@@ -1,0 +1,145 @@
+/* -------------------------------------------------- */
+/* Login Screen */
+/* -------------------------------------------------- */
+
+.logo {
+    position: relative;
+    display: inline-block;
+    height: 135px;
+    width: 125px;
+    background: url(/assets/LoginScreen/logo.svg) no-repeat 0 0;
+    background-size: 100%;
+    cursor: pointer;
+}
+
+.metamask-card {
+    position: relative;
+    display: inline-block;
+    height: 255px;
+    width: 205px;
+    background: url(/assets/LoginScreen/metamask.svg) no-repeat 0 0;
+    background-size: 100%;
+    cursor: pointer;
+}
+
+.prvt-key-card {
+    position: relative;
+    display: inline-block;
+    height: 255px;
+    width: 205px;
+    background: url(/assets/LoginScreen/prvt_key.svg) no-repeat 0 0;
+    background-size: 100%;
+    cursor: pointer;
+}
+
+.sign-in-card {
+    position: relative;
+    display: inline-block;
+    height: 255px;
+    width: 205px;
+    background: url(/assets/LoginScreen/sign_in.svg) no-repeat 0 0;
+    background-size: 100%;
+    cursor: pointer;
+}
+
+.attach-json-card {
+    position: relative;
+    display: inline-block;
+    height: 255px;
+    width: 205px;
+    background: url(/assets/LoginScreen/attch_json.svg) no-repeat 0 0;
+    background-size: 100%;
+    cursor: pointer;
+}
+
+.crd-mrgn {
+    margin: 0 25px;
+}
+
+.crd-animation {
+    position: relative;
+    top: 0;
+    transition: top ease 0.5s;
+}
+
+.crd-animation:hover {
+    top: -20px;
+}
+
+.daico-name {
+    font-size: 50px;
+    line-height: 80px;
+}
+
+.daico-type {
+    font-size: 29px;
+    line-height: 25px;
+}
+
+.d-cnt {
+    margin-left: 40px;
+}
+
+.d-lnr-rstrt-msg {
+    font-size: 25px;
+    line-height: 30px;
+    position: relative;
+    top: 30px;
+}
+
+.d-lnr-dscrptn-mrgn {
+    margin: 30px 0;
+}
+
+.tp-swtch-cnt {
+    height: 110px;
+    width: 270px;
+    border-radius: 8px;
+}
+
+.btn-p {
+    width: 300px;
+    height: 50px;
+    background-image: linear-gradient(to right, #7059de 0%, #4b83e0 42%, #2fa1e2 79%, #25ade3 100%);
+    border: none;
+}
+
+.btn-s {
+    width: 172px;
+    height: 60px;
+    background-image: linear-gradient(to right, #7059de 0%, #4b83e0 42%, #2fa1e2 79%, #25ade3 100%);
+    border: none;
+    border-radius: 50px;
+}
+
+/*CSS for Masonary Card*/
+
+.crd-cnt-mrgn {
+    margin: 15px;
+    position: relative;
+    color: #2d2d2d;
+}
+
+.crd-img-cnt {
+    width: 100px;
+    height: 100px;
+    background-color: #51505D;
+    border-radius: 4px;
+    margin: 0 18px 18px 0;
+}
+
+.crd-btm-ryt-box {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #2185d6;;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+

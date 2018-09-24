@@ -1,0 +1,463 @@
+@import "helpers.css";
+@import "desktop.css";
+@import "mobile.css";
+@import "header.css";
+
+body {
+    font-family: "Roboto", sans-serif !important;
+    background-color: #2d2d2d;
+    font-size: 16px;
+    line-height: 21px;
+    font-weight: 400;
+    color: #fff;
+}
+
+* {
+    outline: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #72727d;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.hide {
+    display: none;
+}
+
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+    margin-top: -10px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    color: #fff;
+}
+
+/* -------------------------------------------------- */
+/* Text Font Sizes */
+/* -------------------------------------------------- */
+
+.txt {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.txt-xs {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.txt-s {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.txt-m {
+    font-size: 18px;
+    line-height: 22px;
+}
+
+.txt-l {
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.txt-xl {
+    font-size: 24px;
+    line-height: 28px;
+}
+
+.txt-xxl {
+    font-size: 28px;
+    line-height: 32px;
+}
+
+.txt-xxxl {
+    font-size: 30px;
+    line-height: 34px;
+}
+
+.txt-p-vault {
+    font-size: 25px;
+    line-height: 30px;
+}
+
+/* -------------------------------------------------- */
+/* Text Colors */
+/* -------------------------------------------------- */
+
+.text--white {
+    color: #ffffff;
+}
+
+.text--primary {
+    color: #e1423e;
+}
+
+.text--success {
+    color: #599a02;
+}
+
+.text--danger {
+    color: #E53A42;
+}
+
+.txt-g-primary {
+    color: #51505D;
+}
+
+.txt-g-secondary {
+    color: #72727D;
+}
+
+.txt-g-tertiary {
+    color: #95959D;
+}
+
+.txt-g-divider {
+    color: #DFE0E3;
+}
+
+.txt-r-medium {
+    color: #e14642;
+}
+
+/* -------------------------------------------------- */
+/* Text Helpers */
+/* -------------------------------------------------- */
+
+.txt-upper {
+    text-transform: uppercase;
+}
+
+.txt-capitalize {
+    text-transform: capitalize;
+}
+
+.txt-nbld {
+    font-weight: 300;
+}
+
+.txt-bld {
+    font-weight: 400;
+}
+
+.txt-dbld {
+    font-weight: 500;
+}
+
+.txt-ddbld {
+    font-weight: 600;
+}
+
+.txt-dddbld {
+    font-weight: 700;
+}
+
+/* -------------------------------------------------- */
+/* Border */
+/* -------------------------------------------------- */
+
+.brdr-g-divider {
+    border: 1px solid #DFE0E3;
+}
+
+.brdr-g-tdivider {
+    border-top: 1px solid #DFE0E3;
+}
+
+.nbrdr {
+    border: none;
+}
+
+/* -------------------------------------------------- */
+/* Background */
+/* -------------------------------------------------- */
+
+.bg--white {
+    background: #ffffff;
+}
+
+.bg--primary {
+    background: #e1423e;
+}
+
+.bg--success {
+    background: #599A02;
+}
+
+.bg--danger {
+    background: #E53A42;
+}
+
+.bg--g-default {
+    background: #F1F1F2;
+}
+
+.bg--g-divider {
+    background: #DFE0E3;
+}
+
+.bg--g-hint {
+    background: #B1B3B9;
+}
+
+.bg--g-primary {
+    background: #51505D;
+}
+
+.bg--g-secondary {
+    background: #72727D;
+}
+
+.bg--g-tertiary {
+    background: #95959D;
+}
+
+/* -------------------------------------------------- */
+/* Link */
+/* -------------------------------------------------- */
+.lnk--p {
+    color: #599a02 !important
+}
+
+.lnk--p:hover {
+    cursor: pointer;
+    color: #599a02 !important
+}
+
+.lnk--i {
+    font-weight: normal;
+    color: #1469cc !important
+}
+
+.lnk--i:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #125db5
+}
+
+/* -------------------------------------------------- */
+/*  Horizontal List */
+/* -------------------------------------------------- */
+
+.hl {
+    font-size: 0
+}
+
+.hl > .hli {
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: top
+}
+
+.hl--bgrid > .hli {
+    margin-right: 15px
+}
+
+.hl--bgrid > .hli:last-child {
+    margin-right: 0
+}
+
+.hl-eq {
+    display: table;
+    width: 100%;
+    table-layout: fixed
+}
+
+.hl-eq > .hl-eqi {
+    display: table-cell;
+    height: 100%;
+    vertical-align: top
+}
+
+/* -------------------------------------------------- */
+/* Position  */
+/* -------------------------------------------------- */
+.pos-abs {
+    position: absolute;
+}
+
+.pos-rel {
+    position: relative;
+}
+
+/* -------------------------------------------------- */
+/* Flex Center  */
+/* -------------------------------------------------- */
+
+.cntr {
+    display: flex;
+    justify-content: center;
+}
+
+.cntr__itm {
+    align-self: center;
+}
+
+/* -------------------------------------------------- */
+/* Text ellipsis */
+/* -------------------------------------------------- */
+
+.pttl {
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden
+}
+
+.pttl--e {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 60px;
+    height: 24px;
+    max-height: 100%;
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #fff));
+    background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0), #fff);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1, StartColorStr=' #00ffffff ', EndColorStr=' #ffffff ')
+}
+
+/* -------------------------------------------------- */
+/* separator with text */
+/* -------------------------------------------------- */
+
+.hr-text {
+    line-height: 1em;
+    position: relative;
+    outline: 0;
+    border: 0;
+    color: black;
+    text-align: center;
+    height: 1.5em;
+    opacity: .5;
+}
+
+.hr-text:before {
+    content: '';
+    background: linear-gradient(to right, transparent, #818078, transparent);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+}
+
+.hr-text:after {
+    content: attr(data-content);
+    position: relative;
+    display: inline-block;
+    padding: 0 .5em;
+    line-height: 1.5em;
+    color: #51505D;
+    background-color: #f1f1f2;
+}
+
+/* -------------------------------------------------- */
+/* separator*/
+/* -------------------------------------------------- */
+
+.hr-sprtr {
+    height: 1px;
+    background-color: #dfe0e3;
+    width: 15%;
+    margin: 0 auto;
+}
+
+/* -------------------------------------------------- */
+/* Circular Image List */
+/* -------------------------------------------------- */
+
+.circle-img-list {
+    /*padding: 10px 0;*/
+}
+
+.circle-img-list-itm {
+    position: relative;
+}
+
+.circle-img-list-itm-n {
+    position: absolute;
+    top: 0;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+.circle-img-list-itm-n-txt {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.circle-img-list-itm-0 {
+    padding-left: 10px;
+}
+
+.circle-img-list-itm-1 {
+    left: -10px;
+}
+
+.circle-img-list-itm-2 {
+    left: -20px;
+}
+
+.circle-img-list-itm img {
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+}
+
+/* -------------------------------------------------- */
+/* Vertical and Horizontal page center alignment css*/
+/* -------------------------------------------------- */
+
+.hr-vr-cntr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* -------------------------------------------------- */
+/* hover link animation css*/
+/* -------------------------------------------------- */
+
+.hover-anim::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #707070;
+    transition: width .3s;
+}
+
+.hover-anim:hover::after {
+    width: 100%;
+/ / transition: width .3 s;
+}
+
+/* -------------------------------------------------- */
+/* Media Queries */
+/* -------------------------------------------------- */
+
+@media only screen and (max-width: 969px) {
+    .show-medium-up {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 970px) {
+    .show-small-only {
+        display: none !important;
+    }
+}

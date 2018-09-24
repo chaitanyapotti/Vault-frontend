@@ -1,0 +1,42 @@
+/* -------------------------------------------------- */
+/* Header */
+/* -------------------------------------------------- */
+
+.hdr-logo {
+    position: relative;
+    display: inline-block;
+    height: 60px;
+    width: 160px;
+    background: url(/assets/Header/hdr-logo.svg) no-repeat 0 0;
+    background-size: 100%;
+    cursor: pointer;
+}
+
+.hdr-item-cnt {
+    position: relative;
+    top: 22px;
+    margin-left: 70px;
+}
+
+.vrfy-cnt {
+    background-color: #ffe4c4;
+    color: #34343a;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.vrfy-icn {
+    position: relative;
+    display: inline-block;
+    height: 15px;
+    width: 27px;
+    background: url(/assets/Header/hdr-vrfy.svg) no-repeat 0 0;
+    background-size: 100%;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.vrfy-pdng {
+    padding: 5px;
+}
+

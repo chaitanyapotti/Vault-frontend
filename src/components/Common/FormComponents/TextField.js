@@ -25,6 +25,7 @@ class TextField extends React.Component {
             name={this.state.value}
             id={this.state.value}
             placeholder="Enter text"
+            className={this.props.inputClass}
           />
         </FormGroup>
       </Form>

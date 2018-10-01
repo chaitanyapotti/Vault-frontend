@@ -142,4 +142,38 @@
 }
 
 
+/* -------------------------------------------------- */
+/* Footer */
+/* -------------------------------------------------- */
+
+.ftr-cnt{
+    height: 215px;
+    background-color: #ffffff;
+}
+
+.ftr-logo{
+    position: relative;
+    display: inline-block;
+    height: 40px;
+    width: 120px;
+    background: url(/assets/Footer/ftr-logo.svg) no-repeat 0 0;
+    background-size: 100%;
+    cursor: pointer;
+}
+
+
+/* Subheaders */
+
+.sbhdr-cnt{
+    background-color: #ffffff;
+    height: 100px;
+}
+
+.sbhdr-txt{
+    color: #4ca9fc;
+}
+
+.sbhdr-mrgn-tp{
+    margin-top: 25px;
+}
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import {HeaderPartial, FooterPartial} from '../src/components/Partials';
+import SubHeader from '../src/components/Common/Subheader';
 
 class VaultApp extends React.PureComponent {
   constructor(props) {
@@ -11,11 +13,12 @@ class VaultApp extends React.PureComponent {
   render() {
     return (
       <div>
-        {/* <HeaderPartial /> */}
+        <HeaderPartial />
+        <SubHeader/>
         <div className="main-content">
           {this.props.children}
-          {/* <FooterPartial /> */}
         </div>
+        <FooterPartial />
       </div>
     );
   }

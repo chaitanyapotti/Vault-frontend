@@ -5,11 +5,11 @@
 
 body {
     font-family: "Roboto", sans-serif !important;
-    background-color: #2d2d2d;
+    background-color: rgba(76,169,252, 0.05);
     font-size: 16px;
     line-height: 21px;
     font-weight: 400;
-    color: #fff;
+    color: #3d3d3d;
 }
 
 * {
@@ -114,7 +114,7 @@ a {
 }
 
 .txt-g-secondary {
-    color: #72727D;
+    color: #3a3a3a
 }
 
 .txt-g-tertiary {
@@ -159,6 +159,10 @@ a {
 
 .txt-dddbld {
     font-weight: 700;
+}
+
+.txt-bold{
+    font-weight: bold;
 }
 
 /* -------------------------------------------------- */
@@ -443,7 +447,7 @@ a {
 
 .hover-anim:hover::after {
     width: 100%;
-/ / transition: width .3 s;
+    transition: width .3 s;
 }
 
 /* -------------------------------------------------- */

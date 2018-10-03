@@ -3,12 +3,14 @@
 
 import React, {Component} from 'react';
 import {Grid} from '../../helpers/react-flexbox-grid';
+import GridData from '../../components/GridData';
 
 class Dashboard extends Component {
   render() {
     return (
       <Grid>
         Dashboard
+        <GridData/> 
       </Grid>
     );
   }

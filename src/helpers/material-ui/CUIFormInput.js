@@ -5,8 +5,8 @@ import Radio from '@material-ui/core/Radio';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { CUIButtonIcon, CUIMenu } from '../material-ui';
-import { Downshift, getCUIPrefixSuffix, handleInputKeydown, renderAutocompleteInput, selectIcon } from './helpers';
-import { CS_COLORS, CUIInputColor, CUIInputMargin, CUIInputType } from '../../static/application/commons/js/variables';
+import { getCUIPrefixSuffix, handleInputKeydown, renderAutocompleteInput, selectIcon } from './helpers';
+import { CS_COLORS, CUIInputColor, CUIInputMargin, CUIInputType } from '../../static/js/variables';
 import PropTypes from '../../PropTypes';
 import CUIChip from './CUIChip';
 
@@ -80,106 +80,106 @@ const CUIFormInput = props => {
       return <Radio {...cuiTextProps} />;
     }
 
-    case CUIInputType.AUTO_COMPLETE: {
-      const {
-        items,
-        source,
-        selected,
-        error,
-        helperText,
-        hintText,
-        full,
-        suggestionsClass = 'atcmplt-sggstns',
-        optionClass = 'atcmplt-sggstn',
-        render,
-        onInputChange,
-        onSelect,
-        onDelete,
-        isMultiple,
-        onBlur,
-        onFocus,
-        InputProps,
-        inputProps,
-        isInputOpen,
-      } =
-        props || {};
+    // case CUIInputType.AUTO_COMPLETE: {
+    //   const {
+    //     items,
+    //     source,
+    //     selected,
+    //     error,
+    //     helperText,
+    //     hintText,
+    //     full,
+    //     suggestionsClass = 'atcmplt-sggstns',
+    //     optionClass = 'atcmplt-sggstn',
+    //     render,
+    //     onInputChange,
+    //     onSelect,
+    //     onDelete,
+    //     isMultiple,
+    //     onBlur,
+    //     onFocus,
+    //     InputProps,
+    //     inputProps,
+    //     isInputOpen,
+    //   } =
+    //     props || {};
 
-      const [sourceKey, sourceValue] = source.split('|');
+    //   const [sourceKey, sourceValue] = source.split('|');
 
-      const onAutocomplete = item => {
-        if (!item) return;
-        if (isMultiple) {
-          onInputChange('');
-        }
-        cuiTextProps.onChange(item);
-      };
+    //   const onAutocomplete = item => {
+    //     if (!item) return;
+    //     if (isMultiple) {
+    //       onInputChange('');
+    //     }
+    //     cuiTextProps.onChange(item);
+    //   };
 
-      const handleKeyDown = event => {
-        const { keyCode } = event;
-        const { value: inputValue } = cuiTextProps || '';
-        if (selected.length && !inputValue.length && keyCode === 8) {
-          const lastItem = selected.slice(-1)[0];
-          onDelete(lastItem);
-        }
-      };
+    //   const handleKeyDown = event => {
+    //     const { keyCode } = event;
+    //     const { value: inputValue } = cuiTextProps || '';
+    //     if (selected.length && !inputValue.length && keyCode === 8) {
+    //       const lastItem = selected.slice(-1)[0];
+    //       onDelete(lastItem);
+    //     }
+    //   };
 
-      const downshiftProps = {
-        itemToString: i => (i && i[sourceValue]) || '',
-        onChange: onAutocomplete,
-        onSelect,
-        selectedItem: selected,
-        defaultSelectedItem: selected,
-        onInputValueChange: onInputChange,
-        selectedItemChanged: (prevItem, item) => prevItem[sourceValue] !== item[sourceValue],
-      };
+    //   const downshiftProps = {
+    //     itemToString: i => (i && i[sourceValue]) || '',
+    //     onChange: onAutocomplete,
+    //     onSelect,
+    //     selectedItem: selected,
+    //     defaultSelectedItem: selected,
+    //     onInputValueChange: onInputChange,
+    //     selectedItemChanged: (prevItem, item) => prevItem[sourceValue] !== item[sourceValue],
+    //   };
 
-      if (isMultiple) {
-        InputProps.onKeyDown = handleKeyDown;
-        downshiftProps.inputValue = cuiTextProps.value;
-        downshiftProps.isOpen = isInputOpen;
-      }
+    //   if (isMultiple) {
+    //     InputProps.onKeyDown = handleKeyDown;
+    //     downshiftProps.inputValue = cuiTextProps.value;
+    //     downshiftProps.isOpen = isInputOpen;
+    //   }
 
-      if (render) {
-        downshiftProps.render = render;
-        return <Downshift {...downshiftProps} />;
-      }
+    //   if (render) {
+    //     downshiftProps.render = render;
+    //     return <Downshift {...downshiftProps} />;
+    //   }
 
-      return (
-        <Downshift {...downshiftProps}>
-          {({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex, clearSelection }) =>
-            <div style={{ position: 'relative' }}>
-              {renderAutocompleteInput({
-                InputProps: getInputProps({
-                  onChange: clearSelection,
-                  onBlur,
-                  onFocus,
-                  ...InputProps,
-                  style: { flexWrap: 'wrap' },
-                  startAdornment: isMultiple
-                    ? selectedItem.map(item => <CUIChip key={item.key} tabIndex={-1} label={item.label} onDelete={() => onDelete(item)} />)
-                    : null,
-                }),
-                inputProps,
-                fullWidth: full,
-                error,
-                helperText: helperText || hintText,
-                ...cuiTextProps,
-              })}
-              {isOpen &&
-                <div className={suggestionsClass}>
-                  {items.filter(i => !inputValue || i[sourceValue].toLowerCase().includes(inputValue.toLowerCase())).map((item, index) =>
-                    <div
-                      {...getItemProps({ key: item[sourceKey], index, item })}
-                      className={`${optionClass}${highlightedIndex === index ? ' selected' : ''}`}
-                    >
-                      {item[sourceValue]}
-                    </div>,
-                  )}
-                </div>}
-            </div>}
-        </Downshift>
-      );
-    }
+    //   return (
+    //     <Downshift {...downshiftProps}>
+    //       {({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex, clearSelection }) =>
+    //         <div style={{ position: 'relative' }}>
+    //           {renderAutocompleteInput({
+    //             InputProps: getInputProps({
+    //               onChange: clearSelection,
+    //               onBlur,
+    //               onFocus,
+    //               ...InputProps,
+    //               style: { flexWrap: 'wrap' },
+    //               startAdornment: isMultiple
+    //                 ? selectedItem.map(item => <CUIChip key={item.key} tabIndex={-1} label={item.label} onDelete={() => onDelete(item)} />)
+    //                 : null,
+    //             }),
+    //             inputProps,
+    //             fullWidth: full,
+    //             error,
+    //             helperText: helperText || hintText,
+    //             ...cuiTextProps,
+    //           })}
+    //           {isOpen &&
+    //             <div className={suggestionsClass}>
+    //               {items.filter(i => !inputValue || i[sourceValue].toLowerCase().includes(inputValue.toLowerCase())).map((item, index) =>
+    //                 <div
+    //                   {...getItemProps({ key: item[sourceKey], index, item })}
+    //                   className={`${optionClass}${highlightedIndex === index ? ' selected' : ''}`}
+    //                 >
+    //                   {item[sourceValue]}
+    //                 </div>,
+    //               )}
+    //             </div>}
+    //         </div>}
+    //     </Downshift>
+    //   );
+    // }
 
     case CUIInputType.SELECT: {
       const { items, full, labelStyle, iconColor, onBlur, iconStyle, onFocus } = props || {};

@@ -8,6 +8,8 @@ import './static/css/app.css';
 import VaultApp from './VaultApp';
 import Registration from './pages/Registration';
 import Dashboard from './pages/Dashboard';
+import ProjectDetails from './pages/ProjectDetails';
+
 import store from "./store";
 
 class App extends Component {
@@ -19,6 +21,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Registration}/>
               <Route exact path="/dashboard" component={Dashboard}/>
+              <Route exact path="/project" component={ProjectDetails}/>
             </Switch>
           </VaultApp>
         </Router>

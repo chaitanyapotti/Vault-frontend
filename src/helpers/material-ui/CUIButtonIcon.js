@@ -1,7 +1,7 @@
 import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import PropTypes from '../../PropTypes';
-import { CUIColor } from '../../static/application/commons/js/variables';
+import { CUIColor } from '../../static/js/variables';
 
 /**
  * @Component ButtonIcon

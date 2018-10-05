@@ -3,7 +3,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import { CUIColor } from '../../static/application/commons/js/variables';
+import { CUIColor } from '../../static/js/variables';
 import PropTypes from '../../PropTypes';
 
 /**

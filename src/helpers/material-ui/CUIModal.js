@@ -6,7 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Slide from '@material-ui/core/Slide';
 import PropTypes from '../../PropTypes';
-import { CUIDialogMaXWidth, CUIModalTransition } from '../../static/application/commons/js/variables';
+import { CUIDialogMaXWidth, CUIModalTransition } from '../../static/js/variables';
 import CUIWrapper from './CUIWrapper';
 
 /**

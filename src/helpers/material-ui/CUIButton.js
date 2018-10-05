@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import { CS_FONT_SIZE, CUIButtonColor } from '../../static/application/commons/js/variables';
+import { CS_FONT_SIZE, CUIButtonColor } from '../../static/js/variables';
 import PropTypes from '../../PropTypes';
 
 /**

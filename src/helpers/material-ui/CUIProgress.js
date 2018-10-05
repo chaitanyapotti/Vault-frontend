@@ -4,7 +4,7 @@
 import React from 'react';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { CUIColor, CUIProgressType } from '../../static/application/commons/js/variables';
+import { CUIColor, CUIProgressType } from '../../static/js/variables';
 import PropTypes from '../../PropTypes';
 
 /**

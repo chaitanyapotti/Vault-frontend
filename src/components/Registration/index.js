@@ -1,9 +1,9 @@
-import ProfileDetails from './ProfileDetails';
-import TokenDistribution from './TokenDistribution';
+import IdentityDetails from './IdentityDetails';
 import DaicoDetails from './DaicoDetails';
+import Distribution from './Distribution';
 
 export {
-  ProfileDetails,
-  TokenDistribution,
-  DaicoDetails
+  IdentityDetails,
+  DaicoDetails,
+  Distribution
 }

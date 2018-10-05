@@ -1,7 +1,7 @@
 /* eslint react/require-default-props: 0 */
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import { CUIColor, CUIPosition } from '../../static/application/commons/js/variables';
+import { CUIColor, CUIPosition } from '../../static/js/variables';
 import PropTypes from '../../PropTypes';
 
 /**

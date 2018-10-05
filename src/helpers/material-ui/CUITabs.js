@@ -5,7 +5,7 @@ import Tab from '@material-ui/core/Tab';
 import { Link } from 'react-router-dom';
 import { CUIBadge } from '../material-ui';
 import PropTypes from '../../PropTypes';
-import { CUIColor } from '../../static/application/commons/js/variables';
+import { CUIColor } from '../../static/js/variables';
 
 /**
  * @Component Tabs

@@ -1,6 +1,6 @@
 import React from 'react';
 import Badge from '@material-ui/core/Badge';
-import { CUIColor } from '../../static/application/commons/js/variables';
+import { CUIColor } from '../../static/js/variables';
 import PropTypes from '../../PropTypes';
 
 /**

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import { customRegTheme } from '../../static/application/commons/js/theme';
+import { customRegTheme } from '../../static/js/theme';
 import PropTypes from '../../PropTypes';
 
 const theme = createMuiTheme(customRegTheme);

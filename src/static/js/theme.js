@@ -1,6 +1,6 @@
 import merge from 'lodash/merge';
 import { CS_COLORS, CS_FONT_SIZE, CUIColor } from './variables';
-import { isMobile } from '../../../../helpers/common/deviceDetect';
+import { isMobile } from '../../helpers/common/deviceDetect';
 
 const customTheme = {
   typography: {

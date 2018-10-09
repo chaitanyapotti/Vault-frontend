@@ -5,23 +5,36 @@ import actionTypes from '../../action_types';
 export const initialState = {
     activeDaicosTable: [],
     showActiveDaicosLoader: true,
-    activeDaicosRetreiveFailureMessage: ''
+    activeDaicosRetrieveFailureMessage: '',
+    activeDaicosRetrievedSuccessFully: false
 };
 
 export default function (state = initialState, action) {
     switch (action.type) {
+
         case actionTypes.ACTIVE_DAICOS_SUCCESS:
             return {
                 ...state,
                 showActiveDaicosLoader: false,
-                activeDaicosTable: action.payload
+                activeDaicosTable: action.payload,
+                activeDaicosRetrievedSuccessFully: true
             };
+
         case actionTypes.ACTIVE_DAICOS_FAILED:
             return {
                 ...state,
                 showActiveDaicosLoader: false,
-                activeDaicosRetreiveFailureMessage: action.payload
+                activeDaicosRetrieveFailureMessage: action.payload,
+                activeDaicosRetrievedSuccessFully: false
             };
+
+        case actionTypes.SHOW_ACTIVE_DAICOS_LOADER:
+            return {
+                ...state, 
+                showActiveDaicosLoader: true, 
+                activeDaicosRetrievedSuccessFully: false
+            }
+            
         default:
             return state;
     }

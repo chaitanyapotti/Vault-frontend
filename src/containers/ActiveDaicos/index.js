@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Table } from 'semantic-ui-react';
-import { getActiveDaicos } from '../../actions/activeDaicosActions';
+import { Table, Loader } from 'semantic-ui-react';
+import { getActiveDaicos, showActiveDaicosLoaderAction } from '../../actions/activeDaicosActions';
 import moment from 'moment';
 
 function calculateEndDuration(r1EndTime) {
@@ -21,6 +21,37 @@ function calculateFinalGoal(roundArray) {
         finalGoal += calculateRoundGoal(roundArray[i])
     }
     return finalGoal
+}
+
+class ActiveDaicosTableBody extends Component {
+    addTableRowsDynamically() {
+        if (this.props.activeDaicosTable.length > 0) {
+            return this.props.activeDaicosTable.map((project, index) => {
+                return (
+                    <Table.Row key={index}>
+                        <Table.Cell>{project.projectName}</Table.Cell>
+                        <Table.Cell>{project.rounds.length}</Table.Cell>
+                        <Table.Cell>{calculateRoundGoal(project.rounds[0])}</Table.Cell>
+                        <Table.Cell>{calculateFinalGoal(project.rounds)}</Table.Cell>
+                        <Table.Cell>{100}</Table.Cell>
+                        <Table.Cell>{1}</Table.Cell>
+                        <Table.Cell>{new Date(project.startDateTime).toISOString()}</Table.Cell>
+                        <Table.Cell>{calculateEndDuration(project.r1EndTime)}</Table.Cell>
+                    </Table.Row>
+                );
+            });
+        } else {
+            return <Table.Row key={145}>Activities could not be retrieved, please try reloading the page.</Table.Row>;
+        }
+    }
+
+    render() {
+        return (
+            <Table.Body>
+                {this.addTableRowsDynamically()}
+            </Table.Body>
+        )
+    }
 }
 
 class ActiveDaicosTableHeader extends Component {
@@ -47,54 +78,43 @@ class ActiveDaicosTableHeader extends Component {
 class ActiveDaicos extends Component {
     componentDidMount() {
         this.props.getActiveDaicos()
+        this.props.showActiveDaicosLoaderAction()
     }
-
-    addTableRowsDynamically() {
-        if (this.props.activeDaicosTable.length > 0) {
-            return this.props.activeDaicosTable.map((project, index) => {
-                return (
-                    <Table.Row key={index}>
-                        <Table.Cell>{project.projectName}</Table.Cell>
-                        <Table.Cell>{project.rounds.length}</Table.Cell>
-                        <Table.Cell>{calculateRoundGoal(project.rounds[0])}</Table.Cell>
-                        <Table.Cell>{calculateFinalGoal(project.rounds)}</Table.Cell>
-                        <Table.Cell>{100}</Table.Cell>
-                        <Table.Cell>{1}</Table.Cell>
-                        <Table.Cell>{new Date(project.startDateTime).toISOString()}</Table.Cell>
-                        <Table.Cell>{calculateEndDuration(project.r1EndTime)}</Table.Cell>
-                    </Table.Row>
-                );
-            });
-        } else {
-            return <Table.Row key={145}>Activities could not be retrieved, please try reloading the page.</Table.Row>;
-        }
-    }
-
 
     render() {
         return (
             <div>
-                <Table>
-                    <ActiveDaicosTableHeader />
-                    <Table.Body>
-                        {this.addTableRowsDynamically()}
-                    </Table.Body>
-                </Table>
+                {
+                    this.props.showActiveDaicosLoader ?
+                        <Loader active={this.props.showActiveDaicosLoader} /> :
+                        (this.props.activeDaicosRetrievedSuccessFully ?
+                            <Table>
+                                <ActiveDaicosTableHeader />
+                                <ActiveDaicosTableBody activeDaicosTable={this.props.activeDaicosTable} />
+                            </Table>
+                            :
+                            <h3>{this.props.activeDaicosRetrieveFailureMessage}</h3>
+                        )
+
+                }
             </div>
         )
     }
 }
+
 const mapStateToProps = state => {
     return {
         activeDaicosTable: state.activeDaicosData.activeDaicosTable,
         showActiveDaicosLoader: state.activeDaicosData.showActiveDaicosLoader,
-        activeDaicosRetreiveFailureMessage: state.activeDaicosData.activeDaicosRetreiveFailureMessage
+        activeDaicosRetrieveFailureMessage: state.activeDaicosData.activeDaicosRetrieveFailureMessage,
+        activeDaicosRetrievedSuccessFully: state.activeDaicosData.activeDaicosRetrievedSuccessFully
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         getActiveDaicos: getActiveDaicos,
+        showActiveDaicosLoaderAction: showActiveDaicosLoaderAction
     }, dispatch)
 }
 

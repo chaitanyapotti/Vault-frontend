@@ -168,17 +168,6 @@ class Deployer extends Component {
     );
   };
 
-  createKillPolls2 = () => {
-    this.props.performContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      null,
-      "PollFactory",
-      this.props.projectDetails.pollFactoryAddress
-    );
-  };
-
   mintFoundationTokens = () => {
     this.props.performContractAction(
       this.props.projectDetails.version,
@@ -214,7 +203,7 @@ class Deployer extends Component {
         case 9:
           return <CreateKillPolls onClick={this.createKillPolls} />;
         case 10:
-          return <CreateKillPolls2 onClick={this.createKillPolls2} />;
+          return <CreateKillPolls2 onClick={this.createKillPolls} />;
         case 11:
           return <MintFoundationTokens onClick={this.mintFoundationTokens} />;
         default:

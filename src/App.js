@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard';
 import ProjectDetails from './pages/ProjectDetails';
 import LandingPage from './pages/LandingPage';
 import AllDaicos from './pages/AllDaicos';
+import Governance from './pages/Governance';
 
 import store from "./store";
 import 'semantic-ui-css/semantic.min.css';
@@ -22,7 +23,8 @@ class App extends Component {
         <Router>
           <VaultApp dispatch={store.dispatch} getState={store.getState}>
             <Switch>
-              <Route exact path="/" component={AllDaicos} />
+              <Route exact path="/" component={Governance} />
+              <Route exact path="/alldaicos" component={AllDaicos} />
               <Route exact path="/landing" component={LandingPage} />
               <Route exact path="/registration" component={Registration} />
               <Route exact path="/dashboard" component={Dashboard} />

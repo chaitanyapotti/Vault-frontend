@@ -8,43 +8,54 @@ const initialState = {
 export default function(state = initialState, action) {
   let currentProjDetails = state.projectDetails;
   switch (action.type) {
-    case types.PROJECT_DETAILS_FETCHED:
+    case types.PROJECT_DETAILS_FETCHED: {
+      const { data } = action.payload || {};
       return {
         ...state,
-        projectDetails: action.payload.data,
+        projectDetails: data,
         ts: new Date()
       };
-
+    }
     case types.TRANSACTION_PENDING:
       //keep spinner rotating
       return state;
     case types.TRANSACTION_REDO:
     case types.RECEIVED_TRANSACTION_HASH:
-      currentProjDetails.latestTxHash = action.payload.body.latestTxHash;
-      currentProjDetails.currentDeploymentIndicator = action.payload.body.currentDeploymentIndicator;
+      const { latestTxHash, currentDeploymentIndicator } = action.payload.body || {};
+      currentProjDetails.latestTxHash = latestTxHash;
+      currentProjDetails.currentDeploymentIndicator = currentDeploymentIndicator;
       return {
         ...state,
         projectDetails: currentProjDetails,
         ts: new Date()
       };
-    case types.DEPLOYED_CONTRACT:
-      currentProjDetails.currentDeploymentIndicator = action.payload.body.currentDeploymentIndicator;
-      currentProjDetails.latestTxHash = action.payload.body.latestTxHash;      
-      switch (action.payload.body.currentDeploymentIndicator - 1) {
+    case types.DEPLOYED_CONTRACT: {
+      const {
+        latestTxHash,
+        currentDeploymentIndicator,
+        membershipAddress,
+        daicoTokenAddress,
+        lockedTokensAddress,
+        pollFactoryAddress,
+        crowdSaleAddress
+      } = action.payload.body || {};
+      currentProjDetails.currentDeploymentIndicator = currentDeploymentIndicator;
+      currentProjDetails.latestTxHash = latestTxHash;
+      switch (currentDeploymentIndicator - 1) {
         case 0:
-          currentProjDetails.membershipAddress = action.payload.body.membershipAddress;
+          currentProjDetails.membershipAddress = membershipAddress;
           break;
         case 1:
-          currentProjDetails.daicoTokenAddress = action.payload.body.daicoTokenAddress;
+          currentProjDetails.daicoTokenAddress = daicoTokenAddress;
           break;
         case 2:
-          currentProjDetails.lockedTokensAddress = action.payload.body.lockedTokensAddress;
+          currentProjDetails.lockedTokensAddress = lockedTokensAddress;
           break;
         case 3:
-          currentProjDetails.pollFactoryAddress = action.payload.body.pollFactoryAddress;
+          currentProjDetails.pollFactoryAddress = pollFactoryAddress;
           break;
         case 4:
-          currentProjDetails.crowdSaleAddress = action.payload.body.crowdSaleAddress;
+          currentProjDetails.crowdSaleAddress = crowdSaleAddress;
           break;
         default:
           console.log(currentProjDetails);
@@ -55,6 +66,7 @@ export default function(state = initialState, action) {
         projectDetails: currentProjDetails,
         ts: new Date()
       };
+    }
     default:
       return state;
   }

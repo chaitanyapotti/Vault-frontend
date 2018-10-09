@@ -19,164 +19,129 @@ import web3 from "../../helpers/web3";
 
 class Deployer extends Component {
   componentDidMount() {
+    //TODO: Replace projectid from parent container
     this.props.fetchProjectDetails("5bafaed1eb00b152a418f7df");
   }
 
   deployMembership = () => {
-    const args = [web3.utils.fromAscii(this.props.projectDetails.projectName), web3.utils.fromAscii(this.props.projectDetails.tokenTag)];
-    this.props.deployContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      args,
-      "Protocol"
-    );
+    const { version, _id, currentDeploymentIndicator, projectName, tokenTag } = this.props.projectDetails || {};
+    const args = [web3.utils.fromAscii(projectName), web3.utils.fromAscii(tokenTag)];
+    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "Protocol");
   };
 
   deployDaicoToken = () => {
-    const args = [
-      this.props.projectDetails.projectName,
-      this.props.projectDetails.tokenTag,
-      this.props.projectDetails.membershipAddress,
-      this.props.projectDetails.totalMintableSupply
-    ];
-
-    this.props.deployContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      args,
-      "DaicoToken"
-    );
+    const { version, _id, currentDeploymentIndicator, projectName, tokenTag, membershipAddress, totalMintableSupply } =
+      this.props.projectDetails || {};
+    const args = [projectName, tokenTag, membershipAddress, totalMintableSupply];
+    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken");
   };
 
   deployLockedTokens = () => {
-    const args = [this.props.projectDetails.daicoTokenAddress];
-    this.props.deployContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      args,
-      "LockedTokens"
-    );
+    const { version, _id, currentDeploymentIndicator, daicoTokenAddress } = this.props.projectDetails || {};
+    const args = [daicoTokenAddress];
+    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "LockedTokens");
   };
 
   deployPollFactory = () => {
+    const {
+      version,
+      _id,
+      currentDeploymentIndicator,
+      daicoTokenAddress,
+      teamAddress,
+      initialFundRelease,
+      initialTapAmount,
+      killPollStartDate,
+      vaultAddress,
+      capPercent,
+      killAcceptancePercent,
+      xfrRejectionPercent,
+      tapAcceptancePercent,
+      lockedTokensAddress,
+      tapIncrementFactor
+    } = this.props.projectDetails || {};
     const args = [
-      this.props.projectDetails.daicoTokenAddress,
-      this.props.projectDetails.teamAddress,
-      this.props.projectDetails.initialFundRelease,
-      this.props.projectDetails.initialTapAmount,
-      new Date(this.props.projectDetails.killPollStartDate).getTime() / 1000, //In Unix Time
-      this.props.projectDetails.vaultAddress,
-      this.props.projectDetails.capPercent,
-      this.props.projectDetails.killAcceptancePercent,
-      this.props.projectDetails.xfrRejectionPercent,
-      this.props.projectDetails.tapAcceptancePercent,
-      this.props.projectDetails.lockedTokensAddress,
-      this.props.projectDetails.tapIncrementFactor
+      daicoTokenAddress,
+      teamAddress,
+      initialFundRelease,
+      initialTapAmount,
+      new Date(killPollStartDate).getTime() / 1000, //In Unix Time
+      vaultAddress,
+      capPercent,
+      killAcceptancePercent,
+      xfrRejectionPercent,
+      tapAcceptancePercent,
+      lockedTokensAddress,
+      tapIncrementFactor
     ];
-    this.props.deployContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      args,
-      "PollFactory"
-    );
+    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "PollFactory");
   };
 
   deployCrowdSale = () => {
+    const {
+      version,
+      _id,
+      currentDeploymentIndicator,
+      minimumEtherContribution,
+      maximumEtherContribution,
+      r1EndTime,
+      rounds,
+      lockedTokensAddress,
+      pollFactoryAddress,
+      membershipAddress,
+      daicoTokenAddress,
+      vaultAddress,
+      foundationDetails
+    } = this.props.projectDetails || {};
     const args = [
-      this.props.projectDetails.minimumEtherContribution,
-      this.props.projectDetails.maximumEtherContribution,
-      new Date(this.props.projectDetails.r1EndTime).getTime() / 1000,
-      this.props.projectDetails.rounds.map(a => a.tokenCount),
-      this.props.projectDetails.rounds.map(a => a.tokenRate),
-      this.props.projectDetails.lockedTokensAddress,
-      this.props.projectDetails.pollFactoryAddress,
-      this.props.projectDetails.membershipAddress,
-      this.props.projectDetails.daicoTokenAddress,
-      this.props.projectDetails.vaultAddress,
-      this.props.projectDetails.foundationDetails.map(a => a.address),
-      this.props.projectDetails.foundationDetails.map(a => a.amount)
+      minimumEtherContribution,
+      maximumEtherContribution,
+      new Date(r1EndTime).getTime() / 1000,
+      rounds.map(a => a.tokenCount),
+      rounds.map(a => a.tokenRate),
+      lockedTokensAddress,
+      pollFactoryAddress,
+      membershipAddress,
+      daicoTokenAddress,
+      vaultAddress,
+      foundationDetails.map(a => a.address),
+      foundationDetails.map(a => a.amount)
     ];
-    this.props.deployContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      args,
-      "CrowdSale"
-    );
+    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "CrowdSale");
   };
 
   setTreasuryInDaicoToken = () => {
-    const args = this.props.projectDetails.pollFactoryAddress;
-    this.props.performContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      args,
-      "DaicoToken",
-      this.props.projectDetails.daicoTokenAddress
-    );
+    const { version, _id, currentDeploymentIndicator, pollFactoryAddress, daicoTokenAddress } = this.props.projectDetails || {};
+    const args = pollFactoryAddress;
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", daicoTokenAddress);
   };
 
   setCrowdsaleInDaicoToken = () => {
-    const args = this.props.projectDetails.crowdSaleAddress;
-    this.props.performContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      args,
-      "DaicoToken",
-      this.props.projectDetails.daicoTokenAddress
-    );
+    const { version, _id, currentDeploymentIndicator, crowdSaleAddress, daicoTokenAddress } = this.props.projectDetails || {};
+    const args = crowdSaleAddress;
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", daicoTokenAddress);
   };
 
   setCrowdsaleInLockedTokens = () => {
-    const args = this.props.projectDetails.crowdSaleAddress;
-    this.props.performContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      args,
-      "LockedTokens",
-      this.props.projectDetails.lockedTokensAddress
-    );
+    const { version, _id, currentDeploymentIndicator, crowdSaleAddress, lockedTokensAddress } = this.props.projectDetails || {};
+    const args = crowdSaleAddress;
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "LockedTokens", lockedTokensAddress);
   };
 
   setCrowdSaleInPollFactory = () => {
-    const args = this.props.projectDetails.crowdSaleAddress;
-    this.props.performContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      args,
-      "PollFactory",
-      this.props.projectDetails.pollFactoryAddress
-    );
+    const { version, _id, currentDeploymentIndicator, crowdSaleAddress, pollFactoryAddress } = this.props.projectDetails || {};
+    const args = crowdSaleAddress;
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "PollFactory", pollFactoryAddress);
   };
 
   createKillPolls = () => {
-    this.props.performContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      null,
-      "PollFactory",
-      this.props.projectDetails.pollFactoryAddress
-    );
+    const { version, _id, currentDeploymentIndicator, pollFactoryAddress } = this.props.projectDetails || {};
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, null, "PollFactory", pollFactoryAddress);
   };
 
   mintFoundationTokens = () => {
-    this.props.performContractAction(
-      this.props.projectDetails.version,
-      this.props.projectDetails._id,
-      this.props.projectDetails.currentDeploymentIndicator,
-      null,
-      "CrowdSale",
-      this.props.projectDetails.crowdSaleAddress
-    );
+    const { version, _id, currentDeploymentIndicator, crowdSaleAddress } = this.props.projectDetails || {};
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, null, "CrowdSale", crowdSaleAddress);
   };
 
   render() {
@@ -214,9 +179,10 @@ class Deployer extends Component {
 }
 
 const mapStateToProps = state => {
+  const { projectDetails, ts } = state.deployerReducer || {};
   return {
-    projectDetails: state.deployerReducer.projectDetails,
-    ts: state.deployerReducer.ts
+    projectDetails: projectDetails,
+    ts: ts
   };
 };
 

@@ -43,16 +43,17 @@ export function fetchProjectDetails(projectid) {
       .get(config.api_base_url + "/db/projects", { params: { projectid: projectid } })
       .then(async response => {
         if (response.status === 200) {
-          dispatch(projectDetailsFetched(response.data.data));
-          const txHash = response.data.data.latestTxHash;
-          const cdi = response.data.data.currentDeploymentIndicator;
-          if (txHash !== "0x") {
-            web3.eth.getTransactionReceipt(txHash).then(result => {
+          const { data } = response.data || {};
+          const { latestTxHash, currentDeploymentIndicator } = data || {};
+          dispatch(projectDetailsFetched(data));
+          if (latestTxHash !== "0x") {
+            web3.eth.getTransactionReceipt(latestTxHash).then(result => {
               if (result !== null) {
                 //update ctr address in db and update txhash to "0x"
-                if (result.status) setContractAddress(projectid, cdi, result.contractAddress).then(body => dispatch(deployedContract(body)));
+                if (result.status)
+                  setContractAddress(projectid, currentDeploymentIndicator, result.contractAddress).then(body => dispatch(deployedContract(body)));
                 //redotx;  set txHash to 0x
-                else dispatch(redoTx(cdi));
+                else dispatch(redoTx(currentDeploymentIndicator));
               } else {
                 //wait for tx to complete - keep spinner rotating
                 dispatch(txPending());
@@ -70,9 +71,11 @@ export function deployContractAction(version, projectid, cdi, args, contractName
       .get(config.api_base_url + "/web3/contractdata/", { params: { version: version.toString(), name: contractName } })
       .then(response => {
         if (response.status === 200) {
+          const { data } = response.data || {};
+          const { abi, bytecode } = data || {};
           web3.eth.getAccounts().then(accounts =>
-            new web3.eth.Contract(response.data.data.abi)
-              .deploy({ data: response.data.data.bytecode, arguments: args })
+            new web3.eth.Contract(abi)
+              .deploy({ data: bytecode, arguments: args })
               .send({ from: accounts[0] })
               .on("error", error => console.error(error.message))
               .on("transactionHash", transactionHash =>
@@ -91,8 +94,10 @@ export function performContractAction(version, projectid, cdi, args, contractNam
   return dispatch =>
     axios.get(config.api_base_url + "/web3/contractdata/", { params: { version: version.toString(), name: contractName } }).then(response => {
       if (response.status === 200) {
+        const { data } = response.data || {};
+        const { abi } = data || {};
         web3.eth.getAccounts().then(accounts => {
-          const instance = new web3.eth.Contract(response.data.data.abi, contractAddress, { from: accounts[0] });
+          const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
           peformSpecificAction(cdi, instance, args, accounts)
             .on("error", error => console.error(error.message))
             .on("transactionHash", transactionHash =>

@@ -1,11 +1,10 @@
 import React from 'react';
-import {Progress} from 'reactstrap';
+import {CUILinearProgress} from '../../../helpers/material-ui';
 
 const LinearProgressBar = (props) => {
   return (
     <div>
-      <Progress color="success" value="25"/>
-      <Progress color="info" value={50}/>
+      <CUILinearProgress/>
     </div>
   );
 };

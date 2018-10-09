@@ -231,3 +231,11 @@
 .pieclr6{
     background-color: #002838;
 }
+
+/* Project Details */
+.prjct-logo{
+    width: 100px;
+    height: 100px;
+    background-color: #2185d6;
+    display: block;
+}

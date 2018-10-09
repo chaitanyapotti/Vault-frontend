@@ -4,8 +4,8 @@ import actionTypes from '../../action_types';
 import constants from '../../constants';
 
 export function getEndedDaicos() {
-    return function (dispatch) {
-        axios.get(config.api_base_url + '/db/projects/ended')
+    return (dispatch) => {
+        axios.get(`${config.api_base_url}/db/projects/ended`)
             .then(response => {
                 if (response.status === 200) {
                     if (response.data.message === constants.SUCCESS) {
@@ -35,7 +35,7 @@ export function getEndedDaicos() {
 }
 
 export function showEndedDaicosLoaderAction(){
-    return function (dispatch){
+    return (dispatch) =>{
         dispatch({
             type: actionTypes.SHOW_ENDED_DAICOS_LOADER,
             payload: null

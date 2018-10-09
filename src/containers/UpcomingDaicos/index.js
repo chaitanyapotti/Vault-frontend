@@ -6,27 +6,20 @@ import { Table, Loader } from 'semantic-ui-react';
 import { getUpcomingDaicos, showUpcomingDaicosLoaderAction } from '../../actions/upcomingDaicosActions';
 import moment from 'moment';
 
-function calculateEndDuration(r1EndTime) {
+const calculateEndDuration = (r1EndTime) => {
     // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))
     return r1EndTime
 }
 
-function calculateRoundGoal(round) {
+const calculateRoundGoal = (round) => {
     return (parseFloat(round.tokenCount) / (parseFloat(round.tokenRate) * Math.pow(10, 18)))
 }
 
-function calculateFinalGoal(roundArray) {
-    let finalGoal = 0
-    for (let i = 0; i < roundArray.length; i++) {
-        finalGoal += calculateRoundGoal(roundArray[i])
-    }
-    return finalGoal
-}
-
 class UpcomingDaicosTableBody extends Component {
-    addTableRowsDynamically() {
-        if (this.props.upcomingDaicosTable.length > 0) {
-            return this.props.upcomingDaicosTable.map((project, index) => {
+    addTableRowsDynamically = () => {
+        const table = this.props.upcomingDaicosTable;
+        if (table && table.length > 0) {
+            return table.map((project, index) => {
                 return (
                     <Table.Row key={index}>
                         <Table.Cell>{project.projectName}</Table.Cell>
@@ -39,7 +32,7 @@ class UpcomingDaicosTableBody extends Component {
                 );
             });
         } else {
-            return <Table.Row key={145}>Activities could not be retrieved, please try reloading the page.</Table.Row>;
+            return <Table.Row>Activities could not be retrieved, please try reloading the page.</Table.Row>;
         }
     }
 
@@ -52,22 +45,20 @@ class UpcomingDaicosTableBody extends Component {
     }
 }
 
-class UpcomingDaicosTableHeader extends Component {
-    render() {
-        return (
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell>Name</Table.HeaderCell>
-                    <Table.HeaderCell>Rounds</Table.HeaderCell>
-                    <Table.HeaderCell>R1 Goal</Table.HeaderCell>
-                    <Table.HeaderCell>Final Goal</Table.HeaderCell>
-                    <Table.HeaderCell>Price*</Table.HeaderCell>
-                    <Table.HeaderCell>Starts at</Table.HeaderCell>
-                    <Table.HeaderCell>R1 Ends on</Table.HeaderCell>
-                </Table.Row>
-            </Table.Header>
-        )
-    }
+const UpcomingDaicosTableHeader = () => {
+    return (
+        <Table.Header>
+            <Table.Row>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Rounds</Table.HeaderCell>
+                <Table.HeaderCell>R1 Goal</Table.HeaderCell>
+                <Table.HeaderCell>Final Goal</Table.HeaderCell>
+                <Table.HeaderCell>Price*</Table.HeaderCell>
+                <Table.HeaderCell>Starts at</Table.HeaderCell>
+                <Table.HeaderCell>R1 Ends on</Table.HeaderCell>
+            </Table.Row>
+        </Table.Header>
+    )
 }
 
 class UpcomingDaicos extends Component {
@@ -97,11 +88,12 @@ class UpcomingDaicos extends Component {
 }
 
 const mapStateToProps = state => {
+    const { upcomingDaicosTable, showUpcomingDaicosLoader, upcomingDaicosRetrieveFailureMessage, upcomingDaicosRetrievedSuccessFully } = state.upcomingDaicosData || {}
     return {
-        upcomingDaicosTable: state.upcomingDaicosData.upcomingDaicosTable,
-        showUpcomingDaicosLoader: state.upcomingDaicosData.showUpcomingDaicosLoader,
-        upcomingDaicosRetrieveFailureMessage: state.upcomingDaicosData.upcomingDaicosRetrieveFailureMessage,
-        upcomingDaicosRetrievedSuccessFully: state.upcomingDaicosData.upcomingDaicosRetrievedSuccessFully
+        upcomingDaicosTable: upcomingDaicosTable,
+        showUpcomingDaicosLoader: showUpcomingDaicosLoader,
+        upcomingDaicosRetrieveFailureMessage: upcomingDaicosRetrieveFailureMessage,
+        upcomingDaicosRetrievedSuccessFully: upcomingDaicosRetrievedSuccessFully
     }
 }
 

@@ -4,8 +4,8 @@ import actionTypes from '../../action_types';
 import constants from '../../constants';
 
 export function getUpcomingDaicos() {
-    return function (dispatch) {
-        axios.get(config.api_base_url + '/db/projects/upcoming')
+    return (dispatch) => {
+        axios.get(`${config.api_base_url}/db/projects/upcoming`)
             .then(response => {
                 if (response.status === 200) {
                     if (response.data.message === constants.SUCCESS) {
@@ -35,7 +35,7 @@ export function getUpcomingDaicos() {
 }
 
 export function showUpcomingDaicosLoaderAction(){
-    return function (dispatch){
+    return (dispatch) =>{
         dispatch({
             type: actionTypes.SHOW_UPCOMING_DAICOS_LOADER,
             payload: null

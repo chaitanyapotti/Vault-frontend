@@ -6,16 +6,16 @@ import { Table, Loader } from 'semantic-ui-react';
 import { getActiveDaicos, showActiveDaicosLoaderAction } from '../../actions/activeDaicosActions';
 import moment from 'moment';
 
-function calculateEndDuration(r1EndTime) {
+const calculateEndDuration = (r1EndTime) => {
     // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))
     return r1EndTime
 }
 
-function calculateRoundGoal(round) {
+const calculateRoundGoal = (round) => {
     return (parseFloat(round.tokenCount) / (parseFloat(round.tokenRate) * Math.pow(10, 18)))
 }
 
-function calculateFinalGoal(roundArray) {
+const calculateFinalGoal = (roundArray) => {
     let finalGoal = 0
     for (let i = 0; i < roundArray.length; i++) {
         finalGoal += calculateRoundGoal(roundArray[i])
@@ -24,9 +24,10 @@ function calculateFinalGoal(roundArray) {
 }
 
 class ActiveDaicosTableBody extends Component {
-    addTableRowsDynamically() {
-        if (this.props.activeDaicosTable.length > 0) {
-            return this.props.activeDaicosTable.map((project, index) => {
+    addTableRowsDynamically = () => {
+        const table = this.props.activeDaicosTable;
+        if (table && table.length > 0) {
+            return table.map((project, index) => {
                 return (
                     <Table.Row key={index}>
                         <Table.Cell>{project.projectName}</Table.Cell>
@@ -41,7 +42,7 @@ class ActiveDaicosTableBody extends Component {
                 );
             });
         } else {
-            return <Table.Row key={145}>Activities could not be retrieved, please try reloading the page.</Table.Row>;
+            return <Table.Row>Activities could not be retrieved, please try reloading the page.</Table.Row>;
         }
     }
 
@@ -54,25 +55,21 @@ class ActiveDaicosTableBody extends Component {
     }
 }
 
-class ActiveDaicosTableHeader extends Component {
-
-    render() {
-        return (
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell>Name</Table.HeaderCell>
-                    <Table.HeaderCell>Rounds</Table.HeaderCell>
-                    <Table.HeaderCell>R1 Goal</Table.HeaderCell>
-                    <Table.HeaderCell>Final Goal</Table.HeaderCell>
-                    <Table.HeaderCell>Raised*</Table.HeaderCell>
-                    <Table.HeaderCell>Price*</Table.HeaderCell>
-                    <Table.HeaderCell>Started at</Table.HeaderCell>
-                    <Table.HeaderCell>R1 Ends in</Table.HeaderCell>
-                </Table.Row>
-            </Table.Header>
-
-        )
-    }
+const ActiveDaicosTableHeader = () => {
+    return (
+        <Table.Header>
+            <Table.Row>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Rounds</Table.HeaderCell>
+                <Table.HeaderCell>R1 Goal</Table.HeaderCell>
+                <Table.HeaderCell>Final Goal</Table.HeaderCell>
+                <Table.HeaderCell>Raised*</Table.HeaderCell>
+                <Table.HeaderCell>Price*</Table.HeaderCell>
+                <Table.HeaderCell>Started at</Table.HeaderCell>
+                <Table.HeaderCell>R1 Ends in</Table.HeaderCell>
+            </Table.Row>
+        </Table.Header>
+    )
 }
 
 class ActiveDaicos extends Component {
@@ -103,11 +100,12 @@ class ActiveDaicos extends Component {
 }
 
 const mapStateToProps = state => {
+    const { activeDaicosTable, showActiveDaicosLoader, activeDaicosRetrieveFailureMessage, activeDaicosRetrievedSuccessFully } = state.activeDaicosData || {}
     return {
-        activeDaicosTable: state.activeDaicosData.activeDaicosTable,
-        showActiveDaicosLoader: state.activeDaicosData.showActiveDaicosLoader,
-        activeDaicosRetrieveFailureMessage: state.activeDaicosData.activeDaicosRetrieveFailureMessage,
-        activeDaicosRetrievedSuccessFully: state.activeDaicosData.activeDaicosRetrievedSuccessFully
+        activeDaicosTable: activeDaicosTable,
+        showActiveDaicosLoader: showActiveDaicosLoader,
+        activeDaicosRetrieveFailureMessage: activeDaicosRetrieveFailureMessage,
+        activeDaicosRetrievedSuccessFully: activeDaicosRetrievedSuccessFully
     }
 }
 

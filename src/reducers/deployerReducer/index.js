@@ -22,7 +22,6 @@ export default function(state = initialState, action) {
     case types.RECEIVED_TRANSACTION_HASH:
       currentProjDetails.latestTxHash = action.payload.body.latestTxHash;
       currentProjDetails.currentDeploymentIndicator = action.payload.body.currentDeploymentIndicator;
-      console.log("Updated state after tx hash", action.payload);
       return {
         ...state,
         projectDetails: currentProjDetails,
@@ -30,8 +29,7 @@ export default function(state = initialState, action) {
       };
     case types.DEPLOYED_CONTRACT:
       currentProjDetails.currentDeploymentIndicator = action.payload.body.currentDeploymentIndicator;
-      currentProjDetails.latestTxHash = action.payload.body.latestTxHash;
-      console.log("Updated state after contract deployment", action.payload.body);
+      currentProjDetails.latestTxHash = action.payload.body.latestTxHash;      
       switch (action.payload.body.currentDeploymentIndicator - 1) {
         case 0:
           currentProjDetails.membershipAddress = action.payload.body.membershipAddress;

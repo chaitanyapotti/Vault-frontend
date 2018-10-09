@@ -74,12 +74,10 @@ export function deployContractAction(version, projectid, cdi, args, contractName
             new web3.eth.Contract(response.data.data.abi)
               .deploy({ data: response.data.data.bytecode, arguments: args })
               .send({ from: accounts[0] })
-              .on("error", error => {
-                console.error(error.message);
-              })
-              .on("transactionHash", transactionHash => {
-                setTxHash(projectid, transactionHash, cdi).then(body => dispatch(receivedTransactionHash(body)));
-              })
+              .on("error", error => console.error(error.message))
+              .on("transactionHash", transactionHash =>
+                setTxHash(projectid, transactionHash, cdi).then(body => dispatch(receivedTransactionHash(body)))
+              )
               .then(newContractInstance =>
                 setContractAddress(projectid, cdi, newContractInstance.options.address).then(body => dispatch(deployedContract(body)))
               )
@@ -88,6 +86,42 @@ export function deployContractAction(version, projectid, cdi, args, contractName
       })
       .catch(err => console.error(err.message));
 }
+
+export function performContractAction(version, projectid, cdi, args, contractName, contractAddress) {
+  return dispatch =>
+    axios.get(config.api_base_url + "/web3/contractdata/", { params: { version: version.toString(), name: contractName } }).then(response => {
+      if (response.status === 200) {
+        web3.eth.getAccounts().then(accounts => {
+          const instance = new web3.eth.Contract(response.data.data.abi, contractAddress, { from: accounts[0] });
+          peformSpecificAction(cdi, instance, args, accounts)
+            .on("error", error => console.error(error.message))
+            .on("transactionHash", transactionHash =>
+              setTxHash(projectid, transactionHash, cdi).then(body => dispatch(receivedTransactionHash(body)))
+            )
+            .then(receipt => setContractAddress(projectid, cdi, null).then(body => dispatch(deployedContract(body))));
+        });
+      }
+    });
+}
+
+const peformSpecificAction = (cdi, instance, args, accounts) => {
+  switch (cdi) {
+    case 5:
+      return instance.methods.setTreasuryAddress(args).send({ from: accounts[0] });
+    case 6:
+    case 7:
+    case 8:
+      return instance.methods.setCrowdSaleAddress(args).send({ from: accounts[0] });
+    case 9:
+      return instance.methods.createKillPolls().send({ from: accounts[0] });
+    case 10:
+      return instance.methods.createRemainingKillPolls().send({ from: accounts[0] });
+    case 11:
+      return instance.methods.mintFoundationTokens().send({ from: accounts[0] });
+    default:
+      return null;
+  }
+};
 
 const setTxHash = (projectid, transactionHash, cdi) => {
   return new Promise((resolve, reject) => {

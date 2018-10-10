@@ -144,7 +144,7 @@ const customTheme = {
         display: 'block',
       },
       colorPrimary: {
-        backgroundColor: CS_COLORS.WHITE,
+        backgroundColor: '#ffffff',
       },
       colorDefault: {
         backgroundColor: CS_COLORS.WHITE,

@@ -1,7 +1,7 @@
 /* eslint react/require-default-props: 0 */
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import { CUIColor, CUIPosition } from '../../static/js/variables';
+import { CUIColor, CUIPosition, CS_COLORS } from '../../static/js/variables';
 import PropTypes from '../../PropTypes';
 
 /**
@@ -35,8 +35,7 @@ const CUIAppBar = props => {
 };
 
 CUIAppBar.defaultProps = {
-  style: { height: 56 },
-  appBarColor: CUIColor.PRIMARY,
+  appBarColor: CS_COLORS.WHITE,
   appBarPosition: CUIPosition.FIXED,
 };
 

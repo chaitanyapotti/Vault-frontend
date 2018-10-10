@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.1.2",
+    "@material-ui/icons": "^3.0.1",
     "@syncfusion/ej2-base": "^16.3.21",
     "@syncfusion/ej2-react-grids": "^16.3.23",
     "axios": "^0.18.0",

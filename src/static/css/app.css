@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import "../../../node_modules/@syncfusion/ej2-react-grids/styles/material.css";
 @import "helpers.css";
 @import "desktop.css";
@@ -110,6 +111,10 @@ a {
     color: #E53A42;
 }
 
+.text--secondary{
+    color: #4ca9fc;
+}
+
 .txt-g-primary {
     color: #51505D;
 }
@@ -128,6 +133,10 @@ a {
 
 .txt-r-medium {
     color: #e14642;
+}
+
+.txt-inc{
+    color: #16c116;
 }
 
 /* -------------------------------------------------- */

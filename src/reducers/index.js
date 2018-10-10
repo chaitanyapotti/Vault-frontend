@@ -1,9 +1,10 @@
-import app from './app';
-import activeDaicosData from './activeDaicosReducer';
-import endedDaicosData from './endedDaicosReducer';
-import upcomingDaicosData from './upcomingDaicosReducer';
+import app from "./app";
+import activeDaicosData from "./activeDaicosReducer";
+import endedDaicosData from "./endedDaicosReducer";
+import upcomingDaicosData from "./upcomingDaicosReducer";
 import deployerReducer from "./deployerReducer";
 import userTokensData from './userTokensReducer';
+import featuredProjectsReducer from "./featuredProjectsReducer";
 
 export default {
     app,
@@ -11,5 +12,6 @@ export default {
     endedDaicosData,
     upcomingDaicosData,
     deployerReducer, 
-    userTokensData
+    userTokensData,
+    featuredProjectsReducer
 };

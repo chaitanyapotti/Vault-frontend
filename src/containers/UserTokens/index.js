@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Table, Loader } from 'semantic-ui-react';
+import { Table, Loader, Grid } from 'semantic-ui-react';
 import { showUserTokensLoaderAction } from '../../actions/userTokensActions';
 
 
@@ -59,6 +59,25 @@ class UserTokens extends Component {
     render() {
         return (
             <div>
+                <Grid columns={5}>
+                    <Grid.Row>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column>
+                        </Grid.Column>
+                        <Grid.Column>
+                            My Tokens
+                        </Grid.Column>
+                        <Grid.Column>
+
+                        </Grid.Column>
+                        <Grid.Column>
+                            *Prices based on current ETH/USD ratio
+                        </Grid.Column>
+                        <Grid.Column>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
                 {
                     this.props.showUserTokensLoader ?
                         <Loader active={this.props.showUserTokensLoader} /> :

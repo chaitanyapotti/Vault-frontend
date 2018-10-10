@@ -22,19 +22,19 @@ const images = [
 
 const SocialLinks = () => {
   return (
-    images.map(d =>
-      <div>
-        <tbody>
-        <tr>
-          <td>
-            <a target="_blank" href={d.link}>
-              <img src={d.image} width="20" height="20"/>
-            </a>
-          </td>
-        </tr>
-        </tbody>
-      </div>
-    )
+    <tbody>
+      <tr>
+        {
+          images.map(d =>
+              <td>
+                <a target="_blank" href={d.link}>
+                  <img src={d.image} width="20" height="20"/>
+                </a>
+              </td>
+          )
+        }
+      </tr>
+    </tbody>
   )
 };
 

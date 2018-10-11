@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
+import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 
 class ProjectGovernance extends Component {
   componentDidMount() {
@@ -69,9 +70,34 @@ class ProjectGovernance extends Component {
     //       foundationDetails={foundationDetails}
     //     />
     //   );
+    // if (currentRoundNumber === "1") {
+    //   return (
+    //     <ProjectDetailCrowdSale
+    //       version={version}
+    //       membershipAddress={membershipAddress}
+    //       projectName={projectName}
+    //       tokenTag={tokenTag}
+    //       description={description}
+    //       urls={urls}
+    //       whitepaper={whitepaper}
+    //       startDateTime={startDateTime}
+    //       maximumEtherContribution={maximumEtherContribution}
+    //       capPercent={capPercent}
+    //       initialTapAmount={initialTapAmount}
+    //       tapIncrementFactor={tapIncrementFactor}
+    //       isCurrentMember={isCurrentMember}
+    //       rounds={rounds}
+    //       totalMintableSupply={totalMintableSupply}
+    //       foundationDetails={foundationDetails}
+    //       r1EndTime={r1EndTime}
+    //       pollFactoryAddress={pollFactoryAddress}
+    //       initialFundRelease={initialFundRelease}
+    //       crowdSaleAddress={crowdSaleAddress}
+    //     />
+    //   );
     if (currentRoundNumber === "0") {
       return (
-        <ProjectDetailCrowdSale
+        <ProjectDetailGovernance
           version={version}
           membershipAddress={membershipAddress}
           projectName={projectName}
@@ -92,6 +118,7 @@ class ProjectGovernance extends Component {
           pollFactoryAddress={pollFactoryAddress}
           initialFundRelease={initialFundRelease}
           crowdSaleAddress={crowdSaleAddress}
+          currentRoundNumber={currentRoundNumber}
         />
       );
     } else return null;

@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { PDetailCrowdSale, ProjectName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
-import { getEtherCollected, getR1TokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
+import { getEtherCollected, getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
 
 class ProjectDetailCrowdSale extends Component {
   componentDidMount() {
     const { version, pollFactoryAddress, crowdSaleAddress } = this.props || {};
     this.props.getEtherCollected(version, pollFactoryAddress);
-    this.props.getR1TokensSold(version, crowdSaleAddress);
+    this.props.getRoundTokensSold(version, crowdSaleAddress);
   }
   //need to refactor and remove these methods later
   getPrice = () => {
@@ -26,11 +26,10 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   getRoundText = () => {
-    const { rounds, r1Info } = this.props || {};
+    const { rounds, roundInfo } = this.props || {};
     const [round1, ...rest] = rounds || {};
     const { tokenCount } = round1 || {}; //tokens/wei
-    console.log(r1Info);
-    const { totalTokensSold } = r1Info || "";
+    const { totalTokensSold } = roundInfo || "";
     //based on tokens sold
     return `${Math.round(parseFloat(totalTokensSold) * Math.pow(10, -18))} Tokens Sold of ${Math.round(
       parseFloat(tokenCount) * Math.pow(10, -18)
@@ -122,7 +121,7 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       getEtherCollected: getEtherCollected,
-      getR1TokensSold: getR1TokensSold,
+      getRoundTokensSold: getRoundTokensSold,
       buyTokens: buyTokens
     },
     dispatch
@@ -130,10 +129,10 @@ const mapDispatchToProps = dispatch => {
 };
 
 const mapStateToProps = state => {
-  const { etherCollected, r1Info } = state.projectCrowdSaleReducer || {};
+  const { etherCollected, roundInfo } = state.projectCrowdSaleReducer || {};
   return {
     etherCollected: etherCollected,
-    r1Info: r1Info
+    roundInfo: roundInfo
   };
 };
 

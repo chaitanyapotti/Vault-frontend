@@ -9,10 +9,10 @@ export function etherCollected(receipt) {
   };
 }
 
-export function r1InfoReceived(data) {
+export function roundInfoReceived(data) {
   return {
     payload: { rec: data },
-    type: "ROUND1_INFO_RECEIVED"
+    type: "ROUND_INFO_RECEIVED"
   };
 }
 
@@ -32,17 +32,17 @@ export function getEtherCollected(version, contractAddress) {
   };
 }
 
-export function getR1TokensSold(version, contractAddress) {
+export function getRoundTokensSold(version, contractAddress, round) {
   return async dispatch => {
     //doesn't call blockchain. await is non blocking
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(config.api_base_url + "/web3/crowdsale/round/details", {
-        params: { version: version.toString(), network: network, address: contractAddress, round: "0" }
+        params: { version: version.toString(), network: network, address: contractAddress, round: round }
       })
       .then(async response => {
         const { data } = response.data;
-        dispatch(r1InfoReceived(data));
+        dispatch(roundInfoReceived(data));
       })
       .catch(err => console.error(err.message));
   };
@@ -61,20 +61,3 @@ export function buyTokens(contractAddress) {
     );
   };
 }
-
-// export function checkWhiteList(version, contractName, contractAddress) {
-//   return dispatch =>
-//     axios.get(config.api_base_url + "/web3/contractdata/", { params: { version: version.toString(), name: contractName } }).then(response => {
-//       if (response.status === 200) {
-//         const { data } = response.data || {};
-//         const { abi } = data || {};
-//         web3.eth.getAccounts().then(accounts => {
-//           const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-//           instance.methods
-//             .isCurrentMember(accounts[0])
-//             .call()
-//             .then(receipt => dispatch(isAlreadyWhiteListed(receipt)));
-//         });
-//       }
-//     });
-// }

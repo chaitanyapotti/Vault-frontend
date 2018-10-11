@@ -32,13 +32,13 @@ class TimeLine extends Component {
 
         <Row className="push--top">
           <Col lg={6} className="txt-m push-half-h--bottom">
-            Started on: {startDate.toDatestring()}
+            Started on: {startDate.toDateString()}
           </Col>
           <Col lg={6} className="txt-m push-half-h--bottom">
-            Ends on: {endDate.toDatestring()}
+            Ends on: {endDate.toDateString()}
           </Col>
           <Col lg={6} className="txt-m push-half-h--bottom">
-            Days Left: {Math.round(Math.abs(endDate - new Date()) / 86400)} days
+            Days Left: {Math.round(Math.abs(endDate - new Date()) / 86400 / 1000)} days
           </Col>
         </Row>
 

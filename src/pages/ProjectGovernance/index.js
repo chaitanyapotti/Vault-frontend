@@ -35,7 +35,9 @@ class ProjectGovernance extends Component {
       membershipAddress,
       rounds,
       totalMintableSupply,
-      foundationDetails
+      foundationDetails,
+      r1EndTime,
+      pollFactoryAddress
     } = projectDetails || {};
     if (currentDeploymentIndicator !== 12)
       return (
@@ -84,6 +86,8 @@ class ProjectGovernance extends Component {
           rounds={rounds}
           totalMintableSupply={totalMintableSupply}
           foundationDetails={foundationDetails}
+          r1EndTime={r1EndTime}
+          pollFactoryAddress={pollFactoryAddress}
         />
       );
     } else return null;

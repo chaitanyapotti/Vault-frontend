@@ -10,7 +10,6 @@ import { Loader } from "semantic-ui-react";
 
 class FeaturedProjects extends Component {
   componentDidMount() {
-    console.log("hdhcvhevj");
     this.props.getFeaturedProjects();
     this.props.featuredProjectsLoaderAction();
   }
@@ -34,7 +33,7 @@ class FeaturedProjects extends Component {
             })}
           </div>
         ) : (
-          <h1>{this.props.featuredprojectsRetrieveFailureMessage}</h1>
+          <h1>{this.props.featuredProjectsRetrieveFailureMessage}</h1>
         )}
       </div>
     );
@@ -45,13 +44,13 @@ const mapStateToProps = state => {
   const {
     featuredProjects,
     showFeaturedProjectsLoader,
-    featuredprojectsRetrieveFailureMessage,
+    featuredProjectsRetrieveFailureMessage,
     featuredProjectsRetrievedSuccessfully
   } = state.featuredProjectsReducer || {};
   return {
     featuredProjects: featuredProjects,
     showFeaturedProjectsLoader: showFeaturedProjectsLoader,
-    featuredprojectsRetrieveFailureMessage: featuredprojectsRetrieveFailureMessage,
+    featuredProjectsRetrieveFailureMessage: featuredProjectsRetrieveFailureMessage,
     featuredProjectsRetrievedSuccessfully: featuredProjectsRetrievedSuccessfully
   };
 };

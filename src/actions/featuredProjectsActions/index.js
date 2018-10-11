@@ -4,15 +4,12 @@ import actionTypes from "../../action_types";
 import constants from "../../constants";
 
 export function getFeaturedProjects() {
-  console.log("success")
   return dispatch => {
     axios
       .get(`${config.api_base_url}/db/projects/featured`)
       .then(response => {
-        console.log("success")
         if (response.status == 200) {
           if (response.data.message == constants.SUCCESS) {
-            console.log("success")
             dispatch({
               type: actionTypes.FEATURED_PROJECTS_SUCCESS,
               payload: response.data.data

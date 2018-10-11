@@ -13,6 +13,7 @@ import LandingPage from "./pages/LandingPage";
 import AllDaicos from "./pages/AllDaicos";
 import Governance from "./pages/Governance";
 import FeaturedProjects from "./pages/FeaturedProjects";
+import SigninManager from "./containers/SigninManager";
 
 import store from "./store";
 import "semantic-ui-css/semantic.min.css";
@@ -34,6 +35,7 @@ class App extends Component {
               <Route exact path="/project" component={ProjectDetails} />
               <Route exact path="/deploy" component={Deployer} />
             </Switch>
+            <SigninManager/>
           </VaultApp>
         </Router>
       </Provider>

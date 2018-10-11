@@ -4,7 +4,7 @@ import actionTypes from "../../action_types";
 
 export const initialState = {
   featuredProjects: [],
-  featuredprojectsRetrieveFailureMessage: "",
+  featuredProjectsRetrieveFailureMessage: "",
   showFeaturedProjectsLoader: true,
   featuredProjectsRetrievedSuccessfully: false
 };
@@ -22,7 +22,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         showFeaturedProjectsLoader: false,
-        featuredprojectsRetrieveFailureMessage: action.payload,
+        featuredProjectsRetrieveFailureMessage: action.payload,
         featuredProjectsRetrievedSuccessfully: false
       };
 

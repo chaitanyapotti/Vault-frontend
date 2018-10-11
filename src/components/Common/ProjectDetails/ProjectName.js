@@ -24,29 +24,29 @@ class ProjectName extends React.Component {
     } = this.props || {};
     const { website } = urls;
     return (
-      <CUICard style={{ padding: "40px 67px" }}>
+      <CUICard style={{ padding: "40px 52px" }}>
         <Row>
           <Col xs={12} lg={9}>
             <div className="hl">
               <span className="prjct-logo hli" />
-              <div className="hli">
+              <div className="hli push--left text--primary">
                 <div className="txt-xxxl">
                   {projectName} ({tokenTag})
                 </div>
-                <div>
+                <div className="txt">
                   <span>{price} ETH</span> <span className="txt-inc"> {priceIncrement}</span>
                 </div>
               </div>
             </div>
           </Col>
-          <Col lg={3}>
+          <Col lg={3} className="txt-g-secondary txt">
             {/* <div>Level 2 Price</div>
             <div>0.017522 ETH</div> */}
             <span>{lastRoundInfo}</span>
           </Col>
         </Row>
-        <Row>
-          <Col lg={6}>
+        <Row className="push--top">
+          <Col lg={6} className="txt txt-g-secondary">
             <div>{roundText}</div>
           </Col>
           <Col lg={6}>
@@ -55,11 +55,11 @@ class ProjectName extends React.Component {
             </div>
           </Col>
         </Row>
-        <Row>
+        <Row className="push-half--top txt">
           <Col>{description}</Col>
         </Row>
-        <Row>
-          <Col lg={6}>
+        <Row className="push--top">
+          <Col lg={6} className="text--secondary txt">
             <div>
               <a href={whitepaper}>Read our whitepaper</a>
             </div>

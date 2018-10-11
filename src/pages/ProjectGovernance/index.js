@@ -5,6 +5,7 @@ import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
+import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 
 class ProjectGovernance extends Component {
   componentDidMount() {
@@ -34,7 +35,11 @@ class ProjectGovernance extends Component {
       membershipAddress,
       rounds,
       totalMintableSupply,
-      foundationDetails
+      foundationDetails,
+      r1EndTime,
+      pollFactoryAddress,
+      initialFundRelease,
+      crowdSaleAddress
     } = projectDetails || {};
     if (currentDeploymentIndicator !== 12)
       return (
@@ -42,10 +47,31 @@ class ProjectGovernance extends Component {
           <p>The project hasn't been deployed yet</p>
         </div>
       );
-    console.log(currentRoundNumber);
-    if (currentRoundNumber === "0")
+    // console.log(currentRoundNumber);
+    // if (currentRoundNumber === "0")
+    //   return (
+    //     <ProjectDetailPreStart
+    //       version={version}
+    //       membershipAddress={membershipAddress}
+    //       projectName={projectName}
+    //       tokenTag={tokenTag}
+    //       description={description}
+    //       urls={urls}
+    //       whitepaper={whitepaper}
+    //       startDateTime={startDateTime}
+    //       maximumEtherContribution={maximumEtherContribution}
+    //       capPercent={capPercent}
+    //       initialTapAmount={initialTapAmount}
+    //       tapIncrementFactor={tapIncrementFactor}
+    //       isCurrentMember={isCurrentMember}
+    //       rounds={rounds}
+    //       totalMintableSupply={totalMintableSupply}
+    //       foundationDetails={foundationDetails}
+    //     />
+    //   );
+    if (currentRoundNumber === "0") {
       return (
-        <ProjectDetailPreStart
+        <ProjectDetailCrowdSale
           version={version}
           membershipAddress={membershipAddress}
           projectName={projectName}
@@ -62,9 +88,13 @@ class ProjectGovernance extends Component {
           rounds={rounds}
           totalMintableSupply={totalMintableSupply}
           foundationDetails={foundationDetails}
+          r1EndTime={r1EndTime}
+          pollFactoryAddress={pollFactoryAddress}
+          initialFundRelease={initialFundRelease}
+          crowdSaleAddress={crowdSaleAddress}
         />
       );
-    else return null;
+    } else return null;
   }
 }
 

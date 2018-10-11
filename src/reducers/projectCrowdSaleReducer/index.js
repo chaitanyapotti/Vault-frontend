@@ -3,7 +3,8 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  currentRoundNumber: 0
+  etherCollected: 0,
+  r1Info: {}
 };
 
 export default function(state = initialState, action) {
@@ -20,11 +21,18 @@ export default function(state = initialState, action) {
     //     membershipAssigned: false
     //   };
 
-    case actionTypes.CURRENT_ROUND_FETCHED:
+    case actionTypes.ETHER_COLLECTED:
       const { receipt } = action.payload;
       return {
         ...state,
-        currentRoundNumber: receipt
+        etherCollected: receipt
+      };
+
+    case actionTypes.ROUND1_INFO_RECEIVED:
+      const { rec } = action.payload;
+      return {
+        ...state,
+        r1Info: rec
       };
 
     default:

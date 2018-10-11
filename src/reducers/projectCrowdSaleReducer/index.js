@@ -3,7 +3,8 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  etherCollected: 0
+  etherCollected: 0,
+  r1Info: {}
 };
 
 export default function(state = initialState, action) {
@@ -25,6 +26,13 @@ export default function(state = initialState, action) {
       return {
         ...state,
         etherCollected: receipt
+      };
+
+    case actionTypes.ROUND1_INFO_RECEIVED:
+      const { rec } = action.payload;
+      return {
+        ...state,
+        r1Info: rec
       };
 
     default:

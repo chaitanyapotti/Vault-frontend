@@ -7,12 +7,17 @@ import LinearProgressBar from "../LinearProgressBar";
 
 class TimeLine extends Component {
   render() {
+    const { fundsCollected, roundGoal, startDate, endDate } = this.props || {};
     return (
       <Grid>
         <div>DAICO Timeline</div>
         <Row>
+          <Col lg={6}>{parseFloat(fundsCollected) / parseFloat(roundGoal)} % Goal reached</Col>
+        </Row>
+        <Row>
           <Col lg={6}>Funds Collected</Col>
-          <Col lg={6}>3,500 ETH Goal</Col>
+          <Col lg={6}>{fundsCollected} ETH</Col>
+          <Col lg={6}>{roundGoal} ETH Goal</Col>
         </Row>
 
         <div>
@@ -20,8 +25,9 @@ class TimeLine extends Component {
         </div>
 
         <Row>
-          <Col lg={6}>Started on: 3rd Aug 2018</Col>
-          <Col lg={6}>Ends on: 23rd Aug 2018</Col>
+          <Col lg={6}>Started on: {startDate.toDatestring()}</Col>
+          <Col lg={6}>Ends on: {endDate.toDatestring()}</Col>
+          <Col lg={6}>Days Left: {Math.round(Math.abs(endDate - new Date()) / 86400)} days</Col>
         </Row>
 
         <div>

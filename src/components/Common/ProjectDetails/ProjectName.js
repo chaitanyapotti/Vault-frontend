@@ -21,31 +21,31 @@ class ProjectName extends React.Component{
 
     render(){
         return(
-                <CUICard style={{padding: '40px 67px'}}>
+                <CUICard style={{padding: '40px 52px'}}>
                     <Row>
                         <Col xs={12} lg={9}>
                             <div className="hl">
                                 <span className="prjct-logo hli"></span>
-                                <div className="hli">
+                                <div className="hli push--left text--primary">
                                     <div className="txt-xxxl">Omisego (OMG)</div>
-                                    <div>0.009861 ETH <span className="txt-inc"> (+31.23 %)</span></div>
+                                    <div className="txt">0.009861 ETH <span className="txt-inc"> (+31.23 %)</span></div>
                                 </div>
                             </div>
                         </Col>
-                        <Col lg={3}>
+                        <Col lg={3} className="txt-g-secondary txt">
                             <div>Level 2 Price</div>
                             <div>0.017522 ETH</div>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col lg={6}>
+                    <Row className="push--top">
+                        <Col lg={6} className="txt txt-g-secondary">
                             <div>Sold Out (3rd Round Ended)</div>
                         </Col>
                         <Col lg={6}>
                             <div><SocialLinks/></div>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className="push-half--top txt">
                         <Col>
                             Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy 
                             nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi 
@@ -53,8 +53,8 @@ class ProjectName extends React.Component{
                             nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in 
                         </Col>
                     </Row>
-                    <Row>
-                        <Col lg={6}>
+                    <Row className="push--top">
+                        <Col lg={6} className="text--secondary txt">
                             <div>Read our whitepaper</div>
                             <div>Learn more on our website</div>
                         </Col>

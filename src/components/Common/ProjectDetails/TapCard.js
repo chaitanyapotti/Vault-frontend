@@ -22,16 +22,16 @@ class TapCard extends React.Component{
     render(){
         return(
                 <CUICard style={{padding: '40px 50px'}}>
-                    <div>Tap Increment</div>
-                    <Row>
-                        <Col lg={6}>Current Tap Amount: <span className="text--secondary">550 ETH</span> </Col>
-                        <Col lg={6}>Tap increment Unit: <span className="text--secondary">50 ETH</span> </Col>
+                    <div className="txt-xxxl text--primary">Tap Increment</div>
+                    <Row className="push-top--35">
+                        <Col lg={6} className="txt">Current Tap Amount: <span className="text--secondary">550 ETH</span> </Col>
+                        <Col lg={6} className="txt">Tap increment Unit: <span className="text--secondary">50 ETH</span> </Col>
                     </Row>
 
                     <Row>
-                        <Col lg={12}>Increment Approval: <span className="text--secondary">9.23%</span> </Col>
+                        <Col lg={12} className="txt">Increment Approval: <span className="text--secondary">9.23%</span> </Col>
                     </Row>
-                    <div>
+                    <div className="text-right">
                         <CUIButton
                             type={CUIButtonType.RAISED}
                             buttonColor={CUIInputColor.PRIMARY}

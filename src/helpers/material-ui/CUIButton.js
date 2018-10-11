@@ -85,7 +85,7 @@ CUIButton.defaultProps = {
   id: '',
   isLinkExternal: false,
   tabIndex: 0,
-  buttonColor: CUIButtonColor.SECONDARY,
+  buttonColor: CUIButtonColor.PRIMARY,
   full: false,
   icon: null,
   actionProps: {},

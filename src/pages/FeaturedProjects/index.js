@@ -22,10 +22,10 @@ class FeaturedProjects extends Component {
           <Loader active={this.props.showFeaturedProjectsLoader} />
         ) : this.props.featuredProjectsRetrievedSuccessfully ? (
           <div>
-            {featuredProjects.map(item => {
+            {featuredProjects.map((item, index) => {
               const { projectName, description } = item;
               return (
-                <FeaturedProject
+                <FeaturedProject key={index}
                   projectName={projectName}
                   description={description}
                 />

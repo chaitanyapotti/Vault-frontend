@@ -4,8 +4,10 @@ import types from "../../action_types";
 
 export const initialState = {
     userRegistered: false,
-    userPublicAddress: '',
+    userServerPublicAddress: '',
     userIsIssuer: false,
+    userLocalPublicAddress: '',
+    userPreviousLocalPublicAddress: ''
 };
 
 export default function (state = initialState, action) {
@@ -16,9 +18,25 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 userRegistered: true,
-                userPublicAddress: publicAddress,
-                userIsIssuer: isIssuer
+                userServerPublicAddress: publicAddress,
+                userIsIssuer: isIssuer,
+                userPreviousLocalPublicAddress: publicAddress
             };
+        case types.USER_LOCAL_ACCOUNT_ADDRESS:
+            return {
+                ...state,
+                userLocalPublicAddress: action.payload, 
+                userPreviousLocalPublicAddress: action.payload
+            }
+        case types.USER_DEFAULT_ACCOUNT_CHANGED:
+            return {
+                ...state, 
+                userRegistered: false,
+                userIsIssuer: false,
+                userServerPublicAddress: '',
+                userLocalPublicAddress: action.payload,
+                userPreviousLocalPublicAddress: action.payload
+            }
         default:
             return state;
     }

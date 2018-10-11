@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -198,8 +199,17 @@ class HeaderPartial extends React.Component {
                     <div className="hdr-itm-pad text--primary txt-m"><div className="hvr-underline-from-left">Governance</div></div>
                     <div className="hdr-itm-pad text--primary txt-m"><div className="hvr-underline-from-left">Publish ICO</div></div>
                     <div className="hdr-itm-pad text--primary txt-m wdh-100">
-                      <div>Somesh:</div>
-                      <div className="add-ellip">12xxxjs0000dskds</div>
+                      
+                      {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
+                      {this.props.userRegistered? (
+                        <div>
+                        <div>Somesh:</div>
+                        <div>{this.props.userServerPublicAddress}</div>
+                        </div>
+                        ):(
+                         <div> <button>Register</button></div>
+                        )}
+                      
                     </div>
                   </div>
                   <div className={classes.sectionMobile}>
@@ -241,4 +251,14 @@ HeaderPartial.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(HeaderPartial);
+const mapStateToProps = state => {
+  const { userRegistered, userServerPublicAddress, userIsIssuer } = state.signinManagerData || {}
+  return {
+      userRegistered: userRegistered,
+      userServerPublicAddress: userServerPublicAddress,
+      userIsIssuer: userIsIssuer
+  }
+
+}
+
+export default connect(mapStateToProps, null)(withStyles(styles)(HeaderPartial)) ;

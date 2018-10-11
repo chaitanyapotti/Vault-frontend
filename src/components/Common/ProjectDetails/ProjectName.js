@@ -3,6 +3,8 @@ import {CUICard, CUIFormInput, CUIButton} from '../../../helpers/material-ui';
 import {CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS} from '../../../static/js/variables';
 import {Row, Col} from '../../../helpers/react-flexbox-grid';
 import SocialLinks from '../../Common/SocialLinks';
+import {ButtonComponent} from '../FormComponents';
+import DualComponent from '../FormComponents/DualButton';
 
 class ProjectName extends React.Component{
     state={
@@ -59,16 +61,19 @@ class ProjectName extends React.Component{
                             <div>Learn more on our website</div>
                         </Col>
                         <Col lg={6}>
-                            <CUIButton
-                                type={CUIButtonType.RAISED}
-                                buttonColor={CUIInputColor.PRIMARY}
-                                id="Publish DAICO"
-                                label={'Publish DAICO'}
-                                // disabled={!this.state.validPassword}
-                                onClick={() => {
-                                    // this.uploadDaico();
-                                }}
+                        { this.props.type === 'dual' ? 
+                            <DualComponent
+                                label1="Buy"
+                                label2="Trade"
                             />
+                            :
+                            <ButtonComponent
+                                type='danger'
+                                onClick={()=> this.uploadDaico()}
+                                label="Deny"
+                            />
+                        }
+                            
                         </Col>
                     </Row>
                 </CUICard>

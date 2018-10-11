@@ -3,6 +3,7 @@ import {CUICard, CUIFormInput, CUIButton} from '../../../../helpers/material-ui'
 import {CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS} from '../../../../static/js/variables';
 import {Row, Col} from '../../../../helpers/react-flexbox-grid';
 import SocialLinks from '../../../Common/SocialLinks';
+import {ButtonComponent} from '../../FormComponents';
 
 class ReqType extends React.Component{
   
@@ -32,15 +33,10 @@ class ReqType extends React.Component{
                     </Row>
 
                     <div className="push--top">
-                        <CUIButton
-                            type={CUIButtonType.RAISED}
-                            buttonColor={CUIInputColor.PRIMARY}
-                            id="Deny"
-                            label={'Deny'}
-                            // disabled={!this.state.validPassword}
-                            onClick={() => {
-                                this.uploadDaico();
-                            }}
+                        <ButtonComponent
+                            type='danger'
+                            onClick={()=> this.uploadDaico()}
+                            label="Deny"
                         />
                     </div>
                 </div>

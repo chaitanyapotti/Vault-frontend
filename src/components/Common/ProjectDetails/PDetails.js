@@ -3,6 +3,7 @@ import {CUICard, CUIFormInput, CUIButton} from '../../../helpers/material-ui';
 import {CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS} from '../../../static/js/variables';
 import {Row, Col} from '../../../helpers/react-flexbox-grid';
 import SocialLinks from '../../Common/SocialLinks';
+import {ButtonComponent} from '../FormComponents';
 
 class PDetails extends React.Component{
     state={
@@ -46,15 +47,9 @@ class PDetails extends React.Component{
                     <div className="push-top--35 txt">Total Refundable Balance: <span className="text--secondary">19,076.98125 ETH</span></div>
                     <div className="txt">Kill Consensus: <span className="text--secondary">9.23%</span></div>
                     <div className="text-right">
-                        <CUIButton
-                            type={CUIButtonType.RAISED}
-                            buttonColor={CUIInputColor.PRIMARY}
-                            id="Kill Project"
-                            label={'Kill Project'}
-                            // disabled={!this.state.validPassword}
-                            onClick={() => {
-                                this.uploadDaico();
-                            }}
+                        <ButtonComponent
+                            onClick={()=> this.uploadDaico()}
+                            label="Kill Project"
                         />
                     </div>
 

@@ -3,6 +3,7 @@ import {CUICard, CUIFormInput, CUIButton} from '../../../helpers/material-ui';
 import {CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS} from '../../../static/js/variables';
 import {Row, Col} from '../../../helpers/react-flexbox-grid';
 import SocialLinks from '../../Common/SocialLinks';
+import ButtonComponent from '../FormComponents/ButtonComponent';
 
 class TapCard extends React.Component{
     state={
@@ -32,15 +33,10 @@ class TapCard extends React.Component{
                         <Col lg={12} className="txt">Increment Approval: <span className="text--secondary">9.23%</span> </Col>
                     </Row>
                     <div className="text-right">
-                        <CUIButton
-                            type={CUIButtonType.RAISED}
-                            buttonColor={CUIInputColor.PRIMARY}
-                            id="Approve"
-                            label={'Approve'}
-                            // disabled={!this.state.validPassword}
-                            onClick={() => {
-                                this.uploadDaico();
-                            }}
+                        <ButtonComponent
+                            type='danger'
+                            onClick={()=> this.uploadDaico()}
+                            label="Approve"
                         />
                     </div>
                 </CUICard>

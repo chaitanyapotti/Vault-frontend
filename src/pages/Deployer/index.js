@@ -14,6 +14,7 @@ import CreateKillPolls2 from "./CreateKillPolls2";
 import MintFoundationTokens from "./MintFoundationTokens";
 import SetCrowdsaleInLockedTokens from "./SetCrowdsaleInLockedTokens";
 import SetCrowdSaleInPollFactory from "./SetCrowdSaleInPollFactory";
+import RouteToMain from "./RouteToMain";
 
 import web3 from "../../helpers/web3";
 
@@ -144,6 +145,10 @@ class Deployer extends Component {
     this.props.performContractAction(version, _id, currentDeploymentIndicator, null, "CrowdSale", crowdSaleAddress);
   };
 
+  redirectHome = () => {
+    this.props.history.push("/");
+  };
+
   render() {
     if (this.props.projectDetails != null)
       switch (this.props.projectDetails.currentDeploymentIndicator) {
@@ -172,7 +177,7 @@ class Deployer extends Component {
         case 11:
           return <MintFoundationTokens onClick={this.mintFoundationTokens} />;
         default:
-          return null;
+          return <RouteToMain onClick={this.redirectHome} />;
       }
     return null;
   }

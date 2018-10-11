@@ -21,10 +21,16 @@ class FundReq extends React.Component {
   };
 
   render() {
-    return (
+    const {reqTypes} = this.props 
+        return (
       <CUICard style={{ padding: "40px 50px" }}>
-        <ReqType />
-        <ReqType />
+        {reqTypes.map(item=>{
+          const {etherRequested, approvalRate, endsIn} = item;
+          return (
+            <ReqType etherRequested={etherRequested} approvalRate={approvalRate} endsIn={endsIn} />
+          )
+        })
+        }
       </CUICard>
     );
   }

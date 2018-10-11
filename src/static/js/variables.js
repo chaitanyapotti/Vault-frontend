@@ -3,7 +3,7 @@ export const CS_COLORS = {
   WHITE: '#FFFFFF',
   BLACK: '#000000',
   LIGHT_PRIMARY: '#71BA6D',
-  PRIMARY: '#599A02',
+  PRIMARY: '#4ca9fc',
   SECONDARY: '#d91e59',
   SUCCESS: '#599A02',
   DANGER: '#E53A42',

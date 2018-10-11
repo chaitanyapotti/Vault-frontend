@@ -3,35 +3,47 @@
 
 import React, { Component } from "react";
 import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
-import LinearProgressBar from "../LinearProgressBar";
+import { CUILinearProgress } from "../../../helpers/material-ui";
 
 class TimeLine extends Component {
   render() {
     const { fundsCollected, roundGoal, startDate, endDate } = this.props || {};
     return (
       <Grid>
-        <div>DAICO Timeline</div>
-        <Row>
-          <Col lg={6}>{parseFloat(fundsCollected) / parseFloat(roundGoal)} % Goal reached</Col>
+        <div className="txt-xxxl text--primary">DAICO Timeline</div>
+        <Row className="push--top">
+          <Col lg={6} className="txt-m push-half-h--bottom">
+            {parseFloat(fundsCollected) / parseFloat(roundGoal)} % Goal reached
+          </Col>
         </Row>
         <Row>
           <Col lg={6}>Funds Collected</Col>
-          <Col lg={6}>{fundsCollected} ETH</Col>
-          <Col lg={6}>{roundGoal} ETH Goal</Col>
+          <Col lg={6} className="txt-m push-half-h--bottom">
+            {fundsCollected} ETH
+          </Col>
+          <Col lg={6} className="txt-m push-half-h--bottom">
+            {roundGoal} ETH Goal
+          </Col>
         </Row>
 
         <div>
-          <LinearProgressBar />
+          <CUILinearProgress style={{ height: 7, borderRadius: 7 }} value={70} />
         </div>
 
-        <Row>
-          <Col lg={6}>Started on: {startDate.toDatestring()}</Col>
-          <Col lg={6}>Ends on: {endDate.toDatestring()}</Col>
-          <Col lg={6}>Days Left: {Math.round(Math.abs(endDate - new Date()) / 86400)} days</Col>
+        <Row className="push--top">
+          <Col lg={6} className="txt-m push-half-h--bottom">
+            Started on: {startDate.toDatestring()}
+          </Col>
+          <Col lg={6} className="txt-m push-half-h--bottom">
+            Ends on: {endDate.toDatestring()}
+          </Col>
+          <Col lg={6} className="txt-m push-half-h--bottom">
+            Days Left: {Math.round(Math.abs(endDate - new Date()) / 86400)} days
+          </Col>
         </Row>
 
         <div>
-          <LinearProgressBar />
+          <CUILinearProgress style={{ height: 7, borderRadius: 7 }} value={50} />
         </div>
       </Grid>
     );

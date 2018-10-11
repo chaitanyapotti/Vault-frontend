@@ -37,7 +37,9 @@ class ProjectGovernance extends Component {
       totalMintableSupply,
       foundationDetails,
       r1EndTime,
-      pollFactoryAddress
+      pollFactoryAddress,
+      initialFundRelease,
+      crowdSaleAddress
     } = projectDetails || {};
     if (currentDeploymentIndicator !== 12)
       return (
@@ -45,7 +47,7 @@ class ProjectGovernance extends Component {
           <p>The project hasn't been deployed yet</p>
         </div>
       );
-    console.log(currentRoundNumber);
+    // console.log(currentRoundNumber);
     // if (currentRoundNumber === "0")
     //   return (
     //     <ProjectDetailPreStart
@@ -88,6 +90,8 @@ class ProjectGovernance extends Component {
           foundationDetails={foundationDetails}
           r1EndTime={r1EndTime}
           pollFactoryAddress={pollFactoryAddress}
+          initialFundRelease={initialFundRelease}
+          crowdSaleAddress={crowdSaleAddress}
         />
       );
     } else return null;

@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { PDetailCrowdSale, ProjectName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
-import { getEtherCollected } from "../../actions/projectCrowdSaleActions/index";
+import { getEtherCollected, getR1TokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
 
 class ProjectDetailCrowdSale extends Component {
   componentDidMount() {
-    const { version, pollFactoryAddress } = this.props || {};
+    const { version, pollFactoryAddress, crowdSaleAddress } = this.props || {};
     this.props.getEtherCollected(version, pollFactoryAddress);
+    this.props.getR1TokensSold(version, crowdSaleAddress);
   }
   //need to refactor and remove these methods later
   getPrice = () => {
@@ -25,8 +26,15 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   getRoundText = () => {
+    const { rounds, r1Info } = this.props || {};
+    const [round1, ...rest] = rounds || {};
+    const { tokenCount } = round1 || {}; //tokens/wei
+    console.log(r1Info);
+    const { totalTokensSold } = r1Info || "";
     //based on tokens sold
-    return "3 Round DAICO";
+    return `${Math.round(parseFloat(totalTokensSold) * Math.pow(10, -18))} Tokens Sold of ${Math.round(
+      parseFloat(tokenCount) * Math.pow(10, -18)
+    )} (Round 1 of 3)`;
   };
 
   getR3Price = () => {
@@ -55,10 +63,10 @@ class ProjectDetailCrowdSale extends Component {
     return Math.round(hardCap).toString();
   };
 
-  onWhiteListClick = () => {
-    const { version, membershipAddress } = this.props || {};
-    //this.props.checkWhiteList(version, "Protocol", membershipAddress);
-    this.props.onWhiteListClick(version, "Protocol", membershipAddress);
+  buyTokens = () => {
+    const { crowdSaleAddress } = this.props || {};
+    //TODO need to add how many tokens to buy
+    this.props.buyTokens(crowdSaleAddress);
   };
   render() {
     const {
@@ -79,7 +87,6 @@ class ProjectDetailCrowdSale extends Component {
       r1EndTime,
       etherCollected
     } = this.props || {};
-    console.log(r1EndTime);
     return (
       <div>
         <TimeLine fundsCollected={etherCollected} roundGoal={this.getR1Goal()} startDate={new Date(startDateTime)} endDate={new Date(r1EndTime)} />
@@ -93,14 +100,14 @@ class ProjectDetailCrowdSale extends Component {
           whitepaper={whitepaper}
           buttonText="Buy"
           buttonVisibility={!isCurrentMember}
-          onClick={this.onWhiteListClick}
+          onClick={this.buyTokens}
         />
         <PDetailCrowdSale
           individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
           voteSaturationLimit={capPercent / 100}
           killFrequency="Quarterly"
           initialTapAmount={(parseInt(initialTapAmount, 10) * 86400 * 30) / Math.pow(10, 18)}
-          initialFundRelease={initialFundRelease}
+          initialFundRelease={parseInt(initialFundRelease, 10) / Math.pow(10, 18)}
           tapIncrementUnit={tapIncrementFactor}
           hardCapCapitalisation={this.getSoftCap()}
           dilutedCapitalisation={this.getHardCap()}
@@ -114,16 +121,19 @@ class ProjectDetailCrowdSale extends Component {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      getEtherCollected: getEtherCollected
+      getEtherCollected: getEtherCollected,
+      getR1TokensSold: getR1TokensSold,
+      buyTokens: buyTokens
     },
     dispatch
   );
 };
 
 const mapStateToProps = state => {
-  const { etherCollected } = state.projectCrowdSaleReducer || {};
+  const { etherCollected, r1Info } = state.projectCrowdSaleReducer || {};
   return {
-    etherCollected: etherCollected
+    etherCollected: etherCollected,
+    r1Info: r1Info
   };
 };
 

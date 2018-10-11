@@ -22,7 +22,6 @@ export default function(state = initialState, action) {
 
     case actionTypes.CURRENT_ROUND_FETCHED:
       const { receipt } = action.payload;
-      console.log(receipt, "Set round");
       return {
         ...state,
         currentRoundNumber: receipt

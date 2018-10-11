@@ -10,28 +10,28 @@ class ReqType extends React.Component{
         return(
                 <div>
                     <div>Exceptional Fund Requests</div>
-                    <Row>
+                    <Row className="txt-g-secondary push-top--35 txt-m">
                         <Col lg={6}>App Redesign</Col>
                         <Col lg={6}>20 Aug 2018</Col>
                     </Row>
 
-                    <div>
+                    <div className="txt-g-secondary txt-m">
                         <div lg={12}>500 ETH</div>
                     </div>
 
-                    <div>
+                    <div className="push--top txt">
                         Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy 
                         nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi 
                         enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis 
                         nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in 
                     </div>
 
-                    <Row>
-                        <Col lg={6}>Approval Rate:<span className="text--secondary"> 99.99%</span> </Col>
-                        <Col lg={6}>Ends in: <span className="text--secondary"> 5D 12H 20M</span> </Col>
+                    <Row className="push--top">
+                        <Col lg={6} className="txt">Approval Rate:<span className="text--secondary"> 99.99%</span> </Col>
+                        <Col lg={6} className="txt">Ends in: <span className="text--secondary"> 5D 12H 20M</span> </Col>
                     </Row>
 
-                    <div>
+                    <div className="push--top">
                         <CUIButton
                             type={CUIButtonType.RAISED}
                             buttonColor={CUIInputColor.PRIMARY}

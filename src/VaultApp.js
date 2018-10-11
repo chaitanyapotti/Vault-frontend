@@ -15,7 +15,7 @@ class VaultApp extends React.PureComponent {
       <div>
         <HeaderPartial />
         <SubHeader/>
-        <div className="main-content">
+        <div className="main-content push-top--50">
           {this.props.children}
         </div>
         <FooterPartial />

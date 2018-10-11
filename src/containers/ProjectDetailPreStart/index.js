@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ProjectName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
-import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
+import { onWhiteListClick } from "../../actions/projectPreStartActions/index";
 
 class ProjectDetailPreStart extends Component {
   getPrice = () => {
@@ -98,18 +98,16 @@ class ProjectDetailPreStart extends Component {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      onWhiteListClick: onWhiteListClick,
-      checkWhiteList: checkWhiteList
+      onWhiteListClick: onWhiteListClick
     },
     dispatch
   );
 };
 
 const mapStateToProps = state => {
-  const { isCurrentMember, membershipAssigned } = state.projectPreStartReducer || {};
+  const { isCurrentMember } = state.projectPreStartReducer || {};
   return {
-    isCurrentMember: isCurrentMember,
-    membershipAssigned: membershipAssigned
+    isCurrentMember: isCurrentMember
   };
 };
 

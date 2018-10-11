@@ -3,7 +3,7 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  isCurrentMember: false
+  currentRoundNumber: 0
 };
 
 export default function(state = initialState, action) {
@@ -20,11 +20,12 @@ export default function(state = initialState, action) {
     //     membershipAssigned: false
     //   };
 
-    case actionTypes.WHITELIST_CHECK:
+    case actionTypes.CURRENT_ROUND_FETCHED:
       const { receipt } = action.payload;
+      console.log(receipt, "Set round");
       return {
         ...state,
-        isCurrentMember: receipt
+        currentRoundNumber: receipt
       };
 
     default:

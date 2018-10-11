@@ -70,7 +70,9 @@ class ProjectName extends React.Component {
           <Col lg={6}>
             {buttonVisibility ? (
               <CUIButton type={CUIButtonType.RAISED} buttonColor={CUIInputColor.PRIMARY} label={buttonText} onClick={onClick} />
-            ) : null}
+            ) : (
+              <span>You are whitelisted</span>
+            )}
             {onSecondaryClick ? (
               <CUIButton type={CUIButtonType.RAISED} buttonColor={CUIInputColor.PRIMARY} label={secondaryButtonText} onClick={onSecondaryClick} />
             ) : null}

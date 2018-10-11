@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -15,7 +13,7 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Drawer from '@material-ui/core/Drawer';
 import {Grid,Row, Col} from '../../../helpers/react-flexbox-grid';
-import { CUIAppBar } from '../../../helpers/material-ui';
+import { CUIAppBar, CUIButtonIcon } from '../../../helpers/material-ui';
 
 const scrnWdh = window.innerWidth;
 const styles = theme => ({
@@ -172,9 +170,9 @@ class HeaderPartial extends React.Component {
                 <Toolbar style={scrnWdh < 768 ? {height: '60px'}: {height: '129px'}} >
                   {
                     (scrnWdh < 768) ?
-                      <IconButton onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
+                      <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
                         <MenuIcon />
-                      </IconButton>
+                      </CUIButtonIcon>
                     :
                     <div/>
                   }
@@ -205,9 +203,9 @@ class HeaderPartial extends React.Component {
                     </div>
                   </div>
                   <div className={classes.sectionMobile}>
-                    <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+                    <CUIButtonIcon aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
                       <MoreIcon />
-                    </IconButton>
+                    </CUIButtonIcon>
                   </div>
                 </Toolbar>
                 </Col>
@@ -224,9 +222,9 @@ class HeaderPartial extends React.Component {
           open={this.state.drawerIsOpen}
         >
           <div className={classes.drawerHeader}>
-            <IconButton onClick={this.handleDrawerClose}>
+            <CUIButtonIcon onClick={this.handleDrawerClose}>
               <div><ChevronLeft/> Back</div>
-            </IconButton>
+            </CUIButtonIcon>
           </div>
           <div className={classes.drawerInner}>
             <div className="hdr-itm-pad text--primary txt-m">Projects</div>

@@ -11,9 +11,9 @@ class Header extends Component {
           <Col md={9}>
             <div className="hl">
               <div className="hli"><span className="hdr-logo"/></div>
-              <div className="hli hdr-item-cnt"><span className="txt-xl txt-dddbld hover-anim">My Investments</span>
+              <div className="hli hdr-item-cnt"><span className="txt-m txt-dddbld hover-anim">My Investments</span>
               </div>
-              <div className="hli hdr-item-cnt"><span className="txt-xl txt-dddbld hover-anim">Become an issuer</span>
+              <div className="hli hdr-item-cnt"><span className="txt-m txt-dddbld hover-anim">Become an issuer</span>
               </div>
             </div>
           </Col>

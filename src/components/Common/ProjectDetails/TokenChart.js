@@ -22,4 +22,4 @@ const TokenChart = () =>
                     </Row>
                 </div>
 
-export default TokenChart;
+export default TokenChart;  

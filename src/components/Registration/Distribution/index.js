@@ -4,7 +4,7 @@ import {CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS} from '../../../st
 import {Row, Col} from '../../../helpers/react-flexbox-grid';
 import TokenSale from './TokenSale';
 import NonSale from './NonSale';
-import TokenChart from './TokenChart';
+import TokenChart from '../../Common/ProjectDetails/TokenChart';
 
 
 class Distribution extends React.Component{

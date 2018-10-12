@@ -159,7 +159,7 @@ class ProjectDetailGovernance extends Component {
           tapIncrementUnit={tapIncrementFactor}
           incrementApproval={this.getTapPollConsensus()}
         />
-        <FundReq reqTypes />
+        {/* <FundReq reqTypes /> */}
       </div>
     );
   }

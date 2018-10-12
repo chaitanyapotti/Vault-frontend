@@ -40,7 +40,8 @@ class ProjectGovernance extends Component {
       r1EndTime,
       pollFactoryAddress,
       initialFundRelease,
-      crowdSaleAddress
+      crowdSaleAddress,
+      daicoTokenAddress
     } = projectDetails || {};
     console.log(currentDeploymentIndicator);
     if (currentDeploymentIndicator !== 12)
@@ -120,6 +121,7 @@ class ProjectGovernance extends Component {
           initialFundRelease={initialFundRelease}
           crowdSaleAddress={crowdSaleAddress}
           currentRoundNumber={currentRoundNumber}
+          daicoTokenAddress={daicoTokenAddress}
         />
       );
     } else return null;

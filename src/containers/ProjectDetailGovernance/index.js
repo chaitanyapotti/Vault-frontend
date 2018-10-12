@@ -15,12 +15,6 @@ import {
   getCurrentTap
 } from "../../actions/projectDetailGovernanceActions/index";
 
-Date.prototype.addDays = days => {
-  let date = new Date(this.valueOf());
-  date.setDate(date.getDate() + days);
-  return date;
-};
-
 class ProjectDetailGovernance extends Component {
   componentDidMount() {
     const { version, crowdSaleAddress, currentRoundNumber, pollFactoryAddress, daicoTokenAddress } = this.props || {};
@@ -32,6 +26,7 @@ class ProjectDetailGovernance extends Component {
     this.props.getTotalSupply(version, daicoTokenAddress);
     this.props.getKillConsensus(version, pollFactoryAddress);
     this.props.getTapPollConsensus(version, pollFactoryAddress);
+    this.props.getCurrentTap(version, pollFactoryAddress);
   }
   getPriceIncrement = () => {
     //to use external api
@@ -75,8 +70,9 @@ class ProjectDetailGovernance extends Component {
   };
   getNextKillPollStartDate = () => {
     const { killPollIndex, r1EndTime } = this.props || {};
-    const endDate = new Date(r1EndTime);
-    return endDate.addDays(killPollIndex * 90);
+    let endDate = new Date(r1EndTime);
+    endDate.setDate(endDate.getDate() + killPollIndex * 90);
+    return endDate.toDateString();
   };
   getMyTokenValue = () => {
     const etherPrice = 200;
@@ -155,7 +151,7 @@ class ProjectDetailGovernance extends Component {
           onKillClick={this.onKillClick}
         />
         <TapCard
-          currentTapAmount={(parseInt(currentTap, 10) * 86400 * 30) / Math.pow(10, 18)}
+          currentTapAmount={(parseFloat(currentTap, 10) * 86400 * 30) / Math.pow(10, 18)}
           tapIncrementUnit={tapIncrementFactor}
           incrementApproval={this.getTapPollConsensus()}
         />

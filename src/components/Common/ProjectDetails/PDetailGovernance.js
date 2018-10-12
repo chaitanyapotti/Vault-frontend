@@ -35,11 +35,8 @@ class PDetailGovernance extends React.Component {
             Vote Saturation Limit: <span className="text--secondary">{voteSaturationLimit}%</span>
           </Col>
           <Col lg={6}>
-            Kill Attempts Left
-            <span className="text--secondary">
-              {killAttemptsLeft}
-              ETH
-            </span>
+            Kill Attempts Left:
+            <span className="text--secondary">{killAttemptsLeft}</span>
           </Col>
         </Row>
 

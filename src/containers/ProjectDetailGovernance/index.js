@@ -12,7 +12,8 @@ import {
   getTotalSupply,
   getKillConsensus,
   getTapPollConsensus,
-  getCurrentTap
+  getCurrentTap,
+  getXfrData
 } from "../../actions/projectDetailGovernanceActions/index";
 
 class ProjectDetailGovernance extends Component {
@@ -27,6 +28,7 @@ class ProjectDetailGovernance extends Component {
     this.props.getKillConsensus(version, pollFactoryAddress);
     this.props.getTapPollConsensus(version, pollFactoryAddress);
     this.props.getCurrentTap(version, pollFactoryAddress);
+    this.props.getXfrData(version, pollFactoryAddress);
   }
   getPriceIncrement = () => {
     //to use external api
@@ -117,7 +119,8 @@ class ProjectDetailGovernance extends Component {
       killPollIndex,
       remainingEtherBalance,
       tapIncrementFactor,
-      currentTap
+      currentTap,
+      xfrData
     } = this.props || {};
     return (
       <div>
@@ -155,7 +158,7 @@ class ProjectDetailGovernance extends Component {
           tapIncrementUnit={tapIncrementFactor}
           incrementApproval={this.getTapPollConsensus()}
         />
-        {/* <FundReq reqTypes /> */}
+        <FundReq data={xfrData} />
       </div>
     );
   }
@@ -163,8 +166,17 @@ class ProjectDetailGovernance extends Component {
 
 const mapStateToProps = state => {
   const { etherCollected, roundInfo } = state.projectCrowdSaleReducer || {};
-  const { tokenBalance, tokensUnderGovernance, killPollIndex, remainingEtherBalance, killConsensus, totalSupply, tapPollConsensus, currentTap } =
-    state.projectDetailGovernanceReducer || {};
+  const {
+    tokenBalance,
+    tokensUnderGovernance,
+    killPollIndex,
+    remainingEtherBalance,
+    killConsensus,
+    totalSupply,
+    tapPollConsensus,
+    currentTap,
+    xfrData
+  } = state.projectDetailGovernanceReducer || {};
   return {
     etherCollected: etherCollected,
     roundInfo: roundInfo,
@@ -175,7 +187,8 @@ const mapStateToProps = state => {
     totalSupply: totalSupply,
     killConsensus: killConsensus,
     tapPollConsensus: tapPollConsensus,
-    currentTap: currentTap
+    currentTap: currentTap,
+    xfrData: xfrData
   };
 };
 
@@ -191,7 +204,8 @@ const mapDispatchToProps = dispatch => {
       getTotalSupply: getTotalSupply,
       getKillConsensus: getKillConsensus,
       getTapPollConsensus: getTapPollConsensus,
-      getCurrentTap: getCurrentTap
+      getCurrentTap: getCurrentTap,
+      getXfrData: getXfrData
     },
     dispatch
   );

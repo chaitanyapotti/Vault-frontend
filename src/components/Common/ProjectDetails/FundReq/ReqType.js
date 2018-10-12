@@ -6,11 +6,7 @@ import SocialLinks from "../../../Common/SocialLinks";
 
 class ReqType extends React.Component {
   render() {
-    const {
-      etherRequested,
-      approvalRate,
-      endsIn
-    } = this.props || {}
+    const { amount, consensus, endTime } = this.props || {};
     return (
       <div>
         <div>Exceptional Fund Requests</div>
@@ -20,7 +16,7 @@ class ReqType extends React.Component {
         </Row>
 
         <div className="txt-g-secondary txt-m">
-          <div lg={12}>{this.props.etherRequested} ETH</div>
+          <div lg={12}>{amount} ETH</div>
         </div>
 
         <div className="push--top txt">
@@ -32,10 +28,10 @@ class ReqType extends React.Component {
         <Row className="push--top">
           <Col lg={6} className="txt">
             Approval Rate:
-            <span className="text--secondary"> {this.props.approvalRate}%</span>{" "}
+            <span className="text--secondary"> {consensus}%</span>{" "}
           </Col>
           <Col lg={6} className="txt">
-            Ends in: <span className="text--secondary">{this.props.endsIn}</span>{" "}
+            Ends in: <span className="text--secondary">{endTime}</span>{" "}
           </Col>
         </Row>
 

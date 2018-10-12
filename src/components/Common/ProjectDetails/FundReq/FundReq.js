@@ -6,32 +6,25 @@ import SocialLinks from "../../../Common/SocialLinks";
 import ReqType from "./ReqType";
 
 class FundReq extends React.Component {
-  state = {
-    inifundValue: ""
+  getObject1 = () => {
+    const { data } = this.props || {};
+    const { poll1 } = data || {};
+    const { amount, consensus, endTime } = poll1 || {};
+    return endTime ? <ReqType amount={amount} consensus={consensus} endTime={new Date(endTime).toDateString()} /> : <span> Nothing deployed</span>;
   };
-
-  onChangeIniFundVal = e => {
-    this.setState({
-      inifundValue: e.target.value
-    });
+  getObject2 = () => {
+    const { data } = this.props || {};
+    const { poll2 } = data || {};
+    const { amount, consensus, endTime } = poll2 || {};
+    return endTime ? <ReqType amount={amount} consensus={consensus} endTime={new Date(endTime).toDateString()} /> : <span> Nothing deployed</span>;
   };
-
-  uploadDaico = () => {
-    console.log("upload DAICO button action");
-  };
-
+  getObject2 = () => {};
   render() {
-    const {reqTypes} = this.props 
-        return (
-      <CUICard style={{ padding: "40px 50px" }}>
-        {reqTypes.map(item=>{
-          const {etherRequested, approvalRate, endsIn} = item;
-          return (
-            <ReqType etherRequested={etherRequested} approvalRate={approvalRate} endsIn={endsIn} />
-          )
-        })
-        }
-      </CUICard>
+    return (
+      <div>
+        <CUICard style={{ padding: "40px 50px" }}>{this.getObject1()}</CUICard>
+        <CUICard style={{ padding: "40px 50px" }}>{this.getObject2()}</CUICard>
+      </div>
     );
   }
 }

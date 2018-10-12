@@ -10,7 +10,8 @@ export const initialState = {
   totalSupply: "0",
   killConsensus: "0",
   tapPollConsensus: "0",
-  currentTap: "0"
+  currentTap: "0",
+  xfrData: {}
 };
 
 export default function(state = initialState, action) {
@@ -80,6 +81,13 @@ export default function(state = initialState, action) {
       return {
         ...state,
         currentTap: receipt
+      };
+    }
+    case actionTypes.XFR_DATA_RECEIVED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        xfrData: receipt
       };
     }
     default:

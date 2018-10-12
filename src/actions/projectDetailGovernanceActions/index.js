@@ -58,6 +58,13 @@ export function currentTapReceived(receipt) {
   };
 }
 
+export function xfrDataReceived(receipt) {
+  return {
+    payload: { receipt: receipt },
+    type: "XFR_DATA_RECEIVED"
+  };
+}
+
 export function getTokenBalance(version, contractAddress) {
   return async dispatch => {
     //doesn't call blockchain. await is non blocking
@@ -183,6 +190,22 @@ export function getCurrentTap(version, contractAddress) {
       .then(async response => {
         const { data } = response.data;
         dispatch(currentTapReceived(data));
+      })
+      .catch(err => console.error(err.message));
+  };
+}
+
+export function getXfrData(version, contractAddress) {
+  return async dispatch => {
+    //doesn't call blockchain. await is non blocking
+    const network = await web3.eth.net.getNetworkType();
+    axios
+      .get(config.api_base_url + "/web3/pollfactory/xfrpolldata", {
+        params: { version: version.toString(), network: network, address: contractAddress }
+      })
+      .then(async response => {
+        const { data } = response.data;
+        dispatch(xfrDataReceived(data));
       })
       .catch(err => console.error(err.message));
   };

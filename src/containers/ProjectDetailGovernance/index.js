@@ -4,11 +4,34 @@ import { bindActionCreators } from "redux";
 import { ProjectName, PDetailGovernance, TapCard } from "../../components/Common/ProjectDetails";
 import { FundReq } from "../../components/Common/ProjectDetails";
 import { getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
+import {
+  getTokenBalance,
+  getTokensUnderGovernance,
+  getCurrentKillPollIndex,
+  getRemainingEtherBalance,
+  getTotalSupply,
+  getKillConsensus,
+  getTapPollConsensus,
+  getCurrentTap
+} from "../../actions/projectDetailGovernanceActions/index";
+
+Date.prototype.addDays = days => {
+  let date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};
 
 class ProjectDetailGovernance extends Component {
   componentDidMount() {
-    const { version, crowdSaleAddress, currentRoundNumber } = this.props || {};
+    const { version, crowdSaleAddress, currentRoundNumber, pollFactoryAddress, daicoTokenAddress } = this.props || {};
     this.props.getRoundTokensSold(version, crowdSaleAddress, currentRoundNumber);
+    this.props.getTokenBalance(version, daicoTokenAddress);
+    this.props.getTokensUnderGovernance(version, daicoTokenAddress);
+    this.props.getCurrentKillPollIndex(version, pollFactoryAddress);
+    this.props.getRemainingEtherBalance(version, pollFactoryAddress);
+    this.props.getTotalSupply(version, daicoTokenAddress);
+    this.props.getKillConsensus(version, pollFactoryAddress);
+    this.props.getTapPollConsensus(version, pollFactoryAddress);
   }
   getPriceIncrement = () => {
     //to use external api
@@ -45,8 +68,61 @@ class ProjectDetailGovernance extends Component {
       parseFloat(tokenCount) * Math.pow(10, -18)
     )} (Round ${currentRoundNumber} of 3)`;
   };
+  getVoteShare = () => {
+    const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
+    const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * Math.pow(10, 18);
+    return userShare > capPercent / 10000 ? capPercent / 10000 : userShare;
+  };
+  getNextKillPollStartDate = () => {
+    const { killPollIndex, r1EndTime } = this.props || {};
+    const endDate = new Date(r1EndTime);
+    return endDate.addDays(killPollIndex * 90);
+  };
+  getMyTokenValue = () => {
+    const etherPrice = 200;
+    const tokenPrice = this.getPrice() * etherPrice;
+    const { tokenBalance } = this.props || {};
+    return tokenPrice * parseFloat(tokenBalance);
+  };
+
+  getMyRefundValue = () => {
+    const etherPrice = 200;
+    const { remainingEtherBalance, tokenBalance, totalSupply, foundationDetails } = this.props || {};
+    let softCap = 0;
+    for (let index = 0; index < foundationDetails.length; index++) {
+      const { amount } = foundationDetails[index];
+      softCap += parseFloat(amount);
+    }
+    const denom = parseFloat(totalSupply) - softCap;
+    return Math.round((parseFloat(tokenBalance) / denom) * parseFloat(remainingEtherBalance) * Math.pow(10, -18) * etherPrice);
+  };
+
+  getKillConsensus = () => {
+    const { killConsensus, tokensUnderGovernance } = this.props || {};
+    return parseFloat(killConsensus) / parseFloat(tokensUnderGovernance);
+  };
+  onKillClick = () => {
+    //this.props.onKillClick();
+  };
+  getTapPollConsensus = () => {
+    const { tapPollConsensus, tokensUnderGovernance } = this.props || {};
+    return parseFloat(tapPollConsensus) / parseFloat(tokensUnderGovernance);
+  };
   render() {
-    const { projectName, tokenTag, description, urls, whitepaper, capPercent, isCurrentMember } = this.props || {};
+    const {
+      projectName,
+      tokenTag,
+      description,
+      urls,
+      whitepaper,
+      capPercent,
+      isCurrentMember,
+      tokenBalance,
+      killPollIndex,
+      remainingEtherBalance,
+      tapIncrementFactor,
+      currentTap
+    } = this.props || {};
     return (
       <div>
         <ProjectName
@@ -68,18 +144,22 @@ class ProjectDetailGovernance extends Component {
         <PDetailGovernance
           voteSaturationLimit={capPercent / 100}
           killFrequency="Quarterly"
-          yourTokens
-          yourVoteShare
-          killAttemptsLeft
-          nextKillAttempt
-          yourTokenValue
-          yourRefundValue
-          totalRefundableBalance
-          killConsensus
-          onKillClick
+          yourTokens={tokenBalance}
+          yourVoteShare={this.getVoteShare()}
+          killAttemptsLeft={7 - killPollIndex}
+          nextKillAttempt={this.getNextKillPollStartDate()}
+          yourTokenValue={this.getMyTokenValue()}
+          yourRefundValue={this.getMyRefundValue()}
+          totalRefundableBalance={remainingEtherBalance * Math.pow(10, -18)}
+          killConsensus={this.getKillConsensus()}
+          onKillClick={this.onKillClick}
         />
-        <TapCard currentTapAmount tapIncrementUnit incrementApproval />
-        {/* <FundReq reqTypes /> */}
+        <TapCard
+          currentTapAmount={(parseInt(currentTap, 10) * 86400 * 30) / Math.pow(10, 18)}
+          tapIncrementUnit={tapIncrementFactor}
+          incrementApproval={this.getTapPollConsensus()}
+        />
+        <FundReq reqTypes />
       </div>
     );
   }
@@ -87,9 +167,19 @@ class ProjectDetailGovernance extends Component {
 
 const mapStateToProps = state => {
   const { etherCollected, roundInfo } = state.projectCrowdSaleReducer || {};
+  const { tokenBalance, tokensUnderGovernance, killPollIndex, remainingEtherBalance, killConsensus, totalSupply, tapPollConsensus, currentTap } =
+    state.projectDetailGovernanceReducer || {};
   return {
     etherCollected: etherCollected,
-    roundInfo: roundInfo
+    roundInfo: roundInfo,
+    tokenBalance: tokenBalance,
+    tokensUnderGovernance: tokensUnderGovernance,
+    killPollIndex: killPollIndex,
+    remainingEtherBalance: remainingEtherBalance,
+    totalSupply: totalSupply,
+    killConsensus: killConsensus,
+    tapPollConsensus: tapPollConsensus,
+    currentTap: currentTap
   };
 };
 
@@ -97,7 +187,15 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       buyTokens: buyTokens,
-      getRoundTokensSold: getRoundTokensSold
+      getRoundTokensSold: getRoundTokensSold,
+      getTokensUnderGovernance: getTokensUnderGovernance,
+      getTokenBalance: getTokenBalance,
+      getCurrentKillPollIndex: getCurrentKillPollIndex,
+      getRemainingEtherBalance: getRemainingEtherBalance,
+      getTotalSupply: getTotalSupply,
+      getKillConsensus: getKillConsensus,
+      getTapPollConsensus: getTapPollConsensus,
+      getCurrentTap: getCurrentTap
     },
     dispatch
   );

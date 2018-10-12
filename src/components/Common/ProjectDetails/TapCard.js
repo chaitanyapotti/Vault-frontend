@@ -13,16 +13,16 @@ class TapCard extends Component {
           <div className="txt-xxxl text--primary">Tap Increment</div>
           <Row className="push-top--35">
             <Col lg={6} className="txt">
-              Current Tap Amount: <span className="text--secondary">{this.props.currentTapAmount} ETH</span>{" "}
+              Current Tap Amount: <span className="text--secondary">{currentTapAmount} ETH</span>{" "}
             </Col>
             <Col lg={6} className="txt">
-              Tap increment Unit: <span className="text--secondary">{this.props.tapIncrementUnit} ETH</span>{" "}
+              Tap increment Factor: <span className="text--secondary">{tapIncrementUnit}%</span>{" "}
             </Col>
           </Row>
 
           <Row>
             <Col lg={12} className="txt">
-              Increment Approval: <span className="text--secondary">{this.props.incrementApproval}%</span>{" "}
+              Increment Approval: <span className="text--secondary">{incrementApproval}%</span>{" "}
             </Col>
           </Row>
           <div className="text-right">

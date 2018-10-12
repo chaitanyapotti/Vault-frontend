@@ -42,6 +42,7 @@ class ProjectGovernance extends Component {
       initialFundRelease,
       crowdSaleAddress
     } = projectDetails || {};
+    console.log(currentDeploymentIndicator);
     if (currentDeploymentIndicator !== 12)
       return (
         <div>

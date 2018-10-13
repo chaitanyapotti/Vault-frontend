@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ProjectName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
 import { onWhiteListClick } from "../../actions/projectPreStartActions/index";
+import {Grid, Row, Col} from '../../helpers/react-flexbox-grid';
 
 class ProjectDetailPreStart extends Component {
   getPrice = () => {
@@ -66,31 +67,42 @@ class ProjectDetailPreStart extends Component {
       foundationDetails
     } = this.props || {};
     return (
-      <div>
-        <ProjectName
-          projectName={projectName}
-          tokenTag={tokenTag}
-          price={this.getPrice()}
-          roundText={this.getRoundText()}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          buttonText="Get Whitelisted"
-          buttonVisibility={!isCurrentMember}
-          onClick={this.onWhiteListClick}
-        />
-        <PDetailPreStart
-          icoStartDate={new Date(startDateTime).toDateString()}
-          individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
-          voteSaturationLimit={capPercent / 100}
-          killFrequency="Quarterly"
-          initialTapAmount={(parseInt(initialTapAmount, 10) * 86400 * 30) / Math.pow(10, 18)}
-          tapIncrementUnit={tapIncrementFactor}
-          hardCapCapitalisation={this.getSoftCap()}
-          dilutedCapitalisation={this.getHardCap()}
-        />
-        <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
-      </div>
+      <Grid>
+        <Row className="push--top">
+          <Col xs={12} lg={6}>
+            <ProjectName
+              projectName={projectName}
+              tokenTag={tokenTag}
+              price={this.getPrice()}
+              roundText={this.getRoundText()}
+              description={description}
+              urls={urls}
+              whitepaper={whitepaper}
+              buttonText="Get Whitelisted"
+              buttonVisibility={!isCurrentMember}
+              onClick={this.onWhiteListClick}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <PDetailPreStart
+              icoStartDate={new Date(startDateTime).toDateString()}
+              individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
+              voteSaturationLimit={capPercent / 100}
+              killFrequency="Quarterly"
+              initialTapAmount={(parseInt(initialTapAmount, 10) * 86400 * 30) / Math.pow(10, 18)}
+              tapIncrementUnit={tapIncrementFactor}
+              hardCapCapitalisation={this.getSoftCap()}
+              dilutedCapitalisation={this.getHardCap()}
+            />
+          </Col>
+        </Row>
+        
+        <Row className="push--top">
+          <Col xs={12} lg={6}>
+            <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

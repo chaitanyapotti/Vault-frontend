@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { ProjectName, PDetailGovernance, TapCard } from "../../components/Common/ProjectDetails";
 import { FundReq } from "../../components/Common/ProjectDetails";
 import { getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
+import {Grid, Row, Col} from '../../helpers/react-flexbox-grid';
 import {
   getTokenBalance,
   getTokensUnderGovernance,
@@ -126,43 +127,59 @@ class ProjectDetailGovernance extends Component {
       xfrData
     } = this.props || {};
     return (
-      <div>
-        <ProjectName
-          projectName={projectName}
-          tokenTag={tokenTag}
-          price={this.getPrice()}
-          roundText={this.getRoundText()}
-          priceIncrement={this.getPriceIncrement()}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          buttonText="Buy"
-          secondaryButtonText="Trade"
-          buttonVisibility={!isCurrentMember}
-          onClick={this.buyTokens}
-          onSecondaryClick={this.onTradeClick}
-          lastRoundInfo={this.lastRoundInfo()}
-        />
-        <PDetailGovernance
-          voteSaturationLimit={capPercent / 100}
-          killFrequency="Quarterly"
-          yourTokens={tokenBalance}
-          yourVoteShare={this.getVoteShare()}
-          killAttemptsLeft={7 - killPollIndex}
-          nextKillAttempt={this.getNextKillPollStartDate()}
-          yourTokenValue={this.getMyTokenValue()}
-          yourRefundValue={this.getMyRefundValue()}
-          totalRefundableBalance={remainingEtherBalance * Math.pow(10, -18)}
-          killConsensus={this.getKillConsensus()}
-          onKillClick={this.onKillClick}
-        />
-        <TapCard
-          currentTapAmount={(parseFloat(currentTap, 10) * 86400 * 30) / Math.pow(10, 18)}
-          tapIncrementUnit={tapIncrementFactor}
-          incrementApproval={this.getTapPollConsensus()}
-        />
-        <FundReq data={xfrData} />
-      </div>
+      <Grid>
+        <Row className="push--top">
+          <Col xs={12} lg={6}>
+            <ProjectName
+              projectName={projectName}
+              tokenTag={tokenTag}
+              price={this.getPrice()}
+              roundText={this.getRoundText()}
+              priceIncrement={this.getPriceIncrement()}
+              description={description}
+              urls={urls}
+              whitepaper={whitepaper}
+              buttonText="Buy"
+              secondaryButtonText="Trade"
+              buttonVisibility={!isCurrentMember}
+              onClick={this.buyTokens}
+              onSecondaryClick={this.onTradeClick}
+              lastRoundInfo={this.lastRoundInfo()}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <PDetailGovernance
+              voteSaturationLimit={capPercent / 100}
+              killFrequency="Quarterly"
+              yourTokens={tokenBalance}
+              yourVoteShare={this.getVoteShare()}
+              killAttemptsLeft={7 - killPollIndex}
+              nextKillAttempt={this.getNextKillPollStartDate()}
+              yourTokenValue={this.getMyTokenValue()}
+              yourRefundValue={this.getMyRefundValue()}
+              totalRefundableBalance={remainingEtherBalance * Math.pow(10, -18)}
+              killConsensus={this.getKillConsensus()}
+              onKillClick={this.onKillClick}
+            />
+          </Col>
+        </Row>
+        
+        <Row className="push--top">
+          <Col xs={12} lg={6}>
+            <TapCard
+              currentTapAmount={(parseFloat(currentTap, 10) * 86400 * 30) / Math.pow(10, 18)}
+              tapIncrementUnit={tapIncrementFactor}
+              incrementApproval={this.getTapPollConsensus()}
+            />
+          </Col>
+        </Row>
+
+        <Row className="push--top">
+          <Col xs={12} lg={6}>
+            <FundReq data={xfrData} />
+            </Col>
+        </Row>
+      </Grid>
     );
   }
 }

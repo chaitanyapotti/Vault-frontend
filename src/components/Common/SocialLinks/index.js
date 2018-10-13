@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 
 const images = {
-  github: "https://www.sundowners.org.uk/wp-content/uploads/Logos/fb.png",
-  telegram: "https://www.sundowners.org.uk/wp-content/uploads/Logos/fb.png",
-  medium: "https://www.sundowners.org.uk/wp-content/uploads/Logos/fb.png",
-  facebook: "https://www.sundowners.org.uk/wp-content/uploads/Logos/fb.png",
-  twitter: "https://www.sundowners.org.uk/wp-content/uploads/Logos/fb.png"
+  github: "assets/Footer/github.png",
+  telegram: "assets/Footer/telegram.png",
+  medium: "assets/Footer/medium.png",
+  facebook: "assets/Footer/fb.png",
+  twitter: "assets/Footer/twitter.png"
 };
 
 class SocialLinks extends Component {
@@ -17,27 +17,27 @@ class SocialLinks extends Component {
           <tr>
             <td>
               <a target="_blank" href={urls.github}>
-                <img src={images.github} width="20" height="20" />
+                <img className="push--right" src={images.github} width="20" height="20" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.telegram}>
-                <img src={images.telegram} width="20" height="20" />
+                <img className="push--right" src={images.telegram} width="20" height="20" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.medium}>
-                <img src={images.medium} width="20" height="20" />
+                <img className="push--right" src={images.medium} width="20" height="20" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.facebook}>
-                <img src={images.facebook} width="20" height="20" />
+                <img className="push--right" src={images.facebook} width="20" height="20" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.twitter}>
-                <img src={images.twitter} width="20" height="20" />
+                <img className="push--right" src={images.twitter} width="20" height="20" />
               </a>
             </td>
           </tr>

@@ -108,7 +108,7 @@ a {
 }
 
 .text--danger {
-    color: #E53A42;
+    color: #f23333;
 }
 
 .text--secondary{
@@ -200,7 +200,7 @@ a {
 }
 
 .bg--primary {
-    background: #e1423e;
+    background: #4ca9fc !important;
 }
 
 .bg--success {
@@ -208,7 +208,7 @@ a {
 }
 
 .bg--danger {
-    background: #E53A42;
+    background: #f23333 !important;
 }
 
 .bg--g-default {

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { PDetailCrowdSale, ProjectName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
 import { getEtherCollected, getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
+import {Grid, Row, Col} from '../../helpers/react-flexbox-grid';
 
 class ProjectDetailCrowdSale extends Component {
   componentDidMount() {
@@ -87,32 +88,43 @@ class ProjectDetailCrowdSale extends Component {
       etherCollected
     } = this.props || {};
     return (
-      <div>
+      <Grid>
         <TimeLine fundsCollected={etherCollected} roundGoal={this.getR1Goal()} startDate={new Date(startDateTime)} endDate={new Date(r1EndTime)} />
-        <ProjectName
-          projectName={projectName}
-          tokenTag={tokenTag}
-          price={this.getPrice()}
-          roundText={this.getRoundText()}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          buttonText="Buy"
-          buttonVisibility={!isCurrentMember}
-          onClick={this.buyTokens}
-        />
-        <PDetailCrowdSale
-          individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
-          voteSaturationLimit={capPercent / 100}
-          killFrequency="Quarterly"
-          initialTapAmount={(parseInt(initialTapAmount, 10) * 86400 * 30) / Math.pow(10, 18)}
-          initialFundRelease={parseInt(initialFundRelease, 10) / Math.pow(10, 18)}
-          tapIncrementUnit={tapIncrementFactor}
-          hardCapCapitalisation={this.getSoftCap()}
-          dilutedCapitalisation={this.getHardCap()}
-        />
-        <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
-      </div>
+        <Row className="push--top">
+          <Col xs={12} lg={6}>
+            <ProjectName
+              projectName={projectName}
+              tokenTag={tokenTag}
+              price={this.getPrice()}
+              roundText={this.getRoundText()}
+              description={description}
+              urls={urls}
+              whitepaper={whitepaper}
+              buttonText="Buy"
+              buttonVisibility={!isCurrentMember}
+              onClick={this.buyTokens}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <PDetailCrowdSale
+              individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
+              voteSaturationLimit={capPercent / 100}
+              killFrequency="Quarterly"
+              initialTapAmount={(parseInt(initialTapAmount, 10) * 86400 * 30) / Math.pow(10, 18)}
+              initialFundRelease={parseInt(initialFundRelease, 10) / Math.pow(10, 18)}
+              tapIncrementUnit={tapIncrementFactor}
+              hardCapCapitalisation={this.getSoftCap()}
+              dilutedCapitalisation={this.getHardCap()}
+            />
+          </Col>
+        </Row>
+        
+        <Row className="push--top">
+          <Col xs={12} lg={6}>
+            <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

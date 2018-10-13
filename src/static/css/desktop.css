@@ -97,19 +97,11 @@
     border-radius: 8px;
 }
 
-.btn-p {
-    width: 300px;
-    height: 50px;
-    background-image: linear-gradient(to right, #7059de 0%, #4b83e0 42%, #2fa1e2 79%, #25ade3 100%);
-    border: none;
-}
-
-.btn-s {
-    width: 172px;
-    height: 60px;
-    background-image: linear-gradient(to right, #7059de 0%, #4b83e0 42%, #2fa1e2 79%, #25ade3 100%);
-    border: none;
-    border-radius: 50px;
+.btn{
+    min-width: 135px;
+    height: 45px;
+    border: none !important;
+    border-radius: 50px !important;
 }
 
 /*CSS for Masonary Card*/

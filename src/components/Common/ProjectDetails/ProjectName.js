@@ -1,8 +1,8 @@
 import React from "react";
-import { CUICard, CUIButton } from "../../../helpers/material-ui";
-import { CUIButtonType, CUIInputColor, CS_COLORS } from "../../../static/js/variables";
+import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../../Common/SocialLinks";
+import {ButtonComponent} from '../FormComponents';
 
 class ProjectName extends React.Component{
     render(){
@@ -31,7 +31,7 @@ class ProjectName extends React.Component{
                                 <span className="prjct-logo hli"></span>
                                 <div className="hli push--left text--primary">
                                     <div className="txt-xxxl"> {projectName} ({tokenTag})</div>
-                                    <div className="txt">{price} ETH<span className="txt-inc">{priceIncrement}</span></div>
+                                    <div className="txt">{price} ETH<span className="txt-inc">{` ${priceIncrement}`}</span></div>
                                 </div>
                             </div>
                         </Col>

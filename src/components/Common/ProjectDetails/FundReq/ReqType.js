@@ -5,6 +5,7 @@ import {Row, Col} from '../../../../helpers/react-flexbox-grid';
 import SocialLinks from '../../../Common/SocialLinks';
 import {ButtonComponent} from '../../FormComponents';
 
+<<<<<<< HEAD
 class ReqType extends React.Component{
     render(){
       const {
@@ -23,6 +24,22 @@ class ReqType extends React.Component{
                     <div className="txt-g-secondary txt-m">
                         <div lg={12}>{this.props.etherRequested} ETH</div>
                     </div>
+=======
+class ReqType extends React.Component {
+  render() {
+    const { amount, consensus, endTime } = this.props || {};
+    return (
+      <div>
+        <div>Exceptional Fund Requests</div>
+        <Row className="txt-g-secondary push-top--35 txt-m">
+          <Col lg={6}>App Redesign</Col>
+          <Col lg={6}>20 Aug 2018</Col>
+        </Row>
+
+        <div className="txt-g-secondary txt-m">
+          <div lg={12}>{amount} ETH</div>
+        </div>
+>>>>>>> part 1 done
 
                     <div className="push--top txt">
                         Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy 
@@ -31,10 +48,22 @@ class ReqType extends React.Component{
                         nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in 
                     </div>
 
+<<<<<<< HEAD
                     <Row className="push--top">
                         <Col lg={6} className="txt">Approval Rate:<span className="text--secondary"> {this.props.approvalRate}%</span> </Col>
                         <Col lg={6} className="txt">Ends in: <span className="text--secondary"> {this.props.endsIn}</span> </Col>
                     </Row>
+=======
+        <Row className="push--top">
+          <Col lg={6} className="txt">
+            Approval Rate:
+            <span className="text--secondary"> {consensus}%</span>{" "}
+          </Col>
+          <Col lg={6} className="txt">
+            Ends in: <span className="text--secondary">{endTime}</span>{" "}
+          </Col>
+        </Row>
+>>>>>>> part 1 done
 
                     <div className="push--top">
                         <ButtonComponent

@@ -13,7 +13,8 @@ import {
   getKillConsensus,
   getTapPollConsensus,
   getCurrentTap,
-  getXfrData
+  getXfrData,
+  voteInKillPoll
 } from "../../actions/projectDetailGovernanceActions/index";
 
 class ProjectDetailGovernance extends Component {
@@ -100,7 +101,9 @@ class ProjectDetailGovernance extends Component {
     return parseFloat(killConsensus) / parseFloat(tokensUnderGovernance);
   };
   onKillClick = () => {
-    //this.props.onKillClick();
+    const { version, pollFactoryAddress } = this.props || {};
+    this.props.voteInKillPoll(version, pollFactoryAddress);
+    //or revokeVoteInKillPoll();
   };
   getTapPollConsensus = () => {
     const { tapPollConsensus, tokensUnderGovernance } = this.props || {};
@@ -205,7 +208,8 @@ const mapDispatchToProps = dispatch => {
       getKillConsensus: getKillConsensus,
       getTapPollConsensus: getTapPollConsensus,
       getCurrentTap: getCurrentTap,
-      getXfrData: getXfrData
+      getXfrData: getXfrData,
+      voteInKillPoll: voteInKillPoll
     },
     dispatch
   );

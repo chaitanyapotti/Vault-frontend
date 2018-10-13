@@ -19,7 +19,7 @@ class ProjectGovernance extends Component {
   }
 
   render() {
-    const { currentRoundNumber, projectDetails } = this.props || {};
+    let { currentRoundNumber, projectDetails } = this.props || {};
     const {
       currentDeploymentIndicator,
       projectName,
@@ -44,6 +44,7 @@ class ProjectGovernance extends Component {
       crowdSaleAddress,
       daicoTokenAddress
     } = projectDetails || {};
+    currentRoundNumber = "2";
     console.log(currentDeploymentIndicator);
     if (currentDeploymentIndicator !== 12)
       return (
@@ -52,81 +53,80 @@ class ProjectGovernance extends Component {
         </div>
       );
     // console.log(currentRoundNumber);
-    // if (currentRoundNumber === "0")
-    //   return (
-    //     <ProjectDetailPreStart
-    //       version={version}
-    //       membershipAddress={membershipAddress}
-    //       projectName={projectName}
-    //       tokenTag={tokenTag}
-    //       description={description}
-    //       urls={urls}
-    //       whitepaper={whitepaper}
-    //       startDateTime={startDateTime}
-    //       maximumEtherContribution={maximumEtherContribution}
-    //       capPercent={capPercent}
-    //       initialTapAmount={initialTapAmount}
-    //       tapIncrementFactor={tapIncrementFactor}
-    //       isCurrentMember={isCurrentMember}
-    //       rounds={rounds}
-    //       totalMintableSupply={totalMintableSupply}
-    //       foundationDetails={foundationDetails}
-    //     />
-    //   );
-    // if (currentRoundNumber === "1") {
-    //   return (
-    //     <ProjectDetailCrowdSale
-    //       version={version}
-    //       membershipAddress={membershipAddress}
-    //       projectName={projectName}
-    //       tokenTag={tokenTag}
-    //       description={description}
-    //       urls={urls}
-    //       whitepaper={whitepaper}
-    //       startDateTime={startDateTime}
-    //       maximumEtherContribution={maximumEtherContribution}
-    //       capPercent={capPercent}
-    //       initialTapAmount={initialTapAmount}
-    //       tapIncrementFactor={tapIncrementFactor}
-    //       isCurrentMember={isCurrentMember}
-    //       rounds={rounds}
-    //       totalMintableSupply={totalMintableSupply}
-    //       foundationDetails={foundationDetails}
-    //       r1EndTime={r1EndTime}
-    //       pollFactoryAddress={pollFactoryAddress}
-    //       initialFundRelease={initialFundRelease}
-    //       crowdSaleAddress={crowdSaleAddress}
-    //     />
-    //   );
-    // if (currentRoundNumber === "0") {
-    //   return (
-    //     <ProjectDetailGovernance
-    //       version={version}
-    //       membershipAddress={membershipAddress}
-    //       projectName={projectName}
-    //       tokenTag={tokenTag}
-    //       description={description}
-    //       urls={urls}
-    //       whitepaper={whitepaper}
-    //       startDateTime={startDateTime}
-    //       maximumEtherContribution={maximumEtherContribution}
-    //       capPercent={capPercent}
-    //       initialTapAmount={initialTapAmount}
-    //       tapIncrementFactor={tapIncrementFactor}
-    //       isCurrentMember={isCurrentMember}
-    //       rounds={rounds}
-    //       totalMintableSupply={totalMintableSupply}
-    //       foundationDetails={foundationDetails}
-    //       r1EndTime={r1EndTime}
-    //       pollFactoryAddress={pollFactoryAddress}
-    //       initialFundRelease={initialFundRelease}
-    //       crowdSaleAddress={crowdSaleAddress}
-    //       currentRoundNumber={currentRoundNumber}
-    //       daicoTokenAddress={daicoTokenAddress}
-    //     />
-    //   );
-    // }
-    if (currentRoundNumber === "0") {
+    if (currentRoundNumber === "0")
+      return (
+        <ProjectDetailPreStart
+          version={version}
+          membershipAddress={membershipAddress}
+          projectName={projectName}
+          tokenTag={tokenTag}
+          description={description}
+          urls={urls}
+          whitepaper={whitepaper}
+          startDateTime={startDateTime}
+          maximumEtherContribution={maximumEtherContribution}
+          capPercent={capPercent}
+          initialTapAmount={initialTapAmount}
+          tapIncrementFactor={tapIncrementFactor}
+          isCurrentMember={isCurrentMember}
+          rounds={rounds}
+          totalMintableSupply={totalMintableSupply}
+          foundationDetails={foundationDetails}
+        />
+      );
+    else if (currentRoundNumber === "1") {
+      return (
+        <ProjectDetailCrowdSale
+          version={version}
+          membershipAddress={membershipAddress}
+          projectName={projectName}
+          tokenTag={tokenTag}
+          description={description}
+          urls={urls}
+          whitepaper={whitepaper}
+          startDateTime={startDateTime}
+          maximumEtherContribution={maximumEtherContribution}
+          capPercent={capPercent}
+          initialTapAmount={initialTapAmount}
+          tapIncrementFactor={tapIncrementFactor}
+          isCurrentMember={isCurrentMember}
+          rounds={rounds}
+          totalMintableSupply={totalMintableSupply}
+          foundationDetails={foundationDetails}
+          r1EndTime={r1EndTime}
+          pollFactoryAddress={pollFactoryAddress}
+          initialFundRelease={initialFundRelease}
+          crowdSaleAddress={crowdSaleAddress}
+        />
+      );
+    } else if (currentRoundNumber === "2" || currentRoundNumber === "3") {
+      return (
+        <ProjectDetailGovernance
+          version={version}
+          membershipAddress={membershipAddress}
+          projectName={projectName}
+          tokenTag={tokenTag}
+          description={description}
+          urls={urls}
+          whitepaper={whitepaper}
+          startDateTime={startDateTime}
+          maximumEtherContribution={maximumEtherContribution}
+          capPercent={capPercent}
+          initialTapAmount={initialTapAmount}
+          tapIncrementFactor={tapIncrementFactor}
+          isCurrentMember={isCurrentMember}
+          rounds={rounds}
+          totalMintableSupply={totalMintableSupply}
+          foundationDetails={foundationDetails}
+          r1EndTime={r1EndTime}
+          pollFactoryAddress={pollFactoryAddress}
+          initialFundRelease={initialFundRelease}
+          crowdSaleAddress={crowdSaleAddress}
+          currentRoundNumber={currentRoundNumber}
+          daicoTokenAddress={daicoTokenAddress}
+        />
+      );
+    } else if (currentRoundNumber === "4") {
       return (
         <ProjectDetailSaleEnd
           version={version}

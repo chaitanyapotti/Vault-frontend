@@ -5,6 +5,7 @@ import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
+import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 
 class ProjectGovernance extends Component {
   componentDidMount() {
@@ -43,9 +44,30 @@ class ProjectGovernance extends Component {
         </div>
       );
     console.log(currentRoundNumber);
-    if (currentRoundNumber === "0")
+    // if (currentRoundNumber === "0")
+    //   return (
+    //     <ProjectDetailPreStart
+    //       version={version}
+    //       membershipAddress={membershipAddress}
+    //       projectName={projectName}
+    //       tokenTag={tokenTag}
+    //       description={description}
+    //       urls={urls}
+    //       whitepaper={whitepaper}
+    //       startDateTime={startDateTime}
+    //       maximumEtherContribution={maximumEtherContribution}
+    //       capPercent={capPercent}
+    //       initialTapAmount={initialTapAmount}
+    //       tapIncrementFactor={tapIncrementFactor}
+    //       isCurrentMember={isCurrentMember}
+    //       rounds={rounds}
+    //       totalMintableSupply={totalMintableSupply}
+    //       foundationDetails={foundationDetails}
+    //     />
+    //   );
+    if (currentRoundNumber === "0") {
       return (
-        <ProjectDetailPreStart
+        <ProjectDetailCrowdSale
           version={version}
           membershipAddress={membershipAddress}
           projectName={projectName}
@@ -64,7 +86,7 @@ class ProjectGovernance extends Component {
           foundationDetails={foundationDetails}
         />
       );
-    else return null;
+    } else return null;
   }
 }
 

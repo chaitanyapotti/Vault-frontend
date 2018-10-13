@@ -7,15 +7,18 @@ import { CUILinearProgress } from '../../../helpers/material-ui';
 
 class TimeLine extends Component {
   render() {
+    const { fundsCollected, roundGoal, startDate, endDate } = this.props || {};
     return (
       <Grid>
         <div className="txt-xxxl text--primary">DAICO Timeline</div>
         <Row className="push--top">
           <Col lg={6} className="txt-m push-half-h--bottom">
-            Funds Collected
+            {parseFloat(fundsCollected) / parseFloat(roundGoal)} % Goal reached
           </Col>
           <Col lg={6} className="txt-m push-half-h--bottom">
-            3,500 ETH Goal
+            <Col lg={6}>Funds Collected</Col>
+            <Col lg={6}>{fundsCollected} ETH</Col>
+            <Col lg={6}>{roundGoal} ETH Goal</Col>
           </Col>
         </Row>
 
@@ -25,11 +28,12 @@ class TimeLine extends Component {
 
         <Row className="push--top">
           <Col lg={6} className="txt-m push-half-h--bottom">
-            Started on: 3rd Aug 2018
+            Started on: {startDate.toDatestring()}
           </Col>
           <Col lg={6} className="txt-m push-half-h--bottom">
-            Ends on: 23rd Aug 2018
+            Ends on: {endDate.toDatestring()}
           </Col>
+          <Col lg={6}>Days Left: {Math.round(Math.abs(endDate - new Date()) / 86400)} days</Col>
         </Row>
 
         <div>

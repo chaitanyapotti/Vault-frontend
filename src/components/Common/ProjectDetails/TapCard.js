@@ -5,7 +5,7 @@ import {Row, Col} from '../../../helpers/react-flexbox-grid';
 import SocialLinks from '../../Common/SocialLinks';
 import ButtonComponent from '../FormComponents/ButtonComponent';
 
-class TapCard extends Component {
+class TapCard extends React.Component {
   render() {
     const { currentTapAmount, tapIncrementUnit, incrementApproval } = this.props || {};
     return (

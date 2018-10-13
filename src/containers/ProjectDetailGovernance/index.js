@@ -18,7 +18,7 @@ import {
 
 class ProjectDetailGovernance extends Component {
   componentDidMount() {
-    const { version, crowdSaleAddress, currentRoundNumber } = this.props || {};
+    const { version, crowdSaleAddress, currentRoundNumber,pollFactoryAddress,daicoTokenAddress } = this.props || {};
     this.props.getRoundTokensSold(version, crowdSaleAddress, currentRoundNumber);
     this.props.getTokenBalance(version, daicoTokenAddress);
     this.props.getTokensUnderGovernance(version, daicoTokenAddress);

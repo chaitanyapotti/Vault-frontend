@@ -1,9 +1,9 @@
 /* eslint react/require-default-props: 0 */
 /* eslint camelcase: 0 */
 
-import React, {Component} from 'react';
-import {Grid, Row, Col} from '../../../helpers/react-flexbox-grid';
-import { CUILinearProgress } from '../../../helpers/material-ui';
+import React, { Component } from "react";
+import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
+import { CUILinearProgress } from "../../../helpers/material-ui";
 
 class TimeLine extends Component {
   render() {
@@ -15,15 +15,19 @@ class TimeLine extends Component {
           <Col lg={6} className="txt-m push-half-h--bottom">
             {parseFloat(fundsCollected) / parseFloat(roundGoal)} % Goal reached
           </Col>
+        </Row>
+        <Row>
+          <Col lg={6}>Funds Collected</Col>
           <Col lg={6} className="txt-m push-half-h--bottom">
-            <Col lg={6}>Funds Collected</Col>
-            <Col lg={6}>{fundsCollected} ETH</Col>
-            <Col lg={6}>{roundGoal} ETH Goal</Col>
+            {fundsCollected} ETH
+          </Col>
+          <Col lg={6} className="txt-m push-half-h--bottom">
+            {roundGoal} ETH Goal
           </Col>
         </Row>
 
         <div>
-            <CUILinearProgress style={{ height: 7, borderRadius: 7 }} value={70}/>
+          <CUILinearProgress style={{ height: 7, borderRadius: 7 }} value={70} />
         </div>
 
         <Row className="push--top">
@@ -39,7 +43,7 @@ class TimeLine extends Component {
         </Row>
 
         <div>
-            <CUILinearProgress style={{ height: 7, borderRadius: 7 }} value={50}/>
+          <CUILinearProgress style={{ height: 7, borderRadius: 7 }} value={50} />
         </div>
       </Grid>
     );

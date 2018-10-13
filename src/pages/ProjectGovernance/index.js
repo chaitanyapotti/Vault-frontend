@@ -44,6 +44,7 @@ class ProjectGovernance extends Component {
       crowdSaleAddress,
       daicoTokenAddress
     } = projectDetails || {};
+    console.log(currentDeploymentIndicator);
     if (currentDeploymentIndicator !== 12)
       return (
         <div>

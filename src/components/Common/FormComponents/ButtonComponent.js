@@ -1,16 +1,17 @@
 import React from 'react';
-import {CUIButton} from '../../../helpers/material-ui';
+import {Button} from 'reactstrap';
 
-const ButtonComponent = (props) => 
-      <CUIButton
-          className= {props.type !== 'danger' ? "btn bg--primary txt-p-vault txt-dddbld text--white" : "btn bg--danger txt-p-vault txt-dddbld text--white"}
-          label={props.label}
-          id={props.label}
-          type='raised'
-          labelStyle={{padding: '8px 16px'}}
-          onClick={() => {
-            props.onClick
-          }}
-      />;
+class ButtonComponent extends React.Component {
+  
+  render() {
+    return (
+      <Button
+        className={this.props.type === 'oval' ? "btn-p txt-p-vault txt-dddbld text--white" : "btn-s txt-p-vault txt-dddbld text--white"}
+      >
+        {this.props.label}
+      </Button>
+    );
+  }
+}
 
 export default ButtonComponent;

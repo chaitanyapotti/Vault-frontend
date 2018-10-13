@@ -1,10 +1,8 @@
-import React from 'react';
-import {CUICard, CUIFormInput, CUIButton} from '../../../helpers/material-ui';
-import {CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS} from '../../../static/js/variables';
-import {Row, Col} from '../../../helpers/react-flexbox-grid';
-import SocialLinks from '../../Common/SocialLinks';
-import {ButtonComponent} from '../FormComponents';
-import DualComponent from '../FormComponents/DualButton';
+import React from "react";
+import { CUICard, CUIButton } from "../../../helpers/material-ui";
+import { CUIButtonType, CUIInputColor, CS_COLORS } from "../../../static/js/variables";
+import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import SocialLinks from "../../Common/SocialLinks";
 
 class ProjectName extends React.Component{
     render(){
@@ -64,7 +62,9 @@ class ProjectName extends React.Component{
                         <Col lg={6}>
                         {buttonVisibility ? (
                             <CUIButton type={CUIButtonType.RAISED} buttonColor={CUIInputColor.PRIMARY} label={buttonText} onClick={onClick} />
-                          ) : null}
+                          ) : (
+                            <span>You are whitelisted</span>
+                          )}
                           {onSecondaryClick ? (
                             <CUIButton type={CUIButtonType.RAISED} buttonColor={CUIInputColor.PRIMARY} label={secondaryButtonText} onClick={onSecondaryClick} />
                           ) : null}
@@ -80,7 +80,6 @@ class ProjectName extends React.Component{
                                 label="Deny"
                             />
                         } */}
-                            
                         </Col>
                     </Row>
                 </CUICard>

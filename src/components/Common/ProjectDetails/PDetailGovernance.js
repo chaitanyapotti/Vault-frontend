@@ -23,10 +23,10 @@ class PDetailGovernance extends React.Component {
         <div>Project Details</div>
         <Row>
           <Col lg={6}>
-            Your Tokens: <span className="text--secondary">{yourTokens} ETH/person</span>
+            Your Tokens: <span className="text--secondary">{yourTokens}</span>
           </Col>
           <Col lg={6}>
-            Your Vote Share: <span className="text--secondary">{yourVoteShare}</span>
+            Your Vote Share: <span className="text--secondary">{yourVoteShare}%</span>
           </Col>
         </Row>
 
@@ -53,10 +53,10 @@ class PDetailGovernance extends React.Component {
 
         <Row>
           <Col lg={6}>
-            Your Token Value: <span className="text--secondary">{yourTokenValue} ETH</span>
+            Your Token Value: <span className="text--secondary">${yourTokenValue}</span>
           </Col>
           <Col lg={6}>
-            your Refund Value: <span className="text--secondary">{yourRefundValue} ETH</span>
+            your Refund Value: <span className="text--secondary">${yourRefundValue}</span>
           </Col>
         </Row>
 

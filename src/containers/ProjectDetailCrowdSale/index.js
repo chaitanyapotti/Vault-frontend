@@ -2,9 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { PDetailCrowdSale, ProjectName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
-import { onWhiteListClick } from "../../actions/projectPreStartActions/index";
+import { getEtherCollected } from "../../actions/projectCrowdSaleActions/index";
 
 class ProjectDetailCrowdSale extends Component {
+  componentDidMount() {
+    const { version, pollFactoryAddress } = this.props || {};
+    this.props.getEtherCollected(version, pollFactoryAddress);
+  }
   //need to refactor and remove these methods later
   getPrice = () => {
     const { rounds } = this.props || {};
@@ -23,11 +27,6 @@ class ProjectDetailCrowdSale extends Component {
   getRoundText = () => {
     //based on tokens sold
     return "3 Round DAICO";
-  };
-
-  getFundsCollected = () => {
-    const { version, pollFactoryAddress } = this.props || {};
-    this.props.getEtherCollected(version, pollFactoryAddress);
   };
 
   getR3Price = () => {
@@ -77,16 +76,13 @@ class ProjectDetailCrowdSale extends Component {
       rounds,
       foundationDetails,
       startDateTime,
-      r1EndTime
+      r1EndTime,
+      etherCollected
     } = this.props || {};
+    console.log(r1EndTime);
     return (
       <div>
-        <TimeLine
-          fundsCollected={this.getFundsCollected()}
-          roundGoal={this.getR1Goal()}
-          startDate={new Date(startDateTime)}
-          endDate={new Date(r1EndTime)}
-        />
+        <TimeLine fundsCollected={etherCollected} roundGoal={this.getR1Goal()} startDate={new Date(startDateTime)} endDate={new Date(r1EndTime)} />
         <ProjectName
           projectName={projectName}
           tokenTag={tokenTag}
@@ -118,17 +114,16 @@ class ProjectDetailCrowdSale extends Component {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      onWhiteListClick: onWhiteListClick
+      getEtherCollected: getEtherCollected
     },
     dispatch
   );
 };
 
 const mapStateToProps = state => {
-  const { isCurrentMember, membershipAssigned } = state.projectPreStartReducer || {};
+  const { etherCollected } = state.projectCrowdSaleReducer || {};
   return {
-    isCurrentMember: isCurrentMember,
-    membershipAssigned: membershipAssigned
+    etherCollected: etherCollected
   };
 };
 

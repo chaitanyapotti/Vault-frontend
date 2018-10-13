@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { ProjectName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
 import { onWhiteListClick } from "../../actions/projectPreStartActions/index";
 import {Grid, Row, Col} from '../../helpers/react-flexbox-grid';
+import { CUICard } from "../../helpers/material-ui";
 
 class ProjectDetailPreStart extends Component {
   getPrice = () => {
@@ -99,7 +100,9 @@ class ProjectDetailPreStart extends Component {
         
         <Row className="push--top">
           <Col xs={12} lg={6}>
-            <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
+            <CUICard style={{ padding: "40px 50px" }}>
+              <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
+            </CUICard>
           </Col>
         </Row>
       </Grid>

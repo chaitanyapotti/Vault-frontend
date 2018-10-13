@@ -44,7 +44,7 @@ class ProjectGovernance extends Component {
       crowdSaleAddress,
       daicoTokenAddress
     } = projectDetails || {};
-    currentRoundNumber = "2";
+    currentRoundNumber = "4";
     console.log('governance',currentDeploymentIndicator, currentRoundNumber);
     if (currentDeploymentIndicator !== 12)
       return (

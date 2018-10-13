@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { PDetailCrowdSale, ProjectName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
 import { getEtherCollected, getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
 import {Grid, Row, Col} from '../../helpers/react-flexbox-grid';
+import { CUICard } from "../../helpers/material-ui";
 
 class ProjectDetailCrowdSale extends Component {
   componentDidMount() {
@@ -89,7 +90,9 @@ class ProjectDetailCrowdSale extends Component {
     } = this.props || {};
     return (
       <Grid>
-        <TimeLine fundsCollected={etherCollected} roundGoal={this.getR1Goal()} startDate={new Date(startDateTime)} endDate={new Date(r1EndTime)} />
+        <CUICard style={{ padding: "40px 50px" }}>
+          <TimeLine fundsCollected={etherCollected} roundGoal={this.getR1Goal()} startDate={new Date(startDateTime)} endDate={new Date(r1EndTime)} />
+        </CUICard>
         <Row className="push--top">
           <Col xs={12} lg={6}>
             <ProjectName
@@ -121,7 +124,9 @@ class ProjectDetailCrowdSale extends Component {
         
         <Row className="push--top">
           <Col xs={12} lg={6}>
-            <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
+            <CUICard style={{ padding: "40px 50px" }}>
+              <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
+            </CUICard>
           </Col>
         </Row>
       </Grid>

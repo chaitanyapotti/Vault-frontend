@@ -61,12 +61,18 @@ class ProjectName extends React.Component{
                         </Col>
                         <Col lg={6}>
                         {buttonVisibility ? (
-                            <CUIButton type={CUIButtonType.RAISED} buttonColor={CUIInputColor.PRIMARY} label={buttonText} onClick={onClick} />
+                            <ButtonComponent
+                                onClick={onClick}
+                                label={buttonText}
+                            />
                           ) : (
                             <span>You are whitelisted</span>
                           )}
                           {onSecondaryClick ? (
-                            <CUIButton type={CUIButtonType.RAISED} buttonColor={CUIInputColor.PRIMARY} label={secondaryButtonText} onClick={onSecondaryClick} />
+                              <ButtonComponent
+                                onClick={onSecondaryClick}
+                                label={secondaryButtonText}
+                              />
                           ) : null}
                         {/* { this.props.type === 'dual' ? 
                             <DualComponent

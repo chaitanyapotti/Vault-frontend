@@ -45,7 +45,7 @@ class ProjectGovernance extends Component {
       daicoTokenAddress
     } = projectDetails || {};
     currentRoundNumber = "2";
-    console.log(currentDeploymentIndicator);
+    console.log('governance',currentDeploymentIndicator, currentRoundNumber);
     if (currentDeploymentIndicator !== 12)
       return (
         <div>

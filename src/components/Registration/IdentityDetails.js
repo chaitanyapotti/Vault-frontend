@@ -1,56 +1,69 @@
 import React from 'react';
-import {CUICard, CUIFormInput, CUIButton} from '../../helpers/material-ui';
-import {CUIInputType, CUIButtonType, CUIInputColor} from '../../static/js/variables';
-import {Row, Col} from '../../helpers/react-flexbox-grid';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { CUICard, CUIFormInput, CUIButton } from '../../helpers/material-ui';
+import { CUIInputType, CUIButtonType, CUIInputColor } from '../../static/js/variables';
+import { Row, Col } from '../../helpers/react-flexbox-grid';
+import {
+    adminNameChangedAction, adminEmailChangedAction, projectNameChangedAction, erc20TokenTagChangedAction, projectDescriptionChangedAction, websiteLinkAction,
+    telegramLinkChangedAction, githubLinkChangedAction, mediumLinkChangedAction, facebookLinkChangedAction, twitterLinkChangedAction
+} from '../../actions/projectRegistrationActions';
 
-class IdentityDetails extends React.Component{
-    state={
-        name: '',
-        email: '',
-        project:'',
-        erc20tag: '',
-        prjctDesc: '',
+class IdentityDetails extends React.Component {
+
+    onChangeName = (e) => {
+        this.props.adminNameChangedAction(e.target.value)
     }
 
-    onChangeName = (e) =>{
-        this.setState({
-            name: e.target.value
-        })
+    onChangeEmail = (e) => {
+        this.props.adminEmailChangedAction(e.target.value)
     }
 
-    onChangeEmail = (e) =>{
-        this.setState({
-            email: e.target.value
-        })
+    onChangeProject = (e) => {
+        this.props.projectNameChangedAction(e.target.value)
     }
 
-    onChangeProject = (e) =>{
-        this.setState({
-            project: e.target.value
-        })
+    onChangeErc20Tag = (e) => {
+        this.props.erc20TokenTagChangedAction(e.target.value)
     }
 
-    onChangeErc20Tag = (e) =>{
-        this.setState({
-            erc20tag: e.target.value
-        })
+    onChangePrjctDesc = (e) => {
+        this.props.projectDescriptionChangedAction(e.target.value)
     }
 
-    onChangePrjctDesc = (e) =>{
-        this.setState({
-            prjctDesc: e.target.value
-        })
+    onChangeWebLink = (e) => {
+        this.props.websiteLinkAction(e.target.value)
+    }
+
+    onChangeTlgrmLink = (e) => {
+        this.props.telegramLinkChangedAction(e.target.value)
+    }
+
+    onChangeGitLink = (e) => {
+        this.props.githubLinkChangedAction(e.target.value)
+    }
+
+    onChangeMedLink = (e) => {
+        this.props.mediumLinkChangedAction(e.target.value)
+    }
+
+    onChangeFbLink = (e) => {
+        this.props.facebookLinkChangedAction(e.target.value)
+    }
+
+    onChangeTwtLink = (e) => {
+        this.props.twitterLinkChangedAction(e.target.value)
     }
 
     uploadWhitePaper = () => {
         console.log('upload white paper button action');
     }
 
-    render(){
-        return(
-            <CUICard style={{padding: '40px 67px'}}>
+    render() {
+        return (
+            <CUICard style={{ padding: '40px 67px' }}>
                 <div>Identity Details</div>
-                <hr/>
+                <hr />
                 <Row>
                     <Col xs={12} lg={6}>
                         <CUIFormInput
@@ -59,7 +72,7 @@ class IdentityDetails extends React.Component{
                             inputName="Admin Name"
                             inputLabel={'Admin Name'}
                             inputPlaceholder="Eg. Aman"
-                            inputValue={this.state.name}
+                            inputValue={this.props.adminName}
                             textFocus
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
@@ -75,7 +88,7 @@ class IdentityDetails extends React.Component{
                             inputName="Admin Email"
                             inputLabel={'Admin Email'}
                             inputPlaceholder="Eg. test@test.com"
-                            inputValue={this.state.email}
+                            inputValue={this.props.adminEmail}
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
                             // helperText={this.state.errorAgeText}
@@ -93,7 +106,7 @@ class IdentityDetails extends React.Component{
                             inputName="Project Name"
                             inputLabel={'Project Name'}
                             inputPlaceholder="Eg. Wanchain"
-                            inputValue={this.state.project}
+                            inputValue={this.props.projectName}
                             textFocus
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
@@ -109,7 +122,7 @@ class IdentityDetails extends React.Component{
                             inputName="ERC20 Token Tag"
                             inputLabel={'ERC20 Token Tag'}
                             inputPlaceholder="Eg. ERC"
-                            inputValue={this.state.erc20tag}
+                            inputValue={this.props.erc20TokenTag}
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
                             // helperText={this.state.errorAgeText}
@@ -127,7 +140,7 @@ class IdentityDetails extends React.Component{
                             inputName="Project Description"
                             inputLabel={'Project Description'}
                             inputPlaceholder="Eg. Protocol for E-Governance"
-                            inputValue={this.state.prjctDesc}
+                            inputValue={this.props.projectDescription}
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
                             // helperText={this.state.errorAgeText}
@@ -145,7 +158,7 @@ class IdentityDetails extends React.Component{
                             inputName="Website Link"
                             inputLabel={'Website Link'}
                             inputPlaceholder="Eg. Wanchain"
-                            inputValue={this.state.webLink}
+                            inputValue={this.props.websiteLink}
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
                             // helperText={this.state.errorAgeText}
@@ -160,7 +173,7 @@ class IdentityDetails extends React.Component{
                             inputName="Telegram Link"
                             inputLabel={'Telegram Link'}
                             inputPlaceholder="Eg. ERC"
-                            inputValue={this.state.TlgrmLink}
+                            inputValue={this.props.telegramLink}
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
                             // helperText={this.state.errorAgeText}
@@ -178,7 +191,7 @@ class IdentityDetails extends React.Component{
                             inputName="Github Link"
                             inputLabel={'Github Link'}
                             inputPlaceholder="Eg. Wanchain"
-                            inputValue={this.state.gitLink}
+                            inputValue={this.props.githubLink}
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
                             // helperText={this.state.errorAgeText}
@@ -193,7 +206,7 @@ class IdentityDetails extends React.Component{
                             inputName="Medium Link"
                             inputLabel={'Medium Link'}
                             inputPlaceholder="Eg. ERC"
-                            inputValue={this.state.medLink}
+                            inputValue={this.props.mediumLink}
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
                             // helperText={this.state.errorAgeText}
@@ -211,7 +224,7 @@ class IdentityDetails extends React.Component{
                             inputName="Facebook Link"
                             inputLabel={'Facebook Link'}
                             inputPlaceholder="Eg. Wanchain"
-                            inputValue={this.state.fbLink}
+                            inputValue={this.props.facebookLink}
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
                             // helperText={this.state.errorAgeText}
@@ -226,7 +239,7 @@ class IdentityDetails extends React.Component{
                             inputName="Twitter Link"
                             inputLabel={'Twitter Link'}
                             inputPlaceholder="Eg. ERC"
-                            inputValue={this.state.twtLink}
+                            inputValue={this.props.twitterLink}
                             // onBlur={this.onBlurAge}
                             // error={this.state.errorAgeText !== ''}
                             // helperText={this.state.errorAgeText}
@@ -245,7 +258,7 @@ class IdentityDetails extends React.Component{
                             label={'Upload Whitepaper'}
                             // disabled={!this.state.validPassword}
                             onClick={() => {
-                              this.uploadWhitePaper();
+                                this.uploadWhitePaper();
                             }}
                         />
                     </Col>
@@ -255,4 +268,42 @@ class IdentityDetails extends React.Component{
     }
 }
 
-export default IdentityDetails;
+
+const mapStateToProps = state => {
+    const { adminName, adminEmail, projectName, erc20TokenTag, projectDescription, websiteLink, telegramLink,
+        githubLink, mediumLink, facebookLink, twitterLink } = state.activeDaicosData || {}
+    return {
+        adminName: adminName,
+        adminEmail: adminEmail,
+        projectName: projectName,
+        erc20TokenTag: erc20TokenTag,
+        projectDescription: projectDescription,
+        websiteLink: websiteLink,
+        telegramLink: telegramLink,
+        githubLink: githubLink,
+        mediumLink: mediumLink,
+        facebookLink: facebookLink,
+        twitterLink: twitterLink
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        adminNameChangedAction: adminNameChangedAction,
+        adminEmailChangedAction: adminEmailChangedAction,
+        projectNameChangedAction: projectNameChangedAction,
+        erc20TokenTagChangedAction: erc20TokenTagChangedAction,
+        projectDescriptionChangedAction: projectDescriptionChangedAction,
+        websiteLinkAction: websiteLinkAction,
+        telegramLinkChangedAction: telegramLinkChangedAction,
+        githubLinkChangedAction: githubLinkChangedAction,
+        mediumLinkChangedAction: mediumLinkChangedAction,
+        facebookLinkChangedAction: facebookLinkChangedAction,
+        twitterLinkChangedAction: twitterLinkChangedAction
+    }, dispatch)
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(IdentityDetails);

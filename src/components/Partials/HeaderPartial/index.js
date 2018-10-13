@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -13,8 +15,10 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Drawer from '@material-ui/core/Drawer';
 import {Grid,Row, Col} from '../../../helpers/react-flexbox-grid';
-import { CUIAppBar, CUIButtonIcon } from '../../../helpers/material-ui';
+import { CUIAppBar, CUIButtonIcon, CUIModal } from '../../../helpers/material-ui';
+import { Modal, Button } from 'semantic-ui-react';
 
+import { openRegistrationFormAction, closeRegistrationFormAction }  from '../../../actions/signinManagerActions';
 const scrnWdh = window.innerWidth;
 const styles = theme => ({
   root: {
@@ -95,6 +99,14 @@ class HeaderPartial extends React.Component {
     anchorEl: null,
     mobileMoreAnchorEl: null,
   };
+
+  handleFormCloseButtonClicked = event => {
+    this.props.closeRegistrationFormAction()
+  }
+
+  handleRegistrationButtonClicked = event => {
+    this.props.openRegistrationFormAction(this.props.userRegistered)
+  }
 
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -198,8 +210,17 @@ class HeaderPartial extends React.Component {
                     <div className="hdr-itm-pad text--primary txt-m"><div className="hvr-underline-from-left">Governance</div></div>
                     <div className="hdr-itm-pad text--primary txt-m"><div className="hvr-underline-from-left">Publish ICO</div></div>
                     <div className="hdr-itm-pad text--primary txt-m wdh-100">
-                      <div>Somesh:</div>
-                      <div className="add-ellip">12xxxjs0000dskds</div>
+                      
+                      {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
+                      {this.props.userRegistered? (
+                        <div>
+                        <div>Somesh:</div>
+                        <div>{this.props.userServerPublicAddress}</div>
+                        </div>
+                        ):(
+                         <div> <button onClick={this.handleRegistrationButtonClicked}>Register</button></div>
+                        )}
+                      
                     </div>
                   </div>
                   <div className={classes.sectionMobile}>
@@ -241,4 +262,22 @@ HeaderPartial.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(HeaderPartial);
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    openRegistrationFormAction: openRegistrationFormAction,
+    closeRegistrationFormAction : closeRegistrationFormAction
+  }, dispatch)
+}
+
+const mapStateToProps = state => {
+  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm } = state.signinManagerData || {}
+  return {
+      userRegistered: userRegistered,
+      userServerPublicAddress: userServerPublicAddress,
+      userIsIssuer: userIsIssuer, 
+      showRegistrationForm: showRegistrationForm
+  }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(HeaderPartial)) ;

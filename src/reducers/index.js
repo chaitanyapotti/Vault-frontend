@@ -7,6 +7,10 @@ import projectPreStartReducer from "./projectPreStartReducer";
 import projectGovernanceReducer from "./projectGovernanceReducer";
 import projectCrowdSaleReducer from "./projectCrowdSaleReducer";
 import projectDetailGovernanceReducer from "./projectDetailGovernanceReducer";
+import userTokensData from "./userTokensReducer";
+import featuredProjectsReducer from "./featuredProjectsReducer";
+import signinManagerData from "./signinManagerReducer";
+import projectRegistrationData from "./projectRegistrationReducer";
 
 export default {
   app,
@@ -17,5 +21,9 @@ export default {
   projectPreStartReducer,
   projectGovernanceReducer,
   projectCrowdSaleReducer,
-  projectDetailGovernanceReducer
+  projectDetailGovernanceReducer,
+  userTokensData,
+  featuredProjectsReducer,
+  signinManagerData,
+  projectRegistrationData
 };

@@ -1,17 +1,30 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {CUICard, CUIFormInput, CUIButton} from '../../helpers/material-ui';
 import {CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS} from '../../static/js/variables';
 import {Row, Col} from '../../helpers/react-flexbox-grid';
+import { initialFundReleaseChangedAction,
+    daicoRoundsChangedAction, daicoStartDateChangedAction, daicoEndDateChangedAction, round1TokensChangedAction, round1RateChangedAction,
+    round2TokensChangedAction, round3TokensChangedAction, round3RateChangedAction } from '../../actions/projectRegistrationActions';
 
 class DaicoDetails extends React.Component{
-    state={
-        inifundValue: '',
-    }
 
     onChangeIniFundVal = (e) =>{
-        this.setState({
-            inifundValue: e.target.value
-        })
+        this.props.initialFundReleaseChangedAction(e.target.value)
+    }
+
+    onSelectDaicoRounds = (e) => {
+        console.log(e.target.value)
+        this.props.daicoRoundsChangedAction(e.target.value)
+    }
+
+    onChangeDaicoStart = (e) => {
+        this.props.daicoStartDateChangedAction(e.target.value)
+    }
+
+    onChangeDaicoEnd = (e) => {
+        this.props.daicoEndDateChangedAction(e.target.value)
     }
 
     uploadDaico = () => {
@@ -23,7 +36,7 @@ class DaicoDetails extends React.Component{
             <div>
                 <Row>
                     <Col>
-                        <CUIButton
+                        {/* <CUIButton
                             type={CUIButtonType.RAISED}
                             buttonColor={CUIInputColor.PRIMARY}
                             id="Publish DAICO"
@@ -32,7 +45,7 @@ class DaicoDetails extends React.Component{
                             onClick={() => {
                                 this.uploadDaico();
                             }}
-                        />
+                        /> */}
                     </Col>
                 </Row>
                 <CUICard style={{padding: '40px 67px'}}>
@@ -46,7 +59,7 @@ class DaicoDetails extends React.Component{
                                 inputName="Initial Fund Release"
                                 inputLabel={'Initial Fund Release'}
                                 inputPlaceholder="Eg. Aman"
-                                inputValue={this.state.inifundValue}
+                                inputValue={this.props.initialFundRelease}
                                 textFocus
                                 // onBlur={this.onBlurAge}
                                 // error={this.state.errorAgeText !== ''}
@@ -61,13 +74,12 @@ class DaicoDetails extends React.Component{
                                 iconColor={CS_COLORS.G_DIVIDER}
                                 full
                                 inputLabel={'DAICO Rounds'}
-                                inputValue={this.state.postedBy}
-                                items={[{value: 'sdsds', primaryText: 'sdhjds'}]}
-                                onChange={this.onSelectPostedBy}
+                                inputValue={this.props.daicoRounds}
+                                items={[{value: '3', primaryText: '3'}, {value: '2', primaryText: '2'}, {value: '1', primaryText: '1'}]}
+                                onChange={this.onSelectDaicoRounds}
                             />
                         </Col>
                     </Row>
-
                     <Row>
                         <Col xs={12} lg={6}>
                             <CUIFormInput
@@ -76,7 +88,7 @@ class DaicoDetails extends React.Component{
                                 inputName="DAICO Start Date"
                                 inputLabel={'DAICO Start Date'}
                                 inputPlaceholder="Eg. Wanchain"
-                                inputValue={this.state.daicoStrtDt}
+                                inputValue={this.props.daicoStartDate}
                                 // onBlur={this.onBlurAge}
                                 // error={this.state.errorAgeText !== ''}
                                 // helperText={this.state.errorAgeText}
@@ -91,7 +103,7 @@ class DaicoDetails extends React.Component{
                                 inputName="DAICO End Date"
                                 inputLabel={'DAICO End Date'}
                                 inputPlaceholder="Eg. ERC"
-                                inputValue={this.state.daicoEndDt}
+                                inputValue={this.props.daicoEndDate}
                                 // onBlur={this.onBlurAge}
                                 // error={this.state.errorAgeText !== ''}
                                 // helperText={this.state.errorAgeText}
@@ -106,4 +118,39 @@ class DaicoDetails extends React.Component{
     }
 }
 
-export default DaicoDetails;
+const mapStateToProps = state => {
+    const { initialFundRelease, daicoRounds,
+        daicoStartDate, daicoEndDate, round1Tokens, round1Rate, round2Tokens, round2Rate,
+        round3Tokens, round3Rate, } = state.activeDaicosData || {}
+    return {
+        initialFundRelease: initialFundRelease,
+        daicoRounds: daicoRounds,
+        daicoStartDate: daicoStartDate,
+        daicoEndDate: daicoEndDate,
+        round1Tokens: round1Tokens,
+        round1Rate: round1Rate,
+        round2Tokens: round2Tokens,
+        round2Rate: round2Rate,
+        round3Tokens: round3Tokens,
+        round3Rate: round3Rate,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        initialFundReleaseChangedAction: initialFundReleaseChangedAction,
+        daicoRoundsChangedAction: daicoRoundsChangedAction,
+        daicoStartDateChangedAction: daicoStartDateChangedAction,
+        daicoEndDateChangedAction: daicoEndDateChangedAction,
+        round1TokensChangedAction: round1TokensChangedAction,
+        round1RateChangedAction: round1RateChangedAction,
+        round2TokensChangedAction: round2TokensChangedAction,
+        round3TokensChangedAction: round3TokensChangedAction,
+        round3RateChangedAction: round3RateChangedAction
+    }, dispatch)
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(DaicoDetails);

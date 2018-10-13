@@ -6,6 +6,7 @@ import deployerReducer from "./deployerReducer";
 import userTokensData from './userTokensReducer';
 import featuredProjectsReducer from "./featuredProjectsReducer";
 import signinManagerData from "./signinManagerReducer";
+import projectRegistrationData from "./projectRegistrationReducer";
 
 export default {
     app,
@@ -16,4 +17,5 @@ export default {
     userTokensData,
     featuredProjectsReducer,
     signinManagerData,
+    projectRegistrationData
 };

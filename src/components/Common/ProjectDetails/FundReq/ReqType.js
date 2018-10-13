@@ -6,8 +6,12 @@ import SocialLinks from '../../../Common/SocialLinks';
 import {ButtonComponent} from '../../FormComponents';
 
 class ReqType extends React.Component{
-  
     render(){
+      const {
+        etherRequested,
+        approvalRate,
+        endsIn
+      } = this.props || {}
         return(
                 <div>
                     <div>Exceptional Fund Requests</div>
@@ -17,7 +21,7 @@ class ReqType extends React.Component{
                     </Row>
 
                     <div className="txt-g-secondary txt-m">
-                        <div lg={12}>500 ETH</div>
+                        <div lg={12}>{this.props.etherRequested} ETH</div>
                     </div>
 
                     <div className="push--top txt">
@@ -28,8 +32,8 @@ class ReqType extends React.Component{
                     </div>
 
                     <Row className="push--top">
-                        <Col lg={6} className="txt">Approval Rate:<span className="text--secondary"> 99.99%</span> </Col>
-                        <Col lg={6} className="txt">Ends in: <span className="text--secondary"> 5D 12H 20M</span> </Col>
+                        <Col lg={6} className="txt">Approval Rate:<span className="text--secondary"> {this.props.approvalRate}%</span> </Col>
+                        <Col lg={6} className="txt">Ends in: <span className="text--secondary"> {this.props.endsIn}</span> </Col>
                     </Row>
 
                     <div className="push--top">

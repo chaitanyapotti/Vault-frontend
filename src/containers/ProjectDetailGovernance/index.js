@@ -78,7 +78,6 @@ class ProjectDetailGovernance extends Component {
           killConsensus
           onKillClick
         />
-        <TapCard currentTapAmount tapIncrementUnit incrementApproval />
         {/* <FundReq reqTypes /> */}
       </div>
     );

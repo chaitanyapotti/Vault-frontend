@@ -4,6 +4,7 @@ import endedDaicosData from "./endedDaicosReducer";
 import upcomingDaicosData from "./upcomingDaicosReducer";
 import deployerReducer from "./deployerReducer";
 import projectPreStartReducer from "./projectPreStartReducer";
+import projectGovernanceReducer from "./projectGovernanceReducer";
 
 export default {
   app,
@@ -11,5 +12,6 @@ export default {
   endedDaicosData,
   upcomingDaicosData,
   deployerReducer,
-  projectPreStartReducer
+  projectPreStartReducer,
+  projectGovernanceReducer
 };

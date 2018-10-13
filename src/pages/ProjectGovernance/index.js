@@ -3,18 +3,20 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
-import { fetchProjectDetails } from "../../actions/deployerActions/index";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 
 class ProjectGovernance extends Component {
   componentDidMount() {
     //Do Routing here - use query string
-    this.props.fetchProjectDetails("5bafaed1eb00b152a418f7df");
-    // this.props.currentRound();
+    this.props.currentRound("5bafaed1eb00b152a418f7df");
+    // const { version, crowdSaleAddress } = this.props.projectDetails || {};
+    // console.log(version, crowdSaleAddress);
+    // this.props.currentRound(version, crowdSaleAddress);
   }
 
   render() {
+    const { currentRoundNumber, projectDetails } = this.props || {};
     const {
       currentDeploymentIndicator,
       projectName,
@@ -33,40 +35,45 @@ class ProjectGovernance extends Component {
       rounds,
       totalMintableSupply,
       foundationDetails
-    } = this.props.projectDetails || {};
+    } = projectDetails || {};
     if (currentDeploymentIndicator !== 12)
       return (
         <div>
           <p>The project hasn't been deployed yet</p>
         </div>
       );
-    return (
-      <ProjectDetailPreStart
-        version={version}
-        membershipAddress={membershipAddress}
-        projectName={projectName}
-        tokenTag={tokenTag}
-        description={description}
-        urls={urls}
-        whitepaper={whitepaper}
-        startDateTime={startDateTime}
-        maximumEtherContribution={maximumEtherContribution}
-        capPercent={capPercent}
-        initialTapAmount={initialTapAmount}
-        tapIncrementFactor={tapIncrementFactor}
-        isCurrentMember={isCurrentMember}
-        rounds={rounds}
-        totalMintableSupply={totalMintableSupply}
-        foundationDetails={foundationDetails}
-      />
-    );
+    console.log(currentRoundNumber);
+    if (currentRoundNumber === "0")
+      return (
+        <ProjectDetailPreStart
+          version={version}
+          membershipAddress={membershipAddress}
+          projectName={projectName}
+          tokenTag={tokenTag}
+          description={description}
+          urls={urls}
+          whitepaper={whitepaper}
+          startDateTime={startDateTime}
+          maximumEtherContribution={maximumEtherContribution}
+          capPercent={capPercent}
+          initialTapAmount={initialTapAmount}
+          tapIncrementFactor={tapIncrementFactor}
+          isCurrentMember={isCurrentMember}
+          rounds={rounds}
+          totalMintableSupply={totalMintableSupply}
+          foundationDetails={foundationDetails}
+        />
+      );
+    else return null;
   }
 }
 
 const mapStateToProps = state => {
   const { projectDetails, ts } = state.deployerReducer || {};
+  const { currentRoundNumber } = state.projectGovernanceReducer || {};
   return {
     projectDetails: projectDetails,
+    currentRoundNumber: currentRoundNumber,
     ts: ts
   };
 };
@@ -74,7 +81,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      fetchProjectDetails: fetchProjectDetails,
       currentRound: currentRound
     },
     dispatch

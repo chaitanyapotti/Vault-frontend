@@ -1,20 +1,21 @@
 /* eslint react/require-default-props: 0 */
 /* eslint camelcase: 0 */
 
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import './static/css/app.css';
-import VaultApp from './VaultApp';
-import Registration from './pages/Registration';
-import Dashboard from './pages/Dashboard';
-import ProjectDetails from './pages/ProjectDetails';
-import LandingPage from './pages/LandingPage';
-import AllDaicos from './pages/AllDaicos';
-import Governance from './pages/Governance';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
+import "./static/css/app.css";
+import VaultApp from "./VaultApp";
+import Registration from "./pages/Registration";
+import Dashboard from "./pages/Dashboard";
+import ProjectDetails from "./pages/ProjectDetails";
+import LandingPage from "./pages/LandingPage";
+import AllDaicos from "./pages/AllDaicos";
+import Governance from "./pages/Governance";
+import ProjectGovernance from "./pages/ProjectGovernance";
 
 import store from "./store";
-import 'semantic-ui-css/semantic.min.css';
+import "semantic-ui-css/semantic.min.css";
 import Deployer from "./pages/Deployer";
 
 class App extends Component {
@@ -31,6 +32,7 @@ class App extends Component {
               <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/project" component={ProjectDetails} />
               <Route exact path="/deploy" component={Deployer} />
+              <Route exact path="/page6" component={ProjectGovernance} />
             </Switch>
           </VaultApp>
         </Router>

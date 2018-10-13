@@ -42,20 +42,20 @@ class PDetailCrowdSale extends React.Component {
         <Row>
           <Col lg={6}>
             Initial Tap Amount:
-            <span className="text--secondary">{initialTapAmount}</span>
+            <span className="text--secondary">{initialTapAmount} ETH</span>
           </Col>
           <Col lg={6}>
             Tap Increment Unit:
-            <span className="text--secondary">{tapIncrementUnit}%</span>
+            <span className="text--secondary">{tapIncrementUnit} ETH</span>
           </Col>
         </Row>
 
         <Row>
           <Col lg={6}>
-            Hard Capitalisation: <span className="text--secondary">{hardCapCapitalisation} ETH</span>
+            Hard Capitalisation: <span className="text--secondary">{hardCapCapitalisation}Mn</span>
           </Col>
           <Col lg={6}>
-            Diluted Capitalisation: <span className="text--secondary">{dilutedCapitalisation} ETH</span>
+            Diluted Capitalisation: <span className="text--secondary">{dilutedCapitalisation}Mn</span>
           </Col>
         </Row>
       </CUICard>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {HeaderPartial, FooterPartial} from '../src/components/Partials';
 import SubHeader from '../src/components/Common/Subheader';
+import {CUIWrapper} from '../src/helpers/material-ui';
 
 class VaultApp extends React.PureComponent {
   constructor(props) {
@@ -12,14 +13,14 @@ class VaultApp extends React.PureComponent {
   
   render() {
     return (
-      <div>
+      <CUIWrapper>
         <HeaderPartial />
         <SubHeader/>
-        <div className="main-content push-top--50">
+        <div className="main-content push-top--35">
           {this.props.children}
         </div>
         <FooterPartial />
-      </div>
+      </CUIWrapper>
     );
   }
 }

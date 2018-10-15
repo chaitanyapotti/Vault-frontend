@@ -17,27 +17,27 @@ class SocialLinks extends Component {
           <tr>
             <td>
               <a target="_blank" href={urls.github}>
-                <img className="push--right" src={images.github} width="20" height="20" />
+                <img className="push--left" src={images.github} width="20" height="20" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.telegram}>
-                <img className="push--right" src={images.telegram} width="20" height="20" />
+                <img className="push--left" src={images.telegram} width="20" height="20" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.medium}>
-                <img className="push--right" src={images.medium} width="20" height="20" />
+                <img className="push--left" src={images.medium} width="20" height="20" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.facebook}>
-                <img className="push--right" src={images.facebook} width="20" height="20" />
+                <img className="push--left" src={images.facebook} width="20" height="20" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.twitter}>
-                <img className="push--right" src={images.twitter} width="20" height="20" />
+                <img className="push--left" src={images.twitter} width="20" height="20" />
               </a>
             </td>
           </tr>

@@ -20,22 +20,30 @@ class ProjectName extends React.Component{
         secondaryButtonText,
         onClick,
         onSecondaryClick,
-        buttonVisibility
+        buttonVisibility,
+        priceIncrementFlag
       } = this.props || {};
       const { website } = urls;
         return(
-                <CUICard style={{padding: '40px 52px'}}>
+                <CUICard style={{padding: '40px 40px'}}>
                     <Row>
-                        <Col xs={12} lg={9}>
+                        <Col xs={12} lg={8}>
                             <div className="hl">
                                 <span className="prjct-logo hli"></span>
-                                <div className="hli push--left text--primary">
+                                <div className="hli push--left text--primary push-half--top">
                                     <div className="txt-xxxl"> {projectName} ({tokenTag})</div>
-                                    <div className="txt">{price} ETH<span className="txt-inc">{` ${priceIncrement}`}</span></div>
+                                    <div className="txt">
+                                        {price} ETH
+                                        {priceIncrementFlag ? 
+                                             <span className="txt-inc">{` ${priceIncrement}`}</span>
+                                            :
+                                            <div/>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </Col>
-                        <Col lg={3} className="txt-g-secondary txt">
+                        <Col lg={4} className="txt-g-secondary txt">
                             {/* <div>Level 2 Price</div>
                             <div>0.017522 ETH</div> */}
                             <span>{lastRoundInfo}</span>
@@ -56,10 +64,10 @@ class ProjectName extends React.Component{
                     </Row>
                     <Row className="push--top">
                         <Col lg={6} className="text--secondary txt">
-                            <a href={whitepaper}>Read our whitepaper</a>
-                            <a href={website}>Learn more on our website</a>
+                            <div><a href={whitepaper}>Read our whitepaper</a></div>
+                            <div><a href={website}>Learn more on our website</a></div>
                         </Col>
-                        <Col lg={6}>
+                        <Col lg={6} className="text-right   ">
                         {buttonVisibility ? (
                             <ButtonComponent
                                 onClick={onClick}
@@ -69,10 +77,12 @@ class ProjectName extends React.Component{
                             <span>You are whitelisted</span>
                           )}
                           {onSecondaryClick ? (
-                              <ButtonComponent
-                                onClick={onSecondaryClick}
-                                label={secondaryButtonText}
-                              />
+                              <span className="push-left--13">
+                                <ButtonComponent
+                                    onClick={onSecondaryClick}
+                                    label={secondaryButtonText}
+                                />
+                              </span>
                           ) : null}
                         {/* { this.props.type === 'dual' ? 
                             <DualComponent

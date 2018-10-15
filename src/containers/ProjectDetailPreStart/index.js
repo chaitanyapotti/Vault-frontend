@@ -69,10 +69,11 @@ class ProjectDetailPreStart extends Component {
     } = this.props || {};
     return (
       <Grid>
-        <Row className="push--top">
+        <Row>
           <Col xs={12} lg={6}>
             <ProjectName
               projectName={projectName}
+              priceIncrementFlag={false}
               tokenTag={tokenTag}
               price={this.getPrice()}
               roundText={this.getRoundText()}

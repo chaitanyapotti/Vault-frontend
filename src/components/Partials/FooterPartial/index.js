@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import {Col, Grid, Row} from '../../../helpers/react-flexbox-grid';
 
 const FooterPartial = () => (
-  <div className="ftr-cnt">
+  <div className="ftr-cnt push-top--50">
   <Grid>
     <Row className="push-top--50">
       <Col lg={2}>

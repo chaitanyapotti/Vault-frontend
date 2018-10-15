@@ -61,18 +61,19 @@ class PDetailGovernance extends React.Component {
           </Col>
         </Row>
 
-        <Row className="push-top--35 txt">
+        <Row className="push-top--35 txt txt-g-secondary ">
           <Col lg={12}>
             Total Refundable Balance: <span className="text--secondary">{totalRefundableBalance} ETH</span>
           </Col>
         </Row>
-        <Row className="txt">
+        <Row className="txt txt-g-secondary">
           <Col lg={12}>
             Kill Consensus: <span className="text--secondary">{killConsensus}%</span>
           </Col>
         </Row>
         <div className="text-right">
           <ButtonComponent
+            type="danger"
             onClick={onKillClick}
             label="Kill Project"
           />

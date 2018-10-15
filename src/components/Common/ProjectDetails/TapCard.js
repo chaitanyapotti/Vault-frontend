@@ -28,7 +28,6 @@ class TapCard extends Component {
           </Row>
           <div className="text-right">
             <ButtonComponent
-                type='danger'
                 onClick={()=> this.uploadDaico()}
                 label="Approve"
             />

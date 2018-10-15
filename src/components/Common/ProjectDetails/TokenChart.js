@@ -5,7 +5,7 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 
 const TokenChart = () => (
   <div className="push-top--50">
-    <div>Token Distribution Chart</div>
+    <div className="txt-xxxl text--primary">Token Distribution Chart</div>
     <hr />
     <Row>
       <Col xs={12} lg={6} className="piechrtxtcnt">

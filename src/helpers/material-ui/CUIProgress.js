@@ -34,7 +34,7 @@ import PropTypes from '../../PropTypes';
  */
 
 export const CUILinearProgress = ({ style, color, value }) =>
-  <LinearProgress variant={CUIProgressType.DETERMINATE} style={style} color={color} value={value} />;
+  <LinearProgress variant={CUIProgressType.DETERMINATE} style={style} color={color}  value={value} />;
 
 CUILinearProgress.defaultProps = {
   style: {},

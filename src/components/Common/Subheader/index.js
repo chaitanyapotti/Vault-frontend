@@ -3,7 +3,7 @@ import {Col, Grid, Row} from '../../../helpers/react-flexbox-grid';
 
 
 const Subheader = () =>
-    <div className="sbhdr-cnt push--top">
+    <div className="sbhdr-cnt push-top--135">
         <Grid>
             <div className="sbhdr-txt txt-xl txt-bold sbhdr-mrgn-tp">
                 ACCOUNTABLE CROWDFUNDING PLATFORM

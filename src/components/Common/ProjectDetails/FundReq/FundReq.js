@@ -20,6 +20,7 @@ class FundReq extends React.Component {
   };
   getObject2 = () => {};
   render() {
+    console.log('props in fund req', this.props)
     return (
       <div>
         <CUICard style={{ padding: "40px 50px" }}>{this.getObject1()}</CUICard>

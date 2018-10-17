@@ -504,7 +504,7 @@ export function getXfrPollVote(version, contractAddress, index) {
                 .call()
                 .then(response => {
                   const { voted } = response;
-                  dispatch(index == 0 ? xfrPollVote1(voted) : xfrPollVote2(voted));
+                  dispatch(index === 0 ? xfrPollVote1(voted) : xfrPollVote2(voted));
                 });
             });
           });
@@ -536,7 +536,7 @@ export function voteInXfrPoll(version, contractAddress, index) {
               ipollInstance.methods
                 .vote(0)
                 .send({ from: accounts[0] })
-                .then(response => dispatch(index == 0 ? votedInXfrPoll1(response) : votedInXfrPoll2(response)));
+                .then(response => dispatch(index === 0 ? votedInXfrPoll1(response) : votedInXfrPoll2(response)));
             });
           });
       })
@@ -567,7 +567,7 @@ export function revokeVoteInXfrPoll(version, contractAddress, index) {
               ipollInstance.methods
                 .revokeVote()
                 .send({ from: accounts[0] })
-                .then(response => dispatch(index == 0 ? revokedVoteInXfrPoll1(response) : revokedVoteInXfrPoll2(response)));
+                .then(response => dispatch(index === 0 ? revokedVoteInXfrPoll1(response) : revokedVoteInXfrPoll2(response)));
             });
           });
       })

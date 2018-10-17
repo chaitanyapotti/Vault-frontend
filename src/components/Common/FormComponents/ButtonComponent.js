@@ -9,7 +9,7 @@ const ButtonComponent = (props) =>
           type='raised'
           labelStyle={{padding: '8px 16px'}}
           onClick={() => {
-            props.onClick
+            props.onClick()
           }}
       />;
 

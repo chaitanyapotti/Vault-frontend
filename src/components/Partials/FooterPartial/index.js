@@ -17,7 +17,7 @@ const FooterPartial = () => (
           <Link to="/whitepaper">
             <div>White Paper</div>
           </Link>
-          <a  href="https://medium.com/@ParthaB/" target="_blank">Blog</a>
+          <a  href="https://medium.com/@ParthaB/" target="_blank" rel="noopener noreferrer" alt="blog">Blog</a>
         </div>
       </Col>
 

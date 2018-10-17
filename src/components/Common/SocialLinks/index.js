@@ -16,28 +16,28 @@ class SocialLinks extends Component {
         <tbody>
           <tr>
             <td>
-              <a target="_blank" href={urls.github}>
-                <img className="push--left" src={images.github} width="20" height="20" />
+              <a target="_blank" href={urls.github} rel="noopener noreferrer">
+                <img className="push--left" src={images.github} width="20" height="20" alt="github" />
               </a>
             </td>
             <td>
-              <a target="_blank" href={urls.telegram}>
-                <img className="push--left" src={images.telegram} width="20" height="20" />
+              <a target="_blank" href={urls.telegram} rel="noopener noreferrer">
+                <img className="push--left" src={images.telegram} width="20" height="20" alt="telegram" />
               </a>
             </td>
             <td>
-              <a target="_blank" href={urls.medium}>
-                <img className="push--left" src={images.medium} width="20" height="20" />
+              <a target="_blank" href={urls.medium} rel="noopener noreferrer">
+                <img className="push--left" src={images.medium} width="20" height="20" alt="medium" />
               </a>
             </td>
             <td>
-              <a target="_blank" href={urls.facebook}>
-                <img className="push--left" src={images.facebook} width="20" height="20" />
+              <a target="_blank" href={urls.facebook} rel="noopener noreferrer">
+                <img className="push--left" src={images.facebook} width="20" height="20" alt="facebook" />
               </a>
             </td>
             <td>
-              <a target="_blank" href={urls.twitter}>
-                <img className="push--left" src={images.twitter} width="20" height="20" />
+              <a target="_blank" href={urls.twitter} rel="noopener noreferrer">
+                <img className="push--left" src={images.twitter} width="20" height="20" alt="twitter" />
               </a>
             </td>
           </tr>

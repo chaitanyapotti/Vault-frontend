@@ -21,8 +21,9 @@ export function currentRound(projectid) {
     axios
       .get(config.api_base_url + "/db/projects", { params: { projectid: projectid } })
       .then(async response => {
-        if (response.status === 200) {
-          const { data } = response.data || {};
+        const {status, data:projectData} = response || {};
+        if (status === 200) {
+          const { data } = projectData || {};
           const { version, crowdSaleAddress } = data || {};
           dispatch(projectDetailsFetched(data));
           const network = await web3.eth.net.getNetworkType();
@@ -32,8 +33,9 @@ export function currentRound(projectid) {
                 params: { version: version.toString(), network: network, address: crowdSaleAddress, useraddress: accounts[0] }
               })
               .then(response => {
+                const{data: currentRoundData} = response || {};
                 if (response.status === 200) {
-                  const { data } = response.data;
+                  const { data } = currentRoundData;
                   dispatch(currentRoundFetchSuccess(data));
                 }
               })

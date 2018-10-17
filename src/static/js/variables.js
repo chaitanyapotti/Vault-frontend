@@ -4,7 +4,7 @@ export const CS_COLORS = {
   BLACK: '#000000',
   LIGHT_PRIMARY: '#71BA6D',
   PRIMARY: '#4ca9fc',
-  SECONDARY: '#4ca9fc',
+  SECONDARY: '#ffffff',
   SUCCESS: '#599A02',
   DANGER: '#E53A42',
   BG_PRIMARY: '#E1423E',

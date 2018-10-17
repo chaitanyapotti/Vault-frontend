@@ -31,13 +31,15 @@ class ProjectDetailGovernance extends Component {
     this.props.getTapPollConsensus(version, pollFactoryAddress);
     this.props.getCurrentTap(version, pollFactoryAddress);
     this.props.getXfrData(version, pollFactoryAddress);
-  }
+  };
+
   getPriceIncrement = () => {
-    //to use external api
+    //TODO: to use external api
     return "(+31.23%)";
   };
+
   lastRoundInfo = () => {
-    //get current round and price
+    //TODO: get current round and price
     const { roundInfo } = this.props || {};
     const { tokenRate } = roundInfo;
     const { currentRoundNumber } = this.props || {};
@@ -48,16 +50,20 @@ class ProjectDetailGovernance extends Component {
       </div>
     );
   };
+
   buyTokens = () => {
     const { crowdSaleAddress } = this.props || {};
     //TODO need to add how many tokens to buy
     this.props.buyTokens(crowdSaleAddress);
   };
+
   getPrice = () => {
-    //to use external API
+    //TODO: to use external API
     return "0.009861";
   };
+
   onTradeClick = () => {};
+
   getRoundText = () => {
     const { currentRoundNumber } = this.props || {};
     const { roundInfo } = this.props || {};
@@ -67,17 +73,20 @@ class ProjectDetailGovernance extends Component {
       parseFloat(tokenCount) * Math.pow(10, -18)
     )} (Round ${currentRoundNumber} of 3)`;
   };
+
   getVoteShare = () => {
     const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
     const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * Math.pow(10, 18);
     return userShare > capPercent / 10000 ? capPercent / 10000 : userShare;
   };
+
   getNextKillPollStartDate = () => {
     const { killPollIndex, r1EndTime } = this.props || {};
     let endDate = new Date(r1EndTime);
     endDate.setDate(endDate.getDate() + killPollIndex * 90);
     return endDate.toDateString();
   };
+
   getMyTokenValue = () => {
     const etherPrice = 200;
     const tokenPrice = this.getPrice() * etherPrice;
@@ -101,15 +110,18 @@ class ProjectDetailGovernance extends Component {
     const { killConsensus, tokensUnderGovernance } = this.props || {};
     return parseFloat(killConsensus) / parseFloat(tokensUnderGovernance);
   };
+
   onKillClick = () => {
     const { version, pollFactoryAddress } = this.props || {};
     this.props.voteInKillPoll(version, pollFactoryAddress);
     //or revokeVoteInKillPoll();
   };
+
   getTapPollConsensus = () => {
     const { tapPollConsensus, tokensUnderGovernance } = this.props || {};
     return parseFloat(tapPollConsensus) / parseFloat(tokensUnderGovernance);
   };
+  
   render() {
     const {
       projectName,
@@ -185,7 +197,8 @@ class ProjectDetailGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { etherCollected, roundInfo } = state.projectCrowdSaleReducer || {};
+  const { projectCrowdSaleReducer, projectDetailGovernanceReducer } = state || {};
+  const { etherCollected, roundInfo } = projectCrowdSaleReducer || {};
   const {
     tokenBalance,
     tokensUnderGovernance,
@@ -196,7 +209,8 @@ const mapStateToProps = state => {
     tapPollConsensus,
     currentTap,
     xfrData
-  } = state.projectDetailGovernanceReducer || {};
+  } = projectDetailGovernanceReducer || {};
+
   return {
     etherCollected: etherCollected,
     roundInfo: roundInfo,

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import queryString from "query-string";
+// import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
@@ -45,121 +45,127 @@ class ProjectGovernance extends Component {
       daicoTokenAddress
     } = projectDetails || {};
     currentRoundNumber = "4";
-    console.log('governance',currentDeploymentIndicator, currentRoundNumber);
+
     if (currentDeploymentIndicator !== 12)
       return (
         <div>
           <p>The project hasn't been deployed yet</p>
         </div>
-      );
-    // console.log(currentRoundNumber);
-    if (currentRoundNumber === "0")
-      return (
-        <ProjectDetailPreStart
-          version={version}
-          membershipAddress={membershipAddress}
-          projectName={projectName}
-          tokenTag={tokenTag}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          startDateTime={startDateTime}
-          maximumEtherContribution={maximumEtherContribution}
-          capPercent={capPercent}
-          initialTapAmount={initialTapAmount}
-          tapIncrementFactor={tapIncrementFactor}
-          isCurrentMember={isCurrentMember}
-          rounds={rounds}
-          totalMintableSupply={totalMintableSupply}
-          foundationDetails={foundationDetails}
-        />
-      );
-    else if (currentRoundNumber === "1") {
-      return (
-        <ProjectDetailCrowdSale
-          version={version}
-          membershipAddress={membershipAddress}
-          projectName={projectName}
-          tokenTag={tokenTag}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          startDateTime={startDateTime}
-          maximumEtherContribution={maximumEtherContribution}
-          capPercent={capPercent}
-          initialTapAmount={initialTapAmount}
-          tapIncrementFactor={tapIncrementFactor}
-          isCurrentMember={isCurrentMember}
-          rounds={rounds}
-          totalMintableSupply={totalMintableSupply}
-          foundationDetails={foundationDetails}
-          r1EndTime={r1EndTime}
-          pollFactoryAddress={pollFactoryAddress}
-          initialFundRelease={initialFundRelease}
-          crowdSaleAddress={crowdSaleAddress}
-        />
-      );
-    } else if (currentRoundNumber === "2" || currentRoundNumber === "3") {
-      return (
-        <ProjectDetailGovernance
-          version={version}
-          membershipAddress={membershipAddress}
-          projectName={projectName}
-          tokenTag={tokenTag}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          startDateTime={startDateTime}
-          maximumEtherContribution={maximumEtherContribution}
-          capPercent={capPercent}
-          initialTapAmount={initialTapAmount}
-          tapIncrementFactor={tapIncrementFactor}
-          isCurrentMember={isCurrentMember}
-          rounds={rounds}
-          totalMintableSupply={totalMintableSupply}
-          foundationDetails={foundationDetails}
-          r1EndTime={r1EndTime}
-          pollFactoryAddress={pollFactoryAddress}
-          initialFundRelease={initialFundRelease}
-          crowdSaleAddress={crowdSaleAddress}
-          currentRoundNumber={currentRoundNumber}
-          daicoTokenAddress={daicoTokenAddress}
-        />
-      );
-    } else if (currentRoundNumber === "4") {
-      return (
-        <ProjectDetailSaleEnd
-          version={version}
-          membershipAddress={membershipAddress}
-          projectName={projectName}
-          tokenTag={tokenTag}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          startDateTime={startDateTime}
-          maximumEtherContribution={maximumEtherContribution}
-          capPercent={capPercent}
-          initialTapAmount={initialTapAmount}
-          tapIncrementFactor={tapIncrementFactor}
-          isCurrentMember={isCurrentMember}
-          rounds={rounds}
-          totalMintableSupply={totalMintableSupply}
-          foundationDetails={foundationDetails}
-          r1EndTime={r1EndTime}
-          pollFactoryAddress={pollFactoryAddress}
-          initialFundRelease={initialFundRelease}
-          crowdSaleAddress={crowdSaleAddress}
-          currentRoundNumber={currentRoundNumber}
-          daicoTokenAddress={daicoTokenAddress}
-        />
-      );
-    } else return null;
+    );
+
+    switch(currentRoundNumber){
+      case "0":
+        return (
+          <ProjectDetailPreStart
+            version={version}
+            membershipAddress={membershipAddress}
+            projectName={projectName}
+            tokenTag={tokenTag}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            startDateTime={startDateTime}
+            maximumEtherContribution={maximumEtherContribution}
+            capPercent={capPercent}
+            initialTapAmount={initialTapAmount}
+            tapIncrementFactor={tapIncrementFactor}
+            isCurrentMember={isCurrentMember}
+            rounds={rounds}
+            totalMintableSupply={totalMintableSupply}
+            foundationDetails={foundationDetails}
+          />
+        );
+      case "1":
+        return (
+          <ProjectDetailCrowdSale
+            version={version}
+            membershipAddress={membershipAddress}
+            projectName={projectName}
+            tokenTag={tokenTag}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            startDateTime={startDateTime}
+            maximumEtherContribution={maximumEtherContribution}
+            capPercent={capPercent}
+            initialTapAmount={initialTapAmount}
+            tapIncrementFactor={tapIncrementFactor}
+            isCurrentMember={isCurrentMember}
+            rounds={rounds}
+            totalMintableSupply={totalMintableSupply}
+            foundationDetails={foundationDetails}
+            r1EndTime={r1EndTime}
+            pollFactoryAddress={pollFactoryAddress}
+            initialFundRelease={initialFundRelease}
+            crowdSaleAddress={crowdSaleAddress}
+          />
+        );
+      case "2":
+      case "3":
+        return (
+          <ProjectDetailGovernance
+            version={version}
+            membershipAddress={membershipAddress}
+            projectName={projectName}
+            tokenTag={tokenTag}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            startDateTime={startDateTime}
+            maximumEtherContribution={maximumEtherContribution}
+            capPercent={capPercent}
+            initialTapAmount={initialTapAmount}
+            tapIncrementFactor={tapIncrementFactor}
+            isCurrentMember={isCurrentMember}
+            rounds={rounds}
+            totalMintableSupply={totalMintableSupply}
+            foundationDetails={foundationDetails}
+            r1EndTime={r1EndTime}
+            pollFactoryAddress={pollFactoryAddress}
+            initialFundRelease={initialFundRelease}
+            crowdSaleAddress={crowdSaleAddress}
+            currentRoundNumber={currentRoundNumber}
+            daicoTokenAddress={daicoTokenAddress}
+          />
+        );
+      case "4":
+        return (
+          <ProjectDetailSaleEnd
+            version={version}
+            membershipAddress={membershipAddress}
+            projectName={projectName}
+            tokenTag={tokenTag}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            startDateTime={startDateTime}
+            maximumEtherContribution={maximumEtherContribution}
+            capPercent={capPercent}
+            initialTapAmount={initialTapAmount}
+            tapIncrementFactor={tapIncrementFactor}
+            isCurrentMember={isCurrentMember}
+            rounds={rounds}
+            totalMintableSupply={totalMintableSupply}
+            foundationDetails={foundationDetails}
+            r1EndTime={r1EndTime}
+            pollFactoryAddress={pollFactoryAddress}
+            initialFundRelease={initialFundRelease}
+            crowdSaleAddress={crowdSaleAddress}
+            currentRoundNumber={currentRoundNumber}
+            daicoTokenAddress={daicoTokenAddress}
+          />
+        );
+      default:
+          return null;
+    }
   }
 }
 
 const mapStateToProps = state => {
-  const { projectDetails, ts } = state.deployerReducer || {};
-  const { currentRoundNumber } = state.projectGovernanceReducer || {};
+  const { deployerReducer, projectGovernanceReducer } = state || {};
+  const { projectDetails, ts } = deployerReducer || {};
+  const { currentRoundNumber } = projectGovernanceReducer || {};
+
   return {
     projectDetails: projectDetails,
     currentRoundNumber: currentRoundNumber,
@@ -182,3 +188,5 @@ const connector = connect(
 )(ProjectGovernance);
 
 export default withRouter(connector);
+
+// TODO: Do the Proptypes validation to all childrens

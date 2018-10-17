@@ -27,8 +27,8 @@ class ProjectDetailPreStart extends Component {
   };
 
   getSoftCap = () => {
-    //For now using ether.. when ether price is brought, it is implemented, convert to $
-    const etherPrice = "200"; //dollars
+    //TODO: For now using ether.. when ether price is brought, it is implemented, convert to $
+    const etherPrice = "200"; //TODO: dollars
     const { rounds } = this.props || {};
     let softCap = 0;
     for (let index = 0; index < rounds.length; index++) {
@@ -39,7 +39,7 @@ class ProjectDetailPreStart extends Component {
   };
 
   getHardCap = () => {
-    const etherPrice = "200"; //dollars
+    const etherPrice = "200"; //TODO: dollars
     const { totalMintableSupply } = this.props || {};
     const hardCap = parseFloat(totalMintableSupply) * this.getR3Price() * etherPrice * Math.pow(10, -18);
     return Math.round(hardCap).toString();
@@ -121,7 +121,9 @@ const mapDispatchToProps = dispatch => {
 };
 
 const mapStateToProps = state => {
-  const { isCurrentMember } = state.projectPreStartReducer || {};
+  const {projectPreStartReducer} = state || {};
+  const { isCurrentMember } = projectPreStartReducer || {};
+
   return {
     isCurrentMember: isCurrentMember
   };

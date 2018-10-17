@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 
 import { Table, Loader } from 'semantic-ui-react';
 import { getActiveDaicos, showActiveDaicosLoaderAction } from '../../actions/activeDaicosActions';
-import moment from 'moment';
 
 const calculateEndDuration = (r1EndTime) => {
     // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))

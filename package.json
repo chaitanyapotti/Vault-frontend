@@ -1,7 +1,11 @@
 {
-  "name": "react-redux-boilerplate",
-  "version": "0.1.0",
+  "name": "vault",
+  "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=8.6.0",
+    "yarn": ">=1.0.1"
+  },
   "dependencies": {
     "@material-ui/core": "^3.1.2",
     "@material-ui/icons": "^3.0.1",
@@ -35,19 +39,19 @@
     "lint:ci": "eslint src --max-warnings 0",
     "fix": "eslint --fix src",
     "q": "eslint --quiet --fix src/index.js $(git diff --cached --name-only --diff-filter=d HEAD | grep .js$)",
-    "size:why": "source-map-explorer build/static/js/main*.*js",
+    "size:why": "node tools/stats.js",
     "size": "size-limit"
   },
   "devDependencies": {
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-config-prettier": "^2.10.0",
-    "eslint-config-react-app": "^2.1.0",
-    "eslint-plugin-flowtype": "^2.50.3",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-prettier": "^2.7.0",
-    "eslint-plugin-react": "^7.11.1",
-    "prettier": "^1.14.3",
-    "source-map-explorer": "^1.6.0"
+    "eslint": "4.4.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "2.3.0",
+    "eslint-config-react-app": "^2.0.0",
+    "eslint-plugin-flowtype": "^2.40.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-prettier": "2.1.2",
+    "eslint-plugin-react": "^7.2.0",
+    "prettier": "1.5.3"
   }
 }

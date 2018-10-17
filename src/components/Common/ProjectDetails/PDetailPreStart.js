@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { CUICard, CUIFormInput } from "../../../helpers/material-ui";
+import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 
 class PDetailPreStart extends Component {

@@ -1,6 +1,4 @@
 import React from "react";
-import { CUICard, CUIFormInput, CUIButton } from "../../../helpers/material-ui";
-import { CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 
 const TokenChart = () => (

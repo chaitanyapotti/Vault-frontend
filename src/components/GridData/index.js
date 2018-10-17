@@ -1,9 +1,8 @@
 /* eslint camelcase: 0 */
 
 import React, {Component} from 'react';
-import {DataGrid, DataRow, DataCol} from '../../helpers/DataGridHelpers';
 import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page } from '@syncfusion/ej2-react-grids';
-import { DataManager, ODataAdaptor } from '@syncfusion/ej2-data';
+import { DataManager } from '@syncfusion/ej2-data';
 
 class GridData extends Component {
   render() {

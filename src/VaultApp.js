@@ -6,11 +6,6 @@ import SubHeader from '../src/components/Common/Subheader';
 import {CUIWrapper} from '../src/helpers/material-ui';
 
 class VaultApp extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    
-  }
-  
   render() {
     return (
       <CUIWrapper>

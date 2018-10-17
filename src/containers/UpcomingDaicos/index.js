@@ -4,16 +4,15 @@ import { bindActionCreators } from 'redux';
 
 import { Table, Loader } from 'semantic-ui-react';
 import { getUpcomingDaicos, showUpcomingDaicosLoaderAction } from '../../actions/upcomingDaicosActions';
-import moment from 'moment';
 
 const calculateEndDuration = (r1EndTime) => {
     // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))
     return r1EndTime
 }
 
-const calculateRoundGoal = (round) => {
-    return (parseFloat(round.tokenCount) / (parseFloat(round.tokenRate) * Math.pow(10, 18)))
-}
+// const calculateRoundGoal = (round) => {
+//     return (parseFloat(round.tokenCount) / (parseFloat(round.tokenRate) * Math.pow(10, 18)))
+// }
 
 class UpcomingDaicosTableBody extends Component {
     addTableRowsDynamically = () => {

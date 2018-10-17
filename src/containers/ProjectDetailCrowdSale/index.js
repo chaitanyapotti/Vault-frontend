@@ -12,7 +12,7 @@ class ProjectDetailCrowdSale extends Component {
     this.props.getEtherCollected(version, pollFactoryAddress);
     this.props.getRoundTokensSold(version, crowdSaleAddress);
   }
-  //need to refactor and remove these methods later
+  //TODO: need to refactor and remove these methods later
   getPrice = () => {
     const { rounds } = this.props || {};
     const [round1, ...rest] = rounds || {};
@@ -46,7 +46,7 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   getSoftCap = () => {
-    //For now using ether.. when ether price is brought, it is implemented, convert to $
+    //TODO: For now using ether.. when ether price is brought, it is implemented, convert to $
     const etherPrice = "200"; //dollars
     const { rounds } = this.props || {};
     let softCap = 0;
@@ -66,7 +66,7 @@ class ProjectDetailCrowdSale extends Component {
 
   buyTokens = () => {
     const { crowdSaleAddress } = this.props || {};
-    //TODO need to add how many tokens to buy
+    //TODO: need to add how many tokens to buy
     this.props.buyTokens(crowdSaleAddress);
   };
   render() {
@@ -146,7 +146,8 @@ const mapDispatchToProps = dispatch => {
 };
 
 const mapStateToProps = state => {
-  const { etherCollected, roundInfo } = state.projectCrowdSaleReducer || {};
+  const { projectCrowdSaleReducer } = state || {};
+  const { etherCollected, roundInfo } = projectCrowdSaleReducer || {};
   return {
     etherCollected: etherCollected,
     roundInfo: roundInfo

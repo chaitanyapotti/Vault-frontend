@@ -32,12 +32,14 @@ class ProjectDetailSaleEnd extends Component {
     this.props.getCurrentTap(version, pollFactoryAddress);
     this.props.getXfrData(version, pollFactoryAddress);
   }
+
   getPriceIncrement = () => {
-    //to use external api
+    //TODO: to use external api
     return "(+31.23%)";
   };
+
   lastRoundInfo = () => {
-    //get current round and price
+    //TODO: get current round and price
     const { roundInfo } = this.props || {};
     const { tokenRate } = roundInfo;
     const { currentRoundNumber } = this.props || {};
@@ -48,30 +50,37 @@ class ProjectDetailSaleEnd extends Component {
       </div>
     );
   };
+
   buyTokens = () => {
     const { crowdSaleAddress } = this.props || {};
     //TODO need to add how many tokens to buy
     this.props.buyTokens(crowdSaleAddress);
   };
+
   getPrice = () => {
     //to use external API
     return "0.009861";
   };
+
   onTradeClick = () => {};
+
   getRoundText = () => {
     return "Sold Out (3rd Round Ended)";
   };
+
   getVoteShare = () => {
     const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
     const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * Math.pow(10, 18);
     return userShare > capPercent / 10000 ? capPercent / 10000 : userShare;
   };
+
   getNextKillPollStartDate = () => {
     const { killPollIndex, r1EndTime } = this.props || {};
     let endDate = new Date(r1EndTime);
     endDate.setDate(endDate.getDate() + killPollIndex * 90);
     return endDate.toDateString();
   };
+
   getMyTokenValue = () => {
     const etherPrice = 200;
     const tokenPrice = this.getPrice() * etherPrice;
@@ -95,13 +104,16 @@ class ProjectDetailSaleEnd extends Component {
     const { killConsensus, tokensUnderGovernance } = this.props || {};
     return parseFloat(killConsensus) / parseFloat(tokensUnderGovernance);
   };
+
   onKillClick = () => {
     //this.props.onKillClick();
   };
+
   getTapPollConsensus = () => {
     const { tapPollConsensus, tokensUnderGovernance } = this.props || {};
     return parseFloat(tapPollConsensus) / parseFloat(tokensUnderGovernance);
   };
+  
   render() {
     const {
       projectName,
@@ -119,10 +131,10 @@ class ProjectDetailSaleEnd extends Component {
       xfrData
     } = this.props || {};
     return (
-      <MasonaryLayout>
+      // <MasonaryLayout>
         <Grid>
-          {/* <Row>
-            <Col xs={12} lg={6}> */}
+          <Row>
+            <Col xs={12} lg={6}>
               <ProjectName
                 projectName={projectName}
                 tokenTag={tokenTag}
@@ -139,8 +151,8 @@ class ProjectDetailSaleEnd extends Component {
                 onSecondaryClick={this.onTradeClick}
                 lastRoundInfo={this.lastRoundInfo()}
               />
-            {/* </Col>
-            <Col xs={12} lg={6}> */}
+            </Col>
+            <Col xs={12} lg={6}>
               <PDetailGovernance
                 voteSaturationLimit={capPercent / 100}
                 killFrequency="Quarterly"
@@ -154,8 +166,8 @@ class ProjectDetailSaleEnd extends Component {
                 killConsensus={this.getKillConsensus()}
                 onKillClick={this.onKillClick}
               />
-            {/* </Col>
-          </Row> */}
+            </Col>
+          </Row>
           
           <Row className="push--top">
             <Col xs={12} lg={6}>
@@ -168,19 +180,20 @@ class ProjectDetailSaleEnd extends Component {
             </Col>
           </Row>
 
-          {/* <Row className="push--top">
+          <Row className="push--top">
             <Col xs={12} lg={6}>
               <FundReq data={xfrData} />
             </Col>
-          </Row> */}
+          </Row>
         </Grid>
-      </MasonaryLayout>
+      // </MasonaryLayout>
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { etherCollected, roundInfo } = state.projectCrowdSaleReducer || {};
+  const { projectCrowdSaleReducer, projectDetailGovernanceReducer } = state || {};
+  const { etherCollected, roundInfo } = projectCrowdSaleReducer || {};
   const {
     tokenBalance,
     tokensUnderGovernance,
@@ -191,7 +204,8 @@ const mapStateToProps = state => {
     tapPollConsensus,
     currentTap,
     xfrData
-  } = state.projectDetailGovernanceReducer || {};
+  } = projectDetailGovernanceReducer || {};
+
   return {
     etherCollected: etherCollected,
     roundInfo: roundInfo,

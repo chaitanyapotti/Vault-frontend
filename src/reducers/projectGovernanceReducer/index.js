@@ -1,9 +1,9 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
-import actionTypes from "../../action_types";
+import actionTypes from '../../action_types';
 
 export const initialState = {
-  currentRoundNumber: 0
+  currentRoundNumber: 0,
 };
 
 export default function(state = initialState, action) {
@@ -24,7 +24,7 @@ export default function(state = initialState, action) {
       const { receipt } = action.payload;
       return {
         ...state,
-        currentRoundNumber: receipt
+        currentRoundNumber: receipt,
       };
 
     default:

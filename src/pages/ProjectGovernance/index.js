@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 // import queryString from "query-string";
-import { withRouter } from "react-router-dom";
-import { currentRound } from "../../actions/projectGovernanceActions/index";
-import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
-import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
-import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
-import ProjectDetailSaleEnd from "../../containers/ProjectDetailSaleEnd";
+import { withRouter } from 'react-router-dom';
+import { currentRound } from '../../actions/projectGovernanceActions/index';
+import ProjectDetailPreStart from '../../containers/ProjectDetailPreStart';
+import ProjectDetailCrowdSale from '../../containers/ProjectDetailCrowdSale';
+import ProjectDetailGovernance from '../../containers/ProjectDetailGovernance';
+import ProjectDetailSaleEnd from '../../containers/ProjectDetailSaleEnd';
 
 class ProjectGovernance extends Component {
   componentDidMount() {
-    //Do Routing here - use query string
-    this.props.currentRound("5bafaed1eb00b152a418f7df");
+    // Do Routing here - use query string
+    this.props.currentRound('5bafaed1eb00b152a418f7df');
     // const { version, crowdSaleAddress } = this.props.projectDetails || {};
     // console.log(version, crowdSaleAddress);
     // this.props.currentRound(version, crowdSaleAddress);
@@ -42,19 +42,20 @@ class ProjectGovernance extends Component {
       pollFactoryAddress,
       initialFundRelease,
       crowdSaleAddress,
-      daicoTokenAddress
-    } = projectDetails || {};
-    currentRoundNumber = "4";
+      daicoTokenAddress,
+    } =
+      projectDetails || {};
+    currentRoundNumber = '4';
 
     if (currentDeploymentIndicator !== 12)
       return (
         <div>
           <p>The project hasn't been deployed yet</p>
         </div>
-    );
+      );
 
-    switch(currentRoundNumber){
-      case "0":
+    switch (currentRoundNumber) {
+      case '0':
         return (
           <ProjectDetailPreStart
             version={version}
@@ -75,7 +76,7 @@ class ProjectGovernance extends Component {
             foundationDetails={foundationDetails}
           />
         );
-      case "1":
+      case '1':
         return (
           <ProjectDetailCrowdSale
             version={version}
@@ -100,8 +101,8 @@ class ProjectGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
           />
         );
-      case "2":
-      case "3":
+      case '2':
+      case '3':
         return (
           <ProjectDetailGovernance
             version={version}
@@ -128,7 +129,7 @@ class ProjectGovernance extends Component {
             daicoTokenAddress={daicoTokenAddress}
           />
         );
-      case "4":
+      case '4':
         return (
           <ProjectDetailSaleEnd
             version={version}
@@ -156,7 +157,7 @@ class ProjectGovernance extends Component {
           />
         );
       default:
-          return null;
+        return null;
     }
   }
 }
@@ -167,25 +168,21 @@ const mapStateToProps = state => {
   const { currentRoundNumber } = projectGovernanceReducer || {};
 
   return {
-    projectDetails: projectDetails,
-    currentRoundNumber: currentRoundNumber,
-    ts: ts
+    projectDetails,
+    currentRoundNumber,
+    ts,
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
     {
-      currentRound: currentRound
+      currentRound,
     },
-    dispatch
+    dispatch,
   );
-};
 
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProjectGovernance);
+const connector = connect(mapStateToProps, mapDispatchToProps)(ProjectGovernance);
 
 export default withRouter(connector);
 

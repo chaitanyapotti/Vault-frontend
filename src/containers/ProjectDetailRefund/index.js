@@ -1,20 +1,11 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import {
-  ProjectName
-} from "../../components/Common/ProjectDetails";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { ProjectName } from '../../components/Common/ProjectDetails';
 
 class ProjectDetailRefund extends Component {
   render() {
-    const {
-      projectName,
-      tokenTag,
-      description,
-      urls,
-      whitepaper,
-      isCurrentMember
-    } = this.props || {};
+    const { projectName, tokenTag, description, urls, whitepaper, isCurrentMember } = this.props || {};
     return (
       <div>
         <ProjectName
@@ -34,7 +25,4 @@ class ProjectDetailRefund extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProjectDetailRefund);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailRefund);

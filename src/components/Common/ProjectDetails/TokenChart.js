@@ -1,7 +1,7 @@
-import React from "react";
-import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import React from 'react';
+import { Row, Col } from '../../../helpers/react-flexbox-grid';
 
-const TokenChart = () => (
+const TokenChart = () =>
   <div className="push-top--50">
     <div className="txt-xxxl text--primary">Token Distribution Chart</div>
     <hr />
@@ -36,7 +36,6 @@ const TokenChart = () => (
         <div className="piechart" />
       </Col>
     </Row>
-  </div>
-);
+  </div>;
 
 export default TokenChart;

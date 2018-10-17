@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import {HeaderPartial, FooterPartial} from '../src/components/Partials';
+import { HeaderPartial, FooterPartial } from '../src/components/Partials';
 import SubHeader from '../src/components/Common/Subheader';
-import {CUIWrapper} from '../src/helpers/material-ui';
+import { CUIWrapper } from '../src/helpers/material-ui';
 
 class VaultApp extends React.PureComponent {
   render() {
     return (
       <CUIWrapper>
         <HeaderPartial />
-        <SubHeader/>
+        <SubHeader />
         <div className="main-content push-top--35">
           {this.props.children}
         </div>

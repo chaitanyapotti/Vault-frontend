@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 const images = {
-  github: "assets/Footer/github.png",
-  telegram: "assets/Footer/telegram.png",
-  medium: "assets/Footer/medium.png",
-  facebook: "assets/Footer/fb.png",
-  twitter: "assets/Footer/twitter.png"
+  github: 'assets/Footer/github.png',
+  telegram: 'assets/Footer/telegram.png',
+  medium: 'assets/Footer/medium.png',
+  facebook: 'assets/Footer/fb.png',
+  twitter: 'assets/Footer/twitter.png',
 };
 
 class SocialLinks extends Component {

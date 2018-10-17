@@ -1,15 +1,15 @@
 /* eslint react/require-default-props: 0 */
 /* eslint camelcase: 0 */
 
-import React, { Component } from "react";
-import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
-import { CUILinearProgress } from "../../../helpers/material-ui";
+import React, { Component } from 'react';
+import { Grid, Row, Col } from '../../../helpers/react-flexbox-grid';
+import { CUILinearProgress } from '../../../helpers/material-ui';
 
 class TimeLine extends Component {
   render() {
     const { fundsCollected, roundGoal, startDate, endDate } = this.props || {};
-    const progressValue = Math.round((fundsCollected)/roundGoal * 100);
-    console.log(progressValue, 'dsddsd')
+    const progressValue = Math.round(fundsCollected / roundGoal * 100);
+    console.log(progressValue, 'dsddsd');
     return (
       <Grid>
         <Row>
@@ -22,7 +22,9 @@ class TimeLine extends Component {
         </Row>
 
         <Row className="push--top">
-          <Col lg={4} className="txt-m push-half-h--bottom">Funds Collected</Col>
+          <Col lg={4} className="txt-m push-half-h--bottom">
+            Funds Collected
+          </Col>
           <Col lg={4} className="txt-m push-half-h--bottom">
             {fundsCollected} ETH
           </Col>

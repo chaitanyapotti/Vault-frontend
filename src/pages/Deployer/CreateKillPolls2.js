@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class CreateKillPolls2 extends Component {
   render() {

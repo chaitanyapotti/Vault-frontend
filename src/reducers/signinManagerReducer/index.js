@@ -16,7 +16,7 @@ export const initialState = {
   phoneNumber: "",
   countryCode: "",
   otpVerificationSuccessful: false,
-  isIssuerFlag: false,
+  isIssuerFlag: false
 };
 
 export default function(state = initialState, action) {
@@ -29,13 +29,13 @@ export default function(state = initialState, action) {
         userRegistered: true,
         userServerPublicAddress: publicAddress,
         userIsIssuer: isIssuer,
-        userPreviousLocalPublicAddress: publicAddress,
+        userPreviousLocalPublicAddress: publicAddress
       };
     case types.USER_LOCAL_ACCOUNT_ADDRESS:
       return {
         ...state,
         userLocalPublicAddress: action.payload,
-        userPreviousLocalPublicAddress: action.payload,
+        userPreviousLocalPublicAddress: action.payload
       };
     case types.USER_DEFAULT_ACCOUNT_CHANGED:
       return {
@@ -44,51 +44,51 @@ export default function(state = initialState, action) {
         userIsIssuer: false,
         userServerPublicAddress: "",
         userLocalPublicAddress: action.payload,
-        userPreviousLocalPublicAddress: action.payload,
+        userPreviousLocalPublicAddress: action.payload
       };
 
     case types.OTP_SENT_TO_USER_SUCCESS:
       return {
         ...state,
         otpFailed: false,
-        otpFromServer: action.payload,
+        otpFromServer: action.payload
       };
 
     case types.OTP_SENT_TO_USER_FAILED:
       return {
         ...state,
         otpFailed: true,
-        otpFailedMessage: action.payload,
+        otpFailedMessage: action.payload
       };
 
     case types.SHOW_REGISTRATION_FORM:
       return {
         ...state,
-        showRegistrationForm: true,
+        showRegistrationForm: true
       };
 
     case types.HIDE_REGISTRATION_FORM:
       return {
         ...state,
-        showRegistrationForm: false,
+        showRegistrationForm: false
       };
 
     case types.PHONE_NUMBER_CHANGED:
       return {
         ...state,
-        phoneNumber: action.payload,
+        phoneNumber: action.payload
       };
 
     case types.COUNTRY_CODE_CHANGED:
       return {
         ...state,
-        countryCode: action.payload,
+        countryCode: action.payload
       };
 
     case types.USER_OTP_INPUT_CHANGED:
       return {
         ...state,
-        otpFromUser: action.payload,
+        otpFromUser: action.payload
       };
 
     case types.PHONE_VERIFICATION_SUCCESS: {
@@ -97,7 +97,7 @@ export default function(state = initialState, action) {
         ...state,
         otpVerificationSuccessful: true,
         userRegistered: true,
-        userServerPublicAddress: publicAddress,
+        userServerPublicAddress: publicAddress
       };
     }
 
@@ -105,14 +105,21 @@ export default function(state = initialState, action) {
       return {
         ...state,
         otpVerificationSuccessful: false,
-        userRegistered: false,
+        userRegistered: false
       };
 
     case types.IS_ISSUER_FLAG_TOGGLED:
       const isIssuerFlag = state.isIssuerFlag;
       return {
         ...state,
-        isIssuerFlag: !isIssuerFlag,
+        isIssuerFlag: !isIssuerFlag
+      };
+
+    case types.VAULT_MEMBERSHIP_CHECK:
+      const { result } = action.payload || false;
+      return {
+        ...state,
+        isVaultMember: result
       };
 
     default:

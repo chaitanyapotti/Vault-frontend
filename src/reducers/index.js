@@ -11,6 +11,7 @@ import projectPreStartReducer from "./projectPreStartReducer";
 import projectGovernanceReducer from "./projectGovernanceReducer";
 import projectCrowdSaleReducer from "./projectCrowdSaleReducer";
 import projectDetailGovernanceReducer from "./projectDetailGovernanceReducer";
+import projectRefundReducer from "./projectRefundReducer";
 
 export default {
   app,
@@ -25,5 +26,6 @@ export default {
   projectPreStartReducer,
   projectGovernanceReducer,
   projectCrowdSaleReducer,
-  projectDetailGovernanceReducer
+  projectDetailGovernanceReducer,
+  projectRefundReducer
 };

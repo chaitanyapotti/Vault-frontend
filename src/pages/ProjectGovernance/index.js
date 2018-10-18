@@ -8,6 +8,7 @@ import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 import ProjectDetailSaleEnd from "../../containers/ProjectDetailSaleEnd";
+import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
 
 class ProjectGovernance extends Component {
   componentDidMount() {
@@ -19,7 +20,7 @@ class ProjectGovernance extends Component {
   }
 
   render() {
-    let { currentRoundNumber, projectDetails } = this.props || {};
+    let { currentRoundNumber, projectDetails, treasuryStateNumber } = this.props || {};
     const {
       currentDeploymentIndicator,
       projectName,
@@ -42,8 +43,9 @@ class ProjectGovernance extends Component {
       pollFactoryAddress,
       initialFundRelease,
       crowdSaleAddress,
-      daicoTokenAddress,
-    } = projectDetails || {};
+      daicoTokenAddress
+    } =
+      projectDetails || {};
     currentRoundNumber = "4";
 
     if (currentDeploymentIndicator !== 12)
@@ -52,6 +54,35 @@ class ProjectGovernance extends Component {
           <p>The project hasn't been deployed yet</p>
         </div>
       );
+
+    if (treasuryStateNumber === "3") {
+      return (
+        <ProjectDetailRefund
+          version={version}
+          membershipAddress={membershipAddress}
+          projectName={projectName}
+          tokenTag={tokenTag}
+          description={description}
+          urls={urls}
+          whitepaper={whitepaper}
+          startDateTime={startDateTime}
+          maximumEtherContribution={maximumEtherContribution}
+          capPercent={capPercent}
+          initialTapAmount={initialTapAmount}
+          tapIncrementFactor={tapIncrementFactor}
+          isCurrentMember={isCurrentMember}
+          rounds={rounds}
+          totalMintableSupply={totalMintableSupply}
+          foundationDetails={foundationDetails}
+          r1EndTime={r1EndTime}
+          pollFactoryAddress={pollFactoryAddress}
+          initialFundRelease={initialFundRelease}
+          crowdSaleAddress={crowdSaleAddress}
+          currentRoundNumber={currentRoundNumber}
+          daicoTokenAddress={daicoTokenAddress}
+        />
+      );
+    }
 
     switch (currentRoundNumber) {
       case "0":
@@ -155,6 +186,33 @@ class ProjectGovernance extends Component {
             daicoTokenAddress={daicoTokenAddress}
           />
         );
+      case "5":
+        return (
+          <ProjectDetailRefund
+            version={version}
+            membershipAddress={membershipAddress}
+            projectName={projectName}
+            tokenTag={tokenTag}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            startDateTime={startDateTime}
+            maximumEtherContribution={maximumEtherContribution}
+            capPercent={capPercent}
+            initialTapAmount={initialTapAmount}
+            tapIncrementFactor={tapIncrementFactor}
+            isCurrentMember={isCurrentMember}
+            rounds={rounds}
+            totalMintableSupply={totalMintableSupply}
+            foundationDetails={foundationDetails}
+            r1EndTime={r1EndTime}
+            pollFactoryAddress={pollFactoryAddress}
+            initialFundRelease={initialFundRelease}
+            crowdSaleAddress={crowdSaleAddress}
+            currentRoundNumber={currentRoundNumber}
+            daicoTokenAddress={daicoTokenAddress}
+          />
+        );
       default:
         return null;
     }
@@ -164,27 +222,25 @@ class ProjectGovernance extends Component {
 const mapStateToProps = state => {
   const { deployerReducer, projectGovernanceReducer } = state || {};
   const { projectDetails, ts } = deployerReducer || {};
-  const { currentRoundNumber } = projectGovernanceReducer || {};
+  const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
 
   return {
     projectDetails,
     currentRoundNumber,
-    ts,
+    treasuryStateNumber,
+    ts
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      currentRound,
+      currentRound
     },
-    dispatch,
+    dispatch
   );
 
-const connector = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProjectGovernance);
+const connector = connect(mapStateToProps, mapDispatchToProps)(ProjectGovernance);
 
 export default withRouter(connector);
 

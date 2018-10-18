@@ -2,30 +2,58 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ProjectName } from "../../components/Common/ProjectDetails";
+import { onRefundClick } from "../../actions/projectRefundActions/index";
+import { getTokenBalance } from "../../actions/projectDetailGovernanceActions/index";
 
 class ProjectDetailRefund extends Component {
+  componentDidMount() {
+    const { version, daicoTokenAddress } = this.props || {};
+    this.props.getTokenBalance(version, daicoTokenAddress);
+  }
+  getRoundText = () =>
+    // Always Constant for all daicos
+    "DAICO in Refund Mode";
+
+  onRefundClick = () => {
+    const { version, pollFactoryAddress, currentRoundNumber } = this.props || {};
+    this.props.onRefundClick(version, currentRoundNumber, pollFactoryAddress);
+  };
   render() {
-    const { projectName, tokenTag, description, urls, whitepaper, isCurrentMember } = this.props || {};
+    const { projectName, tokenTag, description, urls, whitepaper, tokenBalance } = this.props || {};
     return (
       <div>
         <ProjectName
           projectName={projectName}
           tokenTag={tokenTag}
-          price={this.getPrice()}
+          price="0"
           roundText={this.getRoundText()}
           description={description}
           urls={urls}
           whitepaper={whitepaper}
-          buttonText="Trade"
-          buttonVisibility={!isCurrentMember}
-          onClick={this.onWhiteListClick}
+          buttonText="Get Refund"
+          buttonVisibility={tokenBalance > 0}
+          onClick={this.onRefundClick}
         />
       </div>
     );
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProjectDetailRefund);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      onRefundClick,
+      getTokenBalance
+    },
+    dispatch
+  );
+
+const mapStateToProps = state => {
+  const { projectRefundReducer } = state || {};
+  const { tokenBalance } = projectRefundReducer || {};
+  return {
+    tokenBalance
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailRefund);

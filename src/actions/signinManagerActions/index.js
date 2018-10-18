@@ -242,3 +242,42 @@ export const fetchCurrentAccount = userPreviousLocalPublicAddress =>
         });
       });
   };
+
+export function isAlreadyVaultMember(receipt) {
+  return {
+    payload: { result: receipt },
+    type: "VAULT_MEMBERSHIP_CHECK"
+  };
+}
+
+export const requestVaultMembership = (version, contractAddress) => {
+  return async dispatch => {
+    const network = await web3.eth.net.getNetworkType();
+    web3.eth.getAccounts().then(accounts =>
+      axios
+        .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
+          params: { version: version.toString(), network, address: contractAddress, useraddress: accounts[0] }
+        })
+        .then(response => {
+          if (response.status === 200) {
+            const { data } = response.data;
+            if (data === "true") {
+              dispatch(isAlreadyVaultMember(true));
+            } else {
+              axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "Vault" } }).then(res => {
+                const { data } = res.data || {};
+                const { abi } = data || {};
+                const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
+                instance.methods
+                  .requestMembership([])
+                  .send({ from: accounts[0], value: web3.utils.toWei("0.001", "ether") })
+                  .on("error", error => console.error(error.message))
+                  .then(receipt => dispatch(isAlreadyVaultMember(receipt.status === "0x1")));
+              });
+            }
+          }
+        })
+        .catch(err => console.error(err.message))
+    );
+  };
+};

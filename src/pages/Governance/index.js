@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import UserTokens from "../../containers/UserTokens";
+import UserTokens from '../../containers/UserTokens';
 
-
-class Governance  extends Component {
+class Governance extends Component {
   render() {
     return (
       <div>
-        <UserTokens/>
+        <UserTokens />
       </div>
-    )
+    );
   }
 }
 
-export default Governance
+export default Governance;

@@ -1,5 +1,5 @@
 import React from 'react';
-import Lodable from 'react-loadable';
+// import Lodable from 'react-loadable';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 // import ComponentLoader from '../../../components/Common/ModuleLoader/ComponentLoader';

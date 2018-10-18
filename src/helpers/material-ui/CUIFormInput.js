@@ -5,10 +5,9 @@ import Radio from '@material-ui/core/Radio';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { CUIButtonIcon, CUIMenu } from '../material-ui';
-import { getCUIPrefixSuffix, handleInputKeydown, renderAutocompleteInput, selectIcon } from './helpers';
+import { getCUIPrefixSuffix, handleInputKeydown, selectIcon } from './helpers';
 import { CS_COLORS, CUIInputColor, CUIInputMargin, CUIInputType } from '../../static/js/variables';
 import PropTypes from '../../PropTypes';
-import CUIChip from './CUIChip';
 
 const CUIFormInput = props => {
   const { inputType, inputName, inputLabel, inputPlaceholder, inputID, inputValue: inputVal, inputMargin, disabled, style, onChange } =

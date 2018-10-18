@@ -7,15 +7,22 @@ import userTokensData from './userTokensReducer';
 import featuredProjectsReducer from "./featuredProjectsReducer";
 import signinManagerData from "./signinManagerReducer";
 import projectRegistrationData from "./projectRegistrationReducer";
-
+import projectPreStartReducer from './projectPreStartReducer';
+import projectGovernanceReducer from './projectGovernanceReducer';
+import projectCrowdSaleReducer from './projectCrowdSaleReducer';
+import projectDetailGovernanceReducer from './projectDetailGovernanceReducer';
 export default {
-    app,
-    activeDaicosData,
-    endedDaicosData,
-    upcomingDaicosData,
-    deployerReducer, 
-    userTokensData,
-    featuredProjectsReducer,
-    signinManagerData,
-    projectRegistrationData
+  app,
+  activeDaicosData,
+  endedDaicosData,
+  upcomingDaicosData,
+  deployerReducer,
+  userTokensData,
+  featuredProjectsReducer,
+  signinManagerData,
+  projectRegistrationData,
+  projectPreStartReducer,
+  projectGovernanceReducer,
+  projectCrowdSaleReducer,
+  projectDetailGovernanceReducer,
 };

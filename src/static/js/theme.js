@@ -37,6 +37,11 @@ const customTheme = {
           backgroundColor: CS_COLORS.HOVER_COLOR,
         },
       },
+      label: {
+        textTransform: 'none',
+        fontSize: '16px',
+        fontWeight: 'bold',
+      },
     },
     MuiBackdrop: {
       root: {
@@ -48,10 +53,13 @@ const customTheme = {
         backgroundColor: CS_COLORS.PROGRESS_BAR_SECONDARY,
       },
       barColorSecondary: {
-        backgroundColor: CS_COLORS.WHITE,
+        backgroundColor: CS_COLORS.PRIMARY,
       },
       barColorPrimary: {
         backgroundColor: CS_COLORS.PRIMARY,
+      },
+      bar: {
+        borderRadius: '4px',
       },
     },
     MuiCircularProgress: {

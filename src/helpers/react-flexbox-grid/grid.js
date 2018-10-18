@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container} from 'reactstrap';
+import { Container } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 export const GridContainer = props =>

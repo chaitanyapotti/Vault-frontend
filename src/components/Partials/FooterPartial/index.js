@@ -1,10 +1,10 @@
 /* eslint camelcase: 0 */
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Col, Grid, Row } from '../../../helpers/react-flexbox-grid';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Col, Grid, Row } from "../../../helpers/react-flexbox-grid";
 
-const FooterPartial = () =>
+const FooterPartial = () => (
   <div className="ftr-cnt push-top--50">
     <Grid>
       <Row className="push-top--50">
@@ -49,7 +49,7 @@ const FooterPartial = () =>
         <Col lg={4} className="push-mob--top15">
           <div className="txt-l txt-ddbld flush fnt-mli">FOUND US ON</div>
           <div>
-            <table id="foottable" style={{ fontSize: '22px', color: '#9ab4d3' }} width="100%">
+            <table id="foottable" style={{ fontSize: "22px", color: "#9ab4d3" }} width="100%">
               <tbody>
                 <tr>
                   <td>
@@ -125,6 +125,7 @@ const FooterPartial = () =>
         <Col className="text-right opacity-70 push--top fnt-ps">©Electus Foundation 2018 all rights reserved</Col>
       </Row>
     </Grid>
-  </div>;
+  </div>
+);
 
 export default FooterPartial;

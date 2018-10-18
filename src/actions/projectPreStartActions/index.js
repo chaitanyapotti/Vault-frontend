@@ -1,6 +1,6 @@
-import axios from 'axios';
-import config from '../../config';
-import web3 from '../../helpers/web3';
+import axios from "axios";
+import config from "../../config";
+import web3 from "../../helpers/web3";
 
 // export function requestedMembershipSuccess() {
 //   return {
@@ -19,7 +19,7 @@ import web3 from '../../helpers/web3';
 export function isAlreadyWhiteListed(receipt) {
   return {
     payload: { receipt },
-    type: 'WHITELIST_CHECK',
+    type: "WHITELIST_CHECK",
   };
 }
 
@@ -34,8 +34,8 @@ export function onWhiteListClick(version, contractName, contractAddress) {
         .then(response => {
           if (response.status === 200) {
             const { data } = response.data;
-            if (data === 'true') {
-              console.log('herer');
+            if (data === "true") {
+              console.log("herer");
               dispatch(isAlreadyWhiteListed(true));
             } else {
               axios
@@ -47,8 +47,8 @@ export function onWhiteListClick(version, contractName, contractAddress) {
                   instance.methods
                     .requestMembership([])
                     .send({ from: accounts[0] })
-                    .on('error', error => console.error(error.message))
-                    .then(receipt => dispatch(isAlreadyWhiteListed(receipt.status === '0x1')));
+                    .on("error", error => console.error(error.message))
+                    .then(receipt => dispatch(isAlreadyWhiteListed(receipt.status === "0x1")));
                 });
             }
           }

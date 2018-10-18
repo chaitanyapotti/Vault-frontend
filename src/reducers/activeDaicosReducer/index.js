@@ -1,15 +1,15 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
-import actionTypes from '../../action_types';
+import actionTypes from "../../action_types";
 
 export const initialState = {
   activeDaicosTable: [],
   showActiveDaicosLoader: true,
-  activeDaicosRetrieveFailureMessage: '',
+  activeDaicosRetrieveFailureMessage: "",
   activeDaicosRetrievedSuccessFully: false,
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case actionTypes.ACTIVE_DAICOS_SUCCESS:
       return {
@@ -38,4 +38,3 @@ export default function (state = initialState, action) {
       return state;
   }
 }
-

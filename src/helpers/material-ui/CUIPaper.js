@@ -1,7 +1,7 @@
 /* eslint react/require-default-props: 0 */
-import React from 'react';
-import Paper from '@material-ui/core/Paper';
-import PropTypes from 'prop-types';
+import React from "react";
+import Paper from "@material-ui/core/Paper";
+import PropTypes from "prop-types";
 
 /**
  * @Component Paper
@@ -21,13 +21,14 @@ import PropTypes from 'prop-types';
  * @Material-Paper@API https://material-ui.com/api/paper/
  */
 
-const CUIPaper = props =>
-  <Paper className={`${props.type === 'intrruption' ? 'cs-cui-ppr-intrrup' : 'cs-cui-ppr'}`} elevation={0}>
+const CUIPaper = props => (
+  <Paper className={`${props.type === "intrruption" ? "cs-cui-ppr-intrrup" : "cs-cui-ppr"}`} elevation={0}>
     {props.children}
-  </Paper>;
+  </Paper>
+);
 
 CUIPaper.defaultProps = {
-  className: '',
+  className: "",
 };
 CUIPaper.propTypes = {
   children: PropTypes.node.isRequired,

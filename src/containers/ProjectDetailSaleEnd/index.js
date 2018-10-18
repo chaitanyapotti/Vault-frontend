@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { ProjectName, PDetailGovernance, TapCard } from '../../components/Common/ProjectDetails';
-import { FundReq } from '../../components/Common/ProjectDetails';
-import { getRoundTokensSold, buyTokens } from '../../actions/projectCrowdSaleActions/index';
-import { Grid, Row, Col } from '../../helpers/react-flexbox-grid';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { ProjectName, PDetailGovernance, TapCard } from "../../components/Common/ProjectDetails";
+import { FundReq } from "../../components/Common/ProjectDetails";
+import { getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import {
   getTokenBalance,
   getTokensUnderGovernance,
@@ -15,8 +15,8 @@ import {
   getTapPollConsensus,
   getCurrentTap,
   getXfrData,
-} from '../../actions/projectDetailGovernanceActions/index';
-import MasonaryLayout from '../../components/Common/MasonaryLayout';
+} from "../../actions/projectDetailGovernanceActions/index";
+import MasonaryLayout from "../../components/Common/MasonaryLayout";
 
 class ProjectDetailSaleEnd extends Component {
   componentDidMount() {
@@ -35,7 +35,7 @@ class ProjectDetailSaleEnd extends Component {
 
   getPriceIncrement = () =>
     // TODO: to use external api
-    '(+31.23%)';
+    "(+31.23%)";
 
   lastRoundInfo = () => {
     // TODO: get current round and price
@@ -44,12 +44,8 @@ class ProjectDetailSaleEnd extends Component {
     const { currentRoundNumber } = this.props || {};
     return (
       <div>
-        <div>
-          Level {currentRoundNumber} price
-        </div>
-        <div>
-          {1 / tokenRate} ETH
-        </div>
+        <div>Level {currentRoundNumber} price</div>
+        <div>{1 / tokenRate} ETH</div>
       </div>
     );
   };
@@ -62,15 +58,15 @@ class ProjectDetailSaleEnd extends Component {
 
   getPrice = () =>
     // to use external API
-    '0.009861';
+    "0.009861";
 
   onTradeClick = () => {};
 
-  getRoundText = () => 'Sold Out (3rd Round Ended)';
+  getRoundText = () => "Sold Out (3rd Round Ended)";
 
   getVoteShare = () => {
     const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
-    const userShare = parseFloat(tokenBalance) / parseFloat(totalMintableSupply) * Math.pow(10, 18);
+    const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * Math.pow(10, 18);
     return userShare > capPercent / 10000 ? capPercent / 10000 : userShare;
   };
 
@@ -97,7 +93,7 @@ class ProjectDetailSaleEnd extends Component {
       softCap += parseFloat(amount);
     }
     const denom = parseFloat(totalSupply) - softCap;
-    return Math.round(parseFloat(tokenBalance) / denom * parseFloat(remainingEtherBalance) * Math.pow(10, -18) * etherPrice);
+    return Math.round((parseFloat(tokenBalance) / denom) * parseFloat(remainingEtherBalance) * Math.pow(10, -18) * etherPrice);
   };
 
   getKillConsensus = () => {
@@ -129,8 +125,7 @@ class ProjectDetailSaleEnd extends Component {
       tapIncrementFactor,
       currentTap,
       xfrData,
-    } =
-      this.props || {};
+    } = this.props || {};
     return (
       // <MasonaryLayout>
       <Grid>
@@ -173,7 +168,7 @@ class ProjectDetailSaleEnd extends Component {
         <Row className="push--top">
           <Col xs={12} lg={6}>
             <TapCard
-              currentTapAmount={parseFloat(currentTap, 10) * 86400 * 30 / Math.pow(10, 18)}
+              currentTapAmount={(parseFloat(currentTap, 10) * 86400 * 30) / Math.pow(10, 18)}
               tapIncrementUnit={tapIncrementFactor}
               incrementApproval={this.getTapPollConsensus()}
             />
@@ -205,8 +200,7 @@ const mapStateToProps = state => {
     tapPollConsensus,
     currentTap,
     xfrData,
-  } =
-    projectDetailGovernanceReducer || {};
+  } = projectDetailGovernanceReducer || {};
 
   return {
     etherCollected,
@@ -241,4 +235,7 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailSaleEnd);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProjectDetailSaleEnd);

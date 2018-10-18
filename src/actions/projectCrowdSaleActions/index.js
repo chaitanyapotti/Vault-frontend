@@ -1,18 +1,18 @@
-import axios from 'axios';
-import config from '../../config';
-import web3 from '../../helpers/web3';
+import axios from "axios";
+import config from "../../config";
+import web3 from "../../helpers/web3";
 
 export function etherCollected(receipt) {
   return {
     payload: { receipt },
-    type: 'ETHER_COLLECTED',
+    type: "ETHER_COLLECTED",
   };
 }
 
 export function roundInfoReceived(data) {
   return {
     payload: { rec: data },
-    type: 'ROUND_INFO_RECEIVED',
+    type: "ROUND_INFO_RECEIVED",
   };
 }
 
@@ -26,7 +26,7 @@ export function getEtherCollected(version, contractAddress) {
       })
       .then(async response => {
         const { data } = response.data;
-        dispatch(etherCollected(web3.utils.fromWei(data, 'ether')));
+        dispatch(etherCollected(web3.utils.fromWei(data, "ether")));
       })
       .catch(err => console.error(err.message));
   };
@@ -55,7 +55,7 @@ export function buyTokens(contractAddress) {
         .sendTransaction({
           from: accounts[0],
           to: contractAddress,
-          value: web3.utils.toWei('1', 'ether'),
+          value: web3.utils.toWei("1", "ether"),
         })
         .then(response => console.log(response)),
     );

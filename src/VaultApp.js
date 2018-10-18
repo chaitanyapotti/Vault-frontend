@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { HeaderPartial, FooterPartial } from '../src/components/Partials';
-import SubHeader from '../src/components/Common/Subheader';
-import { CUIWrapper } from '../src/helpers/material-ui';
+import React from "react";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { HeaderPartial, FooterPartial } from "./components/Partials";
+import SubHeader from "./components/Common/Subheader";
+import { CUIWrapper } from "./helpers/material-ui";
 
 class VaultApp extends React.PureComponent {
   render() {
@@ -11,9 +11,7 @@ class VaultApp extends React.PureComponent {
       <CUIWrapper>
         <HeaderPartial />
         <SubHeader />
-        <div className="main-content push-top--35">
-          {this.props.children}
-        </div>
+        <div className="main-content push-top--35">{this.props.children}</div>
         <FooterPartial />
       </CUIWrapper>
     );

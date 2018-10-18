@@ -1,10 +1,10 @@
-import merge from 'lodash/merge';
-import { CS_COLORS, CS_FONT_SIZE, CUIColor } from './variables';
-import { isMobile } from '../../helpers/common/deviceDetect';
+import merge from "lodash/merge";
+import { CS_COLORS, CS_FONT_SIZE, CUIColor } from "./variables";
+import { isMobile } from "../../helpers/common/deviceDetect";
 
 const customTheme = {
   typography: {
-    fontFamily: 'Roboto',
+    fontFamily: "Roboto",
   },
   palette: {
     [CUIColor.PRIMARY]: {
@@ -30,22 +30,22 @@ const customTheme = {
         color: CS_COLORS.WHITE,
       },
       flatPrimary: {
-        backgroundColor: 'transparent !important',
+        backgroundColor: "transparent !important",
       },
       root: {
-        '&:hover': {
+        "&:hover": {
           backgroundColor: CS_COLORS.HOVER_COLOR,
         },
       },
       label: {
-        textTransform: 'none',
-        fontSize: '16px',
-        fontWeight: 'bold',
+        textTransform: "none",
+        fontSize: "16px",
+        fontWeight: "bold",
       },
     },
     MuiBackdrop: {
       root: {
-        opacity: '0.7 !important',
+        opacity: "0.7 !important",
       },
     },
     MuiLinearProgress: {
@@ -59,7 +59,7 @@ const customTheme = {
         backgroundColor: CS_COLORS.PRIMARY,
       },
       bar: {
-        borderRadius: '4px',
+        borderRadius: "4px",
       },
     },
     MuiCircularProgress: {
@@ -70,7 +70,7 @@ const customTheme = {
     },
     MuiSelect: {
       disabled: {
-        cursor: 'not-allowed !important',
+        cursor: "not-allowed !important",
       },
     },
     MuiTabs: {
@@ -78,27 +78,27 @@ const customTheme = {
         backgroundColor: CS_COLORS.WHITE,
       },
       flexContainer: {
-        width: '100%',
+        width: "100%",
       },
     },
     MuiTab: {
       root: {
-        minWidth: '25% !important',
-        textTransform: 'none',
-        boxSizing: 'border-box',
+        minWidth: "25% !important",
+        textTransform: "none",
+        boxSizing: "border-box",
       },
       textColorInherit: {
-        opacity: '1 !important',
-        color: 'rgba(255, 255, 255, 0.7) !important',
+        opacity: "1 !important",
+        color: "rgba(255, 255, 255, 0.7) !important",
       },
       labelContainer: {
-        padding: '0px !important',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        whiteSpace: ' nowrap',
-        width: '98%',
-        textAlign: 'center',
-        margin: '0px auto',
+        padding: "0px !important",
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: " nowrap",
+        width: "98%",
+        textAlign: "center",
+        margin: "0px auto",
       },
       labelIcon: {
         height: 56,
@@ -114,7 +114,7 @@ const customTheme = {
     },
     MuiMenuItem: {
       selected: {
-        backgroundColor: 'transparent !important',
+        backgroundColor: "transparent !important",
         color: CS_COLORS.SELECT_TEXT,
       },
     },
@@ -123,36 +123,36 @@ const customTheme = {
         color: CS_COLORS.G_PRIMARY,
       },
       input: {
-        background: 'transparent !important',
+        background: "transparent !important",
       },
       disabled: {
-        cursor: 'not-allowed !important',
+        cursor: "not-allowed !important",
       },
       inputType: {
         color: CS_COLORS.G_PRIMARY,
       },
       underline: {
-        '&:before': {
+        "&:before": {
           borderBottom: `1px solid ${CS_COLORS.G_DIVIDER} !important`,
         },
       },
     },
     MuiPaper: {
       elevation1: {
-        boxShadow: 'none',
+        boxShadow: "none",
       },
     },
     MuiInputLabel: {
       root: {
-        color: 'rgba(0, 0, 0, 0.35)',
+        color: "rgba(0, 0, 0, 0.35)",
       },
     },
     MuiAppBar: {
       root: {
-        display: 'block',
+        display: "block",
       },
       colorPrimary: {
-        backgroundColor: '#ffffff',
+        backgroundColor: "#ffffff",
       },
       colorDefault: {
         backgroundColor: CS_COLORS.WHITE,
@@ -168,12 +168,12 @@ const customTheme = {
     },
     MuiBadge: {
       colorPrimary: {
-        position: 'relative',
+        position: "relative",
         top: -2,
         left: 12,
-        width: 'auto',
-        height: 'auto',
-        padding: '0px 5px',
+        width: "auto",
+        height: "auto",
+        padding: "0px 5px",
         color: CS_COLORS.WHITE,
         borderRadius: 10,
         backgroundColor: CS_COLORS.BADGE_COLOR,
@@ -196,7 +196,7 @@ const customRegTheme = merge({}, customTheme, {
       },
       contained: {
         backgroundColor: CS_COLORS.WHITE,
-        '&:hover': {
+        "&:hover": {
           backgroundColor: isMobile ? CS_COLORS.WHITE : CS_COLORS.HOVER_COLOR,
         },
       },

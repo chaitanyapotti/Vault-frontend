@@ -1,11 +1,11 @@
 /* eslint react/require-default-props: 0 */
-import React from 'react';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import { Link } from 'react-router-dom';
-import { CUIBadge } from '../material-ui';
-import PropTypes from '../../PropTypes';
-import { CUIColor } from '../../static/js/variables';
+import React from "react";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import { Link } from "react-router-dom";
+import { CUIBadge } from ".";
+import PropTypes from "../../PropTypes";
+import { CUIColor } from "../../static/js/variables";
 
 /**
  * @Component Tabs
@@ -61,12 +61,13 @@ const CUITabs = props => {
           <Tab
             {...tabProps}
             icon={
-              <span className={`${option.class}${isActive ? ' active' : ' inactive'}`}>
+              <span className={`${option.class}${isActive ? " active" : " inactive"}`}>
                 {!isActive &&
-                  !!option.count &&
-                  <CUIBadge badgeColor={CUIColor.PRIMARY} style={{ marginLeft: 5 }} content={option.count > 999 ? '999+' : option.count}>
-                    <span />
-                  </CUIBadge>}
+                  !!option.count && (
+                    <CUIBadge badgeColor={CUIColor.PRIMARY} style={{ marginLeft: 5 }} content={option.count > 999 ? "999+" : option.count}>
+                      <span />
+                    </CUIBadge>
+                  )}
               </span>
             }
           />
@@ -79,7 +80,7 @@ const CUITabs = props => {
 CUITabs.defaultProps = {
   style: {},
   icon: null,
-  label: '',
+  label: "",
   iconList: [],
   full: false,
   scroll: false,

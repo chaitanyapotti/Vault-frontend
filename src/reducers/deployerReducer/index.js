@@ -1,4 +1,4 @@
-import types from '../../action_types';
+import types from "../../action_types";
 
 const initialState = {
   projectDetails: null,
@@ -38,8 +38,7 @@ export default function(state = initialState, action) {
         lockedTokensAddress,
         pollFactoryAddress,
         crowdSaleAddress,
-      } =
-        action.payload.body || {};
+      } = action.payload.body || {};
       currentProjDetails.currentDeploymentIndicator = currentDeploymentIndicator;
       currentProjDetails.latestTxHash = latestTxHash;
       switch (currentDeploymentIndicator - 1) {

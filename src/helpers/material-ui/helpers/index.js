@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 // import Lodable from 'react-loadable';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 // import ComponentLoader from '../../../components/Common/ModuleLoader/ComponentLoader';
 
 // export const Downshift = Lodable({
@@ -10,10 +10,10 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 
 const selectIcon = (iconColor, style) => () => {
   const defaultStyle = {
-    position: 'absolute',
+    position: "absolute",
     bottom: 10,
     right: 10,
-    pointerEvents: 'none',
+    pointerEvents: "none",
   };
   return (
     <span style={{ ...defaultStyle, ...style }}>
@@ -66,11 +66,7 @@ const handleInputKeydown = (event, onKeyDownSelector, forceNumeric) => {
 
 const getCUIPrefixSuffix = (type, children) =>
   type && {
-    [type]: (
-      <InputAdornment>
-        {children}
-      </InputAdornment>
-    ),
+    [type]: <InputAdornment>{children}</InputAdornment>,
   };
 
 const selectLabelStyle = (style, underline) => ({

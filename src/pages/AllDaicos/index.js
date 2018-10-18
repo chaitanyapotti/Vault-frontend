@@ -1,30 +1,34 @@
-import React, { Component } from 'react';
-import { Tab } from 'semantic-ui-react';
-import ActiveDaicos from '../../containers/ActiveDaicos';
-import UpcomingDaicos from '../../containers/UpcomingDaicos';
-import EndedDaicos from '../../containers/EndedDaicos';
+import React, { Component } from "react";
+import { Tab } from "semantic-ui-react";
+import ActiveDaicos from "../../containers/ActiveDaicos";
+import UpcomingDaicos from "../../containers/UpcomingDaicos";
+import EndedDaicos from "../../containers/EndedDaicos";
 
 const panes = [
   {
-    menuItem: 'Active DAICOs',
-    render: () =>
+    menuItem: "Active DAICOs",
+    render: () => (
       <Tab.Pane attached={false}>
-        {' '}<ActiveDaicos />
-      </Tab.Pane>,
+        {" "}
+        <ActiveDaicos />
+      </Tab.Pane>
+    ),
   },
   {
-    menuItem: 'Upcoming DAICOs',
-    render: () =>
+    menuItem: "Upcoming DAICOs",
+    render: () => (
       <Tab.Pane attached={false}>
         <UpcomingDaicos />
-      </Tab.Pane>,
+      </Tab.Pane>
+    ),
   },
   {
-    menuItem: 'Ended DAICOs',
-    render: () =>
+    menuItem: "Ended DAICOs",
+    render: () => (
       <Tab.Pane attached={false}>
         <EndedDaicos />
-      </Tab.Pane>,
+      </Tab.Pane>
+    ),
   },
 ];
 

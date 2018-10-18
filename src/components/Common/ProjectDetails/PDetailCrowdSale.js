@@ -1,6 +1,6 @@
-import React from 'react';
-import { CUICard } from '../../../helpers/material-ui';
-import { Row, Col } from '../../../helpers/react-flexbox-grid';
+import React from "react";
+import { CUICard } from "../../../helpers/material-ui";
+import { Row, Col } from "../../../helpers/react-flexbox-grid";
 
 class PDetailCrowdSale extends React.Component {
   render() {
@@ -13,10 +13,9 @@ class PDetailCrowdSale extends React.Component {
       tapIncrementUnit,
       hardCapCapitalisation,
       dilutedCapitalisation,
-    } =
-      this.props || {};
+    } = this.props || {};
     return (
-      <CUICard style={{ padding: '40px 50px' }}>
+      <CUICard style={{ padding: "40px 50px" }}>
         <div className="txt-xxxl text--primary">Project Details</div>
         <Row className="push-top--35">
           <Col lg={6} className="txt">

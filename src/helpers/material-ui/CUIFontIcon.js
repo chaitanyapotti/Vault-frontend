@@ -1,6 +1,6 @@
-import React from 'react';
-import Icon from '@material-ui/core/Icon';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import Icon from "@material-ui/core/Icon";
+import PropTypes from "../../PropTypes";
 
 /**
  *
@@ -17,10 +17,7 @@ import PropTypes from '../../PropTypes';
  * @Material-IconFont@API https://material-ui.com/api/icon/
  */
 
-const CUIFontIcon = props =>
-  <Icon {...props}>
-    {props.children}
-  </Icon>;
+const CUIFontIcon = props => <Icon {...props}>{props.children}</Icon>;
 
 CUIFontIcon.defaultProps = {
   children: null,

@@ -1,39 +1,39 @@
-import axios from 'axios';
-import config from '../../config';
-import web3 from '../../helpers/web3';
+import axios from "axios";
+import config from "../../config";
+import web3 from "../../helpers/web3";
 
 export function txPending(cdi, txHash) {
   return {
     payload: {},
-    type: 'TRANSACTION_PENDING',
+    type: "TRANSACTION_PENDING",
   };
 }
 
 export function redoTx(cdi) {
   return {
-    payload: { cdi, txHash: '0x' },
-    type: 'TRANSACTION_REDO',
+    payload: { cdi, txHash: "0x" },
+    type: "TRANSACTION_REDO",
   };
 }
 
 export function projectDetailsFetched(data) {
   return {
     payload: { data },
-    type: 'PROJECT_DETAILS_FETCHED',
+    type: "PROJECT_DETAILS_FETCHED",
   };
 }
 
 export function deployedContract(body) {
   return {
     payload: { body },
-    type: 'DEPLOYED_CONTRACT',
+    type: "DEPLOYED_CONTRACT",
   };
 }
 
 export function receivedTransactionHash(body) {
   return {
     payload: { body },
-    type: 'RECEIVED_TRANSACTION_HASH',
+    type: "RECEIVED_TRANSACTION_HASH",
   };
 }
 
@@ -46,7 +46,7 @@ export function fetchProjectDetails(projectid) {
           const { data } = response.data || {};
           const { latestTxHash, currentDeploymentIndicator } = data || {};
           dispatch(projectDetailsFetched(data));
-          if (latestTxHash !== '0x') {
+          if (latestTxHash !== "0x") {
             web3.eth.getTransactionReceipt(latestTxHash).then(result => {
               if (result !== null) {
                 // update ctr address in db and update txhash to "0x"
@@ -54,9 +54,8 @@ export function fetchProjectDetails(projectid) {
                   setContractAddress(projectid, currentDeploymentIndicator, result.contractAddress).then(body =>
                     dispatch(deployedContract(body)),
                   );
-                else
-                  // redotx;  set txHash to 0x
-                  dispatch(redoTx(currentDeploymentIndicator));
+                // redotx;  set txHash to 0x
+                else dispatch(redoTx(currentDeploymentIndicator));
               } else {
                 // wait for tx to complete - keep spinner rotating
                 dispatch(txPending());
@@ -76,20 +75,18 @@ export function deployContractAction(version, projectid, cdi, args, contractName
         if (response.status === 200) {
           const { data } = response.data || {};
           const { abi, bytecode } = data || {};
-          web3.eth
-            .getAccounts()
-            .then(accounts =>
-              new web3.eth.Contract(abi)
-                .deploy({ data: bytecode, arguments: args })
-                .send({ from: accounts[0] })
-                .on('error', error => console.error(error.message))
-                .on('transactionHash', transactionHash =>
-                  setTxHash(projectid, transactionHash, cdi).then(body => dispatch(receivedTransactionHash(body))),
-                )
-                .then(newContractInstance =>
-                  setContractAddress(projectid, cdi, newContractInstance.options.address).then(body => dispatch(deployedContract(body))),
-                ),
-            );
+          web3.eth.getAccounts().then(accounts =>
+            new web3.eth.Contract(abi)
+              .deploy({ data: bytecode, arguments: args })
+              .send({ from: accounts[0] })
+              .on("error", error => console.error(error.message))
+              .on("transactionHash", transactionHash =>
+                setTxHash(projectid, transactionHash, cdi).then(body => dispatch(receivedTransactionHash(body))),
+              )
+              .then(newContractInstance =>
+                setContractAddress(projectid, cdi, newContractInstance.options.address).then(body => dispatch(deployedContract(body))),
+              ),
+          );
         }
       })
       .catch(err => console.error(err.message));
@@ -106,8 +103,8 @@ export function performContractAction(version, projectid, cdi, args, contractNam
           web3.eth.getAccounts().then(accounts => {
             const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
             peformSpecificAction(cdi, instance, args, accounts)
-              .on('error', error => console.error(error.message))
-              .on('transactionHash', transactionHash =>
+              .on("error", error => console.error(error.message))
+              .on("transactionHash", transactionHash =>
                 setTxHash(projectid, transactionHash, cdi).then(body => dispatch(receivedTransactionHash(body))),
               )
               .then(receipt => setContractAddress(projectid, cdi, null).then(body => dispatch(deployedContract(body))));
@@ -143,7 +140,7 @@ const setTxHash = (projectid, transactionHash, cdi) =>
 
 const setContractAddress = (projectid, cdi, address) =>
   new Promise((resolve, reject) => {
-    const body = { latestTxHash: '0x', currentDeploymentIndicator: cdi + 1 };
+    const body = { latestTxHash: "0x", currentDeploymentIndicator: cdi + 1 };
     switch (cdi) {
       case 0:
         body.membershipAddress = address;

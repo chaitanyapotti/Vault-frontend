@@ -1,13 +1,13 @@
 /* eslint react/require-default-props: 0 */
-import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import Slide from '@material-ui/core/Slide';
-import PropTypes from '../../PropTypes';
-import { CUIDialogMaXWidth, CUIModalTransition } from '../../static/js/variables';
-import CUIWrapper from './CUIWrapper';
+import React from "react";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import Slide from "@material-ui/core/Slide";
+import PropTypes from "../../PropTypes";
+import { CUIDialogMaXWidth, CUIModalTransition } from "../../static/js/variables";
+import CUIWrapper from "./CUIWrapper";
 
 /**
  *
@@ -68,8 +68,7 @@ const CUIModal = props => {
     close,
     transition,
     transitionDirection,
-  } =
-    props || {};
+  } = props || {};
 
   const modalProps = {
     children,
@@ -101,7 +100,7 @@ CUIModal.defaultProps = {
   dialogMaxWidth: CUIDialogMaXWidth.SM,
   width: undefined,
   margin: undefined,
-  className: '',
+  className: "",
   close: () => {},
 };
 
@@ -119,28 +118,19 @@ CUIModal.propTypes = {
   close: PropTypes.func,
 };
 
-const CUIModalActions = props =>
-  <DialogActions {...props}>
-    {props.children}
-  </DialogActions>;
+const CUIModalActions = props => <DialogActions {...props}>{props.children}</DialogActions>;
 
 CUIModalActions.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-const CUIModalTitle = props =>
-  <DialogTitle {...props}>
-    {props.children}
-  </DialogTitle>;
+const CUIModalTitle = props => <DialogTitle {...props}>{props.children}</DialogTitle>;
 
 CUIModalTitle.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-const CUIModalContent = props =>
-  <DialogContent {...props}>
-    {props.children}
-  </DialogContent>;
+const CUIModalContent = props => <DialogContent {...props}>{props.children}</DialogContent>;
 
 CUIModalContent.propTypes = {
   children: PropTypes.node.isRequired,

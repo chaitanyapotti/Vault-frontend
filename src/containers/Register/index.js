@@ -1,58 +1,65 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Form, Input, Button, Divider, Checkbox } from 'semantic-ui-react';
-import { sendOtp, countryCodeChanged, phoneNumberChanged, userOtpChanged, verifyPhoneNumber, isIssuerFlagToggled } from '../../actions/signinManagerActions';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Form, Input, Button, Divider, Checkbox } from "semantic-ui-react";
+import {
+  sendOtp,
+  countryCodeChanged,
+  phoneNumberChanged,
+  userOtpChanged,
+  verifyPhoneNumber,
+  isIssuerFlagToggled,
+} from "../../actions/signinManagerActions";
 
 class Register extends Component {
 
-    handleSendOtp = (event) => {
+  handleSendOtp = event => {
         this.props.sendOtp(this.props.phoneNumber, this.props.countryCode)
     }
 
-    handlePhoneNumberChanged = (event, data) => {
+  handlePhoneNumberChanged = (event, data) => {
         this.props.phoneNumberChanged(data.value)
-    }
+  };
 
-    handleCountryCodeChanged = (event, data) => {
+  handleCountryCodeChanged = (event, data) => {
         this.props.countryCodeChanged(data.value)
     }
 
-    handleOtpVerification = () =>{
+  handleOtpVerification = () => {
         this.props.verifyPhoneNumber(this.props.otpFromServer, this.props.otpFromUser , this.props.isIssuerFlag, this.props.userLocalPublicAddress, this.props.phoneNumber, this.props.countryCode)
-    }
+    );
+  };
 
     handleIssuerFlagToggled = (event, data) =>{
         console.log("click", data)
         this.props.isIssuerFlagToggled()
     }
 
-    handleOtpChanged = (event, data) =>{
+  handleOtpChanged = (event, data) => {
         this.props.userOtpChanged(data.value)
     }
 
-    render() {
-        return (
+  render() {
+    return (
             <div>
                 This is registration form
-                <Form>
+        <Form>
                     <Form.Group inline>
                         <Form.Field>
                             <label>Phone Number</label>
-                            <Input placeholder='(xxx)' onChange={this.handleCountryCodeChanged}/>
+              <Input placeholder="(xxx)" onChange={this.handleCountryCodeChanged} />
                         </Form.Field>
                         <Form.Field>
                             <Input placeholder='xxxxxxxxxxx' onChange={this.handlePhoneNumberChanged}/>
                         </Form.Field>
                         <Form.Field>
                             <label>Please check if you are an Issuer</label>
-                            <Checkbox toggle onClick={this.handleIssuerFlagToggled} checked={this.props.isIssuerFlag}></Checkbox>
-                        </Form.Field>
+                            <Checkbox toggle onClick={this.handleIssuerFlagToggled} checked={this.props.isIssuerFlag} />
+            </Form.Field>
                         <Form.Field>
                             <Button onClick={this.handleSendOtp}> Send OTP</Button>
                         </Form.Field>
-                        
-                    </Form.Group>
+          </Form.Group>
                 </Form>
                 <Divider/>
                 <Form>
@@ -66,9 +73,9 @@ class Register extends Component {
                 </Form>
                 {this.props.otpVerificationSuccessful?(
                     <div>OTP Verification Successful. Welcome to the Vault</div>
-                ):(
+        ) : (
                     <div>OTP Verification Failed.</div>
-                )}
+        )}
             </div>
         )
     }
@@ -77,18 +84,17 @@ class Register extends Component {
 const mapStateToProps = state => {
     const { phoneNumber, countryCode, otpFromUser, otpFromServer, otpVerificationSuccessful, isIssuerFlag, userLocalPublicAddress } = state.signinManagerData || {}
     return {
-        phoneNumber: phoneNumber,
-        countryCode: countryCode,
-        otpFromUser: otpFromUser,
-        otpFromServer: otpFromServer,
-        otpVerificationSuccessful: otpVerificationSuccessful,
-        isIssuerFlag: isIssuerFlag,
-        userLocalPublicAddress: userLocalPublicAddress
-    }
-}
+    phoneNumber: phoneNumber,
+        countryCode,
+        otpFromUser,
+        otpFromServer,
+        otpVerificationSuccessful,
+        isIssuerFlag,
+        userLocalPublicAddress
+  };
+};
 
-const mapDispatchToProps = dispatch => {
-    return bindActionCreators({
+const mapDispatchToProps = dispatch => bindActionCreators({
         sendOtp: sendOtp,
         phoneNumberChanged:phoneNumberChanged, 
         countryCodeChanged:countryCodeChanged,
@@ -96,8 +102,8 @@ const mapDispatchToProps = dispatch => {
         verifyPhoneNumber: verifyPhoneNumber,
         isIssuerFlagToggled: isIssuerFlagToggled
     }, dispatch)
-}
 
 export default connect(
-    mapStateToProps, mapDispatchToProps
-)(Register) 
+  mapStateToProps,
+  mapDispatchToProps,
+)(Register);

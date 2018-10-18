@@ -1,11 +1,11 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
-import actionTypes from '../../action_types';
+import actionTypes from "../../action_types";
 
 export const initialState = {
   endedDaicosTable: [],
   showEndedDaicosLoader: true,
-  endedDaicosRetrieveFailureMessage: '',
+  endedDaicosRetrieveFailureMessage: "",
   endedDaicosRetrievedSuccessFully: false,
 };
 

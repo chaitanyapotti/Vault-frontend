@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from '../../../PropTypes';
+import React from "react";
+import PropTypes from "../../../PropTypes";
 
 const MasonryLayout = props => {
   const columnWrapper = {};
@@ -13,11 +13,7 @@ const MasonryLayout = props => {
   // divide children into columns
   for (let i = 0; i < props.children.length; i++) {
     const columnIndex = i % props.columns;
-    columnWrapper[`column${columnIndex}`].push(
-      <div style={{ marginBottom: `${props.gap}px` }}>
-        {props.children[i]}
-      </div>,
-    );
+    columnWrapper[`column${columnIndex}`].push(<div style={{ marginBottom: `${props.gap}px` }}>{props.children[i]}</div>);
   }
 
   // wrap children in each column with a div
@@ -34,11 +30,7 @@ const MasonryLayout = props => {
     );
   }
 
-  return (
-    <div style={{ display: 'flex' }}>
-      {result}
-    </div>
-  );
+  return <div style={{ display: "flex" }}>{result}</div>;
 };
 
 MasonryLayout.propTypes = {

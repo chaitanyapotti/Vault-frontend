@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-import { Table, Loader } from 'semantic-ui-react';
-import { getActiveDaicos, showActiveDaicosLoaderAction } from '../../actions/activeDaicosActions';
+import { Table, Loader } from "semantic-ui-react";
+import { getActiveDaicos, showActiveDaicosLoaderAction } from "../../actions/activeDaicosActions";
 
 const calculateEndDuration = r1EndTime =>
   // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))
@@ -23,7 +23,7 @@ class ActiveDaicosTableBody extends Component {
   addTableRowsDynamically = () => {
     const table = this.props.activeDaicosTable;
     if (table && table.length > 0) {
-      return table.map((project, index) =>
+      return table.map((project, index) => (
         <Table.Row key={index}>
           <Table.Cell>
             {project.projectName}
@@ -49,22 +49,18 @@ class ActiveDaicosTableBody extends Component {
           <Table.Cell>
             {calculateEndDuration(project.r1EndTime)}
           </Table.Cell>
-        </Table.Row>,
-      );
+        </Table.Row>
+      ));
     }
     return <Table.Row>Activities could not be retrieved, please try reloading the page.</Table.Row>;
   };
 
   render() {
-    return (
-      <Table.Body>
-        {this.addTableRowsDynamically()}
-      </Table.Body>
-    );
+    return <Table.Body>{this.addTableRowsDynamically()}</Table.Body>;
   }
 }
 
-const ActiveDaicosTableHeader = () =>
+const ActiveDaicosTableHeader = () => (
   <Table.Header>
     <Table.Row>
       <Table.HeaderCell>Name</Table.HeaderCell>
@@ -76,7 +72,8 @@ const ActiveDaicosTableHeader = () =>
       <Table.HeaderCell>Started at</Table.HeaderCell>
       <Table.HeaderCell>R1 Ends in</Table.HeaderCell>
     </Table.Row>
-  </Table.Header>;
+  </Table.Header>
+);
 
 class ActiveDaicos extends Component {
   componentDidMount() {
@@ -87,16 +84,16 @@ class ActiveDaicos extends Component {
   render() {
     return (
       <div>
-        {this.props.showActiveDaicosLoader
-          ? <Loader active={this.props.showActiveDaicosLoader} />
-          : this.props.activeDaicosRetrievedSuccessFully
-            ? <Table>
+        {this.props.showActiveDaicosLoader ? (
+          <Loader active={this.props.showActiveDaicosLoader} />
+        ) : this.props.activeDaicosRetrievedSuccessFully ? (
+          <Table>
                 <ActiveDaicosTableHeader />
                 <ActiveDaicosTableBody activeDaicosTable={this.props.activeDaicosTable} />
-              </Table>
+          </Table>
             : <h3>
                 {this.props.activeDaicosRetrieveFailureMessage}
-              </h3>}
+        )}
       </div>
     );
   }
@@ -122,4 +119,7 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActiveDaicos);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ActiveDaicos);

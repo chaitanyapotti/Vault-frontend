@@ -1,7 +1,7 @@
-import React from 'react';
-import { Col, Grid, Row } from '../../../helpers/react-flexbox-grid';
+import React from "react";
+import { Col, Grid, Row } from "../../../helpers/react-flexbox-grid";
 
-const Subheader = () =>
+const Subheader = () => (
   <div className="sbhdr-cnt push-top--135">
     <Grid>
       <div className="sbhdr-txt txt-xl txt-bold sbhdr-mrgn-tp">ACCOUNTABLE CROWDFUNDING PLATFORM</div>
@@ -14,6 +14,7 @@ const Subheader = () =>
         </Col>
       </Row>
     </Grid>
-  </div>;
+  </div>
+);
 
 export default Subheader;

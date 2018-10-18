@@ -13,6 +13,7 @@ class FeaturedProjects extends Component {
     this.props.getFeaturedProjects();
     this.props.featuredProjectsLoaderAction();
   }
+
   render() {
     const { featuredProjects } = this.props;
     return (
@@ -24,12 +25,7 @@ class FeaturedProjects extends Component {
           <div>
             {featuredProjects.map((item, index) => {
               const { projectName, description } = item;
-              return (
-                <FeaturedProject key={index}
-                  projectName={projectName}
-                  description={description}
-                />
-              );
+              return <FeaturedProject key={index} projectName={projectName} description={description} />;
             })}
           </div>
         ) : (
@@ -46,26 +42,24 @@ const mapStateToProps = state => {
     showFeaturedProjectsLoader,
     featuredProjectsRetrieveFailureMessage,
     featuredProjectsRetrievedSuccessfully
-  } = state.featuredProjectsReducer || {};
+    state.featuredProjectsReducer || {};
   return {
-    featuredProjects: featuredProjects,
-    showFeaturedProjectsLoader: showFeaturedProjectsLoader,
-    featuredProjectsRetrieveFailureMessage: featuredProjectsRetrieveFailureMessage,
-    featuredProjectsRetrievedSuccessfully: featuredProjectsRetrievedSuccessfully
+    featuredProjects,
+    showFeaturedProjectsLoader,
+    featuredProjectsRetrieveFailureMessage,
+    featuredProjectsRetrievedSuccessfully
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(
+const mapDispatchToProps = dispatch => bindActionCreators(
     {
       getFeaturedProjects: getFeaturedProjects,
       featuredProjectsLoaderAction: featuredProjectsLoaderAction
     },
     dispatch
   );
-};
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(FeaturedProjects);

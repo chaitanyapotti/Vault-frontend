@@ -1,7 +1,7 @@
-import React from 'react';
-import { CUICard } from '../../../helpers/material-ui';
-import { Row, Col } from '../../../helpers/react-flexbox-grid';
-import { ButtonComponent } from '../FormComponents';
+import React from "react";
+import { CUICard } from "../../../helpers/material-ui";
+import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import { ButtonComponent } from "../FormComponents";
 
 class PDetailGovernance extends React.Component {
   render() {
@@ -17,10 +17,9 @@ class PDetailGovernance extends React.Component {
       totalRefundableBalance,
       killConsensus,
       onKillClick,
-    } =
-      this.props || {};
+    } = this.props || {};
     return (
-      <CUICard style={{ padding: '40px 50px' }}>
+      <CUICard style={{ padding: "40px 50px" }}>
         <div className="txt-xxxl text--primary">Project Details</div>
         <Row className="push-top--35">
           <Col lg={6} className="txt">

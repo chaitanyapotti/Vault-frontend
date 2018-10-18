@@ -1,6 +1,6 @@
-import React from 'react';
-import Divider from '@material-ui/core/Divider';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import Divider from "@material-ui/core/Divider";
+import PropTypes from "../../PropTypes";
 
 /**
  * @Component Divider
@@ -34,7 +34,7 @@ CUIDivider.defaultProps = {
   style: {},
   dividerTheme: false,
   dividerStyle: false,
-  className: '',
+  className: "",
 };
 CUIDivider.propTypes = {
   style: PropTypes.shape({}),

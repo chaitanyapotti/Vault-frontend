@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-import { Table, Loader } from 'semantic-ui-react';
-import { getEndedDaicos, showEndedDaicosLoaderAction } from '../../actions/endedDaicosActions';
+import { Table, Loader } from "semantic-ui-react";
+import { getEndedDaicos, showEndedDaicosLoaderAction } from "../../actions/endedDaicosActions";
 
 const calculateEndDuration = r1EndTime =>
   // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))
@@ -17,40 +17,26 @@ class EndedDaicosTableBody extends Component {
   addTableRowsDynamically = () => {
     const table = this.props.endedDaicosTable;
     if (table && table.length > 0) {
-      return table.map((project, index) =>
+      return table.map((project, index) => (
         <Table.Row key={index}>
-          <Table.Cell>
-            {project.projectName}
-          </Table.Cell>
-          <Table.Cell>
-            {100}
-          </Table.Cell>
-          <Table.Cell>
-            {1}
-          </Table.Cell>
+          <Table.Cell>{project.projectName}</Table.Cell>
+          <Table.Cell>{100}</Table.Cell>
+          <Table.Cell>{1}</Table.Cell>
           <Table.Cell>90%</Table.Cell>
-          <Table.Cell>
-            {new Date(project.startDateTime).toISOString()}
-          </Table.Cell>
-          <Table.Cell>
-            {calculateEndDuration(project.r1EndTime)}
-          </Table.Cell>
-        </Table.Row>,
-      );
+          <Table.Cell>{new Date(project.startDateTime).toISOString()}</Table.Cell>
+          <Table.Cell>{calculateEndDuration(project.r1EndTime)}</Table.Cell>
+        </Table.Row>
+      ));
     }
     return <Table.Row>Activities could not be retrieved, please try reloading the page.</Table.Row>;
   };
 
   render() {
-    return (
-      <Table.Body>
-        {this.addTableRowsDynamically()}
-      </Table.Body>
-    );
+    return <Table.Body>{this.addTableRowsDynamically()}</Table.Body>;
   }
 }
 
-const EndedDaicosTableHeader = () =>
+const EndedDaicosTableHeader = () => (
   <Table.Header>
     <Table.Row>
       <Table.HeaderCell>Name</Table.HeaderCell>
@@ -60,7 +46,8 @@ const EndedDaicosTableHeader = () =>
       <Table.HeaderCell>Started at</Table.HeaderCell>
       <Table.HeaderCell>Ended at</Table.HeaderCell>
     </Table.Row>
-  </Table.Header>;
+  </Table.Header>
+);
 
 class EndedDaicos extends Component {
   componentDidMount() {
@@ -71,16 +58,16 @@ class EndedDaicos extends Component {
   render() {
     return (
       <div>
-        {this.props.showEndedDaicosLoader
-          ? <Loader active={this.props.showEndedDaicosLoader} />
-          : this.props.endedDaicosRetrievedSuccessFully
-            ? <Table>
-                <EndedDaicosTableHeader />
-                <EndedDaicosTableBody endedDaicosTable={this.props.endedDaicosTable} />
-              </Table>
-            : <h3>
-                {this.props.endedDaicosRetrieveFailureMessage}
-              </h3>}
+        {this.props.showEndedDaicosLoader ? (
+          <Loader active={this.props.showEndedDaicosLoader} />
+        ) : this.props.endedDaicosRetrievedSuccessFully ? (
+          <Table>
+            <EndedDaicosTableHeader />
+            <EndedDaicosTableBody endedDaicosTable={this.props.endedDaicosTable} />
+          </Table>
+        ) : (
+          <h3>{this.props.endedDaicosRetrieveFailureMessage}</h3>
+        )}
       </div>
     );
   }
@@ -106,4 +93,7 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(EndedDaicos);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EndedDaicos);

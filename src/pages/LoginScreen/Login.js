@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import web3 from '../../helpers/web3';
+import React, { Component } from "react";
+import web3 from "../../helpers/web3";
 
 class Login extends Component {
   state = {
@@ -10,15 +10,15 @@ class Login extends Component {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/auth`, {
       body: JSON.stringify({ publicAddress, signature }),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'POST',
+      method: "POST",
     }).then(response => response.json());
 
   handleClick = () => {
     const { onLoggedIn } = this.props;
     if (!web3.eth.coinbase) {
-      window.alert('Please activate MetaMask first.');
+      window.alert("Please activate MetaMask first.");
       return;
     }
     const publicAddress = web3.utils.toChecksumAddress(web3.eth.coinbase);
@@ -53,9 +53,9 @@ class Login extends Component {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/users`, {
       body: JSON.stringify({ publicAddress }),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'POST',
+      method: "POST",
     }).then(response => response.json());
 
   render() {
@@ -63,7 +63,7 @@ class Login extends Component {
     return (
       <div>
         <button className="Login-button Login-mm" onClick={this.handleClick}>
-          {loading ? 'Loading...' : 'Login with MetaMask'}
+          {loading ? "Loading..." : "Login with MetaMask"}
         </button>
       </div>
     );

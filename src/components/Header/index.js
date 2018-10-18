@@ -1,7 +1,7 @@
 /* eslint camelcase: 0 */
 
-import React, { Component } from 'react';
-import { Col, Grid, Row } from '../../helpers/react-flexbox-grid';
+import React, { Component } from "react";
+import { Col, Grid, Row } from "../../helpers/react-flexbox-grid";
 
 class Header extends Component {
   render() {

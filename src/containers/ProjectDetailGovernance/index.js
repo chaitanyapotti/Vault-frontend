@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { ProjectName, PDetailGovernance, TapCard } from '../../components/Common/ProjectDetails';
-import { FundReq } from '../../components/Common/ProjectDetails';
-import { getRoundTokensSold, buyTokens } from '../../actions/projectCrowdSaleActions/index';
-import { Grid, Row, Col } from '../../helpers/react-flexbox-grid';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { ProjectName, PDetailGovernance, TapCard } from "../../components/Common/ProjectDetails";
+import { FundReq } from "../../components/Common/ProjectDetails";
+import { getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import {
   getTokenBalance,
   getTokensUnderGovernance,
@@ -16,7 +16,7 @@ import {
   getCurrentTap,
   getXfrData,
   voteInKillPoll,
-} from '../../actions/projectDetailGovernanceActions/index';
+} from "../../actions/projectDetailGovernanceActions/index";
 
 class ProjectDetailGovernance extends Component {
   componentDidMount() {
@@ -35,7 +35,7 @@ class ProjectDetailGovernance extends Component {
 
   getPriceIncrement = () =>
     // TODO: to use external api
-    '(+31.23%)';
+    "(+31.23%)";
 
   lastRoundInfo = () => {
     // TODO: get current round and price
@@ -44,12 +44,8 @@ class ProjectDetailGovernance extends Component {
     const { currentRoundNumber } = this.props || {};
     return (
       <div>
-        <div>
-          Level {currentRoundNumber} price
-        </div>
-        <div>
-          {1 / tokenRate} ETH
-        </div>
+        <div>Level {currentRoundNumber} price</div>
+        <div>{1 / tokenRate} ETH</div>
       </div>
     );
   };
@@ -62,7 +58,7 @@ class ProjectDetailGovernance extends Component {
 
   getPrice = () =>
     // TODO: to use external API
-    '0.009861';
+    "0.009861";
 
   onTradeClick = () => {};
 
@@ -78,7 +74,7 @@ class ProjectDetailGovernance extends Component {
 
   getVoteShare = () => {
     const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
-    const userShare = parseFloat(tokenBalance) / parseFloat(totalMintableSupply) * Math.pow(10, 18);
+    const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * Math.pow(10, 18);
     return userShare > capPercent / 10000 ? capPercent / 10000 : userShare;
   };
 
@@ -105,7 +101,7 @@ class ProjectDetailGovernance extends Component {
       softCap += parseFloat(amount);
     }
     const denom = parseFloat(totalSupply) - softCap;
-    return Math.round(parseFloat(tokenBalance) / denom * parseFloat(remainingEtherBalance) * Math.pow(10, -18) * etherPrice);
+    return Math.round((parseFloat(tokenBalance) / denom) * parseFloat(remainingEtherBalance) * Math.pow(10, -18) * etherPrice);
   };
 
   getKillConsensus = () => {
@@ -139,8 +135,7 @@ class ProjectDetailGovernance extends Component {
       tapIncrementFactor,
       currentTap,
       xfrData,
-    } =
-      this.props || {};
+    } = this.props || {};
     return (
       <Grid>
         <Row>
@@ -182,7 +177,7 @@ class ProjectDetailGovernance extends Component {
         <Row className="push--top">
           <Col xs={12} lg={6}>
             <TapCard
-              currentTapAmount={parseFloat(currentTap, 10) * 86400 * 30 / Math.pow(10, 18)}
+              currentTapAmount={(parseFloat(currentTap, 10) * 86400 * 30) / Math.pow(10, 18)}
               tapIncrementUnit={tapIncrementFactor}
               incrementApproval={this.getTapPollConsensus()}
             />
@@ -212,8 +207,7 @@ const mapStateToProps = state => {
     tapPollConsensus,
     currentTap,
     xfrData,
-  } =
-    projectDetailGovernanceReducer || {};
+  } = projectDetailGovernanceReducer || {};
 
   return {
     etherCollected,
@@ -249,4 +243,7 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailGovernance);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProjectDetailGovernance);

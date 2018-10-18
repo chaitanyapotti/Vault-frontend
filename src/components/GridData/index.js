@@ -1,13 +1,13 @@
 /* eslint camelcase: 0 */
 
-import React, { Component } from 'react';
-import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page } from '@syncfusion/ej2-react-grids';
-import { DataManager } from '@syncfusion/ej2-data';
+import React, { Component } from "react";
+import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page } from "@syncfusion/ej2-react-grids";
+import { DataManager } from "@syncfusion/ej2-data";
 
 class GridData extends Component {
   render() {
     const data = new DataManager({
-      url: 'https://js.syncfusion.com/demos/ejServices/Wcf/Northwind.svc/Orders/',
+      url: "https://js.syncfusion.com/demos/ejServices/Wcf/Northwind.svc/Orders/",
     });
     return (
       <GridComponent dataSource={data} allowPaging height={268}>

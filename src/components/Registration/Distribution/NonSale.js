@@ -1,11 +1,11 @@
-import React from 'react';
-import { CUIFormInput, CUIButton } from '../../../helpers/material-ui';
-import { CUIInputType, CUIButtonType, CUIInputColor } from '../../../static/js/variables';
-import { Row, Col } from '../../../helpers/react-flexbox-grid';
+import React from "react";
+import { CUIFormInput, CUIButton } from "../../../helpers/material-ui";
+import { CUIInputType, CUIButtonType, CUIInputColor } from "../../../static/js/variables";
+import { Row, Col } from "../../../helpers/react-flexbox-grid";
 
 class NonSale extends React.Component {
   state = {
-    noOfTkns: '',
+    noOfTkns: "",
   };
 
   onChangeNoOfTkns = e => {
@@ -29,7 +29,7 @@ class NonSale extends React.Component {
               inputType={CUIInputType.TEXT}
               full
               inputName="Number of Tokens"
-              inputLabel={'Number of Tokens'}
+              inputLabel="Number of Tokens"
               inputPlaceholder=""
               inputValue={this.state.noOfTkns}
               // onBlur={this.onBlurAge}
@@ -44,7 +44,7 @@ class NonSale extends React.Component {
               inputType={CUIInputType.TEXT}
               full
               inputName="Receiver"
-              inputLabel={'Receiver'}
+              inputLabel="Receiver"
               inputPlaceholder=""
               inputValue={this.state.inifundValue}
               // onBlur={this.onBlurAge}
@@ -62,7 +62,7 @@ class NonSale extends React.Component {
               type={CUIButtonType.RAISED}
               buttonColor={CUIInputColor.PRIMARY}
               id="Add to Token Distribution Chart"
-              label={'Add To token Distribution Chart'}
+              label="Add To token Distribution Chart"
               // disabled={!this.state.validPassword}
               onClick={() => {
                 this.uploadDaico();

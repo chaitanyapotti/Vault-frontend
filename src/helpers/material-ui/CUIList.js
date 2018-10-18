@@ -1,10 +1,10 @@
-import React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import { CUIColor } from '../../static/js/variables';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import { CUIColor } from "../../static/js/variables";
+import PropTypes from "../../PropTypes";
 
 /**
  * @Component List
@@ -31,10 +31,7 @@ import PropTypes from '../../PropTypes';
  */
 /** *********************** CUIList ************************ */
 
-const CUIList = props =>
-  <List {...props}>
-    {props.children}
-  </List>;
+const CUIList = props => <List {...props}>{props.children}</List>;
 
 CUIList.propTypes = {
   children: PropTypes.node.isRequired,
@@ -42,14 +39,11 @@ CUIList.propTypes = {
 
 /** *********************** CUIList Item ************************ */
 
-const CUIListItem = props =>
-  <ListItem {...props}>
-    {props.children}
-  </ListItem>;
+const CUIListItem = props => <ListItem {...props}>{props.children}</ListItem>;
 
 CUIListItem.defaultProps = {
   children: null,
-  style: { display: 'block' },
+  style: { display: "block" },
   button: true,
 };
 CUIListItem.propTypes = {
@@ -60,10 +54,7 @@ CUIListItem.propTypes = {
 
 /** *********************** CUIList Item Icon************************ */
 
-const CUIListItemIcon = props =>
-  <ListItemIcon>
-    {props.children}
-  </ListItemIcon>;
+const CUIListItemIcon = props => <ListItemIcon>{props.children}</ListItemIcon>;
 
 CUIListItemIcon.propTypes = {
   children: PropTypes.node.isRequired,
@@ -80,18 +71,14 @@ const CUIListSubheader = props => {
     className: props.className,
     onClick: props.onClick,
   };
-  return (
-    <ListSubheader {...listSubheaderProps}>
-      {props.children}
-    </ListSubheader>
-  );
+  return <ListSubheader {...listSubheaderProps}>{props.children}</ListSubheader>;
 };
 
 CUIListSubheader.defaultProps = {
   removeSticky: false,
   inset: false,
   style: {},
-  className: '',
+  className: "",
   color: CUIColor.DEFAULT,
   onClick: () => {},
 };

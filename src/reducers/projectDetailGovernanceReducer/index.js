@@ -1,16 +1,16 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
-import actionTypes from '../../action_types';
+import actionTypes from "../../action_types";
 
 export const initialState = {
-  tokenBalance: '0',
-  tokensUnderGovernance: '0',
-  remainingEtherBalance: '0',
-  killPollIndex: '0',
-  totalSupply: '0',
-  killConsensus: '0',
-  tapPollConsensus: '0',
-  currentTap: '0',
+  tokenBalance: "0",
+  tokensUnderGovernance: "0",
+  remainingEtherBalance: "0",
+  killPollIndex: "0",
+  totalSupply: "0",
+  killConsensus: "0",
+  tapPollConsensus: "0",
+  currentTap: "0",
   xfrData: {},
 };
 

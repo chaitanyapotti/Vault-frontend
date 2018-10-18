@@ -6,7 +6,7 @@ export const initialState = {
   featuredProjects: [],
   featuredProjectsRetrieveFailureMessage: "",
   showFeaturedProjectsLoader: true,
-  featuredProjectsRetrievedSuccessfully: false
+  featuredProjectsRetrievedSuccessfully: false,
 };
 
 export default function(state = initialState, action) {
@@ -16,21 +16,21 @@ export default function(state = initialState, action) {
         ...state,
         showFeaturedProjectsLoader: false,
         featuredProjects: action.payload,
-        featuredProjectsRetrievedSuccessfully: true
+        featuredProjectsRetrievedSuccessfully: true,
       };
     case actionTypes.FEATURED_PROJECTS_FAILURE:
       return {
         ...state,
         showFeaturedProjectsLoader: false,
         featuredProjectsRetrieveFailureMessage: action.payload,
-        featuredProjectsRetrievedSuccessfully: false
+        featuredProjectsRetrievedSuccessfully: false,
       };
 
     case actionTypes.SHOW_FEATURED_PROJECTS_ACTION_LOADER:
       return {
         ...state,
         showFeaturedProjectsLoader: true,
-        featuredProjectsRetrievedSuccessfully: false
+        featuredProjectsRetrievedSuccessfully: false,
       };
 
     default:

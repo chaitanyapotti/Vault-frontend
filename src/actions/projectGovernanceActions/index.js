@@ -1,18 +1,18 @@
-import axios from 'axios';
-import config from '../../config';
-import web3 from '../../helpers/web3';
+import axios from "axios";
+import config from "../../config";
+import web3 from "../../helpers/web3";
 
 export function currentRoundFetchSuccess(receipt) {
   return {
     payload: { receipt },
-    type: 'CURRENT_ROUND_FETCHED',
+    type: "CURRENT_ROUND_FETCHED",
   };
 }
 
 export function projectDetailsFetched(data) {
   return {
     payload: { data },
-    type: 'PROJECT_DETAILS_FETCHED',
+    type: "PROJECT_DETAILS_FETCHED",
   };
 }
 

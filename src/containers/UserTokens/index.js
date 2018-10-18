@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-import { Table, Loader, Grid } from 'semantic-ui-react';
-import { showUserTokensLoaderAction } from '../../actions/userTokensActions';
-
+import { Table, Loader, Grid } from "semantic-ui-react";
+import { showUserTokensLoaderAction } from "../../actions/userTokensActions";
 
 class UserTokensTableBody extends Component {
     addTableRowsDynamically = () => {
@@ -24,9 +23,9 @@ class UserTokensTableBody extends Component {
                     </Table.Row>
                 );
             });
-        } else {
+        } 
             return <Table.Row>Activities could not be retrieved, please try reloading the page.</Table.Row>;
-        }
+        
     }
 
     render() {
@@ -34,12 +33,10 @@ class UserTokensTableBody extends Component {
             <Table.Body>
                 {this.addTableRowsDynamically()}
             </Table.Body>
-        )
-    }
+  }
 }
 
-const UserTokensTableHeader = () => {
-    return (
+const UserTokensTableHeader = () => (
         <Table.Header>
             <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
@@ -53,24 +50,20 @@ const UserTokensTableHeader = () => {
             </Table.Row>
         </Table.Header>
     )
-}
 
 class UserTokens extends Component {
-    render() {
+  render() {
         return (
             <div>
                 <Grid columns={5}>
-                    <Grid.Row>
-                    </Grid.Row>
+          <Grid.Row />
                     <Grid.Row>
                         <Grid.Column>
                         </Grid.Column>
                         <Grid.Column>
                             My Tokens
                         </Grid.Column>
-                        <Grid.Column>
-
-                        </Grid.Column>
+            <Grid.Column />
                         <Grid.Column>
                             *Prices based on current ETH/USD ratio
                         </Grid.Column>
@@ -82,15 +75,14 @@ class UserTokens extends Component {
                     this.props.showUserTokensLoader ?
                         <Loader active={this.props.showUserTokensLoader} /> :
                         (this.props.userTokensRetrievedSuccessFully ?
-                            <Table>
-                                <UserTokensTableHeader />
+          <Table>
+            <UserTokensTableHeader />
                                 <UserTokensTableBody userTokensTable={this.props.userTokensTable} />
                             </Table>
-                            :
-                            <h3>{this.props.userTokensRetrieveFailureMessage}</h3>
-                        )
-                }
-            </div>
+        ) : (
+          <h3>{this.props.userTokensRetrieveFailureMessage}</h3>
+        )}
+      </div>
         )
     }
 }
@@ -98,20 +90,18 @@ class UserTokens extends Component {
 const mapStateToProps = state => {
     const { userTokensTable, showUserTokensLoader, userTokensRetrieveFailureMessage, userTokensRetrievedSuccessFully } = state.userTokensData || {}
     return {
-        userTokensTable: userTokensTable,
-        showUserTokensLoader: showUserTokensLoader,
-        userTokensRetrieveFailureMessage: userTokensRetrieveFailureMessage,
-        userTokensRetrievedSuccessFully: userTokensRetrievedSuccessFully
-    }
-}
+    userTokensTable: userTokensTable,
+        showUserTokensLoader,
+    userTokensRetrieveFailureMessage: userTokensRetrieveFailureMessage,
+        userTokensRetrievedSuccessFully
+  };
+};
 
-const mapDispatchToProps = dispatch => {
-    return bindActionCreators({
+const mapDispatchToProps = dispatch => bindActionCreators({
         showUserTokensLoaderAction: showUserTokensLoaderAction
     }, dispatch)
-}
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
+  mapDispatchToProps,
 )(UserTokens);

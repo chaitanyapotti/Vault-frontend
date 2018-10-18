@@ -1,6 +1,6 @@
-import React from 'react';
-import Chip from '@material-ui/core/Chip';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import Chip from "@material-ui/core/Chip";
+import PropTypes from "../../PropTypes";
 
 /**
  *
@@ -25,9 +25,9 @@ const CUIChip = props => {
 
 CUIChip.defaultProps = {
   style: {
-    margin: '0px 2px 4px',
-    color: '#72727d',
-    backgroundColor: '#f1f1f2',
+    margin: "0px 2px 4px",
+    color: "#72727d",
+    backgroundColor: "#f1f1f2",
   },
 };
 CUIChip.propTypes = {

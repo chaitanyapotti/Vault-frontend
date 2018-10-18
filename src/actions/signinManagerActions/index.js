@@ -5,7 +5,7 @@ import actionTypes from "../../action_types";
 import constants from "../../constants";
 
 export function isIssuerFlagToggled() {
-    return (dispatch) => {
+  return dispatch => {
         dispatch({
             type: actionTypes.IS_ISSUER_FLAG_TOGGLED,
             payload: null
@@ -14,17 +14,19 @@ export function isIssuerFlagToggled() {
 }
 
 export function verifyPhoneNumber(serverOtp, userOtp, isIssuer, publicAddress, phoneNumber, countryCode) {
-    return (dispatch) => {
+  return dispatch => {
         if (serverOtp === userOtp) {
-            axios.post(`${config.api_base_url}/db/users/register`, {
+      axios
+        .post(`${config.api_base_url}/db/users/register`, {
                 "publicaddress": publicAddress, 
                 "isissuer": isIssuer, 
                 "phonenumber": phoneNumber, 
                 "countrycode": countryCode
-            } ).then(response => {
+        })
+        .then(response => {
                 if (response.status == 200) {
                     if (response.data.message == constants.SUCCESS) {
-                        dispatch({
+              dispatch({
                             type: actionTypes.PHONE_VERIFICATION_SUCCESS,
                             payload: response.data.data
                         })
@@ -33,14 +35,15 @@ export function verifyPhoneNumber(serverOtp, userOtp, isIssuer, publicAddress, p
                             type: actionTypes.PHONE_VERIFICATION_FAILED,
                             payload: response.data.reason
                         })
-                    }
+            }
                 } else {
                     dispatch({
                         type: actionTypes.PHONE_VERIFICATION_FAILED,
                         payload: constants.PHONE_VERIFICATION_FAILED_MESSAGE
                     })
-                }
-            }).catch(error => {
+          }
+        })
+        .catch(error => {
                 console.log(error)
                 dispatch({
                     type: actionTypes.PHONE_VERIFICATION_FAILED,
@@ -50,46 +53,46 @@ export function verifyPhoneNumber(serverOtp, userOtp, isIssuer, publicAddress, p
         } else {
             dispatch({
                 type: actionTypes.PHONE_VERIFICATION_FAILED,
-                payload: constants.OTP_DID_NOT_MATCH
-            })
-        }
+        payload: constants.OTP_DID_NOT_MATCH,
+      });
     }
+  };
 }
 
 export function userOtpChanged(otp) {
     return (dispatch) => {
         dispatch({
             type: actionTypes.USER_OTP_INPUT_CHANGED,
-            payload: otp
-        })
-    }
+      payload: otp,
+    });
+  };
 }
 
 export function phoneNumberChanged(number) {
-    return (dispatch) => {
+  return dispatch => {
         dispatch({
             type: actionTypes.PHONE_NUMBER_CHANGED,
             payload: number
         })
-    }
+  };
 }
 
 export function countryCodeChanged(code) {
-    return (dispatch) => {
+  return dispatch => {
         dispatch({
             type: actionTypes.COUNTRY_CODE_CHANGED,
-            payload: code
-        })
-    }
+      payload: code,
+    });
+  };
 }
 
 export function closeRegistrationFormAction() {
     return (dispatch) => {
         dispatch({
             type: actionTypes.HIDE_REGISTRATION_FORM,
-            payload: null
-        })
-    }
+      payload: null,
+    });
+  };
 }
 
 export function openRegistrationFormAction(userRegistered) {
@@ -100,22 +103,23 @@ export function openRegistrationFormAction(userRegistered) {
                 payload: null
             })
         }
-    } else {
+    } 
         return
-    }
+    
 }
 
 export function sendOtp(phoneNumber, countryCode) {
-    console.log("sending otp")
-    return (dispatch) => {
-        axios.get(`${config.api_base_url}/db/users/otp`, { params: { phoneNumber: phoneNumber.toString(), countryCode: countryCode.toString() } })
-            .then(response => {
+  console.log("sending otp");
+  return dispatch => {
+    axios
+      .get(`${config.api_base_url}/db/users/otp`, { params: { phoneNumber: phoneNumber.toString(), countryCode: countryCode.toString() } })
+      .then(response => {
                 if (response.status == 200) {
                     if (response.data.message == constants.SUCCESS) {
                         dispatch({
                             type: actionTypes.OTP_SENT_TO_USER_SUCCESS,
-                            payload: response.data.data.otp
-                        });
+              payload: response.data.data.otp,
+            });
                     } else {
                         dispatch({
                             type: actionTypes.OTP_SENT_TO_USER_FAILED,
@@ -135,29 +139,28 @@ export function sendOtp(phoneNumber, countryCode) {
                     payload: constants.OTP_FAILED_MESSAGE
                 });
             });
-    }
-
+  };
 }
 
 export function checkUserRegistration() {
-    return (dispatch) => {
+  return dispatch => {
         web3.eth.getAccounts().then(
-            accounts => {
+      .then(accounts => {
                 if (accounts.length > 0) {
-                    dispatch({
+          dispatch({
                         type: actionTypes.USER_LOCAL_ACCOUNT_ADDRESS,
                         payload: accounts[0].toLowerCase()
                     })
                     axios
                         .get(`${config.api_base_url}/db/users`, { params: { useraddress: accounts[0].toLowerCase() } })
-                        .then(response => {
+            .then(response => {
                             if (response.status == 200) {
                                 if (response.data.message == constants.SUCCESS) {
                                     dispatch({
                                         type: actionTypes.USER_REGISTRATION_CHECK_SUCCESS,
                                         payload: response.data.data
                                     });
-                                } else {
+                } else {
                                     dispatch({
                                         type: actionTypes.USER_REGISTRATION_CHECK_FAILED,
                                         payload: response.data.reason
@@ -165,7 +168,7 @@ export function checkUserRegistration() {
                                 }
                             } else {
                                 dispatch({
-                                    type: actionTypes.USER_REGISTRATION_CHECK_FAILED,
+                  type: actionTypes.USER_REGISTRATION_CHECK_FAILED,
                                     payload: constants.FAILED_TO_GET_PUBLIC_ADDRESS
                                 });
                             }
@@ -178,22 +181,21 @@ export function checkUserRegistration() {
                         });
 
                 }
-            }
-        )
+      })
             .catch(
                 err => {
                     dispatch({
-                        type: actionTypes.USER_REGISTRATION_CHECK_FAILED,
+          type: actionTypes.USER_REGISTRATION_CHECK_FAILED,
                         payload: constants.FAILED_TO_GET_PUBLIC_ADDRESS
                     });
                 }
             )
-    }
+  };
 }
 
-export const fetchCurrentAccount = (userPreviousLocalPublicAddress) => {
+export const fetchCurrentAccount = userPreviousLocalPublicAddress => 
     // console.log("every interval", userPreviousLocalPublicAddress)
-    return (dispatch) => {
+     (dispatch) => {
         web3.eth.getAccounts()
             .then(accounts => {
                 if (accounts.length > 0) {
@@ -245,4 +247,3 @@ export const fetchCurrentAccount = (userPreviousLocalPublicAddress) => {
             )
     }
 
-}

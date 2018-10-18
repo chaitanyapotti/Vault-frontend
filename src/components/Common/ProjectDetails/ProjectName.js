@@ -1,8 +1,8 @@
-import React from 'react';
-import { CUICard } from '../../../helpers/material-ui';
-import { Row, Col } from '../../../helpers/react-flexbox-grid';
-import SocialLinks from '../../Common/SocialLinks';
-import { ButtonComponent } from '../FormComponents';
+import React from "react";
+import { CUICard } from "../../../helpers/material-ui";
+import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import SocialLinks from "../SocialLinks";
+import { ButtonComponent } from "../FormComponents";
 
 class ProjectName extends React.Component {
   render() {
@@ -22,18 +22,18 @@ class ProjectName extends React.Component {
       onSecondaryClick,
       buttonVisibility,
       priceIncrementFlag,
-    } =
-      this.props || {};
+    } = this.props || {};
     const { website } = urls;
     return (
-      <CUICard style={{ padding: '40px 40px' }}>
+      <CUICard style={{ padding: "40px 40px" }}>
         <Row>
           <Col xs={12} lg={8}>
             <div className="hl">
               <span className="prjct-logo hli" />
               <div className="hli push--left text--primary push-half--top">
                 <div className="txt-xxxl">
-                  {' '}{projectName} ({tokenTag})
+                  {" "}
+                  {projectName} ({tokenTag})
                 </div>
                 <div className="txt">
                   {price} ETH
@@ -45,16 +45,12 @@ class ProjectName extends React.Component {
           <Col lg={4} className="txt-g-secondary txt">
             {/* <div>Level 2 Price</div>
                             <div>0.017522 ETH</div> */}
-            <span>
-              {lastRoundInfo}
-            </span>
+            <span>{lastRoundInfo}</span>
           </Col>
         </Row>
         <Row className="push--top">
           <Col lg={6} className="txt txt-g-secondary">
-            <div>
-              {roundText}
-            </div>
+            <div>{roundText}</div>
           </Col>
           <Col lg={6}>
             <div>
@@ -63,9 +59,7 @@ class ProjectName extends React.Component {
           </Col>
         </Row>
         <Row className="push-half--top txt">
-          <Col>
-            {description}
-          </Col>
+          <Col>{description}</Col>
         </Row>
         <Row className="push--top">
           <Col lg={6} className="text--secondary txt">
@@ -78,11 +72,11 @@ class ProjectName extends React.Component {
           </Col>
           <Col lg={6} className="text-right   ">
             {buttonVisibility ? <ButtonComponent onClick={onClick} label={buttonText} /> : <span>You are whitelisted</span>}
-            {onSecondaryClick
-              ? <span className="push-left--13">
-                  <ButtonComponent onClick={onSecondaryClick} label={secondaryButtonText} />
-                </span>
-              : null}
+            {onSecondaryClick ? (
+              <span className="push-left--13">
+                <ButtonComponent onClick={onSecondaryClick} label={secondaryButtonText} />
+              </span>
+            ) : null}
             {/* { this.props.type === 'dual' ? 
                             <DualComponent
                                 label1="Buy"

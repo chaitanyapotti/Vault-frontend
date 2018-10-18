@@ -1,7 +1,7 @@
-import axios from 'axios';
-import config from '../../config';
-import actionTypes from '../../action_types';
-import constants from '../../constants';
+import axios from "axios";
+import config from "../../config";
+import actionTypes from "../../action_types";
+import constants from "../../constants";
 
 export function getUpcomingDaicos() {
   return dispatch => {

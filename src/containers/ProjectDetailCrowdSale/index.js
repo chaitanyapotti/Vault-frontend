@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { PDetailCrowdSale, ProjectName, TokenChart, TimeLine } from '../../components/Common/ProjectDetails';
-import { getEtherCollected, getRoundTokensSold, buyTokens } from '../../actions/projectCrowdSaleActions/index';
-import { Grid, Row, Col } from '../../helpers/react-flexbox-grid';
-import { CUICard } from '../../helpers/material-ui';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { PDetailCrowdSale, ProjectName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
+import { getEtherCollected, getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { CUICard } from "../../helpers/material-ui";
 
 class ProjectDetailCrowdSale extends Component {
   componentDidMount() {
@@ -12,6 +12,7 @@ class ProjectDetailCrowdSale extends Component {
     this.props.getEtherCollected(version, pollFactoryAddress);
     this.props.getRoundTokensSold(version, crowdSaleAddress);
   }
+
   // TODO: need to refactor and remove these methods later
   getPrice = () => {
     const { rounds } = this.props || {};
@@ -31,7 +32,7 @@ class ProjectDetailCrowdSale extends Component {
     const { rounds, roundInfo } = this.props || {};
     const [round1, ...rest] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
-    const { totalTokensSold } = roundInfo || '';
+    const { totalTokensSold } = roundInfo || "";
     // based on tokens sold
     return `${Math.round(parseFloat(totalTokensSold) * Math.pow(10, -18))} Tokens Sold of ${Math.round(
       parseFloat(tokenCount) * Math.pow(10, -18),
@@ -47,7 +48,7 @@ class ProjectDetailCrowdSale extends Component {
 
   getSoftCap = () => {
     // TODO: For now using ether.. when ether price is brought, it is implemented, convert to $
-    const etherPrice = '200'; // dollars
+    const etherPrice = "200"; // dollars
     const { rounds } = this.props || {};
     let softCap = 0;
     for (let index = 0; index < rounds.length; index++) {
@@ -58,7 +59,7 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   getHardCap = () => {
-    const etherPrice = '200'; // dollars
+    const etherPrice = "200"; // dollars
     const { totalMintableSupply } = this.props || {};
     const hardCap = parseFloat(totalMintableSupply) * this.getR3Price() * etherPrice * Math.pow(10, -18);
     return Math.round(hardCap).toString();
@@ -69,6 +70,7 @@ class ProjectDetailCrowdSale extends Component {
     // TODO: need to add how many tokens to buy
     this.props.buyTokens(crowdSaleAddress);
   };
+
   render() {
     const {
       projectName,
@@ -87,11 +89,10 @@ class ProjectDetailCrowdSale extends Component {
       startDateTime,
       r1EndTime,
       etherCollected,
-    } =
-      this.props || {};
+    } = this.props || {};
     return (
       <Grid>
-        <CUICard style={{ padding: '40px 50px' }}>
+        <CUICard style={{ padding: "40px 50px" }}>
           <TimeLine
             fundsCollected={etherCollected}
             roundGoal={this.getR1Goal()}
@@ -119,7 +120,7 @@ class ProjectDetailCrowdSale extends Component {
               individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
-              initialTapAmount={parseInt(initialTapAmount, 10) * 86400 * 30 / Math.pow(10, 18)}
+              initialTapAmount={(parseInt(initialTapAmount, 10) * 86400 * 30) / Math.pow(10, 18)}
               initialFundRelease={parseInt(initialFundRelease, 10) / Math.pow(10, 18)}
               tapIncrementUnit={tapIncrementFactor}
               hardCapCapitalisation={this.getSoftCap()}
@@ -130,7 +131,7 @@ class ProjectDetailCrowdSale extends Component {
 
         <Row className="push--top">
           <Col xs={12} lg={6}>
-            <CUICard style={{ padding: '40px 50px' }}>
+            <CUICard style={{ padding: "40px 50px" }}>
               <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
             </CUICard>
           </Col>
@@ -159,4 +160,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailCrowdSale);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProjectDetailCrowdSale);

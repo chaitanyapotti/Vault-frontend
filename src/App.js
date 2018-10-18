@@ -8,7 +8,6 @@ import "./static/css/app.css";
 import VaultApp from "./VaultApp";
 import Registration from "./pages/Registration";
 import Dashboard from "./pages/Dashboard";
-import ProjectDetails from "./pages/ProjectDetails";
 import LandingPage from "./pages/LandingPage";
 import AllDaicos from "./pages/AllDaicos";
 import Governance from "./pages/Governance";

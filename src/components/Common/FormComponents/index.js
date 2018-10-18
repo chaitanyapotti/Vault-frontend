@@ -1,9 +1,4 @@
 import ButtonComponent from './ButtonComponent';
-import RadioButton from './RadioButton';
-import TextField from './TextField';
+import DualComponent from './DualComponent';
 
-export {
-  ButtonComponent,
-  RadioButton,
-  TextField
-}
+export { ButtonComponent, DualComponent };

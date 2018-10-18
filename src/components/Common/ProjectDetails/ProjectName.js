@@ -1,8 +1,8 @@
-import React from "react";
-import { CUICard, CUIButton } from "../../../helpers/material-ui";
-import { CUIButtonType, CUIInputColor, CS_COLORS } from "../../../static/js/variables";
-import { Row, Col } from "../../../helpers/react-flexbox-grid";
-import SocialLinks from "../../Common/SocialLinks";
+import React from 'react';
+import { CUICard } from '../../../helpers/material-ui';
+import { Row, Col } from '../../../helpers/react-flexbox-grid';
+import SocialLinks from '../../Common/SocialLinks';
+import { ButtonComponent } from '../FormComponents';
 
 class ProjectName extends React.Component {
   render() {
@@ -20,34 +20,41 @@ class ProjectName extends React.Component {
       secondaryButtonText,
       onClick,
       onSecondaryClick,
-      buttonVisibility
-    } = this.props || {};
+      buttonVisibility,
+      priceIncrementFlag,
+    } =
+      this.props || {};
     const { website } = urls;
     return (
-      <CUICard style={{ padding: "40px 52px" }}>
+      <CUICard style={{ padding: '40px 40px' }}>
         <Row>
-          <Col xs={12} lg={9}>
+          <Col xs={12} lg={8}>
             <div className="hl">
               <span className="prjct-logo hli" />
-              <div className="hli push--left text--primary">
+              <div className="hli push--left text--primary push-half--top">
                 <div className="txt-xxxl">
-                  {projectName} ({tokenTag})
+                  {' '}{projectName} ({tokenTag})
                 </div>
                 <div className="txt">
-                  <span>{price} ETH</span> <span className="txt-inc"> {priceIncrement}</span>
+                  {price} ETH
+                  {priceIncrementFlag ? <span className="txt-inc">{` ${priceIncrement}`}</span> : <div />}
                 </div>
               </div>
             </div>
           </Col>
-          <Col lg={3} className="txt-g-secondary txt">
+          <Col lg={4} className="txt-g-secondary txt">
             {/* <div>Level 2 Price</div>
-            <div>0.017522 ETH</div> */}
-            <span>{lastRoundInfo}</span>
+                            <div>0.017522 ETH</div> */}
+            <span>
+              {lastRoundInfo}
+            </span>
           </Col>
         </Row>
         <Row className="push--top">
           <Col lg={6} className="txt txt-g-secondary">
-            <div>{roundText}</div>
+            <div>
+              {roundText}
+            </div>
           </Col>
           <Col lg={6}>
             <div>
@@ -56,7 +63,9 @@ class ProjectName extends React.Component {
           </Col>
         </Row>
         <Row className="push-half--top txt">
-          <Col>{description}</Col>
+          <Col>
+            {description}
+          </Col>
         </Row>
         <Row className="push--top">
           <Col lg={6} className="text--secondary txt">
@@ -67,15 +76,25 @@ class ProjectName extends React.Component {
               <a href={website}>Learn more on our website</a>
             </div>
           </Col>
-          <Col lg={6}>
-            {buttonVisibility ? (
-              <CUIButton type={CUIButtonType.RAISED} buttonColor={CUIInputColor.PRIMARY} label={buttonText} onClick={onClick} />
-            ) : (
-              <span>You are whitelisted</span>
-            )}
-            {onSecondaryClick ? (
-              <CUIButton type={CUIButtonType.RAISED} buttonColor={CUIInputColor.PRIMARY} label={secondaryButtonText} onClick={onSecondaryClick} />
-            ) : null}
+          <Col lg={6} className="text-right   ">
+            {buttonVisibility ? <ButtonComponent onClick={onClick} label={buttonText} /> : <span>You are whitelisted</span>}
+            {onSecondaryClick
+              ? <span className="push-left--13">
+                  <ButtonComponent onClick={onSecondaryClick} label={secondaryButtonText} />
+                </span>
+              : null}
+            {/* { this.props.type === 'dual' ? 
+                            <DualComponent
+                                label1="Buy"
+                                label2="Trade"
+                            />
+                            :
+                            <ButtonComponent
+                                type='danger'
+                                onClick={()=> this.uploadDaico()}
+                                label="Deny"
+                            />
+                        } */}
           </Col>
         </Row>
       </CUICard>

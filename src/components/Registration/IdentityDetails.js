@@ -57,7 +57,7 @@ class IdentityDetails extends React.Component {
 
     uploadWhitePaper = () => {
         console.log('upload white paper button action');
-    }
+    };
 
     render() {
         return (

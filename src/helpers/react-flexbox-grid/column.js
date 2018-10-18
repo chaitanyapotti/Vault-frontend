@@ -1,5 +1,5 @@
 import React from 'react';
-import {Col} from 'reactstrap';
+import { Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 export const GridCol = props =>

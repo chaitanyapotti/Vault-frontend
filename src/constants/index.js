@@ -7,6 +7,6 @@ const constants = {
     PHONE_VERIFICATION_FAILED_MESSAGE: "Your public address or phone number already exists.",
     OTP_DID_NOT_MATCH: "OTP didn't match. Please re-enter and try again.",
     PROJECT_REGISTRATION_FAILED_MESSAGE: "Project registration failed."
-}
+};
 
 export default constants;

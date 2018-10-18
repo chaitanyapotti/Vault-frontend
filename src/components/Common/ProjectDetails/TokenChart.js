@@ -1,11 +1,9 @@
-import React from "react";
-import { CUICard, CUIFormInput, CUIButton } from "../../../helpers/material-ui";
-import { CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS } from "../../../static/js/variables";
-import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import React from 'react';
+import { Row, Col } from '../../../helpers/react-flexbox-grid';
 
-const TokenChart = () => (
+const TokenChart = () =>
   <div className="push-top--50">
-    <div>Token Distribution Chart</div>
+    <div className="txt-xxxl text--primary">Token Distribution Chart</div>
     <hr />
     <Row>
       <Col xs={12} lg={6} className="piechrtxtcnt">
@@ -38,7 +36,6 @@ const TokenChart = () => (
         <div className="piechart" />
       </Col>
     </Row>
-  </div>
-);
+  </div>;
 
 export default TokenChart;

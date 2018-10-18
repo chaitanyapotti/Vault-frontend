@@ -1,16 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {CUICard, CUIFormInput, CUIButton} from '../../helpers/material-ui';
-import {CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS} from '../../static/js/variables';
-import {Row, Col} from '../../helpers/react-flexbox-grid';
-import { initialFundReleaseChangedAction,
+import { CUICard, CUIFormInput, CUIButton } from '../../helpers/material-ui';
+import { CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS } from '../../static/js/variables';
+import { Row, Col } from '../../helpers/react-flexbox-grid';
+import {
+    initialFundReleaseChangedAction,
     daicoRoundsChangedAction, daicoStartDateChangedAction, daicoEndDateChangedAction, round1TokensChangedAction, round1RateChangedAction,
-    round2TokensChangedAction, round3TokensChangedAction, round3RateChangedAction } from '../../actions/projectRegistrationActions';
+    round2TokensChangedAction, round3TokensChangedAction, round3RateChangedAction
+} from '../../actions/projectRegistrationActions';
 
-class DaicoDetails extends React.Component{
+class DaicoDetails extends React.Component {
 
-    onChangeIniFundVal = (e) =>{
+    onChangeIniFundVal = (e) => {
         this.props.initialFundReleaseChangedAction(e.target.value)
     }
 
@@ -29,10 +31,10 @@ class DaicoDetails extends React.Component{
 
     uploadDaico = () => {
         console.log('upload DAICO button action');
-    }
+    };
 
-    render(){
-        return(
+    render() {
+        return (
             <div>
                 <Row>
                     <Col>
@@ -48,9 +50,9 @@ class DaicoDetails extends React.Component{
                         /> */}
                     </Col>
                 </Row>
-                <CUICard style={{padding: '40px 67px'}}>
+                <CUICard style={{ padding: '40px 67px' }}>
                     <div>DAICO Details</div>
-                    <hr/>
+                    <hr />
                     <Row>
                         <Col xs={12} lg={6}>
                             <CUIFormInput
@@ -75,7 +77,7 @@ class DaicoDetails extends React.Component{
                                 full
                                 inputLabel={'DAICO Rounds'}
                                 inputValue={this.props.daicoRounds}
-                                items={[{value: '3', primaryText: '3'}, {value: '2', primaryText: '2'}, {value: '1', primaryText: '1'}]}
+                                items={[{ value: '3', primaryText: '3' }, { value: '2', primaryText: '2' }, { value: '1', primaryText: '1' }]}
                                 onChange={this.onSelectDaicoRounds}
                             />
                         </Col>

@@ -8,20 +8,28 @@ import "./static/css/app.css";
 import VaultApp from "./VaultApp";
 import Registration from "./pages/Registration";
 import Dashboard from "./pages/Dashboard";
+<<<<<<< HEAD
 import LandingPage from "./pages/LandingPage";
 import AllDaicos from "./pages/AllDaicos";
 import Governance from "./pages/Governance";
 import ProjectGovernance from "./pages/ProjectGovernance";
+=======
+>>>>>>> vinay
 import LandingPage from "./pages/LandingPage";
 import AllDaicos from "./pages/AllDaicos";
 import Governance from "./pages/Governance";
 import FeaturedProjects from "./pages/FeaturedProjects";
+import Deployer from "./pages/Deployer";
+import ProjectGovernance from './pages/ProjectGovernance';
+
+
 import SigninManager from "./containers/SigninManager";
+import Register from "./containers/Register";
 
 import store from "./store";
 import "semantic-ui-css/semantic.min.css";
-import Deployer from "./pages/Deployer";
-import Register from "./containers/Register";
+
+
 
 class App extends Component {
   render() {
@@ -37,8 +45,8 @@ class App extends Component {
               <Route exact path="/registration" component={Registration} />
               <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/deploy" component={Deployer} />
-              <Route exact path="/page6" component={ProjectGovernance} />
               <Route exact path="/register" component={Register} />
+              <Route exact path="/page6" component={ProjectGovernance} />
             </Switch>
             <SigninManager/>
           </VaultApp>

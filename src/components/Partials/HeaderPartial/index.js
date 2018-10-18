@@ -15,8 +15,7 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Drawer from '@material-ui/core/Drawer';
 import {Grid,Row, Col} from '../../../helpers/react-flexbox-grid';
-import { CUIAppBar, CUIButtonIcon, CUIModal } from '../../../helpers/material-ui';
-import { Modal, Button } from 'semantic-ui-react';
+import { CUIAppBar, CUIButtonIcon } from '../../../helpers/material-ui';
 
 import { openRegistrationFormAction, closeRegistrationFormAction }  from '../../../actions/signinManagerActions';
 const scrnWdh = window.innerWidth;
@@ -51,7 +50,7 @@ const styles = theme => ({
       marginLeft: theme.spacing.unit * 3,
       width: 'auto',
     },
-    height:'46px'
+    height: '46px',
   },
   searchIcon: {
     width: theme.spacing.unit * 9,
@@ -67,7 +66,7 @@ const styles = theme => ({
     width: '100%',
     height: 'inherit',
     backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: '30px'
+    borderRadius: '30px',
   },
   inputInput: {
     paddingTop: theme.spacing.unit,
@@ -133,7 +132,6 @@ class HeaderPartial extends React.Component {
     this.setState({ drawerIsOpen: false });
   };
 
-
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
@@ -175,22 +173,24 @@ class HeaderPartial extends React.Component {
 
     return (
       <div className={classes.root}>
-        <CUIAppBar position="static" style={scrnWdh < 768 ? {height: '60px'}: {height: '129px'}}>
-            <Grid>
-              <Row>
-                <Col>
-                <Toolbar style={scrnWdh < 768 ? {height: '60px'}: {height: '129px'}} >
-                  {
-                    (scrnWdh < 768) ?
-                      <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
+        <CUIAppBar position="static" style={scrnWdh < 768 ? { height: '60px' } : { height: '129px' }}>
+          <Grid>
+            <Row>
+              <Col>
+                <Toolbar style={scrnWdh < 768 ? { height: '60px' } : { height: '129px' }}>
+                  {scrnWdh < 768
+                    ? <CUIButtonIcon
+                        onClick={this.handleDrawerOpen}
+                        className={classes.menuButton}
+                        color="inherit"
+                        aria-label="Open drawer"
+                      >
                         <MenuIcon />
                       </CUIButtonIcon>
-                    :
-                    <div/>
-                  }
-                  
+                    : <div />}
+
                   <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                    <span className="hdr-logo"></span>
+                    <span className="hdr-logo" />
                   </Typography>
                   <div className={classes.search}>
                     <div className={classes.searchIcon}>
@@ -206,9 +206,15 @@ class HeaderPartial extends React.Component {
                   </div>
                   <div className={classes.grow} />
                   <div className={classes.sectionDesktop}>
-                    <div className="hdr-itm-pad text--primary txt-m"><div className="hvr-underline-from-left">Projects</div></div>
-                    <div className="hdr-itm-pad text--primary txt-m"><div className="hvr-underline-from-left">Governance</div></div>
-                    <div className="hdr-itm-pad text--primary txt-m"><div className="hvr-underline-from-left">Publish ICO</div></div>
+                    <div className="hdr-itm-pad text--primary txt-m">
+                      <div className="hvr-underline-from-left">Projects</div>
+                    </div>
+                    <div className="hdr-itm-pad text--primary txt-m">
+                      <div className="hvr-underline-from-left">Governance</div>
+                    </div>
+                    <div className="hdr-itm-pad text--primary txt-m">
+                      <div className="hvr-underline-from-left">Publish ICO</div>
+                    </div>
                     <div className="hdr-itm-pad text--primary txt-m wdh-100">
                       
                       {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
@@ -229,9 +235,9 @@ class HeaderPartial extends React.Component {
                     </CUIButtonIcon>
                   </div>
                 </Toolbar>
-                </Col>
-               </Row>
-            </Grid>
+              </Col>
+            </Row>
+          </Grid>
         </CUIAppBar>
         {renderMenu}
         {renderMobileMenu}
@@ -244,7 +250,9 @@ class HeaderPartial extends React.Component {
         >
           <div className={classes.drawerHeader}>
             <CUIButtonIcon onClick={this.handleDrawerClose}>
-              <div><ChevronLeft/> Back</div>
+              <div>
+                <ChevronLeft /> Back
+              </div>
             </CUIButtonIcon>
           </div>
           <div className={classes.drawerInner}>

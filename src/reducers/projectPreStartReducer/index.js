@@ -1,9 +1,9 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
-import actionTypes from "../../action_types";
+import actionTypes from '../../action_types';
 
 export const initialState = {
-  isCurrentMember: false
+  isCurrentMember: false,
 };
 
 export default function(state = initialState, action) {
@@ -24,7 +24,7 @@ export default function(state = initialState, action) {
       const { receipt } = action.payload;
       return {
         ...state,
-        isCurrentMember: receipt
+        isCurrentMember: receipt,
       };
 
     default:

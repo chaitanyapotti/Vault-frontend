@@ -1,9 +1,9 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
-import types from "../../action_types";
+import types from '../../action_types';
 
 export const initialState = {
-  appInit: false
+  appInit: false,
 };
 
 export default function(state = initialState, action) {
@@ -11,7 +11,7 @@ export default function(state = initialState, action) {
     case types.APP_INIT:
       return {
         ...state,
-        appInit: true
+        appInit: true,
       };
     default:
       return state;

@@ -4,39 +4,42 @@ import ActiveDaicos from "../../containers/ActiveDaicos";
 import UpcomingDaicos from "../../containers/UpcomingDaicos";
 import EndedDaicos from "../../containers/EndedDaicos";
 
-const panes = [
-  {
-    menuItem: "Active DAICOs",
-    render: () => (
-      <Tab.Pane attached={false}>
-        {" "}
-        <ActiveDaicos />
-      </Tab.Pane>
-    ),
-  },
-  {
-    menuItem: "Upcoming DAICOs",
-    render: () => (
-      <Tab.Pane attached={false}>
-        <UpcomingDaicos />
-      </Tab.Pane>
-    ),
-  },
-  {
-    menuItem: "Ended DAICOs",
-    render: () => (
-      <Tab.Pane attached={false}>
-        <EndedDaicos />
-      </Tab.Pane>
-    ),
-  },
-];
+
 
 class AllDaicos extends Component {
+
+  panes = [
+    {
+      menuItem: "Active DAICOs",
+      render: () => (
+        <Tab.Pane attached={false}>
+          {" "}
+          <ActiveDaicos history={this.props.history}/>
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: "Upcoming DAICOs",
+      render: () => (
+        <Tab.Pane attached={false}>
+          <UpcomingDaicos history={this.props.history}/>
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: "Ended DAICOs",
+      render: () => (
+        <Tab.Pane attached={false}>
+          <EndedDaicos history={this.props.history}/>
+        </Tab.Pane>
+      ),
+    },
+  ];
+
   render() {
     return (
       <div>
-        <Tab menu={{ secondary: true, pointing: false }} panes={panes} />
+        <Tab menu={{ secondary: true, pointing: false }} panes={this.panes} history={this.props.history}/>
       </div>
     );
   }

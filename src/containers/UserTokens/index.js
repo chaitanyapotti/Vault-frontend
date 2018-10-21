@@ -6,12 +6,21 @@ import { Table, Loader, Grid } from "semantic-ui-react";
 import { showUserTokensLoaderAction } from "../../actions/userTokensActions";
 
 class UserTokensTableBody extends Component {
+
+  handleTableRowClicked = (projectid) => {
+    this.props.history.push({
+      pathname: `/governance/details`,
+      search: "?projectid=" + projectid
+    });
+  }
+
+
   addTableRowsDynamically = () => {
     const table = this.props.userTokensTable;
     if (table && table.length > 0) {
       return table.map((project, index) => {
         return (
-          <Table.Row key={index}>
+          <Table.Row key={index} onClick={this.handleTableRowClicked.bind(this, project.name)}>
             <Table.Cell>
               {project.name}
             </Table.Cell>
@@ -85,7 +94,7 @@ class UserTokens extends Component {
           : this.props.userTokensRetrievedSuccessFully
             ? <Table>
                 <UserTokensTableHeader />
-                <UserTokensTableBody userTokensTable={this.props.userTokensTable} />
+                <UserTokensTableBody userTokensTable={this.props.userTokensTable} history={this.props.history}/>
               </Table>
             : <h3>
                 {this.props.userTokensRetrieveFailureMessage}

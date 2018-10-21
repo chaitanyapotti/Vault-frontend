@@ -9,7 +9,7 @@ class VaultApp extends React.PureComponent {
   render() {
     return (
       <CUIWrapper>
-        <HeaderPartial />
+        <HeaderPartial history={this.props.history}/>
         <SubHeader />
         <div className="main-content push-top--35">{this.props.children}</div>
         <FooterPartial />

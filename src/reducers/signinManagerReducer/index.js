@@ -19,7 +19,7 @@ export const initialState = {
   isIssuerFlag: false
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case types.USER_REGISTRATION_CHECK_SUCCESS:
       const { publicAddress } = action.payload || "";
@@ -46,6 +46,16 @@ export default function(state = initialState, action) {
         userLocalPublicAddress: action.payload,
         userPreviousLocalPublicAddress: action.payload
       };
+
+    case types.USER_LOGGED_OUT:
+      return {
+        ...state,
+        userRegistered: false,
+        userIsIssuer: false,
+        userServerPublicAddress: "",
+        userLocalPublicAddress: "",
+        userPreviousLocalPublicAddress: ""
+      }
 
     case types.OTP_SENT_TO_USER_SUCCESS:
       return {

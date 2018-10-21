@@ -133,6 +133,20 @@ class HeaderPartial extends React.Component {
     this.setState({ drawerIsOpen: false });
   };
 
+  onHandleProjectsClicked =() =>{
+    this.props.history.push({
+      pathname: `/alldaicos`,
+      // search: "?contract=" + this.props.searchText
+    });
+  };
+
+  onHandleGovernanceClicked =() =>{
+    this.props.history.push({
+      pathname: `/governance`,
+      // search: "?contract=" + this.props.searchText
+    });
+  };
+
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
@@ -160,13 +174,13 @@ class HeaderPartial extends React.Component {
         open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
-        <MenuItem>
+        <MenuItem onClick={this.onHandleProjectsClicked.bind(this)}>
           <div>Projects</div>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={this.onHandleGovernanceClicked.bind(this)}>
           <div>Governance</div>
         </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
+        <MenuItem>
           <div>Publish ICO</div>
         </MenuItem>
       </Menu>
@@ -205,10 +219,10 @@ class HeaderPartial extends React.Component {
                   <div className={classes.grow} />
                   <div className={classes.sectionDesktop}>
                     <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left">Projects</div>
+                      <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked.bind(this)}>Projects</div>
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left">Governance</div>
+                      <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked.bind(this)}>Governance</div>
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m">
                       <div className="hvr-underline-from-left">Publish ICO</div>
@@ -255,8 +269,8 @@ class HeaderPartial extends React.Component {
             </CUIButtonIcon>
           </div>
           <div className={classes.drawerInner}>
-            <div className="hdr-itm-pad text--primary txt-m">Projects</div>
-            <div className="hdr-itm-pad text--primary txt-m">Governance</div>
+            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked.bind(this)}>Projects</div>
+            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked.bind(this)}>Governance</div>
             <div className="hdr-itm-pad text--primary txt-m">Publish ICO</div>
           </div>
         </Drawer>

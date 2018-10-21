@@ -5,7 +5,7 @@ class Governance extends Component {
   render() {
     return (
       <div>
-        <UserTokens />
+        <UserTokens history={this.props.history}/>
       </div>
     );
   }

@@ -14,11 +14,20 @@ const calculateEndDuration = r1EndTime =>
 // }
 
 class UpcomingDaicosTableBody extends Component {
+
+  
+  handleTableRowClicked = (projectid) => {
+    this.props.history.push({
+      pathname: `/governance/details`,
+      search: "?projectid=" + projectid
+    });
+  }
+
   addTableRowsDynamically = () => {
     const table = this.props.upcomingDaicosTable;
     if (table && table.length > 0) {
       return table.map((project, index) => (
-        <Table.Row key={index}>
+        <Table.Row key={index} onClick={this.handleTableRowClicked.bind(this, project._id)}>
           <Table.Cell>{project.projectName}</Table.Cell>
           <Table.Cell>{100}</Table.Cell>
           <Table.Cell>{1}</Table.Cell>
@@ -64,7 +73,7 @@ class UpcomingDaicos extends Component {
         ) : this.props.upcomingDaicosRetrievedSuccessFully ? (
           <Table>
             <UpcomingDaicosTableHeader />
-            <UpcomingDaicosTableBody upcomingDaicosTable={this.props.upcomingDaicosTable} />
+            <UpcomingDaicosTableBody upcomingDaicosTable={this.props.upcomingDaicosTable} history={this.props.history}/>
           </Table>
         ) : (
           <h3>{this.props.upcomingDaicosRetrieveFailureMessage}</h3>

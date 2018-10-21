@@ -179,6 +179,11 @@ export function checkUserRegistration() {
                 payload: constants.FAILED_TO_GET_PUBLIC_ADDRESS
               });
             });
+        }else{
+          dispatch({
+            type: actionTypes.USER_LOGGED_OUT,
+            payload: ''
+          });
         }
       })
       .catch(err => {
@@ -191,7 +196,6 @@ export function checkUserRegistration() {
 }
 
 export const fetchCurrentAccount = userPreviousLocalPublicAddress =>
-  // console.log("every interval", userPreviousLocalPublicAddress)
   dispatch => {
     web3.eth
       .getAccounts()
@@ -233,6 +237,11 @@ export const fetchCurrentAccount = userPreviousLocalPublicAddress =>
                 });
               });
           }
+        }else{
+          dispatch({
+            type: actionTypes.USER_LOGGED_OUT,
+            payload: ''
+          });
         }
       })
       .catch(err => {

@@ -20,11 +20,20 @@ const calculateFinalGoal = roundArray => {
 };
 
 class ActiveDaicosTableBody extends Component {
+
+  handleTableRowClicked = (projectid) => {
+    this.props.history.push({
+      pathname: `/governance/details`,
+      search: "?projectid=" + projectid
+    });
+  }
+
+
   addTableRowsDynamically = () => {
     const table = this.props.activeDaicosTable;
     if (table && table.length > 0) {
       return table.map((project, index) =>
-        <Table.Row key={index}>
+        <Table.Row key={index} onClick={this.handleTableRowClicked.bind(this, project._id)}>
           <Table.Cell>
             {project.projectName}
           </Table.Cell>
@@ -92,7 +101,7 @@ class ActiveDaicos extends Component {
           : this.props.activeDaicosRetrievedSuccessFully
             ? <Table>
                 <ActiveDaicosTableHeader />
-                <ActiveDaicosTableBody activeDaicosTable={this.props.activeDaicosTable} />
+                <ActiveDaicosTableBody activeDaicosTable={this.props.activeDaicosTable} history={this.props.history}/>
               </Table>
             : <h3>
                 {this.props.activeDaicosRetrieveFailureMessage}

@@ -23,17 +23,17 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <VaultApp dispatch={store.dispatch} getState={store.getState}>
+          <VaultApp dispatch={store.dispatch} getState={store.getState} history={this.props.history}>
             <Switch>
               <Route exact path="/" component={FeaturedProjects} />
               <Route exact path="/governance" component={Governance} />
+              <Route strict path="/governance/details" component={ProjectGovernance} />
               <Route exact path="/alldaicos" component={AllDaicos} />
               <Route exact path="/landing" component={LandingPage} />
               <Route exact path="/registration" component={Registration} />
               <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/deploy" component={Deployer} />
               <Route exact path="/register" component={Register} />
-              <Route exact path="/page6" component={ProjectGovernance} />
             </Switch>
             <SigninManager />
           </VaultApp>

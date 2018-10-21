@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import qs from "qs";
 // import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
@@ -13,7 +14,14 @@ import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
 class ProjectGovernance extends Component {
   componentDidMount() {
     // Do Routing here - use query string
-    this.props.currentRound("5bafaed1eb00b152a418f7df");
+    var currentUrl = new URL(window.location.href)
+    var params = qs.parse( currentUrl.search, { ignoreQueryPrefix: true }); 
+    console.log("parsed params: ", params)
+    // this.props.currentRound()
+    if ("projectid" in params){
+      this.props.currentRound(params["projectid"]);
+    }
+    
     // const { version, crowdSaleAddress } = this.props.projectDetails || {};
     // console.log(version, crowdSaleAddress);
     // this.props.currentRound(version, crowdSaleAddress);

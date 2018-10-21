@@ -16,7 +16,10 @@ export const initialState = {
   phoneNumber: "",
   countryCode: "",
   otpVerificationSuccessful: false,
-  isIssuerFlag: false
+  isIssuerFlag: false,
+  isVaultMember: false,
+  isPhoneNumberVerified: false,
+  vaultPaymentPendingStatus: false
 };
 
 export default function (state = initialState, action) {
@@ -42,6 +45,7 @@ export default function (state = initialState, action) {
         ...state,
         userRegistered: false,
         userIsIssuer: false,
+        isVaultMember: false, 
         userServerPublicAddress: "",
         userLocalPublicAddress: action.payload,
         userPreviousLocalPublicAddress: action.payload
@@ -52,6 +56,7 @@ export default function (state = initialState, action) {
         ...state,
         userRegistered: false,
         userIsIssuer: false,
+        isVaultMember: false,
         userServerPublicAddress: "",
         userLocalPublicAddress: "",
         userPreviousLocalPublicAddress: ""
@@ -126,11 +131,28 @@ export default function (state = initialState, action) {
       };
 
     case types.VAULT_MEMBERSHIP_CHECK:
-      const { result } = action.payload || false;
       return {
         ...state,
-        isVaultMember: result
+        isVaultMember: action.payload
       };
+
+    case types.PHONE_NUMBER_IS_VERIFIED: 
+    return {
+      ...state, 
+      isPhoneNumberVerified: true
+    }
+
+    case types.PHONE_NUMBER_IS_NOT_VERIFIED: 
+    return {
+      ...state, 
+      isPhoneNumberVerified: false
+    }
+
+    case types.VAULT_MEMBERSHIP_PAYMENT_CHECK_SUCCESS:
+    return {
+      ...state, 
+      vaultPaymentPendingStatus: action.payload
+    }
 
     default:
       return state;

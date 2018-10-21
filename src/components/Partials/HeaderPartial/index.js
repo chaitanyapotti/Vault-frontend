@@ -105,7 +105,9 @@ class HeaderPartial extends React.Component {
   };
 
   handleRegistrationButtonClicked = event => {
-    this.props.openRegistrationFormAction(this.props.userRegistered);
+    this.props.history.push({
+      pathname: `/register`
+    });
   };
 
   handleProfileMenuOpen = event => {
@@ -133,9 +135,15 @@ class HeaderPartial extends React.Component {
     this.setState({ drawerIsOpen: false });
   };
 
+  onHandleLogoClicked =() => {
+    this.props.history.push({
+      pathname: `/`
+    });
+  };
+
   onHandleProjectsClicked =() =>{
     this.props.history.push({
-      pathname: `/alldaicos`,
+      pathname: `/projects`,
       // search: "?contract=" + this.props.searchText
     });
   };
@@ -202,7 +210,7 @@ class HeaderPartial extends React.Component {
                   )}
 
                   <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                    <span className="hdr-logo" />
+                    <span onClick={this.onHandleLogoClicked.bind(this)} className="hdr-logo" />
                   </Typography>
                   <div className={classes.search}>
                     <div className={classes.searchIcon}>
@@ -229,10 +237,10 @@ class HeaderPartial extends React.Component {
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m wdh-100">
                       {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
-                      {this.props.userRegistered ? (
+                      {this.props.isVaultMember ? (
                         <div>
                           <div>Somesh:</div>
-                          <div>{this.props.userServerPublicAddress}</div>
+                          <div>{this.props.userLocalPublicAddress}</div>
                         </div>
                       ) : (
                         <div>
@@ -293,12 +301,14 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm } = state.signinManagerData || {};
+  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress } = state.signinManagerData || {};
   return {
     userRegistered,
     userServerPublicAddress,
     userIsIssuer,
     showRegistrationForm,
+    isVaultMember,
+    userLocalPublicAddress
   };
 };
 

@@ -8,13 +8,26 @@ import {
   phoneNumberChanged,
   userOtpChanged,
   verifyPhoneNumber,
-  isIssuerFlagToggled
+  isIssuerFlagToggled,
+  checkVaultMembership,
+  requestVaultMembership
 } from "../../actions/signinManagerActions";
 
 class Register extends Component {
+
+  componentDidMount() {
+    if (this.props.userLocalPublicAddress) {
+      this.props.checkVaultMembership(this.props.userLocalPublicAddress)
+    }
+  }
+
   handleSendOtp = event => {
     this.props.sendOtp(this.props.phoneNumber, this.props.countryCode);
   };
+
+  handleVaultMembershipTransaction = event => {
+    this.props.requestVaultMembership(this.props.userLocalPublicAddress)
+  }
 
   handlePhoneNumberChanged = (event, data) => {
     this.props.phoneNumberChanged(data.value);
@@ -47,52 +60,80 @@ class Register extends Component {
   render() {
     return (
       <div>
-        This is registration form
+        {this.props.isVaultMember ? (
+          <div>You  are already a vault member.</div>
+        ) : (
+            this.props.isPhoneNumberVerified ? (
+              this.props.vaultPaymentPendingStatus ? (
+                <div>
+                  Your approval is pending at our end. Our team shall process it at the earliest possible.
+              </div>
+              ) : (
+                  <div>
+                    <Button onClick={this.handleVaultMembershipTransaction}>Request Vault Membership</Button>
+                  </div>
+                )
+            ) : (
+                <div>
+                  This is Phone Number Registration form
         <Form>
-          <Form.Group inline>
-            <Form.Field>
-              <label>Phone Number</label>
-              <Input placeholder="(xxx)" onChange={this.handleCountryCodeChanged} />
-            </Form.Field>
-            <Form.Field>
-              <Input placeholder="xxxxxxxxxxx" onChange={this.handlePhoneNumberChanged} />
-            </Form.Field>
-            <Form.Field>
-              <label>Please check if you are an Issuer</label>
-              <Checkbox toggle onClick={this.handleIssuerFlagToggled} checked={this.props.isIssuerFlag} />
-            </Form.Field>
-            <Form.Field>
-              <Button onClick={this.handleSendOtp}> Send OTP</Button>
-            </Form.Field>
-          </Form.Group>
-        </Form>
-        <Divider />
-        <Form>
-          <Form.Field>
-            <label> OTP: </label>
-            <Input placeholder="1234" onChange={this.handleOtpChanged} />
-          </Form.Field>
-          <Form.Field>
-            <Button onClick={this.handleOtpVerification}>Submit</Button>
-          </Form.Field>
-        </Form>
-        {this.props.otpVerificationSuccessful ? <div>OTP Verification Successful. Welcome to the Vault</div> : <div>OTP Verification Failed.</div>}
+                    <Form.Group inline>
+                      <Form.Field>
+                        <label>Phone Number</label>
+                        <Input placeholder="+91" onChange={this.handleCountryCodeChanged} />
+                      </Form.Field>
+                      <Form.Field>
+                        <Input placeholder="9096xxxxxx" onChange={this.handlePhoneNumberChanged} />
+                      </Form.Field>
+                      <Form.Field>
+                        <label>Please check if you are an Issuer</label>
+                        <Checkbox toggle onClick={this.handleIssuerFlagToggled} checked={this.props.isIssuerFlag} />
+                      </Form.Field>
+                      <Form.Field>
+                        <Button onClick={this.handleSendOtp}> Send OTP</Button>
+                      </Form.Field>
+                    </Form.Group>
+                  </Form>
+                  <Divider />
+                  <Form>
+                    <Form.Field>
+                      <label> OTP: </label>
+                      <Input placeholder="1234" onChange={this.handleOtpChanged} />
+                    </Form.Field>
+                    <Form.Field>
+                      <Button onClick={this.handleOtpVerification}>Submit</Button>
+                    </Form.Field>
+                  </Form>
+                  {this.props.otpVerificationSuccessful ? <div>OTP Verification Successful. Welcome to the Vault</div> : <div>OTP Verification Failed.</div>}
+                </div>
+              )
+          )
+        }
+
+        <div>
+        </div>
+
+
       </div>
+
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { phoneNumber, countryCode, otpFromUser, otpFromServer, otpVerificationSuccessful, isIssuerFlag, userLocalPublicAddress } =
+  const { phoneNumber, countryCode, otpFromUser, otpFromServer, otpVerificationSuccessful, isIssuerFlag, userLocalPublicAddress, isVaultMember, isPhoneNumberVerified, vaultPaymentPendingStatus } =
     state.signinManagerData || {};
   return {
     phoneNumber: phoneNumber,
-    countryCode,
-    otpFromUser,
-    otpFromServer,
-    otpVerificationSuccessful,
-    isIssuerFlag,
-    userLocalPublicAddress
+    countryCode: countryCode,
+    otpFromUser: otpFromUser,
+    otpFromServer: otpFromServer,
+    otpVerificationSuccessful: otpVerificationSuccessful,
+    isIssuerFlag: isIssuerFlag,
+    userLocalPublicAddress: userLocalPublicAddress,
+    isVaultMember: isVaultMember,
+    isPhoneNumberVerified: isPhoneNumberVerified,
+    vaultPaymentPendingStatus: vaultPaymentPendingStatus
   };
 };
 
@@ -104,7 +145,9 @@ const mapDispatchToProps = dispatch =>
       countryCodeChanged: countryCodeChanged,
       userOtpChanged: userOtpChanged,
       verifyPhoneNumber: verifyPhoneNumber,
-      isIssuerFlagToggled: isIssuerFlagToggled
+      isIssuerFlagToggled: isIssuerFlagToggled,
+      checkVaultMembership: checkVaultMembership,
+      requestVaultMembership: requestVaultMembership
     },
     dispatch
   );

@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { checkUserRegistration, fetchCurrentAccount } from "../../actions/signinManagerActions";
+import { checkUserRegistration, fetchCurrentAccount, checkVaultMembership } from "../../actions/signinManagerActions";
+
 
 class SigninManager extends Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class SigninManager extends Component {
   }
 
   componentDidMount() {
-    this.props.checkUserRegistration();
     this.initAddressPoll();
   }
 
@@ -38,11 +38,11 @@ const mapStateToProps = state => {
   const { userRegistered, userServerPublicAddress, userIsIssuer, userLocalPublicAddress, userPreviousLocalPublicAddress } =
     state.signinManagerData || {};
   return {
-    userRegistered,
-    userServerPublicAddress,
+    userRegistered: userRegistered,
+    userServerPublicAddress: userServerPublicAddress,
     userIsIssuer: userIsIssuer,
     userLocalPublicAddress: userLocalPublicAddress,
-    userPreviousLocalPublicAddress
+    userPreviousLocalPublicAddress: userPreviousLocalPublicAddress
   };
 };
 
@@ -50,7 +50,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       checkUserRegistration: checkUserRegistration,
-      fetchCurrentAccount: fetchCurrentAccount
+      fetchCurrentAccount: fetchCurrentAccount,
+      checkVaultMembership:checkVaultMembership 
     },
     dispatch
   );

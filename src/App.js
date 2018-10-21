@@ -9,7 +9,7 @@ import VaultApp from "./VaultApp";
 import Registration from "./pages/Registration";
 import Dashboard from "./pages/Dashboard";
 import LandingPage from "./pages/LandingPage";
-import AllDaicos from "./pages/AllDaicos";
+import AllProjects from "./pages/AllProjects";
 import Governance from "./pages/Governance";
 import FeaturedProjects from "./pages/FeaturedProjects";
 import Deployer from "./pages/Deployer";
@@ -28,7 +28,7 @@ class App extends Component {
               <Route exact path="/" component={FeaturedProjects} />
               <Route exact path="/governance" component={Governance} />
               <Route strict path="/governance/details" component={ProjectGovernance} />
-              <Route exact path="/alldaicos" component={AllDaicos} />
+              <Route exact path="/projects" component={AllProjects} />
               <Route exact path="/landing" component={LandingPage} />
               <Route exact path="/registration" component={Registration} />
               <Route exact path="/dashboard" component={Dashboard} />

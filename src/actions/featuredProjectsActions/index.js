@@ -8,8 +8,8 @@ export function getFeaturedProjects() {
     axios
       .get(`${config.api_base_url}/db/projects/featured`)
       .then(response => {
-        if (response.status == 200) {
-          if (response.data.message == constants.SUCCESS) {
+        if (response.status === 200) {
+          if (response.data.message === constants.SUCCESS) {
             dispatch({
               type: actionTypes.FEATURED_PROJECTS_SUCCESS,
               payload: response.data.data,

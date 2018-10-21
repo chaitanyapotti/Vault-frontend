@@ -6,7 +6,7 @@ import EndedDaicos from "../../containers/EndedDaicos";
 
 
 
-class AllDaicos extends Component {
+class AllProjects extends Component {
 
   panes = [
     {
@@ -45,4 +45,4 @@ class AllDaicos extends Component {
   }
 }
 
-export default AllDaicos;
+export default AllProjects;

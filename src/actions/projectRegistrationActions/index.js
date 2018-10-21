@@ -41,8 +41,8 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     axios
       .post(`${config.api_base_url}/db/projects/`, projectObject)
       .then(response => {
-        if (response.status == 200) {
-          if (response.data.message == constants.SUCCESS) {
+        if (response.status === 200) {
+          if (response.data.message === constants.SUCCESS) {
             dispatch({
               type: actionTypes.PROJECT_REGISTRATION_SUCCESS,
               payload: response.data.data.project_id

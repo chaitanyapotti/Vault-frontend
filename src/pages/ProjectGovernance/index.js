@@ -20,6 +20,10 @@ class ProjectGovernance extends Component {
     // this.props.currentRound()
     if ("projectid" in params){
       this.props.currentRound(params["projectid"]);
+    }else{
+      this.props.history.push({
+        pathname: `/`
+      });
     }
     
     // const { version, crowdSaleAddress } = this.props.projectDetails || {};
@@ -54,7 +58,7 @@ class ProjectGovernance extends Component {
       daicoTokenAddress
     } =
       projectDetails || {};
-    currentRoundNumber = "4";
+    // currentRoundNumber = "2";
 
     if (currentDeploymentIndicator !== 12)
       return (

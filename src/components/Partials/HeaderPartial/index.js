@@ -239,7 +239,7 @@ class HeaderPartial extends React.Component {
                       {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
                       {this.props.isVaultMember ? (
                         <div>
-                          <div>Somesh:</div>
+                          {/* <div>Somesh:</div> */}
                           <div>{this.props.userLocalPublicAddress}</div>
                         </div>
                       ) : (

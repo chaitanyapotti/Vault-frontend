@@ -51,9 +51,7 @@ export function fetchProjectDetails(projectid) {
               if (result !== null) {
                 // update ctr address in db and update txhash to "0x"
                 if (result.status)
-                  setContractAddress(projectid, currentDeploymentIndicator, result.contractAddress).then(body =>
-                    dispatch(deployedContract(body)),
-                  );
+                  setContractAddress(projectid, currentDeploymentIndicator, result.contractAddress).then(body => dispatch(deployedContract(body)));
                 // redotx;  set txHash to 0x
                 else dispatch(redoTx(currentDeploymentIndicator));
               } else {
@@ -94,23 +92,21 @@ export function deployContractAction(version, projectid, cdi, args, contractName
 
 export function performContractAction(version, projectid, cdi, args, contractName, contractAddress) {
   return dispatch =>
-    axios
-      .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
-      .then(response => {
-        if (response.status === 200) {
-          const { data } = response.data || {};
-          const { abi } = data || {};
-          web3.eth.getAccounts().then(accounts => {
-            const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-            peformSpecificAction(cdi, instance, args, accounts)
-              .on("error", error => console.error(error.message))
-              .on("transactionHash", transactionHash =>
-                setTxHash(projectid, transactionHash, cdi).then(body => dispatch(receivedTransactionHash(body))),
-              )
-              .then(receipt => setContractAddress(projectid, cdi, null).then(body => dispatch(deployedContract(body))));
-          });
-        }
-      });
+    axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } }).then(response => {
+      if (response.status === 200) {
+        const { data } = response.data || {};
+        const { abi } = data || {};
+        web3.eth.getAccounts().then(accounts => {
+          const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
+          peformSpecificAction(cdi, instance, args, accounts)
+            .on("error", error => console.error(error.message))
+            .on("transactionHash", transactionHash =>
+              setTxHash(projectid, transactionHash, cdi).then(body => dispatch(receivedTransactionHash(body))),
+            )
+            .then(receipt => setContractAddress(projectid, cdi, null).then(body => dispatch(deployedContract(body))));
+        });
+      }
+    });
 }
 
 const peformSpecificAction = (cdi, instance, args, accounts) => {

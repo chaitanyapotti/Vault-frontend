@@ -14,25 +14,25 @@ import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
 class ProjectGovernance extends Component {
   componentDidMount() {
     // Do Routing here - use query string
-    var currentUrl = new URL(window.location.href)
-    var params = qs.parse( currentUrl.search, { ignoreQueryPrefix: true }); 
-    console.log("parsed params: ", params)
+    const currentUrl = new URL(window.location.href);
+    const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
+    console.log("parsed params: ", params);
     // this.props.currentRound()
-    if ("projectid" in params){
-      this.props.currentRound(params["projectid"]);
-    }else{
+    if ("projectid" in params) {
+      this.props.currentRound(params.projectid);
+    } else {
       this.props.history.push({
-        pathname: `/`
+        pathname: `/`,
       });
     }
-    
+
     // const { version, crowdSaleAddress } = this.props.projectDetails || {};
     // console.log(version, crowdSaleAddress);
     // this.props.currentRound(version, crowdSaleAddress);
   }
 
   render() {
-    let { currentRoundNumber, projectDetails, treasuryStateNumber } = this.props || {};
+    const { currentRoundNumber, projectDetails, treasuryStateNumber } = this.props || {};
     const {
       currentDeploymentIndicator,
       projectName,
@@ -55,9 +55,8 @@ class ProjectGovernance extends Component {
       pollFactoryAddress,
       initialFundRelease,
       crowdSaleAddress,
-      daicoTokenAddress
-    } =
-      projectDetails || {};
+      daicoTokenAddress,
+    } = projectDetails || {};
     // currentRoundNumber = "2";
 
     if (currentDeploymentIndicator !== 12)
@@ -240,19 +239,22 @@ const mapStateToProps = state => {
     projectDetails,
     currentRoundNumber,
     treasuryStateNumber,
-    ts
+    ts,
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      currentRound
+      currentRound,
     },
-    dispatch
+    dispatch,
   );
 
-const connector = connect(mapStateToProps, mapDispatchToProps)(ProjectGovernance);
+const connector = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProjectGovernance);
 
 export default withRouter(connector);
 

@@ -10,8 +10,7 @@ import { CS_COLORS, CUIInputColor, CUIInputMargin, CUIInputType } from "../../st
 import PropTypes from "../../PropTypes";
 
 const CUIFormInput = props => {
-  const { inputType, inputName, inputLabel, inputPlaceholder, inputID, inputValue: inputVal, inputMargin, disabled, style, onChange } =
-    props || {};
+  const { inputType, inputName, inputLabel, inputPlaceholder, inputID, inputValue: inputVal, inputMargin, disabled, style, onChange } = props || {};
 
   const cuiTextProps = {
     type: inputType,

@@ -4,17 +4,14 @@ import ActiveDaicos from "../../containers/ActiveDaicos";
 import UpcomingDaicos from "../../containers/UpcomingDaicos";
 import EndedDaicos from "../../containers/EndedDaicos";
 
-
-
 class AllProjects extends Component {
-
   panes = [
     {
       menuItem: "Active DAICOs",
       render: () => (
         <Tab.Pane attached={false}>
           {" "}
-          <ActiveDaicos history={this.props.history}/>
+          <ActiveDaicos history={this.props.history} />
         </Tab.Pane>
       ),
     },
@@ -22,7 +19,7 @@ class AllProjects extends Component {
       menuItem: "Upcoming DAICOs",
       render: () => (
         <Tab.Pane attached={false}>
-          <UpcomingDaicos history={this.props.history}/>
+          <UpcomingDaicos history={this.props.history} />
         </Tab.Pane>
       ),
     },
@@ -30,7 +27,7 @@ class AllProjects extends Component {
       menuItem: "Ended DAICOs",
       render: () => (
         <Tab.Pane attached={false}>
-          <EndedDaicos history={this.props.history}/>
+          <EndedDaicos history={this.props.history} />
         </Tab.Pane>
       ),
     },
@@ -39,7 +36,7 @@ class AllProjects extends Component {
   render() {
     return (
       <div>
-        <Tab menu={{ secondary: true, pointing: false }} panes={this.panes} history={this.props.history}/>
+        <Tab menu={{ secondary: true, pointing: false }} panes={this.panes} history={this.props.history} />
       </div>
     );
   }

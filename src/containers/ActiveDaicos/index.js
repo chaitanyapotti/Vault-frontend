@@ -20,60 +20,38 @@ const calculateFinalGoal = roundArray => {
 };
 
 class ActiveDaicosTableBody extends Component {
-
-  handleTableRowClicked = (projectid) => {
+  handleTableRowClicked = projectid => {
     this.props.history.push({
       pathname: `/governance/details`,
-      search: "?projectid=" + projectid
+      search: `?projectid=${projectid}`,
     });
-  }
-
+  };
 
   addTableRowsDynamically = () => {
     const table = this.props.activeDaicosTable;
     if (table && table.length > 0) {
-      return table.map((project, index) =>
+      return table.map((project, index) => (
         <Table.Row key={index} onClick={this.handleTableRowClicked.bind(this, project._id)}>
-          <Table.Cell>
-            {project.projectName}
-          </Table.Cell>
-          <Table.Cell>
-            {project.rounds.length}
-          </Table.Cell>
-          <Table.Cell>
-            {calculateRoundGoal(project.rounds[0])}
-          </Table.Cell>
-          <Table.Cell>
-            {calculateFinalGoal(project.rounds)}
-          </Table.Cell>
-          <Table.Cell>
-            {100}
-          </Table.Cell>
-          <Table.Cell>
-            {1}
-          </Table.Cell>
-          <Table.Cell>
-            {new Date(project.startDateTime).toISOString()}
-          </Table.Cell>
-          <Table.Cell>
-            {calculateEndDuration(project.r1EndTime)}
-          </Table.Cell>
+          <Table.Cell>{project.projectName}</Table.Cell>
+          <Table.Cell>{project.rounds.length}</Table.Cell>
+          <Table.Cell>{calculateRoundGoal(project.rounds[0])}</Table.Cell>
+          <Table.Cell>{calculateFinalGoal(project.rounds)}</Table.Cell>
+          <Table.Cell>{100}</Table.Cell>
+          <Table.Cell>{1}</Table.Cell>
+          <Table.Cell>{new Date(project.startDateTime).toISOString()}</Table.Cell>
+          <Table.Cell>{calculateEndDuration(project.r1EndTime)}</Table.Cell>
         </Table.Row>
-      );
+      ));
     }
     return <Table.Row>Activities could not be retrieved, please try reloading the page.</Table.Row>;
   };
 
   render() {
-    return (
-      <Table.Body>
-        {this.addTableRowsDynamically()}
-      </Table.Body>
-    );
+    return <Table.Body>{this.addTableRowsDynamically()}</Table.Body>;
   }
 }
 
-const ActiveDaicosTableHeader = () =>
+const ActiveDaicosTableHeader = () => (
   <Table.Header>
     <Table.Row>
       <Table.HeaderCell>Name</Table.HeaderCell>
@@ -85,7 +63,8 @@ const ActiveDaicosTableHeader = () =>
       <Table.HeaderCell>Started at</Table.HeaderCell>
       <Table.HeaderCell>R1 Ends in</Table.HeaderCell>
     </Table.Row>
-  </Table.Header>;
+  </Table.Header>
+);
 
 class ActiveDaicos extends Component {
   componentDidMount() {
@@ -96,16 +75,16 @@ class ActiveDaicos extends Component {
   render() {
     return (
       <div>
-        {this.props.showActiveDaicosLoader
-          ? <Loader active={this.props.showActiveDaicosLoader} />
-          : this.props.activeDaicosRetrievedSuccessFully
-            ? <Table>
-                <ActiveDaicosTableHeader />
-                <ActiveDaicosTableBody activeDaicosTable={this.props.activeDaicosTable} history={this.props.history}/>
-              </Table>
-            : <h3>
-                {this.props.activeDaicosRetrieveFailureMessage}
-              </h3>}
+        {this.props.showActiveDaicosLoader ? (
+          <Loader active={this.props.showActiveDaicosLoader} />
+        ) : this.props.activeDaicosRetrievedSuccessFully ? (
+          <Table>
+            <ActiveDaicosTableHeader />
+            <ActiveDaicosTableBody activeDaicosTable={this.props.activeDaicosTable} history={this.props.history} />
+          </Table>
+        ) : (
+          <h3>{this.props.activeDaicosRetrieveFailureMessage}</h3>
+        )}
       </div>
     );
   }
@@ -118,7 +97,7 @@ const mapStateToProps = state => {
     activeDaicosTable,
     showActiveDaicosLoader,
     activeDaicosRetrieveFailureMessage,
-    activeDaicosRetrievedSuccessFully
+    activeDaicosRetrievedSuccessFully,
   };
 };
 
@@ -126,9 +105,12 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getActiveDaicos,
-      showActiveDaicosLoaderAction
+      showActiveDaicosLoaderAction,
     },
-    dispatch
+    dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActiveDaicos);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ActiveDaicos);

@@ -5,7 +5,7 @@ import web3 from "../../helpers/web3";
 export function refundSuccess(receipt) {
   return {
     payload: { receipt },
-    type: "REFUND_SUCCESS"
+    type: "REFUND_SUCCESS",
   };
 }
 

@@ -38,18 +38,16 @@ export function onWhiteListClick(version, contractName, contractAddress) {
               console.log("herer");
               dispatch(isAlreadyWhiteListed(true));
             } else {
-              axios
-                .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
-                .then(res => {
-                  const { data } = res.data || {};
-                  const { abi } = data || {};
-                  const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-                  instance.methods
-                    .requestMembership([])
-                    .send({ from: accounts[0] })
-                    .on("error", error => console.error(error.message))
-                    .then(receipt => dispatch(isAlreadyWhiteListed(receipt.status === "0x1")));
-                });
+              axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } }).then(res => {
+                const { data } = res.data || {};
+                const { abi } = data || {};
+                const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
+                instance.methods
+                  .requestMembership([])
+                  .send({ from: accounts[0] })
+                  .on("error", error => console.error(error.message))
+                  .then(receipt => dispatch(isAlreadyWhiteListed(receipt.status === "0x1")));
+              });
             }
           }
         })

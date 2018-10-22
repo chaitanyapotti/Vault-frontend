@@ -14,14 +14,12 @@ const calculateEndDuration = r1EndTime =>
 // }
 
 class EndedDaicosTableBody extends Component {
-  
-
-  handleTableRowClicked = (projectid) => {
+  handleTableRowClicked = projectid => {
     this.props.history.push({
       pathname: `/governance/details`,
-      search: "?projectid=" + projectid
+      search: `?projectid=${projectid}`,
     });
-  }
+  };
 
   addTableRowsDynamically = () => {
     const table = this.props.endedDaicosTable;
@@ -72,7 +70,7 @@ class EndedDaicos extends Component {
         ) : this.props.endedDaicosRetrievedSuccessFully ? (
           <Table>
             <EndedDaicosTableHeader />
-            <EndedDaicosTableBody endedDaicosTable={this.props.endedDaicosTable} history={this.props.history}/>
+            <EndedDaicosTableBody endedDaicosTable={this.props.endedDaicosTable} history={this.props.history} />
           </Table>
         ) : (
           <h3>{this.props.endedDaicosRetrieveFailureMessage}</h3>

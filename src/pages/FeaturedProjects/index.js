@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import FeaturedProject from "../../components/FeaturedProject";
-import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
 import { bindActionCreators } from "redux";
 import { Loader } from "semantic-ui-react";
+import FeaturedProject from "../../components/FeaturedProject";
+import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
 
 class FeaturedProjects extends Component {
   componentDidMount() {
@@ -16,18 +16,18 @@ class FeaturedProjects extends Component {
     return (
       <div>
         <div>FEATURED PROJECTS</div>
-        {this.props.showFeaturedProjectsLoader
-          ? <Loader active={this.props.showFeaturedProjectsLoader} />
-          : this.props.featuredProjectsRetrievedSuccessfully
-            ? <div>
-                {featuredProjects.map((item, index) => {
-                  const { projectName, description } = item;
-                  return <FeaturedProject key={index} projectName={projectName} description={description} />;
-                })}
-              </div>
-            : <h1>
-                {this.props.featuredProjectsRetrieveFailureMessage}
-              </h1>}
+        {this.props.showFeaturedProjectsLoader ? (
+          <Loader active={this.props.showFeaturedProjectsLoader} />
+        ) : this.props.featuredProjectsRetrievedSuccessfully ? (
+          <div>
+            {featuredProjects.map((item, index) => {
+              const { projectName, description } = item;
+              return <FeaturedProject key={index} projectName={projectName} description={description} />;
+            })}
+          </div>
+        ) : (
+          <h1>{this.props.featuredProjectsRetrieveFailureMessage}</h1>
+        )}
       </div>
     );
   }
@@ -40,17 +40,20 @@ const mapStateToProps = state => {
     featuredProjects,
     showFeaturedProjectsLoader,
     featuredProjectsRetrieveFailureMessage,
-    featuredProjectsRetrievedSuccessfully
+    featuredProjectsRetrievedSuccessfully,
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getFeaturedProjects: getFeaturedProjects,
-      featuredProjectsLoaderAction: featuredProjectsLoaderAction
+      getFeaturedProjects,
+      featuredProjectsLoaderAction,
     },
-    dispatch
+    dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(FeaturedProjects);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(FeaturedProjects);

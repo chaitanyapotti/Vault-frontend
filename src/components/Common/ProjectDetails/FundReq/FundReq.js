@@ -7,22 +7,14 @@ class FundReq extends React.Component {
     const { data } = this.props || {};
     const { poll1 } = data || {};
     const { amount, consensus, endTime } = poll1 || {};
-    return endTime ? (
-      <ReqType amount={amount} consensus={consensus} endTime={new Date(endTime).toDateString()} />
-    ) : (
-      <span> Nothing deployed</span>
-    );
+    return endTime ? <ReqType amount={amount} consensus={consensus} endTime={new Date(endTime).toDateString()} /> : <span> Nothing deployed</span>;
   };
 
   getObject2 = () => {
     const { data } = this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime } = poll2 || {};
-    return endTime ? (
-      <ReqType amount={amount} consensus={consensus} endTime={new Date(endTime).toDateString()} />
-    ) : (
-      <span> Nothing deployed</span>
-    );
+    return endTime ? <ReqType amount={amount} consensus={consensus} endTime={new Date(endTime).toDateString()} /> : <span> Nothing deployed</span>;
   };
 
   getObject2 = () => {};

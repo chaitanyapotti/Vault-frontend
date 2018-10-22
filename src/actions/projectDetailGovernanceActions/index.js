@@ -310,20 +310,18 @@ export function getKillPollVote(version, contractAddress) {
           .currentKillPoll()
           .call()
           .then(killPollAddress => {
-            axios
-              .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-              .then(ipollData => {
-                const { data } = ipollData.data || {};
-                const { abi } = data || {};
-                const ipollInstance = new web3.eth.Contract(abi, killPollAddress, { from: accounts[0] });
-                ipollInstance.methods
-                  .voters(accounts[0])
-                  .call()
-                  .then(response => {
-                    const { voted } = response;
-                    dispatch(killPollVote(voted));
-                  });
-              });
+            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
+              const { data } = ipollData.data || {};
+              const { abi } = data || {};
+              const ipollInstance = new web3.eth.Contract(abi, killPollAddress, { from: accounts[0] });
+              ipollInstance.methods
+                .voters(accounts[0])
+                .call()
+                .then(response => {
+                  const { voted } = response;
+                  dispatch(killPollVote(voted));
+                });
+            });
           });
       })
       .catch(err => console.error(err.message));
@@ -345,17 +343,15 @@ export function voteInKillPoll(version, contractAddress) {
           .currentKillPoll()
           .call()
           .then(killPollAddress => {
-            axios
-              .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-              .then(ipollData => {
-                const { data } = ipollData.data || {};
-                const { abi } = data || {};
-                const ipollInstance = new web3.eth.Contract(abi, killPollAddress, { from: accounts[0] });
-                ipollInstance.methods
-                  .vote(0)
-                  .send({ from: accounts[0] })
-                  .then(response => dispatch(votedInKillPoll(response)));
-              });
+            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
+              const { data } = ipollData.data || {};
+              const { abi } = data || {};
+              const ipollInstance = new web3.eth.Contract(abi, killPollAddress, { from: accounts[0] });
+              ipollInstance.methods
+                .vote(0)
+                .send({ from: accounts[0] })
+                .then(response => dispatch(votedInKillPoll(response)));
+            });
           });
       })
       .catch(err => console.error(err.message));
@@ -377,17 +373,15 @@ export function revokeVoteInKillPoll(version, contractAddress) {
           .currentKillPoll()
           .call()
           .then(killPollAddress => {
-            axios
-              .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-              .then(ipollData => {
-                const { data } = ipollData.data || {};
-                const { abi } = data || {};
-                const ipollInstance = new web3.eth.Contract(abi, killPollAddress, { from: accounts[0] });
-                ipollInstance.methods
-                  .revokeVote()
-                  .send({ from: accounts[0] })
-                  .then(response => dispatch(revokedVoteInKillPoll(response)));
-              });
+            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
+              const { data } = ipollData.data || {};
+              const { abi } = data || {};
+              const ipollInstance = new web3.eth.Contract(abi, killPollAddress, { from: accounts[0] });
+              ipollInstance.methods
+                .revokeVote()
+                .send({ from: accounts[0] })
+                .then(response => dispatch(revokedVoteInKillPoll(response)));
+            });
           });
       })
       .catch(err => console.error(err.message));
@@ -408,20 +402,18 @@ export function getTapPollVote(version, contractAddress) {
           .tapPoll()
           .call()
           .then(tapPollAddress => {
-            axios
-              .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-              .then(ipollData => {
-                const { data } = ipollData.data || {};
-                const { abi } = data || {};
-                const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
-                ipollInstance.methods
-                  .voters(accounts[0])
-                  .call()
-                  .then(response => {
-                    const { voted } = response;
-                    dispatch(tapPollVote(voted));
-                  });
-              });
+            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
+              const { data } = ipollData.data || {};
+              const { abi } = data || {};
+              const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
+              ipollInstance.methods
+                .voters(accounts[0])
+                .call()
+                .then(response => {
+                  const { voted } = response;
+                  dispatch(tapPollVote(voted));
+                });
+            });
           });
       })
       .catch(err => console.error(err.message));
@@ -443,17 +435,15 @@ export function voteInTapPoll(version, contractAddress) {
           .tapPoll()
           .call()
           .then(tapPollAddress => {
-            axios
-              .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-              .then(ipollData => {
-                const { data } = ipollData.data || {};
-                const { abi } = data || {};
-                const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
-                ipollInstance.methods
-                  .vote(0)
-                  .send({ from: accounts[0] })
-                  .then(response => dispatch(votedInTapPoll(response)));
-              });
+            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
+              const { data } = ipollData.data || {};
+              const { abi } = data || {};
+              const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
+              ipollInstance.methods
+                .vote(0)
+                .send({ from: accounts[0] })
+                .then(response => dispatch(votedInTapPoll(response)));
+            });
           });
       })
       .catch(err => console.error(err.message));
@@ -475,17 +465,15 @@ export function revokeVoteInTapPoll(version, contractAddress) {
           .tapPoll()
           .call()
           .then(tapPollAddress => {
-            axios
-              .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-              .then(ipollData => {
-                const { data } = ipollData.data || {};
-                const { abi } = data || {};
-                const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
-                ipollInstance.methods
-                  .revokeVote()
-                  .send({ from: accounts[0] })
-                  .then(response => dispatch(revokedVoteInTapPoll(response)));
-              });
+            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
+              const { data } = ipollData.data || {};
+              const { abi } = data || {};
+              const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
+              ipollInstance.methods
+                .revokeVote()
+                .send({ from: accounts[0] })
+                .then(response => dispatch(revokedVoteInTapPoll(response)));
+            });
           });
       })
       .catch(err => console.error(err.message));
@@ -507,20 +495,18 @@ export function getXfrPollVote(version, contractAddress, index) {
           .call()
           .then(xfrPollDetails => {
             const { xfrPollAddress } = xfrPollDetails;
-            axios
-              .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-              .then(ipollData => {
-                const { data } = ipollData.data || {};
-                const { abi } = data || {};
-                const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
-                ipollInstance.methods
-                  .voters(accounts[0])
-                  .call()
-                  .then(response => {
-                    const { voted } = response;
-                    dispatch(index === 0 ? xfrPollVote1(voted) : xfrPollVote2(voted));
-                  });
-              });
+            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
+              const { data } = ipollData.data || {};
+              const { abi } = data || {};
+              const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
+              ipollInstance.methods
+                .voters(accounts[0])
+                .call()
+                .then(response => {
+                  const { voted } = response;
+                  dispatch(index === 0 ? xfrPollVote1(voted) : xfrPollVote2(voted));
+                });
+            });
           });
       })
       .catch(err => console.error(err.message));
@@ -543,17 +529,15 @@ export function voteInXfrPoll(version, contractAddress, index) {
           .call()
           .then(xfrPollDetails => {
             const { xfrPollAddress } = xfrPollDetails;
-            axios
-              .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-              .then(ipollData => {
-                const { data } = ipollData.data || {};
-                const { abi } = data || {};
-                const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
-                ipollInstance.methods
-                  .vote(0)
-                  .send({ from: accounts[0] })
-                  .then(response => dispatch(index === 0 ? votedInXfrPoll1(response) : votedInXfrPoll2(response)));
-              });
+            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
+              const { data } = ipollData.data || {};
+              const { abi } = data || {};
+              const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
+              ipollInstance.methods
+                .vote(0)
+                .send({ from: accounts[0] })
+                .then(response => dispatch(index === 0 ? votedInXfrPoll1(response) : votedInXfrPoll2(response)));
+            });
           });
       })
       .catch(err => console.error(err.message));
@@ -576,17 +560,15 @@ export function revokeVoteInXfrPoll(version, contractAddress, index) {
           .call()
           .then(xfrPollDetails => {
             const { xfrPollAddress } = xfrPollDetails;
-            axios
-              .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-              .then(ipollData => {
-                const { data } = ipollData.data || {};
-                const { abi } = data || {};
-                const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
-                ipollInstance.methods
-                  .revokeVote()
-                  .send({ from: accounts[0] })
-                  .then(response => dispatch(index === 0 ? revokedVoteInXfrPoll1(response) : revokedVoteInXfrPoll2(response)));
-              });
+            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
+              const { data } = ipollData.data || {};
+              const { abi } = data || {};
+              const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
+              ipollInstance.methods
+                .revokeVote()
+                .send({ from: accounts[0] })
+                .then(response => dispatch(index === 0 ? revokedVoteInXfrPoll1(response) : revokedVoteInXfrPoll2(response)));
+            });
           });
       })
       .catch(err => console.error(err.message));

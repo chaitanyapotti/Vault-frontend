@@ -3,7 +3,7 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  refundSuccess: false
+  refundSuccess: false,
 };
 
 export default function(state = initialState, action) {
@@ -12,7 +12,7 @@ export default function(state = initialState, action) {
       const { receipt } = action.payload;
       return {
         ...state,
-        refundSuccess: receipt
+        refundSuccess: receipt,
       };
 
     default:

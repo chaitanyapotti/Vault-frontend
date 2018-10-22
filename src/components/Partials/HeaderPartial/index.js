@@ -106,7 +106,7 @@ class HeaderPartial extends React.Component {
 
   handleRegistrationButtonClicked = event => {
     this.props.history.push({
-      pathname: `/register`
+      pathname: `/register`,
     });
   };
 
@@ -135,20 +135,20 @@ class HeaderPartial extends React.Component {
     this.setState({ drawerIsOpen: false });
   };
 
-  onHandleLogoClicked =() => {
+  onHandleLogoClicked = () => {
     this.props.history.push({
-      pathname: `/`
+      pathname: `/`,
     });
   };
 
-  onHandleProjectsClicked =() =>{
+  onHandleProjectsClicked = () => {
     this.props.history.push({
       pathname: `/projects`,
       // search: "?contract=" + this.props.searchText
     });
   };
 
-  onHandleGovernanceClicked =() =>{
+  onHandleGovernanceClicked = () => {
     this.props.history.push({
       pathname: `/governance`,
       // search: "?contract=" + this.props.searchText
@@ -227,10 +227,14 @@ class HeaderPartial extends React.Component {
                   <div className={classes.grow} />
                   <div className={classes.sectionDesktop}>
                     <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked.bind(this)}>Projects</div>
+                      <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked.bind(this)}>
+                        Projects
+                      </div>
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked.bind(this)}>Governance</div>
+                      <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked.bind(this)}>
+                        Governance
+                      </div>
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m">
                       <div className="hvr-underline-from-left">Publish ICO</div>
@@ -277,8 +281,12 @@ class HeaderPartial extends React.Component {
             </CUIButtonIcon>
           </div>
           <div className={classes.drawerInner}>
-            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked.bind(this)}>Projects</div>
-            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked.bind(this)}>Governance</div>
+            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked.bind(this)}>
+              Projects
+            </div>
+            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked.bind(this)}>
+              Governance
+            </div>
             <div className="hdr-itm-pad text--primary txt-m">Publish ICO</div>
           </div>
         </Drawer>
@@ -301,14 +309,15 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress } = state.signinManagerData || {};
+  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress } =
+    state.signinManagerData || {};
   return {
     userRegistered,
     userServerPublicAddress,
     userIsIssuer,
     showRegistrationForm,
     isVaultMember,
-    userLocalPublicAddress
+    userLocalPublicAddress,
   };
 };
 

@@ -27,5 +27,5 @@ export default {
   projectGovernanceReducer,
   projectCrowdSaleReducer,
   projectDetailGovernanceReducer,
-  projectRefundReducer
+  projectRefundReducer,
 };

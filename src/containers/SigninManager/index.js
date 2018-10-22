@@ -4,7 +4,6 @@ import { bindActionCreators } from "redux";
 
 import { checkUserRegistration, fetchCurrentAccount, checkVaultMembership } from "../../actions/signinManagerActions";
 
-
 class SigninManager extends Component {
   constructor(props) {
     super(props);
@@ -38,21 +37,24 @@ const mapStateToProps = state => {
   const { userRegistered, userServerPublicAddress, userIsIssuer, userLocalPublicAddress, userPreviousLocalPublicAddress } =
     state.signinManagerData || {};
   return {
-    userRegistered: userRegistered,
-    userServerPublicAddress: userServerPublicAddress,
-    userIsIssuer: userIsIssuer,
-    userLocalPublicAddress: userLocalPublicAddress,
-    userPreviousLocalPublicAddress: userPreviousLocalPublicAddress
+    userRegistered,
+    userServerPublicAddress,
+    userIsIssuer,
+    userLocalPublicAddress,
+    userPreviousLocalPublicAddress,
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      checkUserRegistration: checkUserRegistration,
-      fetchCurrentAccount: fetchCurrentAccount,
-      checkVaultMembership:checkVaultMembership 
+      checkUserRegistration,
+      fetchCurrentAccount,
+      checkVaultMembership,
     },
-    dispatch
+    dispatch,
   );
-export default connect(mapStateToProps, mapDispatchToProps)(SigninManager);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SigninManager);

@@ -10,6 +10,7 @@ class ProjectDetailRefund extends Component {
     const { version, daicoTokenAddress } = this.props || {};
     this.props.getTokenBalance(version, daicoTokenAddress);
   }
+
   getRoundText = () =>
     // Always Constant for all daicos
     "DAICO in Refund Mode";
@@ -18,6 +19,7 @@ class ProjectDetailRefund extends Component {
     const { version, pollFactoryAddress, currentRoundNumber } = this.props || {};
     this.props.onRefundClick(version, currentRoundNumber, pollFactoryAddress);
   };
+
   render() {
     const { projectName, tokenTag, description, urls, whitepaper, tokenBalance } = this.props || {};
     return (
@@ -43,17 +45,20 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       onRefundClick,
-      getTokenBalance
+      getTokenBalance,
     },
-    dispatch
+    dispatch,
   );
 
 const mapStateToProps = state => {
   const { projectRefundReducer } = state || {};
   const { tokenBalance } = projectRefundReducer || {};
   return {
-    tokenBalance
+    tokenBalance,
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailRefund);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProjectDetailRefund);

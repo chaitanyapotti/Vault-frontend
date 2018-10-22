@@ -1,7 +1,7 @@
-import React from 'react';
-import Menu from '@material-ui/core/Menu';
-import MenuList from '@material-ui/core/MenuList';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import Menu from "@material-ui/core/Menu";
+import MenuList from "@material-ui/core/MenuList";
+import PropTypes from "../../PropTypes";
 
 /**
  * @Component Menu
@@ -48,16 +48,12 @@ const CUIMenuList = props => {
     style: props.style,
     className: props.className,
   };
-  return (
-    <MenuList {...menuListProps}>
-      {props.children}
-    </MenuList>
-  );
+  return <MenuList {...menuListProps}>{props.children}</MenuList>;
 };
 
 CUIMenuList.defaultProps = {
   style: {},
-  className: '',
+  className: "",
 };
 
 CUIMenuList.propTypes = {

@@ -20,7 +20,7 @@ import web3 from "../../helpers/web3";
 
 class Deployer extends Component {
   componentDidMount() {
-    //TODO: Replace projectid from parent container
+    // TODO: Replace projectid from parent container
     this.props.fetchProjectDetails("5bafaed1eb00b152a418f7df");
   }
 
@@ -59,21 +59,21 @@ class Deployer extends Component {
       xfrRejectionPercent,
       tapAcceptancePercent,
       lockedTokensAddress,
-      tapIncrementFactor
+      tapIncrementFactor,
     } = this.props.projectDetails || {};
     const args = [
       daicoTokenAddress,
       teamAddress,
       initialFundRelease,
       initialTapAmount,
-      new Date(killPollStartDate).getTime() / 1000, //In Unix Time
+      new Date(killPollStartDate).getTime() / 1000, // In Unix Time
       vaultAddress,
       capPercent,
       killAcceptancePercent,
       xfrRejectionPercent,
       tapAcceptancePercent,
       lockedTokensAddress,
-      tapIncrementFactor
+      tapIncrementFactor,
     ];
     this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "PollFactory");
   };
@@ -92,7 +92,7 @@ class Deployer extends Component {
       membershipAddress,
       daicoTokenAddress,
       vaultAddress,
-      foundationDetails
+      foundationDetails,
     } = this.props.projectDetails || {};
     const args = [
       minimumEtherContribution,
@@ -106,7 +106,7 @@ class Deployer extends Component {
       daicoTokenAddress,
       vaultAddress,
       foundationDetails.map(a => a.address),
-      foundationDetails.map(a => a.amount)
+      foundationDetails.map(a => a.amount),
     ];
     this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "CrowdSale");
   };
@@ -186,23 +186,22 @@ class Deployer extends Component {
 const mapStateToProps = state => {
   const { projectDetails, ts } = state.deployerReducer || {};
   return {
-    projectDetails: projectDetails,
-    ts: ts
+    projectDetails,
+    ts,
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
     {
-      fetchProjectDetails: fetchProjectDetails,
-      deployContractAction: deployContractAction,
-      performContractAction: performContractAction
+      fetchProjectDetails,
+      deployContractAction,
+      performContractAction,
     },
-    dispatch
+    dispatch,
   );
-};
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Deployer);

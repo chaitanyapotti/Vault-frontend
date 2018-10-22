@@ -1,18 +1,16 @@
 /* eslint-disable no-undef */
-import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import Radio from '@material-ui/core/Radio';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import { CUIButtonIcon, CUIMenu } from '../material-ui';
-import { getCUIPrefixSuffix, handleInputKeydown, renderAutocompleteInput, selectIcon } from './helpers';
-import { CS_COLORS, CUIInputColor, CUIInputMargin, CUIInputType } from '../../static/js/variables';
-import PropTypes from '../../PropTypes';
-import CUIChip from './CUIChip';
+import React from "react";
+import Checkbox from "@material-ui/core/Checkbox";
+import Radio from "@material-ui/core/Radio";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
+import { CUIButtonIcon, CUIMenu } from ".";
+import { getCUIPrefixSuffix, handleInputKeydown, selectIcon } from "./helpers";
+import { CS_COLORS, CUIInputColor, CUIInputMargin, CUIInputType } from "../../static/js/variables";
+import PropTypes from "../../PropTypes";
 
 const CUIFormInput = props => {
-  const { inputType, inputName, inputLabel, inputPlaceholder, inputID, inputValue: inputVal, inputMargin, disabled, style, onChange } =
-    props || {};
+  const { inputType, inputName, inputLabel, inputPlaceholder, inputID, inputValue: inputVal, inputMargin, disabled, style, onChange } = props || {};
 
   const cuiTextProps = {
     type: inputType,
@@ -48,8 +46,7 @@ const CUIFormInput = props => {
         hintText,
         onBlur,
         onFocus,
-      } =
-        props || {};
+      } = props || {};
       cuiTextProps.error = error;
       cuiTextProps.helperText = hintText || helperText;
       cuiTextProps.autoFocus = textFocus;
@@ -195,11 +192,11 @@ const CUIFormInput = props => {
       };
       return (
         <TextField {...cuiTextProps}>
-          {items.map(option =>
-            <MenuItem key={option.value} value={option.value} style={{ cursor: 'pointer' }}>
+          {items.map(option => (
+            <MenuItem key={option.value} value={option.value} style={{ cursor: "pointer" }}>
               {option.primaryText}
-            </MenuItem>,
-          )}
+            </MenuItem>
+          ))}
         </TextField>
       );
     }
@@ -208,16 +205,14 @@ const CUIFormInput = props => {
       const { items, onClick, onClose, iconElement, elementRef, open, listStyle } = props || {};
       return (
         <div>
-          <CUIButtonIcon onClick={onClick}>
-            {iconElement}
-          </CUIButtonIcon>
+          <CUIButtonIcon onClick={onClick}>{iconElement}</CUIButtonIcon>
 
           <CUIMenu PaperProps={{ style: listStyle }} anchorEl={elementRef} onClose={onClose} open={open}>
-            {items.map(option =>
-              <MenuItem key={option.value} onClick={option.onClick} style={{ padding: '5px 20px' }}>
+            {items.map(option => (
+              <MenuItem key={option.value} onClick={option.onClick} style={{ padding: "5px 20px" }}>
                 {option.primaryText}
-              </MenuItem>,
-            )}
+              </MenuItem>
+            ))}
           </CUIMenu>
         </div>
       );
@@ -229,9 +224,9 @@ const CUIFormInput = props => {
 };
 
 CUIFormInput.defaultProps = {
-  inputName: '',
-  inputID: '',
-  inputPlaceholder: '',
+  inputName: "",
+  inputID: "",
+  inputPlaceholder: "",
   items: [],
   disabled: false,
   inputLabel: null,
@@ -245,10 +240,10 @@ CUIFormInput.defaultProps = {
   error: false,
   labelStyle: {},
   selected: [],
-  className: '',
-  source: '',
-  hintText: '',
-  helperText: '',
+  className: "",
+  source: "",
+  hintText: "",
+  helperText: "",
   inputPrefixSuffix: [],
   textFocus: false,
   iconColor: CS_COLORS.WHITE,

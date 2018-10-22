@@ -1,5 +1,5 @@
 /* eslint-disable guard-for-in */
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import {
   CUIButtonSize,
   CUIButtonType,
@@ -12,7 +12,7 @@ import {
   CUIPosition,
   CUIPrefixSuffixType,
   CUIProgressType,
-} from './static/js/variables';
+} from "./static/js/variables";
 // import { MEMBERSHIP_TYPE } from './enitites/Common';
 
 const cuiTypes = {
@@ -35,7 +35,7 @@ function getCUIPropTypes(object) {
 
 const types = {};
 for (const type in cuiTypes) {
-  types[type.replace('CUI', 'cui')] = getCUIPropTypes(cuiTypes[type]);
+  types[type.replace("CUI", "cui")] = getCUIPropTypes(cuiTypes[type]);
 }
 
 // types.membershipType = PropTypes.oneOf(Object.keys(MEMBERSHIP_TYPE).map(item => MEMBERSHIP_TYPE[item]));
@@ -69,7 +69,7 @@ types.profileItem = {
   slug: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
-  type: PropTypes.oneOf(['space', 'dot', 'comma']), // defaults to comma
+  type: PropTypes.oneOf(["space", "dot", "comma"]), // defaults to comma
 };
 
 types.profileSection = {

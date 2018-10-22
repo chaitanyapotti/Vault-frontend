@@ -1,24 +1,28 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import { withStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import Drawer from '@material-ui/core/Drawer';
-import {Grid,Row, Col} from '../../../helpers/react-flexbox-grid';
-import { CUIAppBar, CUIButtonIcon } from '../../../helpers/material-ui';
+import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import PropTypes from "prop-types";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import InputBase from "@material-ui/core/InputBase";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import { fade } from "@material-ui/core/styles/colorManipulator";
+import { withStyles } from "@material-ui/core/styles";
+import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import MoreIcon from "@material-ui/icons/MoreVert";
+import Drawer from "@material-ui/core/Drawer";
+import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
+import { CUIAppBar, CUIButtonIcon } from "../../../helpers/material-ui";
+
+import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 
 const scrnWdh = window.innerWidth;
 const styles = theme => ({
   root: {
-    width: '100%',
+    width: "100%",
   },
   grow: {
     flexGrow: 1,
@@ -28,64 +32,64 @@ const styles = theme => ({
     marginRight: 20,
   },
   title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
+    display: "none",
+    [theme.breakpoints.up("sm")]: {
+      display: "block",
     },
   },
   search: {
-    position: 'relative',
-    borderRadius: '30px',
+    position: "relative",
+    borderRadius: "30px",
     backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
+    "&:hover": {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing.unit * 2,
     marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing.unit * 3,
-      width: 'auto',
+      width: "auto",
     },
-    height:'46px'
+    height: "46px",
   },
   searchIcon: {
     width: theme.spacing.unit * 9,
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   inputRoot: {
-    color: 'inherit',
-    width: '100%',
-    height: 'inherit',
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: '30px'
+    color: "inherit",
+    width: "100%",
+    height: "inherit",
+    backgroundColor: "rgba(0,0,0,0.05)",
+    borderRadius: "30px",
   },
   inputInput: {
     paddingTop: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 10,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
       width: 200,
     },
   },
   sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
+    display: "none",
+    [theme.breakpoints.up("md")]: {
+      display: "flex",
     },
   },
   sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
+    display: "flex",
+    [theme.breakpoints.up("md")]: {
+      display: "none",
     },
   },
 });
@@ -94,6 +98,16 @@ class HeaderPartial extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+  };
+
+  handleFormCloseButtonClicked = event => {
+    this.props.closeRegistrationFormAction();
+  };
+
+  handleRegistrationButtonClicked = event => {
+    this.props.history.push({
+      pathname: `/register`,
+    });
   };
 
   handleProfileMenuOpen = event => {
@@ -121,6 +135,25 @@ class HeaderPartial extends React.Component {
     this.setState({ drawerIsOpen: false });
   };
 
+  onHandleLogoClicked = () => {
+    this.props.history.push({
+      pathname: `/`,
+    });
+  };
+
+  onHandleProjectsClicked = () => {
+    this.props.history.push({
+      pathname: `/projects`,
+      // search: "?contract=" + this.props.searchText
+    });
+  };
+
+  onHandleGovernanceClicked = () => {
+    this.props.history.push({
+      pathname: `/governance`,
+      // search: "?contract=" + this.props.searchText
+    });
+  };
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
@@ -131,8 +164,8 @@ class HeaderPartial extends React.Component {
     const renderMenu = (
       <Menu
         anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
@@ -144,18 +177,18 @@ class HeaderPartial extends React.Component {
     const renderMobileMenu = (
       <Menu
         anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
-        <MenuItem>
+        <MenuItem onClick={this.onHandleProjectsClicked.bind(this)}>
           <div>Projects</div>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={this.onHandleGovernanceClicked.bind(this)}>
           <div>Governance</div>
         </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
+        <MenuItem>
           <div>Publish ICO</div>
         </MenuItem>
       </Menu>
@@ -163,22 +196,21 @@ class HeaderPartial extends React.Component {
 
     return (
       <div className={classes.root}>
-        <CUIAppBar position="static" style={scrnWdh < 768 ? {height: '60px'}: {height: '129px'}}>
-            <Grid>
-              <Row>
-                <Col>
-                <Toolbar style={scrnWdh < 768 ? {height: '60px'}: {height: '129px'}} >
-                  {
-                    (scrnWdh < 768) ?
-                      <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
-                        <MenuIcon />
-                      </CUIButtonIcon>
-                    :
-                    <div/>
-                  }
-                  
+        <CUIAppBar position="static" style={scrnWdh < 768 ? { height: "60px" } : { height: "129px" }}>
+          <Grid>
+            <Row>
+              <Col>
+                <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "129px" }}>
+                  {scrnWdh < 768 ? (
+                    <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
+                      <MenuIcon />
+                    </CUIButtonIcon>
+                  ) : (
+                    <div />
+                  )}
+
                   <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                    <span className="hdr-logo"></span>
+                    <span onClick={this.onHandleLogoClicked.bind(this)} className="hdr-logo" />
                   </Typography>
                   <div className={classes.search}>
                     <div className={classes.searchIcon}>
@@ -194,12 +226,32 @@ class HeaderPartial extends React.Component {
                   </div>
                   <div className={classes.grow} />
                   <div className={classes.sectionDesktop}>
-                    <div className="hdr-itm-pad text--primary txt-m"><div className="hvr-underline-from-left">Projects</div></div>
-                    <div className="hdr-itm-pad text--primary txt-m"><div className="hvr-underline-from-left">Governance</div></div>
-                    <div className="hdr-itm-pad text--primary txt-m"><div className="hvr-underline-from-left">Publish ICO</div></div>
+                    <div className="hdr-itm-pad text--primary txt-m">
+                      <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked.bind(this)}>
+                        Projects
+                      </div>
+                    </div>
+                    <div className="hdr-itm-pad text--primary txt-m">
+                      <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked.bind(this)}>
+                        Governance
+                      </div>
+                    </div>
+                    <div className="hdr-itm-pad text--primary txt-m">
+                      <div className="hvr-underline-from-left">Publish ICO</div>
+                    </div>
                     <div className="hdr-itm-pad text--primary txt-m wdh-100">
-                      <div>Somesh:</div>
-                      <div className="add-ellip">12xxxjs0000dskds</div>
+                      {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
+                      {this.props.isVaultMember ? (
+                        <div>
+                          {/* <div>Somesh:</div> */}
+                          <div>{this.props.userLocalPublicAddress}</div>
+                        </div>
+                      ) : (
+                        <div>
+                          {" "}
+                          <button onClick={this.handleRegistrationButtonClicked}>Register</button>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className={classes.sectionMobile}>
@@ -208,9 +260,9 @@ class HeaderPartial extends React.Component {
                     </CUIButtonIcon>
                   </div>
                 </Toolbar>
-                </Col>
-               </Row>
-            </Grid>
+              </Col>
+            </Row>
+          </Grid>
         </CUIAppBar>
         {renderMenu}
         {renderMobileMenu}
@@ -223,12 +275,18 @@ class HeaderPartial extends React.Component {
         >
           <div className={classes.drawerHeader}>
             <CUIButtonIcon onClick={this.handleDrawerClose}>
-              <div><ChevronLeft/> Back</div>
+              <div>
+                <ChevronLeft /> Back
+              </div>
             </CUIButtonIcon>
           </div>
           <div className={classes.drawerInner}>
-            <div className="hdr-itm-pad text--primary txt-m">Projects</div>
-            <div className="hdr-itm-pad text--primary txt-m">Governance</div>
+            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked.bind(this)}>
+              Projects
+            </div>
+            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked.bind(this)}>
+              Governance
+            </div>
             <div className="hdr-itm-pad text--primary txt-m">Publish ICO</div>
           </div>
         </Drawer>
@@ -241,4 +299,29 @@ HeaderPartial.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(HeaderPartial);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      openRegistrationFormAction,
+      closeRegistrationFormAction,
+    },
+    dispatch,
+  );
+
+const mapStateToProps = state => {
+  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress } =
+    state.signinManagerData || {};
+  return {
+    userRegistered,
+    userServerPublicAddress,
+    userIsIssuer,
+    showRegistrationForm,
+    isVaultMember,
+    userLocalPublicAddress,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withStyles(styles)(HeaderPartial));

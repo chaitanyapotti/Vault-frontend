@@ -3,7 +3,8 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  currentRoundNumber: 0
+  currentRoundNumber: 0,
+  treasuryStateNumber: "0",
 };
 
 export default function(state = initialState, action) {
@@ -24,9 +25,16 @@ export default function(state = initialState, action) {
       const { receipt } = action.payload;
       return {
         ...state,
-        currentRoundNumber: receipt
+        currentRoundNumber: receipt,
       };
 
+    case actionTypes.TREASURY_STATE_FETCHED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        treasuryStateNumber: receipt,
+      };
+    }
     default:
       return state;
   }

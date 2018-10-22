@@ -1,18 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import {Col, Grid, Row} from '../../../helpers/react-flexbox-grid';
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import purple from "@material-ui/core/colors/purple";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+import { Col, Grid, Row } from "../../../helpers/react-flexbox-grid";
 
 const styles = theme => ({
   colorSwitchBase: {
     color: purple[300],
-    '&$colorChecked': {
+    "&$colorChecked": {
       color: purple[500],
-      '& + $colorBar': {
+      "& + $colorBar": {
         backgroundColor: purple[500],
       },
     },
@@ -25,14 +25,14 @@ class TapSwitch extends React.Component {
   state = {
     checked: true,
   };
-  
+
   handleChange = name => event => {
-    this.setState({[name]: event.target.checked});
+    this.setState({ [name]: event.target.checked });
   };
-  
+
   render() {
-    const {classes} = this.props;
-    
+    const { classes } = this.props;
+
     return (
       <div className="bg--white tp-swtch-cnt">
         <Grid>
@@ -47,7 +47,7 @@ class TapSwitch extends React.Component {
                     control={
                       <Switch
                         checked={this.state.checked}
-                        onChange={this.handleChange('checked')}
+                        onChange={this.handleChange("checked")}
                         value="checkedA"
                         classes={{
                           switchBase: classes.colorSwitchBase,

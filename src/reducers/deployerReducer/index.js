@@ -2,22 +2,22 @@ import types from "../../action_types";
 
 const initialState = {
   projectDetails: null,
-  ts: new Date()
+  ts: new Date(),
 };
 
 export default function(state = initialState, action) {
-  let currentProjDetails = state.projectDetails;
+  const currentProjDetails = state.projectDetails;
   switch (action.type) {
     case types.PROJECT_DETAILS_FETCHED: {
       const { data } = action.payload || {};
       return {
         ...state,
         projectDetails: data,
-        ts: new Date()
+        ts: new Date(),
       };
     }
     case types.TRANSACTION_PENDING:
-      //keep spinner rotating
+      // keep spinner rotating
       return state;
     case types.TRANSACTION_REDO:
     case types.RECEIVED_TRANSACTION_HASH:
@@ -27,7 +27,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         projectDetails: currentProjDetails,
-        ts: new Date()
+        ts: new Date(),
       };
     case types.DEPLOYED_CONTRACT: {
       const {
@@ -37,7 +37,7 @@ export default function(state = initialState, action) {
         daicoTokenAddress,
         lockedTokensAddress,
         pollFactoryAddress,
-        crowdSaleAddress
+        crowdSaleAddress,
       } = action.payload.body || {};
       currentProjDetails.currentDeploymentIndicator = currentDeploymentIndicator;
       currentProjDetails.latestTxHash = latestTxHash;
@@ -64,7 +64,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         projectDetails: currentProjDetails,
-        ts: new Date()
+        ts: new Date(),
       };
     }
     default:

@@ -1,7 +1,7 @@
 /* eslint camelcase: 0 */
 
-import React, {Component} from 'react';
-import {Col, Grid, Row} from '../../helpers/react-flexbox-grid';
+import React, { Component } from "react";
+import { Col, Grid, Row } from "../../helpers/react-flexbox-grid";
 
 class Header extends Component {
   render() {
@@ -10,10 +10,14 @@ class Header extends Component {
         <Row>
           <Col md={9}>
             <div className="hl">
-              <div className="hli"><span className="hdr-logo"/></div>
-              <div className="hli hdr-item-cnt"><span className="txt-m txt-dddbld hover-anim">My Investments</span>
+              <div className="hli">
+                <span className="hdr-logo" />
               </div>
-              <div className="hli hdr-item-cnt"><span className="txt-m txt-dddbld hover-anim">Become an issuer</span>
+              <div className="hli hdr-item-cnt">
+                <span className="txt-m txt-dddbld hover-anim">My Investments</span>
+              </div>
+              <div className="hli hdr-item-cnt">
+                <span className="txt-m txt-dddbld hover-anim">Become an issuer</span>
               </div>
             </div>
           </Col>
@@ -22,7 +26,7 @@ class Header extends Component {
               <div>Signed in as: 0x56dnd...837jd9</div>
               <div className="vrfy-cnt text--center">
                 <div className="vrfy-pdng">
-                  <span className="vrfy-icn"/>
+                  <span className="vrfy-icn" />
                   Get verified on Abacus
                 </div>
               </div>

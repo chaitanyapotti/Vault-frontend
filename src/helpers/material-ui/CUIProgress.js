@@ -1,11 +1,11 @@
 /* eslint react/require-default-props: 0 */
 // eslint-disable-line no-static-element-interactions
 
-import React from 'react';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { CUIColor, CUIProgressType } from '../../static/js/variables';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { CUIColor, CUIProgressType } from "../../static/js/variables";
+import PropTypes from "../../PropTypes";
 
 /**
  * @Component Progress Bar
@@ -33,8 +33,9 @@ import PropTypes from '../../PropTypes';
  *
  */
 
-export const CUILinearProgress = ({ style, color, value }) =>
-  <LinearProgress variant={CUIProgressType.DETERMINATE} style={style} color={color} value={value} />;
+export const CUILinearProgress = ({ style, color, value }) => (
+  <LinearProgress variant={CUIProgressType.DETERMINATE} style={style} color={color} value={value} />
+);
 
 CUILinearProgress.defaultProps = {
   style: {},
@@ -47,14 +48,15 @@ CUILinearProgress.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export const CUICircularProgress = ({ displayColor, className }) =>
+export const CUICircularProgress = ({ displayColor, className }) => (
   <div className="loader">
     <CircularProgress color={displayColor} className={className} size={40} thickness={4} />
-  </div>;
+  </div>
+);
 
 CUICircularProgress.defaultProps = {
   displayColor: CUIColor.PRIMARY,
-  className: '',
+  className: "",
 };
 CUICircularProgress.propTypes = {
   displayColor: PropTypes.cuiColor,

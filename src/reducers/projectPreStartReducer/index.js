@@ -3,7 +3,7 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  isCurrentMember: false,
+  isCurrentMember: false
 };
 
 export default function(state = initialState, action) {
@@ -20,13 +20,13 @@ export default function(state = initialState, action) {
     //     membershipAssigned: false
     //   };
 
-    case actionTypes.WHITELIST_CHECK:
+    case actionTypes.WHITELIST_CHECK: {
       const { receipt } = action.payload;
       return {
         ...state,
-        isCurrentMember: receipt,
+        isCurrentMember: receipt
       };
-
+    }
     default:
       return state;
   }

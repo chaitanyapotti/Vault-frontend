@@ -6,8 +6,14 @@ import { onWhiteListClick } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
 import { formatDate } from "../../helpers/common/projectDetailhelperFunctions";
+import { fetchPrice } from "../../actions/priceFetchActions/index";
 
 class ProjectDetailPreStart extends Component {
+  componentDidMount() {
+    const { fetchPrice: etherPriceFetch } = this.props || {};
+    etherPriceFetch("ETH");
+  }
+
   getPrice = () => {
     const { rounds } = this.props || {};
     const [round1, ...rest] = rounds || {};
@@ -28,8 +34,9 @@ class ProjectDetailPreStart extends Component {
 
   getSoftCap = () => {
     // TODO: For now using ether.. when ether price is brought, it is implemented, convert to $
-    const etherPrice = "200"; // TODO: dollars
-    const { rounds } = this.props || {};
+    const { rounds, prices, ts } = this.props || {};
+    console.log(prices);
+    const { ETH: etherPrice } = prices || {};
     let softCap = 0;
     for (let index = 0; index < rounds.length; index += 1) {
       const { tokenCount } = rounds[index];
@@ -39,8 +46,8 @@ class ProjectDetailPreStart extends Component {
   };
 
   getHardCap = () => {
-    const etherPrice = "200"; // TODO: dollars
-    const { totalMintableSupply } = this.props || {};
+    const { totalMintableSupply, prices, ts } = this.props || {};
+    const { ETH: etherPrice } = prices || {};
     const hardCap = parseFloat(totalMintableSupply) * this.getR3Price() * etherPrice * Math.pow(10, -18);
     return Math.round(hardCap).toString();
   };
@@ -119,17 +126,20 @@ class ProjectDetailPreStart extends Component {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onWhiteListClick
+      onWhiteListClick,
+      fetchPrice
     },
     dispatch
   );
 
 const mapStateToProps = state => {
-  const { projectPreStartReducer } = state || {};
+  const { projectPreStartReducer, fetchPriceReducer } = state || {};
+  const { prices } = fetchPriceReducer || {};
   const { isCurrentMember } = projectPreStartReducer || {};
 
   return {
-    isCurrentMember
+    isCurrentMember,
+    prices
   };
 };
 

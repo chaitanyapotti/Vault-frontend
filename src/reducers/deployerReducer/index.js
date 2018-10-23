@@ -2,7 +2,7 @@ import types from "../../action_types";
 
 const initialState = {
   projectDetails: null,
-  ts: new Date(),
+  ts: new Date()
 };
 
 export default function(state = initialState, action) {
@@ -13,7 +13,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         projectDetails: data,
-        ts: new Date(),
+        ts: new Date()
       };
     }
     case types.TRANSACTION_PENDING:
@@ -27,7 +27,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         projectDetails: currentProjDetails,
-        ts: new Date(),
+        ts: new Date()
       };
     case types.DEPLOYED_CONTRACT: {
       const {
@@ -37,7 +37,7 @@ export default function(state = initialState, action) {
         daicoTokenAddress,
         lockedTokensAddress,
         pollFactoryAddress,
-        crowdSaleAddress,
+        crowdSaleAddress
       } = action.payload.body || {};
       currentProjDetails.currentDeploymentIndicator = currentDeploymentIndicator;
       currentProjDetails.latestTxHash = latestTxHash;
@@ -64,7 +64,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         projectDetails: currentProjDetails,
-        ts: new Date(),
+        ts: new Date()
       };
     }
     default:

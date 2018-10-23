@@ -19,10 +19,12 @@ class ProjectGovernance extends Component {
     console.log("parsed params: ", params);
     // this.props.currentRound()
     if ("projectid" in params) {
-      this.props.currentRound(params.projectid);
+      console.log("fetching price");
+      const { currentRound: currentRoundDetailsFetch } = this.props || {};
+      currentRoundDetailsFetch(params.projectid);
     } else {
       this.props.history.push({
-        pathname: `/`,
+        pathname: `/`
       });
     }
 
@@ -56,6 +58,7 @@ class ProjectGovernance extends Component {
       initialFundRelease,
       crowdSaleAddress,
       daicoTokenAddress,
+      etherPrice
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
@@ -91,6 +94,7 @@ class ProjectGovernance extends Component {
           crowdSaleAddress={crowdSaleAddress}
           currentRoundNumber={currentRoundNumber}
           daicoTokenAddress={daicoTokenAddress}
+          etherPrice={etherPrice}
         />
       );
     }
@@ -115,6 +119,7 @@ class ProjectGovernance extends Component {
             rounds={rounds}
             totalMintableSupply={totalMintableSupply}
             foundationDetails={foundationDetails}
+            etherPrice={etherPrice}
           />
         );
       case "1":
@@ -140,6 +145,7 @@ class ProjectGovernance extends Component {
             pollFactoryAddress={pollFactoryAddress}
             initialFundRelease={initialFundRelease}
             crowdSaleAddress={crowdSaleAddress}
+            etherPrice={etherPrice}
           />
         );
       case "2":
@@ -168,6 +174,7 @@ class ProjectGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
+            etherPrice={etherPrice}
           />
         );
       case "4":
@@ -195,6 +202,7 @@ class ProjectGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
+            etherPrice={etherPrice}
           />
         );
       case "5":
@@ -222,6 +230,7 @@ class ProjectGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
+            etherPrice={etherPrice}
           />
         );
       default:
@@ -231,7 +240,7 @@ class ProjectGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { deployerReducer, projectGovernanceReducer } = state || {};
+  const { deployerReducer, projectGovernanceReducer, fetchPriceReducer } = state || {};
   const { projectDetails, ts } = deployerReducer || {};
   const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
 
@@ -239,21 +248,21 @@ const mapStateToProps = state => {
     projectDetails,
     currentRoundNumber,
     treasuryStateNumber,
-    ts,
+    ts
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      currentRound,
+      currentRound
     },
-    dispatch,
+    dispatch
   );
 
 const connector = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ProjectGovernance);
 
 export default withRouter(connector);

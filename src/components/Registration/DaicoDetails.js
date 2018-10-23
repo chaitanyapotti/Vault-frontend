@@ -41,22 +41,8 @@ class DaicoDetails extends React.Component {
   render() {
     return (
       <div>
-        <Row>
-          <Col>
-            {/* <CUIButton
-                            type={CUIButtonType.RAISED}
-                            buttonColor={CUIInputColor.PRIMARY}
-                            id="Publish DAICO"
-                            label={'Publish DAICO'}
-                            // disabled={!this.state.validPassword}
-                            onClick={() => {
-                                this.uploadDaico();
-                            }}
-                        /> */}
-          </Col>
-        </Row>
         <CUICard style={{ padding: "40px 67px" }}>
-          <div>DAICO Details</div>
+          <div className="txt-xl">DAICO Details</div>
           <hr />
           <Row>
             <Col xs={12} lg={6}>

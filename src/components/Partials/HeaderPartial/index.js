@@ -18,7 +18,7 @@ import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
 import { CUIAppBar, CUIButtonIcon } from "../../../helpers/material-ui";
 
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
-
+import {ButtonComponent} from "../../../components/Common/FormComponents";
 const scrnWdh = window.innerWidth;
 const styles = theme => ({
   root: {
@@ -196,11 +196,11 @@ class HeaderPartial extends React.Component {
 
     return (
       <div className={classes.root}>
-        <CUIAppBar position="static" style={scrnWdh < 768 ? { height: "60px" } : { height: "129px" }}>
+        <CUIAppBar position="static" style={scrnWdh < 768 ? { height: "60px" } : { height: "85px" }}>
           <Grid>
             <Row>
               <Col>
-                <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "129px" }}>
+                <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "85px" }}>
                   {scrnWdh < 768 ? (
                     <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
                       <MenuIcon />
@@ -239,7 +239,7 @@ class HeaderPartial extends React.Component {
                     <div className="hdr-itm-pad text--primary txt-m">
                       <div className="hvr-underline-from-left">Publish ICO</div>
                     </div>
-                    <div className="hdr-itm-pad text--primary txt-m wdh-100">
+                    <div className="text--primary txt-m wdh-100" style={{paddingTop: '10px'}}>
                       {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
                       {this.props.isVaultMember ? (
                         <div>
@@ -248,8 +248,7 @@ class HeaderPartial extends React.Component {
                         </div>
                       ) : (
                         <div>
-                          {" "}
-                          <button onClick={this.handleRegistrationButtonClicked}>Register</button>
+                          <ButtonComponent onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent>
                         </div>
                       )}
                     </div>

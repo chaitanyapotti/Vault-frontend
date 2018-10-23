@@ -17,6 +17,7 @@ import {
   facebookLinkChangedAction,
   twitterLinkChangedAction,
 } from "../../actions/projectRegistrationActions";
+import { ButtonComponent } from "../Common/FormComponents";
 
 class IdentityDetails extends React.Component {
   onChangeName = e => {
@@ -70,7 +71,7 @@ class IdentityDetails extends React.Component {
   render() {
     return (
       <CUICard style={{ padding: "40px 67px" }}>
-        <div>Identity Details</div>
+        <div className="txt-xl">Identity Details</div>
         <hr />
         <Row>
           <Col xs={12} lg={6}>
@@ -259,16 +260,13 @@ class IdentityDetails extends React.Component {
 
         <Row>
           <Col>
-            <CUIButton
-              type={CUIButtonType.RAISED}
-              buttonColor={CUIInputColor.PRIMARY}
-              id="uploadWhitepaper"
-              label="Upload Whitepaper"
-              // disabled={!this.state.validPassword}
-              onClick={() => {
-                this.uploadWhitePaper();
-              }}
-            />
+            <div className="text--right push--top">
+              <ButtonComponent
+                id="uploadWhitepaper"
+                label="Upload Whitepaper"
+                onClick={this.uploadWhitePaper}
+              />
+            </div>
           </Col>
         </Row>
       </CUICard>

@@ -2,6 +2,7 @@ import React from "react";
 import { CUIFormInput, CUIButton } from "../../../helpers/material-ui";
 import { CUIInputType, CUIButtonType, CUIInputColor } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import { ButtonComponent } from "../../Common/FormComponents";
 
 class NonSale extends React.Component {
   state = {
@@ -17,7 +18,7 @@ class NonSale extends React.Component {
   render() {
     return (
       <div className="push-top--50">
-        <div>Non Sale Distribution</div>
+        <div className="txt-xl">Non Sale Distribution</div>
         <hr />
         <div>
           <div>1. 4500 ETH - Bug Bounty</div>
@@ -58,16 +59,13 @@ class NonSale extends React.Component {
 
         <Row>
           <Col>
-            <CUIButton
-              type={CUIButtonType.RAISED}
-              buttonColor={CUIInputColor.PRIMARY}
-              id="Add to Token Distribution Chart"
-              label="Add To token Distribution Chart"
-              // disabled={!this.state.validPassword}
-              onClick={() => {
-                this.uploadDaico();
-              }}
-            />
+            <div className="push--top">
+              <ButtonComponent
+                label="Add To token Distribution Chart"
+                style={{width: '100%'}}
+                onClick={this.uploadDaico}
+              />
+            </div>
           </Col>
         </Row>
       </div>

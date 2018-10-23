@@ -11,7 +11,7 @@ class Distribution extends React.Component {
         <CUICard style={{ padding: "40px 67px" }}>
           <TokenSale />
           <NonSale />
-          <TokenChart />
+          {/* <TokenChart /> */}
         </CUICard>
       </div>
     );

@@ -6,14 +6,13 @@ import { CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS } from "../../sta
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import {
   initialFundReleaseChangedAction,
-  daicoRoundsChangedAction,
+  maxEtherContributionChangedAction,
+  initialTapValueChangedAction,
+  // daicoRoundsChangedAction,
   daicoStartDateChangedAction,
   daicoEndDateChangedAction,
-  round1TokensChangedAction,
-  round1RateChangedAction,
-  round2TokensChangedAction,
-  round3TokensChangedAction,
-  round3RateChangedAction,
+  tapIncrementFactorChangedAction,
+  voteSaturationLimitChangedAction,
 } from "../../actions/projectRegistrationActions";
 
 class DaicoDetails extends React.Component {
@@ -21,10 +20,26 @@ class DaicoDetails extends React.Component {
     this.props.initialFundReleaseChangedAction(e.target.value);
   };
 
-  onSelectDaicoRounds = e => {
-    console.log(e.target.value);
-    this.props.daicoRoundsChangedAction(e.target.value);
-  };
+  onChangeMaxEtherContribution = e => {
+    this.props.maxEtherContributionChangedAction(e.target.value)
+  }
+
+  onChangeInitialTapValue = e => {
+    this.props.initialTapValueChangedAction(e.target.value)
+  }
+
+  onChangeTapIncrementFactor = e => {
+    this.props.tapIncrementFactorChangedAction(e.target.value)
+  }
+
+  onChangeVoteSaturationLimit = e => {
+    this.props.voteSaturationLimitChangedAction(e.target.value)
+  }
+
+  // onSelectDaicoRounds = e => {
+  //   console.log(e.target.value);
+  //   this.props.daicoRoundsChangedAction(e.target.value);
+  // };
 
   onChangeDaicoStart = e => {
     this.props.daicoStartDateChangedAction(e.target.value);
@@ -41,23 +56,41 @@ class DaicoDetails extends React.Component {
   render() {
     return (
       <div>
-        <Row>
-          <Col>
-            {/* <CUIButton
-                            type={CUIButtonType.RAISED}
-                            buttonColor={CUIInputColor.PRIMARY}
-                            id="Publish DAICO"
-                            label={'Publish DAICO'}
-                            // disabled={!this.state.validPassword}
-                            onClick={() => {
-                                this.uploadDaico();
-                            }}
-                        /> */}
-          </Col>
-        </Row>
         <CUICard style={{ padding: "40px 67px" }}>
           <div>DAICO Details</div>
           <hr />
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Round 1 Start Date"
+                inputLabel="Round 1 Start Date"
+                inputPlaceholder="Eg. 22-10-2018"
+                inputValue={this.props.daicoStartDate}
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeDaicoStart}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Round 1 End Date"
+                inputLabel="Round 1 End Date"
+                inputPlaceholder="Eg. 25-10-2018"
+                inputValue={this.props.daicoEndDate}
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeDaicoEnd}
+              />
+            </Col>
+          </Row>
           <Row>
             <Col xs={12} lg={6}>
               <CUIFormInput
@@ -77,6 +110,22 @@ class DaicoDetails extends React.Component {
             </Col>
             <Col xs={12} lg={6}>
               <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Max Ether Contribution"
+                inputLabel="Max Ether Contribution"
+                inputPlaceholder="Eg. 5"
+                inputValue={this.props.maxEtherContribution}
+                textFocus
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeMaxEtherContribution}
+              />
+            </Col>
+            {/* <Col xs={12} lg={6}>
+              <CUIFormInput
                 inputType={CUIInputType.SELECT}
                 iconColor={CS_COLORS.G_DIVIDER}
                 full
@@ -85,6 +134,40 @@ class DaicoDetails extends React.Component {
                 items={[{ value: "3", primaryText: "3" }, { value: "2", primaryText: "2" }, { value: "1", primaryText: "1" }]}
                 onChange={this.onSelectDaicoRounds}
               />
+            </Col> */}
+          </Row>
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Initial Tap Value"
+                inputLabel="Initial Tap Value"
+                inputPlaceholder="Eg. 100 eth/month"
+                inputValue={this.props.initialTapValue}
+                textFocus
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeInitialTapValue}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Tap Increment Factor"
+                inputLabel="Tap Increment Factor"
+                inputPlaceholder="Eg. 1.5"
+                inputValue={this.props.tapIncrementFactor}
+                textFocus
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeTapIncrementFactor}
+              />
             </Col>
           </Row>
           <Row>
@@ -92,30 +175,16 @@ class DaicoDetails extends React.Component {
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
                 full
-                inputName="DAICO Start Date"
-                inputLabel="DAICO Start Date"
-                inputPlaceholder="Eg. Wanchain"
-                inputValue={this.props.daicoStartDate}
+                inputName="Vote Saturation Limit"
+                inputLabel="Vote Saturation Limit"
+                inputPlaceholder="Eg. 0.05%"
+                inputValue={this.props.voteSaturationLimit}
+                textFocus
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}
                 // helperText={this.state.errorAgeText}
                 // onKeyDownSelector="Admin"
-                onChange={this.onChangeDaicoStart}
-              />
-            </Col>
-            <Col xs={12} lg={6}>
-              <CUIFormInput
-                inputType={CUIInputType.TEXT}
-                full
-                inputName="DAICO End Date"
-                inputLabel="DAICO End Date"
-                inputPlaceholder="Eg. ERC"
-                inputValue={this.props.daicoEndDate}
-                // onBlur={this.onBlurAge}
-                // error={this.state.errorAgeText !== ''}
-                // helperText={this.state.errorAgeText}
-                // onKeyDownSelector="Admin"
-                onChange={this.onChangeDaicoEnd}
+                onChange={this.onChangeVoteSaturationLimit}
               />
             </Col>
           </Row>
@@ -131,24 +200,21 @@ const mapStateToProps = state => {
     daicoRounds,
     daicoStartDate,
     daicoEndDate,
-    round1Tokens,
-    round1Rate,
-    round2Tokens,
-    round2Rate,
-    round3Tokens,
-    round3Rate,
+    maxEtherContribution,
+    initialTapValue,
+    tapIncrementFactor,
+    voteSaturationLimit,
+
   } = state.activeDaicosData || {};
   return {
     initialFundRelease,
     daicoRounds,
     daicoStartDate,
     daicoEndDate,
-    round1Tokens,
-    round1Rate,
-    round2Tokens,
-    round2Rate,
-    round3Tokens,
-    round3Rate,
+    maxEtherContribution,
+    initialTapValue,
+    tapIncrementFactor,
+    voteSaturationLimit,
   };
 };
 
@@ -156,14 +222,13 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       initialFundReleaseChangedAction,
-      daicoRoundsChangedAction,
+      // daicoRoundsChangedAction,
       daicoStartDateChangedAction,
       daicoEndDateChangedAction,
-      round1TokensChangedAction,
-      round1RateChangedAction,
-      round2TokensChangedAction,
-      round3TokensChangedAction,
-      round3RateChangedAction,
+      maxEtherContributionChangedAction,
+      initialTapValueChangedAction,
+      tapIncrementFactorChangedAction,
+      voteSaturationLimitChangedAction,
     },
     dispatch,
   );

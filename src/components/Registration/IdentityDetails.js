@@ -16,6 +16,7 @@ import {
   mediumLinkChangedAction,
   facebookLinkChangedAction,
   twitterLinkChangedAction,
+  teamAddressChangedAction,
 } from "../../actions/projectRegistrationActions";
 
 class IdentityDetails extends React.Component {
@@ -62,6 +63,10 @@ class IdentityDetails extends React.Component {
   onChangeTwtLink = e => {
     this.props.twitterLinkChangedAction(e.target.value);
   };
+
+  onChangeTeamAddress = e => {
+    this.props.teamAddressChangedAction(e.target.value);
+  }
 
   uploadWhitePaper = () => {
     console.log("upload white paper button action");
@@ -256,7 +261,23 @@ class IdentityDetails extends React.Component {
             />
           </Col>
         </Row>
-
+        <Row>
+          <Col>
+          <CUIFormInput
+              inputType={CUIInputType.TEXT}
+              full
+              inputName="Team Address"
+              inputLabel="Team Address"
+              inputPlaceholder="0xABCD"
+              inputValue={this.props.teamAddress}
+              // onBlur={this.onBlurAge}
+              // error={this.state.errorAgeText !== ''}
+              // helperText={this.state.errorAgeText}
+              // onKeyDownSelector="Admin"
+              onChange={this.onChangeTeamAddress}
+            />
+          </Col>
+        </Row>
         <Row>
           <Col>
             <CUIButton
@@ -289,6 +310,7 @@ const mapStateToProps = state => {
     mediumLink,
     facebookLink,
     twitterLink,
+    teamAddress
   } = state.activeDaicosData || {};
   return {
     adminName,
@@ -302,6 +324,7 @@ const mapStateToProps = state => {
     mediumLink,
     facebookLink,
     twitterLink,
+    teamAddress,
   };
 };
 
@@ -319,6 +342,7 @@ const mapDispatchToProps = dispatch =>
       mediumLinkChangedAction,
       facebookLinkChangedAction,
       twitterLinkChangedAction,
+      teamAddressChangedAction
     },
     dispatch,
   );

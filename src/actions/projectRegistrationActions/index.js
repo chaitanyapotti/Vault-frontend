@@ -4,11 +4,35 @@ import config from "../../config";
 import constants from "../../constants";
 
 export function newProjectRegistration(projectData, userLocalPublicAddress) {
+  let foundationDetails = []
+  const { nonSaleEntities, totalSaleTokens } = projectData || []
+  let totalNonSaleTokens = 0
+  if (nonSaleEntities.length>0){
+    for (let i=0; i< nonSaleEntities.length; i++){
+      foundationDetails.push({address: nonSaleEntities[i]["entityAddress"], amount:Math.round(totalSaleTokens*nonSaleEntities[i]["entityPercentage"]/100), description: nonSaleEntities[i]["entityName"]})
+      totalNonSaleTokens = totalNonSaleTokens + Math.round(totalSaleTokens*nonSaleEntities[i]["entityPercentage"]/100) 
+    }
+  }
   let projectObject = {
     projectName: projectData.projectName,
     description: projectData.projectDescription,
     startDateTime: projectData.daicoStartDate,
+    ownerAddress: userLocalPublicAddress,
     r1EndTime: projectData.daicoEndDate,
+    rounds: [
+      { tokenCount: projectData.round1Tokens, tokenRate: projectData.round1Rate },
+      { tokenCount: projectData.round2Tokens, tokenRate: projectData.round2Rate },
+      { tokenCount: projectData.round3Tokens, tokenRate: projectData.round3Rate }
+    ],
+    minimumEtherContribution: "100000000000000000",
+    maximumEtherContribution: Math.round(parseFloat(projectData.maxEtherContribution)*Math.pow(10, 18)),
+    foundationDetails: foundationDetails,
+    initialFundRelease: Math.round(parseFloat(projectData.initialFundRelease)*Math.pow(10, 18)),
+    teamAddress: projectData.teamAddress,
+    killPollStartDate: projectData.daicoEndDate,
+    initialTapAmount:Math.round(parseFloat(projectData.initialTapValue)*Math.pow(10, 18)/(30*86400)), 
+    tapIncrementFactor: Math.round(parseFloat(projectData.tapIncrementFactor)*100),
+    tokenTag: projectData.erc20TokenTag,
     adminName: projectData.adminName,
     email: projectData.adminEmail,
     urls: {
@@ -19,22 +43,13 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       twitter: projectData.twitterLink,
       medium: projectData.mediumLink
     },
-    tokenTag: projectData.erc20TokenTag,
-    rounds: [
-      { tokenCount: projectData.round1Tokens, tokenRate: projectData.round1Rate },
-      { tokenCount: projectData.round2Tokens, tokenRate: projectData.round2Rate },
-      { tokenCount: projectData.round3Tokens, tokenRate: projectData.round3Rate }
-    ],
-    daicoRounds: projectData.daicoRounds,
-    initialFundRelease: projectData.initialFundRelease,
-    ownerAddress: userLocalPublicAddress,
-    minimumEtherContribution: "100000000000000000",
-    maximumEtherContribution: "5000000000000000000",
-    foundationDetails: [
-      { address: "0xb758c38326df3d75f1cf0da14bb8220ca4231e74", amount: "5000000000000000000", name: "Vinay Bagul" },
-      { address: "0xb71455b02bb8cd42552744b8bd720763711d6d66", amount: "1000000000000000000", name: "Vinay Bagul" }
-    ],
-    teamAddress: userLocalPublicAddress
+    capPercent: Math.round(parseFloat(projectData.voteSaturationLimit)*100),
+    killAcceptancePercent: 80,
+    xfrRejectionPercent: 20,
+    tapAcceptancePercent: 65,
+    network: "rinkeby",
+    version: "1",
+    totalMintableSupply: projectData.totalSaleTokens + totalNonSaleTokens
   };
 
   return dispatch =>
@@ -67,6 +82,79 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
           payload: constants.PROJECT_REGISTRATION_FAILED_MESSAGE
         });
       });
+}
+
+
+export function nonSaleEntityEditAction(index){
+  return dispatch => {
+    dispatch({
+      type: actionTypes.NON_SALE_ENTITY_EDIT,
+      payload: index
+    })
+  }
+}
+
+export function addNonSaleEntityAction(entityName, entityPercentage, entityAddress){
+  return dispatch => {
+    dispatch({
+      type: actionTypes.ADD_NON_SALE_ENTITY,
+      payload: {entityName: entityName, entityPercentage:entityPercentage, entityAddress: entityAddress}
+    })
+  }
+}
+
+export function entityNameChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.ENTITY_NAME_CHANGED,
+      payload: value
+    });
+  }
+}
+
+export function entityPercentageChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.ENTITY_PERCENTAGE_CHANGED,
+      payload: value
+    });
+  }
+}
+
+export function entityAddressChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.ENTITY_ADDRESS_CHANGED,
+      payload: value
+    });
+  }
+}
+
+export function teamAddressChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.TEAM_ADDRESS_CHANGED,
+      payload: value
+    });
+  }
+}
+
+export function calculateTokens(){
+  return dispatch => {
+    dispatch({
+      type: actionTypes.CALCULATE_TOKENS,
+      payload: null
+    })
+  }
+}
+
+export function tokenPriceFactorChangedAction(value){
+  return dispatch =>{
+    dispatch({
+      type: actionTypes.TOKEN_PRICE_FACTOR_CHANGED,
+      payload: value
+    })
+  }
 }
 
 export function adminNameChangedAction(value) {
@@ -177,14 +265,51 @@ export function initialFundReleaseChangedAction(value) {
   };
 }
 
-export function daicoRoundsChangedAction(value) {
+export function maxEtherContributionChangedAction(value) {
   return dispatch => {
     dispatch({
-      type: actionTypes.DAICO_ROUNDS_CHANGED,
+      type: actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED,
       payload: value
     });
   };
 }
+
+export function initialTapValueChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.INITIAL_TAP_VALUE_CHANGED,
+      payload: value
+    });
+  };
+}
+
+export function tapIncrementFactorChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.TAP_INCREMENT_FACTOR_CHANGED,
+      payload: value
+    });
+  };
+}
+
+export function voteSaturationLimitChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.VOTE_SATURATION_LIMIT_CHANGED,
+      payload: value
+    });
+  };
+}
+
+
+// export function daicoRoundsChangedAction(value) {
+//   return dispatch => {
+//     dispatch({
+//       type: actionTypes.DAICO_ROUNDS_CHANGED,
+//       payload: value
+//     });
+//   };
+// }
 
 export function daicoStartDateChangedAction(value) {
   return dispatch => {
@@ -204,55 +329,55 @@ export function daicoEndDateChangedAction(value) {
   };
 }
 
-export function round1TokensChangedAction(value) {
+export function round1TargetUSDChangedAction(value) {
   return dispatch => {
     dispatch({
-      type: actionTypes.ROUND1_TOKENS_CHANGED,
+      type: actionTypes.ROUND1_TARGET_USD_CHANGED,
       payload: value
     });
   };
 }
 
-export function round1RateChangedAction(value) {
+export function round1TargetEthChangedAction(value) {
   return dispatch => {
     dispatch({
-      type: actionTypes.ROUND1_RATE_CHANGED,
+      type: actionTypes.ROUND1_TARGET_ETH_CHANGED,
       payload: value
     });
   };
 }
 
-export function round2TokensChangedAction(value) {
+export function round2TargetUSDChangedAction(value) {
   return dispatch => {
     dispatch({
-      type: actionTypes.ROUND2_TOKENS_CHANGED,
+      type: actionTypes.ROUND2_TARGET_USD_CHANGED,
       payload: value
     });
   };
 }
 
-export function round2RateChangedAction(value) {
+export function round2TargetEthChangedAction(value) {
   return dispatch => {
     dispatch({
-      type: actionTypes.ROUND2_RATE_CHANGED,
+      type: actionTypes.ROUND2_TARGET_ETH_CHANGED,
       payload: value
     });
   };
 }
 
-export function round3TokensChangedAction(value) {
+export function round3TargetUSDChangedAction(value) {
   return dispatch => {
     dispatch({
-      type: actionTypes.ROUND3_TOKENS_CHANGED,
+      type: actionTypes.ROUND3_TARGET_USD_CHANGED,
       payload: value
     });
   };
 }
 
-export function round3RateChangedAction(value) {
+export function round3TargetEthChangedAction(value) {
   return dispatch => {
     dispatch({
-      type: actionTypes.ROUND3_RATE_CHANGED,
+      type: actionTypes.ROUND3_TARGET_ETH_CHANGED,
       payload: value
     });
   };

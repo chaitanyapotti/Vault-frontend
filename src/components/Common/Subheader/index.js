@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Grid, Row } from "../../../helpers/react-flexbox-grid";
 
 const Subheader = () => (
-  <div className="sbhdr-cnt push-top--135">
+  <div className="sbhdr-cnt push-top--91">
     <Grid>
       <div className="sbhdr-txt txt-xl txt-bold sbhdr-mrgn-tp">ACCOUNTABLE CROWDFUNDING PLATFORM</div>
       <Row>

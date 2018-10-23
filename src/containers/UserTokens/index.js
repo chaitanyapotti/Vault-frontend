@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { Table, Loader, Grid } from "semantic-ui-react";
+import { Table, Loader } from "semantic-ui-react";
 import { showUserTokensLoaderAction } from "../../actions/userTokensActions";
-
+import {Grid, Row, Col} from "../../helpers/react-flexbox-grid";
 class UserTokensTableBody extends Component {
   handleTableRowClicked = projectid => {
     this.props.history.push({
@@ -56,16 +56,10 @@ class UserTokens extends Component {
   render() {
     return (
       <div>
-        <Grid columns={5}>
-          <Grid.Row />
-          <Grid.Row>
-            <Grid.Column />
-            <Grid.Column>My Tokens</Grid.Column>
-            <Grid.Column />
-            <Grid.Column>*Prices based on current ETH/USD ratio</Grid.Column>
-            <Grid.Column />
-          </Grid.Row>
-        </Grid>
+        <Row>
+          <Col lg={6}>My Tokens</Col>
+          <Col lg={6} className="text--right">*Prices based on current ETH/USD ratio</Col>
+        </Row>
         {this.props.showUserTokensLoader ? (
           <Loader active={this.props.showUserTokensLoader} />
         ) : this.props.userTokensRetrievedSuccessFully ? (

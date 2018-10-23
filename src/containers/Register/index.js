@@ -12,7 +12,8 @@ import {
   checkVaultMembership,
   requestVaultMembership,
 } from "../../actions/signinManagerActions";
-
+import { CUICard } from "../../helpers/material-ui";
+import {Grid} from "../../helpers/react-flexbox-grid";
 class Register extends Component {
   componentDidMount() {
     if (this.props.userLocalPublicAddress) {
@@ -70,42 +71,53 @@ class Register extends Component {
             </div>
           )
         ) : (
-          <div>
-            This is Phone Number Registration form
-            <Form>
-              <Form.Group inline>
-                <Form.Field>
-                  <label>Phone Number</label>
-                  <Input placeholder="+91" onChange={this.handleCountryCodeChanged} />
-                </Form.Field>
-                <Form.Field>
-                  <Input placeholder="9096xxxxxx" onChange={this.handlePhoneNumberChanged} />
-                </Form.Field>
-                <Form.Field>
-                  <label>Please check if you are an Issuer</label>
-                  <Checkbox toggle onClick={this.handleIssuerFlagToggled} checked={this.props.isIssuerFlag} />
-                </Form.Field>
-                <Form.Field>
-                  <Button onClick={this.handleSendOtp}> Send OTP</Button>
-                </Form.Field>
-              </Form.Group>
-            </Form>
-            <Divider />
-            <Form>
-              <Form.Field>
-                <label> OTP: </label>
-                <Input placeholder="1234" onChange={this.handleOtpChanged} />
-              </Form.Field>
-              <Form.Field>
-                <Button onClick={this.handleOtpVerification}>Submit</Button>
-              </Form.Field>
-            </Form>
-            {this.props.otpVerificationSuccessful ? (
-              <div>OTP Verification Successful. Welcome to the Vault</div>
-            ) : (
-              <div>OTP Verification Failed.</div>
-            )}
-          </div>
+          <Grid>
+            <CUICard style={{ padding: "40px 40px", width: "450px", margin: '0 auto' }}>
+              <div>
+                <div className="sbhdr-txt push--bottom txt-xl">Phone Number Registration form</div>
+                <Form>
+                  <label>Phone Number:</label>
+                  <Form.Group inline>
+                    <Form.Field>
+                      <Input placeholder="+91" onChange={this.handleCountryCodeChanged} />
+                    </Form.Field>
+                    <Form.Field>
+                      <Input placeholder="9096xxxxxx" onChange={this.handlePhoneNumberChanged} />
+                    </Form.Field>
+                  </Form.Group>
+
+                  <Form.Group inline>
+                    <Form.Field>
+                      <Button onClick={this.handleSendOtp}> Send OTP</Button>
+                    </Form.Field>
+                  </Form.Group>
+
+                  <Form.Group inline>
+                    <Form.Field>
+                      <label style={{position: 'relative', top: '-17px'}}>Please check if you are an Issuer</label>
+                      <Checkbox toggle onClick={this.handleIssuerFlagToggled} checked={this.props.isIssuerFlag} />
+                    </Form.Field>
+                  </Form.Group>
+
+                </Form>
+                <Divider />
+                <Form>
+                  <Form.Field>
+                    <label> OTP: </label>
+                    <Input placeholder="1234" onChange={this.handleOtpChanged} />
+                  </Form.Field>
+                  <Form.Field>
+                    <Button onClick={this.handleOtpVerification}>Submit</Button>
+                  </Form.Field>
+                </Form>
+                {this.props.otpVerificationSuccessful ? (
+                  <div>OTP Verification Successful. Welcome to the Vault</div>
+                ) : (
+                  <div>OTP Verification Failed.</div>
+                )}
+              </div>
+            </CUICard>
+          </Grid>
         )}
 
         <div />

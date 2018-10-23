@@ -11,6 +11,7 @@ const ButtonComponent = props => (
     onClick={() => {
       props.onClick();
     }}
+    {...props}
   />
 );
 

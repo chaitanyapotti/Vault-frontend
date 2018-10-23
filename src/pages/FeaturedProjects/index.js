@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { Loader } from "semantic-ui-react";
 import FeaturedProject from "../../components/FeaturedProject";
 import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 
 class FeaturedProjects extends Component {
   componentDidMount() {
@@ -15,15 +16,23 @@ class FeaturedProjects extends Component {
     const { featuredProjects } = this.props;
     return (
       <div>
-        <div>FEATURED PROJECTS</div>
+        <div className="text--center sbhdr-txt txt-xl txt-bold">FEATURED PROJECTS</div>
         {this.props.showFeaturedProjectsLoader ? (
           <Loader active={this.props.showFeaturedProjectsLoader} />
         ) : this.props.featuredProjectsRetrievedSuccessfully ? (
-          <div>
-            {featuredProjects.map((item, index) => {
-              const { projectName, description } = item;
-              return <FeaturedProject key={index} projectName={projectName} description={description} />;
-            })}
+          <div className="push-top--35">
+            <Grid>
+              <Row>
+                {featuredProjects.map((item, index) => {
+                  const { projectName, description } = item;
+                  return (
+                    <Col xs={12} lg={4}>
+                      <FeaturedProject key={index} projectName={projectName} description={description} />
+                    </Col>
+                  )
+                })}
+              </Row>
+            </Grid>
           </div>
         ) : (
           <h1>{this.props.featuredProjectsRetrieveFailureMessage}</h1>

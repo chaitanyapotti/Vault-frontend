@@ -41,7 +41,7 @@ class TokenSale extends React.Component {
   render() {
     return (
       <div>
-        <div>Token Sale Distribution</div>
+        <div className="txt-xl">Token Sale Distribution</div>
         <hr />
         <Row>
           <Col xs={12} lg={6}>

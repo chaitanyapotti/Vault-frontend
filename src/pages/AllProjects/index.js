@@ -3,6 +3,7 @@ import { Tab } from "semantic-ui-react";
 import ActiveDaicos from "../../containers/ActiveDaicos";
 import UpcomingDaicos from "../../containers/UpcomingDaicos";
 import EndedDaicos from "../../containers/EndedDaicos";
+import {Grid} from "../../helpers/react-flexbox-grid";
 
 class AllProjects extends Component {
   panes = [
@@ -35,9 +36,9 @@ class AllProjects extends Component {
 
   render() {
     return (
-      <div>
+      <Grid>
         <Tab menu={{ secondary: true, pointing: false }} panes={this.panes} history={this.props.history} />
-      </div>
+      </Grid>
     );
   }
 }

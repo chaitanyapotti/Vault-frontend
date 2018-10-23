@@ -19,7 +19,7 @@ import web3 from "../../helpers/web3";
 export function isAlreadyWhiteListed(receipt) {
   return {
     payload: { receipt },
-    type: "WHITELIST_CHECK",
+    type: "WHITELIST_CHECK"
   };
 }
 
@@ -29,7 +29,7 @@ export function onWhiteListClick(version, contractName, contractAddress) {
     web3.eth.getAccounts().then(accounts =>
       axios
         .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
-          params: { version: version.toString(), network, address: contractAddress, useraddress: accounts[0] },
+          params: { version: version.toString(), network, address: contractAddress, useraddress: accounts[0] }
         })
         .then(response => {
           if (response.status === 200) {
@@ -51,7 +51,7 @@ export function onWhiteListClick(version, contractName, contractAddress) {
             }
           }
         })
-        .catch(err => console.error(err.message)),
+        .catch(err => console.error(err.message))
     );
   };
 }

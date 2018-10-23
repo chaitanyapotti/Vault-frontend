@@ -13,7 +13,7 @@ const calculateRoundGoal = round => parseFloat(round.tokenCount) / (parseFloat(r
 
 const calculateFinalGoal = roundArray => {
   let finalGoal = 0;
-  for (let i = 0; i < roundArray.length; i++) {
+  for (let i = 0; i < roundArray.length; i += 1) {
     finalGoal += calculateRoundGoal(roundArray[i]);
   }
   return finalGoal;
@@ -23,7 +23,7 @@ class ActiveDaicosTableBody extends Component {
   handleTableRowClicked = projectid => {
     this.props.history.push({
       pathname: `/governance/details`,
-      search: `?projectid=${projectid}`,
+      search: `?projectid=${projectid}`
     });
   };
 
@@ -97,7 +97,7 @@ const mapStateToProps = state => {
     activeDaicosTable,
     showActiveDaicosLoader,
     activeDaicosRetrieveFailureMessage,
-    activeDaicosRetrievedSuccessFully,
+    activeDaicosRetrievedSuccessFully
   };
 };
 
@@ -105,12 +105,12 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getActiveDaicos,
-      showActiveDaicosLoaderAction,
+      showActiveDaicosLoaderAction
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ActiveDaicos);

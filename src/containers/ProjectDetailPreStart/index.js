@@ -5,13 +5,14 @@ import { ProjectName, PDetailPreStart, TokenChart } from "../../components/Commo
 import { onWhiteListClick } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
+import { formatDate } from "../../helpers/common/projectDetailhelperFunctions";
 
 class ProjectDetailPreStart extends Component {
   getPrice = () => {
     const { rounds } = this.props || {};
     const [round1, ...rest] = rounds || {};
     const { tokenRate } = round1 || {}; // tokens/wei
-    return 1 / parseInt(tokenRate, 10);
+    return 1 / parseFloat(tokenRate, 10);
   };
 
   getRoundText = () =>
@@ -22,7 +23,7 @@ class ProjectDetailPreStart extends Component {
     const { rounds } = this.props || {};
     const round3 = [...rounds].pop() || {};
     const { tokenRate } = round3 || {}; // tokens/wei
-    return 1 / parseInt(tokenRate, 10);
+    return 1 / parseFloat(tokenRate, 10);
   };
 
   getSoftCap = () => {
@@ -30,7 +31,7 @@ class ProjectDetailPreStart extends Component {
     const etherPrice = "200"; // TODO: dollars
     const { rounds } = this.props || {};
     let softCap = 0;
-    for (let index = 0; index < rounds.length; index++) {
+    for (let index = 0; index < rounds.length; index += 1) {
       const { tokenCount } = rounds[index];
       softCap += parseFloat(tokenCount);
     }
@@ -44,10 +45,15 @@ class ProjectDetailPreStart extends Component {
     return Math.round(hardCap).toString();
   };
 
-  onWhiteListClick = () => {
+  onWhiteListClickInternal = () => {
     const { version, membershipAddress } = this.props || {};
     // this.props.checkWhiteList(version, "Protocol", membershipAddress);
-    this.props.onWhiteListClick(version, "Protocol", membershipAddress);
+    onWhiteListClick(version, "Protocol", membershipAddress);
+  };
+
+  getStartDate = () => {
+    const { startDateTime } = this.props || new Date();
+    return formatDate(startDateTime);
   };
 
   render() {
@@ -64,7 +70,7 @@ class ProjectDetailPreStart extends Component {
       tapIncrementFactor,
       isCurrentMember,
       rounds,
-      foundationDetails,
+      foundationDetails
     } = this.props || {};
     return (
       <Grid>
@@ -81,16 +87,16 @@ class ProjectDetailPreStart extends Component {
               whitepaper={whitepaper}
               buttonText="Get Whitelisted"
               buttonVisibility={!isCurrentMember}
-              onClick={this.onWhiteListClick}
+              onClick={this.onWhiteListClickInternal}
             />
           </Col>
           <Col xs={12} lg={6}>
             <PDetailPreStart
-              icoStartDate={new Date(startDateTime).toDateString()}
+              icoStartDate={formatDate(startDateTime)}
               individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
-              initialTapAmount={(parseInt(initialTapAmount, 10) * 86400 * 30) / Math.pow(10, 18)}
+              initialTapAmount={(parseFloat(initialTapAmount) * 86400 * 30) / Math.pow(10, 18)}
               tapIncrementUnit={tapIncrementFactor}
               hardCapCapitalisation={this.getSoftCap()}
               dilutedCapitalisation={this.getHardCap()}
@@ -113,9 +119,9 @@ class ProjectDetailPreStart extends Component {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onWhiteListClick,
+      onWhiteListClick
     },
-    dispatch,
+    dispatch
   );
 
 const mapStateToProps = state => {
@@ -123,11 +129,11 @@ const mapStateToProps = state => {
   const { isCurrentMember } = projectPreStartReducer || {};
 
   return {
-    isCurrentMember,
+    isCurrentMember
   };
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ProjectDetailPreStart);

@@ -311,7 +311,7 @@ const mapStateToProps = state => {
     facebookLink,
     twitterLink,
     teamAddress
-  } = state.activeDaicosData || {};
+  } = state.projectRegistrationData || {};
   return {
     adminName,
     adminEmail,

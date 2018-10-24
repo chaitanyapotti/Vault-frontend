@@ -2,7 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { CUICard, CUIFormInput, CUIButton } from "../../helpers/material-ui";
-import { CUIInputType, CUIButtonType, CUIInputColor } from "../../static/js/variables";
+import {
+  CUIInputType,
+  CUIButtonType,
+  CUIInputColor
+} from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import {
   adminNameChangedAction,
@@ -16,8 +20,9 @@ import {
   mediumLinkChangedAction,
   facebookLinkChangedAction,
   twitterLinkChangedAction,
-  teamAddressChangedAction,
+  teamAddressChangedAction
 } from "../../actions/projectRegistrationActions";
+import actionTypes from "../../action_types";
 
 class IdentityDetails extends React.Component {
   onChangeName = e => {
@@ -66,13 +71,21 @@ class IdentityDetails extends React.Component {
 
   onChangeTeamAddress = e => {
     this.props.teamAddressChangedAction(e.target.value);
-  }
+  };
 
   uploadWhitePaper = () => {
     console.log("upload white paper button action");
   };
 
   render() {
+    let errorMsg;
+    if (
+      this.props.errors &&
+      this.props.errors.hasOwnProperty(actionTypes.ADMIN_NAME_CHANGED)
+    ) {
+      errorMsg = this.props.errors[actionTypes.ADMIN_NAME_CHANGED];
+    }
+    console.log(errorMsg);
     return (
       <CUICard style={{ padding: "40px 67px" }}>
         <div>Identity Details</div>
@@ -92,6 +105,8 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeName}
+              error={!!errorMsg}
+              helperText={errorMsg}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -263,7 +278,7 @@ class IdentityDetails extends React.Component {
         </Row>
         <Row>
           <Col>
-          <CUIFormInput
+            <CUIFormInput
               inputType={CUIInputType.TEXT}
               full
               inputName="Team Address"
@@ -310,7 +325,8 @@ const mapStateToProps = state => {
     mediumLink,
     facebookLink,
     twitterLink,
-    teamAddress
+    teamAddress,
+    errors
   } = state.activeDaicosData || {};
   return {
     adminName,
@@ -325,6 +341,7 @@ const mapStateToProps = state => {
     facebookLink,
     twitterLink,
     teamAddress,
+    errors
   };
 };
 
@@ -344,10 +361,10 @@ const mapDispatchToProps = dispatch =>
       twitterLinkChangedAction,
       teamAddressChangedAction
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(IdentityDetails);

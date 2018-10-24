@@ -12,7 +12,7 @@ import {
   daicoStartDateChangedAction,
   daicoEndDateChangedAction,
   tapIncrementFactorChangedAction,
-  voteSaturationLimitChangedAction,
+  voteSaturationLimitChangedAction
 } from "../../actions/projectRegistrationActions";
 
 class DaicoDetails extends React.Component {
@@ -21,20 +21,20 @@ class DaicoDetails extends React.Component {
   };
 
   onChangeMaxEtherContribution = e => {
-    this.props.maxEtherContributionChangedAction(e.target.value)
-  }
+    this.props.maxEtherContributionChangedAction(e.target.value);
+  };
 
   onChangeInitialTapValue = e => {
-    this.props.initialTapValueChangedAction(e.target.value)
-  }
+    this.props.initialTapValueChangedAction(e.target.value);
+  };
 
   onChangeTapIncrementFactor = e => {
-    this.props.tapIncrementFactorChangedAction(e.target.value)
-  }
+    this.props.tapIncrementFactorChangedAction(e.target.value);
+  };
 
   onChangeVoteSaturationLimit = e => {
-    this.props.voteSaturationLimitChangedAction(e.target.value)
-  }
+    this.props.voteSaturationLimitChangedAction(e.target.value);
+  };
 
   // onSelectDaicoRounds = e => {
   //   console.log(e.target.value);
@@ -203,9 +203,8 @@ const mapStateToProps = state => {
     maxEtherContribution,
     initialTapValue,
     tapIncrementFactor,
-    voteSaturationLimit,
-
-  } = state.activeDaicosData || {};
+    voteSaturationLimit
+  } = state.projectRegistrationData || {};
   return {
     initialFundRelease,
     daicoRounds,
@@ -214,7 +213,7 @@ const mapStateToProps = state => {
     maxEtherContribution,
     initialTapValue,
     tapIncrementFactor,
-    voteSaturationLimit,
+    voteSaturationLimit
   };
 };
 
@@ -228,12 +227,12 @@ const mapDispatchToProps = dispatch =>
       maxEtherContributionChangedAction,
       initialTapValueChangedAction,
       tapIncrementFactorChangedAction,
-      voteSaturationLimitChangedAction,
+      voteSaturationLimitChangedAction
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(DaicoDetails);

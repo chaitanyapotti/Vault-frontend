@@ -21,7 +21,7 @@ class ProjectName extends React.Component {
       onClick,
       onSecondaryClick,
       buttonVisibility,
-      priceIncrementFlag,
+      priceIncrementFlag
     } = this.props || {};
     const { website } = urls;
     return (

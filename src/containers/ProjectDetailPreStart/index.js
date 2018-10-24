@@ -52,9 +52,9 @@ class ProjectDetailPreStart extends Component {
   };
 
   onWhiteListClickInternal = () => {
-    const { version, membershipAddress } = this.props || {};
+    const { version, membershipAddress, onWhiteListClick: whiteListClick } = this.props || {};
     // this.props.checkWhiteList(version, "Protocol", membershipAddress);
-    onWhiteListClick(version, "Protocol", membershipAddress);
+    whiteListClick(version, "Protocol", membershipAddress);
   };
 
   getStartDate = () => {

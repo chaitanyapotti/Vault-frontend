@@ -27,8 +27,7 @@ const CUIFormInput = props => {
     style,
     onChange,
     error,
-    helperText,
-    ...rest
+    helperText
   } = props || {};
 
   const cuiTextProps = {
@@ -43,8 +42,7 @@ const CUIFormInput = props => {
     style,
     onChange,
     error,
-    helperText,
-    ...rest
+    helperText
   };
 
   switch (inputType) {

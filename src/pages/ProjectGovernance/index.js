@@ -16,10 +16,8 @@ class ProjectGovernance extends Component {
     // Do Routing here - use query string
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
-    console.log("parsed params: ", params);
     // this.props.currentRound()
     if ("projectid" in params) {
-      console.log("fetching price");
       const { currentRound: currentRoundDetailsFetch } = this.props || {};
       currentRoundDetailsFetch(params.projectid);
     } else {

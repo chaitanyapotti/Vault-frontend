@@ -11,7 +11,6 @@ export function priceFetched(price, ticker) {
 
 export function fetchPrice(ticker) {
   return dispatch => {
-    console.log("erre");
     axios
       .get(`${config.api_base_url}/coinprice`, {
         params: { ticker }

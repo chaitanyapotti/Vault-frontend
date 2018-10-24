@@ -3,21 +3,18 @@
 import actionTypes from "../../action_types";
 
 const initialState = {
-  prices: { ETH: 200 },
-  ts: new Date()
+  prices: { ETH: 200 }
 };
 
 export default function(state = initialState, action) {
-  const localPrices = state.prices;
+  const localPrices = JSON.parse(JSON.stringify(state.prices));
   switch (action.type) {
     case actionTypes.PRICE_FETCHED: {
       const { price, ticker } = action.payload || {};
-      console.log(price, ticker);
       localPrices[ticker] = price;
       return {
         ...state,
-        prices: localPrices,
-        ts: new Date()
+        prices: localPrices
       };
     }
     default:

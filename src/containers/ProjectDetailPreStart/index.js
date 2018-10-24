@@ -34,8 +34,7 @@ class ProjectDetailPreStart extends Component {
 
   getSoftCap = () => {
     // TODO: For now using ether.. when ether price is brought, it is implemented, convert to $
-    const { rounds, prices, ts } = this.props || {};
-    console.log(prices);
+    const { rounds, prices } = this.props || {};
     const { ETH: etherPrice } = prices || {};
     let softCap = 0;
     for (let index = 0; index < rounds.length; index += 1) {
@@ -46,7 +45,7 @@ class ProjectDetailPreStart extends Component {
   };
 
   getHardCap = () => {
-    const { totalMintableSupply, prices, ts } = this.props || {};
+    const { totalMintableSupply, prices } = this.props || {};
     const { ETH: etherPrice } = prices || {};
     const hardCap = parseFloat(totalMintableSupply) * this.getR3Price() * etherPrice * Math.pow(10, -18);
     return Math.round(hardCap).toString();

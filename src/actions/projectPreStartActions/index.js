@@ -35,7 +35,6 @@ export function onWhiteListClick(version, contractName, contractAddress) {
           if (response.status === 200) {
             const { data } = response.data;
             if (data === "true") {
-              console.log("herer");
               dispatch(isAlreadyWhiteListed(true));
             } else {
               axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } }).then(res => {

@@ -2,7 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { CUICard, CUIFormInput, CUIButton } from "../../helpers/material-ui";
-import { CUIInputType, CUIButtonType, CUIInputColor } from "../../static/js/variables";
+import {
+  CUIInputType,
+  CUIButtonType,
+  CUIInputColor
+} from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import {
   adminNameChangedAction,
@@ -16,8 +20,10 @@ import {
   mediumLinkChangedAction,
   facebookLinkChangedAction,
   twitterLinkChangedAction,
+  teamAddressChangedAction
 } from "../../actions/projectRegistrationActions";
 import { ButtonComponent } from "../Common/FormComponents";
+import actionTypes from "../../action_types";
 
 class IdentityDetails extends React.Component {
   onChangeName = e => {
@@ -64,10 +70,48 @@ class IdentityDetails extends React.Component {
     this.props.twitterLinkChangedAction(e.target.value);
   };
 
+  onChangeTeamAddress = e => {
+    this.props.teamAddressChangedAction(e.target.value);
+  };
+
   uploadWhitePaper = () => {
     console.log("upload white paper button action");
   };
 
+  componentDidUpdate(prevProps) {
+    console.log("here");
+    if (prevProps.errors !== this.props.errors) {
+      this.hasError();
+      this.getErrorMsg();
+    }
+  }
+
+  hasError = () => {
+    let returnvalue = false;
+    if (this.props.errors) {
+      if (
+        this.props.errors.hasOwnProperty(actionTypes.ADMIN_NAME_CHANGED) &&
+        this.props.errors[actionTypes.ADMIN_NAME_CHANGED !== ""]
+      ) {
+        returnvalue = true;
+      } else {
+        returnvalue = false;
+      }
+    } else {
+      returnvalue = false;
+    }
+    console.log(returnvalue);
+    return returnvalue;
+  };
+  getErrorMsg = () => {
+    if (this.props.errors) {
+      if (this.props.errors.hasOwnProperty(actionTypes.ADMIN_NAME_CHANGED)) {
+        return this.props.errors[actionTypes.ADMIN_NAME_CHANGED];
+      }
+      return false;
+    }
+    return false;
+  };
   render() {
     return (
       <CUICard style={{ padding: "40px 67px" }}>
@@ -88,6 +132,8 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeName}
+              error={this.hasError()}
+              helperText={this.getErrorMsg()}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -257,7 +303,23 @@ class IdentityDetails extends React.Component {
             />
           </Col>
         </Row>
-
+        <Row>
+          <Col>
+            <CUIFormInput
+              inputType={CUIInputType.TEXT}
+              full
+              inputName="Team Address"
+              inputLabel="Team Address"
+              inputPlaceholder="0xABCD"
+              inputValue={this.props.teamAddress}
+              // onBlur={this.onBlurAge}
+              // error={this.state.errorAgeText !== ''}
+              // helperText={this.state.errorAgeText}
+              // onKeyDownSelector="Admin"
+              onChange={this.onChangeTeamAddress}
+            />
+          </Col>
+        </Row>
         <Row>
           <Col>
             <div className="text--right push--top">
@@ -287,6 +349,8 @@ const mapStateToProps = state => {
     mediumLink,
     facebookLink,
     twitterLink,
+    teamAddress,
+    errors
   } = state.activeDaicosData || {};
   return {
     adminName,
@@ -300,6 +364,8 @@ const mapStateToProps = state => {
     mediumLink,
     facebookLink,
     twitterLink,
+    teamAddress,
+    errors
   };
 };
 
@@ -317,11 +383,12 @@ const mapDispatchToProps = dispatch =>
       mediumLinkChangedAction,
       facebookLinkChangedAction,
       twitterLinkChangedAction,
+      teamAddressChangedAction
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(IdentityDetails);

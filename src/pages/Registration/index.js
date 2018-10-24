@@ -12,7 +12,7 @@ import { newProjectRegistration } from "../../actions/projectRegistrationActions
 import {ButtonComponent} from "../../components/Common/FormComponents";
 class Registration extends Component {
   handlePublishDaico = e => {
-    this.props.newProjectRegistration(this.props.activeDaicosData, this.props.userLocalPublicAddress);
+    this.props.newProjectRegistration(this.props.projectRegistrationData, this.props.userLocalPublicAddress);
   };
 
   render() {
@@ -45,10 +45,10 @@ class Registration extends Component {
 }
 
 const mapStateToProps = state => {
-  const { activeDaicosData } = state || {};
+  const { projectRegistrationData } = state || {};
   const { userLocalPublicAddress } = state.signinManagerData || {};
   return {
-    activeDaicosData,
+    projectRegistrationData,
     userLocalPublicAddress,
   };
 };

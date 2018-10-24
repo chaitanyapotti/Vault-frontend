@@ -77,15 +77,41 @@ class IdentityDetails extends React.Component {
     console.log("upload white paper button action");
   };
 
-  render() {
-    let errorMsg;
-    if (
-      this.props.errors &&
-      this.props.errors.hasOwnProperty(actionTypes.ADMIN_NAME_CHANGED)
-    ) {
-      errorMsg = this.props.errors[actionTypes.ADMIN_NAME_CHANGED];
+  componentDidUpdate(prevProps) {
+    console.log("here");
+    if (prevProps.errors !== this.props.errors) {
+      this.hasError();
+      this.getErrorMsg();
     }
-    console.log(errorMsg);
+  }
+
+  hasError = () => {
+    let returnvalue = false;
+    if (this.props.errors) {
+      if (
+        this.props.errors.hasOwnProperty(actionTypes.ADMIN_NAME_CHANGED) &&
+        this.props.errors[actionTypes.ADMIN_NAME_CHANGED !== ""]
+      ) {
+        returnvalue = true;
+      } else {
+        returnvalue = false;
+      }
+    } else {
+      returnvalue = false;
+    }
+    console.log(returnvalue);
+    return returnvalue;
+  };
+  getErrorMsg = () => {
+    if (this.props.errors) {
+      if (this.props.errors.hasOwnProperty(actionTypes.ADMIN_NAME_CHANGED)) {
+        return this.props.errors[actionTypes.ADMIN_NAME_CHANGED];
+      }
+      return false;
+    }
+    return false;
+  };
+  render() {
     return (
       <CUICard style={{ padding: "40px 67px" }}>
         <div>Identity Details</div>
@@ -105,8 +131,8 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeName}
-              error={!!errorMsg}
-              helperText={errorMsg}
+              error={this.hasError()}
+              helperText={this.getErrorMsg()}
             />
           </Col>
           <Col xs={12} lg={6}>

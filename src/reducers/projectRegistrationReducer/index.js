@@ -46,7 +46,7 @@ export const initialState = {
   entityName: "",
   entityPercentage: "",
   entityAddress: "",
-  errors: { [actionTypes.ADMIN_NAME_CHANGED]: "NULL" }
+  errors: { [actionTypes.ADMIN_NAME_CHANGED]: "" }
 };
 
 export default function(state = initialState, action) {
@@ -163,13 +163,11 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.ADMIN_NAME_CHANGED: {
-      console.log(action.payload);
       if (action.payload.length > 5) {
         localErrors[actionTypes.ADMIN_NAME_CHANGED] = "Can't have such length";
       } else {
         localErrors[actionTypes.ADMIN_NAME_CHANGED] = "";
       }
-      console.log(localErrors);
       return {
         ...state,
         adminName: action.payload,

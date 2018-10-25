@@ -7,7 +7,7 @@ const ButtonComponent = props => (
     label={props.label}
     id={props.label}
     type="raised"
-    labelStyle={{ padding: "8px 16px" }}
+    labelStyle={{ padding: "6px 16px" }}
     onClick={() => {
       props.onClick();
     }}

@@ -2,11 +2,12 @@
 
 import React, { Component } from "react";
 import { Col, Grid, Row } from "../../helpers/react-flexbox-grid";
+import "../../static/css/app.css";
 
 class Header extends Component {
   render() {
     return (
-      <Grid>
+      <Grid >
         <Row>
           <Col md={9}>
             <div className="hl">

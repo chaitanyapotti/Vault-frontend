@@ -13,7 +13,7 @@
 }
 
 body {
-    font-family: 'Montserrat';
+    font-family: 'Montserrat' !important;
     background-color: rgba(76,169,252, 0.05) !important;
     font-size: 16px !important;
     line-height: 21px;
@@ -467,6 +467,7 @@ a {
     transition: width .3 s;
 }
 
+
 /* -------------------------------------------------- */
 /* Media Queries */
 /* -------------------------------------------------- */
@@ -482,3 +483,54 @@ a {
         display: none !important;
     }
 }
+
+
+/* -------------------------------------------------- */
+/* somesh css edits*/
+/* -------------------------------------------------- */
+
+.blue-shadow{
+    box-shadow: 0px 5px 25px 0px rgba(76, 169, 252, 0.25) !important;
+}
+
+.blue-button {
+
+    width: 120px;
+    height: 32px;
+    background-color: #4ca9fc;
+    border-radius: 2.25em;
+    border: None;
+    color: #ffffff !important;
+    font-family: 'Montserrat';
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom:5px;
+    margin-top: 5px;
+    margin-left:120px;
+    transition: 100ms;
+  }
+  
+  .blue-button:hover {
+    color: #ffffff !important;
+    transition: 50ms !important;
+    box-shadow: 0px 0px 30px #4caafc79;
+  }
+  
+  .blue-button:active {
+    box-shadow: 0px 0px 0px !important;
+    background-color: #1e7aca;
+    color: #ffffff !important;
+  }
+
+  .register{
+    background-color: #4ca9fc;
+    border-radius: 100px !important;
+    border: None;
+    color: #ffffff !important;
+    font-family: 'Montserrat' !important;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom:0px;
+    margin-top: 0px;
+    transition: 100ms;
+  }

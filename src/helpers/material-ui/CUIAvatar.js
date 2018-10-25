@@ -1,6 +1,6 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import Avatar from "@material-ui/core/Avatar";
+import PropTypes from "../../PropTypes";
 
 /**
  * @Component Avatar
@@ -29,7 +29,7 @@ const CUIAvatar = props => {
 };
 
 CUIAvatar.defaultProps = {
-  imgSrc: '',
+  imgSrc: "",
   style: {},
 };
 

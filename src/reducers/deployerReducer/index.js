@@ -6,7 +6,7 @@ const initialState = {
 };
 
 export default function(state = initialState, action) {
-  let currentProjDetails = state.projectDetails;
+  const currentProjDetails = state.projectDetails;
   switch (action.type) {
     case types.PROJECT_DETAILS_FETCHED: {
       const { data } = action.payload || {};
@@ -17,7 +17,7 @@ export default function(state = initialState, action) {
       };
     }
     case types.TRANSACTION_PENDING:
-      //keep spinner rotating
+      // keep spinner rotating
       return state;
     case types.TRANSACTION_REDO:
     case types.RECEIVED_TRANSACTION_HASH:

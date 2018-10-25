@@ -38,7 +38,7 @@ const isSafari = !!device.Safari();
 const isOperaMini = !!device.OperaMini();
 const isIE = !!device.IE();
 
-const chromeVersion = isChrome && parseInt(navigator.userAgent.match(new RegExp('Chrome/([0-9]+).'))[1], 10);
-const firefoxVersion = isFirefox && parseInt(navigator.userAgent.match(new RegExp('Firefox/([0-9]+).'))[1], 10);
+const chromeVersion = isChrome && parseInt(navigator.userAgent.match(new RegExp("Chrome/([0-9]+)."))[1], 10);
+const firefoxVersion = isFirefox && parseInt(navigator.userAgent.match(new RegExp("Firefox/([0-9]+)."))[1], 10);
 
 export { device, isChrome, isFirefox, isSafari, isOperaMini, isIE, isMobile, chromeVersion, firefoxVersion };

@@ -1,17 +1,22 @@
 {
-  "name": "react-redux-boilerplate",
-  "version": "0.1.0",
+  "name": "vault",
+  "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=8.6.0",
+    "yarn": ">=1.0.1"
+  },
   "dependencies": {
-    "@material-ui/core": "^3.1.2",
+    "@material-ui/core": "^3.3.0",
     "@material-ui/icons": "^3.0.1",
-    "@syncfusion/ej2-base": "^16.3.21",
-    "@syncfusion/ej2-react-grids": "^16.3.23",
+    "@syncfusion/ej2-base": "^16.3.24",
+    "@syncfusion/ej2-react-grids": "^16.3.25",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",
-    "downshift": "^2.2.3",
+    "downshift": "^3.1.2",
     "moment": "^2.22.2",
     "prop-types": "^15.6.2",
+    "qs": "^6.5.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-loadable": "^5.5.0",
@@ -19,11 +24,12 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5",
     "reactstrap": "^6.5.0",
+    "recharts": "^1.3.4",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",
     "redux-thunk": "^2.3.0",
-    "semantic-ui-css": "^2.4.0",
-    "semantic-ui-react": "^0.82.5",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.83.0",
     "web3": "^1.0.0-beta.36"
   },
   "scripts": {
@@ -35,19 +41,25 @@
     "lint:ci": "eslint src --max-warnings 0",
     "fix": "eslint --fix src",
     "q": "eslint --quiet --fix src/index.js $(git diff --cached --name-only --diff-filter=d HEAD | grep .js$)",
-    "size:why": "source-map-explorer build/static/js/main*.*js",
+    "size:why": "node tools/stats.js",
     "size": "size-limit"
   },
   "devDependencies": {
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-config-prettier": "^2.10.0",
-    "eslint-config-react-app": "^2.1.0",
-    "eslint-plugin-flowtype": "^2.50.3",
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-config-react-app": "^3.0.4",
+    "eslint-plugin-flowtype": "^3.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-prettier": "^2.7.0",
+    "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-mocha": "^5.2.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
     "prettier": "^1.14.3",
-    "source-map-explorer": "^1.6.0"
+    "webpack-bundle-analyzer": "^3.0.3"
   }
 }

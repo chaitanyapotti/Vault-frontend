@@ -1,27 +1,27 @@
-import React from 'react';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import { customRegTheme } from '../../static/js/theme';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { customRegTheme } from "../../static/js/theme";
+import PropTypes from "../../PropTypes";
 
 const theme = createMuiTheme(customRegTheme);
 
 const styles = {
   container: {
-    backgroundImage: 'linear-gradient(-179deg, #FF5454 1%, #FF7C46 100%)',
-    height: '100vh',
-    minHeight: '500px',
+    backgroundImage: "linear-gradient(-179deg, #FF5454 1%, #FF7C46 100%)",
+    height: "100vh",
+    minHeight: "500px",
   },
   interruption: {
-    backgroundImage: 'linear-gradient(-179deg, #FF5454 1%, #FF7C46 100%)',
-    backgroundColor: 'transparent',
-    boxShadow: 'none',
+    backgroundImage: "linear-gradient(-179deg, #FF5454 1%, #FF7C46 100%)",
+    backgroundColor: "transparent",
+    boxShadow: "none",
   },
 };
 
 class CUIRegWrapper extends React.PureComponent {
   renderStyle = () => {
     switch (this.props.type) {
-      case 'interruption':
+      case "interruption":
         return styles.interruption;
       default:
         return styles.container;
@@ -41,7 +41,7 @@ class CUIRegWrapper extends React.PureComponent {
 }
 
 CUIRegWrapper.defaultProps = {
-  id: 'cuiWrapper',
+  id: "cuiWrapper",
   style: {},
 };
 

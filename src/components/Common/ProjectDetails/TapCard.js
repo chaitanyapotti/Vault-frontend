@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { CUICard, CUIFormInput, CUIButton } from "../../../helpers/material-ui";
-import { CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS } from "../../../static/js/variables";
+import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
-import SocialLinks from "../../Common/SocialLinks";
+import ButtonComponent from "../FormComponents/ButtonComponent";
 
 class TapCard extends Component {
   render() {
@@ -26,14 +25,7 @@ class TapCard extends Component {
             </Col>
           </Row>
           <div className="text-right">
-            <CUIButton
-              type={CUIButtonType.RAISED}
-              buttonColor={CUIInputColor.PRIMARY}
-              id="Approve"
-              label={"Approve"}
-              // disabled={!this.state.validPassword}
-              onClick={this.uploadDaico}
-            />
+            <ButtonComponent onClick={() => this.uploadDaico()} label="Approve" />
           </div>
         </CUICard>
       </div>

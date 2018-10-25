@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import UserTokens from "../../containers/UserTokens";
-
-
-class Governance  extends Component {
+import {Grid} from "../../helpers/react-flexbox-grid";
+class Governance extends Component {
   render() {
     return (
-      <div>
-        <UserTokens/>
-      </div>
-    )
+      <Grid>
+        <UserTokens history={this.props.history} />
+      </Grid>
+    );
   }
 }
 
-export default Governance
+export default Governance;

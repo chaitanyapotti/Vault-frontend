@@ -20,13 +20,13 @@ export default function(state = initialState, action) {
     //     membershipAssigned: false
     //   };
 
-    case actionTypes.WHITELIST_CHECK:
+    case actionTypes.WHITELIST_CHECK: {
       const { receipt } = action.payload;
       return {
         ...state,
         isCurrentMember: receipt
       };
-
+    }
     default:
       return state;
   }

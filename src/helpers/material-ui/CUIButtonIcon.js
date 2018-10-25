@@ -1,7 +1,7 @@
-import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import PropTypes from '../../PropTypes';
-import { CUIColor } from '../../static/js/variables';
+import React from "react";
+import IconButton from "@material-ui/core/IconButton";
+import PropTypes from "../../PropTypes";
+import { CUIColor } from "../../static/js/variables";
 
 /**
  * @Component ButtonIcon
@@ -22,10 +22,7 @@ import { CUIColor } from '../../static/js/variables';
  *
  */
 
-const CUIButtonIcon = props =>
-  <IconButton {...props}>
-    {props.children}
-  </IconButton>;
+const CUIButtonIcon = props => <IconButton {...props}>{props.children}</IconButton>;
 
 CUIButtonIcon.defaultProps = {
   color: CUIColor.DEFAULT,

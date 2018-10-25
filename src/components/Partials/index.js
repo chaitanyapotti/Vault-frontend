@@ -1,7 +1,4 @@
-import HeaderPartial from './HeaderPartial';
-import FooterPartial from './FooterPartial';
+import HeaderPartial from "./HeaderPartial";
+import FooterPartial from "./FooterPartial";
 
-export {
-    HeaderPartial,
-    FooterPartial,
-}
+export { HeaderPartial, FooterPartial };

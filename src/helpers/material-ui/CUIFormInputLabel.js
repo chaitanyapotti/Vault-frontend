@@ -1,6 +1,6 @@
-import React from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import PropTypes from "../../PropTypes";
 
 /**
  * @Component FormInputLabel

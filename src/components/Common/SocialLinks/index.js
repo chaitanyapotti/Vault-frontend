@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 
 const images = {
-  github: "https://www.sundowners.org.uk/wp-content/uploads/Logos/fb.png",
-  telegram: "https://www.sundowners.org.uk/wp-content/uploads/Logos/fb.png",
-  medium: "https://www.sundowners.org.uk/wp-content/uploads/Logos/fb.png",
-  facebook: "https://www.sundowners.org.uk/wp-content/uploads/Logos/fb.png",
-  twitter: "https://www.sundowners.org.uk/wp-content/uploads/Logos/fb.png"
+  github: "/assets/Footer/github.png",
+  telegram: "/assets/Footer/telegram.png",
+  medium: "/assets/Footer/medium.png",
+  facebook: "/assets/Footer/fb.png",
+  twitter: "/assets/Footer/twitter.png"
 };
 
 class SocialLinks extends Component {
@@ -16,28 +16,28 @@ class SocialLinks extends Component {
         <tbody>
           <tr>
             <td>
-              <a target="_blank" href={urls.github}>
-                <img src={images.github} width="20" height="20" />
+              <a target="_blank" href={urls.github} rel="noopener noreferrer">
+                <img className="push--left" src={images.github} width="20" height="20" alt="github" />
               </a>
             </td>
             <td>
-              <a target="_blank" href={urls.telegram}>
-                <img src={images.telegram} width="20" height="20" />
+              <a target="_blank" href={urls.telegram} rel="noopener noreferrer">
+                <img className="push--left" src={images.telegram} width="20" height="20" alt="telegram" />
               </a>
             </td>
             <td>
-              <a target="_blank" href={urls.medium}>
-                <img src={images.medium} width="20" height="20" />
+              <a target="_blank" href={urls.medium} rel="noopener noreferrer">
+                <img className="push--left" src={images.medium} width="20" height="20" alt="medium" />
               </a>
             </td>
             <td>
-              <a target="_blank" href={urls.facebook}>
-                <img src={images.facebook} width="20" height="20" />
+              <a target="_blank" href={urls.facebook} rel="noopener noreferrer">
+                <img className="push--left" src={images.facebook} width="20" height="20" alt="facebook" />
               </a>
             </td>
             <td>
-              <a target="_blank" href={urls.twitter}>
-                <img src={images.twitter} width="20" height="20" />
+              <a target="_blank" href={urls.twitter} rel="noopener noreferrer">
+                <img className="push--left" src={images.twitter} width="20" height="20" alt="twitter" />
               </a>
             </td>
           </tr>

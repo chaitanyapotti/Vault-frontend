@@ -3,33 +3,41 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ProjectName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
 import { onWhiteListClick } from "../../actions/projectPreStartActions/index";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { CUICard } from "../../helpers/material-ui";
+import { formatDate } from "../../helpers/common/projectDetailhelperFunctions";
+import { fetchPrice } from "../../actions/priceFetchActions/index";
 
 class ProjectDetailPreStart extends Component {
+  componentDidMount() {
+    const { fetchPrice: etherPriceFetch } = this.props || {};
+    etherPriceFetch("ETH");
+  }
+
   getPrice = () => {
     const { rounds } = this.props || {};
     const [round1, ...rest] = rounds || {};
-    const { tokenRate } = round1 || {}; //tokens/wei
-    return 1 / parseInt(tokenRate, 10);
+    const { tokenRate } = round1 || {}; // tokens/wei
+    return 1 / parseFloat(tokenRate, 10);
   };
 
-  getRoundText = () => {
-    //Always Constant for all daicos
-    return "3 Round DAICO";
-  };
+  getRoundText = () =>
+    // Always Constant for all daicos
+    "3 Round DAICO";
 
   getR3Price = () => {
     const { rounds } = this.props || {};
     const round3 = [...rounds].pop() || {};
-    const { tokenRate } = round3 || {}; //tokens/wei
-    return 1 / parseInt(tokenRate, 10);
+    const { tokenRate } = round3 || {}; // tokens/wei
+    return 1 / parseFloat(tokenRate, 10);
   };
 
   getSoftCap = () => {
-    //For now using ether.. when ether price is brought, it is implemented, convert to $
-    const etherPrice = "200"; //dollars
-    const { rounds } = this.props || {};
+    // TODO: For now using ether.. when ether price is brought, it is implemented, convert to $
+    const { rounds, prices } = this.props || {};
+    const { ETH: etherPrice } = prices || {};
     let softCap = 0;
-    for (let index = 0; index < rounds.length; index++) {
+    for (let index = 0; index < rounds.length; index += 1) {
       const { tokenCount } = rounds[index];
       softCap += parseFloat(tokenCount);
     }
@@ -37,16 +45,21 @@ class ProjectDetailPreStart extends Component {
   };
 
   getHardCap = () => {
-    const etherPrice = "200"; //dollars
-    const { totalMintableSupply } = this.props || {};
+    const { totalMintableSupply, prices } = this.props || {};
+    const { ETH: etherPrice } = prices || {};
     const hardCap = parseFloat(totalMintableSupply) * this.getR3Price() * etherPrice * Math.pow(10, -18);
     return Math.round(hardCap).toString();
   };
 
-  onWhiteListClick = () => {
-    const { version, membershipAddress } = this.props || {};
-    //this.props.checkWhiteList(version, "Protocol", membershipAddress);
-    this.props.onWhiteListClick(version, "Protocol", membershipAddress);
+  onWhiteListClickInternal = () => {
+    const { version, membershipAddress, onWhiteListClick: whiteListClick } = this.props || {};
+    // this.props.checkWhiteList(version, "Protocol", membershipAddress);
+    whiteListClick(version, "Protocol", membershipAddress);
+  };
+
+  getStartDate = () => {
+    const { startDateTime } = this.props || new Date();
+    return formatDate(startDateTime);
   };
 
   render() {
@@ -66,48 +79,66 @@ class ProjectDetailPreStart extends Component {
       foundationDetails
     } = this.props || {};
     return (
-      <div>
-        <ProjectName
-          projectName={projectName}
-          tokenTag={tokenTag}
-          price={this.getPrice()}
-          roundText={this.getRoundText()}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          buttonText="Get Whitelisted"
-          buttonVisibility={!isCurrentMember}
-          onClick={this.onWhiteListClick}
-        />
-        <PDetailPreStart
-          icoStartDate={new Date(startDateTime).toDateString()}
-          individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
-          voteSaturationLimit={capPercent / 100}
-          killFrequency="Quarterly"
-          initialTapAmount={(parseInt(initialTapAmount, 10) * 86400 * 30) / Math.pow(10, 18)}
-          tapIncrementUnit={tapIncrementFactor}
-          hardCapCapitalisation={this.getSoftCap()}
-          dilutedCapitalisation={this.getHardCap()}
-        />
-        <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
-      </div>
+      <Grid>
+        <Row>
+          <Col xs={12} lg={6}>
+            <ProjectName
+              projectName={projectName}
+              priceIncrementFlag={false}
+              tokenTag={tokenTag}
+              price={this.getPrice()}
+              roundText={this.getRoundText()}
+              description={description}
+              urls={urls}
+              whitepaper={whitepaper}
+              buttonText="Get Whitelisted"
+              buttonVisibility={!isCurrentMember}
+              onClick={this.onWhiteListClickInternal}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <PDetailPreStart
+              icoStartDate={formatDate(startDateTime)}
+              individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
+              voteSaturationLimit={capPercent / 100}
+              killFrequency="Quarterly"
+              initialTapAmount={(parseFloat(initialTapAmount) * 86400 * 30) / Math.pow(10, 18)}
+              tapIncrementUnit={tapIncrementFactor}
+              hardCapCapitalisation={this.getSoftCap()}
+              dilutedCapitalisation={this.getHardCap()}
+            />
+          </Col>
+        </Row>
+
+        <Row className="push--top">
+          <Col xs={12} lg={6}>
+            <CUICard style={{ padding: "40px 50px" }}>
+              <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
+            </CUICard>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
     {
-      onWhiteListClick: onWhiteListClick
+      onWhiteListClick,
+      fetchPrice
     },
     dispatch
   );
-};
 
 const mapStateToProps = state => {
-  const { isCurrentMember } = state.projectPreStartReducer || {};
+  const { projectPreStartReducer, fetchPriceReducer } = state || {};
+  const { prices } = fetchPriceReducer || {};
+  const { isCurrentMember } = projectPreStartReducer || {};
+
   return {
-    isCurrentMember: isCurrentMember
+    isCurrentMember,
+    prices
   };
 };
 

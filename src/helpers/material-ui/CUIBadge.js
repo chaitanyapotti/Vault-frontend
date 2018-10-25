@@ -1,7 +1,7 @@
-import React from 'react';
-import Badge from '@material-ui/core/Badge';
-import { CUIColor } from '../../static/js/variables';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import Badge from "@material-ui/core/Badge";
+import { CUIColor } from "../../static/js/variables";
+import PropTypes from "../../PropTypes";
 
 /**
  * @Component Badge
@@ -24,10 +24,11 @@ import PropTypes from '../../PropTypes';
  * @Material-Badge@API https://material-ui.com/api/badge/
  */
 
-const CUIBadge = props =>
+const CUIBadge = props => (
   <Badge color={props.badgeColor} badgeContent={props.content} style={props.style}>
     {props.children}
-  </Badge>;
+  </Badge>
+);
 
 CUIBadge.defaultProps = {
   badgeColor: CUIColor.DEFAULT,

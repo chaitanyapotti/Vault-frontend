@@ -1,9 +1,9 @@
 /* eslint-disable no-script-url */
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import { CS_FONT_SIZE, CUIButtonColor } from '../../static/js/variables';
-import PropTypes from '../../PropTypes';
+import React from "react";
+import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import { CS_FONT_SIZE, CUIButtonColor } from "../../static/js/variables";
+import PropTypes from "../../PropTypes";
 
 /**
  * @Component Button
@@ -61,9 +61,7 @@ const CUIButton = props => {
 
   return (
     <Button {...btnProps}>
-      <div style={props.labelStyle}>
-        {props.children || props.label}
-      </div>
+      <div style={props.labelStyle}>{props.children || props.label}</div>
     </Button>
   );
 };
@@ -71,25 +69,25 @@ const CUIButton = props => {
 CUIButton.defaultProps = {
   children: null,
   labelStyle: {
-    textTransform: 'none',
+    textTransform: "none",
     fontSize: CS_FONT_SIZE.S,
   },
-  className: '',
+  className: "",
   disabled: false,
-  size: 'medium',
+  size: "medium",
   style: {},
   isLink: false,
-  label: '',
-  type: 'flat',
+  label: "",
+  type: "flat",
   href: undefined,
-  id: '',
+  id: "",
   isLinkExternal: false,
   tabIndex: 0,
   buttonColor: CUIButtonColor.PRIMARY,
   full: false,
   icon: null,
   actionProps: {},
-  to: '',
+  to: "",
   component: undefined,
   onClick: () => {},
 };

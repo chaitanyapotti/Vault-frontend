@@ -1,109 +1,238 @@
-import React from 'react';
-import {CUICard, CUIFormInput, CUIButton} from '../../helpers/material-ui';
-import {CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS} from '../../static/js/variables';
-import {Row, Col} from '../../helpers/react-flexbox-grid';
+import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { CUICard, CUIFormInput, CUIButton } from "../../helpers/material-ui";
+import { CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS } from "../../static/js/variables";
+import { Row, Col } from "../../helpers/react-flexbox-grid";
+import {
+  initialFundReleaseChangedAction,
+  maxEtherContributionChangedAction,
+  initialTapValueChangedAction,
+  // daicoRoundsChangedAction,
+  daicoStartDateChangedAction,
+  daicoEndDateChangedAction,
+  tapIncrementFactorChangedAction,
+  voteSaturationLimitChangedAction
+} from "../../actions/projectRegistrationActions";
 
-class DaicoDetails extends React.Component{
-    state={
-        inifundValue: '',
-    }
+class DaicoDetails extends React.Component {
+  onChangeIniFundVal = e => {
+    this.props.initialFundReleaseChangedAction(e.target.value);
+  };
 
-    onChangeIniFundVal = (e) =>{
-        this.setState({
-            inifundValue: e.target.value
-        })
-    }
+  onChangeMaxEtherContribution = e => {
+    this.props.maxEtherContributionChangedAction(e.target.value);
+  };
 
-    uploadDaico = () => {
-        console.log('upload DAICO button action');
-    }
+  onChangeInitialTapValue = e => {
+    this.props.initialTapValueChangedAction(e.target.value);
+  };
 
-    render(){
-        return(
-            <div>
-                <Row>
-                    <Col>
-                        <CUIButton
-                            type={CUIButtonType.RAISED}
-                            buttonColor={CUIInputColor.PRIMARY}
-                            id="Publish DAICO"
-                            label={'Publish DAICO'}
-                            // disabled={!this.state.validPassword}
-                            onClick={() => {
-                                this.uploadDaico();
-                            }}
-                        />
-                    </Col>
-                </Row>
-                <CUICard style={{padding: '40px 67px'}}>
-                    <div>DAICO Details</div>
-                    <hr/>
-                    <Row>
-                        <Col xs={12} lg={6}>
-                            <CUIFormInput
-                                inputType={CUIInputType.TEXT}
-                                full
-                                inputName="Initial Fund Release"
-                                inputLabel={'Initial Fund Release'}
-                                inputPlaceholder="Eg. Aman"
-                                inputValue={this.state.inifundValue}
-                                textFocus
-                                // onBlur={this.onBlurAge}
-                                // error={this.state.errorAgeText !== ''}
-                                // helperText={this.state.errorAgeText}
-                                // onKeyDownSelector="Admin"
-                                onChange={this.onChangeIniFundVal}
-                            />
-                        </Col>
-                        <Col xs={12} lg={6}>
-                            <CUIFormInput
-                                inputType={CUIInputType.SELECT}
-                                iconColor={CS_COLORS.G_DIVIDER}
-                                full
-                                inputLabel={'DAICO Rounds'}
-                                inputValue={this.state.postedBy}
-                                items={[{value: 'sdsds', primaryText: 'sdhjds'}]}
-                                onChange={this.onSelectPostedBy}
-                            />
-                        </Col>
-                    </Row>
+  onChangeTapIncrementFactor = e => {
+    this.props.tapIncrementFactorChangedAction(e.target.value);
+  };
 
-                    <Row>
-                        <Col xs={12} lg={6}>
-                            <CUIFormInput
-                                inputType={CUIInputType.TEXT}
-                                full
-                                inputName="DAICO Start Date"
-                                inputLabel={'DAICO Start Date'}
-                                inputPlaceholder="Eg. Wanchain"
-                                inputValue={this.state.daicoStrtDt}
-                                // onBlur={this.onBlurAge}
-                                // error={this.state.errorAgeText !== ''}
-                                // helperText={this.state.errorAgeText}
-                                // onKeyDownSelector="Admin"
-                                onChange={this.onChangeDaicoStart}
-                            />
-                        </Col>
-                        <Col xs={12} lg={6}>
-                            <CUIFormInput
-                                inputType={CUIInputType.TEXT}
-                                full
-                                inputName="DAICO End Date"
-                                inputLabel={'DAICO End Date'}
-                                inputPlaceholder="Eg. ERC"
-                                inputValue={this.state.daicoEndDt}
-                                // onBlur={this.onBlurAge}
-                                // error={this.state.errorAgeText !== ''}
-                                // helperText={this.state.errorAgeText}
-                                // onKeyDownSelector="Admin"
-                                onChange={this.onChangeDaicoEnd}
-                            />
-                        </Col>
-                    </Row>
-                </CUICard>
-            </div>
-        )
-    }
+  onChangeVoteSaturationLimit = e => {
+    this.props.voteSaturationLimitChangedAction(e.target.value);
+  };
+
+  // onSelectDaicoRounds = e => {
+  //   console.log(e.target.value);
+  //   this.props.daicoRoundsChangedAction(e.target.value);
+  // };
+
+  onChangeDaicoStart = e => {
+    this.props.daicoStartDateChangedAction(e.target.value);
+  };
+
+  onChangeDaicoEnd = e => {
+    this.props.daicoEndDateChangedAction(e.target.value);
+  };
+
+  uploadDaico = () => {
+    console.log("upload DAICO button action");
+  };
+
+  render() {
+    return (
+      <div>
+        <CUICard style={{ padding: "40px 67px" }}>
+          <div className="txt-xl">DAICO Details</div>
+          <hr />
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Round 1 Start Date"
+                inputLabel="Round 1 Start Date"
+                inputPlaceholder="Eg. 22-10-2018"
+                inputValue={this.props.daicoStartDate}
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeDaicoStart}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Round 1 End Date"
+                inputLabel="Round 1 End Date"
+                inputPlaceholder="Eg. 25-10-2018"
+                inputValue={this.props.daicoEndDate}
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeDaicoEnd}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Initial Fund Release"
+                inputLabel="Initial Fund Release"
+                inputPlaceholder="Eg. Aman"
+                inputValue={this.props.initialFundRelease}
+                textFocus
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeIniFundVal}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Max Ether Contribution"
+                inputLabel="Max Ether Contribution"
+                inputPlaceholder="Eg. 5"
+                inputValue={this.props.maxEtherContribution}
+                textFocus
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeMaxEtherContribution}
+              />
+            </Col>
+            {/* <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.SELECT}
+                iconColor={CS_COLORS.G_DIVIDER}
+                full
+                inputLabel="DAICO Rounds"
+                inputValue={this.props.daicoRounds}
+                items={[{ value: "3", primaryText: "3" }, { value: "2", primaryText: "2" }, { value: "1", primaryText: "1" }]}
+                onChange={this.onSelectDaicoRounds}
+              />
+            </Col> */}
+          </Row>
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Initial Tap Value"
+                inputLabel="Initial Tap Value"
+                inputPlaceholder="Eg. 100 eth/month"
+                inputValue={this.props.initialTapValue}
+                textFocus
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeInitialTapValue}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Tap Increment Factor"
+                inputLabel="Tap Increment Factor"
+                inputPlaceholder="Eg. 1.5"
+                inputValue={this.props.tapIncrementFactor}
+                textFocus
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeTapIncrementFactor}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                full
+                inputName="Vote Saturation Limit"
+                inputLabel="Vote Saturation Limit"
+                inputPlaceholder="Eg. 0.05%"
+                inputValue={this.props.voteSaturationLimit}
+                textFocus
+                // onBlur={this.onBlurAge}
+                // error={this.state.errorAgeText !== ''}
+                // helperText={this.state.errorAgeText}
+                // onKeyDownSelector="Admin"
+                onChange={this.onChangeVoteSaturationLimit}
+              />
+            </Col>
+          </Row>
+        </CUICard>
+      </div>
+    );
+  }
 }
 
-export default DaicoDetails;
+const mapStateToProps = state => {
+  const {
+    initialFundRelease,
+    daicoRounds,
+    daicoStartDate,
+    daicoEndDate,
+    maxEtherContribution,
+    initialTapValue,
+    tapIncrementFactor,
+    voteSaturationLimit
+  } = state.projectRegistrationData || {};
+  return {
+    initialFundRelease,
+    daicoRounds,
+    daicoStartDate,
+    daicoEndDate,
+    maxEtherContribution,
+    initialTapValue,
+    tapIncrementFactor,
+    voteSaturationLimit
+  };
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      initialFundReleaseChangedAction,
+      // daicoRoundsChangedAction,
+      daicoStartDateChangedAction,
+      daicoEndDateChangedAction,
+      maxEtherContributionChangedAction,
+      initialTapValueChangedAction,
+      tapIncrementFactorChangedAction,
+      voteSaturationLimitChangedAction
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DaicoDetails);

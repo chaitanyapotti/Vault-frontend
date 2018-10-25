@@ -18,7 +18,7 @@ import web3 from "../../helpers/web3";
 
 export function isAlreadyWhiteListed(receipt) {
   return {
-    payload: { receipt: receipt },
+    payload: { receipt },
     type: "WHITELIST_CHECK"
   };
 }
@@ -28,17 +28,16 @@ export function onWhiteListClick(version, contractName, contractAddress) {
     const network = await web3.eth.net.getNetworkType();
     web3.eth.getAccounts().then(accounts =>
       axios
-        .get(config.api_base_url + "/web3/membershiptoken/iscurrentmember", {
-          params: { version: version.toString(), network: network, address: contractAddress, useraddress: accounts[0] }
+        .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
+          params: { version: version.toString(), network, address: contractAddress, useraddress: accounts[0] }
         })
         .then(response => {
           if (response.status === 200) {
             const { data } = response.data;
             if (data === "true") {
-              console.log("herer");
               dispatch(isAlreadyWhiteListed(true));
             } else {
-              axios.get(config.api_base_url + "/web3/contractdata/", { params: { version: version.toString(), name: contractName } }).then(res => {
+              axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } }).then(res => {
                 const { data } = res.data || {};
                 const { abi } = data || {};
                 const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });

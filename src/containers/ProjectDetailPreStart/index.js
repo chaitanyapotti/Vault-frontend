@@ -2,23 +2,24 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ProjectName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
-import { onWhiteListClick } from "../../actions/projectPreStartActions/index";
+import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
-import { formatDate } from "../../helpers/common/projectDetailhelperFunctions";
+import { formatDate, formatRateToPrice, formatFromWei } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 
 class ProjectDetailPreStart extends Component {
   componentDidMount() {
-    const { fetchPrice: etherPriceFetch } = this.props || {};
+    const { fetchPrice: etherPriceFetch, checkWhiteList: checkWhiteListStatus, version, membershipAddress } = this.props || {};
     etherPriceFetch("ETH");
+    checkWhiteListStatus(version, membershipAddress);
   }
 
   getPrice = () => {
     const { rounds } = this.props || {};
     const [round1, ...rest] = rounds || {};
     const { tokenRate } = round1 || {}; // tokens/wei
-    return 1 / parseFloat(tokenRate, 10);
+    return formatRateToPrice(tokenRate);
   };
 
   getRoundText = () =>
@@ -29,11 +30,10 @@ class ProjectDetailPreStart extends Component {
     const { rounds } = this.props || {};
     const round3 = [...rounds].pop() || {};
     const { tokenRate } = round3 || {}; // tokens/wei
-    return 1 / parseFloat(tokenRate, 10);
+    return formatRateToPrice(tokenRate);
   };
 
   getSoftCap = () => {
-    // TODO: For now using ether.. when ether price is brought, it is implemented, convert to $
     const { rounds, prices } = this.props || {};
     const { ETH: etherPrice } = prices || {};
     let softCap = 0;
@@ -41,14 +41,13 @@ class ProjectDetailPreStart extends Component {
       const { tokenCount } = rounds[index];
       softCap += parseFloat(tokenCount);
     }
-    return Math.round(softCap * this.getR3Price() * Math.pow(10, -18) * parseFloat(etherPrice)).toString();
+    return formatFromWei(softCap * this.getR3Price() * parseFloat(etherPrice));
   };
 
   getHardCap = () => {
     const { totalMintableSupply, prices } = this.props || {};
     const { ETH: etherPrice } = prices || {};
-    const hardCap = parseFloat(totalMintableSupply) * this.getR3Price() * etherPrice * Math.pow(10, -18);
-    return Math.round(hardCap).toString();
+    return formatFromWei(parseFloat(totalMintableSupply) * this.getR3Price() * etherPrice);
   };
 
   onWhiteListClickInternal = () => {
@@ -99,10 +98,10 @@ class ProjectDetailPreStart extends Component {
           <Col xs={12} lg={6}>
             <PDetailPreStart
               icoStartDate={formatDate(startDateTime)}
-              individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
+              individualCap={formatFromWei(maximumEtherContribution, 3)}
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
-              initialTapAmount={(parseFloat(initialTapAmount) * 86400 * 30) / Math.pow(10, 18)}
+              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
               tapIncrementUnit={tapIncrementFactor}
               hardCapCapitalisation={this.getSoftCap()}
               dilutedCapitalisation={this.getHardCap()}
@@ -126,7 +125,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       onWhiteListClick,
-      fetchPrice
+      fetchPrice,
+      checkWhiteList
     },
     dispatch
   );

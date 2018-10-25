@@ -1,13 +1,18 @@
 import moment from "moment";
-import axios from "axios";
 
-const formatDate = dbDate => `${moment(dbDate).format("dddd, MMMM Do YYYY, h:mm:ss a z")}(UTC)`;
+const formatDate = dbDate =>
+  // moment().locale("en-gb");
+  // moment.updateLocale("en-gb", {
+  //   ordinal(number, token) {
+  //     const b = number % 10;
+  //     const output = (number % 100) / 10 === 1 ? "th" : b === 1 ? "st" : b === 2 ? "nd" : b === 3 ? "rd" : "th";
+  //     return number + output;
+  //   }
+  // });
+  `${moment(dbDate).format("Do MMM YYYY | h:mm A z")}(UTC)`;
 
-const etherPrice = () => {
-  axios.get("https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=USD").then(response => {
-    const { price_usd } = response || "230";
-    return price_usd;
-  });
-};
+const formatRateToPrice = rate => parseFloat(1 / parseFloat(rate)).toPrecision(2);
 
-export { formatDate, etherPrice };
+const formatFromWei = (input, precision = 0) => Math.round(parseFloat(input) * Math.pow(10, -18) * Math.pow(10, precision)) / Math.pow(10, precision);
+
+export { formatDate, formatRateToPrice, formatFromWei };

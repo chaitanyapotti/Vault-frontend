@@ -10,9 +10,19 @@ import { fetchPrice } from "../../actions/priceFetchActions/index";
 
 class ProjectDetailPreStart extends Component {
   componentDidMount() {
-    const { fetchPrice: etherPriceFetch, checkWhiteList: checkWhiteListStatus, version, membershipAddress } = this.props || {};
+    const { fetchPrice: etherPriceFetch, checkWhiteList: checkWhiteListStatus, version, membershipAddress, userLocalPublicAddress } =
+      this.props || {};
     etherPriceFetch("ETH");
-    checkWhiteListStatus(version, membershipAddress);
+    checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log("here");
+    const { userLocalPublicAddress } = prevProps || "";
+    const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress } = this.props || {};
+    if (userLocalPublicAddress !== localAddress) {
+      checkWhiteListStatus(version, membershipAddress, localAddress);
+    }
   }
 
   getPrice = () => {
@@ -51,9 +61,12 @@ class ProjectDetailPreStart extends Component {
   };
 
   onWhiteListClickInternal = () => {
-    const { version, membershipAddress, onWhiteListClick: whiteListClick } = this.props || {};
-    // this.props.checkWhiteList(version, "Protocol", membershipAddress);
-    whiteListClick(version, "Protocol", membershipAddress);
+    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
+    if (isVaultMember) {
+      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
+    } else {
+      // show modal
+    }
   };
 
   getStartDate = () => {
@@ -102,7 +115,7 @@ class ProjectDetailPreStart extends Component {
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
               initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
-              tapIncrementUnit={tapIncrementFactor}
+              tapIncrementUnit={parseFloat(tapIncrementFactor) / 100}
               hardCapCapitalisation={this.getSoftCap()}
               dilutedCapitalisation={this.getHardCap()}
             />
@@ -132,13 +145,16 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { projectPreStartReducer, fetchPriceReducer } = state || {};
+  const { projectPreStartReducer, fetchPriceReducer, signinManagerData } = state || {};
   const { prices } = fetchPriceReducer || {};
   const { isCurrentMember } = projectPreStartReducer || {};
+  const { isVaultMember, userLocalPublicAddress } = signinManagerData || {};
 
   return {
     isCurrentMember,
-    prices
+    prices,
+    isVaultMember,
+    userLocalPublicAddress
   };
 };
 

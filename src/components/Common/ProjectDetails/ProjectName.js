@@ -71,7 +71,13 @@ class ProjectName extends React.Component {
             </div>
           </Col>
           <Col lg={6} className="text-right   ">
-            {buttonVisibility ? <ButtonComponent onClick={onClick} label={buttonText} /> : <span>You are whitelisted</span>}
+            {buttonVisibility ? (
+              <ButtonComponent onClick={onClick} label={buttonText} />
+            ) : (
+              <span>
+                You are whitelisted <img src="/assets/Vault/whitelist.svg" alt="whitelist checked" width="20" height="20" />
+              </span>
+            )}
             {onSecondaryClick ? (
               <span className="push-left--13">
                 <ButtonComponent onClick={onSecondaryClick} label={secondaryButtonText} />

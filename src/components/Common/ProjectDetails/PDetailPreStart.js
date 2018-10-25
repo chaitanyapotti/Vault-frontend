@@ -12,7 +12,7 @@ class PDetailPreStart extends Component {
       initialTapAmount,
       tapIncrementUnit,
       hardCapCapitalisation,
-      dilutedCapitalisation,
+      dilutedCapitalisation
     } = this.props || {};
     return (
       <CUICard style={{ padding: "40px 50px" }}>
@@ -38,20 +38,17 @@ class PDetailPreStart extends Component {
         <Row className="push-half--top">
           <Col lg={6} className="txt">
             Initial Tap Amount:
-            <span className="text--secondary">
-              {initialTapAmount}
-              ETH/month
-            </span>
+            <span className="text--secondary">{initialTapAmount} ETH/month</span>
           </Col>
           <Col lg={6} className="txt">
-            Tap Increment Percent:
-            <span className="text--secondary">{tapIncrementUnit}%</span>
+            Tap Increment Factor:
+            <span className="text--secondary">{tapIncrementUnit}</span>
           </Col>
         </Row>
 
         <Row className="push-half--top">
           <Col lg={6} className="txt">
-            Hard Capitalisation: <span className="text--secondary">${hardCapCapitalisation}</span>
+            Hard Cap Capitalisation: <span className="text--secondary">${hardCapCapitalisation}</span>
           </Col>
           <Col lg={6} className="txt">
             Diluted Capitalisation: <span className="text--secondary">${dilutedCapitalisation}</span>

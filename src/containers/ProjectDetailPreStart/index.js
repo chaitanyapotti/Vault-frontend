@@ -65,7 +65,8 @@ class ProjectDetailPreStart extends Component {
     if (isVaultMember) {
       whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
     } else {
-      // show modal
+      // show user that "you are not a vault member" and ask to be redirected to registration page
+      // if yes, redirect to /registration else stay here
     }
   };
 

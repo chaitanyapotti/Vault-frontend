@@ -1,5 +1,4 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { withStyles } from '@material-ui/core/styles';
 import ButtonComponent from "../FormComponents/ButtonComponent";
@@ -18,7 +17,7 @@ const SpinnerAdornment = withStyles(styles)(props => (
   />
 ))
 
-const AdornedButton = (props) => {
+const LoadingButton = (props) => {
   const {
     children,
     loading,
@@ -32,7 +31,7 @@ const AdornedButton = (props) => {
   )
 }
 
-export default AdornedButton;
+export default LoadingButton;
 
 // Example how to use this component
-{/* <AdornedButton loading={true} >Click</AdornedButton> */}
+{/* <LoadingButton loading={true} >Click</LoadingButton> */}

@@ -1,27 +1,143 @@
 /* eslint camelcase: 0 */
 
-import React, { Component } from "react";
-import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page } from "@syncfusion/ej2-react-grids";
-import { DataManager } from "@syncfusion/ej2-data";
+import React from "react";
+import MUIDataTable from "mui-datatables";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+import Cities from "./cities";
 
-class GridData extends Component {
+class GridData extends React.Component {
   render() {
-    const data = new DataManager({
-      url: "https://js.syncfusion.com/demos/ejServices/Wcf/Northwind.svc/Orders/",
-    });
+    const columns = [
+      {
+        name: "Name",
+        options: {
+          filter: false
+        }
+      },
+      {
+        name: "Title",
+        options: {
+          filter: true
+        }
+      },
+      {
+        name: "Location",
+        options: {
+          filter: true,
+          customBodyRender: (value, tableMeta, updateValue) => {
+            return (
+              <Cities
+                value={value}
+                index={tableMeta.columnIndex}
+                change={event => updateValue(event)}
+              />
+            );
+          }
+        }
+      },
+      {
+        name: "Age",
+        options: {
+          filter: false
+        }
+      },
+      {
+        name: "Salary",
+        options: {
+          filter: true,
+          customBodyRender: (value, tableMeta, updateValue) => {
+            const nf = new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            });
+
+            return nf.format(value);
+          }
+        }
+      },
+      {
+        name: "Active",
+        options: {
+          filter: true,
+          customBodyRender: (value, tableMeta, updateValue) => {
+            return (
+              <FormControlLabel
+                label={value ? "Yes" : "No"}
+                value={value ? "Yes" : "No"}
+                control={
+                  <Switch
+                    color="primary"
+                    checked={value}
+                    value={value ? "Yes" : "No"}
+                  />
+                }
+                onChange={event => {
+                  updateValue(event.target.value === "Yes" ? false : true);
+                }}
+              />
+            );
+          }
+        }
+      }
+    ];
+
+    const data = [
+      ["Robin Duncan", "Business Analyst", "Los Angeles", 20, 77000, false],
+      ["Mel Brooks", "Business Consultant", "Oklahoma City", 37, 135000, true],
+      ["Harper White", "Attorney", "Pittsburgh", 52, 420000, false],
+      ["Kris Humphrey", "Agency Legal Counsel", "Laredo", 30, 150000, true],
+      ["Frankie Long", "Industrial Analyst", "Austin", 31, 170000, false],
+      ["Brynn Robbins", "Business Analyst", "Norfolk", 22, 90000, true],
+      ["Justice Mann", "Business Consultant", "Chicago", 24, 133000, false],
+      [
+        "Addison Navarro",
+        "Business Management Analyst",
+        "New York",
+        50,
+        295000,
+        true
+      ],
+      ["Jesse Welch", "Agency Legal Counsel", "Seattle", 28, 200000, false],
+      ["Eli Mejia", "Commercial Specialist", "Long Beach", 65, 400000, true],
+      ["Gene Leblanc", "Industrial Analyst", "Hartford", 34, 110000, false],
+      ["Danny Leon", "Computer Scientist", "Newark", 60, 220000, true],
+      ["Lane Lee", "Corporate Counselor", "Cincinnati", 52, 180000, false],
+      ["Jesse Hall", "Business Analyst", "Baltimore", 44, 99000, true],
+      ["Danni Hudson", "Agency Legal Counsel", "Tampa", 37, 90000, false],
+      ["Terry Macdonald", "Commercial Specialist", "Miami", 39, 140000, true],
+      ["Justice Mccarthy", "Attorney", "Tucson", 26, 330000, false],
+      ["Silver Carey", "Computer Scientist", "Memphis", 47, 250000, true],
+      ["Franky Miles", "Industrial Analyst", "Buffalo", 49, 190000, false],
+      ["Glen Nixon", "Corporate Counselor", "Arlington", 44, 80000, true],
+      [
+        "Gabby Strickland",
+        "Business Process Consultant",
+        "Scottsdale",
+        26,
+        45000,
+        false
+      ],
+      ["Mason Ray", "Computer Scientist", "San Francisco", 39, 142000, true]
+    ];
+
+    const options = {
+      filter: true,
+      filterType: "dropdown",
+      responsive: "scroll"
+    };
+
     return (
-      <GridComponent dataSource={data} allowPaging height={268}>
-        <ColumnsDirective>
-          <ColumnDirective field="OrderID" width="100" textAlign="Right" />
-          <ColumnDirective field="CustomerID" width="100" />
-          <ColumnDirective field="EmployeeID" width="100" textAlign="Right" />
-          <ColumnDirective field="Freight" width="100" format="C2" textAlign="Right" />
-          <ColumnDirective field="ShipCountry" width="100" />
-        </ColumnsDirective>
-        <Inject services={[Page]} />
-      </GridComponent>
+      <MUIDataTable
+        title={"ACME Employee list"}
+        data={data}
+        columns={columns}
+        options={options}
+      />
     );
   }
 }
 
-export default GridData;
+export default GridData

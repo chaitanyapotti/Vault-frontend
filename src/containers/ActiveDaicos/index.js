@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 
 import { Table, Loader } from "semantic-ui-react";
 import { getActiveDaicos, showActiveDaicosLoaderAction } from "../../actions/activeDaicosActions";
+import GridData from '../../components/GridData';
 
 const calculateEndDuration = r1EndTime =>
   // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))
@@ -75,7 +76,8 @@ class ActiveDaicos extends Component {
   render() {
     return (
       <div>
-        {this.props.showActiveDaicosLoader ? (
+        <GridData/>
+        {/* {this.props.showActiveDaicosLoader ? (
           <Loader active={this.props.showActiveDaicosLoader} />
         ) : this.props.activeDaicosRetrievedSuccessFully ? (
           <Table>
@@ -84,7 +86,7 @@ class ActiveDaicos extends Component {
           </Table>
         ) : (
           <h3>{this.props.activeDaicosRetrieveFailureMessage}</h3>
-        )}
+        )} */}
       </div>
     );
   }

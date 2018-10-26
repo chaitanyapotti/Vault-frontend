@@ -1,146 +1,152 @@
 import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
+import actionTypes from "../../action_types";
 
-
+export function tokenBalanceReceived(receipt) {
+  return {
+    payload: { rec: receipt },
+    type: actionTypes.TOKEN_BALANCE_RECEIVED
+  };
+}
 
 export function tokensUnderGovernanceReceived(receipt) {
   return {
     payload: { rec: receipt },
-    type: "TOKENS_UNDER_GOVERNANCE_RECEIVED",
+    type: "TOKENS_UNDER_GOVERNANCE_RECEIVED"
   };
 }
 
 export function killPollIndexReceived(receipt) {
   return {
     payload: { receipt },
-    type: "KILL_POLL_INDEX_RECEIVED",
+    type: "KILL_POLL_INDEX_RECEIVED"
   };
 }
 
 export function remainingEtherBalanceReceived(receipt) {
   return {
     payload: { receipt },
-    type: "REMAINING_ETHER_BALANCE_RECEIVED",
+    type: "REMAINING_ETHER_BALANCE_RECEIVED"
   };
 }
 
 export function totalSupplyReceived(receipt) {
   return {
     payload: { receipt },
-    type: "TOTAL_SUPPLY_RECEIVED",
+    type: "TOTAL_SUPPLY_RECEIVED"
   };
 }
 
 export function killConsensusReceived(receipt) {
   return {
     payload: { receipt },
-    type: "KILL_CONSENSUS_RECEIVED",
+    type: "KILL_CONSENSUS_RECEIVED"
   };
 }
 
 export function tapConsensusReceived(receipt) {
   return {
     payload: { receipt },
-    type: "TAP_CONSENSUS_RECEIVED",
+    type: "TAP_CONSENSUS_RECEIVED"
   };
 }
 
 export function currentTapReceived(receipt) {
   return {
     payload: { receipt },
-    type: "CURRENT_TAP_RECEIVED",
+    type: "CURRENT_TAP_RECEIVED"
   };
 }
 
 export function xfrDataReceived(receipt) {
   return {
     payload: { receipt },
-    type: "XFR_DATA_RECEIVED",
+    type: "XFR_DATA_RECEIVED"
   };
 }
 
 export function killPollVote(receipt) {
   return {
     payload: { receipt },
-    type: "KILL_POLL_VOTE_RECEIVED",
+    type: "KILL_POLL_VOTE_RECEIVED"
   };
 }
 
 export function votedInKillPoll(receipt) {
   return {
     payload: { receipt },
-    type: "VOTED_KILL_POLL",
+    type: "VOTED_KILL_POLL"
   };
 }
 
 export function revokedVoteInKillPoll(receipt) {
   return {
     payload: { receipt },
-    type: "REVOKED_VOTE_KILL_POLL",
+    type: "REVOKED_VOTE_KILL_POLL"
   };
 }
 
 export function tapPollVote(receipt) {
   return {
     payload: { receipt },
-    type: "TAP_POLL_VOTE_RECEIVED",
+    type: "TAP_POLL_VOTE_RECEIVED"
   };
 }
 
 export function votedInTapPoll(receipt) {
   return {
     payload: { receipt },
-    type: "VOTED_TAP_POLL",
+    type: "VOTED_TAP_POLL"
   };
 }
 
 export function revokedVoteInTapPoll(receipt) {
   return {
     payload: { receipt },
-    type: "REVOKED_VOTE_TAP_POLL",
+    type: "REVOKED_VOTE_TAP_POLL"
   };
 }
 
 export function xfrPollVote1(receipt) {
   return {
     payload: { receipt },
-    type: "XFR_POLL1_VOTE_RECEIVED",
+    type: "XFR_POLL1_VOTE_RECEIVED"
   };
 }
 
 export function votedInXfrPoll1(receipt) {
   return {
     payload: { receipt },
-    type: "VOTED_XFR_POLL1",
+    type: "VOTED_XFR_POLL1"
   };
 }
 
 export function revokedVoteInXfrPoll1(receipt) {
   return {
     payload: { receipt },
-    type: "REVOKED_VOTE_XFR_POLL1",
+    type: "REVOKED_VOTE_XFR_POLL1"
   };
 }
 
 export function xfrPollVote2(receipt) {
   return {
     payload: { receipt },
-    type: "XFR_POLL2_VOTE_RECEIVED",
+    type: "XFR_POLL2_VOTE_RECEIVED"
   };
 }
 
 export function votedInXfrPoll2(receipt) {
   return {
     payload: { receipt },
-    type: "VOTED_XFR_POLL2",
+    type: "VOTED_XFR_POLL2"
   };
 }
 
 export function revokedVoteInXfrPoll2(receipt) {
   return {
     payload: { receipt },
-    type: "REVOKED_VOTE_XFR_POLL2",
+    type: "REVOKED_VOTE_XFR_POLL2"
   };
 }
 
@@ -151,13 +157,13 @@ export function getTokenBalance(version, contractAddress) {
     web3.eth.getAccounts().then(accounts =>
       axios
         .get(`${config.api_base_url}/web3/erc20token/tokenbalance`, {
-          params: { version: version.toString(), network, address: contractAddress, useraddress: accounts[0] },
+          params: { version: version.toString(), network, address: contractAddress, useraddress: accounts[0] }
         })
         .then(async response => {
           const { data } = response.data;
           dispatch(tokenBalanceReceived(web3.utils.fromWei(data, "ether")));
         })
-        .catch(err => console.error(err.message)),
+        .catch(err => console.error(err.message))
     );
   };
 }
@@ -168,7 +174,7 @@ export function getTokensUnderGovernance(version, contractAddress) {
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/web3/erc20token/tokensundergovernance`, {
-        params: { version: version.toString(), network, address: contractAddress },
+        params: { version: version.toString(), network, address: contractAddress }
       })
       .then(async response => {
         const { data } = response.data;
@@ -184,7 +190,7 @@ export function getCurrentKillPollIndex(version, contractAddress) {
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/web3/pollfactory/currentkillpollindex`, {
-        params: { version: version.toString(), network, address: contractAddress },
+        params: { version: version.toString(), network, address: contractAddress }
       })
       .then(async response => {
         const { data } = response.data;
@@ -200,7 +206,7 @@ export function getRemainingEtherBalance(version, contractAddress) {
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/web3/pollfactory/remainingbalance`, {
-        params: { version: version.toString(), network, address: contractAddress },
+        params: { version: version.toString(), network, address: contractAddress }
       })
       .then(async response => {
         const { data } = response.data;
@@ -216,7 +222,7 @@ export function getTotalSupply(version, contractAddress) {
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/web3/erc20token/totalsupply`, {
-        params: { version: version.toString(), network, address: contractAddress },
+        params: { version: version.toString(), network, address: contractAddress }
       })
       .then(async response => {
         const { data } = response.data;
@@ -232,7 +238,7 @@ export function getKillConsensus(version, contractAddress) {
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/web3/pollfactory/killconsensus`, {
-        params: { version: version.toString(), network, address: contractAddress },
+        params: { version: version.toString(), network, address: contractAddress }
       })
       .then(async response => {
         const { data } = response.data;
@@ -248,7 +254,7 @@ export function getTapPollConsensus(version, contractAddress) {
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/web3/pollfactory/tappollconsensus`, {
-        params: { version: version.toString(), network, address: contractAddress },
+        params: { version: version.toString(), network, address: contractAddress }
       })
       .then(async response => {
         const { data } = response.data;
@@ -264,7 +270,7 @@ export function getCurrentTap(version, contractAddress) {
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/web3/pollfactory/currenttap`, {
-        params: { version: version.toString(), network, address: contractAddress },
+        params: { version: version.toString(), network, address: contractAddress }
       })
       .then(async response => {
         const { data } = response.data;
@@ -280,7 +286,7 @@ export function getXfrData(version, contractAddress) {
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/web3/pollfactory/xfrpolldata`, {
-        params: { version: version.toString(), network, address: contractAddress },
+        params: { version: version.toString(), network, address: contractAddress }
       })
       .then(async response => {
         const { data } = response.data;

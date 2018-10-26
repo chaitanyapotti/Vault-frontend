@@ -1,6 +1,7 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
+import {activeDaico} from "../../helpers/decorators";
 
 export const initialState = {
   activeDaicosTable: [],
@@ -15,7 +16,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         showActiveDaicosLoader: false,
-        activeDaicosTable: action.payload,
+        activeDaicosTable: activeDaico(undefined, action.payload),
         activeDaicosRetrievedSuccessFully: true,
       };
 

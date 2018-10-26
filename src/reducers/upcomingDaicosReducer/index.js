@@ -1,6 +1,7 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
+import {upcomingDaico} from "../../helpers/decorators";
 
 export const initialState = {
   upcomingDaicosTable: [],

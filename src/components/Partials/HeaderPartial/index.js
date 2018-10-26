@@ -19,6 +19,8 @@ import { CUIAppBar, CUIButtonIcon } from "../../../helpers/material-ui";
 
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 import {ButtonComponent} from "../../../components/Common/FormComponents";
+import "../../../static/css/app.css";
+
 const scrnWdh = window.innerWidth;
 const styles = theme => ({
   root: {
@@ -196,7 +198,7 @@ class HeaderPartial extends React.Component {
 
     return (
       <div className={classes.root}>
-        <CUIAppBar position="static" style={scrnWdh < 768 ? { height: "60px" } : { height: "85px" }}>
+        <CUIAppBar position="static" style={scrnWdh < 768 ? { height: "60px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" } : { height: "85px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }}>
           <Grid>
             <Row>
               <Col>
@@ -248,7 +250,7 @@ class HeaderPartial extends React.Component {
                         </div>
                       ) : (
                         <div>
-                          <ButtonComponent onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent>
+                          <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent>
                         </div>
                       )}
                     </div>

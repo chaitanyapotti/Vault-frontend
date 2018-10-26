@@ -1,6 +1,6 @@
 /* eslint camelcase: 0 */
 const baseValue = {
-    tableData:[]
+  tableData: []
 };
 
 const calculateEndDuration = r1EndTime =>
@@ -16,25 +16,24 @@ const calculateFinalGoal = roundArray => {
   }
   return finalGoal;
 };
- 
+
 export default (baseline = baseValue, payload = {}, extra = {}) => {
-    const data = payload.map((item) => {
-        const {projectName, rounds, startDateTime, r1EndTime} = item || {};
-        const dataArray = [
-                            projectName,
-                            rounds.length,
-                            calculateRoundGoal(rounds[0]),
-                            calculateFinalGoal(rounds),
-                            100,
-                            1,
-                            new Date(startDateTime).toISOString(),
-                            calculateEndDuration(r1EndTime)
-                         ];
-        return dataArray
-    })
-    return {
-      ...baseline,
-      tableData: data
-    };
+  const data = payload.map(item => {
+    const { projectName, rounds, startDateTime, r1EndTime } = item || {};
+    const dataArray = [
+      projectName,
+      rounds.length,
+      calculateRoundGoal(rounds[0]),
+      calculateFinalGoal(rounds),
+      100,
+      1,
+      new Date(startDateTime).toISOString(),
+      calculateEndDuration(r1EndTime)
+    ];
+    return dataArray;
+  });
+  return {
+    ...baseline,
+    tableData: data
   };
-  
+};

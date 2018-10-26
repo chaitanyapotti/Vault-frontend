@@ -20,7 +20,6 @@ class TokenChart extends Component {
         return { value: formatFromWei(amount), description };
       })
     );
-    console.log(interDetails);
     return (
       <div className="push-top--50">
         <div className="txt-xl text--primary">Token Distribution Chart</div>
@@ -44,7 +43,7 @@ class TokenChart extends Component {
                   nameKey="description"
                 >
                   {interDetails.map((entry, index) => (
-                    <Cell key={index} fill={CHARTCOLORS[index % CHARTCOLORS.length]} />
+                    <Cell key={Math.random()} fill={CHARTCOLORS[index % CHARTCOLORS.length]} />
                   ))}
                 </Pie>
               </PieChart>

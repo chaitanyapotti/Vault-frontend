@@ -17,7 +17,6 @@ class ProjectDetailPreStart extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("here");
     const { userLocalPublicAddress } = prevProps || "";
     const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress } = this.props || {};
     if (userLocalPublicAddress !== localAddress) {
@@ -89,7 +88,8 @@ class ProjectDetailPreStart extends Component {
       tapIncrementFactor,
       isCurrentMember,
       rounds,
-      foundationDetails
+      foundationDetails,
+      buttonSpinning
     } = this.props || {};
     return (
       <Grid>
@@ -106,6 +106,7 @@ class ProjectDetailPreStart extends Component {
               whitepaper={whitepaper}
               buttonText="Get Whitelisted"
               buttonVisibility={!isCurrentMember}
+              buttonSpinning={buttonSpinning}
               onClick={this.onWhiteListClickInternal}
             />
           </Col>
@@ -148,11 +149,12 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => {
   const { projectPreStartReducer, fetchPriceReducer, signinManagerData } = state || {};
   const { prices } = fetchPriceReducer || {};
-  const { isCurrentMember } = projectPreStartReducer || {};
+  const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress } = signinManagerData || {};
 
   return {
     isCurrentMember,
+    buttonSpinning,
     prices,
     isVaultMember,
     userLocalPublicAddress

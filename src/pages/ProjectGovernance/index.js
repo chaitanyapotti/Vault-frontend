@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import PropTypes, { object } from "prop-types";
 import qs from "qs";
 // import queryString from "query-string";
 import { withRouter } from "react-router-dom";
@@ -16,7 +17,6 @@ class ProjectGovernance extends Component {
     // Do Routing here - use query string
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
-    // this.props.currentRound()
     if ("projectid" in params) {
       const { currentRound: currentRoundDetailsFetch } = this.props || {};
       currentRoundDetailsFetch(params.projectid);
@@ -25,10 +25,6 @@ class ProjectGovernance extends Component {
         pathname: `/`
       });
     }
-
-    // const { version, crowdSaleAddress } = this.props.projectDetails || {};
-    // console.log(version, crowdSaleAddress);
-    // this.props.currentRound(version, crowdSaleAddress);
   }
 
   render() {
@@ -264,5 +260,3 @@ const connector = connect(
 )(ProjectGovernance);
 
 export default withRouter(connector);
-
-// TODO: Do the Proptypes validation to all childrens

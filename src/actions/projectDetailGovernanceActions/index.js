@@ -2,12 +2,7 @@ import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 
-export function tokenBalanceReceived(receipt) {
-  return {
-    payload: { receipt },
-    type: "TOKEN_BALANCE_RECEIVED",
-  };
-}
+
 
 export function tokensUnderGovernanceReceived(receipt) {
   return {

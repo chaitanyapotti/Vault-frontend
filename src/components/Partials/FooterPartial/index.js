@@ -47,13 +47,13 @@ const FooterPartial = () => (
         </Col>
 
         <Col lg={4} className="push-mob--top15">
-          <div className="txt-l txt-ddbld flush fnt-mli">FOUND US ON</div>
+          <div className="txt-l txt-ddbld flush fnt-mli">FIND US ON</div>
           <div>
             <table id="foottable" style={{ fontSize: "22px", color: "#9ab4d3" }} width="100%">
               <tbody>
                 <tr>
                   <td>
-                    <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://http://github.com/chaitanyapotti">
+                    <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://github.com/chaitanyapotti">
                       <img src="/assets/Footer/github.png" alt="git-logo" />
                     </a>
                   </td>

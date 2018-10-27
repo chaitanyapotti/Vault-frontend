@@ -21,6 +21,14 @@ import { openRegistrationFormAction, closeRegistrationFormAction } from "../../.
 import {ButtonComponent} from "../../../components/Common/FormComponents";
 import "../../../static/css/app.css";
 
+const images = {
+  metamask: "/assets/Footer/metamask.png"
+};
+
+const urls = {
+  metamask: "https://metamask.io/"
+};
+
 const scrnWdh = window.innerWidth;
 const styles = theme => ({
   root: {
@@ -243,16 +251,48 @@ class HeaderPartial extends React.Component {
                     </div>
                     <div className="text--primary txt-m wdh-100" style={{paddingTop: '10px'}}>
                       {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
-                      {this.props.isVaultMember ? (
-                        <div>
-                          {/* <div>Somesh:</div> */}
-                          <div>{this.props.userLocalPublicAddress}</div>
-                        </div>
-                      ) : (
-                        <div>
-                          <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent>
-                        </div>
-                      )}
+                      <div>
+                            {{
+                              0: (
+                                <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
+                                  <img className="push--left" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
+                                </a>
+                              ),
+                              1: (
+                                <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
+                                  Please Sign in <img className="push--left" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
+                                </a>
+                              ),
+                              2: (
+                                <div>
+                                Wrong network.
+                                  {this.props.userLocalPublicAddress}
+                                {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
+                            </div>
+
+                          ),
+                          3: (
+                            <div>
+                              {this.props.userLocalPublicAddress}
+                              <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Become a Vault Member</ButtonComponent>
+                            </div>
+
+                          ),
+                          4: (
+                            <div>
+                              Welcome to the vault.
+                              {this.props.userLocalPublicAddress}
+                              {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
+                            </div>
+                          ),
+                              5: (
+                                <div>
+                                Welcome to the vault, Issuer.
+                              {this.props.userLocalPublicAddress}
+                                </div>
+                              )
+                            }[this.props.signinStatusFlag]}
+                          </div>
                     </div>
                   </div>
                   <div className={classes.sectionMobile}>
@@ -310,7 +350,7 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress } =
+  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress, signinStatusFlag } =
     state.signinManagerData || {};
   return {
     userRegistered,
@@ -319,6 +359,7 @@ const mapStateToProps = state => {
     showRegistrationForm,
     isVaultMember,
     userLocalPublicAddress,
+    signinStatusFlag
   };
 };
 

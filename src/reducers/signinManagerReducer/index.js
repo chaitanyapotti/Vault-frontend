@@ -20,10 +20,51 @@ export const initialState = {
   isVaultMember: false,
   isPhoneNumberVerified: false,
   vaultPaymentPendingStatus: false,
+  signinStatusFlag: 0,
+  networkName: ""
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
+
+    case types.ISISSUER_CHECK: {
+      let isIssuer = action.payload
+      let signinStatusFlag = state.signinStatusFlag
+      if (signinStatusFlag===4 && isIssuer){
+        return {...state, signinStatusFlag: 5}
+      }else{
+        if (isIssuer){
+          return {...state, userIsIssuer: true }
+        }else{
+          return {...state }
+        }
+      }
+    }
+
+    case types.METAMASK_NETWORK:{
+      if (action.payload=== 'rinkeby'){
+        return {
+          ...state, networkName: 'rinkeby'
+        }
+      }else{
+        return {
+          ...state, signinStatusFlag: 2
+        }
+      }
+    }
+
+    case types.METAMASK_INSTALLATION_STATUS_CHECK: {
+      if (action.payload){
+        return {
+          ...state
+        }
+      }else{
+        return{
+          ...state, signinStatusFlag: 0
+        }        
+      }
+    }
+
     case types.USER_REGISTRATION_CHECK_SUCCESS:
       const { publicAddress } = action.payload || "";
       const { isIssuer } = action.payload || false;
@@ -60,6 +101,7 @@ export default function(state = initialState, action) {
         userServerPublicAddress: "",
         userLocalPublicAddress: "",
         userPreviousLocalPublicAddress: "",
+        signinStatusFlag: 1
       };
 
     case types.OTP_SENT_TO_USER_SUCCESS:
@@ -131,9 +173,23 @@ export default function(state = initialState, action) {
       };
 
     case types.VAULT_MEMBERSHIP_CHECK:
+      let signinStatusFlag
+      let userIsIssuer = state.userIsIssuer
+      if (action.payload){
+        if (userIsIssuer){
+          signinStatusFlag = 5
+        }
+        else{
+          signinStatusFlag = 4
+        }
+        
+      }else{
+        signinStatusFlag = 3
+      }
       return {
         ...state,
         isVaultMember: action.payload,
+        signinStatusFlag: signinStatusFlag
       };
 
     case types.PHONE_NUMBER_IS_VERIFIED:

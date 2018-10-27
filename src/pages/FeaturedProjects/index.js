@@ -24,10 +24,10 @@ class FeaturedProjects extends Component {
             <Grid>
               <Row>
                 {featuredProjects.map((item, index) => {
-                  const { projectName, description } = item;
+                  const { projectName, description, _id } = item;
                   return (
                     <Col xs={12} lg={4}>
-                      <FeaturedProject key={index} projectName={projectName} description={description} />
+                      <FeaturedProject key={index} projectName={projectName} description={description} projectId={_id} history={this.props.history}/>
                     </Col>
                   )
                 })}

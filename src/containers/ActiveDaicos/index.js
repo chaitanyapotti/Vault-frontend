@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import { getActiveDaicos, showActiveDaicosLoaderAction } from "../../actions/activeDaicosActions";
-import GridData from '../../components/GridData';
+import GridData from "../../components/GridData";
 
 class ActiveDaicos extends Component {
   componentDidMount() {
@@ -12,11 +12,11 @@ class ActiveDaicos extends Component {
   }
 
   render() {
-    const {activeDaicosTable} = this.props || {};
-    const {tableData} = activeDaicosTable || {};
+    const { activeDaicosTable } = this.props || {};
+    const { tableData } = activeDaicosTable || {};
     return (
       <div>
-        <GridData tableData = {tableData} />
+        <GridData tableData={tableData} />
       </div>
     );
   }
@@ -47,7 +47,6 @@ export default connect(
   mapDispatchToProps
 )(ActiveDaicos);
 
-
 // class ActiveDaicosTableBody extends Component {
 //   handleTableRowClicked = projectid => {
 //     this.props.history.push({
@@ -55,4 +54,3 @@ export default connect(
 //       search: `?projectid=${projectid}`
 //     });
 //   };
-

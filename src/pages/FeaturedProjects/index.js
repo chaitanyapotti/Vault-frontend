@@ -5,7 +5,6 @@ import { Loader } from "semantic-ui-react";
 import FeaturedProject from "../../components/FeaturedProject";
 import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import AdornedButton from "../../components/Common/LoadingButton";
 
 class FeaturedProjects extends Component {
   componentDidMount() {

@@ -1,7 +1,8 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  isCurrentMember: false
+  isCurrentMember: false,
+  buttonSpinning: false
 };
 
 export default (state = initialState, action) => {

@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import PropTypes, { object } from "prop-types";
 import qs from "qs";
-// import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
@@ -21,7 +19,8 @@ class ProjectGovernance extends Component {
       const { currentRound: currentRoundDetailsFetch } = this.props || {};
       currentRoundDetailsFetch(params.projectid);
     } else {
-      this.props.history.push({
+      const { history } = this.props || {};
+      history.push({
         pathname: `/`
       });
     }
@@ -59,7 +58,7 @@ class ProjectGovernance extends Component {
     if (currentDeploymentIndicator !== 12)
       return (
         <div>
-          <p>The project hasn't been deployed yet</p>
+          <p>The project has not been deployed yet</p>
         </div>
       );
 
@@ -234,7 +233,7 @@ class ProjectGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { deployerReducer, projectGovernanceReducer, fetchPriceReducer } = state || {};
+  const { deployerReducer, projectGovernanceReducer } = state || {};
   const { projectDetails, ts } = deployerReducer || {};
   const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
 

@@ -27,12 +27,6 @@
         "props": false
       }
     ],
-    "no-mixed-operators": [
-      "error",
-      {
-        "allowSamePrecedence": true
-      }
-    ],
     "prettier/prettier": [
       "error",
       {

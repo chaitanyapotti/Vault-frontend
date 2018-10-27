@@ -1,27 +1,77 @@
 /* eslint camelcase: 0 */
 
-import React, { Component } from "react";
-import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page } from "@syncfusion/ej2-react-grids";
-import { DataManager } from "@syncfusion/ej2-data";
-
-class GridData extends Component {
+import React from "react";
+import MUIDataTable from "mui-datatables";
+class GridData extends React.Component {
   render() {
-    const data = new DataManager({
-      url: "https://js.syncfusion.com/demos/ejServices/Wcf/Northwind.svc/Orders/",
-    });
+    const columns = [
+      {
+        name: "Name",
+        options: {
+          filter: false
+        }
+      },
+      {
+        name: "Rounds",
+        options: {
+          filter: true
+        }
+      },
+      {
+        name: "R1 Goal",
+        options: {
+          filter: true,
+        }
+      },
+      {
+        name: "Final Goal",
+        options: {
+          filter: false
+        }
+      },
+      {
+        name: "Raised*",
+        options: {
+          filter: true,
+        }
+      },
+      {
+        name: "Price*",
+        options: {
+          filter: true,
+        }
+      },
+      {
+        name: "Started at",
+        options: {
+          filter: true,
+        }
+      },
+      {
+        name: "R1 Ends in",
+        options: {
+          filter: true,
+        }
+      }
+    ];
+
+    
+
+    const options = {
+      filter: true,
+      filterType: "dropdown",
+      responsive: "scroll"
+    };
+    const {tableData} = this.props || {};
     return (
-      <GridComponent dataSource={data} allowPaging height={268}>
-        <ColumnsDirective>
-          <ColumnDirective field="OrderID" width="100" textAlign="Right" />
-          <ColumnDirective field="CustomerID" width="100" />
-          <ColumnDirective field="EmployeeID" width="100" textAlign="Right" />
-          <ColumnDirective field="Freight" width="100" format="C2" textAlign="Right" />
-          <ColumnDirective field="ShipCountry" width="100" />
-        </ColumnsDirective>
-        <Inject services={[Page]} />
-      </GridComponent>
+      <MUIDataTable
+        title={"Active Daicos List"}
+        data={tableData}
+        columns={columns}
+        options={options}
+      />
     );
   }
 }
 
-export default GridData;
+export default GridData

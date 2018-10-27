@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import qs from "qs";
-// import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
@@ -16,19 +15,15 @@ class ProjectGovernance extends Component {
     // Do Routing here - use query string
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
-    // this.props.currentRound()
     if ("projectid" in params) {
       const { currentRound: currentRoundDetailsFetch } = this.props || {};
       currentRoundDetailsFetch(params.projectid);
     } else {
-      this.props.history.push({
+      const { history } = this.props || {};
+      history.push({
         pathname: `/`
       });
     }
-
-    // const { version, crowdSaleAddress } = this.props.projectDetails || {};
-    // console.log(version, crowdSaleAddress);
-    // this.props.currentRound(version, crowdSaleAddress);
   }
 
   render() {
@@ -63,7 +58,7 @@ class ProjectGovernance extends Component {
     if (currentDeploymentIndicator !== 12)
       return (
         <div>
-          <p>The project hasn't been deployed yet</p>
+          <p>The project has not been deployed yet</p>
         </div>
       );
 
@@ -238,7 +233,7 @@ class ProjectGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { deployerReducer, projectGovernanceReducer, fetchPriceReducer } = state || {};
+  const { deployerReducer, projectGovernanceReducer } = state || {};
   const { projectDetails, ts } = deployerReducer || {};
   const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
 
@@ -264,5 +259,3 @@ const connector = connect(
 )(ProjectGovernance);
 
 export default withRouter(connector);
-
-// TODO: Do the Proptypes validation to all childrens

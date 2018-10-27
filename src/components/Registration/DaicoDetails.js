@@ -20,7 +20,17 @@ import {
   voteSaturationLimitChangedAction
 } from "../../actions/projectRegistrationActions";
 import actionTypes from "../../action_types";
+import DTPicker from '../Common/DTPicker';
 class DaicoDetails extends React.Component {
+  state={
+    selectedDate: new Date('2018-01-01T18:54'),
+  }
+
+  handleDateChange = (date) => {
+    console.log('date', date)
+    this.setState({ selectedDate: date });
+  }
+
   onChangeIniFundVal = e => {
     this.props.initialFundReleaseChangedAction(e.target.value);
   };
@@ -76,25 +86,12 @@ class DaicoDetails extends React.Component {
   render() {
     return (
       <div>
-        <CUICard style={{ padding: "40px 67px" }}>
+        <CUICard style={{ padding: "40px 50px" }}>
           <div className="txt-xl">DAICO Details</div>
           <hr />
           <Row>
             <Col xs={12} lg={6}>
-              <CUIFormInput
-                required
-                inputType={CUIInputType.TEXT}
-                full
-                inputName="Round 1 Start Date"
-                inputLabel="Round 1 Start Date"
-                inputPlaceholder="Eg. 22-10-2018"
-                inputValue={this.props.daicoStartDate}
-                // onBlur={this.onBlurAge}
-                // error={this.state.errorAgeText !== ''}
-                // helperText={this.state.errorAgeText}
-                // onKeyDownSelector="Admin"
-                onChange={this.onChangeDaicoStart}
-              />
+              <DTPicker selectedDate={this.state.selectedDate} handleDateChange={this.handleDateChange} />
             </Col>
             <Col xs={12} lg={6}>
               <CUIFormInput

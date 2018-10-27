@@ -9,7 +9,7 @@ const Subheader = () => (
         <Col lg={6} className="txt-g-secondary">
           Powered By Electus Protocol
         </Col>
-        <Col lg={6} className="text--right txt-g-secondary">
+        <Col lg={6} className="text--right txt-g-secondary" style={{color: "#4ca9fc"}}>
           Learn more about Vault & DAICOs
         </Col>
       </Row>

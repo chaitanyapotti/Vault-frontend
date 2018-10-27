@@ -36,7 +36,7 @@ export default function(state = initialState, action) {
         if (isIssuer){
           return {...state, userIsIssuer: true }
         }else{
-          return {...state }
+          return {...state, userIsIssuer: false }
         }
       }
     }

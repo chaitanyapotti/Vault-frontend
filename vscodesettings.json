@@ -1,0 +1,72 @@
+{
+  "git.autofetch": true,
+  "editor.formatOnSave": true,
+  "window.zoomLevel": 0,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "solidity.packageDefaultDependenciesContractsDirectory": "",
+  "solidity.linter": "solhint",
+  "solidity.solhintRules": {
+    "extends": "default",
+    "rules": {
+      "compiler-fixed": false,
+      "indent": ["error", 4],
+      "max-line-length": ["warn", 120],
+      "contract-name-camelcase": ["warn"],
+      "not-rely-on-time": false,
+      "no-empty-blocks": false
+    }
+  },
+  "solidity.compileUsingLocalVersion": "node-modules/solc/soljson.js",
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "prettier.eslintIntegration": true,
+  "eslint.alwaysShowStatus": true,
+  "prettier.jsxBracketSameLine": true,
+  "prettier.printWidth": 150,
+  "workbench.statusBar.feedback.visible": false,
+  "eslint.provideLintTask": true,
+  "eslint.options": {
+    "extends": ["airbnb", "react-app", "prettier", "prettier/react"],
+    "plugins": ["prettier"],
+    "rules": {
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [".js", ".jsx"]
+        }
+      ],
+      "max-len": [
+        2,
+        {
+          "code": 300
+        }
+      ],
+      "react/sort-comp": 0,
+      "camelcase": 0,
+      "no-console": 0,
+      "import/prefer-default-export": 0,
+      "no-nested-ternary": 0,
+      "no-confusing-arrow": 0,
+      "linebreak-style": 0,
+      "no-param-reassign": [
+        "error",
+        {
+          "props": false
+        }
+      ],
+      "prettier/prettier": [
+        "error",
+        {
+          "singleQuote": false,
+          "printWidth": 150,
+          "semi": true
+        }
+      ]
+    },
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true
+    }
+  }
+}

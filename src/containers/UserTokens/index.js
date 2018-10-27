@@ -81,19 +81,19 @@ const mapStateToProps = state => {
     userTokensTable,
     showUserTokensLoader,
     userTokensRetrieveFailureMessage,
-    userTokensRetrievedSuccessFully,
+    userTokensRetrievedSuccessFully
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      showUserTokensLoaderAction,
+      showUserTokensLoaderAction
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(UserTokens);

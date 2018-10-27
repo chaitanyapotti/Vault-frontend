@@ -7,7 +7,7 @@ export function showUserTokensLoaderAction() {
   return dispatch => {
     dispatch({
       type: actionTypes.SHOW_USER_TOKENS_LOADER,
-      payload: null,
+      payload: null
     });
   };
 }

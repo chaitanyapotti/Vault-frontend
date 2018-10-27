@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Tab } from "semantic-ui-react";
 import ActiveDaicos from "../../containers/ActiveDaicos";
 import UpcomingDaicos from "../../containers/UpcomingDaicos";
 import EndedDaicos from "../../containers/EndedDaicos";

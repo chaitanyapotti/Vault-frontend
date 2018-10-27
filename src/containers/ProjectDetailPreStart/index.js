@@ -1,14 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import Warning from "@material-ui/icons/Warning";
 import { ProjectName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
 import { formatDate, formatRateToPrice, formatFromWei } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
+import AlertModal from "../../components/Common/AlertModal";
 
 class ProjectDetailPreStart extends Component {
+  state={
+    modalOpen: false
+  }
+
+  handleClose = () => this.setState({modalOpen: false});
+
   componentDidMount() {
     const { fetchPrice: etherPriceFetch, checkWhiteList: checkWhiteListStatus, version, membershipAddress, userLocalPublicAddress } =
       this.props || {};
@@ -64,6 +72,9 @@ class ProjectDetailPreStart extends Component {
     if (isVaultMember) {
       whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
     } else {
+      this.setState({
+        modalOpen: true
+      })
       // show user that "you are not a vault member" and ask to be redirected to registration page
       // if yes, redirect to /registration else stay here
     }
@@ -131,6 +142,11 @@ class ProjectDetailPreStart extends Component {
             </CUICard>
           </Col>
         </Row>
+
+        <AlertModal open={this.state.modalOpen} handleClose={this.handleClose} link="/registration">
+          <div className="text--center text--danger"><Warning style={{width:'2em', height: '2em'}}/></div>
+          <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
+        </AlertModal>
       </Grid>
     );
   }

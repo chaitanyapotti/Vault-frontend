@@ -27,7 +27,8 @@ const CUIFormInput = props => {
     style,
     onChange,
     error,
-    helperText
+    helperText,
+    required
   } = props || {};
 
   const cuiTextProps = {
@@ -42,7 +43,8 @@ const CUIFormInput = props => {
     style,
     onChange,
     error,
-    helperText
+    helperText,
+    required
   };
 
   switch (inputType) {
@@ -65,9 +67,11 @@ const CUIFormInput = props => {
         helperText,
         hintText,
         onBlur,
-        onFocus
+        onFocus,
+        required
       } = props || {};
       cuiTextProps.error = error;
+      cuiTextProps.required = required;
       cuiTextProps.helperText = hintText || helperText;
       cuiTextProps.autoFocus = textFocus;
       cuiTextProps.fullWidth = full;

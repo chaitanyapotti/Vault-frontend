@@ -2,7 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { CUICard, CUIFormInput, CUIButton } from "../../helpers/material-ui";
-import { CUIInputType, CUIButtonType, CUIInputColor } from "../../static/js/variables";
+import {
+  CUIInputType,
+  CUIButtonType,
+  CUIInputColor
+} from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import {
   adminNameChangedAction,
@@ -75,36 +79,19 @@ class IdentityDetails extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    console.log("here");
     if (prevProps.errors !== this.props.errors) {
-      this.hasError();
       this.getErrorMsg();
     }
   }
 
-  hasError = () => {
-    let returnvalue = false;
+  getErrorMsg = propName => {
     if (this.props.errors) {
-      if (this.props.errors.hasOwnProperty(actionTypes.ADMIN_NAME_CHANGED) && this.props.errors[actionTypes.ADMIN_NAME_CHANGED !== ""]) {
-        returnvalue = true;
-      } else {
-        returnvalue = false;
+      if (this.props.errors.hasOwnProperty(propName)) {
+        return this.props.errors[propName];
       }
-    } else {
-      returnvalue = false;
+      return "";
     }
-    console.log(returnvalue);
-    return returnvalue;
-  };
-
-  getErrorMsg = () => {
-    if (this.props.errors) {
-      if (this.props.errors.hasOwnProperty(actionTypes.ADMIN_NAME_CHANGED)) {
-        return this.props.errors[actionTypes.ADMIN_NAME_CHANGED];
-      }
-      return false;
-    }
-    return false;
+    return "";
   };
 
   render() {
@@ -116,6 +103,7 @@ class IdentityDetails extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Admin Name"
               inputLabel="Admin Name"
@@ -127,13 +115,14 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeName}
-              error={this.hasError()}
-              helperText={this.getErrorMsg()}
+              error={!!this.getErrorMsg(actionTypes.ADMIN_NAME_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.ADMIN_NAME_CHANGED)}
             />
           </Col>
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Admin Email"
               inputLabel="Admin Email"
@@ -144,6 +133,8 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeEmail}
+              error={!!this.getErrorMsg(actionTypes.ADMIN_EMAIL_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.ADMIN_EMAIL_CHANGED)}
             />
           </Col>
         </Row>
@@ -152,6 +143,7 @@ class IdentityDetails extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Project Name"
               inputLabel="Project Name"
@@ -163,11 +155,14 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeProject}
+              error={!!this.getErrorMsg(actionTypes.PROJECT_NAME_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.PROJECT_NAME_CHANGED)}
             />
           </Col>
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="ERC20 Token Tag"
               inputLabel="ERC20 Token Tag"
@@ -178,6 +173,8 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeErc20Tag}
+              error={!!this.getErrorMsg(actionTypes.ERC20_TAG_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.ERC20_TAG_CHANGED)}
             />
           </Col>
         </Row>
@@ -185,6 +182,7 @@ class IdentityDetails extends React.Component {
           <Col>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               multiline
               inputName="Project Description"
@@ -204,6 +202,7 @@ class IdentityDetails extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Website Link"
               inputLabel="Website Link"
@@ -214,11 +213,14 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeWebLink}
+              error={!!this.getErrorMsg(actionTypes.WEBSITE_LINK_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.WEBSITE_LINK_CHANGED)}
             />
           </Col>
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Telegram Link"
               inputLabel="Telegram Link"
@@ -229,6 +231,8 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeTlgrmLink}
+              error={!!this.getErrorMsg(actionTypes.TELEGRAM_LINK_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.TELEGRAM_LINK_CHANGED)}
             />
           </Col>
         </Row>
@@ -237,6 +241,7 @@ class IdentityDetails extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Github Link"
               inputLabel="Github Link"
@@ -247,11 +252,14 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeGitLink}
+              error={!!this.getErrorMsg(actionTypes.GITHUB_LINK_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.GITHUB_LINK_CHANGED)}
             />
           </Col>
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Medium Link"
               inputLabel="Medium Link"
@@ -262,6 +270,8 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeMedLink}
+              error={!!this.getErrorMsg(actionTypes.MEDIUM_LINK_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.MEDIUM_LINK_CHANGED)}
             />
           </Col>
         </Row>
@@ -270,6 +280,7 @@ class IdentityDetails extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Facebook Link"
               inputLabel="Facebook Link"
@@ -280,11 +291,14 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeFbLink}
+              error={!!this.getErrorMsg(actionTypes.FACEBOOK_LINK_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.FACEBOOK_LINK_CHANGED)}
             />
           </Col>
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Twitter Link"
               inputLabel="Twitter Link"
@@ -295,6 +309,8 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeTwtLink}
+              error={!!this.getErrorMsg(actionTypes.TWITTER_LINK_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.TWITTER_LINK_CHANGED)}
             />
           </Col>
         </Row>
@@ -302,6 +318,7 @@ class IdentityDetails extends React.Component {
           <Col>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Team Address"
               inputLabel="Team Address"
@@ -312,13 +329,19 @@ class IdentityDetails extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeTeamAddress}
+              error={!!this.getErrorMsg(actionTypes.TEAM_ADDRESS_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.TEAM_ADDRESS_CHANGED)}
             />
           </Col>
         </Row>
         <Row>
           <Col>
             <div className="text--right push--top">
-              <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitePaper} />
+              <ButtonComponent
+                id="uploadWhitepaper"
+                label="Upload Whitepaper"
+                onClick={this.uploadWhitePaper}
+              />
             </div>
           </Col>
         </Row>

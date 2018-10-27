@@ -2,74 +2,54 @@
 
 import React from "react";
 import MUIDataTable from "mui-datatables";
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+
 class GridData extends React.Component {
-  render() {
-    const columns = [
-      {
-        name: "Name",
-        options: {
-          filter: false
+  getMuiTheme = () => createMuiTheme({
+    overrides: {
+      MUIDataTableBodyCell: {
+        root: {
+          fontSize: "16px"
         }
       },
-      {
-        name: "Rounds",
-        options: {
-          filter: true
+      MUIDataTableHeadCell: {
+        root: {
+          fontSize: "16px"
         }
       },
-      {
-        name: "R1 Goal",
-        options: {
-          filter: true,
+      MUIDataTableFooterCell: {
+        root: {
+          fontSize: "16px"
         }
       },
-      {
-        name: "Final Goal",
-        options: {
-          filter: false
-        }
-      },
-      {
-        name: "Raised*",
-        options: {
-          filter: true,
-        }
-      },
-      {
-        name: "Price*",
-        options: {
-          filter: true,
-        }
-      },
-      {
-        name: "Started at",
-        options: {
-          filter: true,
-        }
-      },
-      {
-        name: "R1 Ends in",
-        options: {
-          filter: true,
+      MuiTypography:{
+        root:{
+          fontSize: "16px"
         }
       }
-    ];
+    }
+  })
+ 
+  render() {
+    const columns = [ "Name","Rounds","R1 Goal","Final Goal", "Raised*", "Price*","Started at","R1 Ends in"];
 
     
 
     const options = {
-      filter: true,
       filterType: "dropdown",
-      responsive: "scroll"
+      responsive: "scroll",
+      selectableRows: false
     };
     const {tableData} = this.props || {};
     return (
-      <MUIDataTable
-        title={"Active Daicos List"}
-        data={tableData}
-        columns={columns}
-        options={options}
-      />
+      <MuiThemeProvider theme={this.getMuiTheme()}>
+        <MUIDataTable
+          data={tableData}
+          columns={columns}
+          options={options}
+        />
+      </MuiThemeProvider>
     );
   }
 }

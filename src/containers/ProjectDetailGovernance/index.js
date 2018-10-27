@@ -15,7 +15,7 @@ import {
   getTapPollConsensus,
   getCurrentTap,
   getXfrData,
-  voteInKillPoll,
+  voteInKillPoll
 } from "../../actions/projectDetailGovernanceActions/index";
 
 class ProjectDetailGovernance extends Component {
@@ -58,7 +58,7 @@ class ProjectDetailGovernance extends Component {
 
   getPrice = () =>
     // TODO: to use external API
-    "0.009861";
+    0.009861;
 
   onTradeClick = () => {};
 
@@ -68,7 +68,7 @@ class ProjectDetailGovernance extends Component {
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
     // based on tokens sold
     return `${Math.round(parseFloat(totalTokensSold) * Math.pow(10, -18))} Tokens Sold of ${Math.round(
-      parseFloat(tokenCount) * Math.pow(10, -18),
+      parseFloat(tokenCount) * Math.pow(10, -18)
     )} (Round ${currentRoundNumber} of 3)`;
   };
 
@@ -134,7 +134,7 @@ class ProjectDetailGovernance extends Component {
       remainingEtherBalance,
       tapIncrementFactor,
       currentTap,
-      xfrData,
+      xfrData
     } = this.props || {};
     return (
       <Grid>
@@ -206,7 +206,7 @@ const mapStateToProps = state => {
     totalSupply,
     tapPollConsensus,
     currentTap,
-    xfrData,
+    xfrData
   } = projectDetailGovernanceReducer || {};
 
   return {
@@ -220,7 +220,7 @@ const mapStateToProps = state => {
     killConsensus,
     tapPollConsensus,
     currentTap,
-    xfrData,
+    xfrData
   };
 };
 
@@ -238,12 +238,12 @@ const mapDispatchToProps = dispatch =>
       getTapPollConsensus,
       getCurrentTap,
       getXfrData,
-      voteInKillPoll,
+      voteInKillPoll
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ProjectDetailGovernance);

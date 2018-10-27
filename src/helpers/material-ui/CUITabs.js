@@ -33,43 +33,22 @@ import { CUIColor } from "../../static/js/variables";
  */
 
 const CUITabs = props => {
-  const { iconList, full, scroll, style, indicatorColor, textColor, value, disabled } = props || {};
-  const tabsProps = { indicatorColor, textColor, value, scrollable: scroll, fullWidth: full };
+  const { iconList, full, scroll, style, indicatorColor, textColor, value , onChange} = props || {};
+  const tabsProps = { indicatorColor, textColor, value, scrollable: scroll, fullWidth: full, onChange, style };
 
   return (
     <Tabs {...tabsProps}>
       {iconList.map(option => {
-        const isActive = option.value === value;
-        const isDisabled = isActive && disabled;
-
         const tabProps = {
           key: option.key,
-          disabled: isDisabled,
           value: option.value,
           label: option.label,
           style,
         };
 
-        if (option.isLinkExternal) {
-          tabProps.href = option.link;
-        } else {
-          tabProps.component = Link;
-          tabProps.to = option.link;
-        }
-
         return (
           <Tab
             {...tabProps}
-            icon={
-              <span className={`${option.class}${isActive ? " active" : " inactive"}`}>
-                {!isActive &&
-                  !!option.count && (
-                    <CUIBadge badgeColor={CUIColor.PRIMARY} style={{ marginLeft: 5 }} content={option.count > 999 ? "999+" : option.count}>
-                      <span />
-                    </CUIBadge>
-                  )}
-              </span>
-            }
           />
         );
       })}

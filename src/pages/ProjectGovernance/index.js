@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import qs from "qs";
-// import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
@@ -14,25 +13,21 @@ import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
 class ProjectGovernance extends Component {
   componentDidMount() {
     // Do Routing here - use query string
-    var currentUrl = new URL(window.location.href)
-    var params = qs.parse( currentUrl.search, { ignoreQueryPrefix: true }); 
-    console.log("parsed params: ", params)
-    // this.props.currentRound()
-    if ("projectid" in params){
-      this.props.currentRound(params["projectid"]);
-    }else{
-      this.props.history.push({
+    const currentUrl = new URL(window.location.href);
+    const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
+    if ("projectid" in params) {
+      const { currentRound: currentRoundDetailsFetch } = this.props || {};
+      currentRoundDetailsFetch(params.projectid);
+    } else {
+      const { history } = this.props || {};
+      history.push({
         pathname: `/`
       });
     }
-    
-    // const { version, crowdSaleAddress } = this.props.projectDetails || {};
-    // console.log(version, crowdSaleAddress);
-    // this.props.currentRound(version, crowdSaleAddress);
   }
 
   render() {
-    let { currentRoundNumber, projectDetails, treasuryStateNumber } = this.props || {};
+    const { currentRoundNumber, projectDetails, treasuryStateNumber } = this.props || {};
     const {
       currentDeploymentIndicator,
       projectName,
@@ -55,15 +50,15 @@ class ProjectGovernance extends Component {
       pollFactoryAddress,
       initialFundRelease,
       crowdSaleAddress,
-      daicoTokenAddress
-    } =
-      projectDetails || {};
+      daicoTokenAddress,
+      etherPrice
+    } = projectDetails || {};
     // currentRoundNumber = "2";
 
     if (currentDeploymentIndicator !== 12)
       return (
         <div>
-          <p>The project hasn't been deployed yet</p>
+          <p>The project has not been deployed yet</p>
         </div>
       );
 
@@ -92,6 +87,7 @@ class ProjectGovernance extends Component {
           crowdSaleAddress={crowdSaleAddress}
           currentRoundNumber={currentRoundNumber}
           daicoTokenAddress={daicoTokenAddress}
+          etherPrice={etherPrice}
         />
       );
     }
@@ -116,6 +112,7 @@ class ProjectGovernance extends Component {
             rounds={rounds}
             totalMintableSupply={totalMintableSupply}
             foundationDetails={foundationDetails}
+            etherPrice={etherPrice}
           />
         );
       case "1":
@@ -141,6 +138,7 @@ class ProjectGovernance extends Component {
             pollFactoryAddress={pollFactoryAddress}
             initialFundRelease={initialFundRelease}
             crowdSaleAddress={crowdSaleAddress}
+            etherPrice={etherPrice}
           />
         );
       case "2":
@@ -169,6 +167,7 @@ class ProjectGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
+            etherPrice={etherPrice}
           />
         );
       case "4":
@@ -196,6 +195,7 @@ class ProjectGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
+            etherPrice={etherPrice}
           />
         );
       case "5":
@@ -223,6 +223,7 @@ class ProjectGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
+            etherPrice={etherPrice}
           />
         );
       default:
@@ -252,8 +253,9 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-const connector = connect(mapStateToProps, mapDispatchToProps)(ProjectGovernance);
+const connector = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProjectGovernance);
 
 export default withRouter(connector);
-
-// TODO: Do the Proptypes validation to all childrens

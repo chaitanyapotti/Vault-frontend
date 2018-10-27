@@ -1,76 +1,66 @@
 import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
+import actionTypes from "../../action_types";
 
-// export function requestedMembershipSuccess() {
-//   return {
-//     payload: {},
-//     type: "MEMBERSHIP_ASSIGNED"
-//   };
-// }
+export const isAlreadyWhiteListed = receipt => ({
+  payload: { receipt },
+  type: actionTypes.WHITELIST_CHECK
+});
 
-// export function requestedMembershipFailure() {
-//   return {
-//     payload: {},
-//     type: "MEMBERSHIP_FAILED"
-//   };
-// }
+export const isButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.BUTTON_SPINNING
+});
 
-export function isAlreadyWhiteListed(receipt) {
-  return {
-    payload: { receipt },
-    type: "WHITELIST_CHECK",
-  };
-}
-
-export function onWhiteListClick(version, contractName, contractAddress) {
-  return async dispatch => {
-    const network = await web3.eth.net.getNetworkType();
-    web3.eth.getAccounts().then(accounts =>
-      axios
-        .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
-          params: { version: version.toString(), network, address: contractAddress, useraddress: accounts[0] },
+export const onWhiteListClick = (version, contractName, contractAddress, userLocalPublicAddress) => async dispatch => {
+  dispatch(isButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
+    .then(res => {
+      const { data } = res.data || {};
+      const { abi } = data || {};
+      const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      // TODO: to send country attributes of the user
+      instance.methods
+        .requestMembership([])
+        .send({ from: userLocalPublicAddress })
+        .on("receipt", receipt => {
+          dispatch(isButtonSpinning(false));
+          dispatch(isAlreadyWhiteListed(receipt.status === "0x1"));
         })
-        .then(response => {
-          if (response.status === 200) {
-            const { data } = response.data;
-            if (data === "true") {
-              console.log("herer");
-              dispatch(isAlreadyWhiteListed(true));
-            } else {
-              axios
-                .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
-                .then(res => {
-                  const { data } = res.data || {};
-                  const { abi } = data || {};
-                  const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-                  instance.methods
-                    .requestMembership([])
-                    .send({ from: accounts[0] })
-                    .on("error", error => console.error(error.message))
-                    .then(receipt => dispatch(isAlreadyWhiteListed(receipt.status === "0x1")));
-                });
-            }
-          }
-        })
-        .catch(err => console.error(err.message)),
-    );
-  };
-}
+        .on("error", error => {
+          console.error(error.message);
+          dispatch(isButtonSpinning(false));
+          dispatch(isAlreadyWhiteListed(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isButtonSpinning(false));
+      dispatch(isAlreadyWhiteListed(false));
+    });
+};
 
-// export function checkWhiteList(version, contractName, contractAddress) {
-//   return dispatch =>
-//     axios.get(config.api_base_url + "/web3/contractdata/", { params: { version: version.toString(), name: contractName } }).then(response => {
-//       if (response.status === 200) {
-//         const { data } = response.data || {};
-//         const { abi } = data || {};
-//         web3.eth.getAccounts().then(accounts => {
-//           const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-//           instance.methods
-//             .isCurrentMember(accounts[0])
-//             .call()
-//             .then(receipt => dispatch(isAlreadyWhiteListed(receipt)));
-//         });
-//       }
-//     });
-// }
+export const checkWhiteList = (version, contractAddress, userLocalPublicAddress) => async dispatch => {
+  // doesn't call the blockchain => non-blocking
+  const network = await web3.eth.net.getNetworkType();
+  const address = await web3.utils.toChecksumAddress(contractAddress);
+  axios
+    .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
+      params: { version: version.toString(), network, address, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        dispatch(isAlreadyWhiteListed(data === "true"));
+      } else {
+        console.error("api response error");
+        dispatch(isAlreadyWhiteListed(false));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isAlreadyWhiteListed(false));
+    });
+};

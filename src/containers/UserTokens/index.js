@@ -2,66 +2,42 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { Table, Loader, Grid } from "semantic-ui-react";
+import { Table, Loader } from "semantic-ui-react";
 import { showUserTokensLoaderAction } from "../../actions/userTokensActions";
-
+import {Grid, Row, Col} from "../../helpers/react-flexbox-grid";
 class UserTokensTableBody extends Component {
-
-  handleTableRowClicked = (projectid) => {
+  handleTableRowClicked = projectid => {
     this.props.history.push({
       pathname: `/governance/details`,
-      search: "?projectid=" + projectid
+      search: `?projectid=${projectid}`,
     });
-  }
-
+  };
 
   addTableRowsDynamically = () => {
     const table = this.props.userTokensTable;
     if (table && table.length > 0) {
-      return table.map((project, index) => {
-        return (
-          <Table.Row key={index} onClick={this.handleTableRowClicked.bind(this, project.name)}>
-            <Table.Cell>
-              {project.name}
-            </Table.Cell>
-            <Table.Cell>
-              {project.price}
-            </Table.Cell>
-            <Table.Cell>
-              {project.tokens}
-            </Table.Cell>
-            <Table.Cell>
-              {project.health}
-            </Table.Cell>
-            <Table.Cell>
-              {project.tapIncrement}
-            </Table.Cell>
-            <Table.Cell>
-              {project.killConsensus}
-            </Table.Cell>
-            <Table.Cell>
-              {project.nextKillPollRemainingTime}
-            </Table.Cell>
-            <Table.Cell>
-              {project.XFRs}
-            </Table.Cell>
-          </Table.Row>
-        );
-      });
+      return table.map((project, index) => (
+        <Table.Row key={index} onClick={this.handleTableRowClicked.bind(this, project.name)}>
+          <Table.Cell>{project.name}</Table.Cell>
+          <Table.Cell>{project.price}</Table.Cell>
+          <Table.Cell>{project.tokens}</Table.Cell>
+          <Table.Cell>{project.health}</Table.Cell>
+          <Table.Cell>{project.tapIncrement}</Table.Cell>
+          <Table.Cell>{project.killConsensus}</Table.Cell>
+          <Table.Cell>{project.nextKillPollRemainingTime}</Table.Cell>
+          <Table.Cell>{project.XFRs}</Table.Cell>
+        </Table.Row>
+      ));
     }
     return <Table.Row>Activities could not be retrieved, please try reloading the page.</Table.Row>;
   };
 
   render() {
-    return (
-      <Table.Body>
-        {this.addTableRowsDynamically()}
-      </Table.Body>
-    );
+    return <Table.Body>{this.addTableRowsDynamically()}</Table.Body>;
   }
 }
 
-const UserTokensTableHeader = () =>
+const UserTokensTableHeader = () => (
   <Table.Header>
     <Table.Row>
       <Table.HeaderCell>Name</Table.HeaderCell>
@@ -73,32 +49,27 @@ const UserTokensTableHeader = () =>
       <Table.HeaderCell>Started at</Table.HeaderCell>
       <Table.HeaderCell>R1 Ends in</Table.HeaderCell>
     </Table.Row>
-  </Table.Header>;
+  </Table.Header>
+);
 
 class UserTokens extends Component {
   render() {
     return (
       <div>
-        <Grid columns={5}>
-          <Grid.Row />
-          <Grid.Row>
-            <Grid.Column />
-            <Grid.Column>My Tokens</Grid.Column>
-            <Grid.Column />
-            <Grid.Column>*Prices based on current ETH/USD ratio</Grid.Column>
-            <Grid.Column />
-          </Grid.Row>
-        </Grid>
-        {this.props.showUserTokensLoader
-          ? <Loader active={this.props.showUserTokensLoader} />
-          : this.props.userTokensRetrievedSuccessFully
-            ? <Table>
-                <UserTokensTableHeader />
-                <UserTokensTableBody userTokensTable={this.props.userTokensTable} history={this.props.history}/>
-              </Table>
-            : <h3>
-                {this.props.userTokensRetrieveFailureMessage}
-              </h3>}
+        <Row>
+          <Col lg={6}>My Tokens</Col>
+          <Col lg={6} className="text--right">*Prices based on current ETH/USD ratio</Col>
+        </Row>
+        {this.props.showUserTokensLoader ? (
+          <Loader active={this.props.showUserTokensLoader} />
+        ) : this.props.userTokensRetrievedSuccessFully ? (
+          <Table>
+            <UserTokensTableHeader />
+            <UserTokensTableBody userTokensTable={this.props.userTokensTable} history={this.props.history} />
+          </Table>
+        ) : (
+          <h3>{this.props.userTokensRetrieveFailureMessage}</h3>
+        )}
       </div>
     );
   }
@@ -107,19 +78,22 @@ class UserTokens extends Component {
 const mapStateToProps = state => {
   const { userTokensTable, showUserTokensLoader, userTokensRetrieveFailureMessage, userTokensRetrievedSuccessFully } = state.userTokensData || {};
   return {
-    userTokensTable: userTokensTable,
+    userTokensTable,
     showUserTokensLoader,
-    userTokensRetrieveFailureMessage: userTokensRetrieveFailureMessage,
-    userTokensRetrievedSuccessFully
+    userTokensRetrieveFailureMessage,
+    userTokensRetrievedSuccessFully,
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      showUserTokensLoaderAction: showUserTokensLoaderAction
+      showUserTokensLoaderAction,
     },
-    dispatch
+    dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserTokens);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(UserTokens);

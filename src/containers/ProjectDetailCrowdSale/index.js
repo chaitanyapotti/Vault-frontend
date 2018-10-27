@@ -93,12 +93,7 @@ class ProjectDetailCrowdSale extends Component {
     return (
       <Grid>
         <CUICard style={{ padding: "40px 50px" }}>
-          <TimeLine
-            fundsCollected={etherCollected}
-            roundGoal={this.getR1Goal()}
-            startDate={new Date(startDateTime)}
-            endDate={new Date(r1EndTime)}
-          />
+          <TimeLine fundsCollected={etherCollected} roundGoal={this.getR1Goal()} startDate={new Date(startDateTime)} endDate={new Date(r1EndTime)} />
         </CUICard>
         <Row className="push--top">
           <Col xs={12} lg={6}>

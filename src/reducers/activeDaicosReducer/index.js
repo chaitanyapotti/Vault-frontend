@@ -1,12 +1,13 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
+import { activeDaico } from "../../helpers/decorators";
 
 export const initialState = {
   activeDaicosTable: [],
   showActiveDaicosLoader: true,
   activeDaicosRetrieveFailureMessage: "",
-  activeDaicosRetrievedSuccessFully: false,
+  activeDaicosRetrievedSuccessFully: false
 };
 
 export default function(state = initialState, action) {
@@ -15,8 +16,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         showActiveDaicosLoader: false,
-        activeDaicosTable: action.payload,
-        activeDaicosRetrievedSuccessFully: true,
+        activeDaicosTable: activeDaico(undefined, action.payload),
+        activeDaicosRetrievedSuccessFully: true
       };
 
     case actionTypes.ACTIVE_DAICOS_FAILED:
@@ -24,14 +25,14 @@ export default function(state = initialState, action) {
         ...state,
         showActiveDaicosLoader: false,
         activeDaicosRetrieveFailureMessage: action.payload,
-        activeDaicosRetrievedSuccessFully: false,
+        activeDaicosRetrievedSuccessFully: false
       };
 
     case actionTypes.SHOW_ACTIVE_DAICOS_LOADER:
       return {
         ...state,
         showActiveDaicosLoader: true,
-        activeDaicosRetrievedSuccessFully: false,
+        activeDaicosRetrievedSuccessFully: false
       };
 
     default:

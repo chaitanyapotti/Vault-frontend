@@ -2,15 +2,27 @@ import axios from "axios";
 import actionTypes from "../../action_types";
 import config from "../../config";
 import constants from "../../constants";
+import web3 from "../../helpers/web3";
 
 export function newProjectRegistration(projectData, userLocalPublicAddress) {
-  let foundationDetails = []
-  const { nonSaleEntities, totalSaleTokens } = projectData || []
-  let totalNonSaleTokens = 0
-  if (nonSaleEntities.length>0){
-    for (let i=0; i< nonSaleEntities.length; i++){
-      foundationDetails.push({address: nonSaleEntities[i]["entityAddress"], amount:Math.round(totalSaleTokens*nonSaleEntities[i]["entityPercentage"]/100), description: nonSaleEntities[i]["entityName"]})
-      totalNonSaleTokens = totalNonSaleTokens + Math.round(totalSaleTokens*nonSaleEntities[i]["entityPercentage"]/100) 
+  
+  let foundationDetails = [];
+  const { nonSaleEntities, totalSaleTokens } = projectData || [];
+  let totalNonSaleTokens = 0;
+  if (nonSaleEntities.length > 0) {
+    for (let i = 0; i < nonSaleEntities.length; i++) {
+      foundationDetails.push({
+        address: nonSaleEntities[i]["entityAddress"],
+        amount: Math.round(
+          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 100
+        ),
+        description: nonSaleEntities[i]["entityName"]
+      });
+      totalNonSaleTokens =
+        totalNonSaleTokens +
+        Math.round(
+          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 100
+        );
     }
   }
   let projectObject = {
@@ -20,18 +32,36 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     ownerAddress: userLocalPublicAddress,
     r1EndTime: projectData.daicoEndDate,
     rounds: [
-      { tokenCount: projectData.round1Tokens, tokenRate: projectData.round1Rate },
-      { tokenCount: projectData.round2Tokens, tokenRate: projectData.round2Rate },
-      { tokenCount: projectData.round3Tokens, tokenRate: projectData.round3Rate }
+      {
+        tokenCount: projectData.round1Tokens,
+        tokenRate: projectData.round1Rate
+      },
+      {
+        tokenCount: projectData.round2Tokens,
+        tokenRate: projectData.round2Rate
+      },
+      {
+        tokenCount: projectData.round3Tokens,
+        tokenRate: projectData.round3Rate
+      }
     ],
     minimumEtherContribution: "100000000000000000",
-    maximumEtherContribution: Math.round(parseFloat(projectData.maxEtherContribution)*Math.pow(10, 18)),
+    maximumEtherContribution: Math.round(
+      parseFloat(projectData.maxEtherContribution) * Math.pow(10, 18)
+    ),
     foundationDetails: foundationDetails,
-    initialFundRelease: Math.round(parseFloat(projectData.initialFundRelease)*Math.pow(10, 18)),
+    initialFundRelease: Math.round(
+      parseFloat(projectData.initialFundRelease) * Math.pow(10, 18)
+    ),
     teamAddress: projectData.teamAddress,
     killPollStartDate: projectData.daicoEndDate,
-    initialTapAmount:Math.round(parseFloat(projectData.initialTapValue)*Math.pow(10, 18)/(30*86400)), 
-    tapIncrementFactor: Math.round(parseFloat(projectData.tapIncrementFactor)*100),
+    initialTapAmount: Math.round(
+      (parseFloat(projectData.initialTapValue) * Math.pow(10, 18)) /
+        (30 * 86400)
+    ),
+    tapIncrementFactor: Math.round(
+      parseFloat(projectData.tapIncrementFactor) * 100
+    ),
     tokenTag: projectData.erc20TokenTag,
     adminName: projectData.adminName,
     email: projectData.adminEmail,
@@ -43,7 +73,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       twitter: projectData.twitterLink,
       medium: projectData.mediumLink
     },
-    capPercent: Math.round(parseFloat(projectData.voteSaturationLimit)*100),
+    capPercent: Math.round(parseFloat(projectData.voteSaturationLimit) * 100),
     killAcceptancePercent: 80,
     xfrRejectionPercent: 20,
     tapAcceptancePercent: 65,
@@ -84,23 +114,30 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       });
 }
 
-
-export function nonSaleEntityEditAction(index){
+export function nonSaleEntityEditAction(index) {
   return dispatch => {
     dispatch({
       type: actionTypes.NON_SALE_ENTITY_EDIT,
       payload: index
-    })
-  }
+    });
+  };
 }
 
-export function addNonSaleEntityAction(entityName, entityPercentage, entityAddress){
+export function addNonSaleEntityAction(
+  entityName,
+  entityPercentage,
+  entityAddress
+) {
   return dispatch => {
     dispatch({
       type: actionTypes.ADD_NON_SALE_ENTITY,
-      payload: {entityName: entityName, entityPercentage:entityPercentage, entityAddress: entityAddress}
-    })
-  }
+      payload: {
+        entityName: entityName,
+        entityPercentage: entityPercentage,
+        entityAddress: entityAddress
+      }
+    });
+  };
 }
 
 export function entityNameChangedAction(value) {
@@ -109,7 +146,7 @@ export function entityNameChangedAction(value) {
       type: actionTypes.ENTITY_NAME_CHANGED,
       payload: value
     });
-  }
+  };
 }
 
 export function entityPercentageChangedAction(value) {
@@ -118,7 +155,7 @@ export function entityPercentageChangedAction(value) {
       type: actionTypes.ENTITY_PERCENTAGE_CHANGED,
       payload: value
     });
-  }
+  };
 }
 
 export function entityAddressChangedAction(value) {
@@ -127,34 +164,40 @@ export function entityAddressChangedAction(value) {
       type: actionTypes.ENTITY_ADDRESS_CHANGED,
       payload: value
     });
-  }
+  };
+}
+
+async function checkMetaMask(address) {
+  const isValid = await web3.utils.isAddress(address);
+  return isValid;
 }
 
 export function teamAddressChangedAction(value) {
-  return dispatch => {
+  return async dispatch => {
+    const isValid = await checkMetaMask(value);
     dispatch({
       type: actionTypes.TEAM_ADDRESS_CHANGED,
-      payload: value
+      payload: { value, isValid }
     });
-  }
+  };
 }
 
-export function calculateTokens(){
+export function calculateTokens() {
   return dispatch => {
     dispatch({
       type: actionTypes.CALCULATE_TOKENS,
       payload: null
-    })
-  }
+    });
+  };
 }
 
-export function tokenPriceFactorChangedAction(value){
-  return dispatch =>{
+export function tokenPriceFactorChangedAction(value) {
+  return dispatch => {
     dispatch({
       type: actionTypes.TOKEN_PRICE_FACTOR_CHANGED,
       payload: value
-    })
-  }
+    });
+  };
 }
 
 export function adminNameChangedAction(value) {
@@ -300,7 +343,6 @@ export function voteSaturationLimitChangedAction(value) {
     });
   };
 }
-
 
 // export function daicoRoundsChangedAction(value) {
 //   return dispatch => {

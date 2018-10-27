@@ -21,29 +21,34 @@ import web3 from "../../helpers/web3";
 class Deployer extends Component {
   componentDidMount() {
     // TODO: Replace projectid from parent container
-    this.props.fetchProjectDetails("5bafaed1eb00b152a418f7df");
+    this.props.fetchProjectDetails("5bd31829fff9a5eca2cace3e");
   }
 
   deployMembership = () => {
+    const { userLocalPublicAddress } = this.props || {};
+    console.log(userLocalPublicAddress);
     const { version, _id, currentDeploymentIndicator, projectName, tokenTag } = this.props.projectDetails || {};
     const args = [web3.utils.fromAscii(projectName), web3.utils.fromAscii(tokenTag)];
-    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "Protocol");
+    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "Protocol", userLocalPublicAddress);
   };
 
   deployDaicoToken = () => {
+    const { userLocalPublicAddress } = this.props || {};
     const { version, _id, currentDeploymentIndicator, projectName, tokenTag, membershipAddress, totalMintableSupply } =
       this.props.projectDetails || {};
     const args = [projectName, tokenTag, membershipAddress, totalMintableSupply];
-    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken");
+    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", userLocalPublicAddress);
   };
 
   deployLockedTokens = () => {
+    const { userLocalPublicAddress } = this.props || {};
     const { version, _id, currentDeploymentIndicator, daicoTokenAddress } = this.props.projectDetails || {};
     const args = [daicoTokenAddress];
-    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "LockedTokens");
+    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "LockedTokens", userLocalPublicAddress);
   };
 
   deployPollFactory = () => {
+    const { userLocalPublicAddress } = this.props || {};
     const {
       version,
       _id,
@@ -59,7 +64,7 @@ class Deployer extends Component {
       xfrRejectionPercent,
       tapAcceptancePercent,
       lockedTokensAddress,
-      tapIncrementFactor,
+      tapIncrementFactor
     } = this.props.projectDetails || {};
     const args = [
       daicoTokenAddress,
@@ -73,12 +78,13 @@ class Deployer extends Component {
       xfrRejectionPercent,
       tapAcceptancePercent,
       lockedTokensAddress,
-      tapIncrementFactor,
+      tapIncrementFactor
     ];
-    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "PollFactory");
+    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "PollFactory", userLocalPublicAddress);
   };
 
   deployCrowdSale = () => {
+    const { userLocalPublicAddress } = this.props || {};
     const {
       version,
       _id,
@@ -92,7 +98,7 @@ class Deployer extends Component {
       membershipAddress,
       daicoTokenAddress,
       vaultAddress,
-      foundationDetails,
+      foundationDetails
     } = this.props.projectDetails || {};
     const args = [
       minimumEtherContribution,
@@ -106,43 +112,49 @@ class Deployer extends Component {
       daicoTokenAddress,
       vaultAddress,
       foundationDetails.map(a => a.address),
-      foundationDetails.map(a => a.amount),
+      foundationDetails.map(a => a.amount)
     ];
-    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "CrowdSale");
+    this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "CrowdSale", userLocalPublicAddress);
   };
 
   setTreasuryInDaicoToken = () => {
+    const { userLocalPublicAddress } = this.props || {};
     const { version, _id, currentDeploymentIndicator, pollFactoryAddress, daicoTokenAddress } = this.props.projectDetails || {};
     const args = pollFactoryAddress;
-    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", daicoTokenAddress);
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", daicoTokenAddress, userLocalPublicAddress);
   };
 
   setCrowdsaleInDaicoToken = () => {
+    const { userLocalPublicAddress } = this.props || {};
     const { version, _id, currentDeploymentIndicator, crowdSaleAddress, daicoTokenAddress } = this.props.projectDetails || {};
     const args = crowdSaleAddress;
-    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", daicoTokenAddress);
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", daicoTokenAddress, userLocalPublicAddress);
   };
 
   setCrowdsaleInLockedTokens = () => {
+    const { userLocalPublicAddress } = this.props || {};
     const { version, _id, currentDeploymentIndicator, crowdSaleAddress, lockedTokensAddress } = this.props.projectDetails || {};
     const args = crowdSaleAddress;
-    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "LockedTokens", lockedTokensAddress);
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "LockedTokens", lockedTokensAddress, userLocalPublicAddress);
   };
 
   setCrowdSaleInPollFactory = () => {
+    const { userLocalPublicAddress } = this.props || {};
     const { version, _id, currentDeploymentIndicator, crowdSaleAddress, pollFactoryAddress } = this.props.projectDetails || {};
     const args = crowdSaleAddress;
-    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "PollFactory", pollFactoryAddress);
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, args, "PollFactory", pollFactoryAddress, userLocalPublicAddress);
   };
 
   createKillPolls = () => {
+    const { userLocalPublicAddress } = this.props || {};
     const { version, _id, currentDeploymentIndicator, pollFactoryAddress } = this.props.projectDetails || {};
-    this.props.performContractAction(version, _id, currentDeploymentIndicator, null, "PollFactory", pollFactoryAddress);
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, null, "PollFactory", pollFactoryAddress, userLocalPublicAddress);
   };
 
   mintFoundationTokens = () => {
+    const { userLocalPublicAddress } = this.props || {};
     const { version, _id, currentDeploymentIndicator, crowdSaleAddress } = this.props.projectDetails || {};
-    this.props.performContractAction(version, _id, currentDeploymentIndicator, null, "CrowdSale", crowdSaleAddress);
+    this.props.performContractAction(version, _id, currentDeploymentIndicator, null, "CrowdSale", crowdSaleAddress, userLocalPublicAddress);
   };
 
   redirectHome = () => {
@@ -184,10 +196,11 @@ class Deployer extends Component {
 }
 
 const mapStateToProps = state => {
-  const { projectDetails, ts } = state.deployerReducer || {};
+  const { userLocalPublicAddress } = state.signinManagerData || {};
+  const { projectDetails } = state.deployerReducer || {};
   return {
     projectDetails,
-    ts,
+    userLocalPublicAddress
   };
 };
 
@@ -196,12 +209,12 @@ const mapDispatchToProps = dispatch =>
     {
       fetchProjectDetails,
       deployContractAction,
-      performContractAction,
+      performContractAction
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Deployer);

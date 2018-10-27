@@ -75,7 +75,7 @@ const customTheme = {
     },
     MuiTabs: {
       indicator: {
-        backgroundColor: CS_COLORS.WHITE,
+        backgroundColor: 'rgb(0,0,0)',
       },
       flexContainer: {
         width: "100%",
@@ -89,7 +89,7 @@ const customTheme = {
       },
       textColorInherit: {
         opacity: "1 !important",
-        color: "rgba(255, 255, 255, 0.7) !important",
+        color: "rgb(0,0,0) !important",
       },
       labelContainer: {
         padding: "0px !important",
@@ -109,7 +109,7 @@ const customTheme = {
         fontWeight: 400,
       },
       selected: {
-        color: `${CS_COLORS.WHITE} !important`,
+        color: `rgb(0,0,0) !important`,
       },
     },
     MuiMenuItem: {

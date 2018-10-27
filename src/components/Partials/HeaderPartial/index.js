@@ -18,6 +18,8 @@ import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
 import { CUIAppBar, CUIButtonIcon } from "../../../helpers/material-ui";
 
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
+import {ButtonComponent} from "../../../components/Common/FormComponents";
+import "../../../static/css/app.css";
 
 const scrnWdh = window.innerWidth;
 const styles = theme => ({
@@ -106,7 +108,7 @@ class HeaderPartial extends React.Component {
 
   handleRegistrationButtonClicked = event => {
     this.props.history.push({
-      pathname: `/register`
+      pathname: `/register`,
     });
   };
 
@@ -135,20 +137,20 @@ class HeaderPartial extends React.Component {
     this.setState({ drawerIsOpen: false });
   };
 
-  onHandleLogoClicked =() => {
+  onHandleLogoClicked = () => {
     this.props.history.push({
-      pathname: `/`
+      pathname: `/`,
     });
   };
 
-  onHandleProjectsClicked =() =>{
+  onHandleProjectsClicked = () => {
     this.props.history.push({
       pathname: `/projects`,
       // search: "?contract=" + this.props.searchText
     });
   };
 
-  onHandleGovernanceClicked =() =>{
+  onHandleGovernanceClicked = () => {
     this.props.history.push({
       pathname: `/governance`,
       // search: "?contract=" + this.props.searchText
@@ -196,11 +198,11 @@ class HeaderPartial extends React.Component {
 
     return (
       <div className={classes.root}>
-        <CUIAppBar position="static" style={scrnWdh < 768 ? { height: "60px" } : { height: "129px" }}>
+        <CUIAppBar position="static" style={scrnWdh < 768 ? { height: "60px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" } : { height: "85px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }}>
           <Grid>
             <Row>
               <Col>
-                <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "129px" }}>
+                <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "85px" }}>
                   {scrnWdh < 768 ? (
                     <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
                       <MenuIcon />
@@ -227,15 +229,19 @@ class HeaderPartial extends React.Component {
                   <div className={classes.grow} />
                   <div className={classes.sectionDesktop}>
                     <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked.bind(this)}>Projects</div>
+                      <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked.bind(this)}>
+                        Projects
+                      </div>
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked.bind(this)}>Governance</div>
+                      <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked.bind(this)}>
+                        Governance
+                      </div>
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m">
                       <div className="hvr-underline-from-left">Publish ICO</div>
                     </div>
-                    <div className="hdr-itm-pad text--primary txt-m wdh-100">
+                    <div className="text--primary txt-m wdh-100" style={{paddingTop: '10px'}}>
                       {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
                       {this.props.isVaultMember ? (
                         <div>
@@ -244,8 +250,7 @@ class HeaderPartial extends React.Component {
                         </div>
                       ) : (
                         <div>
-                          {" "}
-                          <button onClick={this.handleRegistrationButtonClicked}>Register</button>
+                          <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent>
                         </div>
                       )}
                     </div>
@@ -277,8 +282,12 @@ class HeaderPartial extends React.Component {
             </CUIButtonIcon>
           </div>
           <div className={classes.drawerInner}>
-            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked.bind(this)}>Projects</div>
-            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked.bind(this)}>Governance</div>
+            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked.bind(this)}>
+              Projects
+            </div>
+            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked.bind(this)}>
+              Governance
+            </div>
             <div className="hdr-itm-pad text--primary txt-m">Publish ICO</div>
           </div>
         </Drawer>
@@ -301,14 +310,15 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress } = state.signinManagerData || {};
+  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress } =
+    state.signinManagerData || {};
   return {
     userRegistered,
     userServerPublicAddress,
     userIsIssuer,
     showRegistrationForm,
     isVaultMember,
-    userLocalPublicAddress
+    userLocalPublicAddress,
   };
 };
 

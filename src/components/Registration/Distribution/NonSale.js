@@ -2,91 +2,113 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { CUIFormInput, CUIButton } from "../../../helpers/material-ui";
-import { CUIInputType, CUIButtonType, CUIInputColor } from "../../../static/js/variables";
+import {
+  CUIInputType,
+  CUIButtonType,
+  CUIInputColor
+} from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import { ButtonComponent } from "../../Common/FormComponents";
 
 import { Table } from "semantic-ui-react";
-import { Tooltip, Legend, Pie, PieChart, Cell } from 'recharts';
+import { Tooltip, Legend, Pie, PieChart, Cell } from "recharts";
 
-import { addNonSaleEntityAction, entityNameChangedAction, entityPercentageChangedAction, entityAddressChangedAction, nonSaleEntityEditAction } from "../../../actions/projectRegistrationActions";
+import {
+  addNonSaleEntityAction,
+  entityNameChangedAction,
+  entityPercentageChangedAction,
+  entityAddressChangedAction,
+  nonSaleEntityEditAction
+} from "../../../actions/projectRegistrationActions";
 
-const data01 = [{ name: 'Group A', value: 400 }, { name: 'Group B', value: 300 },
-{ name: 'Group C', value: 300 }, { name: 'Group D', value: 200 },
-{ name: 'Group E', value: 278 }, { name: 'Group F', value: 189 }]
+const data01 = [
+  { name: "Group A", value: 400 },
+  { name: "Group B", value: 300 },
+  { name: "Group C", value: 300 },
+  { name: "Group D", value: 200 },
+  { name: "Group E", value: 278 },
+  { name: "Group F", value: 189 }
+];
 
 // const CHARTCOLORS = ['#e1f4ff', '#b0ddff', '#7ec3fe', '#65b6fd', '#4ca9fc', '#3d8dd4', '#2e71ac', '#1e5583', '#0f395b', '#001d33']
-const CHARTCOLORS = ['#001d33', '#0f395b', '#1e5583', '#3d8dd4','#4ca9fc','#65b6fd', '#7ec3fe','#b0ddff', '#e1f4ff', '#2e71ac']
+const CHARTCOLORS = [
+  "#001d33",
+  "#0f395b",
+  "#1e5583",
+  "#3d8dd4",
+  "#4ca9fc",
+  "#65b6fd",
+  "#7ec3fe",
+  "#b0ddff",
+  "#e1f4ff",
+  "#2e71ac"
+];
 
-const NonSaleEntitiesTableHeader = () =>
+const NonSaleEntitiesTableHeader = () => (
   <Table.Header>
     <Table.Row>
       <Table.HeaderCell>Name</Table.HeaderCell>
       <Table.HeaderCell>Percentage</Table.HeaderCell>
       <Table.HeaderCell>Address</Table.HeaderCell>
     </Table.Row>
-  </Table.Header>;
+  </Table.Header>
+);
 
 class NonSale extends React.Component {
-
   handleAddNewEntity = () => {
-    this.props.addNonSaleEntityAction(this.props.entityName, parseFloat(this.props.entityPercentage) , this.props.entityAddress)
-  }
+    this.props.addNonSaleEntityAction(
+      this.props.entityName,
+      parseFloat(this.props.entityPercentage),
+      this.props.entityAddress
+    );
+  };
 
   onChangeEntityName = e => {
-    this.props.entityNameChangedAction(e.target.value)
-  }
+    this.props.entityNameChangedAction(e.target.value);
+  };
 
   onChangeEntityAddress = e => {
-    this.props.entityAddressChangedAction(e.target.value)
-  }
+    this.props.entityAddressChangedAction(e.target.value);
+  };
 
   onChangeEntityPercentage = e => {
-    this.props.entityPercentageChangedAction(e.target.value)
-  }
+    this.props.entityPercentageChangedAction(e.target.value);
+  };
 
-  handleNonSaleEntityEdit = (entityTableIndex) => {
-    this.props.nonSaleEntityEditAction(entityTableIndex)
-  }
+  handleNonSaleEntityEdit = entityTableIndex => {
+    this.props.nonSaleEntityEditAction(entityTableIndex);
+  };
 
   populateNonSaleEntities = () => {
-    let nonSaleEntitiesTable = this.props.nonSaleEntities
+    let nonSaleEntitiesTable = this.props.nonSaleEntities;
     if (nonSaleEntitiesTable && nonSaleEntitiesTable.length > 0) {
-      return nonSaleEntitiesTable.map((entity, index) =>
-        <Table.Row key={index} onClick={this.handleNonSaleEntityEdit.bind(this, index)}>
-          <Table.Cell>
-            {entity.entityName}
-          </Table.Cell>
-          <Table.Cell>
-            {entity.entityPercentage}
-          </Table.Cell>
-          <Table.Cell>
-            {entity.entityAddress}
-          </Table.Cell>
+      return nonSaleEntitiesTable.map((entity, index) => (
+        <Table.Row
+          key={index}
+          onClick={this.handleNonSaleEntityEdit.bind(this, index)}
+        >
+          <Table.Cell>{entity.entityName}</Table.Cell>
+          <Table.Cell>{entity.entityPercentage}</Table.Cell>
+          <Table.Cell>{entity.entityAddress}</Table.Cell>
         </Table.Row>
-      )
+      ));
     } else {
-      return null
+      return null;
     }
-  }
+  };
 
   render() {
     return (
       <div className="push-top--50">
-        <div>Non Sale Distribution</div>
+        <div className="txt-xl">Non Sale Distribution</div>
         <hr />
         <div>
-          {
-            this.props.nonSaleEntities.length > 0 ? (
-              <Table>
-                <NonSaleEntitiesTableHeader />
-                <Table.Body>
-                  {this.populateNonSaleEntities()}
-                </Table.Body>
-              </Table>
-            ) : (
-                null
-              )
-          }
+          {this.props.nonSaleEntities.length > 0 ? (
+            <Table>
+              <NonSaleEntitiesTableHeader />
+              <Table.Body>{this.populateNonSaleEntities()}</Table.Body>
+            </Table>
+          ) : null}
         </div>
         <Row>
           <Col xs={12} lg={6}>
@@ -138,14 +160,13 @@ class NonSale extends React.Component {
 
         <Row>
           <Col>
-            <CUIButton
-              type={CUIButtonType.RAISED}
-              buttonColor={CUIInputColor.PRIMARY}
-              id="Add to Token Distribution"
-              label="Add To token Distribution"
-              // disabled={!this.state.validPassword}
-              onClick={this.handleAddNewEntity}
-            />
+            <div className="push--top">
+              <ButtonComponent
+                label="Add To token Distribution Chart"
+                style={{ width: "100%" }}
+                onClick={this.handleAddNewEntity}
+              />
+            </div>
           </Col>
         </Row>
 
@@ -153,10 +174,24 @@ class NonSale extends React.Component {
           <PieChart width={400} height={400}>
             <Legend />
             <Tooltip />
-            <Pie isAnimationActive={false} data={this.props.nonSaleEntities} cx={200} cy={200} innerRadius={100} outerRadius={150} fill="#8884d8" label dataKey="entityPercentage" nameKey="entityName">
-              {
-                this.props.nonSaleEntities.map((entry, index) => <Cell key={index} fill={CHARTCOLORS[index % CHARTCOLORS.length]} />)
-              }
+            <Pie
+              isAnimationActive={false}
+              data={this.props.nonSaleEntities}
+              cx={200}
+              cy={200}
+              innerRadius={100}
+              outerRadius={150}
+              fill="#8884d8"
+              label
+              dataKey="entityPercentage"
+              nameKey="entityName"
+            >
+              {this.props.nonSaleEntities.map((entry, index) => (
+                <Cell
+                  key={index}
+                  fill={CHARTCOLORS[index % CHARTCOLORS.length]}
+                />
+              ))}
             </Pie>
           </PieChart>
         </Row>
@@ -166,13 +201,19 @@ class NonSale extends React.Component {
 }
 
 const mapStateToProps = state => {
-  var { nonSaleEntities, totalSaleTokens, entityName, entityPercentage, entityAddress } = state.projectRegistrationData || {};
+  var {
+    nonSaleEntities,
+    totalSaleTokens,
+    entityName,
+    entityPercentage,
+    entityAddress
+  } = state.projectRegistrationData || {};
   return {
     nonSaleEntities: nonSaleEntities,
     totalSaleTokens: totalSaleTokens,
     entityName: entityName,
     entityPercentage: entityPercentage,
-    entityAddress: entityAddress,
+    entityAddress: entityAddress
   };
 };
 
@@ -183,12 +224,12 @@ const mapDispatchToProps = dispatch =>
       entityNameChangedAction,
       entityPercentageChangedAction,
       entityAddressChangedAction,
-      nonSaleEntityEditAction,
+      nonSaleEntityEditAction
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(NonSale);

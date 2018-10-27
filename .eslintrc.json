@@ -20,22 +20,16 @@
     "import/prefer-default-export": 0,
     "no-nested-ternary": 0,
     "no-confusing-arrow": 0,
+    "linebreak-style": 0,
     "no-param-reassign": [
       "error",
       {
         "props": false
       }
     ],
-    "no-mixed-operators": [
-      "error",
-      {
-        "allowSamePrecedence": true
-      }
-    ],
     "prettier/prettier": [
       "error",
       {
-        "trailingComma": "all",
         "singleQuote": false,
         "printWidth": 150,
         "semi": true

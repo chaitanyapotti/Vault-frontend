@@ -1,17 +1,42 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import Warning from "@material-ui/icons/Warning";
 import { ProjectName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
-import { onWhiteListClick } from "../../actions/projectPreStartActions/index";
+import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
+import { formatDate, formatRateToPrice, formatFromWei } from "../../helpers/common/projectDetailhelperFunctions";
+import { fetchPrice } from "../../actions/priceFetchActions/index";
+import AlertModal from "../../components/Common/AlertModal";
 
 class ProjectDetailPreStart extends Component {
+  state={
+    modalOpen: false
+  }
+
+  handleClose = () => this.setState({modalOpen: false});
+
+  componentDidMount() {
+    const { fetchPrice: etherPriceFetch, checkWhiteList: checkWhiteListStatus, version, membershipAddress, userLocalPublicAddress } =
+      this.props || {};
+    etherPriceFetch("ETH");
+    checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { userLocalPublicAddress } = prevProps || "";
+    const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress } = this.props || {};
+    if (userLocalPublicAddress !== localAddress) {
+      checkWhiteListStatus(version, membershipAddress, localAddress);
+    }
+  }
+
   getPrice = () => {
     const { rounds } = this.props || {};
     const [round1, ...rest] = rounds || {};
     const { tokenRate } = round1 || {}; // tokens/wei
-    return 1 / parseInt(tokenRate, 10);
+    return formatRateToPrice(tokenRate);
   };
 
   getRoundText = () =>
@@ -22,32 +47,42 @@ class ProjectDetailPreStart extends Component {
     const { rounds } = this.props || {};
     const round3 = [...rounds].pop() || {};
     const { tokenRate } = round3 || {}; // tokens/wei
-    return 1 / parseInt(tokenRate, 10);
+    return formatRateToPrice(tokenRate);
   };
 
   getSoftCap = () => {
-    // TODO: For now using ether.. when ether price is brought, it is implemented, convert to $
-    const etherPrice = "200"; // TODO: dollars
-    const { rounds } = this.props || {};
+    const { rounds, prices } = this.props || {};
+    const { ETH: etherPrice } = prices || {};
     let softCap = 0;
-    for (let index = 0; index < rounds.length; index++) {
+    for (let index = 0; index < rounds.length; index += 1) {
       const { tokenCount } = rounds[index];
       softCap += parseFloat(tokenCount);
     }
-    return Math.round(softCap * this.getR3Price() * Math.pow(10, -18) * parseFloat(etherPrice)).toString();
+    return formatFromWei(softCap * this.getR3Price() * parseFloat(etherPrice));
   };
 
   getHardCap = () => {
-    const etherPrice = "200"; // TODO: dollars
-    const { totalMintableSupply } = this.props || {};
-    const hardCap = parseFloat(totalMintableSupply) * this.getR3Price() * etherPrice * Math.pow(10, -18);
-    return Math.round(hardCap).toString();
+    const { totalMintableSupply, prices } = this.props || {};
+    const { ETH: etherPrice } = prices || {};
+    return formatFromWei(parseFloat(totalMintableSupply) * this.getR3Price() * etherPrice);
   };
 
-  onWhiteListClick = () => {
-    const { version, membershipAddress } = this.props || {};
-    // this.props.checkWhiteList(version, "Protocol", membershipAddress);
-    this.props.onWhiteListClick(version, "Protocol", membershipAddress);
+  onWhiteListClickInternal = () => {
+    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
+    if (isVaultMember) {
+      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
+    } else {
+      this.setState({
+        modalOpen: true
+      })
+      // show user that "you are not a vault member" and ask to be redirected to registration page
+      // if yes, redirect to /registration else stay here
+    }
+  };
+
+  getStartDate = () => {
+    const { startDateTime } = this.props || new Date();
+    return formatDate(startDateTime);
   };
 
   render() {
@@ -65,6 +100,7 @@ class ProjectDetailPreStart extends Component {
       isCurrentMember,
       rounds,
       foundationDetails,
+      buttonSpinning
     } = this.props || {};
     return (
       <Grid>
@@ -81,17 +117,18 @@ class ProjectDetailPreStart extends Component {
               whitepaper={whitepaper}
               buttonText="Get Whitelisted"
               buttonVisibility={!isCurrentMember}
-              onClick={this.onWhiteListClick}
+              buttonSpinning={buttonSpinning}
+              onClick={this.onWhiteListClickInternal}
             />
           </Col>
           <Col xs={12} lg={6}>
             <PDetailPreStart
-              icoStartDate={new Date(startDateTime).toDateString()}
-              individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
+              icoStartDate={formatDate(startDateTime)}
+              individualCap={formatFromWei(maximumEtherContribution, 3)}
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
-              initialTapAmount={(parseInt(initialTapAmount, 10) * 86400 * 30) / Math.pow(10, 18)}
-              tapIncrementUnit={tapIncrementFactor}
+              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
+              tapIncrementUnit={parseFloat(tapIncrementFactor) / 100}
               hardCapCapitalisation={this.getSoftCap()}
               dilutedCapitalisation={this.getHardCap()}
             />
@@ -105,6 +142,11 @@ class ProjectDetailPreStart extends Component {
             </CUICard>
           </Col>
         </Row>
+
+        <AlertModal open={this.state.modalOpen} handleClose={this.handleClose} link="/registration">
+          <div className="text--center text--danger"><Warning style={{width:'2em', height: '2em'}}/></div>
+          <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
+        </AlertModal>
       </Grid>
     );
   }
@@ -114,20 +156,28 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       onWhiteListClick,
+      fetchPrice,
+      checkWhiteList
     },
-    dispatch,
+    dispatch
   );
 
 const mapStateToProps = state => {
-  const { projectPreStartReducer } = state || {};
-  const { isCurrentMember } = projectPreStartReducer || {};
+  const { projectPreStartReducer, fetchPriceReducer, signinManagerData } = state || {};
+  const { prices } = fetchPriceReducer || {};
+  const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
+  const { isVaultMember, userLocalPublicAddress } = signinManagerData || {};
 
   return {
     isCurrentMember,
+    buttonSpinning,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress
   };
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ProjectDetailPreStart);

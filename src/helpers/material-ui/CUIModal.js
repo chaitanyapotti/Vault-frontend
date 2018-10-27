@@ -56,23 +56,13 @@ const getTransitionComponent = transitionDirection => {
 };
 
 const CUIModal = props => {
-  const {
-    children,
-    style,
-    dialogFullScreen,
-    dialogFullWidth,
-    dialogMaxWidth,
-    className,
-    width,
-    margin,
-    close,
-    transition,
-    transitionDirection,
-  } = props || {};
+  const { children, style, dialogFullScreen, dialogFullWidth, dialogMaxWidth, className, width, margin, close, transition, transitionDirection, open } =
+    props || {};
 
   const modalProps = {
     children,
     style,
+    open,
     fullScreen: dialogFullScreen,
     fullWidth: dialogFullWidth,
     maxWidth: dialogMaxWidth,
@@ -86,7 +76,7 @@ const CUIModal = props => {
 
   return (
     <CUIWrapper>
-      <Dialog open PaperProps={{ style: { width, margin } }} {...modalProps} />
+      <Dialog PaperProps={{ style: { width, margin } }} {...modalProps} />
     </CUIWrapper>
   );
 };

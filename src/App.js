@@ -18,6 +18,7 @@ import SigninManager from "./containers/SigninManager";
 import Register from "./containers/Register";
 import store from "./store";
 import "semantic-ui-css/semantic.min.css";
+
 class App extends Component {
   render() {
     return (
@@ -27,7 +28,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={FeaturedProjects} />
               <Route exact path="/governance" component={Governance} />
-              <Route strict path="/governance/details" component={ProjectGovernance} history={this.props.history}/>
+              <Route strict path="/governance/details" component={ProjectGovernance} history={this.props.history} />
               <Route exact path="/projects" component={AllProjects} />
               <Route exact path="/landing" component={LandingPage} />
               <Route exact path="/registration" component={Registration} />

@@ -104,7 +104,6 @@ export function openRegistrationFormAction(userRegistered) {
       });
     };
   }
-  return;
 }
 
 export function sendOtp(phoneNumber, countryCode) {
@@ -182,7 +181,7 @@ export function checkUserRegistration() {
         } else {
           dispatch({
             type: actionTypes.USER_LOGGED_OUT,
-            payload: ''
+            payload: ""
           });
         }
       })
@@ -207,7 +206,7 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress) {
               payload: accounts[0]
             });
 
-            dispatch(checkVaultMembership(accounts[0]))
+            dispatch(checkVaultMembership(accounts[0]));
 
             // axios
             //   .get(`${config.api_base_url}/db/users`, { params: { useraddress: accounts[0].toLowerCase() } })
@@ -242,7 +241,7 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress) {
         } else {
           dispatch({
             type: actionTypes.USER_LOGGED_OUT,
-            payload: ''
+            payload: ""
           });
         }
       })
@@ -255,7 +254,6 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress) {
   };
 }
 
-
 export function isAlreadyVaultMember(receipt) {
   return {
     type: actionTypes.VAULT_MEMBERSHIP_CHECK,
@@ -263,133 +261,120 @@ export function isAlreadyVaultMember(receipt) {
   };
 }
 
-export const requestVaultMembership = (userLocalPublicAddress) => {
-  return async dispatch => {
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
-        params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
-      })
-      .then(response => {
-        if (response.status === 200) {
-          const { data } = response.data;
-          if (data === "true") {
-            dispatch(isAlreadyVaultMember(true));
-          } else {
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: config.vault_Version, name: "Vault" } }).then(res => {
-              const { data } = res.data || {};
-              const { abi } = data || {};
-              const instance = new web3.eth.Contract(abi, config.vault_contract_address, { from: userLocalPublicAddress });
-              instance.methods
-                .requestMembership([])
-                .send({ from: userLocalPublicAddress, value: web3.utils.toWei("0.0015", "ether") })
-                .on("error", error => console.error(error.message))
-                .then(receipt => dispatch(isAlreadyVaultMember(receipt.status === "0x1")));
-            });
-          }
+export const requestVaultMembership = userLocalPublicAddress => async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
+      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        if (data === "true") {
+          dispatch(isAlreadyVaultMember(true));
+        } else {
+          axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: config.vault_Version, name: "Vault" } }).then(res => {
+            const { data } = res.data || {};
+            const { abi } = data || {};
+            const instance = new web3.eth.Contract(abi, config.vault_contract_address, { from: userLocalPublicAddress });
+            instance.methods
+              .requestMembership([])
+              .send({ from: userLocalPublicAddress, value: web3.utils.toWei("0.0015", "ether") })
+              .on("error", error => console.error(error.message))
+              .then(receipt => dispatch(isAlreadyVaultMember(receipt.status === "0x1")));
+          });
         }
-      })
-      .catch(err => console.error(err.message))
-  };
+      }
+    })
+    .catch(err => console.error(err.message));
 };
 
-
-export const checkVaultMembership = (userLocalPublicAddress) => {
-  return async dispatch => {
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
-        params: { version: config.vault_Version, network: network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
-      })
-      .then(response => {
-        if (response.status === 200) {
-          const { data } = response.data;
-          if (data === "true") {
-            dispatch(isAlreadyVaultMember(true));
-          } else {
-            dispatch(isAlreadyVaultMember(false));
-            dispatch(checkPhoneVerification(userLocalPublicAddress));
-          }
+export const checkVaultMembership = userLocalPublicAddress => async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
+      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        if (data === "true") {
+          dispatch(isAlreadyVaultMember(true));
+        } else {
+          dispatch(isAlreadyVaultMember(false));
+          dispatch(checkPhoneVerification(userLocalPublicAddress));
         }
-      })
-      .catch(err => {
-        console.error(err.message)
-        dispatch(isAlreadyVaultMember(false));
-      })
-
-  };
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isAlreadyVaultMember(false));
+    });
 };
 
-
-export const checkPhoneVerification = (userLocalPublicAddress) => {
-  return dispatch => {
-    axios
-      .get(`${config.api_base_url}/db/users/isphoneverified`, { params: { useraddress: userLocalPublicAddress } })
-      .then(response => {
-        if (response.status === 200) {
-          if (response.data.message === constants.SUCCESS) {
-            dispatch({
-              type: actionTypes.PHONE_NUMBER_IS_VERIFIED,
-              payload: true
-            });
-            dispatch(checkVaultMembershipPaymentStatus(userLocalPublicAddress))
-          } else {
-            dispatch({
-              type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
-              payload: false
-            });
-          }
+export const checkPhoneVerification = userLocalPublicAddress => dispatch => {
+  axios
+    .get(`${config.api_base_url}/db/users/isphoneverified`, { params: { useraddress: userLocalPublicAddress } })
+    .then(response => {
+      if (response.status === 200) {
+        if (response.data.message === constants.SUCCESS) {
+          dispatch({
+            type: actionTypes.PHONE_NUMBER_IS_VERIFIED,
+            payload: true
+          });
+          dispatch(checkVaultMembershipPaymentStatus(userLocalPublicAddress));
         } else {
           dispatch({
             type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
             payload: false
           });
         }
-      })
-      .catch(err => {
+      } else {
         dispatch({
           type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
           payload: false
         });
+      }
+    })
+    .catch(err => {
+      dispatch({
+        type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
+        payload: false
       });
-  }
-}
+    });
+};
 
-
-export const checkVaultMembershipPaymentStatus = (userLocalPublicAddress) => {
-  return async dispatch => {
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/vaulttoken/ismembershipapprovalpending`, {
-        params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
-      })
-      .then(response => {
-        if (response.status === 200) {
-          if (response.data=== 'true'){
-            dispatch({
-              type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_SUCCESS,
-              payload: true
-            })
-          }else{
-            dispatch({
-              type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_SUCCESS,
-              payload: false
-            })
-          }
-          
+export const checkVaultMembershipPaymentStatus = userLocalPublicAddress => async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/vaulttoken/ismembershipapprovalpending`, {
+      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        if (response.data === "true") {
+          dispatch({
+            type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_SUCCESS,
+            payload: true
+          });
         } else {
           dispatch({
-            type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_FAILED,
+            type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_SUCCESS,
             payload: false
-          })
+          });
         }
-      })
-      .catch(err => {
-        console.error(err.message)
+      } else {
         dispatch({
           type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_FAILED,
           payload: false
-        })
-      })
-  };
+        });
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch({
+        type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_FAILED,
+        payload: false
+      });
+    });
 };

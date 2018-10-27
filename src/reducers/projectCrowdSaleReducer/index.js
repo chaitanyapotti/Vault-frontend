@@ -4,7 +4,7 @@ import actionTypes from "../../action_types";
 
 export const initialState = {
   etherCollected: 0,
-  roundInfo: {},
+  roundInfo: {}
 };
 
 export default function(state = initialState, action) {
@@ -25,14 +25,14 @@ export default function(state = initialState, action) {
       const { receipt } = action.payload;
       return {
         ...state,
-        etherCollected: receipt,
+        etherCollected: receipt
       };
 
     case actionTypes.ROUND_INFO_RECEIVED:
       const { rec } = action.payload;
       return {
         ...state,
-        roundInfo: rec,
+        roundInfo: rec
       };
 
     default:

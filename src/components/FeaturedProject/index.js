@@ -1,20 +1,24 @@
-import React, { Component } from "react";
+import React from "react";
 import { Card } from "semantic-ui-react";
 import "../../static/css/app.css";
 
-class Featuredproject extends Component {
-  render() {
-    const extra = <button className="blue-button">Know More</button>;
-    return (
-        <Card className="blue-shadow" 
-          header={this.props.projectName}
-          description={this.props.description}
-          image="https://cryptocanucks.com/wp-content/uploads/2018/03/daico-explained-what-is-cryptocanucks-ethereum-ico-initial-coin-offering-dao-decentralized-autonomous-organization.jpg"
-          extra={extra}
-          style={{margin: '0 auto'}}
-        />
-    );
-  }
-}
+const Featuredproject = props => {
+  const { projectName, description, website } = props || {};
+  const extra = (
+    <a href={website} target="_blank" rel="noopener noreferrer" alt="Know More">
+      Know More
+    </a>
+  );
+  return (
+    <Card
+      className="blue-shadow"
+      header={projectName}
+      description={description}
+      image="https://cryptocanucks.com/wp-content/uploads/2018/03/daico-explained-what-is-cryptocanucks-ethereum-ico-initial-coin-offering-dao-decentralized-autonomous-organization.jpg"
+      extra={extra}
+      style={{ margin: "0 auto" }}
+    />
+  );
+};
 
 export default Featuredproject;

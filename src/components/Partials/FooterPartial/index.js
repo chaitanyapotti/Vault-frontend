@@ -53,7 +53,7 @@ const FooterPartial = () => (
               <tbody>
                 <tr>
                   <td>
-                    <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://http://github.com/chaitanyapotti">
+                    <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://github.com/electusnetwork">
                       <img src="/assets/Footer/github.png" alt="git-logo" />
                     </a>
                   </td>
@@ -85,7 +85,7 @@ const FooterPartial = () => (
                   </a>
                 </td> */}
                   <td>
-                    <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://www.facebook.com">
+                    <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://www.facebook.com/electusnetwork/">
                       <img src="/assets/Footer/fb.png" alt="fb-logo" />
                     </a>
                   </td>

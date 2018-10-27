@@ -6,36 +6,41 @@ import FeaturedProject from "../../components/FeaturedProject";
 import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import AdornedButton from "../../components/Common/LoadingButton";
+
 class FeaturedProjects extends Component {
   componentDidMount() {
-    this.props.getFeaturedProjects();
-    this.props.featuredProjectsLoaderAction();
+    const { getFeaturedProjects: fetchFeaturedProjects, featuredProjectsLoaderAction: loader } = this.props || {};
+    fetchFeaturedProjects();
+    loader();
   }
 
   render() {
-    const { featuredProjects } = this.props;
+    const { featuredProjects, showFeaturedProjectsLoader, featuredProjectsRetrievedSuccessfully, featuredProjectsRetrieveFailureMessage } =
+      this.props || {};
     return (
       <div>
         <div className="text--center sbhdr-txt txt-xl txt-bold">FEATURED PROJECTS</div>
-        {this.props.showFeaturedProjectsLoader ? (
-          <Loader active={this.props.showFeaturedProjectsLoader} />
-        ) : this.props.featuredProjectsRetrievedSuccessfully ? (
+        {showFeaturedProjectsLoader ? (
+          <Loader active={showFeaturedProjectsLoader} />
+        ) : featuredProjectsRetrievedSuccessfully ? (
           <div className="push-top--35">
             <Grid>
               <Row>
                 {featuredProjects.map((item, index) => {
-                  const { projectName, description } = item;
+                  const { projectName, description, urls } = item || {};
+                  console.log(urls);
+                  const { website } = urls || {};
                   return (
                     <Col xs={12} lg={4}>
-                      <FeaturedProject key={index} projectName={projectName} description={description} />
+                      <FeaturedProject key={Math.random()} projectName={projectName} description={description} website={website} />
                     </Col>
-                  )
+                  );
                 })}
               </Row>
             </Grid>
           </div>
         ) : (
-          <h1>{this.props.featuredProjectsRetrieveFailureMessage}</h1>
+          <h1>{featuredProjectsRetrieveFailureMessage}</h1>
         )}
       </div>
     );
@@ -49,7 +54,7 @@ const mapStateToProps = state => {
     featuredProjects,
     showFeaturedProjectsLoader,
     featuredProjectsRetrieveFailureMessage,
-    featuredProjectsRetrievedSuccessfully,
+    featuredProjectsRetrievedSuccessfully
   };
 };
 
@@ -57,12 +62,12 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getFeaturedProjects,
-      featuredProjectsLoaderAction,
+      featuredProjectsLoaderAction
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(FeaturedProjects);

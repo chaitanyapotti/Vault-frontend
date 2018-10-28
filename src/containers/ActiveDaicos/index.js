@@ -8,14 +8,12 @@ import { formatDate, formatCent, formatFromWei, formatMoney, formatTokenPrice, r
 
 class ActiveDaicos extends Component {
   componentDidMount() {
-    this.props.getActiveDaicos();
-    this.props.showActiveDaicosLoaderAction();
-    this.props.fetchPrice("ETH");
+    const { getActiveDaicos: fetchActiveDaicos, fetchPrice: getPrice } = this.props || {};
+    fetchActiveDaicos();
+    getPrice("ETH");
   }
 
-  calculateEndDuration = r1EndTime =>
-    // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))
-    new Date(r1EndTime) - new Date();
+  calculateEndDuration = r1EndTime => new Date(r1EndTime) - new Date();
 
   convertRoundGoal = (round, ETH) => formatFromWei((parseFloat(round.tokenCount) * ETH) / parseFloat(round.tokenRate));
 
@@ -81,11 +79,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(ActiveDaicos);
-
-// class ActiveDaicosTableBody extends Component {
-//   handleTableRowClicked = projectid => {
-//     this.props.history.push({
-//       pathname: `/governance/details`,
-//       search: `?projectid=${projectid}`
-//     });
-//   };

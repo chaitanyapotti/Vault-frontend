@@ -31,7 +31,7 @@ class BuyModal extends Component {
               full
               inputName="Token Amount"
               inputLabel="Token Amount"
-              inputPlaceholder="Amount in ETH"
+              inputPlaceholder="amount in ETH"
               //   inputValue={this.props.adminName}
               textFocus
               // onBlur={this.onBlurAge}

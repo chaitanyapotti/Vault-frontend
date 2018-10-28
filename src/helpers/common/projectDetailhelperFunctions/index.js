@@ -21,7 +21,7 @@ const formatTokenPrice = (input, precision = 0) => parseFloat(parseFloat(input) 
 
 const formatCent = tokenPrice => {
   if (tokenPrice < 1) {
-    return `${tokenPrice}¢`;
+    return `${tokenPrice * 100}¢`;
   }
   return `$${tokenPrice}`;
 };

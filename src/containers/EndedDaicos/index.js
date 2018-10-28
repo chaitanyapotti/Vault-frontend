@@ -4,18 +4,16 @@ import { bindActionCreators } from "redux";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getEndedDaicos, showEndedDaicosLoaderAction } from "../../actions/endedDaicosActions";
 import GridData from "../../components/GridData";
-import { formatDate, formatCent, formatFromWei, formatMoney, formatTokenPrice, r1EndsIn } from "../../helpers/common/projectDetailhelperFunctions";
+import { formatDate, formatCent, formatFromWei, formatMoney, formatTokenPrice } from "../../helpers/common/projectDetailhelperFunctions";
 
 class EndedDaicos extends Component {
   componentDidMount() {
-    this.props.getEndedDaicos();
-    this.props.showEndedDaicosLoaderAction();
-    this.props.fetchPrice("ETH");
+    const { getEndedDaicos: fetchEndedDaicos, fetchPrice: getPrice } = this.props || {};
+    fetchEndedDaicos();
+    getPrice("ETH");
   }
 
-  calculateEndDuration = r1EndTime =>
-    // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))
-    new Date(r1EndTime) - new Date();
+  calculateEndDuration = r1EndTime => new Date(r1EndTime) - new Date();
 
   convertRoundGoal = (round, ETH) => formatFromWei((parseFloat(round.tokenCount) * ETH) / parseFloat(round.tokenRate));
 

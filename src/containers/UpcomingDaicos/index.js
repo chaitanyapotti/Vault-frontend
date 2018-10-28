@@ -9,21 +9,18 @@ import {
   formatCent,
   formatFromWei,
   formatMoney,
-  formatTokenPrice,
   formatNumber,
   formatRateToPrice
 } from "../../helpers/common/projectDetailhelperFunctions";
 
 class UpcomingDaicos extends Component {
   componentDidMount() {
-    this.props.getUpcomingDaicos();
-    this.props.showUpcomingDaicosLoaderAction();
-    this.props.fetchPrice("ETH");
+    const { getUpcomingDaicos: fetchUpcomingDaicos, fetchPrice: getPrice } = this.props || {};
+    fetchUpcomingDaicos();
+    getPrice("ETH");
   }
 
-  calculateEndDuration = r1EndTime =>
-    // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))
-    new Date(r1EndTime) - new Date();
+  calculateEndDuration = r1EndTime => new Date(r1EndTime) - new Date();
 
   convertRoundGoal = (round, ETH) => formatFromWei((parseFloat(round.tokenCount) * ETH) / parseFloat(round.tokenRate));
 

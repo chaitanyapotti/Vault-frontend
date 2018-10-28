@@ -3,57 +3,36 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  userTokensTable: [
-    {
-      name: "Vault",
-      price: 1.89,
-      tokens: 2000,
-      health: 12897,
-      tapIncrement: 12.67,
-      killConsensus: 12.67,
-      nextKillPollRemainingTime: "5D 12H 12M",
-      XFRs: 0,
-    },
-    {
-      name: "Vault1",
-      price: 2.45,
-      tokens: 4000,
-      health: 12134,
-      tapIncrement: 14.2,
-      killConsensus: 11.37,
-      nextKillPollRemainingTime: "10D 09H 04M",
-      XFRs: 1,
-    },
-  ],
-  showUserTokensLoader: false,
+  userTokensTable: [],
+  showUserTokensLoader: true,
   userTokensRetrieveFailureMessage: "",
-  userTokensRetrievedSuccessFully: true,
+  userTokensRetrievedSuccessFully: false
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    // case actionTypes.UPCOMING_DAICOS_SUCCESS:
-    //     return {
-    //         ...state,
-    //         showUpcomingDaicosLoader: false,
-    //         upcomingDaicosTable: action.payload,
-    //         upcomingDaicosRetrievedSuccessFully: true
-    //     };
+    case actionTypes.USER_TOKENS_SUCCESS:
+      return {
+        ...state,
+        showUserTokensLoader: false,
+        userTokensTable: action.payload,
+        userTokensRetrievedSuccessFully: true
+      };
 
-    // case actionTypes.UPCOMING_DAICOS_FAILED:
-    //     return {
-    //         ...state,
-    //         showUpcomingDaicosLoader: false,
-    //         upcomingDaicosRetrieveFailureMessage: action.payload,
-    //         upcomingDaicosRetrievedSuccessFully: false
-    //     };
+    case actionTypes.USER_TOKENS_FAILED:
+      return {
+        ...state,
+        showUserTokensLoader: false,
+        userTokensRetrieveFailureMessage: action.payload,
+        userTokensRetrievedSuccessFully: false
+      };
 
-    // case actionTypes.SHOW_UPCOMING_DAICOS_LOADER:
-    //     return {
-    //         ...state,
-    //         showUpcomingDaicosLoader: true,
-    //         upcomingDaicosRetrievedSuccessFully: false
-    //     }
+    case actionTypes.SHOW_USER_TOKENS_LOADER:
+      return {
+        ...state,
+        showUserTokensLoader: true,
+        userTokensRetrievedSuccessFully: false
+      };
 
     default:
       return state;

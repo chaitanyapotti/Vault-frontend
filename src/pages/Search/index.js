@@ -6,6 +6,7 @@ import SearchCard from "../../components/Common/SearchCard";
 import { getSearchResults } from "../../actions/searchActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
+
 class Search extends Component {
   componentDidMount() {
     const currentUrl = new URL(window.location.href);
@@ -36,17 +37,20 @@ class Search extends Component {
                 const { projectName, description, _id, tokenTag } = item || {};
                 const { history } = this.props || {};
                 const onClick = () => {
-                  history.push({ pathname: `/governance/details?projectid=${_id}` });
+                  history.push({
+                    pathname: `/governance/details`,
+                    search: `?projectid=${_id}`
+                  });
                 };
                 return (
-                    <SearchCard
-                      key={Math.random()}
-                      projectName={projectName}
-                      tokenTag={tokenTag}
-                      description={description}
-                      _id={_id}
-                      onClick={onClick}
-                    />
+                  <SearchCard
+                    key={Math.random()}
+                    projectName={projectName}
+                    tokenTag={tokenTag}
+                    description={description}
+                    _id={_id}
+                    onClick={onClick}
+                  />
                 );
               })}
             </MasonaryLayout>

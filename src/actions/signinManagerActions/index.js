@@ -196,48 +196,40 @@ export function checkUserRegistration() {
 
 export function fetchCurrentAccount(userPreviousLocalPublicAddress) {
   return dispatch => {
+    // console.log("printing current provider: ", web3.currentProvider)
+    if (web3.currentProvider === null) {
+      dispatch({
+        type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
+        payload: false
+      })
+    } else {
+      dispatch({
+        type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
+        payload: true
+      })
+    }
     web3.eth
       .getAccounts()
       .then(accounts => {
         if (accounts.length > 0) {
-          if (accounts[0].toLowerCase() !== userPreviousLocalPublicAddress.toLowerCase()) {
+          web3.eth.net.getNetworkType()
+          .then( networkName =>{
+            // console.log("printing network: ", networkName)
             dispatch({
-              type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
-              payload: accounts[0]
-            });
-
-            dispatch(checkVaultMembership(accounts[0]));
-
-            // axios
-            //   .get(`${config.api_base_url}/db/users`, { params: { useraddress: accounts[0].toLowerCase() } })
-            //   .then(response => {
-            //     console.log(response);
-            //     if (response.status === 200) {
-            //       if (response.data.message === constants.SUCCESS) {
-            //         dispatch({
-            //           type: actionTypes.USER_REGISTRATION_CHECK_SUCCESS,
-            //           payload: response.data.data
-            //         });
-            //       } else {
-            //         dispatch({
-            //           type: actionTypes.USER_REGISTRATION_CHECK_FAILED,
-            //           payload: response.data.reason
-            //         });
-            //       }
-            //     } else {
-            //       dispatch({
-            //         type: actionTypes.USER_REGISTRATION_CHECK_FAILED,
-            //         payload: constants.FAILED_TO_GET_PUBLIC_ADDRESS
-            //       });
-            //     }
-            //   })
-            //   .catch(err => {
-            //     dispatch({
-            //       type: actionTypes.USER_REGISTRATION_CHECK_FAILED,
-            //       payload: constants.FAILED_TO_GET_PUBLIC_ADDRESS
-            //     });
-            //   });
-          }
+              type: actionTypes.METAMASK_NETWORK,
+              payload: networkName
+            })
+            if (networkName==='rinkeby'){
+              if (accounts[0].toLowerCase() !== userPreviousLocalPublicAddress.toLowerCase()) {
+                dispatch({
+                  type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
+                  payload: accounts[0]
+                });
+                dispatch(checkVaultMembership(accounts[0]));
+                dispatch(checkIssuer(accounts[0]));
+              }
+            }
+          })
         } else {
           dispatch({
             type: actionTypes.USER_LOGGED_OUT,
@@ -259,7 +251,7 @@ export function isAlreadyVaultMember(receipt) {
     type: actionTypes.VAULT_MEMBERSHIP_CHECK,
     payload: receipt
   };
-}
+};
 
 export const requestVaultMembership = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
@@ -304,6 +296,39 @@ export const checkVaultMembership = userLocalPublicAddress => async dispatch => 
           dispatch(isAlreadyVaultMember(false));
           dispatch(checkPhoneVerification(userLocalPublicAddress));
         }
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isAlreadyVaultMember(false));
+    });
+};
+
+export const checkIssuer = userLocalPublicAddress => dispatch => {
+  axios
+    .get(`${config.api_base_url}/db/users/isissuer`, {
+      params: {useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        console.log("isIssuer data", data)
+        if (data) {
+          dispatch({
+            type: actionTypes.ISISSUER_CHECK,
+            payload: data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.ISISSUER_CHECK,
+            payload: data
+          })
+        }
+      }else{
+        dispatch({
+          type: actionTypes.ISISSUER_CHECK,
+          payload: false
+        })
       }
     })
     .catch(err => {

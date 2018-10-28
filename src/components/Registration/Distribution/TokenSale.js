@@ -57,6 +57,7 @@ class TokenSale extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Round1 Target in USD"
               inputLabel="Round1 Target in USD"
@@ -72,6 +73,7 @@ class TokenSale extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Round1 Target in Eth"
               inputLabel="Round1 Target in Eth"
@@ -90,6 +92,7 @@ class TokenSale extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Round2 Target in USD"
               inputLabel="Round2 Target in USD"
@@ -105,6 +108,7 @@ class TokenSale extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Round2 Target in Eth"
               inputLabel="Round2 Target in Eth"
@@ -123,6 +127,7 @@ class TokenSale extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Round3 Target in USD"
               inputLabel="Round3 Target in USD"
@@ -138,6 +143,7 @@ class TokenSale extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Round3 Target in Eth"
               inputLabel="Round3 Target in Eth"
@@ -155,6 +161,7 @@ class TokenSale extends React.Component {
           <Col>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
+              required
               full
               inputName="Token price factor"
               inputLabel="Token price factor"

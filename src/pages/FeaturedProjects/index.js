@@ -26,12 +26,12 @@ class FeaturedProjects extends Component {
             <Grid>
               <MasonaryLayout columns={3}>
                 {featuredProjects.map((item, index) => {
-                  const { projectName, description, urls } = item || {};
-                  console.log(urls);
-                  const { website } = urls || {};
+                  const { projectName, description, _id } = item;
                   return (
-                    <FeaturedProject key={Math.random()} projectName={projectName} description={description} website={website} />
-                  );
+                    <Col xs={12} lg={4}>
+                      <FeaturedProject key={index} projectName={projectName} description={description} projectId={_id} history={this.props.history}/>
+                    </Col>
+                  )
                 })}
               </MasonaryLayout>
             </Grid>

@@ -46,11 +46,45 @@ export const initialState = {
   entityName: "",
   entityPercentage: "",
   entityAddress: "",
-  errors: { [actionTypes.ADMIN_NAME_CHANGED]: "" }
+  errors: {
+    [actionTypes.ADMIN_NAME_CHANGED]: "",
+    [actionTypes.ADMIN_EMAIL_CHANGED]: ""
+  }
 };
 
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
+  function validateEmail(email) {
+    var re = /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/;
+    return re.test(email);
+  }
+  function isUpperCase(str) {
+    return str !== str.toUpperCase();
+  }
+  function validateTwitterLink(twitterLink) {
+    var re = /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/(#!\/)?[a-zA-Z0-9_]+$/i;
+    return re.test(twitterLink);
+  }
+  function validateFacebookLink(facebookLink) {
+    var re = /(?:https?:\/\/)?(?:www\.)?(?:facebook|fb|m\.facebook)\.(?:com|me)\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]+)(?:\/)?/i;
+    return re.test(facebookLink);
+  }
+  function validateWebsiteUrl(websiteUrl) {
+    var re = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i;
+    return re.test(websiteUrl);
+  }
+  function validateGitLink(gitLink) {
+    var re = /^(?:https?:\/\/)?(?:www\.)?github\.com\/(#!\/)?[a-zA-Z0-9_]+$/i;
+    return re.test(gitLink);
+  }
+  function validateMediumLink(mediumLink) {
+    var re = /^(?:https?:\/\/)?(?:www\.)?medium\.com\/(@)?[a-zA-Z0-9_]+$/i;
+    return re.test(mediumLink);
+  }
+  function validateTelegramLink(telegramLink) {
+    var re = /^(?:https?:\/\/)?(?:www\.)?t\.me\/(#!\/)?[a-zA-Z0-9_]+$/i;
+    return re.test(telegramLink);
+  }
   switch (action.type) {
     case actionTypes.NON_SALE_ENTITY_EDIT: {
       let nonSaleEntities = state.nonSaleEntities;
@@ -163,7 +197,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.ADMIN_NAME_CHANGED: {
-      if (action.payload.length > 5) {
+      if (action.payload.length > 100) {
         localErrors[actionTypes.ADMIN_NAME_CHANGED] = "Can't have such length";
       } else {
         localErrors[actionTypes.ADMIN_NAME_CHANGED] = "";
@@ -176,23 +210,47 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.ADMIN_EMAIL_CHANGED: {
+      if (validateEmail(action.payload)) {
+        localErrors[actionTypes.ADMIN_EMAIL_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.ADMIN_EMAIL_CHANGED] = "Not a valid email";
+      }
       return {
         ...state,
-        adminEmail: action.payload
+        adminEmail: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.PROJECT_NAME_CHANGED: {
+      if (action.payload.length > 32) {
+        localErrors[actionTypes.PROJECT_NAME_CHANGED] =
+          "Can't have such length";
+      } else {
+        localErrors[actionTypes.PROJECT_NAME_CHANGED] = "";
+      }
       return {
         ...state,
-        projectName: action.payload
+        projectName: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.ERC20_TAG_CHANGED: {
+      if (
+        action.payload.length < 3 ||
+        action.payload.length > 9 ||
+        isUpperCase(action.payload.toString())
+      ) {
+        localErrors[actionTypes.ERC20_TAG_CHANGED] =
+          "Should have 3-9 characters in upper case";
+      } else {
+        localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
+      }
       return {
         ...state,
-        erc20TokenTag: action.payload
+        erc20TokenTag: action.payload,
+        errors: localErrors
       };
     }
 
@@ -204,51 +262,98 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.WEBSITE_LINK_CHANGED: {
+      if (validateWebsiteUrl(action.payload)) {
+        localErrors[actionTypes.WEBSITE_LINK_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.WEBSITE_LINK_CHANGED] =
+          "Not a valid website url";
+      }
       return {
         ...state,
-        websiteLink: action.payload
+        websiteLink: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.TELEGRAM_LINK_CHANGED: {
+      if (validateTelegramLink(action.payload)) {
+        localErrors[actionTypes.TELEGRAM_LINK_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.TELEGRAM_LINK_CHANGED] =
+          "Not a valid telegram url";
+      }
       return {
         ...state,
-        telegramLink: action.payload
+        telegramLink: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.GITHUB_LINK_CHANGED: {
+      if (validateGitLink(action.payload)) {
+        localErrors[actionTypes.GITHUB_LINK_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.GITHUB_LINK_CHANGED] = "Not a valid github url";
+      }
       return {
         ...state,
-        githubLink: action.payload
+        githubLink: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.MEDIUM_LINK_CHANGED: {
+      if (validateMediumLink(action.payload)) {
+        localErrors[actionTypes.MEDIUM_LINK_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.MEDIUM_LINK_CHANGED] =
+          "Not a valid medium link";
+      }
       return {
         ...state,
-        mediumLink: action.payload
+        mediumLink: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.FACEBOOK_LINK_CHANGED: {
+      if (validateFacebookLink(action.payload)) {
+        localErrors[actionTypes.FACEBOOK_LINK_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.FACEBOOK_LINK_CHANGED] =
+          "Not a valid facebook link";
+      }
       return {
         ...state,
-        facebookLink: action.payload
+        facebookLink: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.TWITTER_LINK_CHANGED: {
+      if (validateTwitterLink(action.payload)) {
+        localErrors[actionTypes.TWITTER_LINK_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.TWITTER_LINK_CHANGED] =
+          "Not a valid twitter link";
+      }
       return {
         ...state,
-        twitterLink: action.payload
+        twitterLink: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.TEAM_ADDRESS_CHANGED: {
+      if (action.payload.isValid) {
+        localErrors[actionTypes.TEAM_ADDRESS_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.TEAM_ADDRESS_CHANGED] = "Not a valid address";
+      }
       return {
         ...state,
-        teamAddress: action.payload
+        teamAddress: action.payload.value,
+        errors: localErrors
       };
     }
 
@@ -279,9 +384,16 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED: {
+      if (parseFloat(action.payload) < 0.1) {
+        localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] =
+          "should be greater than 0.1";
+      } else {
+        localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "";
+      }
       return {
         ...state,
-        maxEtherContribution: action.payload
+        maxEtherContribution: action.payload,
+        errors: localErrors
       };
     }
 
@@ -293,16 +405,30 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.TAP_INCREMENT_FACTOR_CHANGED: {
+      if (parseFloat(action.payload) < 1 || parseFloat(action.payload) > 2) {
+        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] =
+          "should be in between 1 and 2";
+      } else {
+        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "";
+      }
       return {
         ...state,
-        tapIncrementFactor: action.payload
+        tapIncrementFactor: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.VOTE_SATURATION_LIMIT_CHANGED: {
+      if (parseFloat(action.payload) < 0.1 || parseFloat(action.payload) > 10) {
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] =
+          "should be in between 0.1 and 10";
+      } else {
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "";
+      }
       return {
         ...state,
-        voteSaturationLimit: action.payload
+        voteSaturationLimit: action.payload,
+        errors: localErrors
       };
     }
 

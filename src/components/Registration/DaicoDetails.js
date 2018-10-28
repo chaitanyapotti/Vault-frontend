@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { CUICard, CUIFormInput, CUIButton } from "../../helpers/material-ui";
-import { CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS } from "../../static/js/variables";
+import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import {
   initialFundReleaseChangedAction,

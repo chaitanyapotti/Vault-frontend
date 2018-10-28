@@ -29,14 +29,14 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={FeaturedProjects} />
               <Route exact path="/governance" component={Governance} />
-              <Route strict path="/governance/details" component={ProjectGovernance} history={this.props.history} />
+              <Route path="/governance/details:id" component={ProjectGovernance} history={this.props.history} />
               <Route exact path="/projects" component={AllProjects} />
               <Route exact path="/landing" component={LandingPage} />
               <Route exact path="/registration" component={Registration} />
               <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/deploy" component={Deployer} />
               <Route exact path="/register" component={Register} />
-              <Route exact path="/search" component={Search} />
+              <Route path="/search" component={Search} />
             </Switch>
             <SigninManager />
           </VaultApp>

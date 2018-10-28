@@ -5,7 +5,7 @@ import qs from "qs";
 import SearchCard from "../../components/Common/SearchCard";
 import { getSearchResults } from "../../actions/searchActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-
+import MasonaryLayout from "../../components/Common/MasonaryLayout";
 class Search extends Component {
   componentDidMount() {
     const currentUrl = new URL(window.location.href);
@@ -26,13 +26,12 @@ class Search extends Component {
 
   render() {
     const { searchResult } = this.props || {};
-    console.log(searchResult);
     return searchResult.length > 0 ? (
       <div>
         <div className="text--center sbhdr-txt txt-xl txt-bold">SEARCH RESULTS</div>
         <div className="push-top--35">
           <Grid>
-            <Row>
+            <MasonaryLayout columns={3}>
               {searchResult.map((item, index) => {
                 const { projectName, description, _id, tokenTag } = item || {};
                 const { history } = this.props || {};
@@ -40,7 +39,6 @@ class Search extends Component {
                   history.push({ pathname: `/governance/details?projectid=${_id}` });
                 };
                 return (
-                  <Col xs={12} lg={4}>
                     <SearchCard
                       key={Math.random()}
                       projectName={projectName}
@@ -49,10 +47,9 @@ class Search extends Component {
                       _id={_id}
                       onClick={onClick}
                     />
-                  </Col>
                 );
               })}
-            </Row>
+            </MasonaryLayout>
           </Grid>
         </div>
       </div>

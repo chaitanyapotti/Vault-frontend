@@ -100,6 +100,7 @@ class HeaderPartial extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+    searchText: ""
   };
 
   handleFormCloseButtonClicked = event => {
@@ -156,6 +157,18 @@ class HeaderPartial extends React.Component {
       // search: "?contract=" + this.props.searchText
     });
   };
+
+  searchProject = (e) => {
+    this.setState({
+      searchText: e.target.value
+    })
+  }
+
+  handleSearch = (e) => {
+    if (e.keyCode === 13) {
+      this.props.history.push(`/search?q=${this.state.searchText}`)
+    }
+  }
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
@@ -224,6 +237,8 @@ class HeaderPartial extends React.Component {
                         root: classes.inputRoot,
                         input: classes.inputInput,
                       }}
+                      onChange={this.searchProject}
+                      onKeyDown={this.handleSearch}
                     />
                   </div>
                   <div className={classes.grow} />

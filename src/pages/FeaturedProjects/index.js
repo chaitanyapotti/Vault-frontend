@@ -5,7 +5,7 @@ import { Loader } from "semantic-ui-react";
 import FeaturedProject from "../../components/FeaturedProject";
 import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-
+import MasonaryLayout from "../../components/Common/MasonaryLayout";
 class FeaturedProjects extends Component {
   componentDidMount() {
     const { getFeaturedProjects: fetchFeaturedProjects, featuredProjectsLoaderAction: loader } = this.props || {};
@@ -24,18 +24,16 @@ class FeaturedProjects extends Component {
         ) : featuredProjectsRetrievedSuccessfully ? (
           <div className="push-top--35">
             <Grid>
-              <Row>
+              <MasonaryLayout columns={3}>
                 {featuredProjects.map((item, index) => {
                   const { projectName, description, urls } = item || {};
                   console.log(urls);
                   const { website } = urls || {};
                   return (
-                    <Col xs={12} lg={4}>
-                      <FeaturedProject key={Math.random()} projectName={projectName} description={description} website={website} />
-                    </Col>
+                    <FeaturedProject key={Math.random()} projectName={projectName} description={description} website={website} />
                   );
                 })}
-              </Row>
+              </MasonaryLayout>
             </Grid>
           </div>
         ) : (

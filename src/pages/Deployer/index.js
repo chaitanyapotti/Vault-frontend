@@ -2,22 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { fetchProjectDetails, deployContractAction, performContractAction } from "../../actions/deployerActions/index";
-import DeployMembership from "./DeployMembership";
-import DeployDaicoToken from "./DeployDaicoToken";
-import DeployLockedTokens from "./DeployLockedTokens";
-import DeployPollFactory from "./DeployPollFactory";
-import DeployCrowdSale from "./DeployCrowdSale";
-import SetTreasuryInDaicoToken from "./SetTreasuryInDaicoToken";
-import SetCrowdsaleInDaicoToken from "./SetCrowdsaleInDaicoToken";
-import CreateKillPolls from "./CreateKillPolls";
-import CreateKillPolls2 from "./CreateKillPolls2";
-import MintFoundationTokens from "./MintFoundationTokens";
-import SetCrowdsaleInLockedTokens from "./SetCrowdsaleInLockedTokens";
-import SetCrowdSaleInPollFactory from "./SetCrowdSaleInPollFactory";
-import RouteToMain from "./RouteToMain";
-
+import {Grid} from "../../helpers/react-flexbox-grid";
 import web3 from "../../helpers/web3";
-
+import CustomizedStepper from "../../components/Common/CustomizedStepper";
+import DeployerCard from "../../components/DeployerCard";
 class Deployer extends Component {
   componentDidMount() {
     // TODO: Replace projectid from parent container
@@ -161,37 +149,97 @@ class Deployer extends Component {
     this.props.history.push("/");
   };
 
-  render() {
-    if (this.props.projectDetails != null)
-      switch (this.props.projectDetails.currentDeploymentIndicator) {
-        case 0:
-          return <DeployMembership onClick={this.deployMembership} />;
+  getStepContent = () => {
+    const {projectDetails} = this.props || {};
+    const {currentDeploymentIndicator} = projectDetails || {};
+    switch (currentDeploymentIndicator) {
+      case 0:
+          return <DeployerCard
+                  label="Let's start deployment and deploy Membership Contract"
+                  btnLabel="Deploy Membership Contract" 
+                  onClick={this.deployMembership} />;
         case 1:
-          return <DeployDaicoToken onClick={this.deployDaicoToken} />;
+          return <DeployerCard
+                  label="Let's deploy Daico Token Contract"
+                  btnLabel="Deploy Daico Token" 
+                  onClick={this.deployDaicoToken} />;
         case 2:
-          return <DeployLockedTokens onClick={this.deployLockedTokens} />;
+          return <DeployerCard
+                  label="Let's deploy Locked Tokens Contract"
+                  btnLabel="Deploy Locked Tokens" 
+                  onClick={this.deployLockedTokens} />;
         case 3:
-          return <DeployPollFactory onClick={this.deployPollFactory} />;
+          return <DeployerCard
+                  label="Let's deploy Poll Factory Contract"
+                  btnLabel="Deploy Poll Factory" 
+                  onClick={this.deployPollFactory} />;
         case 4:
-          return <DeployCrowdSale onClick={this.deployCrowdSale} />;
+          return <DeployerCard
+                  label="Let's deploy Crowd Sale Contract"
+                  btnLabel="Deploy Crowd Sale" 
+                  onClick={this.deployCrowdSale} />;
         case 5:
-          return <SetTreasuryInDaicoToken onClick={this.setTreasuryInDaicoToken} />;
+          return <DeployerCard
+                  label="Let's set treasury address in Daico Token Contract"
+                  btnLabel="Set Treasury Address" 
+                  onClick={this.setTreasuryInDaicoToken} />;
         case 6:
-          return <SetCrowdsaleInDaicoToken onClick={this.setCrowdsaleInDaicoToken} />;
+          return <DeployerCard
+                  label="Let's set crowdsale address in Daico Token Contract"
+                  btnLabel="Set crowdsale address" 
+                  onClick={this.setCrowdsaleInDaicoToken} />;
         case 7:
-          return <SetCrowdsaleInLockedTokens onClick={this.setCrowdsaleInLockedTokens} />;
+          return <DeployerCard
+                  label="Let's set crowdsale address in Locked Tokens Contract"
+                  btnLabel="Set crowdsale Address" 
+                  onClick={this.setCrowdsaleInLockedTokens} />;
         case 8:
-          return <SetCrowdSaleInPollFactory onClick={this.setCrowdSaleInPollFactory} />;
+          return <DeployerCard
+                  label="Let's set crowdsale address in Poll factory Contract" 
+                  btnLabel="Set crowdsale Address" 
+                  onClick={this.setCrowdSaleInPollFactory} />;
         case 9:
-          return <CreateKillPolls onClick={this.createKillPolls} />;
+          return <DeployerCard
+                  label="Let's Create Kill Polls"
+                  btnLabel="Create Kill Polls"
+                  onClick={this.createKillPolls} />;
         case 10:
-          return <CreateKillPolls2 onClick={this.createKillPolls} />;
+          return <DeployerCard
+                  label="Let's Create Kill Polls part 2"
+                  btnLabel="Create Kill Polls part 2" 
+                  onClick={this.createKillPolls} />;
         case 11:
-          return <MintFoundationTokens onClick={this.mintFoundationTokens} />;
+          return <DeployerCard
+                  label="Let's Mint foundation tokens"
+                  btnLabel="Mint foundation tokens" 
+                  onClick={this.mintFoundationTokens} />;
         default:
-          return <RouteToMain onClick={this.redirectHome} />;
-      }
-    return null;
+          return <DeployerCard
+                  label="Deployment is done. Click here to be redirected to home page"
+                  btnLabel="Redirect Home" 
+                  onClick={this.redirectHome} />;
+    }
+  }
+
+  getSteps = () => {
+    return ['Deploy Membership', 'Deploy Daico Token', 'Deploy Locked Tokens', 'Deploy Poll Factory', 'Deploy Crowd Sale', 'Set Treasury in Daico, Token',
+            'Set Crowdsale in Daico Token', 'Set Crowdsale in Locked Tokens', 'Set Crowdsale in Poll Factory', 'Create Kill Polls', 'Create Kill Polls 2',
+            'Mint Foundation Tokens', 'Route to Main Net'];
+  }
+  
+
+  render() {
+    const {projectDetails} = this.props || {};
+    const {currentDeploymentIndicator} = projectDetails || {};
+    return(
+      <Grid>
+        <CustomizedStepper
+          getStepContent={this.getStepContent}
+          getSteps = {this.getSteps} 
+          activeStep = {currentDeploymentIndicator}
+        />
+      </Grid>
+    )
   }
 }
 

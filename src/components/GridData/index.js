@@ -30,16 +30,18 @@ class GridData extends React.Component {
       }
     }
   })
- 
+  
+  redirectToProject = (rowdata) => {
+    console.log('redirectToProject', rowdata);
+  }
+
   render() {
     const columns = [ "Name","Rounds","R1 Goal","Final Goal", "Raised*", "Price*","Started at","R1 Ends in"];
-
-    
-
     const options = {
       filterType: "dropdown",
       responsive: "scroll",
-      selectableRows: false
+      selectableRows: false,
+      onRowClick: this.redirectToProject
     };
     const {tableData} = this.props || {};
     return (

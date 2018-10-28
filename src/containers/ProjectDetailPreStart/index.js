@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Warning from "@material-ui/icons/Warning";
-import { ProjectName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
+import { ProjectPreStartName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
@@ -106,7 +106,7 @@ class ProjectDetailPreStart extends Component {
       <Grid>
         <Row>
           <Col xs={12} lg={6}>
-            <ProjectName
+            <ProjectPreStartName
               projectName={projectName}
               priceIncrementFlag={false}
               tokenTag={tokenTag}

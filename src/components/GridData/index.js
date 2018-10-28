@@ -10,40 +10,35 @@ class GridData extends React.Component {
       overrides: {
         MUIDataTableBodyCell: {
           root: {
-            fontSize: "17px"
+            fontSize: "16px"
           }
         },
         MUIDataTableHeadCell: {
           root: {
-            fontSize: "17px"
+            fontSize: "16px"
           }
         },
         MUIDataTableFooterCell: {
           root: {
-            fontSize: "17px"
+            fontSize: "16px"
           }
         },
         MuiTypography: {
           root: {
-            fontSize: "17px"
+            fontSize: "16px"
           }
         }
       }
     });
 
-  redirectToProject = rowdata => {
-    console.log("redirectToProject", rowdata);
-  };
-
   render() {
-    const columns = ["Name", "Rounds", "R1 Goal", "Final Goal", "Raised*", "Price*", "Started at", "R1 Ends in"];
     const options = {
       filterType: "dropdown",
       responsive: "scroll",
       selectableRows: false,
       onRowClick: this.redirectToProject
     };
-    const { tableData } = this.props || {};
+    const { tableData, columns } = this.props || {};
     return (
       <MuiThemeProvider theme={this.getMuiTheme()}>
         <MUIDataTable data={tableData} columns={columns} options={options} />

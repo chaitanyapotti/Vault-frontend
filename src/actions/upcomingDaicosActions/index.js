@@ -12,7 +12,7 @@ export function getUpcomingDaicos() {
           if (response.data.message === constants.SUCCESS) {
             dispatch({
               type: actionTypes.UPCOMING_DAICOS_SUCCESS,
-              payload: response.data.data,
+              payload: response.data.data
             });
           } else {
             dispatch({
@@ -40,7 +40,7 @@ export function showUpcomingDaicosLoaderAction() {
   return dispatch => {
     dispatch({
       type: actionTypes.SHOW_UPCOMING_DAICOS_LOADER,
-      payload: null,
+      payload: null
     });
   };
 }

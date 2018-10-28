@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { ProjectName, PDetailGovernance, TapCard } from "../../components/Common/ProjectDetails";
-import { FundReq } from "../../components/Common/ProjectDetails";
+import { ProjectGovernanceName, PDetailGovernance, TapCard, FundReq } from "../../components/Common/ProjectDetails";
 import { getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import {
@@ -140,7 +139,7 @@ class ProjectDetailGovernance extends Component {
       <Grid>
         <Row>
           <Col xs={12} lg={6}>
-            <ProjectName
+            <ProjectGovernanceName
               projectName={projectName}
               tokenTag={tokenTag}
               price={this.getPrice()}
@@ -150,7 +149,7 @@ class ProjectDetailGovernance extends Component {
               urls={urls}
               whitepaper={whitepaper}
               buttonText="Buy"
-              secondaryButtonText="Trade"
+              secondaryButtonText="gggg"
               buttonVisibility={!isCurrentMember}
               onClick={this.buyTokens}
               onSecondaryClick={this.onTradeClick}

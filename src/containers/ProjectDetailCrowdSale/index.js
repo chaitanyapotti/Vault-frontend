@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { PDetailCrowdSale, ProjectName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
+import { PDetailCrowdSale, ProjectCrowdSaleName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
 import { getEtherCollected, getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
@@ -35,7 +35,7 @@ class ProjectDetailCrowdSale extends Component {
     const { totalTokensSold } = roundInfo || "";
     // based on tokens sold
     return `${Math.round(parseFloat(totalTokensSold) * Math.pow(10, -18))} Tokens Sold of ${Math.round(
-      parseFloat(tokenCount) * Math.pow(10, -18),
+      parseFloat(tokenCount) * Math.pow(10, -18)
     )} (Round 1 of 3)`;
   };
 
@@ -88,7 +88,7 @@ class ProjectDetailCrowdSale extends Component {
       foundationDetails,
       startDateTime,
       r1EndTime,
-      etherCollected,
+      etherCollected
     } = this.props || {};
     return (
       <Grid>
@@ -97,7 +97,7 @@ class ProjectDetailCrowdSale extends Component {
         </CUICard>
         <Row className="push--top">
           <Col xs={12} lg={6}>
-            <ProjectName
+            <ProjectCrowdSaleName
               projectName={projectName}
               tokenTag={tokenTag}
               price={this.getPrice()}
@@ -141,9 +141,9 @@ const mapDispatchToProps = dispatch =>
     {
       getEtherCollected,
       getRoundTokensSold,
-      buyTokens,
+      buyTokens
     },
-    dispatch,
+    dispatch
   );
 
 const mapStateToProps = state => {
@@ -151,11 +151,11 @@ const mapStateToProps = state => {
   const { etherCollected, roundInfo } = projectCrowdSaleReducer || {};
   return {
     etherCollected,
-    roundInfo,
+    roundInfo
   };
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ProjectDetailCrowdSale);

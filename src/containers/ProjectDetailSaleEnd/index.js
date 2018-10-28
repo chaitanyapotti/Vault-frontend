@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { ProjectName, PDetailGovernance, TapCard } from "../../components/Common/ProjectDetails";
-import { FundReq } from "../../components/Common/ProjectDetails";
+import { ProjectSaleEndName, PDetailGovernance, TapCard, FundReq } from "../../components/Common/ProjectDetails";
 import BuyModal from "../../components/Common/BuyModal";
 import { getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -15,7 +14,7 @@ import {
   getKillConsensus,
   getTapPollConsensus,
   getCurrentTap,
-  getXfrData,
+  getXfrData
 } from "../../actions/projectDetailGovernanceActions/index";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
 
@@ -125,15 +124,15 @@ class ProjectDetailSaleEnd extends Component {
       remainingEtherBalance,
       tapIncrementFactor,
       currentTap,
-      xfrData,
+      xfrData
     } = this.props || {};
     return (
       // <MasonaryLayout>
       <Grid>
         <Row>
           <Col xs={12} lg={6}>
-            <BuyModal/>
-            <ProjectName
+            <BuyModal />
+            <ProjectSaleEndName
               projectName={projectName}
               tokenTag={tokenTag}
               price={this.getPrice()}
@@ -201,7 +200,7 @@ const mapStateToProps = state => {
     totalSupply,
     tapPollConsensus,
     currentTap,
-    xfrData,
+    xfrData
   } = projectDetailGovernanceReducer || {};
 
   return {
@@ -215,7 +214,7 @@ const mapStateToProps = state => {
     killConsensus,
     tapPollConsensus,
     currentTap,
-    xfrData,
+    xfrData
   };
 };
 
@@ -232,12 +231,12 @@ const mapDispatchToProps = dispatch =>
       getKillConsensus,
       getTapPollConsensus,
       getCurrentTap,
-      getXfrData,
+      getXfrData
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ProjectDetailSaleEnd);

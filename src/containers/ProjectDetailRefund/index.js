@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { ProjectName } from "../../components/Common/ProjectDetails";
+import { ProjectRefundName } from "../../components/Common/ProjectDetails";
 import { onRefundClick } from "../../actions/projectRefundActions/index";
 import { getTokenBalance } from "../../actions/projectDetailGovernanceActions/index";
 
@@ -24,7 +24,7 @@ class ProjectDetailRefund extends Component {
     const { projectName, tokenTag, description, urls, whitepaper, tokenBalance } = this.props || {};
     return (
       <div>
-        <ProjectName
+        <ProjectRefundName
           projectName={projectName}
           tokenTag={tokenTag}
           price="0"
@@ -45,20 +45,20 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       onRefundClick,
-      getTokenBalance,
+      getTokenBalance
     },
-    dispatch,
+    dispatch
   );
 
 const mapStateToProps = state => {
   const { projectRefundReducer } = state || {};
   const { tokenBalance } = projectRefundReducer || {};
   return {
-    tokenBalance,
+    tokenBalance
   };
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ProjectDetailRefund);

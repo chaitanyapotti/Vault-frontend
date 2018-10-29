@@ -17,13 +17,19 @@ import { fetchPrice } from "../../actions/priceFetchActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
 import AlertModal from "../../components/Common/AlertModal";
+import BuyModal from "../../components/Common/BuyModal";
 
 class ProjectDetailCrowdSale extends Component {
   state = {
-    modalOpen: false
+    modalOpen: false,
+    buyModalOpen: false
   };
 
-  handleClose = () => this.setState({ modalOpen: false });
+  handleBuyClose = () => this.setState({ buyModalOpen: false });
+
+  handleClose = () => {
+    this.setState({ modalOpen: false });
+  };
 
   componentDidMount() {
     const {
@@ -78,10 +84,11 @@ class ProjectDetailCrowdSale extends Component {
     }
   };
 
-  buyTokens = () => {
-    const { crowdSaleAddress } = this.props || {};
-    // TODO: need to add how many tokens to buy
-    this.props.buyTokens(crowdSaleAddress);
+  buyTokensOnClick = () => {
+    const { crowdSaleAddress, buyTokens: buyToken } = this.props || {};
+    this.setState({ buyModalOpen: true });
+    // // TODO: need to add how many tokens to buy
+    buyToken(crowdSaleAddress);
   };
 
   render() {
@@ -106,7 +113,7 @@ class ProjectDetailCrowdSale extends Component {
       signinStatusFlag,
       buyButtonSpinning
     } = this.props || {};
-    const { modalOpen } = this.state;
+    const { modalOpen, buyModalOpen } = this.state;
     return (
       <Grid>
         <CUICard style={{ padding: "40px 50px" }}>
@@ -159,13 +166,19 @@ class ProjectDetailCrowdSale extends Component {
             </CUICard>
           </Col>
         </Row>
-
         <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />
           </div>
           <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
         </AlertModal>
+        <BuyModal
+          open={buyModalOpen}
+          onClose={this.handleBuyClose}
+          price={getR1Price(this.props)}
+          tokenTag={tokenTag}
+          buyTokensOnClick={this.buyTokensOnClick}
+        />
       </Grid>
     );
   }

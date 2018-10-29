@@ -28,15 +28,40 @@ const formatCent = tokenPrice => {
 
 const secondsToDhms = seconds => {
   const secs = Number(seconds);
-  const d = Math.floor(secs / (3600 * 24));
+  const y = Math.floor(secs / (3600 * 24 * 365));
+  const mo = Math.floor((secs % (3600 * 24 * 365)) / (30 * 24 * 3600));
+  const d = Math.floor((secs % (30 * 24 * 3600)) / (24 * 3600));
   const h = Math.floor((secs % (3600 * 24)) / 3600);
   const m = Math.floor((secs % 3600) / 60);
   const s = Math.floor((secs % 3600) % 60);
 
-  const dDisplay = d > 0 ? d + (d === 1 ? " D " : " D ") : "";
-  const hDisplay = h > 0 ? h + (h === 1 ? " H " : " H ") : "";
-  const mDisplay = m > 0 ? m + (m === 1 ? " M " : " M ") : "";
-  return dDisplay + hDisplay + mDisplay;
+  const yDisplay = y > 0 ? `${y}Y ` : "";
+  const moDisplay = mo > 0 ? `${mo}M ` : "";
+  const dDisplay = d > 0 ? `${d}D ` : "";
+  const hDisplay = h > 0 ? `${h}H ` : "";
+  const mDisplay = m > 0 ? `${m}m ` : "";
+  const sDisplay = s > 0 ? `${s}s ` : "";
+
+  if (y > 0) {
+    return yDisplay + moDisplay + dDisplay;
+  }
+  if (m > 0) {
+    return moDisplay + dDisplay + hDisplay;
+  }
+  if (d > 0) {
+    return dDisplay + hDisplay + mDisplay;
+  }
+  if (h > 0) {
+    return hDisplay + mDisplay + sDisplay;
+  }
+  if (m > 0) {
+    return mDisplay + sDisplay;
+  }
+  if (s > 0) {
+    return sDisplay;
+  }
+  // return yDisplay + moDisplay + dDisplay + hDisplay + mDisplay;
+  return null;
 };
 
 const r1EndsIn = r1EndTime => {

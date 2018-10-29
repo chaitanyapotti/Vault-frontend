@@ -24,6 +24,6 @@ const CUIFormInputLabel = props => <FormControlLabel control={props.control} lab
 
 CUIFormInputLabel.propTypes = {
   control: PropTypes.element.isRequired,
-  label: PropTypes.node.isRequired,
+  label: PropTypes.node.isRequired
 };
 export default CUIFormInputLabel;

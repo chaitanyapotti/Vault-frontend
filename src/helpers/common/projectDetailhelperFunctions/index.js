@@ -29,7 +29,7 @@ const formatCent = tokenPrice => {
 };
 
 const significantDigits = number => {
-  const input = number;
+  let input = number;
   if (input < 1) {
     input *= 100;
   }

@@ -11,7 +11,10 @@ const PDetailCrowdSale = props => {
     initialFundRelease,
     tapIncrementUnit,
     hardCapCapitalisation,
-    dilutedCapitalisation
+    dilutedCapitalisation,
+    tokenDataVisibitlity,
+    tokenBalance,
+    buyableTokens
   } = props || {};
   return (
     <CUICard style={{ padding: "40px 50px" }}>
@@ -51,8 +54,24 @@ const PDetailCrowdSale = props => {
           Diluted Capitalisation: <span className="text--secondary">{dilutedCapitalisation}</span>
         </Col>
       </Row>
+      {tokenDataVisibitlity ? (
+        <Row className="push-half--top">
+          <Col lg={6} className="txt">
+            User Token Balance: <span className="text--secondary">{tokenBalance}</span>
+          </Col>
+          <Col lg={6} className="txt">
+            Total Buyable Tokens: <span className="text--secondary">{buyableTokens}</span>
+          </Col>
+        </Row>
+      ) : (
+        <span />
+      )}
     </CUICard>
   );
 };
 
 export default PDetailCrowdSale;
+
+// <Col lg={6} className="txt">
+//           {tokenBalance > 0 ? <span className="text--secondary"> user: {tokenBalance}</span> : <span />}
+//         </Col>

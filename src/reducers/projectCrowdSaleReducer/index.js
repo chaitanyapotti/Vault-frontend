@@ -5,7 +5,8 @@ import actionTypes from "../../action_types";
 export const initialState = {
   etherCollected: 0,
   roundInfo: {},
-  buyButtonSpinning: false
+  buyButtonSpinning: false,
+  tokenBalance: ""
 };
 
 export default function(state = initialState, action) {
@@ -22,6 +23,13 @@ export default function(state = initialState, action) {
       return {
         ...state,
         roundInfo: rec
+      };
+    }
+    case actionTypes.TOKEN_BALANCE_RECEIVED: {
+      const { rec } = action.payload;
+      return {
+        ...state,
+        tokenBalance: rec
       };
     }
     case actionTypes.BUY_BUTTON_SPINNING: {

@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Warning from "@material-ui/icons/Warning";
 import { PDetailCrowdSale, ProjectCrowdSaleName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
-import { getEtherCollected, getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
+import { getEtherCollected, getRoundTokensSold, buyTokens, getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
+import { significantDigits } from "../../helpers/common/projectDetailhelperFunctions";
 import {
   formatFromWei,
   getR1Price,
@@ -43,9 +44,13 @@ class ProjectDetailCrowdSale extends Component {
       membershipAddress,
       userLocalPublicAddress,
       fetchPrice: etherPriceFetch,
-      checkWhiteList: checkWhiteListStatus
+      checkWhiteList: checkWhiteListStatus,
+      getTokenBalance: tokenBalance,
+      projectDetails
     } = this.props || {};
     etherPriceFetch("ETH");
+    console.log("mount");
+    tokenBalance(version, projectDetails.daicoTokenAddress, userLocalPublicAddress);
     fetchEtherCollected(version, pollFactoryAddress);
     fetchRoundTokensSold(version, crowdSaleAddress, 0);
     if (signinStatusFlag > 2) {
@@ -55,8 +60,19 @@ class ProjectDetailCrowdSale extends Component {
 
   componentDidUpdate(prevProps) {
     const { userLocalPublicAddress: prevAddress } = prevProps || "";
-    const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag } =
-      this.props || {};
+    const {
+      userLocalPublicAddress: localAddress,
+      getTokenBalance: tokenBalance,
+      checkWhiteList: checkWhiteListStatus,
+      version,
+      membershipAddress,
+      signinStatusFlag,
+      projectDetails
+    } = this.props || {};
+    console.log("last");
+    if (prevAddress !== localAddress) {
+      tokenBalance(version, projectDetails.daicoTokenAddress, localAddress);
+    }
     if (prevAddress !== localAddress && signinStatusFlag > 2) {
       checkWhiteListStatus(version, membershipAddress, localAddress);
     }
@@ -120,8 +136,11 @@ class ProjectDetailCrowdSale extends Component {
       etherCollected,
       buttonSpinning,
       signinStatusFlag,
-      buyButtonSpinning
+      buyButtonSpinning,
+      tokenBalance,
+      projectDetails
     } = this.props || {};
+    console.log(tokenBalance);
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
     return (
       <Grid>
@@ -157,12 +176,16 @@ class ProjectDetailCrowdSale extends Component {
             <PDetailCrowdSale
               individualCap={formatFromWei(maximumEtherContribution)}
               voteSaturationLimit={capPercent / 100}
+              s
               killFrequency="Quarterly"
               initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30)}
               initialFundRelease={formatFromWei(initialFundRelease)}
               tapIncrementUnit={tapIncrementFactor / 100}
               hardCapCapitalisation={getSoftCap(this.props)}
               dilutedCapitalisation={getHardCap(this.props)}
+              tokenDataVisibitlity={isCurrentMember}
+              tokenBalance={parseFloat(tokenBalance) / Math.pow(10, 18)}
+              buyableTokens={significantDigits(getR1Price(this.props) * parseFloat(projectDetails.maximumEtherContribution))}
             />
           </Col>
         </Row>
@@ -201,6 +224,7 @@ const mapDispatchToProps = dispatch =>
       getEtherCollected,
       getRoundTokensSold,
       buyTokens,
+      getTokenBalance,
       onWhiteListClick,
       fetchPrice,
       checkWhiteList
@@ -209,11 +233,14 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, signinManagerData, fetchPriceReducer, projectPreStartReducer } = state || {};
+  const { projectCrowdSaleReducer, deployerReducer, signinManagerData, fetchPriceReducer, projectPreStartReducer, projectDetailGovernanceReducer } =
+    state || {};
   const { etherCollected, roundInfo, buyButtonSpinning } = projectCrowdSaleReducer || {};
+  const { projectDetails } = deployerReducer || {};
   const { prices } = fetchPriceReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
+  const { tokenBalance } = projectDetailGovernanceReducer || {};
   return {
     isCurrentMember,
     buttonSpinning,
@@ -223,7 +250,9 @@ const mapStateToProps = state => {
     userLocalPublicAddress,
     signinStatusFlag,
     prices,
-    buyButtonSpinning
+    buyButtonSpinning,
+    tokenBalance,
+    projectDetails
   };
 };
 

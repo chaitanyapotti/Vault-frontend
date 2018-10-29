@@ -194,19 +194,28 @@ export function checkUserRegistration() {
   };
 }
 
-export function fetchCurrentAccount(userPreviousLocalPublicAddress) {
+export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPreviousNetworkName, 
+  metamaskPreviousInstallationState) {
   return dispatch => {
     // console.log("printing current provider: ", web3.currentProvider)
     if (web3.currentProvider === null) {
-      dispatch({
-        type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
-        payload: false
-      })
+      if (metamaskPreviousInstallationState=== false){
+
+      }else{
+        dispatch({
+          type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
+          payload: false
+        })
+      }
     } else {
-      dispatch({
-        type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
-        payload: true
-      })
+      if (metamaskPreviousInstallationState=== true){
+
+      }else{
+        dispatch({
+          type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
+          payload: true
+        })
+      }
     }
     web3.eth
       .getAccounts()
@@ -215,10 +224,12 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress) {
           web3.eth.net.getNetworkType()
           .then( networkName =>{
             // console.log("printing network: ", networkName)
-            dispatch({
-              type: actionTypes.METAMASK_NETWORK,
-              payload: networkName
-            })
+            if (networkName!== metamaskPreviousNetworkName){
+              dispatch({
+                type: actionTypes.METAMASK_NETWORK,
+                payload: networkName
+              })
+            }
             if (networkName==='rinkeby'){
               if (accounts[0].toLowerCase() !== userPreviousLocalPublicAddress.toLowerCase()) {
                 dispatch({

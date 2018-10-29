@@ -161,7 +161,7 @@ class HeaderPartial extends React.Component {
 
   onHandleGovernanceClicked = () => {
     this.props.history.push({
-      pathname: `/governance`
+      pathname: `/mytokens`
       // search: "?contract=" + this.props.searchText
     });
   };
@@ -205,11 +205,11 @@ class HeaderPartial extends React.Component {
         open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
-        <MenuItem onClick={this.onHandleProjectsClicked.bind(this)}>
+        <MenuItem onClick={this.onHandleProjectsClicked}>
           <div>Projects</div>
         </MenuItem>
-        <MenuItem onClick={this.onHandleGovernanceClicked.bind(this)}>
-          <div>Governance</div>
+        <MenuItem onClick={this.onHandleGovernanceClicked}>
+          <div>My Tokens</div>
         </MenuItem>
         <MenuItem>
           <div>Publish ICO</div>
@@ -240,7 +240,7 @@ class HeaderPartial extends React.Component {
                   )}
 
                   <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                    <span onClick={this.onHandleLogoClicked.bind(this)} className="hdr-logo" />
+                    <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
                   </Typography>
                   <div className={classes.search}>
                     <div className={classes.searchIcon}>
@@ -259,13 +259,13 @@ class HeaderPartial extends React.Component {
                   <div className={classes.grow} />
                   <div className={classes.sectionDesktop}>
                     <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked.bind(this)}>
+                      <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked}>
                         Projects
                       </div>
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked.bind(this)}>
-                        Governance
+                      <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
+                        My Tokens
                       </div>
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m">
@@ -346,11 +346,11 @@ class HeaderPartial extends React.Component {
             </CUIButtonIcon>
           </div>
           <div className={classes.drawerInner}>
-            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked.bind(this)}>
+            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked}>
               Projects
             </div>
-            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked.bind(this)}>
-              Governance
+            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
+              My Tokens
             </div>
             <div className="hdr-itm-pad text--primary txt-m">Publish ICO</div>
           </div>

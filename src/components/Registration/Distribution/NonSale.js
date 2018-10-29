@@ -11,7 +11,7 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../../Common/FormComponents";
 
 import { Table } from "semantic-ui-react";
-import { Tooltip, Legend, Pie, PieChart, Cell, Label, LabelList } from "recharts";
+import { Tooltip, Legend, Pie, PieChart, Cell, Label, LabelList, Sector } from "recharts";
 
 import {
   addNonSaleEntityAction,
@@ -45,7 +45,60 @@ const NonSaleEntitiesTableHeader = () => (
   </Table.Header>
 );
 
+const renderActiveShape = (props) => {
+  const RADIAN = Math.PI / 180;
+  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
+    fill, payload, percent, value } = props;
+  const sin = Math.sin(-RADIAN * midAngle);
+  const cos = Math.cos(-RADIAN * midAngle);
+  const sx = cx + (outerRadius + 10) * cos;
+  const sy = cy + (outerRadius + 10) * sin;
+  const mx = cx + (outerRadius + 30) * cos;
+  const my = cy + (outerRadius + 30) * sin;
+  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+  const ey = my;
+  const textAnchor = cos >= 0 ? 'start' : 'end';
+
+  return (
+    <g>
+      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>{payload.name}</text>
+      <Sector
+      isAnimationActive={true}
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+      <Sector 
+        cx={cx}
+        cy={cy}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        innerRadius={outerRadius-1}
+        outerRadius={outerRadius + 1}
+        fill={fill}
+      />
+      <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
+      <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`PV ${value}`}</text>
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+        {`(Rate ${(percent * 100).toFixed(2)}%)`}
+      </text>
+    </g>
+  );
+};
+
+
 class NonSale extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {nonTokenSalePieActiveIndex: 100, centerValue: 0};
+  }
+
   handleAddNewEntity = () => {
     this.props.addNonSaleEntityAction(
       this.props.entityName,
@@ -113,8 +166,19 @@ class NonSale extends React.Component {
     // ))
   } 
 
-  onPieEnter(data, index) {
+  onPieEnter = (data, index) => {
     console.log("on pie enter: ", data, index)
+    this.setState({
+      nonTokenSalePieActiveIndex: index,
+      centerValue: parseInt(parseFloat(data.payload.entityPercentage)*this.props.totalSaleTokens/100) || 0
+    });
+  }
+
+  onPieLeave = (data, index) => {
+    this.setState({
+      nonTokenSalePieActiveIndex: 100,
+      centerValue: this.props.totalSaleTokens || 0
+    });
   }
 
   render() {
@@ -192,11 +256,13 @@ class NonSale extends React.Component {
 
         <Row>
           <PieChart width={600} height={400}>
-            <Legend layout='vertical' iconSize={32} verticalAlign="middle" align="left"/>
+            <Legend layout='vertical' iconSize={32} verticalAlign="middle" align="left" onMouseEnter={this.onPieEnter} onMouseLeave={this.onPieLeave}/>
             <Tooltip />
             <Pie
-              isAnimationActive={false}
+              //isAnimationActive={true}
               data={this.props.nonSaleEntities}
+              activeIndex={this.state.nonTokenSalePieActiveIndex}
+              activeShape={renderActiveShape}
               cx={250}
               cy={200}
               innerRadius={100}
@@ -205,11 +271,13 @@ class NonSale extends React.Component {
               dataKey="entityPercentage"
               nameKey="entityName"
               onMouseEnter={this.onPieEnter}
+              onMouseLeave={this.onPieLeave}
             >
             <LabelList position="outside" offset={15} formatter={(index) => `${index} %`} fill="black" stroke="#000000"/>
             {/* <LabelList position="outside" content={this.renderCustomizedLabel}/> */}
               <Label width={30} position="center">
-                1B Tokens
+                {this.state.centerValue}
+                Tokens
               </Label>
               {/* {this.props.nonSaleEntities.map((entry, index) => (
                 <Label width={30} position="outside">

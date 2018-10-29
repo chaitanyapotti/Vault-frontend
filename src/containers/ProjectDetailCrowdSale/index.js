@@ -5,12 +5,22 @@ import { PDetailCrowdSale, ProjectCrowdSaleName, TokenChart, TimeLine } from "..
 import { getEtherCollected, getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
+import BuyModal from "../../components/Common/BuyModal";
 
 class ProjectDetailCrowdSale extends Component {
+  state = {
+    modalOpen: false
+  };
+
+  handleClose = () => {
+    this.setState({ modalOpen: false });
+  };
+
   componentDidMount() {
-    const { version, pollFactoryAddress, crowdSaleAddress } = this.props || {};
-    this.props.getEtherCollected(version, pollFactoryAddress);
-    this.props.getRoundTokensSold(version, crowdSaleAddress);
+    const { version, pollFactoryAddress, crowdSaleAddress, getEtherCollected: etherCollected, getRoundTokensSold: roundTokensSold } =
+      this.props || {};
+    etherCollected(version, pollFactoryAddress);
+    roundTokensSold(version, crowdSaleAddress);
   }
 
   // TODO: need to refactor and remove these methods later
@@ -65,10 +75,16 @@ class ProjectDetailCrowdSale extends Component {
     return Math.round(hardCap).toString();
   };
 
-  buyTokens = () => {
-    const { crowdSaleAddress } = this.props || {};
-    // TODO: need to add how many tokens to buy
-    this.props.buyTokens(crowdSaleAddress);
+  setModalState = () => {
+    this.setState({
+      modalOpen: true
+    });
+  };
+
+  buyTokensOnClick = () => {
+    const { crowdSaleAddress, buyTokens: buyToken } = this.props || {};
+    // // TODO: need to add how many tokens to buy
+    buyToken(crowdSaleAddress);
   };
 
   render() {
@@ -107,7 +123,7 @@ class ProjectDetailCrowdSale extends Component {
               whitepaper={whitepaper}
               buttonText="Buy"
               buttonVisibility={!isCurrentMember}
-              onClick={this.buyTokens}
+              onClick={this.setModalState}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -131,6 +147,13 @@ class ProjectDetailCrowdSale extends Component {
             </CUICard>
           </Col>
         </Row>
+        <BuyModal
+          open={this.state.modalOpen}
+          onClose={this.handleClose}
+          price={this.getPrice()}
+          tokenTag={tokenTag}
+          buyTokensOnClick={this.buyTokensOnClick}
+        />
       </Grid>
     );
   }

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ProjectRefundName } from "../../components/Common/ProjectDetails";
 import { onRefundClick } from "../../actions/projectRefundActions/index";
-import { getTokenBalance } from "../../actions/projectDetailGovernanceActions/index";
+import { getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
 
 class ProjectDetailRefund extends Component {
   componentDidMount() {

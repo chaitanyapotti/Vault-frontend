@@ -3,10 +3,9 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { ProjectSaleEndName, PDetailGovernance, TapCard, FundReq } from "../../components/Common/ProjectDetails";
 import BuyModal from "../../components/Common/BuyModal";
-import { getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
+import { getRoundTokensSold, buyTokens, getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import {
-  getTokenBalance,
   getTokensUnderGovernance,
   getCurrentKillPollIndex,
   getRemainingEtherBalance,
@@ -88,7 +87,7 @@ class ProjectDetailSaleEnd extends Component {
     const etherPrice = 200;
     const { remainingEtherBalance, tokenBalance, totalSupply, foundationDetails } = this.props || {};
     let softCap = 0;
-    for (let index = 0; index < foundationDetails.length; index++) {
+    for (let index = 0; index < foundationDetails.length; index += 1) {
       const { amount } = foundationDetails[index];
       softCap += parseFloat(amount);
     }

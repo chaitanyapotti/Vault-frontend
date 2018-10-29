@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import Warning from "@material-ui/icons/Warning";
 import { ProjectGovernanceName, PDetailGovernance, TapCard, FundReq } from "../../components/Common/ProjectDetails";
-import { getRoundTokensSold, buyTokens } from "../../actions/projectCrowdSaleActions/index";
+import { getRoundTokensSold, buyTokens, getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
+import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import {
-  getTokenBalance,
   getTokensUnderGovernance,
   getCurrentKillPollIndex,
   getRemainingEtherBalance,
@@ -13,15 +14,54 @@ import {
   getKillConsensus,
   getTapPollConsensus,
   getCurrentTap,
-  getXfrData,
-  voteInKillPoll
+  getXfrData
 } from "../../actions/projectDetailGovernanceActions/index";
+import {
+  formatFromWei,
+  getRoundPrice,
+  getR1Goal,
+  getHardCap,
+  getSoftCap,
+  formatCurrencyNumber
+} from "../../helpers/common/projectDetailhelperFunctions";
+import { fetchPrice } from "../../actions/priceFetchActions/index";
+import AlertModal from "../../components/Common/AlertModal";
+import BuyModal from "../../components/Common/BuyModal";
 
 class ProjectDetailGovernance extends Component {
+  state = {
+    modalOpen: false,
+    buyModalOpen: false,
+    buyAmount: ""
+  };
+
+  handleBuyClose = () => this.setState({ buyModalOpen: false });
+
+  handleClose = () => {
+    this.setState({ modalOpen: false });
+  };
+
   componentDidMount() {
-    const { version, crowdSaleAddress, currentRoundNumber, pollFactoryAddress, daicoTokenAddress } = this.props || {};
-    this.props.getRoundTokensSold(version, crowdSaleAddress, currentRoundNumber);
-    this.props.getTokenBalance(version, daicoTokenAddress);
+    const {
+      version,
+      crowdSaleAddress,
+      currentRoundNumber,
+      pollFactoryAddress,
+      daicoTokenAddress,
+      getRoundTokensSold: fetchRoundTokensSold,
+      signinStatusFlag,
+      membershipAddress,
+      userLocalPublicAddress,
+      fetchPrice: etherPriceFetch,
+      checkWhiteList: checkWhiteListStatus
+    } = this.props || {};
+    etherPriceFetch("ETH");
+    fetchRoundTokensSold(version, crowdSaleAddress, 0);
+    if (signinStatusFlag > 2) {
+      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
+    }
+    this.props.getRoundTokensSold(version, crowdSaleAddress, parseInt(currentRoundNumber, 10) - 1);
+    this.props.getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
     this.props.getTokensUnderGovernance(version, daicoTokenAddress);
     this.props.getCurrentKillPollIndex(version, pollFactoryAddress);
     this.props.getRemainingEtherBalance(version, pollFactoryAddress);
@@ -32,11 +72,20 @@ class ProjectDetailGovernance extends Component {
     this.props.getXfrData(version, pollFactoryAddress);
   }
 
+  componentDidUpdate(prevProps) {
+    const { userLocalPublicAddress: prevAddress, signinStatusFlag: prevFlag } = prevProps || "";
+    const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag } =
+      this.props || {};
+    if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
+      checkWhiteListStatus(version, membershipAddress, localAddress);
+    }
+  }
+
   getPriceIncrement = () =>
     // TODO: to use external api
     "(+31.23%)";
 
-  lastRoundInfo = () => {
+  getLastRoundInfo = () => {
     // TODO: get current round and price
     const { roundInfo } = this.props || {};
     const { tokenRate } = roundInfo;
@@ -55,19 +104,22 @@ class ProjectDetailGovernance extends Component {
     this.props.buyTokens(crowdSaleAddress);
   };
 
-  getPrice = () =>
-    // TODO: to use external API
-    0.009861;
-
-  onTradeClick = () => {};
+  getPrice = () => {
+    // TODO: to use external AP
+    const { roundInfo } = this.props || {};
+    const { tokenRate } = roundInfo;
+    return 1 / tokenRate;
+    // return 0.009861;
+  };
 
   getRoundText = () => {
     const { currentRoundNumber } = this.props || {};
     const { roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
     // based on tokens sold
-    return `${Math.round(parseFloat(totalTokensSold) * Math.pow(10, -18))} Tokens Sold of ${Math.round(
-      parseFloat(tokenCount) * Math.pow(10, -18)
+    return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
+      formatFromWei(tokenCount),
+      0
     )} (Round ${currentRoundNumber} of 3)`;
   };
 
@@ -80,13 +132,14 @@ class ProjectDetailGovernance extends Component {
   getNextKillPollStartDate = () => {
     const { killPollIndex, r1EndTime } = this.props || {};
     const endDate = new Date(r1EndTime);
-    endDate.setDate(endDate.getDate() + killPollIndex * 90);
+    endDate.setDate(endDate.getDate() + (killPollIndex + 1) * 90);
     return endDate.toDateString();
   };
 
   getMyTokenValue = () => {
-    const etherPrice = 200;
-    const tokenPrice = this.getPrice() * etherPrice;
+    const { prices } = this.props || {};
+    const { ETH: etherPrice } = prices || {};
+    const tokenPrice = this.getPrice() * parseFloat(etherPrice);
     const { tokenBalance } = this.props || {};
     return tokenPrice * parseFloat(tokenBalance);
   };
@@ -95,7 +148,7 @@ class ProjectDetailGovernance extends Component {
     const etherPrice = 200;
     const { remainingEtherBalance, tokenBalance, totalSupply, foundationDetails } = this.props || {};
     let softCap = 0;
-    for (let index = 0; index < foundationDetails.length; index++) {
+    for (let index = 0; index < foundationDetails.length; index += 1) {
       const { amount } = foundationDetails[index];
       softCap += parseFloat(amount);
     }
@@ -119,6 +172,37 @@ class ProjectDetailGovernance extends Component {
     return parseFloat(tapPollConsensus) / parseFloat(tokensUnderGovernance);
   };
 
+  getTradeUrl = () => {
+    const { daicoTokenAddress } = this.props || {};
+    return `https://etherdelta.com/#${daicoTokenAddress}-ETH`;
+  };
+
+  onWhiteListClickInternal = () => {
+    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
+    if (isVaultMember) {
+      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
+    } else {
+      this.setState({
+        modalOpen: true
+      });
+    }
+  };
+
+  buyTokensOnClick = () => {
+    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, currentRoundNumber } = this.props || {};
+    const { buyAmount } = this.state || {};
+    // // TODO: need to add how many tokens to buy
+    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, parseInt(currentRoundNumber, 10) - 1);
+  };
+
+  buyTokens = () => {
+    this.setState({ buyModalOpen: true });
+  };
+
+  onBuyAmountChange = e => {
+    this.setState({ buyAmount: e.target.value });
+  };
+
   render() {
     const {
       projectName,
@@ -133,8 +217,12 @@ class ProjectDetailGovernance extends Component {
       remainingEtherBalance,
       tapIncrementFactor,
       currentTap,
-      xfrData
+      xfrData,
+      buttonSpinning,
+      signinStatusFlag,
+      buyButtonSpinning
     } = this.props || {};
+    const { modalOpen, buyModalOpen, buyAmount } = this.state;
     return (
       <Grid>
         <Row>
@@ -148,19 +236,24 @@ class ProjectDetailGovernance extends Component {
               description={description}
               urls={urls}
               whitepaper={whitepaper}
-              buttonText="Buy"
-              secondaryButtonText="gggg"
+              lastRoundInfo={this.getLastRoundInfo()}
+              buttonText="Get Whitelisted"
               buttonVisibility={!isCurrentMember}
-              onClick={this.buyTokens}
-              onSecondaryClick={this.onTradeClick}
-              lastRoundInfo={this.lastRoundInfo()}
+              buttonSpinning={buttonSpinning}
+              onClick={this.onWhiteListClickInternal}
+              signinStatusFlag={signinStatusFlag}
+              buyButtonVisibility={isCurrentMember}
+              onBuyClick={this.buyTokens}
+              buyButtonText="Buy"
+              tradeButtonVisibility
+              tradeUrl={this.getTradeUrl()}
             />
           </Col>
           <Col xs={12} lg={6}>
             <PDetailGovernance
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
-              yourTokens={tokenBalance}
+              yourTokens={formatCurrencyNumber(tokenBalance, 0)}
               yourVoteShare={this.getVoteShare()}
               killAttemptsLeft={7 - killPollIndex}
               nextKillAttempt={this.getNextKillPollStartDate()}
@@ -188,25 +281,35 @@ class ProjectDetailGovernance extends Component {
             <FundReq data={xfrData} />
           </Col>
         </Row>
+        <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
+          <div className="text--center text--danger">
+            <Warning style={{ width: "2em", height: "2em" }} />
+          </div>
+          <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
+        </AlertModal>
+        <BuyModal
+          open={buyModalOpen}
+          onClose={this.handleBuyClose}
+          price={getRoundPrice(this.props)}
+          tokenTag={tokenTag}
+          buyButtonSpinning={buyButtonSpinning}
+          buyTokensOnClick={this.buyTokensOnClick}
+          inputText={buyAmount}
+          onChange={this.onBuyAmountChange}
+        />
       </Grid>
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, projectDetailGovernanceReducer } = state || {};
-  const { etherCollected, roundInfo } = projectCrowdSaleReducer || {};
-  const {
-    tokenBalance,
-    tokensUnderGovernance,
-    killPollIndex,
-    remainingEtherBalance,
-    killConsensus,
-    totalSupply,
-    tapPollConsensus,
-    currentTap,
-    xfrData
-  } = projectDetailGovernanceReducer || {};
+  const { projectCrowdSaleReducer, projectDetailGovernanceReducer, projectPreStartReducer, signinManagerData, fetchPriceReducer } = state || {};
+  const { etherCollected, roundInfo, tokenBalance, buyButtonSpinning } = projectCrowdSaleReducer || {};
+  const { tokensUnderGovernance, killPollIndex, remainingEtherBalance, killConsensus, totalSupply, tapPollConsensus, currentTap, xfrData } =
+    projectDetailGovernanceReducer || {};
+  const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
+  const { prices } = fetchPriceReducer || {};
 
   return {
     etherCollected,
@@ -219,7 +322,14 @@ const mapStateToProps = state => {
     killConsensus,
     tapPollConsensus,
     currentTap,
-    xfrData
+    xfrData,
+    isCurrentMember,
+    buttonSpinning,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    buyButtonSpinning,
+    prices
   };
 };
 
@@ -237,7 +347,9 @@ const mapDispatchToProps = dispatch =>
       getTapPollConsensus,
       getCurrentTap,
       getXfrData,
-      voteInKillPoll
+      onWhiteListClick,
+      fetchPrice,
+      checkWhiteList
     },
     dispatch
   );

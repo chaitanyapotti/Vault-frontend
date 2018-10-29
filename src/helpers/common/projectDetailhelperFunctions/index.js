@@ -108,6 +108,13 @@ const getR1Price = props => {
   return formatRateToPrice(tokenRate);
 };
 
+const getRoundPrice = props => {
+  const { rounds, currentRoundNumber } = props || {};
+  const roundInfo = rounds[parseInt(currentRoundNumber, 10) - 1] || {};
+  const { tokenRate } = roundInfo || {};
+  return formatRateToPrice(tokenRate);
+};
+
 const getR1Goal = props => {
   const { rounds } = props || {};
   const [round1, ...rest] = rounds || {};
@@ -154,5 +161,6 @@ export {
   getHardCap,
   getR1Goal,
   getR3Price,
+  getRoundPrice,
   formatCurrencyNumber
 };

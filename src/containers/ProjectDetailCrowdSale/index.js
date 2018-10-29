@@ -54,10 +54,10 @@ class ProjectDetailCrowdSale extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { userLocalPublicAddress: prevAddress } = prevProps || "";
+    const { userLocalPublicAddress: prevAddress, signinStatusFlag: prevFlag } = prevProps || "";
     const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag } =
       this.props || {};
-    if (prevAddress !== localAddress && signinStatusFlag > 2) {
+    if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
       checkWhiteListStatus(version, membershipAddress, localAddress);
     }
   }

@@ -1,4 +1,5 @@
 import React from "react";
+import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
@@ -16,12 +17,16 @@ const ProjectGovernanceName = props => {
     whitepaper,
     lastRoundInfo,
     buttonText,
-    secondaryButtonText,
     onClick,
-    onSecondaryClick,
     buttonVisibility,
     priceIncrementFlag,
-    buttonSpinning
+    buttonSpinning,
+    buyButtonVisibility,
+    onBuyClick,
+    buyButtonText,
+    signinStatusFlag,
+    tradeButtonVisibility,
+    tradeUrl
   } = props || {};
   const { website } = urls;
   return (
@@ -72,19 +77,25 @@ const ProjectGovernanceName = props => {
           </div>
         </Col>
         <Col lg={6} className="text-right   ">
-          {buttonVisibility ? (
+          {signinStatusFlag <= 2 ? (
+            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+              <div>
+                <LoadingButton tooltip="This feature is only for Vault Members" disabled>
+                  {buttonText}
+                </LoadingButton>
+              </div>
+            </Tooltip>
+          ) : buttonVisibility ? (
             <LoadingButton onClick={onClick} loading={buttonSpinning}>
               {buttonText}
             </LoadingButton>
-          ) : (
-            <span>
-              You are whitelisted <img src="/assets/Vault/whitelist.svg" alt="whitelist checked" width="20" height="20" />
-            </span>
-          )}
-          {onSecondaryClick ? (
-            <span className="push-left--13">
-              <LoadingButton onClick={onSecondaryClick} label={secondaryButtonText} />
-            </span>
+          ) : buyButtonVisibility ? (
+            <LoadingButton onClick={onBuyClick}>{buyButtonText}</LoadingButton>
+          ) : null}
+          {tradeButtonVisibility ? (
+            <a href={tradeUrl} target="_blank" rel="noopener noreferrer">
+              <LoadingButton onClick={null}>Trade</LoadingButton>
+            </a>
           ) : null}
         </Col>
       </Row>

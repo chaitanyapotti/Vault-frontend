@@ -1,13 +1,14 @@
 import axios from "axios";
 import config from "../../config";
 import actionTypes from "../../action_types";
-import web3 from "../../helpers/web3";
+// import web3 from "../../helpers/web3";
 import constants from "../../constants";
 
 const version = config.vault_Version;
 
 export const getUserTokens = userAddress => async dispatch => {
-  const network = await web3.eth.net.getNetworkType();
+  const network = "rinkeby";
+  // await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/projectweb3/tokens`, {
       params: { network, version, address: userAddress }

@@ -13,7 +13,7 @@ const formatDate = dbDate =>
 
 const formatRateToPrice = rate => parseFloat(1 / parseFloat(rate)).toPrecision(2);
 
-const formatNumber = (rate, precision = 2) => parseFloat(rate).toPrecision(precision);
+// const formatNumber = (rate, precision = 2) => parseFloat(rate).toPrecision(precision);
 
 const formatFromWei = (input, precision = 0) => Math.round(parseFloat(input) * Math.pow(10, -18) * Math.pow(10, precision)) / Math.pow(10, precision);
 
@@ -115,15 +115,4 @@ const formatMoney = (amount, decimalCount = 2, decimal = ".", thousands = ",") =
   return null;
 };
 
-export {
-  formatDate,
-  formatRateToPrice,
-  formatFromWei,
-  formatMoney,
-  formatNumber,
-  formatTokenPrice,
-  formatCent,
-  secondsToDhms,
-  r1EndsIn,
-  significantDigits
-};
+export { formatDate, formatRateToPrice, formatFromWei, formatMoney, formatTokenPrice, formatCent, secondsToDhms, r1EndsIn, significantDigits };

@@ -20,10 +20,27 @@ const formatFromWei = (input, precision = 0) => Math.round(parseFloat(input) * M
 const formatTokenPrice = (input, precision = 0) => parseFloat(parseFloat(input) * Math.pow(10, -18)).toPrecision(precision);
 
 const formatCent = tokenPrice => {
-  if (tokenPrice < 1) {
-    return `${tokenPrice * 100}¢`;
+  console.log(tokenPrice);
+  if (tokenPrice < 100) {
+    return `${tokenPrice}¢`;
   }
+  console.log(tokenPrice);
   return `$${tokenPrice}`;
+};
+
+const significantDigits = number => {
+  if (number < 1) {
+    number *= 100;
+  }
+  let depth;
+  if (number >= 1) {
+    depth = 2;
+  } else {
+    depth = 1 + Math.ceil(Math.log10(1 / number));
+  }
+  const shift = Math.pow(10, depth);
+  const roundedNum = Math.round(shift * number) / shift;
+  return roundedNum;
 };
 
 const secondsToDhms = seconds => {
@@ -98,4 +115,15 @@ const formatMoney = (amount, decimalCount = 2, decimal = ".", thousands = ",") =
   return null;
 };
 
-export { formatDate, formatRateToPrice, formatFromWei, formatMoney, formatNumber, formatTokenPrice, formatCent, secondsToDhms, r1EndsIn };
+export {
+  formatDate,
+  formatRateToPrice,
+  formatFromWei,
+  formatMoney,
+  formatNumber,
+  formatTokenPrice,
+  formatCent,
+  secondsToDhms,
+  r1EndsIn,
+  significantDigits
+};

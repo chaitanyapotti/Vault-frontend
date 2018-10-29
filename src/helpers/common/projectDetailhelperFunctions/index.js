@@ -46,7 +46,10 @@ const r1EndsIn = r1EndTime => {
   return secondsToDhms(r1EndTime);
 };
 
-const formatMoney = (amount, decimalCount = 2, decimal = ".", thousands = ",") => {
+const formatMoney = (amount, decimalCount = 2, decimal = ".", thousands = ",") =>
+  `$${formatCurrencyNumber(amount, decimalCount, decimal, thousands)}`;
+
+const formatCurrencyNumber = (amount, decimalCount = 2, decimal = ".", thousands = ",") => {
   try {
     let amt = amount;
     let decimals = decimalCount;
@@ -58,7 +61,7 @@ const formatMoney = (amount, decimalCount = 2, decimal = ".", thousands = ",") =
     const i = parseInt((amt = Math.abs(Number(amount) || 0).toFixed(decimals)), 10).toString();
     const j = i.length > 3 ? i.length % 3 : 0;
 
-    return `$${negativeSign +
+    return `${negativeSign +
       (j ? i.substr(0, j) + thousands : "") +
       i.substr(j).replace(/(\d{3})(?=\d)/g, `$1${thousands}`) +
       (decimals
@@ -73,4 +76,58 @@ const formatMoney = (amount, decimalCount = 2, decimal = ".", thousands = ",") =
   return null;
 };
 
-export { formatDate, formatRateToPrice, formatFromWei, formatMoney, formatNumber, formatTokenPrice, formatCent, secondsToDhms, r1EndsIn };
+const getR1Price = props => {
+  const { rounds } = props || {};
+  const [round1, ...rest] = rounds || {};
+  const { tokenRate } = round1 || {}; // tokens/wei
+  return formatRateToPrice(tokenRate);
+};
+
+const getR1Goal = props => {
+  const { rounds } = props || {};
+  const [round1, ...rest] = rounds || {};
+  const { tokenRate, tokenCount } = round1 || {}; // tokens/wei
+  return formatTokenPrice(parseFloat(tokenCount) / parseFloat(tokenRate), 2);
+};
+
+const getR3Price = props => {
+  const { rounds } = props || {};
+  const round3 = [...rounds].pop() || {};
+  const { tokenRate } = round3 || {}; // tokens/wei
+  return formatRateToPrice(tokenRate);
+};
+
+const getSoftCap = props => {
+  const { rounds, prices } = props || {};
+  const { ETH: etherPrice } = prices || {};
+  let softCap = 0;
+  for (let index = 0; index < rounds.length; index += 1) {
+    const { tokenCount } = rounds[index];
+    softCap += parseFloat(tokenCount);
+  }
+  return formatMoney(formatFromWei(softCap * getR3Price(props) * parseFloat(etherPrice), 2), 0);
+};
+
+const getHardCap = props => {
+  const { totalMintableSupply, prices } = props || {};
+  const { ETH: etherPrice } = prices || {};
+  return formatMoney(formatFromWei(parseFloat(totalMintableSupply) * getR3Price(props) * etherPrice), 0);
+};
+
+export {
+  formatDate,
+  formatRateToPrice,
+  formatFromWei,
+  formatMoney,
+  formatNumber,
+  formatTokenPrice,
+  formatCent,
+  secondsToDhms,
+  r1EndsIn,
+  getR1Price,
+  getSoftCap,
+  getHardCap,
+  getR1Goal,
+  getR3Price,
+  formatCurrencyNumber
+};

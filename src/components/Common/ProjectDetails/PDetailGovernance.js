@@ -16,7 +16,7 @@ class PDetailGovernance extends React.Component {
       yourRefundValue,
       totalRefundableBalance,
       killConsensus,
-      onKillClick,
+      onKillClick
     } = this.props || {};
     return (
       <CUICard style={{ padding: "40px 50px" }}>

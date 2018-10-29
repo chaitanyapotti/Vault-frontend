@@ -11,7 +11,8 @@ const PDetailPreStart = props => {
     initialTapAmount,
     tapIncrementUnit,
     hardCapCapitalisation,
-    dilutedCapitalisation
+    dilutedCapitalisation,
+    initialFundRelease
   } = props || {};
   return (
     <CUICard style={{ padding: "40px 50px" }}>
@@ -47,10 +48,15 @@ const PDetailPreStart = props => {
 
       <Row className="push-half--top">
         <Col lg={6} className="txt">
-          Hard Cap Capitalisation: <span className="text--secondary">${hardCapCapitalisation}</span>
+          Hard Cap Capitalisation: <span className="text--secondary">{hardCapCapitalisation}</span>
         </Col>
         <Col lg={6} className="txt">
-          Diluted Capitalisation: <span className="text--secondary">${dilutedCapitalisation}</span>
+          Diluted Capitalisation: <span className="text--secondary">{dilutedCapitalisation}</span>
+        </Col>
+      </Row>
+      <Row className="push-half--top">
+        <Col lg={6} className="txt">
+          Initial Fund Release: <span className="text--secondary">{initialFundRelease} ETH</span>
         </Col>
       </Row>
     </CUICard>

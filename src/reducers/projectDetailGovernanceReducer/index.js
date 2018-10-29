@@ -11,7 +11,7 @@ export const initialState = {
   killConsensus: "0",
   tapPollConsensus: "0",
   currentTap: "0",
-  xfrData: {},
+  xfrData: {}
 };
 
 export default function(state = initialState, action) {
@@ -27,67 +27,59 @@ export default function(state = initialState, action) {
     //     ...state,
     //     membershipAssigned: false
     //   };
-
-    case actionTypes.TOKEN_BALANCE_RECEIVED:
-      const { receipt } = action.payload;
-      return {
-        ...state,
-        tokenBalance: receipt,
-      };
-
     case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED:
       const { rec } = action.payload;
       return {
         ...state,
-        tokensUnderGovernance: rec,
+        tokensUnderGovernance: rec
       };
     case actionTypes.KILL_POLL_INDEX_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        killPollIndex: receipt,
+        killPollIndex: receipt
       };
     }
     case actionTypes.REMAINING_ETHER_BALANCE_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        remainingEtherBalance: receipt,
+        remainingEtherBalance: receipt
       };
     }
     case actionTypes.TOTAL_SUPPLY_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        totalSupply: receipt,
+        totalSupply: receipt
       };
     }
     case actionTypes.KILL_CONSENSUS_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        killConsensus: receipt,
+        killConsensus: receipt
       };
     }
     case actionTypes.TAP_CONSENSUS_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        tapPollConsensus: receipt,
+        tapPollConsensus: receipt
       };
     }
     case actionTypes.CURRENT_TAP_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        currentTap: receipt,
+        currentTap: receipt
       };
     }
     case actionTypes.XFR_DATA_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        xfrData: receipt,
+        xfrData: receipt
       };
     }
     default:

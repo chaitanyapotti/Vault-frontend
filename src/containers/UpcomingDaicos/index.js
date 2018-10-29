@@ -9,8 +9,8 @@ import {
   formatCent,
   formatFromWei,
   formatMoney,
-  formatNumber,
-  formatRateToPrice
+  formatRateToPrice,
+  significantDigits
 } from "../../helpers/common/projectDetailhelperFunctions";
 
 class UpcomingDaicos extends Component {
@@ -44,7 +44,7 @@ class UpcomingDaicos extends Component {
         rounds.length,
         this.calculateRoundGoal(rounds[0], ETH),
         this.calculateFinalGoal(rounds, ETH),
-        formatCent(formatNumber(formatRateToPrice(rounds[0].tokenRate) * ETH)),
+        formatCent(significantDigits(formatRateToPrice(rounds[0].tokenRate) * ETH)),
         // formatCent(formatNumber(formatRateToPrice(rounds[0].tokenRate) * ETH, 5)),
         formatDate(startDateTime),
         formatDate(r1EndTime)

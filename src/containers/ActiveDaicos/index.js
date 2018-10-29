@@ -4,7 +4,15 @@ import { bindActionCreators } from "redux";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getActiveDaicos, showActiveDaicosLoaderAction } from "../../actions/activeDaicosActions";
 import GridData from "../../components/GridData";
-import { formatDate, formatCent, formatFromWei, formatMoney, formatTokenPrice, r1EndsIn } from "../../helpers/common/projectDetailhelperFunctions";
+import {
+  formatDate,
+  formatCent,
+  formatFromWei,
+  formatMoney,
+  formatTokenPrice,
+  r1EndsIn,
+  significantDigits
+} from "../../helpers/common/projectDetailhelperFunctions";
 
 class ActiveDaicos extends Component {
   componentDidMount() {
@@ -38,7 +46,7 @@ class ActiveDaicos extends Component {
         this.calculateRoundGoal(rounds[0], ETH),
         this.calculateFinalGoal(rounds, ETH),
         formatMoney(formatFromWei(parseFloat(raisedAmount)), 0),
-        formatCent(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3)),
+        formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
         formatDate(startDateTime),
         r1EndsIn(this.calculateEndDuration(r1EndTime))
       ];

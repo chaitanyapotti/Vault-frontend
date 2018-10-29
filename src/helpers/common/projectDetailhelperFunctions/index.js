@@ -13,17 +13,35 @@ const formatDate = dbDate =>
 
 const formatRateToPrice = rate => parseFloat(1 / parseFloat(rate)).toPrecision(2);
 
-const formatNumber = (rate, precision = 2) => parseFloat(rate).toPrecision(precision);
+// const formatNumber = (rate, precision = 2) => parseFloat(rate).toPrecision(precision);
 
 const formatFromWei = (input, precision = 0) => Math.round(parseFloat(input) * Math.pow(10, -18) * Math.pow(10, precision)) / Math.pow(10, precision);
 
 const formatTokenPrice = (input, precision = 0) => parseFloat(parseFloat(input) * Math.pow(10, -18)).toPrecision(precision);
 
 const formatCent = tokenPrice => {
-  if (tokenPrice < 1) {
-    return `${tokenPrice * 100}¢`;
+  console.log(tokenPrice);
+  if (tokenPrice < 100) {
+    return `${tokenPrice}¢`;
   }
+  console.log(tokenPrice);
   return `$${tokenPrice}`;
+};
+
+const significantDigits = number => {
+  let input = number;
+  if (input < 1) {
+    input *= 100;
+  }
+  let depth;
+  if (input >= 1) {
+    depth = 2;
+  } else {
+    depth = 1 + Math.ceil(Math.log10(1 / input));
+  }
+  const shift = Math.pow(10, depth);
+  const roundedNum = Math.round(shift * input) / shift;
+  return roundedNum;
 };
 
 const secondsToDhms = seconds => {
@@ -108,6 +126,13 @@ const getR1Price = props => {
   return formatRateToPrice(tokenRate);
 };
 
+const getRoundPrice = props => {
+  const { rounds, currentRoundNumber } = props || {};
+  const roundInfo = rounds[parseInt(currentRoundNumber, 10) - 1] || {};
+  const { tokenRate } = roundInfo || {};
+  return formatRateToPrice(tokenRate);
+};
+
 const getR1Goal = props => {
   const { rounds } = props || {};
   const [round1, ...rest] = rounds || {};
@@ -144,7 +169,6 @@ export {
   formatRateToPrice,
   formatFromWei,
   formatMoney,
-  formatNumber,
   formatTokenPrice,
   formatCent,
   secondsToDhms,
@@ -154,5 +178,7 @@ export {
   getHardCap,
   getR1Goal,
   getR3Price,
-  formatCurrencyNumber
+  getRoundPrice,
+  formatCurrencyNumber,
+  significantDigits
 };

@@ -4,7 +4,14 @@ import { bindActionCreators } from "redux";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getUserTokens, showUserTokensLoaderAction } from "../../actions/userTokensActions";
 import GridData from "../../components/GridData";
-import { formatCent, formatFromWei, formatMoney, formatTokenPrice, r1EndsIn } from "../../helpers/common/projectDetailhelperFunctions";
+import {
+  formatCent,
+  formatFromWei,
+  formatMoney,
+  formatTokenPrice,
+  r1EndsIn,
+  significantDigits
+} from "../../helpers/common/projectDetailhelperFunctions";
 
 class UserTokens extends Component {
   componentDidMount() {
@@ -32,7 +39,7 @@ class UserTokens extends Component {
       const { projectName, tokenPrice, balance, projectHealth, tapIncrement, killConsensus, killPollStartDate, xfrCount } = item || {};
       const dataArray = [
         projectName,
-        formatCent(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3)),
+        formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
         `${balance}(${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
         projectHealth,
         `${tapIncrement}(Yes)`,

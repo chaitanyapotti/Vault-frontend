@@ -49,7 +49,6 @@ class ProjectDetailCrowdSale extends Component {
       projectDetails
     } = this.props || {};
     etherPriceFetch("ETH");
-    console.log("mount");
     tokenBalance(version, projectDetails.daicoTokenAddress, userLocalPublicAddress);
     fetchEtherCollected(version, pollFactoryAddress);
     fetchRoundTokensSold(version, crowdSaleAddress, 0);

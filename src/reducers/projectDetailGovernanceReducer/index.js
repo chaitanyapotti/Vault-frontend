@@ -27,12 +27,13 @@ export default function(state = initialState, action) {
     //     ...state,
     //     membershipAssigned: false
     //   };
-    case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED:
+    case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED: {
       const { rec } = action.payload;
       return {
         ...state,
         tokensUnderGovernance: rec
       };
+    }
     case actionTypes.KILL_POLL_INDEX_RECEIVED: {
       const { receipt } = action.payload;
       return {

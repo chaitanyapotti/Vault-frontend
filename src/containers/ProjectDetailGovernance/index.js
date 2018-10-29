@@ -22,7 +22,8 @@ import {
   getR1Goal,
   getHardCap,
   getSoftCap,
-  formatCurrencyNumber
+  formatCurrencyNumber,
+  formatMoney
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
@@ -126,7 +127,7 @@ class ProjectDetailGovernance extends Component {
   getVoteShare = () => {
     const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
     const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * Math.pow(10, 18);
-    return userShare > capPercent / 10000 ? capPercent / 10000 : userShare;
+    return userShare > capPercent / 100 ? capPercent / 100 : userShare;
   };
 
   getNextKillPollStartDate = () => {
@@ -141,13 +142,15 @@ class ProjectDetailGovernance extends Component {
     const { ETH: etherPrice } = prices || {};
     const tokenPrice = this.getPrice() * parseFloat(etherPrice);
     const { tokenBalance } = this.props || {};
-    return tokenPrice * parseFloat(tokenBalance);
+    return formatMoney(tokenPrice * parseFloat(formatFromWei(tokenBalance)));
   };
 
   getMyRefundValue = () => {
-    const etherPrice = 200;
+    const { prices } = this.props || {};
+    const { ETH: etherPrice } = prices || {};
     const { remainingEtherBalance, tokenBalance, totalSupply, foundationDetails } = this.props || {};
     let softCap = 0;
+    console.log(foundationDetails);
     for (let index = 0; index < foundationDetails.length; index += 1) {
       const { amount } = foundationDetails[index];
       softCap += parseFloat(amount);
@@ -253,7 +256,7 @@ class ProjectDetailGovernance extends Component {
             <PDetailGovernance
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
-              yourTokens={formatCurrencyNumber(tokenBalance, 0)}
+              yourTokens={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
               yourVoteShare={this.getVoteShare()}
               killAttemptsLeft={7 - killPollIndex}
               nextKillAttempt={this.getNextKillPollStartDate()}

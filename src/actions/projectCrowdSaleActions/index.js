@@ -34,7 +34,7 @@ export const getEtherCollected = (version, contractAddress) => async dispatch =>
     .then(async response => {
       if (response.status === 200) {
         const { data } = response.data;
-        dispatch(etherCollected(await web3.utils.fromWei(data, "ether")));
+        dispatch(etherCollected(data));
       } else {
         dispatch(etherCollected("0"));
       }
@@ -68,9 +68,6 @@ export const getRoundTokensSold = (version, contractAddress, round) => async dis
 
 export const getTokenBalance = (version, contractAddress, userLocalPublicAddress) => async dispatch => {
   // doesn't call blockchain. await is non blocking
-  console.log(version);
-  console.log(contractAddress);
-  console.log(userLocalPublicAddress);
   const network = "rinkeby";
   axios
     .get(`${config.api_base_url}/web3/erc20token/tokenbalance`, {
@@ -79,15 +76,12 @@ export const getTokenBalance = (version, contractAddress, userLocalPublicAddress
     .then(response => {
       if (response.status === 200) {
         const { data } = response.data;
-        console.log("data", data, typeof data);
         dispatch(tokenBalanceReceived(data));
       } else {
-        console.log("999");
         dispatch(tokenBalanceReceived("0"));
       }
     })
     .catch(err => {
-      console.log("data");
       console.error(err.message);
       dispatch(tokenBalanceReceived("0"));
     });

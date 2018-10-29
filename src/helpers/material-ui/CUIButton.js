@@ -47,7 +47,7 @@ const CUIButton = props => {
     id,
     size,
     fullWidth: full,
-    tabIndex,
+    tabIndex
   };
 
   if (isLink && href) {
@@ -70,7 +70,7 @@ CUIButton.defaultProps = {
   children: null,
   labelStyle: {
     textTransform: "none",
-    fontSize: CS_FONT_SIZE.S,
+    fontSize: CS_FONT_SIZE.S
   },
   className: "",
   disabled: false,
@@ -89,7 +89,7 @@ CUIButton.defaultProps = {
   actionProps: {},
   to: "",
   component: undefined,
-  onClick: () => {},
+  onClick: () => {}
 };
 
 CUIButton.propTypes = {
@@ -112,7 +112,7 @@ CUIButton.propTypes = {
   icon: PropTypes.element,
   to: PropTypes.string,
   actionProps: PropTypes.shape({}),
-  onClick: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 export default CUIButton;

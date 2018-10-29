@@ -35,7 +35,8 @@ class GridData extends React.Component {
     const options = {
       filterType: "dropdown",
       responsive: "scroll",
-      selectableRows: false
+      selectableRows: false,
+      onRowClick: this.redirectToProject
     };
     const { tableData, columns } = this.props || {};
     return (

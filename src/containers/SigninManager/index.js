@@ -41,7 +41,7 @@ const mapStateToProps = state => {
     userServerPublicAddress,
     userIsIssuer,
     userLocalPublicAddress,
-    userPreviousLocalPublicAddress,
+    userPreviousLocalPublicAddress
   };
 };
 
@@ -50,11 +50,11 @@ const mapDispatchToProps = dispatch =>
     {
       checkUserRegistration,
       fetchCurrentAccount,
-      checkVaultMembership,
+      checkVaultMembership
     },
-    dispatch,
+    dispatch
   );
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SigninManager);

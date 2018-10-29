@@ -27,7 +27,7 @@ export const currentRound = projectid => async dispatch => {
         const { data } = projectData || {};
         const { version, crowdSaleAddress } = data || {};
         dispatch(projectDetailsFetched(data));
-        const network = await web3.eth.net.getNetworkType();
+        const network = "rinkeby";
         axios
           .get(`${config.api_base_url}/web3/crowdsale/currentround`, {
             params: { version: version.toString(), network, address: crowdSaleAddress }

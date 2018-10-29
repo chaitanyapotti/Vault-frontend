@@ -113,6 +113,7 @@ class ProjectGovernance extends Component {
             totalMintableSupply={totalMintableSupply}
             foundationDetails={foundationDetails}
             etherPrice={etherPrice}
+            initialFundRelease={initialFundRelease}
           />
         );
       case "1":

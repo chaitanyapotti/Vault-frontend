@@ -18,6 +18,7 @@ import SigninManager from "./containers/SigninManager";
 import Register from "./containers/Register";
 import store from "./store";
 import "semantic-ui-css/semantic.min.css";
+import Search from "./pages/Search";
 
 class App extends Component {
   render() {
@@ -26,15 +27,16 @@ class App extends Component {
         <Router>
           <VaultApp dispatch={store.dispatch} getState={store.getState} history={this.props.history}>
             <Switch>
-              <Route exact path="/" component={FeaturedProjects} />
+              <Route exact path="/" component={FeaturedProjects} history={this.props.history} />
               <Route exact path="/governance" component={Governance} />
-              <Route strict path="/governance/details" component={ProjectGovernance} history={this.props.history} />
+              <Route path="/governance/details" component={ProjectGovernance} history={this.props.history} />
               <Route exact path="/projects" component={AllProjects} />
               <Route exact path="/landing" component={LandingPage} />
               <Route exact path="/registration" component={Registration} />
               <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/deploy" component={Deployer} />
               <Route exact path="/register" component={Register} />
+              <Route path="/search" component={Search} />
             </Switch>
             <SigninManager />
           </VaultApp>

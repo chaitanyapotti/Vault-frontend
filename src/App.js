@@ -27,7 +27,7 @@ class App extends Component {
           <VaultApp dispatch={store.dispatch} getState={store.getState} history={this.props.history}>
             <Switch>
               <Route exact path="/" component={FeaturedProjects} history={this.props.history}/>
-              <Route exact path="/governance" component={Governance} />
+              <Route exact path="/mytokens" component={Governance} />
               <Route strict path="/governance/details" component={ProjectGovernance} history={this.props.history} />
               <Route exact path="/projects" component={AllProjects} />
               <Route exact path="/landing" component={LandingPage} />

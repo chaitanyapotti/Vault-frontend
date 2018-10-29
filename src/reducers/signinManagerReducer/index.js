@@ -21,7 +21,9 @@ export const initialState = {
   isPhoneNumberVerified: false,
   vaultPaymentPendingStatus: false,
   signinStatusFlag: 0,
-  networkName: ""
+  networkName: "",
+  metamaskPreviousInstallationState: false,
+  metamaskPreviousNetworkName: ""
 };
 
 export default function(state = initialState, action) {
@@ -44,11 +46,11 @@ export default function(state = initialState, action) {
     case types.METAMASK_NETWORK:{
       if (action.payload=== 'rinkeby'){
         return {
-          ...state, networkName: 'rinkeby'
+          ...state, networkName: 'rinkeby', metamaskPreviousNetworkName: action.payload
         }
       }else{
         return {
-          ...state, signinStatusFlag: 2
+          ...state, signinStatusFlag: 2, metamaskPreviousNetworkName: action.payload
         }
       }
     }
@@ -56,11 +58,11 @@ export default function(state = initialState, action) {
     case types.METAMASK_INSTALLATION_STATUS_CHECK: {
       if (action.payload){
         return {
-          ...state
+          ...state, metamaskPreviousInstallationState:  action.payload
         }
       }else{
         return{
-          ...state, signinStatusFlag: 0
+          ...state, signinStatusFlag: 0, metamaskPreviousInstallationState:  action.payload
         }        
       }
     }

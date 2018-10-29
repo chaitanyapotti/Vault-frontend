@@ -11,7 +11,7 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../../Common/FormComponents";
 
 import { Table } from "semantic-ui-react";
-import { Tooltip, Legend, Pie, PieChart, Cell } from "recharts";
+import { Tooltip, Legend, Pie, PieChart, Cell, Label, LabelList } from "recharts";
 
 import {
   addNonSaleEntityAction,
@@ -20,15 +20,6 @@ import {
   entityAddressChangedAction,
   nonSaleEntityEditAction
 } from "../../../actions/projectRegistrationActions";
-
-const data01 = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
-  { name: "Group E", value: 278 },
-  { name: "Group F", value: 189 }
-];
 
 // const CHARTCOLORS = ['#e1f4ff', '#b0ddff', '#7ec3fe', '#65b6fd', '#4ca9fc', '#3d8dd4', '#2e71ac', '#1e5583', '#0f395b', '#001d33']
 const CHARTCOLORS = [
@@ -96,6 +87,35 @@ class NonSale extends React.Component {
       return null;
     }
   };
+
+  renderCustomizedLabel = () => {
+    const { x, y, width, height, value } = this.props;
+    const radius = 10;
+    // return <text textAnchor="middle">Hello</text>
+    // return <text 
+    //            x={400} 
+    //            y={400} 
+    //            dy={-4} 
+    //            fontSize='16' 
+    //            fontFamily='sans-serif'
+    //            fill="#e1f4ff"
+    //            textAnchor="middle">{50}%</text>
+  //   return <svg height="21" width="40">
+  //   <path d="M15 0 L8 20 L22 20 Z" />
+  // </svg>
+  return <g>
+    <circle cx={x} cy={y - radius} r={radius} fill="#8884d8" />
+  </g>
+    // return this.props.nonSaleEntities.map((entry, index) => (
+    //   <svg height="210" width="400">
+    //     <path d="M150 0 L75 200 L225 200 Z" />
+    //   </svg>
+    // ))
+  } 
+
+  onPieEnter(data, index) {
+    console.log("on pie enter: ", data, index)
+  }
 
   render() {
     return (
@@ -171,26 +191,37 @@ class NonSale extends React.Component {
         </Row>
 
         <Row>
-          <PieChart width={400} height={400}>
-            <Legend />
+          <PieChart width={600} height={400}>
+            <Legend layout='vertical' iconSize={32} verticalAlign="middle" align="left"/>
             <Tooltip />
             <Pie
               isAnimationActive={false}
               data={this.props.nonSaleEntities}
-              cx={200}
+              cx={250}
               cy={200}
               innerRadius={100}
               outerRadius={150}
               fill="#8884d8"
-              label
               dataKey="entityPercentage"
               nameKey="entityName"
+              onMouseEnter={this.onPieEnter}
             >
+            <LabelList position="outside" offset={15} formatter={(index) => `${index} %`} fill="black" stroke="#000000"/>
+            {/* <LabelList position="outside" content={this.renderCustomizedLabel}/> */}
+              <Label width={30} position="center">
+                1B Tokens
+              </Label>
+              {/* {this.props.nonSaleEntities.map((entry, index) => (
+                <Label width={30} position="outside">
+                  {index}
+                </Label>
+              ))} */}
               {this.props.nonSaleEntities.map((entry, index) => (
                 <Cell
                   key={index}
                   fill={CHARTCOLORS[index % CHARTCOLORS.length]}
-                />
+                >
+                </Cell>
               ))}
             </Pie>
           </PieChart>

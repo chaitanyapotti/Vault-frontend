@@ -160,7 +160,7 @@ class HeaderPartial extends React.Component {
 
   onHandleGovernanceClicked = () => {
     this.props.history.push({
-      pathname: `/governance`,
+      pathname: `/mytokens`,
       // search: "?contract=" + this.props.searchText
     });
   };
@@ -196,7 +196,7 @@ class HeaderPartial extends React.Component {
           <div>Projects</div>
         </MenuItem>
         <MenuItem onClick={this.onHandleGovernanceClicked.bind(this)}>
-          <div>Governance</div>
+          <div>My Tokens</div>
         </MenuItem>
         <MenuItem>
           <div>Publish ICO</div>
@@ -243,7 +243,7 @@ class HeaderPartial extends React.Component {
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m">
                       <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked.bind(this)}>
-                        Governance
+                        My Tokens
                       </div>
                     </div>
                     <div className="hdr-itm-pad text--primary txt-m">
@@ -326,7 +326,7 @@ class HeaderPartial extends React.Component {
               Projects
             </div>
             <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked.bind(this)}>
-              Governance
+              My Tokens
             </div>
             <div className="hdr-itm-pad text--primary txt-m">Publish ICO</div>
           </div>

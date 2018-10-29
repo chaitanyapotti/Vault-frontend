@@ -88,20 +88,9 @@ const ProjectCrowdSaleName = props => {
             <LoadingButton onClick={onClick} loading={buttonSpinning}>
               {buttonText}
             </LoadingButton>
-          ) : (
-            <span>
-              You are whitelisted <img src="/assets/Vault/whitelist.svg" alt="whitelist checked" width="20" height="20" />
-            </span>
-          )}
-          {buyButtonVisibility ? (
-            <LoadingButton onClick={onBuyClick} loading={buyButtonSpinning}>
-              {buyButtonText}
-            </LoadingButton>
-          ) : (
-            <span>
-              Successfully Bought <img src="/assets/Vault/whitelist.svg" alt="Buy checked" width="20" height="20" />
-            </span>
-          )}
+          ) : buyButtonVisibility ? (
+            <LoadingButton onClick={onBuyClick}>{buyButtonText}</LoadingButton>
+          ) : null}
         </Col>
       </Row>
     </CUICard>
@@ -109,3 +98,9 @@ const ProjectCrowdSaleName = props => {
 };
 
 export default ProjectCrowdSaleName;
+
+// : (
+//   <span>
+//     Successfully Bought <img src="/assets/Vault/whitelist.svg" alt="Buy checked" width="20" height="20" />
+//   </span>
+// )

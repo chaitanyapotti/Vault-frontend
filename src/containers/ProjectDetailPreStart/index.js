@@ -6,15 +6,7 @@ import { ProjectPreStartName, PDetailPreStart, TokenChart } from "../../componen
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
-import {
-  formatDate,
-  formatFromWei,
-  formatMoney,
-  getR1Price,
-  getSoftCap,
-  getHardCap,
-  formatCurrencyNumber
-} from "../../helpers/common/projectDetailhelperFunctions";
+import { formatDate, formatFromWei, getR1Price, getSoftCap, getHardCap } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
 

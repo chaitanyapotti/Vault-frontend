@@ -4,37 +4,33 @@ import actionTypes from "../../action_types";
 
 export const initialState = {
   etherCollected: 0,
-  roundInfo: {}
+  roundInfo: {},
+  buyButtonSpinning: false
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    // case actionTypes.MEMBERSHIP_ASSIGNED:
-    //   return {
-    //     ...state,
-    //     membershipAssigned: true
-    //   };
-
-    // case actionTypes.MEMBERSHIP_FAILED:
-    //   return {
-    //     ...state,
-    //     membershipAssigned: false
-    //   };
-
-    case actionTypes.ETHER_COLLECTED:
+    case actionTypes.ETHER_COLLECTED: {
       const { receipt } = action.payload;
       return {
         ...state,
         etherCollected: receipt
       };
-
-    case actionTypes.ROUND_INFO_RECEIVED:
+    }
+    case actionTypes.ROUND_INFO_RECEIVED: {
       const { rec } = action.payload;
       return {
         ...state,
         roundInfo: rec
       };
-
+    }
+    case actionTypes.BUY_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        buyButtonSpinning: receipt
+      };
+    }
     default:
       return state;
   }

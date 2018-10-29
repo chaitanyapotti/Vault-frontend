@@ -22,7 +22,8 @@ import BuyModal from "../../components/Common/BuyModal";
 class ProjectDetailCrowdSale extends Component {
   state = {
     modalOpen: false,
-    buyModalOpen: false
+    buyModalOpen: false,
+    buyAmount: ""
   };
 
   handleBuyClose = () => this.setState({ buyModalOpen: false });
@@ -85,10 +86,18 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   buyTokensOnClick = () => {
-    const { crowdSaleAddress, buyTokens: buyToken } = this.props || {};
-    this.setState({ buyModalOpen: true });
+    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress } = this.props || {};
+    const { buyAmount } = this.state || {};
     // // TODO: need to add how many tokens to buy
-    buyToken(crowdSaleAddress);
+    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, 0);
+  };
+
+  buyTokens = () => {
+    this.setState({ buyModalOpen: true });
+  };
+
+  onBuyAmountChange = e => {
+    this.setState({ buyAmount: e.target.value });
   };
 
   render() {
@@ -113,7 +122,7 @@ class ProjectDetailCrowdSale extends Component {
       signinStatusFlag,
       buyButtonSpinning
     } = this.props || {};
-    const { modalOpen, buyModalOpen } = this.state;
+    const { modalOpen, buyModalOpen, buyAmount } = this.state;
     return (
       <Grid>
         <CUICard style={{ padding: "40px 50px" }}>
@@ -141,7 +150,6 @@ class ProjectDetailCrowdSale extends Component {
               signinStatusFlag={signinStatusFlag}
               buyButtonVisibility={isCurrentMember}
               onBuyClick={this.buyTokens}
-              buyButtonSpinning={buyButtonSpinning}
               buyButtonText="Buy"
             />
           </Col>
@@ -177,7 +185,10 @@ class ProjectDetailCrowdSale extends Component {
           onClose={this.handleBuyClose}
           price={getR1Price(this.props)}
           tokenTag={tokenTag}
+          buyButtonSpinning={buyButtonSpinning}
           buyTokensOnClick={this.buyTokensOnClick}
+          inputText={buyAmount}
+          onChange={this.onBuyAmountChange}
         />
       </Grid>
     );
@@ -199,7 +210,7 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => {
   const { projectCrowdSaleReducer, signinManagerData, fetchPriceReducer, projectPreStartReducer } = state || {};
-  const { etherCollected, roundInfo } = projectCrowdSaleReducer || {};
+  const { etherCollected, roundInfo, buyButtonSpinning } = projectCrowdSaleReducer || {};
   const { prices } = fetchPriceReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
@@ -211,7 +222,8 @@ const mapStateToProps = state => {
     isVaultMember,
     userLocalPublicAddress,
     signinStatusFlag,
-    prices
+    prices,
+    buyButtonSpinning
   };
 };
 

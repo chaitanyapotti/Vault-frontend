@@ -13,9 +13,9 @@ export const roundInfoReceived = data => ({
   type: actionTypes.ROUND_INFO_RECEIVED
 });
 
-export const isButtonSpinning = receipt => ({
+export const isBuyButtonSpinning = receipt => ({
   payload: { receipt },
-  type: actionTypes.BUTTON_SPINNING
+  type: actionTypes.BUY_BUTTON_SPINNING
 });
 
 export const tokenBalanceReceived = receipt => ({
@@ -25,7 +25,7 @@ export const tokenBalanceReceived = receipt => ({
 
 export const getEtherCollected = (version, contractAddress) => async dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = await web3.eth.net.getNetworkType();
+  const network = "rinkeby";
   axios
     .get(`${config.api_base_url}/web3/pollfactory/totaletherraised`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -46,7 +46,7 @@ export const getEtherCollected = (version, contractAddress) => async dispatch =>
 
 export const getRoundTokensSold = (version, contractAddress, round) => async dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = await web3.eth.net.getNetworkType();
+  const network = "rinkeby";
   axios
     .get(`${config.api_base_url}/web3/crowdsale/round/details`, {
       params: { version: version.toString(), network, address: contractAddress, round }
@@ -67,7 +67,7 @@ export const getRoundTokensSold = (version, contractAddress, round) => async dis
 
 export const getTokenBalance = (version, contractAddress, userLocalPublicAddress) => async dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = await web3.eth.net.getNetworkType();
+  const network = "rinkeby";
   axios
     .get(`${config.api_base_url}/web3/erc20token/tokenbalance`, {
       params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }
@@ -86,8 +86,8 @@ export const getTokenBalance = (version, contractAddress, userLocalPublicAddress
     });
 };
 
-export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount) => dispatch => {
-  dispatch(isButtonSpinning(true));
+export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount, round) => dispatch => {
+  dispatch(isBuyButtonSpinning(true));
   web3.eth
     .sendTransaction({
       from: userLocalPublicAddress,
@@ -95,11 +95,12 @@ export const buyTokens = (version, contractAddress, userLocalPublicAddress, amou
       value: web3.utils.toWei(amount, "ether")
     })
     .on("receipt", receipt => {
-      dispatch(isButtonSpinning(false));
+      dispatch(isBuyButtonSpinning(false));
       getTokenBalance(version, contractAddress, userLocalPublicAddress);
+      getRoundTokensSold(version, contractAddress, round);
     })
     .on("error", error => {
       console.error(error.message);
-      dispatch(isButtonSpinning(false));
+      dispatch(isBuyButtonSpinning(false));
     });
 };

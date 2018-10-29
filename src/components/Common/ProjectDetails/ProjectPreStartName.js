@@ -75,9 +75,7 @@ const ProjectPreStartName = props => {
           {signinStatusFlag <= 2 ? (
             <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
               <div>
-                <LoadingButton tooltip="This feature is only for Vault Members" disabled>
-                  {buttonText}
-                </LoadingButton>
+                <LoadingButton disabled>{buttonText}</LoadingButton>
               </div>
             </Tooltip>
           ) : buttonVisibility ? (

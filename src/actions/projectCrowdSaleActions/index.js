@@ -1,4 +1,5 @@
 import axios from "axios";
+import { type } from "os";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
@@ -67,20 +68,26 @@ export const getRoundTokensSold = (version, contractAddress, round) => async dis
 
 export const getTokenBalance = (version, contractAddress, userLocalPublicAddress) => async dispatch => {
   // doesn't call blockchain. await is non blocking
+  console.log(version);
+  console.log(contractAddress);
+  console.log(userLocalPublicAddress);
   const network = "rinkeby";
   axios
     .get(`${config.api_base_url}/web3/erc20token/tokenbalance`, {
       params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }
     })
-    .then(async response => {
+    .then(response => {
       if (response.status === 200) {
         const { data } = response.data;
-        dispatch(tokenBalanceReceived(await web3.utils.fromWei(data, "ether")));
+        console.log("data", data, typeof data);
+        dispatch(tokenBalanceReceived(data));
       } else {
+        console.log("999");
         dispatch(tokenBalanceReceived("0"));
       }
     })
     .catch(err => {
+      console.log("data");
       console.error(err.message);
       dispatch(tokenBalanceReceived("0"));
     });

@@ -107,7 +107,7 @@ class IdentityDetails extends React.Component {
               full
               inputName="Admin Name"
               inputLabel="Admin Name"
-              inputPlaceholder="Eg. Aman"
+              inputPlaceholder="Eg. Adam Smith"
               inputValue={this.props.adminName}
               textFocus
               // onBlur={this.onBlurAge}
@@ -126,7 +126,7 @@ class IdentityDetails extends React.Component {
               full
               inputName="Admin Email"
               inputLabel="Admin Email"
-              inputPlaceholder="Eg. test@test.com"
+              inputPlaceholder="Eg. admin@electus.network"
               inputValue={this.props.adminEmail}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -147,7 +147,7 @@ class IdentityDetails extends React.Component {
               full
               inputName="Project Name"
               inputLabel="Project Name"
-              inputPlaceholder="Eg. Wanchain"
+              inputPlaceholder="Eg. Electus"
               inputValue={this.props.projectName}
               textFocus
               // onBlur={this.onBlurAge}
@@ -164,9 +164,9 @@ class IdentityDetails extends React.Component {
               inputType={CUIInputType.TEXT}
               required
               full
-              inputName="ERC20 Token Tag"
-              inputLabel="ERC20 Token Tag"
-              inputPlaceholder="Eg. ERC"
+              inputName="ERC20 Ticker"
+              inputLabel="ERC20 Ticker"
+              inputPlaceholder="Eg. ELE"
               inputValue={this.props.erc20TokenTag}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -187,7 +187,7 @@ class IdentityDetails extends React.Component {
               multiline
               inputName="Project Description"
               inputLabel="Project Description"
-              inputPlaceholder="Eg. Protocol for E-Governance"
+              inputPlaceholder="Eg. Protocol for Decentralized Organizations"
               inputValue={this.props.projectDescription}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -206,7 +206,7 @@ class IdentityDetails extends React.Component {
               full
               inputName="Website Link"
               inputLabel="Website Link"
-              inputPlaceholder="Eg. Wanchain"
+              inputPlaceholder="Eg. electus.network"
               inputValue={this.props.websiteLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -224,7 +224,7 @@ class IdentityDetails extends React.Component {
               full
               inputName="Telegram Link"
               inputLabel="Telegram Link"
-              inputPlaceholder="Eg. ERC"
+              inputPlaceholder="Eg. https://t.me/joinchat/FwqASEdUSqFIPNBNwPZzfgz"
               inputValue={this.props.telegramLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -245,7 +245,7 @@ class IdentityDetails extends React.Component {
               full
               inputName="Github Link"
               inputLabel="Github Link"
-              inputPlaceholder="Eg. Wanchain"
+              inputPlaceholder="Eg. https://github.com/chaitanyapotti/"
               inputValue={this.props.githubLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -263,7 +263,7 @@ class IdentityDetails extends React.Component {
               full
               inputName="Medium Link"
               inputLabel="Medium Link"
-              inputPlaceholder="Eg. ERC"
+              inputPlaceholder="Eg. https://medium.com/@ParthaB"
               inputValue={this.props.mediumLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -284,7 +284,7 @@ class IdentityDetails extends React.Component {
               full
               inputName="Facebook Link"
               inputLabel="Facebook Link"
-              inputPlaceholder="Eg. Wanchain"
+              inputPlaceholder="Eg. https://www.facebook.com/electusnetwork/"
               inputValue={this.props.facebookLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -302,7 +302,7 @@ class IdentityDetails extends React.Component {
               full
               inputName="Twitter Link"
               inputLabel="Twitter Link"
-              inputPlaceholder="Eg. ERC"
+              inputPlaceholder="Eg. https://twitter.com/ElectusNetwork"
               inputValue={this.props.twitterLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -322,7 +322,7 @@ class IdentityDetails extends React.Component {
               full
               inputName="Team Address"
               inputLabel="Team Address"
-              inputPlaceholder="0xABCD"
+              inputPlaceholder="Eg. 0xdbf6df7e94e3019e1705e699a8874ac5f6ed753e"
               inputValue={this.props.teamAddress}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}

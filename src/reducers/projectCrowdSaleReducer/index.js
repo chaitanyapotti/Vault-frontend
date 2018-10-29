@@ -6,7 +6,7 @@ export const initialState = {
   etherCollected: 0,
   roundInfo: {},
   buyButtonSpinning: false,
-  tokenBalance: 0
+  tokenBalance: ""
 };
 
 export default function(state = initialState, action) {

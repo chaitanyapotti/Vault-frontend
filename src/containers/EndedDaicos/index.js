@@ -4,7 +4,14 @@ import { bindActionCreators } from "redux";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getEndedDaicos, showEndedDaicosLoaderAction } from "../../actions/endedDaicosActions";
 import GridData from "../../components/GridData";
-import { formatDate, formatCent, formatFromWei, formatMoney, formatTokenPrice } from "../../helpers/common/projectDetailhelperFunctions";
+import {
+  formatDate,
+  formatCent,
+  formatFromWei,
+  formatMoney,
+  formatTokenPrice,
+  significantDigits
+} from "../../helpers/common/projectDetailhelperFunctions";
 
 class EndedDaicos extends Component {
   componentDidMount() {
@@ -35,7 +42,7 @@ class EndedDaicos extends Component {
       const dataArray = [
         projectName,
         formatMoney(formatFromWei(parseFloat(raisedAmount)), 0),
-        formatCent(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3)),
+        formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
         `${killConsensus}%`,
         formatDate(startDateTime),
         formatDate(endedAt)

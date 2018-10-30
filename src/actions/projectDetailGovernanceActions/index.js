@@ -15,7 +15,7 @@ export const killPollIndexReceived = receipt => ({
 
 export const remainingEtherBalanceReceived = receipt => ({
   payload: { receipt },
-  type: "REMAINING_ETHER_BALANCE_RECEIVED"
+  type: actionTypes.REMAINING_ETHER_BALANCE_RECEIVED
 });
 
 export const totalSupplyReceived = receipt => ({

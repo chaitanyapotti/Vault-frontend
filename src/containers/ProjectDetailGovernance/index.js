@@ -23,7 +23,8 @@ import {
   getHardCap,
   getSoftCap,
   formatCurrencyNumber,
-  formatMoney
+  formatMoney,
+  formatDate
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
@@ -150,7 +151,6 @@ class ProjectDetailGovernance extends Component {
     const { ETH: etherPrice } = prices || {};
     const { remainingEtherBalance, tokenBalance, totalSupply, foundationDetails } = this.props || {};
     let softCap = 0;
-    console.log(foundationDetails);
     for (let index = 0; index < foundationDetails.length; index += 1) {
       const { amount } = foundationDetails[index];
       softCap += parseFloat(amount);
@@ -259,7 +259,7 @@ class ProjectDetailGovernance extends Component {
               yourTokens={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
               yourVoteShare={this.getVoteShare()}
               killAttemptsLeft={7 - killPollIndex}
-              nextKillAttempt={this.getNextKillPollStartDate()}
+              nextKillAttempt={formatDate(this.getNextKillPollStartDate())}
               yourTokenValue={this.getMyTokenValue()}
               yourRefundValue={this.getMyRefundValue()}
               totalRefundableBalance={remainingEtherBalance * Math.pow(10, -18)}

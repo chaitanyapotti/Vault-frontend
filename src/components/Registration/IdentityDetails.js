@@ -1,12 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { CUICard, CUIFormInput, CUIButton } from "../../helpers/material-ui";
-import {
-  CUIInputType,
-  CUIButtonType,
-  CUIInputColor
-} from "../../static/js/variables";
+import { CUICard, CUIFormInput } from "../../helpers/material-ui";
+import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import {
   adminNameChangedAction,
@@ -337,11 +333,7 @@ class IdentityDetails extends React.Component {
         <Row>
           <Col>
             <div className="text--right push--top">
-              <ButtonComponent
-                id="uploadWhitepaper"
-                label="Upload Whitepaper"
-                onClick={this.uploadWhitePaper}
-              />
+              <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitePaper} />
             </div>
           </Col>
         </Row>

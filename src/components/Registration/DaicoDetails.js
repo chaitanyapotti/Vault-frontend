@@ -115,7 +115,7 @@ class DaicoDetails extends React.Component {
                 full
                 inputName="Initial Fund Release"
                 inputLabel="Initial Fund Release"
-                inputPlaceholder="Eg. Aman"
+                inputPlaceholder="Eg. 100"
                 inputValue={this.props.initialFundRelease}
                 textFocus
                 // onBlur={this.onBlurAge}
@@ -133,7 +133,7 @@ class DaicoDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 full
                 inputName="Max Ether Contribution"
-                inputLabel="Max Ether Contribution"
+                inputLabel="Max Ether Cap (ETH)"
                 inputPlaceholder="Eg. 5"
                 inputValue={this.props.maxEtherContribution}
                 textFocus
@@ -165,8 +165,8 @@ class DaicoDetails extends React.Component {
                 required
                 full
                 inputName="Initial Tap Value"
-                inputLabel="Initial Tap Value"
-                inputPlaceholder="Eg. 100 eth/month"
+                inputLabel="Initial Tap (ETH/Mo)"
+                inputPlaceholder="Eg. 100"
                 inputValue={this.props.initialTapValue}
                 textFocus
                 // onBlur={this.onBlurAge}

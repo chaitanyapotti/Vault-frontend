@@ -44,6 +44,17 @@ const significantDigits = number => {
   return roundedNum;
 };
 
+const formatNumberToINRFormat = number => {
+  let n1;
+  let num;
+  num = `${number}` || "";
+  n1 = num.split(".");
+  const n2 = n1[1] || null;
+  n1 = n1[0].replace(/(\d)(?=(\d\d)+\d$)/g, "$1,");
+  num = n2 ? `${n1}.${n2}` : n1;
+  return num;
+};
+
 const secondsToDhms = seconds => {
   const secs = Number(seconds);
   const y = Math.floor(secs / (3600 * 24 * 365));
@@ -172,5 +183,6 @@ export {
   getR1Goal,
   getR3Price,
   formatCurrencyNumber,
-  significantDigits
+  significantDigits,
+  formatNumberToINRFormat
 };

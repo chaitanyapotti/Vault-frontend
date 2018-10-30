@@ -10,7 +10,8 @@ import {
   formatMoney,
   formatTokenPrice,
   r1EndsIn,
-  significantDigits
+  significantDigits,
+  formatNumberToINRFormat
 } from "../../helpers/common/projectDetailhelperFunctions";
 
 class UserTokens extends Component {
@@ -40,7 +41,7 @@ class UserTokens extends Component {
       const dataArray = [
         projectName,
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
-        `${balance}(${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
+        `${formatNumberToINRFormat(balance)}(${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
         projectHealth,
         `${tapIncrement}(Yes)`,
         `${killConsensus}(No)`,

@@ -4,6 +4,31 @@ const validateAdminName = name => {
   }
   return true;
 };
+
+const validateMaxEtherContribution = input => {
+  if (input < 0.1) {
+    return true;
+  }
+  return false;
+};
+const validateTapIncrementFactor = input => {
+  if (input < 1 || input > 2) {
+    return true;
+  }
+  return false;
+};
+const validateVoteSaturationLimit = input => {
+  if (input < 0.1 || input > 10) {
+    return true;
+  }
+  return false;
+};
+const validateInitialTap = (input, fundRelease) => {
+  if (input > fundRelease * 86400 * 30) {
+    return true;
+  }
+  return false;
+};
 const validateLength = input => {
   if (input.length === 0) {
     return false;
@@ -23,6 +48,13 @@ const validateTokenTagLength = input => {
   return true;
 };
 const alphaOnly = event => /^[a-zA-Z]+$/i.test(event);
+const validateDate = date => {
+  console.log(date);
+  if (date) {
+    return true;
+  }
+  return false;
+};
 const validateEmail = email => {
   const re = /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/;
   return re.test(email);
@@ -66,5 +98,10 @@ export {
   validateTelegramLink,
   validateProjectNameLength,
   validateTokenTagLength,
-  alphaOnly
+  alphaOnly,
+  validateMaxEtherContribution,
+  validateTapIncrementFactor,
+  validateVoteSaturationLimit,
+  validateInitialTap,
+  validateDate
 };

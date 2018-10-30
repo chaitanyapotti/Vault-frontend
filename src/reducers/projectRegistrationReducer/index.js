@@ -13,7 +13,10 @@ import {
   validateTelegramLink,
   validateProjectNameLength,
   validateTokenTagLength,
-  alphaOnly
+  alphaOnly,
+  validateMaxEtherContribution,
+  validateTapIncrementFactor,
+  validateVoteSaturationLimit
 } from "../../helpers/common/validationHelperFunctions";
 
 export const initialState = {
@@ -30,8 +33,8 @@ export const initialState = {
   twitterLink: "",
   initialFundRelease: "",
   daicoRounds: "",
-  daicoStartDate: "",
-  daicoEndDate: "",
+  daicoStartDate: null,
+  daicoEndDate: null,
   round1TargetUSD: "",
   round1TargetEth: "",
   round2TargetUSD: "",
@@ -401,9 +404,8 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED: {
-      if (parseFloat(action.payload) < 0.1) {
-        localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] =
-          "should be greater than 0.1";
+      if (validateMaxEtherContribution(parseFloat(action.payload))) {
+        localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "should be greater than 0.1";
       } else {
         localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "";
       }
@@ -415,6 +417,16 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.INITIAL_TAP_VALUE_CHANGED: {
+      // const { initialFundRelease } = state || {};
+      // let fundRelease;
+      // if (initialFundRelease.length === 0) {
+      //   fundRelease = 0;
+      // } else fundRelease = initialFundRelease;
+      // if (validateInitialTap(parseFloat(action.payload), fundRelease)) {
+      //   localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "should be lesser than initial fund release";
+      // } else {
+      //   localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "";
+      // }
       return {
         ...state,
         initialTapValue: action.payload
@@ -422,9 +434,8 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.TAP_INCREMENT_FACTOR_CHANGED: {
-      if (parseFloat(action.payload) < 1 || parseFloat(action.payload) > 2) {
-        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] =
-          "should be in between 1 and 2";
+      if (validateTapIncrementFactor(parseFloat(action.payload))) {
+        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "should be in between 1 and 2";
       } else {
         localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "";
       }
@@ -436,9 +447,8 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.VOTE_SATURATION_LIMIT_CHANGED: {
-      if (parseFloat(action.payload) < 0.1 || parseFloat(action.payload) > 10) {
-        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] =
-          "should be in between 0.1 and 10";
+      if (validateVoteSaturationLimit(parseFloat(action.payload))) {
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "should be in between 0.1 and 10";
       } else {
         localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "";
       }

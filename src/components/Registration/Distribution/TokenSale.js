@@ -41,8 +41,8 @@ class TokenSale extends React.Component {
   };
 
   onCalculateTokenClicked = e => {
-    this.props.calculateTokens()
-  }
+    this.props.calculateTokens();
+  };
 
   onChangeTokenPriceFactor = e => {
     this.props.tokenPriceFactorChangedAction(e.target.value);
@@ -87,13 +87,13 @@ class TokenSale extends React.Component {
             />
           </Col>
         </Row>
-        {
-          this.props.round1Tokens>0? <Row>
-          <label>
-            Total round 1 tokens {this.props.round1Tokens} at {this.props.round1Rate} eth/token
-          </label>
-        </Row>:null
-        }
+        {this.props.round1Tokens > 0 ? (
+          <Row>
+            <label>
+              Total round 1 tokens {this.props.round1Tokens} at {this.props.round1Rate} eth/token
+            </label>
+          </Row>
+        ) : null}
         <Row>
           <Col xs={12} lg={6}>
             <CUIFormInput
@@ -128,13 +128,13 @@ class TokenSale extends React.Component {
             />
           </Col>
         </Row>
-        {
-          this.props.round2Tokens>0? <Row>
-          <label>
-            Total round 2 tokens {this.props.round2Tokens} at {this.props.round2Rate} eth/token
-          </label>
-        </Row>:null
-        }
+        {this.props.round2Tokens > 0 ? (
+          <Row>
+            <label>
+              Total round 2 tokens {this.props.round2Tokens} at {this.props.round2Rate} eth/token
+            </label>
+          </Row>
+        ) : null}
         <Row>
           <Col xs={12} lg={6}>
             <CUIFormInput
@@ -169,13 +169,13 @@ class TokenSale extends React.Component {
             />
           </Col>
         </Row>
-        {
-          this.props.round3Tokens>0? <Row>
-          <label>
-            Total round 3 tokens {this.props.round3Tokens} at {this.props.round3Rate} eth/token
-          </label>
-         </Row>:null
-        }
+        {this.props.round3Tokens > 0 ? (
+          <Row>
+            <label>
+              Total round 3 tokens {this.props.round3Tokens} at {this.props.round3Rate} eth/token
+            </label>
+          </Row>
+        ) : null}
         <Row>
           <Col>
             <CUIFormInput
@@ -211,30 +211,37 @@ class TokenSale extends React.Component {
 }
 
 const mapStateToProps = state => {
-  var { round1TargetUSD, round1TargetEth, round2TargetUSD, round2TargetEth, round3TargetUSD, round3TargetEth, tokenPriceFactor,
+  const {
+    round1TargetUSD,
+    round1TargetEth,
+    round2TargetUSD,
+    round2TargetEth,
+    round3TargetUSD,
+    round3TargetEth,
+    tokenPriceFactor,
     round1Tokens,
     round2Tokens,
     round3Tokens,
     round1Rate,
     round2Rate,
     round3Rate,
-    totalSaleTokens,
+    totalSaleTokens
   } = state.projectRegistrationData || {};
   return {
-    round1TargetUSD: round1TargetUSD,
-    round1TargetEth: round1TargetEth,
-    round2TargetUSD: round2TargetUSD,
-    round2TargetEth: round2TargetEth,
-    round3TargetUSD: round3TargetUSD,
-    round3TargetEth: round3TargetEth,
-    tokenPriceFactor: tokenPriceFactor,
-    round1Tokens: round1Tokens,
-    round2Tokens: round2Tokens,
-    round3Tokens: round3Tokens,
-    round1Rate: round1Rate,
-    round2Rate: round2Rate,
-    round3Rate: round3Rate,
-    totalSaleTokens: totalSaleTokens,
+    round1TargetUSD,
+    round1TargetEth,
+    round2TargetUSD,
+    round2TargetEth,
+    round3TargetUSD,
+    round3TargetEth,
+    tokenPriceFactor,
+    round1Tokens,
+    round2Tokens,
+    round3Tokens,
+    round1Rate,
+    round2Rate,
+    round3Rate,
+    totalSaleTokens
   };
 };
 
@@ -255,5 +262,5 @@ const mapDispatchToProps = dispatch =>
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(TokenSale);

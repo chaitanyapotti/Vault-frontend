@@ -19,7 +19,11 @@ import {
   validateTelegramLink,
   validateProjectNameLength,
   validateTokenTagLength,
-  alphaOnly
+  alphaOnly,
+  validateMaxEtherContribution,
+  validateTapIncrementFactor,
+  validateVoteSaturationLimit,
+  validateDate
 } from "../../helpers/common/validationHelperFunctions";
 import { newProjectRegistration } from "../../actions/projectRegistrationActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
@@ -43,7 +47,21 @@ class Registration extends Component {
       mediumLink,
       facebookLink,
       twitterLink,
-      teamAddress
+      teamAddress,
+      maxEtherContribution,
+      tapIncrementFactor,
+      voteSaturationLimit,
+      initialFundRelease,
+      initialTapValue,
+      daicoStartDate,
+      daicoEndDate,
+      round1TargetUSD,
+      round1TargetEth,
+      round2TargetUSD,
+      round2TargetEth,
+      round3TargetUSD,
+      round3TargetEth,
+      tokenPriceFactor
     } = this.props || {};
     return (
       <Grid>
@@ -74,8 +92,25 @@ class Registration extends Component {
                   !validateTokenTagLength(erc20TokenTag) ||
                   !checkMetaMask(teamAddress) ||
                   !validateProjectNameLength(projectName) ||
-                  !alphaOnly(erc20TokenTag)||
-                  !alphaOnly(projectName)
+                  !alphaOnly(erc20TokenTag) ||
+                  !alphaOnly(projectName) ||
+                  validateMaxEtherContribution(maxEtherContribution) ||
+                  !validateLength(maxEtherContribution) ||
+                  validateVoteSaturationLimit(voteSaturationLimit) ||
+                  !validateLength(voteSaturationLimit) ||
+                  validateTapIncrementFactor(tapIncrementFactor) ||
+                  !validateLength(tapIncrementFactor) ||
+                  !validateLength(initialTapValue) ||
+                  !validateLength(initialFundRelease) ||
+                  !validateLength(round1TargetEth) ||
+                  !validateLength(round1TargetUSD) ||
+                  !validateLength(round2TargetEth) ||
+                  !validateLength(round2TargetUSD) ||
+                  !validateLength(round3TargetEth) ||
+                  !validateLength(round3TargetUSD) ||
+                  !validateLength(tokenPriceFactor) ||
+                  !validateDate(daicoStartDate)||
+                  !validateDate(daicoEndDate)
                 }
               />
             </div>
@@ -98,7 +133,6 @@ class Registration extends Component {
 const mapStateToProps = state => {
   const { projectRegistrationData } = state || {};
   const { userLocalPublicAddress } = state.signinManagerData || {};
-  const { initialFundRelease, maxEtherContribution, initialTapValue, tapIncrementFactor, voteSaturationLimit } = state.projectRegistrationData || {};
   const {
     adminName,
     adminEmail,
@@ -112,10 +146,22 @@ const mapStateToProps = state => {
     facebookLink,
     twitterLink,
     teamAddress,
+    initialFundRelease,
+    maxEtherContribution,
+    initialTapValue,
+    tapIncrementFactor,
+    voteSaturationLimit,
+    daicoStartDate,
+    daicoEndDate,
+    round1TargetUSD,
+    round1TargetEth,
+    round2TargetUSD,
+    round2TargetEth,
+    round3TargetUSD,
+    round3TargetEth,
+    tokenPriceFactor,
     errors
   } = state.projectRegistrationData || {};
-  const { round1TargetUSD, round1TargetEth, round2TargetUSD, round2TargetEth, round3TargetUSD, round3TargetEth, tokenPriceFactor } =
-    state.projectRegistrationData || {};
   return {
     projectRegistrationData,
     userLocalPublicAddress,
@@ -137,6 +183,8 @@ const mapStateToProps = state => {
     initialTapValue,
     tapIncrementFactor,
     voteSaturationLimit,
+    daicoStartDate,
+    daicoEndDate,
     round1TargetUSD,
     round1TargetEth,
     round2TargetUSD,

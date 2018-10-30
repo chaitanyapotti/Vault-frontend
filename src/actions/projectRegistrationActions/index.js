@@ -354,6 +354,7 @@ export function voteSaturationLimitChangedAction(value) {
 // }
 
 export function daicoStartDateChangedAction(value) {
+  console.log(value);
   return dispatch => {
     dispatch({
       type: actionTypes.DAICO_START_DATE_CHANGED,

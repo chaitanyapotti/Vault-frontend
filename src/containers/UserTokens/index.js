@@ -33,10 +33,10 @@ class UserTokens extends Component {
   calculateKillDuration = killPollStartDate => new Date(killPollStartDate) - new Date();
 
   render() {
-    const { userTokensTable, prices } = this.props || {};
+    const { userTokensTable, prices, history } = this.props || {};
     const { ETH } = prices || {};
     const data = userTokensTable.map(item => {
-      const { projectName, tokenPrice, balance, projectHealth, tapIncrement, killConsensus, killPollStartDate, xfrCount } = item || {};
+      const { projectName, tokenPrice, balance, projectHealth, tapIncrement, killConsensus, killPollStartDate, xfrCount, _id } = item || {};
       const dataArray = [
         projectName,
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
@@ -45,15 +45,17 @@ class UserTokens extends Component {
         `${tapIncrement}(Yes)`,
         `${killConsensus}(No)`,
         r1EndsIn(this.calculateKillDuration(killPollStartDate)),
-        xfrCount
+        xfrCount,
+        _id
       ];
       return dataArray;
     });
     return (
       <div>
         <GridData
+          history={history}
           tableData={data}
-          columns={["Name", "Price(USD)*", "Tokens", "Health", "Tap Increment*", "Kill Consensus", "Next Kill In", "XFRs"]}
+          columns={["Name", "Price(USD)*", "Tokens", "Health", "Tap Increment*", "Kill Consensus", "Next Kill In", "XFRs", {name: "Id",options: {display: false}}]}
         />
       </div>
     );

@@ -40,6 +40,13 @@ class GridData extends React.Component {
           select:{
             fontSize: '14px'
           }
+        },
+        MuiTableRow:{
+          root:{
+            "&:hover":{
+              cursor: 'pointer'
+            }
+          }
         }
       }
     });
@@ -49,7 +56,13 @@ class GridData extends React.Component {
       filterType: "dropdown",
       responsive: "scroll",
       selectableRows: false,
-      onRowClick: this.redirectToProject
+      onRowClick: (currentRowsSelected, allRowsSelected) => {
+        const _id = currentRowsSelected && currentRowsSelected[8];
+        this.props.history.push({
+          pathname: `/governance/details`,
+          search: `?projectid=${_id}`
+        });
+      }
     };
     const { tableData, columns } = this.props || {};
     return (

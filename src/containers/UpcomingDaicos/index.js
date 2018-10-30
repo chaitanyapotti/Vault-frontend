@@ -35,10 +35,10 @@ class UpcomingDaicos extends Component {
   };
 
   render() {
-    const { upcomingDaicosTable, prices } = this.props || {};
+    const { upcomingDaicosTable, prices, history } = this.props || {};
     const { ETH } = prices || {};
     const data = upcomingDaicosTable.map(item => {
-      const { projectName, rounds, startDateTime, r1EndTime } = item || {};
+      const { projectName, rounds, startDateTime, r1EndTime, _id } = item || {};
       const dataArray = [
         projectName,
         rounds.length,
@@ -47,13 +47,14 @@ class UpcomingDaicos extends Component {
         formatCent(significantDigits(formatRateToPrice(rounds[0].tokenRate) * ETH)),
         // formatCent(formatNumber(formatRateToPrice(rounds[0].tokenRate) * ETH, 5)),
         formatDate(startDateTime),
-        formatDate(r1EndTime)
+        formatDate(r1EndTime),
+        _id
       ];
       return dataArray;
     });
     return (
       <div>
-        <GridData tableData={data} columns={["Name", "Rounds", "R1 Goal", "Final Goal", "Price*", "Starts at", "R1 Ends on"]} />
+        <GridData history={history} tableData={data} columns={["Name", "Rounds", "R1 Goal", "Final Goal", "Price*", "Starts at", "R1 Ends on", {name: "Id",options: {display: false}}]} />
       </div>
     );
   }

@@ -14,14 +14,14 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       foundationDetails.push({
         address: nonSaleEntities[i]["entityAddress"],
         amount: Math.round(
-          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 100
+          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 50
         ),
         description: nonSaleEntities[i]["entityName"]
       });
       totalNonSaleTokens =
         totalNonSaleTokens +
         Math.round(
-          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 100
+          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 50
         );
     }
   }
@@ -33,15 +33,15 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     r1EndTime: projectData.daicoEndDate,
     rounds: [
       {
-        tokenCount: projectData.round1Tokens,
+        tokenCount: projectData.round1Tokens* Math.pow(10, 18),
         tokenRate: projectData.round1Rate
       },
       {
-        tokenCount: projectData.round2Tokens,
+        tokenCount: projectData.round2Tokens* Math.pow(10, 18) ,
         tokenRate: projectData.round2Rate
       },
       {
-        tokenCount: projectData.round3Tokens,
+        tokenCount: projectData.round3Tokens* Math.pow(10, 18),
         tokenRate: projectData.round3Rate
       }
     ],

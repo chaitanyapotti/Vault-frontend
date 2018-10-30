@@ -44,19 +44,21 @@ export const initialState = {
   round1Rate: 0,
   round2Rate: 0,
   round3Rate: 100,
+  totalSaleTokens: 0,
   ethPrice: 210,
-  tokenPriceFactor: 0,
+  tokenPriceFactor: "",
   nonSaleDistribution: [],
   project_id: "",
   teamAddress: "",
   maxEtherContribution: "",
   initialTapValue: "",
   tapIncrementFactor: "",
-  voteSaturationLimit: 0,
-  totalSaleTokens: 0,
+  voteSaturationLimit: "",
+  saleEntities: [],
   nonSaleEntities: [
-    { entityName: "Unallocated", entityPercentage: 100, entityAddress: "NA" }
+    { entityName: "Unallocated", entityPercentage: 50, entityAddress: "NA" }
   ],
+  unallocatedTokensPer: 50,
   entityName: "",
   entityPercentage: "",
   entityAddress: "",
@@ -66,28 +68,113 @@ export const initialState = {
   }
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
+
     case actionTypes.NON_SALE_ENTITY_EDIT: {
       let nonSaleEntities = state.nonSaleEntities;
       let editEntity = nonSaleEntities.splice(action.payload, 1);
+      if (nonSaleEntities.indexOf({ entityName: "Unallocated" }) != -1){
+        nonSaleEntities.splice(nonSaleEntities.indexOf({ entityName: "Unallocated" }), 1);
+      }
+      
       const { entityName, entityAddress, entityPercentage } =
         editEntity[0] || "";
-      if (entityName === "Unallocated") {
-        nonSaleEntities.push(editEntity[0]);
-        return {
-          ...state,
+      let unallocatedTokensPer = state.unallocatedTokensPer
+      unallocatedTokensPer = unallocatedTokensPer + entityPercentage
+      nonSaleEntities.push({
+          entityName: "Unallocated",
+          entityPercentage: unallocatedTokensPer,
+          entityAddress: "NA"
+        })
+      return {
+        ...state,
+        unallocatedTokensPer: unallocatedTokensPer, 
+        entityName: entityName,
+          entityPercentage: entityPercentage,
+          entityAddress: entityAddress,
           nonSaleEntities: nonSaleEntities
-        };
+      }  
+    }
+
+    case actionTypes.ADD_NON_SALE_ENTITY: {
+      let nonSaleEntities = state.nonSaleEntities;
+      let unallocatedTokensPer = state.unallocatedTokensPer;
+      // nonSaleEntities.pop();
+      
+      if (action.payload) {
+        if (action.payload.entityPercentage<=0 || isNaN(action.payload.entityPercentage)){
+          return {...state}
+        }
+        var slicedUnallocated = nonSaleEntities.splice(nonSaleEntities.indexOf({ entityName: "Unallocated" }), 1);
+        if (unallocatedTokensPer - action.payload.entityPercentage < 0) {
+          nonSaleEntities.push(slicedUnallocated[0])
+          return { ...state, nonSaleEntities: nonSaleEntities}
+        } else {
+          nonSaleEntities.push(action.payload);
+          if (unallocatedTokensPer - action.payload.entityPercentage> 0) {
+            nonSaleEntities.push({
+              entityName: "Unallocated",
+              entityPercentage: unallocatedTokensPer - action.payload.entityPercentage,
+              entityAddress: "NA"
+            });
+            return {
+              ...state,
+              nonSaleEntities: nonSaleEntities,
+              entityName: "",
+              entityPercentage: "",
+              entityAddress: "",
+              unallocatedTokensPer: unallocatedTokensPer - action.payload.entityPercentage
+            }
+          } else {
+            return {
+              ...state,
+              nonSaleEntities: nonSaleEntities,
+              entityName: "",
+              entityPercentage: "",
+              entityAddress: "",
+              unallocatedTokensPer: unallocatedTokensPer- action.payload.entityPercentage
+            }
+          }
+        }
       } else {
         return {
-          ...state,
-          entityName: entityName,
-          entityPercentage: entityPercentage,
-          entityAddress: entityAddress
+          ...state
         };
       }
+    }
+
+    case actionTypes.CALCULATE_TOKENS: {
+      var round3Rate = 100;
+      var round2Rate =
+        parseFloat(state.tokenPriceFactor).toFixed(1) * round3Rate;
+      var round1Rate =
+        Math.pow(parseFloat(state.tokenPriceFactor).toFixed(1), 2) * round3Rate;
+      var round1N = round1Rate * parseInt(state.round1TargetEth);
+      var round2N = round2Rate * parseInt(state.round2TargetEth);
+      var round3N = round3Rate * parseInt(state.round3TargetEth);
+      var N = round1N + round2N + round3N;
+      var K = Math.round(500000000 / N);
+      var round1Tokens = round1N * K
+      var round2Tokens = round2N * K
+      var round3Tokens = round3N * K
+      var totalSaleTokens = round1Tokens + round2Tokens + round3Tokens
+      var saleEntities = []
+      saleEntities.push({ entityName: "Round1", entityPercentage: parseFloat((round1Tokens * 50 / totalSaleTokens).toFixed(2)), entityAddress: "NA" })
+      saleEntities.push({ entityName: "Round2", entityPercentage: parseFloat((round2Tokens * 50 / totalSaleTokens).toFixed(2)), entityAddress: "NA" })
+      saleEntities.push({ entityName: "Round3", entityPercentage: parseFloat((round3Tokens * 50 / totalSaleTokens).toFixed(2)), entityAddress: "NA" })
+      return {
+        ...state,
+        round1Tokens: round1Tokens,
+        round2Tokens: round2Tokens,
+        round3Tokens: round3Tokens,
+        round1Rate: round1Rate * K,
+        round2Rate: round2Rate * K,
+        round3Rate: round3Rate * K,
+        totalSaleTokens: totalSaleTokens,
+        saleEntities: saleEntities
+      };
     }
 
     case actionTypes.ENTITY_ADDRESS_CHANGED: {
@@ -108,59 +195,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         entityPercentage: action.payload
-      };
-    }
-
-    case actionTypes.ADD_NON_SALE_ENTITY: {
-      let nonSaleEntities = state.nonSaleEntities;
-      nonSaleEntities.pop();
-      if (action.payload) {
-        nonSaleEntities.push(action.payload);
-        let total = 0;
-        for (let i = 0; i < nonSaleEntities.length; i++) {
-          total += nonSaleEntities[i]["entityPercentage"];
-        }
-        if (total < 100) {
-          nonSaleEntities.push({
-            entityName: "Unallocated",
-            entityPercentage: 100 - total,
-            entityAddress: "NA"
-          });
-        }
-        return {
-          ...state,
-          nonSaleEntities: nonSaleEntities,
-          entityName: "",
-          entityPercentage: "",
-          entityAddress: ""
-        };
-      } else {
-        return {
-          ...state
-        };
-      }
-    }
-
-    case actionTypes.CALCULATE_TOKENS: {
-      var round3Rate = 100;
-      var round2Rate =
-        parseFloat(state.tokenPriceFactor).toFixed(1) * round3Rate;
-      var round1Rate =
-        Math.pow(parseFloat(state.tokenPriceFactor).toFixed(1), 2) * round3Rate;
-      var round1N = round1Rate * parseInt(state.round1TargetEth);
-      var round2N = round2Rate * parseInt(state.round2TargetEth);
-      var round3N = round3Rate * parseInt(state.round3TargetEth);
-      var N = round1N + round2N + round3N;
-      var K = Math.round(500000000 / N);
-      return {
-        ...state,
-        round1Tokens: round1N * K * Math.pow(10, 18),
-        round2Tokens: round2N * K * Math.pow(10, 18),
-        round3Tokens: round3N * K * Math.pow(10, 18),
-        round1Rate: round1Rate * K,
-        round2Rate: round2Rate * K,
-        round3Rate: round3Rate * K,
-        totalSaleTokens: round1N * K + round2N * K + round3N * K
       };
     }
 

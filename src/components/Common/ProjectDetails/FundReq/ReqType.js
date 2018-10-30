@@ -1,44 +1,73 @@
 import React from "react";
+import { Tooltip } from "@material-ui/core";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
-import { ButtonComponent } from "../../FormComponents";
+import { formatFromWei, formatDate, significantDigits } from "../../../../helpers/common/projectDetailhelperFunctions";
+import LoadingButton from "../../LoadingButton";
 
-class ReqType extends React.Component {
-  render() {
-    const { amount, consensus, endTime } = this.props || {};
-    return (
-      <div>
-        <div>Exceptional Fund Requests</div>
-        <Row className="txt-g-secondary push-top--35 txt-m">
-          <Col lg={6}>App Redesign</Col>
-          <Col lg={6}>20 Aug 2018</Col>
-        </Row>
+const ReqType = props => {
+  const {
+    amount,
+    consensus,
+    endTime,
+    description,
+    startDate,
+    name,
+    signinStatusFlag,
+    voted,
+    onXfrClick,
+    onRevokeXfrClick,
+    xfrButtonSpinning,
+    tokensUnderGovernance
+  } = props || {};
+  return (
+    <div>
+      <div>Exceptional Fund Requests</div>
+      <Row className="txt-g-secondary txt-m">
+        <Col lg={6}>
+          <div>{name}</div>
+        </Col>
+        <Col lg={6}>
+          <div>{formatDate(startDate)}</div>
+        </Col>
+      </Row>
 
-        <div className="txt-g-secondary txt-m">
-          <div lg={12}>{amount} ETH</div>
-        </div>
-
-        <div className="push--top txt">
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-          volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-          Duis autem vel eum iriure dolor in
-        </div>
-
-        <Row className="push--top">
-          <Col lg={6} className="txt">
-            Approval Rate:
-            <span className="text--secondary"> {consensus}%</span>{" "}
-          </Col>
-          <Col lg={6} className="txt">
-            Ends in: <span className="text--secondary">{endTime}</span>{" "}
-          </Col>
-        </Row>
-
-        <div className="push--top">
-          <ButtonComponent type="danger" onClick={() => this.uploadDaico()} label="Deny" />
-        </div>
+      <div className="txt-g-secondary txt-m">
+        <div lg={12}>{formatFromWei(amount, 3)} ETH</div>
       </div>
-    );
-  }
-}
+
+      <div className="push--top txt">{description}</div>
+
+      <Row className="push--top">
+        <Col lg={6} className="txt">
+          Approval Rate:{" "}
+          <span className="text--secondary"> {significantDigits(parseFloat(consensus) / parseFloat(tokensUnderGovernance) || 0)}%</span>
+        </Col>
+        <Col lg={6} className="txt">
+          Ends in: <span className="text--secondary">{formatDate(endTime * 1000)}</span>
+        </Col>
+      </Row>
+
+      <div className="push--top">
+        {signinStatusFlag <= 3 ? (
+          <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+            <div>
+              <LoadingButton disabled type="danger">
+                Deny
+              </LoadingButton>
+            </div>
+          </Tooltip>
+        ) : voted ? (
+          <LoadingButton onClick={onRevokeXfrClick} loading={xfrButtonSpinning}>
+            Allow
+          </LoadingButton>
+        ) : (
+          <LoadingButton onClick={onXfrClick} type="danger" loading={xfrButtonSpinning}>
+            Deny
+          </LoadingButton>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default ReqType;

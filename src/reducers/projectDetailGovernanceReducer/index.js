@@ -11,7 +11,8 @@ export const initialState = {
   killConsensus: "0",
   tapPollConsensus: "0",
   currentTap: "0",
-  xfrData: {}
+  xfrData: {},
+  xfrVoteData: []
 };
 
 export default function(state = initialState, action) {
@@ -109,6 +110,27 @@ export default function(state = initialState, action) {
       return {
         ...state,
         tapButtonSpinning: receipt
+      };
+    }
+    case actionTypes.XFR_POLL_VOTE_RECEIVED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        xfrVoteData: receipt
+      };
+    }
+    case actionTypes.XFR1_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        xfr1ButtonSpinning: receipt
+      };
+    }
+    case actionTypes.XFR2_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        xfr2ButtonSpinning: receipt
       };
     }
     default:

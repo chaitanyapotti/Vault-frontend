@@ -20,7 +20,12 @@ import {
   revokeVoteInKillPoll,
   getTapPollVote,
   voteInTapPoll,
-  revokeVoteInTapPoll
+  revokeVoteInTapPoll,
+  getXfrPollVote,
+  voteInXfr1Poll,
+  voteInXfr2Poll,
+  revokeVoteInXfr1Poll,
+  revokeVoteInXfr2Poll
 } from "../../actions/projectDetailGovernanceActions/index";
 import {
   formatFromWei,
@@ -70,7 +75,8 @@ class ProjectDetailGovernance extends Component {
       getCurrentTap: fetchCurrentTap,
       getXfrData: fetchXfrData,
       getKillPollVote: fetchKillPollVote,
-      getTapPollVote: fetchTapPollVote
+      getTapPollVote: fetchTapPollVote,
+      getXfrPollVote: fetchXfrPollVote
     } = this.props || {};
     etherPriceFetch("ETH");
     fetchRoundTokensSold(version, crowdSaleAddress, parseInt(currentRoundNumber, 10) - 1);
@@ -87,6 +93,7 @@ class ProjectDetailGovernance extends Component {
       fetchTokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
       fetchKillPollVote(version, pollFactoryAddress, userLocalPublicAddress);
       fetchTapPollVote(version, pollFactoryAddress, userLocalPublicAddress);
+      fetchXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress);
     }
   }
 
@@ -102,13 +109,15 @@ class ProjectDetailGovernance extends Component {
       pollFactoryAddress,
       getTokenBalance: fetchTokenBalance,
       getKillPollVote: fetchKillPollVote,
-      getTapPollVote: fetchTapPollVote
+      getTapPollVote: fetchTapPollVote,
+      getXfrPollVote: fetchXfrPollVote
     } = this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
       checkWhiteListStatus(version, membershipAddress, localAddress);
       fetchTokenBalance(version, daicoTokenAddress, localAddress);
       fetchKillPollVote(version, pollFactoryAddress, localAddress);
       fetchTapPollVote(version, pollFactoryAddress, localAddress);
+      fetchXfrPollVote(version, pollFactoryAddress, localAddress);
     }
   }
 
@@ -249,6 +258,34 @@ class ProjectDetailGovernance extends Component {
     tapUnVote(version, tapPollAddress, userLocalPublicAddress, pollFactoryAddress);
   };
 
+  onXfr1Click = () => {
+    const { version, voteInXfr1Poll: xfr1Vote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { poll1 } = xfrData || {};
+    const { address } = poll1 || {};
+    xfr1Vote(version, address, userLocalPublicAddress, pollFactoryAddress);
+  };
+
+  onXfr2Click = () => {
+    const { version, voteInXfr2Poll: xfr2Vote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { poll2 } = xfrData || {};
+    const { address } = poll2 || {};
+    xfr2Vote(version, address, userLocalPublicAddress, pollFactoryAddress);
+  };
+
+  onRevokeXfr1Click = () => {
+    const { version, revokeVoteInXfr1Poll: xfr1RevokeVote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { poll1 } = xfrData || {};
+    const { address } = poll1 || {};
+    xfr1RevokeVote(version, address, userLocalPublicAddress, pollFactoryAddress);
+  };
+
+  onRevokeXfr2Click = () => {
+    const { version, revokeVoteInXfr2Poll: xfr2RevokeVote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { poll2 } = xfrData || {};
+    const { address } = poll2 || {};
+    xfr2RevokeVote(version, address, userLocalPublicAddress, pollFactoryAddress);
+  };
+
   getKillVoteStatus = () => {
     const { killVoteData } = this.props || {};
     const { voted } = killVoteData || {};
@@ -280,7 +317,12 @@ class ProjectDetailGovernance extends Component {
       signinStatusFlag,
       buyButtonSpinning,
       killButtonSpinning,
-      tapButtonSpinning
+      tapButtonSpinning,
+      xfr1ButtonSpinning,
+      xfr2ButtonSpinning,
+      xfrDetails,
+      xfrVoteData,
+      tokensUnderGovernance
     } = this.props || {};
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
     return (
@@ -347,7 +389,19 @@ class ProjectDetailGovernance extends Component {
 
         <Row className="push--top">
           <Col xs={12} lg={6}>
-            <FundReq data={xfrData} />
+            <FundReq
+              data={xfrData}
+              details={xfrDetails}
+              xfrVoteData={xfrVoteData}
+              signinStatusFlag={signinStatusFlag}
+              onRevokeXfr1Click={this.onRevokeXfr1Click}
+              onXfr1Click={this.onXfr1Click}
+              xfr1ButtonSpinning={xfr1ButtonSpinning}
+              onRevokeXfr2Click={this.onRevokeXfr2Click}
+              onXfr2Click={this.onXfr2Click}
+              xfr2ButtonSpinning={xfr2ButtonSpinning}
+              tokensUnderGovernance={tokensUnderGovernance}
+            />
           </Col>
         </Row>
         <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
@@ -386,7 +440,10 @@ const mapStateToProps = state => {
     killVoteData,
     tapVoteData,
     killButtonSpinning,
-    tapButtonSpinning
+    tapButtonSpinning,
+    xfr1ButtonSpinning,
+    xfr2ButtonSpinning,
+    xfrVoteData
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
@@ -414,7 +471,10 @@ const mapStateToProps = state => {
     killVoteData,
     tapVoteData,
     killButtonSpinning,
-    tapButtonSpinning
+    tapButtonSpinning,
+    xfrVoteData,
+    xfr1ButtonSpinning,
+    xfr2ButtonSpinning
   };
 };
 
@@ -440,7 +500,12 @@ const mapDispatchToProps = dispatch =>
       voteInTapPoll,
       voteInKillPoll,
       revokeVoteInKillPoll,
-      revokeVoteInTapPoll
+      revokeVoteInTapPoll,
+      getXfrPollVote,
+      voteInXfr1Poll,
+      voteInXfr2Poll,
+      revokeVoteInXfr1Poll,
+      revokeVoteInXfr2Poll
     },
     dispatch
   );

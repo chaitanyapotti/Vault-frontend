@@ -51,7 +51,8 @@ class ProjectGovernance extends Component {
       initialFundRelease,
       crowdSaleAddress,
       daicoTokenAddress,
-      etherPrice
+      etherPrice,
+      xfrDetails
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
@@ -169,6 +170,7 @@ class ProjectGovernance extends Component {
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
             etherPrice={etherPrice}
+            xfrDetails={xfrDetails}
           />
         );
       case "4":

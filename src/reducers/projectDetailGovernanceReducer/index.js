@@ -83,6 +83,34 @@ export default function(state = initialState, action) {
         xfrData: receipt
       };
     }
+    case actionTypes.KILL_POLL_VOTE_RECEIVED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        killVoteData: receipt
+      };
+    }
+    case actionTypes.TAP_POLL_VOTE_RECEIVED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        tapVoteData: receipt
+      };
+    }
+    case actionTypes.KILL_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        killButtonSpinning: receipt
+      };
+    }
+    case actionTypes.TAP_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        tapButtonSpinning: receipt
+      };
+    }
     default:
       return state;
   }

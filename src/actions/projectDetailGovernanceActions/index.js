@@ -53,34 +53,14 @@ export const isKillButtonSpinning = receipt => ({
   type: actionTypes.KILL_BUTTON_SPINNING
 });
 
-export const votedInKillPoll = receipt => ({
-  payload: { receipt },
-  type: "VOTED_KILL_POLL"
-});
-
-export const revokedVoteInKillPoll = receipt => ({
-  payload: { receipt },
-  type: "REVOKED_VOTE_KILL_POLL"
-});
-
 export const tapPollVote = receipt => ({
   payload: { receipt },
-  type: "TAP_POLL_VOTE_RECEIVED"
+  type: actionTypes.TAP_POLL_VOTE_RECEIVED
 });
 
 export const isTapButtonSpinning = receipt => ({
   payload: { receipt },
   type: actionTypes.TAP_BUTTON_SPINNING
-});
-
-export const votedInTapPoll = receipt => ({
-  payload: { receipt },
-  type: "VOTED_TAP_POLL"
-});
-
-export const revokedVoteInTapPoll = receipt => ({
-  payload: { receipt },
-  type: "REVOKED_VOTE_TAP_POLL"
 });
 
 export const xfrPollVote1 = receipt => ({
@@ -292,6 +272,7 @@ export const getKillPollVote = (version, contractAddress, userLocalPublicAddress
     .then(response => {
       if (response.status === 200) {
         const { data } = response.data;
+        console.log("here");
         dispatch(killPollVote(data));
       } else {
         dispatch(killPollVote("false"));
@@ -304,7 +285,7 @@ export const getKillPollVote = (version, contractAddress, userLocalPublicAddress
 };
 
 // name: PollFactory, address: pollFactoryAddress
-export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isKillButtonSpinning(true));
   axios
@@ -317,8 +298,9 @@ export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress)
         .vote(0)
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getKillConsensus(version, pollFactoryAddress));
           dispatch(isKillButtonSpinning(false));
-          getKillPollVote(version, contractAddress, userLocalPublicAddress);
         })
         .on("error", error => {
           console.error(error.message);
@@ -332,7 +314,7 @@ export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress)
 };
 
 // name: PollFactory, address: pollFactoryAddress
-export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isKillButtonSpinning(true));
   axios
@@ -345,8 +327,9 @@ export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAd
         .revokeVote()
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getKillConsensus(version, pollFactoryAddress));
           dispatch(isKillButtonSpinning(false));
-          getKillPollVote(version, contractAddress, userLocalPublicAddress);
         })
         .on("error", error => {
           console.error(error.message);
@@ -381,7 +364,7 @@ export const getTapPollVote = (version, contractAddress, userLocalPublicAddress)
 };
 
 // name: PollFactory, address: pollFactoryAddress returns boolean
-export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isTapButtonSpinning(true));
   axios
@@ -394,8 +377,9 @@ export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress) 
         .vote(0)
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getTapPollConsensus(version, pollFactoryAddress));
           dispatch(isTapButtonSpinning(false));
-          getTapPollVote(version, contractAddress, userLocalPublicAddress);
         })
         .on("error", error => {
           console.error(error.message);
@@ -409,7 +393,7 @@ export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress) 
 };
 
 // name: PollFactory, address: pollFactoryAddress
-export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isTapButtonSpinning(true));
   axios
@@ -422,8 +406,9 @@ export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAdd
         .revokeVote()
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getTapPollConsensus(version, pollFactoryAddress));
           dispatch(isTapButtonSpinning(false));
-          getTapPollVote(version, contractAddress, userLocalPublicAddress);
         })
         .on("error", error => {
           console.error(error.message);

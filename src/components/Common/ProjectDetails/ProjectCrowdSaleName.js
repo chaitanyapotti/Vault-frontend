@@ -78,9 +78,9 @@ const ProjectCrowdSaleName = props => {
           {signinStatusFlag <= 2 ? (
             <div className="hli">
               <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-                  <LoadingButton tooltip="This feature is only for Vault Members" disabled>
-                    {buttonText}
-                  </LoadingButton>
+                <LoadingButton tooltip="This feature is only for Vault Members" disabled>
+                  {buttonText}
+                </LoadingButton>
               </Tooltip>
             </div>
           ) : buttonVisibility ? (

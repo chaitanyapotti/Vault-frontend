@@ -39,13 +39,13 @@ class ActiveDaicos extends Component {
     const { activeDaicosTable, prices, history } = this.props || {};
     const { ETH } = prices || {};
     const data = activeDaicosTable.map(item => {
-      const { projectName, rounds, currentRound, startDateTime, r1EndTime, raisedAmount, tokenPrice, _id} = item || {};
+      const { projectName, rounds, currentRound, startDateTime, r1EndTime, raisedAmount, tokenPrice, _id } = item || {};
       const dataArray = [
         projectName,
-        `${currentRound} of 3`,
+        `${currentRound + 1} of 3`,
         this.calculateRoundGoal(rounds[0], ETH),
         this.calculateFinalGoal(rounds, ETH),
-        formatMoney(formatFromWei(parseFloat(raisedAmount)), 0),
+        formatMoney(formatFromWei(parseFloat(raisedAmount) * parseFloat(ETH)), 0),
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
         formatDate(startDateTime),
         r1EndsIn(this.calculateEndDuration(r1EndTime)),
@@ -55,7 +55,21 @@ class ActiveDaicos extends Component {
     });
     return (
       <div>
-        <GridData history={history} tableData={data} columns={["Name", "Current Round", "R1 Goal", "Final Goal", "Raised*", "Price*", "Started at", "R1 Ends in", {name: "Id",options: {display: false}}]} />
+        <GridData
+          history={history}
+          tableData={data}
+          columns={[
+            "Name",
+            "Current Round",
+            "R1 Goal",
+            "Final Goal",
+            "Raised*",
+            "Price*",
+            "Started at",
+            "R1 Ends in",
+            { name: "Id", options: { display: false } }
+          ]}
+        />
       </div>
     );
   }

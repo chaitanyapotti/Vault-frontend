@@ -42,7 +42,7 @@ class EndedDaicos extends Component {
       const dataArray = [
         projectName,
         formatMoney(formatFromWei(parseFloat(raisedAmount)), 0),
-        formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
+        formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * parseFloat(ETH), 3))),
         `${killConsensus}%`,
         formatDate(startDateTime),
         formatDate(endedAt),
@@ -52,7 +52,11 @@ class EndedDaicos extends Component {
     });
     return (
       <div>
-        <GridData history={history} tableData={data} columns={["Name", "Raised*", "Price*", "Kill Consensus", "Started at", "Ended at", {name: "Id",options: {display: false}}]} />
+        <GridData
+          history={history}
+          tableData={data}
+          columns={["Name", "Raised*", "Price*", "Kill Consensus", "Started at", "Ended at", { name: "Id", options: { display: false } }]}
+        />
       </div>
     );
   }

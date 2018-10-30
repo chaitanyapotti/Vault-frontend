@@ -92,7 +92,10 @@ export default function (state = initialState, action) {
     case actionTypes.NON_SALE_ENTITY_EDIT: {
       let nonSaleEntities = state.nonSaleEntities;
       let editEntity = nonSaleEntities.splice(action.payload, 1);
-      var slicedUnallocated = nonSaleEntities.splice(nonSaleEntities.indexOf({ entityName: "Unallocated" }), 1);
+      if (nonSaleEntities.indexOf({ entityName: "Unallocated" }) != -1){
+        nonSaleEntities.splice(nonSaleEntities.indexOf({ entityName: "Unallocated" }), 1);
+      }
+      
       const { entityName, entityAddress, entityPercentage } =
         editEntity[0] || "";
       let unallocatedTokensPer = state.unallocatedTokensPer

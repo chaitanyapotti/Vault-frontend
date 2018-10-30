@@ -170,14 +170,14 @@ class NonSale extends React.Component {
     console.log("on pie enter: ", data, index)
     this.setState({
       nonTokenSalePieActiveIndex: index,
-      centerValue: parseInt(parseFloat(data.payload.entityPercentage) * this.props.totalSaleTokens / 100) || 0
+      centerValue: parseInt(2*parseFloat(data.payload.entityPercentage) * this.props.totalSaleTokens / 100) || 0
     });
   }
 
   onPieLeave = (data, index) => {
     this.setState({
       nonTokenSalePieActiveIndex: 100,
-      centerValue: this.props.totalSaleTokens || 0
+      centerValue: 2*this.props.totalSaleTokens || 0
     });
   }
 
@@ -185,7 +185,7 @@ class NonSale extends React.Component {
     console.log("Combined entities: ",this.props.saleEntities.concat(this.props.nonSaleEntities))
     return (
       <div className="push-top--50">
-        <div className="txt-xl">Non Sale Distribution</div>
+        <div className="txt-xl">Non Sale Distribution <span>(50% of Supply)</span></div>
         <hr />
         <div>
           {this.props.unallocatedTokensPer < 50 ? (
@@ -243,11 +243,16 @@ class NonSale extends React.Component {
               onChange={this.onChangeEntityAddress}
             />
           </Col>
-          <Col>
-            Total unallocated percentage: {this.props.unallocatedTokensPer}
-          </Col>
         </Row>
           : null
+        }
+        {this.props.unallocatedTokensPer>0? 
+          <Row>
+        <Col>
+            Currently unallocated: {this.props.unallocatedTokensPer}%
+          </Col>
+        </Row>
+        : null
         }
         
 

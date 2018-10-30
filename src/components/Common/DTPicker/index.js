@@ -5,7 +5,7 @@ import DateTimePicker from "material-ui-pickers/DateTimePicker";
 
 class DTPicker extends PureComponent {
   render() {
-    const { selectedDate, handleDateChange, label } = this.props;
+    const { selectedDate, handleDateChange, label, disablePast, minDate, maxDate } = this.props;
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DateTimePicker
@@ -16,6 +16,9 @@ class DTPicker extends PureComponent {
           style={{ margin: "16px 0 8px" }}
           format="yyyy/MM/dd kk:mm"
           mask={[/\d/, /\d/, /\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, " ", /\d/, /\d/, ":", /\d/, /\d/, " ", /a|p/i, "M"]}
+          disablePast={disablePast}
+          minDate={minDate}
+          maxDate={maxDate}
         />
       </MuiPickersUtilsProvider>
     );

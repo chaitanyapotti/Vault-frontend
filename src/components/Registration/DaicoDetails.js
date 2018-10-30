@@ -87,6 +87,20 @@ class DaicoDetails extends React.Component {
     return "";
   };
 
+  getEndMinDate = () => {
+    const myDate = new Date();
+    return new Date(myDate.setDate(myDate.getDate()+5));
+  }
+
+  getEndMaxDate = () => {
+    const{daicoStartDate} = this.props || {};
+    const year = daicoStartDate && daicoStartDate.getFullYear();
+    const month = daicoStartDate && daicoStartDate.getMonth();
+    const date = daicoStartDate && daicoStartDate.getDate();
+    const newDate = new Date(year, month, date);
+    return new Date(newDate.setMonth(newDate.getMonth()+2))
+  }
+
   render() {
     const { daicoStartDate, daicoEndDate, initialFundRelease, maxEtherContribution, initialTapValue, tapIncrementFactor, voteSaturationLimit } =
       this.props || {};
@@ -97,10 +111,21 @@ class DaicoDetails extends React.Component {
           <hr />
           <Row>
             <Col xs={12} lg={6}>
-              <DTPicker selectedDate={daicoStartDate} label="Round 1 Start Date" handleDateChange={this.onChangeDaicoStart} />
+              <DTPicker 
+                selectedDate={daicoStartDate} 
+                disablePast={true} 
+                label="Round 1 Start Date" 
+                handleDateChange={this.onChangeDaicoStart} 
+              />
             </Col>
             <Col xs={12} lg={6}>
-              <DTPicker selectedDate={daicoEndDate} label="Round 1 End Date" handleDateChange={this.onChangeDaicoEnd} />
+              <DTPicker 
+                selectedDate={daicoEndDate} 
+                minDate={this.getEndMinDate()}  
+                maxDate={this.getEndMaxDate()}
+                label="Round 1 End Date" 
+                handleDateChange={this.onChangeDaicoEnd} 
+              />
             </Col>
           </Row>
           <Row>

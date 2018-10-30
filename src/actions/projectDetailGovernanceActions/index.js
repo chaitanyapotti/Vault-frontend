@@ -68,6 +68,11 @@ export const tapPollVote = receipt => ({
   type: "TAP_POLL_VOTE_RECEIVED"
 });
 
+export const isTapButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.TAP_BUTTON_SPINNING
+});
+
 export const votedInTapPoll = receipt => ({
   payload: { receipt },
   type: "VOTED_TAP_POLL"
@@ -354,97 +359,82 @@ export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAd
     });
 };
 
-// export function getTapPollVote(version, contractAddress) {
-//   return async dispatch => {
-//     // doesn't call blockchain. await is non blocking
-//     const accounts = await web3.eth.getAccounts();
-//     axios
-//       .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-//       .then(res => {
-//         const { data } = res.data || {};
-//         const { abi } = data || {};
-//         const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-//         instance.methods
-//           .tapPoll()
-//           .call()
-//           .then(tapPollAddress => {
-//             axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-//               const { data } = ipollData.data || {};
-//               const { abi } = data || {};
-//               const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
-//               ipollInstance.methods
-//                 .voters(accounts[0])
-//                 .call()
-//                 .then(response => {
-//                   const { voted } = response;
-//                   dispatch(tapPollVote(voted));
-//                 });
-//             });
-//           });
-//       })
-//       .catch(err => console.error(err.message));
-//   };
-// }
+export const getTapPollVote = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  const network = "rinkeby";
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/tappollvote`, {
+      params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        dispatch(tapPollVote(data));
+      } else {
+        dispatch(tapPollVote("false"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(tapPollVote("false"));
+    });
+};
 
-// // name: PollFactory, address: pollFactoryAddress returns boolean
-// export function voteInTapPoll(version, contractAddress) {
-//   return async dispatch => {
-//     // doesn't call blockchain. await is non blocking
-//     const accounts = await web3.eth.getAccounts();
-//     axios
-//       .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-//       .then(res => {
-//         const { data } = res.data || {};
-//         const { abi } = data || {};
-//         const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-//         instance.methods
-//           .tapPoll()
-//           .call()
-//           .then(tapPollAddress => {
-//             axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-//               const { data } = ipollData.data || {};
-//               const { abi } = data || {};
-//               const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
-//               ipollInstance.methods
-//                 .vote(0)
-//                 .send({ from: accounts[0] })
-//                 .then(response => dispatch(votedInTapPoll(response)));
-//             });
-//           });
-//       })
-//       .catch(err => console.error(err.message));
-//   };
-// }
+// name: PollFactory, address: pollFactoryAddress returns boolean
+export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isTapButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      ipollInstance.methods
+        .vote(0)
+        .send({ from: userLocalPublicAddress })
+        .on("receipt", receipt => {
+          dispatch(isTapButtonSpinning(false));
+          getTapPollVote(version, contractAddress, userLocalPublicAddress);
+        })
+        .on("error", error => {
+          console.error(error.message);
+          dispatch(isTapButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isTapButtonSpinning(false));
+    });
+};
 
-// // name: PollFactory, address: pollFactoryAddress
-// export function revokeVoteInTapPoll(version, contractAddress) {
-//   return async dispatch => {
-//     // doesn't call blockchain. await is non blocking
-//     const accounts = await web3.eth.getAccounts();
-//     axios
-//       .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-//       .then(res => {
-//         const { data } = res.data || {};
-//         const { abi } = data || {};
-//         const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-//         instance.methods
-//           .tapPoll()
-//           .call()
-//           .then(tapPollAddress => {
-//             axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-//               const { data } = ipollData.data || {};
-//               const { abi } = data || {};
-//               const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
-//               ipollInstance.methods
-//                 .revokeVote()
-//                 .send({ from: accounts[0] })
-//                 .then(response => dispatch(revokedVoteInTapPoll(response)));
-//             });
-//           });
-//       })
-//       .catch(err => console.error(err.message));
-//   };
-// }
+// name: PollFactory, address: pollFactoryAddress
+export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isTapButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      ipollInstance.methods
+        .revokeVote()
+        .send({ from: userLocalPublicAddress })
+        .on("receipt", receipt => {
+          dispatch(isTapButtonSpinning(false));
+          getTapPollVote(version, contractAddress, userLocalPublicAddress);
+        })
+        .on("error", error => {
+          console.error(error.message);
+          dispatch(isTapButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isTapButtonSpinning(false));
+    });
+};
 
 // export function getXfrPollVote(version, contractAddress, index) {
 //   return async dispatch => {

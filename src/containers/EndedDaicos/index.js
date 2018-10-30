@@ -35,23 +35,24 @@ class EndedDaicos extends Component {
   };
 
   render() {
-    const { endedDaicosTable, prices } = this.props || {};
+    const { endedDaicosTable, prices, history } = this.props || {};
     const { ETH } = prices || {};
     const data = endedDaicosTable.map(item => {
-      const { projectName, startDateTime, endedAt, raisedAmount, tokenPrice, killConsensus } = item || {};
+      const { projectName, startDateTime, endedAt, raisedAmount, tokenPrice, killConsensus, _id } = item || {};
       const dataArray = [
         projectName,
         formatMoney(formatFromWei(parseFloat(raisedAmount)), 0),
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
         `${killConsensus}%`,
         formatDate(startDateTime),
-        formatDate(endedAt)
+        formatDate(endedAt),
+        _id
       ];
       return dataArray;
     });
     return (
       <div>
-        <GridData tableData={data} columns={["Name", "Raised*", "Price*", "Kill Consensus", "Started at", "Ended at"]} />
+        <GridData history={history} tableData={data} columns={["Name", "Raised*", "Price*", "Kill Consensus", "Started at", "Ended at", {name: "Id",options: {display: false}}]} />
       </div>
     );
   }

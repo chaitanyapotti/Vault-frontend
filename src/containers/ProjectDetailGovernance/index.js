@@ -24,7 +24,8 @@ import {
   getSoftCap,
   formatCurrencyNumber,
   formatMoney,
-  formatDate
+  formatDate,
+  significantDigits
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
@@ -55,31 +56,47 @@ class ProjectDetailGovernance extends Component {
       membershipAddress,
       userLocalPublicAddress,
       fetchPrice: etherPriceFetch,
-      checkWhiteList: checkWhiteListStatus
+      checkWhiteList: checkWhiteListStatus,
+      getTokenBalance: fetchTokenBalance,
+      getTokensUnderGovernance: fetchTokensUnderGovernance,
+      getCurrentKillPollIndex: fetchCurrentKillPollIndex,
+      getRemainingEtherBalance: fetchRemainingEtherBalance,
+      getTotalSupply: fetchTotalSupply,
+      getKillConsensus: fetchKillConsensus,
+      getTapPollConsensus: fetchTapPollConsensus,
+      getCurrentTap: fetchCurrentTap,
+      getXfrData: fetchXfrData
     } = this.props || {};
     etherPriceFetch("ETH");
-    fetchRoundTokensSold(version, crowdSaleAddress, 0);
+    fetchRoundTokensSold(version, crowdSaleAddress, parseInt(currentRoundNumber, 10) - 1);
+    fetchTokensUnderGovernance(version, daicoTokenAddress);
+    fetchCurrentKillPollIndex(version, pollFactoryAddress);
+    fetchRemainingEtherBalance(version, pollFactoryAddress);
+    fetchTotalSupply(version, daicoTokenAddress);
+    fetchKillConsensus(version, pollFactoryAddress);
+    fetchTapPollConsensus(version, pollFactoryAddress);
+    fetchCurrentTap(version, pollFactoryAddress);
+    fetchXfrData(version, pollFactoryAddress);
     if (signinStatusFlag > 2) {
       checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
+      fetchTokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
     }
-    this.props.getRoundTokensSold(version, crowdSaleAddress, parseInt(currentRoundNumber, 10) - 1);
-    this.props.getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
-    this.props.getTokensUnderGovernance(version, daicoTokenAddress);
-    this.props.getCurrentKillPollIndex(version, pollFactoryAddress);
-    this.props.getRemainingEtherBalance(version, pollFactoryAddress);
-    this.props.getTotalSupply(version, daicoTokenAddress);
-    this.props.getKillConsensus(version, pollFactoryAddress);
-    this.props.getTapPollConsensus(version, pollFactoryAddress);
-    this.props.getCurrentTap(version, pollFactoryAddress);
-    this.props.getXfrData(version, pollFactoryAddress);
   }
 
   componentDidUpdate(prevProps) {
     const { userLocalPublicAddress: prevAddress, signinStatusFlag: prevFlag } = prevProps || "";
-    const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag } =
-      this.props || {};
+    const {
+      userLocalPublicAddress: localAddress,
+      checkWhiteList: checkWhiteListStatus,
+      version,
+      membershipAddress,
+      signinStatusFlag,
+      daicoTokenAddress,
+      getTokenBalance: fetchTokenBalance
+    } = this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
       checkWhiteListStatus(version, membershipAddress, localAddress);
+      fetchTokenBalance(version, daicoTokenAddress, localAddress);
     }
   }
 
@@ -100,14 +117,8 @@ class ProjectDetailGovernance extends Component {
     );
   };
 
-  buyTokens = () => {
-    const { crowdSaleAddress } = this.props || {};
-    // TODO need to add how many tokens to buy
-    this.props.buyTokens(crowdSaleAddress);
-  };
-
   getPrice = () => {
-    // TODO: to use external AP
+    // TODO: to use external API
     const { roundInfo } = this.props || {};
     const { tokenRate } = roundInfo;
     return 1 / tokenRate;
@@ -156,18 +167,12 @@ class ProjectDetailGovernance extends Component {
       softCap += parseFloat(amount);
     }
     const denom = parseFloat(totalSupply) - softCap;
-    return Math.round((parseFloat(tokenBalance) / denom) * parseFloat(remainingEtherBalance) * Math.pow(10, -18) * etherPrice);
+    return formatMoney(formatFromWei((parseFloat(tokenBalance) / denom) * parseFloat(remainingEtherBalance) * etherPrice));
   };
 
   getKillConsensus = () => {
     const { killConsensus, tokensUnderGovernance } = this.props || {};
-    return parseFloat(killConsensus) / parseFloat(tokensUnderGovernance);
-  };
-
-  onKillClick = () => {
-    const { version, pollFactoryAddress } = this.props || {};
-    this.props.voteInKillPoll(version, pollFactoryAddress);
-    // or revokeVoteInKillPoll();
+    return (parseFloat(killConsensus) / parseFloat(tokensUnderGovernance)) * 100;
   };
 
   getTapPollConsensus = () => {
@@ -204,6 +209,12 @@ class ProjectDetailGovernance extends Component {
 
   onBuyAmountChange = e => {
     this.setState({ buyAmount: e.target.value });
+  };
+
+  onKillClick = () => {
+    const { version, pollFactoryAddress, voteInKillPoll: killVote } = this.props || {};
+    killVote(version, pollFactoryAddress);
+    // or revokeVoteInKillPoll();
   };
 
   render() {
@@ -262,7 +273,7 @@ class ProjectDetailGovernance extends Component {
               nextKillAttempt={formatDate(this.getNextKillPollStartDate())}
               yourTokenValue={this.getMyTokenValue()}
               yourRefundValue={this.getMyRefundValue()}
-              totalRefundableBalance={remainingEtherBalance * Math.pow(10, -18)}
+              totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
               killConsensus={this.getKillConsensus()}
               onKillClick={this.onKillClick}
             />

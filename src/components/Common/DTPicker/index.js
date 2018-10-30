@@ -10,10 +10,11 @@ class DTPicker extends PureComponent {
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DateTimePicker
           value={selectedDate}
+          ampm={false}
           onChange={handleDateChange}
           label="Start Date & time"
           style={{margin: "16px 0 8px"}}
-          format="yyyy/MM/dd hh:mm A"
+          format="yyyy/MM/dd kk:mm"
           mask={[/\d/, /\d/, /\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/, ' ', /a|p/i, 'M']}
         />
       </MuiPickersUtilsProvider>

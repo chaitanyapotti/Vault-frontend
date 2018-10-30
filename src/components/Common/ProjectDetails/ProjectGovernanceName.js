@@ -76,24 +76,28 @@ const ProjectGovernanceName = props => {
             </a>
           </div>
         </Col>
-        <Col lg={6} className="text-right   ">
+        <Col lg={6} className="text-right hl">
           {signinStatusFlag <= 2 ? (
-            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-              <div>
-                <LoadingButton tooltip="This feature is only for Vault Members" disabled>
-                  {buttonText}
-                </LoadingButton>
-              </div>
-            </Tooltip>
+            <div className="hli">
+              <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+                  <LoadingButton tooltip="This feature is only for Vault Members" disabled>
+                    {buttonText}
+                  </LoadingButton>
+              </Tooltip>
+            </div>
           ) : buttonVisibility ? (
-            <LoadingButton onClick={onClick} loading={buttonSpinning}>
-              {buttonText}
-            </LoadingButton>
+            <span className="hli">
+              <LoadingButton onClick={onClick} loading={buttonSpinning}>
+                {buttonText}
+              </LoadingButton>
+            </span>
           ) : buyButtonVisibility ? (
-            <LoadingButton onClick={onBuyClick}>{buyButtonText}</LoadingButton>
+            <span className="hli">
+              <LoadingButton onClick={onBuyClick}>{buyButtonText}</LoadingButton>
+            </span>
           ) : null}
           {tradeButtonVisibility ? (
-            <a href={tradeUrl} target="_blank" rel="noopener noreferrer">
+            <a className="hli push-left--13" href={tradeUrl} target="_blank" rel="noopener noreferrer">
               <LoadingButton onClick={null}>Trade</LoadingButton>
             </a>
           ) : null}

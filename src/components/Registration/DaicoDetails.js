@@ -19,7 +19,7 @@ import DTPicker from "../Common/DTPicker";
 
 class DaicoDetails extends React.Component {
   state = {
-    selectedDate: new Date("2018-01-01T18:54")
+    selectedDate: null
   };
 
   handleDateChange = date => {

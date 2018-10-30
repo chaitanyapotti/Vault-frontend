@@ -23,7 +23,6 @@ const ProjectCrowdSaleName = props => {
     buttonSpinning,
     buyButtonVisibility,
     onBuyClick,
-    buyButtonSpinning,
     buyButtonText,
     signinStatusFlag
   } = props || {};

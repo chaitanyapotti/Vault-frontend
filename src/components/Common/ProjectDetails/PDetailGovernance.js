@@ -53,10 +53,10 @@ class PDetailGovernance extends React.Component {
 
         <Row className="push-half--top">
           <Col lg={6} className="txt">
-            Your Token Value: <span className="text--secondary">${yourTokenValue}</span>
+            Your Token Value: <span className="text--secondary">{yourTokenValue}</span>
           </Col>
           <Col lg={6} className="txt">
-            your Refund Value: <span className="text--secondary">${yourRefundValue}</span>
+            your Refund Value: <span className="text--secondary">{yourRefundValue}</span>
           </Col>
         </Row>
 

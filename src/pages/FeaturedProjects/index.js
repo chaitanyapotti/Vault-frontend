@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Loader } from "semantic-ui-react";
 import FeaturedProject from "../../components/FeaturedProject";
 import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
+import {CUICircularProgress} from "../../helpers/material-ui";
 class FeaturedProjects extends Component {
   componentDidMount() {
     const { getFeaturedProjects: fetchFeaturedProjects, featuredProjectsLoaderAction: loader } = this.props || {};
@@ -20,7 +20,7 @@ class FeaturedProjects extends Component {
       <div>
         <div className="text--center sbhdr-txt txt-xl txt-bold">FEATURED PROJECTS</div>
         {showFeaturedProjectsLoader ? (
-          <Loader active={showFeaturedProjectsLoader} />
+          <CUICircularProgress color="secondary" />
         ) : featuredProjectsRetrievedSuccessfully ? (
           <div className="push-top--35">
             <Grid>
@@ -28,9 +28,7 @@ class FeaturedProjects extends Component {
                 {featuredProjects.map((item, index) => {
                   const { projectName, description, _id } = item;
                   return (
-                    <Col xs={12} lg={4}>
                       <FeaturedProject key={index} projectName={projectName} description={description} projectId={_id} history={this.props.history}/>
-                    </Col>
                   )
                 })}
               </MasonaryLayout>

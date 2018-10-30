@@ -25,18 +25,18 @@ export default function(state = initialState, action) {
         roundInfo: rec
       };
     }
-    case actionTypes.TOKEN_BALANCE_RECEIVED: {
-      const { rec } = action.payload;
-      return {
-        ...state,
-        tokenBalance: rec
-      };
-    }
     case actionTypes.BUY_BUTTON_SPINNING: {
       const { receipt } = action.payload;
       return {
         ...state,
         buyButtonSpinning: receipt
+      };
+    }
+    case actionTypes.TOKEN_BALANCE_RECEIVED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        tokenBalance: receipt
       };
     }
     default:

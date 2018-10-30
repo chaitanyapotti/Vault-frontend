@@ -26,6 +26,19 @@ class GridData extends React.Component {
         MuiTypography: {
           root: {
             fontSize: "16px"
+          },
+          caption:{
+            fontSize: '1rem'
+          }
+        },
+        MuiTableCell:{
+          root:{
+            padding: '10px 20px 10px 20px'
+          }
+        },
+        MuiTablePagination:{
+          select:{
+            fontSize: '14px'
           }
         }
       }

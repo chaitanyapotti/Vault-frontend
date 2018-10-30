@@ -49,7 +49,6 @@ class ProjectDetailCrowdSale extends Component {
       projectDetails
     } = this.props || {};
     etherPriceFetch("ETH");
-    console.log("mount");
     tokenBalance(version, projectDetails.daicoTokenAddress, userLocalPublicAddress);
     fetchEtherCollected(version, pollFactoryAddress);
     fetchRoundTokensSold(version, crowdSaleAddress, 0);
@@ -59,7 +58,7 @@ class ProjectDetailCrowdSale extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { userLocalPublicAddress: prevAddress } = prevProps || "";
+    const { userLocalPublicAddress: prevAddress, signinStatusFlag: prevFlag } = prevProps || "";
     const {
       userLocalPublicAddress: localAddress,
       getTokenBalance: tokenBalance,
@@ -69,8 +68,7 @@ class ProjectDetailCrowdSale extends Component {
       signinStatusFlag,
       projectDetails
     } = this.props || {};
-    console.log("last");
-    if (prevAddress !== localAddress) {
+    if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
       tokenBalance(version, projectDetails.daicoTokenAddress, localAddress);
     }
     if (prevAddress !== localAddress && signinStatusFlag > 2) {

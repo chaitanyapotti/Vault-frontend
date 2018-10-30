@@ -21,7 +21,9 @@ export const initialState = {
   isPhoneNumberVerified: false,
   vaultPaymentPendingStatus: false,
   signinStatusFlag: 0,
-  networkName: ""
+  networkName: "",
+  metamaskPreviousInstallationState: false,
+  metamaskPreviousNetworkName: ""
 };
 
 export default function(state = initialState, action) {
@@ -42,28 +44,32 @@ export default function(state = initialState, action) {
       if (action.payload === "rinkeby") {
         return {
           ...state,
-          networkName: "rinkeby"
+          networkName: "rinkeby",
+          metamaskPreviousNetworkName: action.payload
         };
       }
       return {
         ...state,
-        signinStatusFlag: 2
+        signinStatusFlag: 2,
+        metamaskPreviousNetworkName: action.payload
       };
     }
 
     case types.METAMASK_INSTALLATION_STATUS_CHECK: {
       if (action.payload) {
         return {
-          ...state
+          ...state,
+          metamaskPreviousInstallationState: action.payload
         };
       }
       return {
         ...state,
-        signinStatusFlag: 0
+        signinStatusFlag: 0,
+        metamaskPreviousInstallationState: action.payload
       };
     }
 
-    case types.USER_REGISTRATION_CHECK_SUCCESS:
+    case types.USER_REGISTRATION_CHECK_SUCCESS: {
       const { publicAddress } = action.payload || "";
       const { isIssuer } = action.payload || false;
       return {
@@ -73,6 +79,7 @@ export default function(state = initialState, action) {
         userIsIssuer: isIssuer,
         userPreviousLocalPublicAddress: publicAddress
       };
+    }
     case types.USER_LOCAL_ACCOUNT_ADDRESS:
       return {
         ...state,
@@ -163,14 +170,14 @@ export default function(state = initialState, action) {
         userRegistered: false
       };
 
-    case types.IS_ISSUER_FLAG_TOGGLED:
+    case types.IS_ISSUER_FLAG_TOGGLED: {
       const isIssuerFlag = state.isIssuerFlag;
       return {
         ...state,
         isIssuerFlag: !isIssuerFlag
       };
-
-    case types.VAULT_MEMBERSHIP_CHECK:
+    }
+    case types.VAULT_MEMBERSHIP_CHECK: {
       let signinStatusFlag;
       const userIsIssuer = state.userIsIssuer;
       if (action.payload) {
@@ -187,7 +194,7 @@ export default function(state = initialState, action) {
         isVaultMember: action.payload,
         signinStatusFlag
       };
-
+    }
     case types.PHONE_NUMBER_IS_VERIFIED:
       return {
         ...state,

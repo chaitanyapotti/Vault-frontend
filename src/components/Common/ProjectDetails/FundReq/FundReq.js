@@ -2,6 +2,7 @@ import React from "react";
 import { CUICard } from "../../../../helpers/material-ui";
 import ReqType from "./ReqType";
 import XfrForm from "../XfrForm";
+
 class FundReq extends React.Component {
   getObject1 = () => {
     const { data } = this.props || {};
@@ -20,7 +21,6 @@ class FundReq extends React.Component {
   getObject2 = () => {};
 
   render() {
-    console.log("props in fund req", this.props);
     return (
       <div>
         <CUICard style={{ padding: "40px 50px" }}>

@@ -6,6 +6,7 @@ const ButtonComponent = props => (
     className={props.type !== "danger" ? "btn bg--primary txt-p-vault txt-dddbld text--white" : "btn bg--danger txt-p-vault txt-dddbld text--white"}
     label={props.label}
     id={props.label}
+    disabled={props.disabled}
     type="raised"
     // labelStyle={{ padding: "6px 16px" }}
     onClick={() => {

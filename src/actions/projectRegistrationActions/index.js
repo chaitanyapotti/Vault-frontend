@@ -167,14 +167,14 @@ export function entityAddressChangedAction(value) {
   };
 }
 
-async function checkMetaMask(address) {
-  const isValid = await web3.utils.isAddress(address);
+export function checkMetaMask(address) {
+  const isValid = web3.utils.isAddress(address);
   return isValid;
 }
 
 export function teamAddressChangedAction(value) {
-  return async dispatch => {
-    const isValid = await checkMetaMask(value);
+  return dispatch => {
+    const isValid = checkMetaMask(value);
     dispatch({
       type: actionTypes.TEAM_ADDRESS_CHANGED,
       payload: { value, isValid }

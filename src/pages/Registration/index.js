@@ -6,10 +6,24 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Registration";
-import { CUIButton } from "../../helpers/material-ui";
-import { CUIButtonType, CUIInputColor } from "../../static/js/variables";
+import {
+  validateAdminName,
+  validateLength,
+  validateEmail,
+  isUpperCase,
+  validateTwitterLink,
+  validateFacebookLink,
+  validateWebsiteUrl,
+  validateGitLink,
+  validateMediumLink,
+  validateTelegramLink,
+  validateProjectNameLength,
+  validateTokenTagLength,
+  alphaOnly
+} from "../../helpers/common/validationHelperFunctions";
 import { newProjectRegistration } from "../../actions/projectRegistrationActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
+import { checkMetaMask } from "../../actions/projectRegistrationActions";
 
 class Registration extends Component {
   handlePublishDaico = e => {
@@ -17,6 +31,20 @@ class Registration extends Component {
   };
 
   render() {
+    const {
+      adminName,
+      adminEmail,
+      projectName,
+      projectDescription,
+      erc20TokenTag,
+      websiteLink,
+      telegramLink,
+      githubLink,
+      mediumLink,
+      facebookLink,
+      twitterLink,
+      teamAddress
+    } = this.props || {};
     return (
       <Grid>
         <Row className="push--top">
@@ -25,7 +53,31 @@ class Registration extends Component {
           </Col>
           <Col xs={12} lg={5}>
             <div style={{ textAlign: "center" }}>
-              <ButtonComponent style={{ width: "85%" }} label="Publish DAICO" onClick={this.handlePublishDaico} />
+              <ButtonComponent
+                style={{ width: "85%" }}
+                label="Publish DAICO"
+                onClick={this.handlePublishDaico}
+                disabled={
+                  !validateAdminName(adminName) ||
+                  !validateLength(adminName) ||
+                  !validateLength(projectDescription) ||
+                  !validateLength(projectName) ||
+                  !validateEmail(adminEmail) ||
+                  !validateFacebookLink(facebookLink) ||
+                  !validateMediumLink(mediumLink) ||
+                  !validateGitLink(githubLink) ||
+                  !validateTwitterLink(twitterLink) ||
+                  !validateWebsiteUrl(websiteLink) ||
+                  !validateTelegramLink(telegramLink) ||
+                  isUpperCase(erc20TokenTag) ||
+                  !validateLength(erc20TokenTag) ||
+                  !validateTokenTagLength(erc20TokenTag) ||
+                  !checkMetaMask(teamAddress) ||
+                  !validateProjectNameLength(projectName) ||
+                  !alphaOnly(erc20TokenTag)||
+                  !alphaOnly(projectName)
+                }
+              />
             </div>
             <div className="push--top">
               <DaicoDetails />
@@ -46,9 +98,52 @@ class Registration extends Component {
 const mapStateToProps = state => {
   const { projectRegistrationData } = state || {};
   const { userLocalPublicAddress } = state.signinManagerData || {};
+  const { initialFundRelease, maxEtherContribution, initialTapValue, tapIncrementFactor, voteSaturationLimit } = state.projectRegistrationData || {};
+  const {
+    adminName,
+    adminEmail,
+    projectName,
+    erc20TokenTag,
+    projectDescription,
+    websiteLink,
+    telegramLink,
+    githubLink,
+    mediumLink,
+    facebookLink,
+    twitterLink,
+    teamAddress,
+    errors
+  } = state.projectRegistrationData || {};
+  const { round1TargetUSD, round1TargetEth, round2TargetUSD, round2TargetEth, round3TargetUSD, round3TargetEth, tokenPriceFactor } =
+    state.projectRegistrationData || {};
   return {
     projectRegistrationData,
-    userLocalPublicAddress
+    userLocalPublicAddress,
+    adminName,
+    adminEmail,
+    projectName,
+    erc20TokenTag,
+    projectDescription,
+    websiteLink,
+    telegramLink,
+    githubLink,
+    mediumLink,
+    facebookLink,
+    twitterLink,
+    teamAddress,
+    errors,
+    initialFundRelease,
+    maxEtherContribution,
+    initialTapValue,
+    tapIncrementFactor,
+    voteSaturationLimit,
+    round1TargetUSD,
+    round1TargetEth,
+    round2TargetUSD,
+    round2TargetEth,
+    round3TargetUSD,
+    round3TargetEth,
+    tokenPriceFactor
   };
 };
 

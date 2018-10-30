@@ -1,6 +1,20 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
+import {
+  validateAdminName,
+  validateEmail,
+  isUpperCase,
+  validateTwitterLink,
+  validateFacebookLink,
+  validateWebsiteUrl,
+  validateGitLink,
+  validateMediumLink,
+  validateTelegramLink,
+  validateProjectNameLength,
+  validateTokenTagLength,
+  alphaOnly
+} from "../../helpers/common/validationHelperFunctions";
 
 export const initialState = {
   adminName: "",
@@ -54,37 +68,6 @@ export const initialState = {
 
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
-  function validateEmail(email) {
-    var re = /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/;
-    return re.test(email);
-  }
-  function isUpperCase(str) {
-    return str !== str.toUpperCase();
-  }
-  function validateTwitterLink(twitterLink) {
-    var re = /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/(#!\/)?[a-zA-Z0-9_]+$/i;
-    return re.test(twitterLink);
-  }
-  function validateFacebookLink(facebookLink) {
-    var re = /(?:https?:\/\/)?(?:www\.)?(?:facebook|fb|m\.facebook)\.(?:com|me)\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]+)(?:\/)?/i;
-    return re.test(facebookLink);
-  }
-  function validateWebsiteUrl(websiteUrl) {
-    var re = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i;
-    return re.test(websiteUrl);
-  }
-  function validateGitLink(gitLink) {
-    var re = /^(?:https?:\/\/)?(?:www\.)?github\.com\/(#!\/)?[a-zA-Z0-9_]+$/i;
-    return re.test(gitLink);
-  }
-  function validateMediumLink(mediumLink) {
-    var re = /^(?:https?:\/\/)?(?:www\.)?medium\.com\/(@)?[a-zA-Z0-9_]+$/i;
-    return re.test(mediumLink);
-  }
-  function validateTelegramLink(telegramLink) {
-    var re = /^(?:https?:\/\/)?(?:www\.)?t\.me\/(#!\/)?[a-zA-Z0-9_]+$/i;
-    return re.test(telegramLink);
-  }
   switch (action.type) {
     case actionTypes.NON_SALE_ENTITY_EDIT: {
       let nonSaleEntities = state.nonSaleEntities;
@@ -197,7 +180,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.ADMIN_NAME_CHANGED: {
-      if (action.payload.length > 100) {
+      if (!validateAdminName(action.payload)) {
         localErrors[actionTypes.ADMIN_NAME_CHANGED] = "Can't have such length";
       } else {
         localErrors[actionTypes.ADMIN_NAME_CHANGED] = "";
@@ -223,9 +206,8 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.PROJECT_NAME_CHANGED: {
-      if (action.payload.length > 32) {
-        localErrors[actionTypes.PROJECT_NAME_CHANGED] =
-          "Can't have such length";
+      if (!validateProjectNameLength(action.payload) || !alphaOnly(action.payload)) {
+        localErrors[actionTypes.PROJECT_NAME_CHANGED] = "Only Letters are allowed & length should be less than 32 ";
       } else {
         localErrors[actionTypes.PROJECT_NAME_CHANGED] = "";
       }
@@ -237,16 +219,17 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.ERC20_TAG_CHANGED: {
-      if (
-        action.payload.length < 3 ||
-        action.payload.length > 9 ||
-        isUpperCase(action.payload.toString())
-      ) {
-        localErrors[actionTypes.ERC20_TAG_CHANGED] =
-          "Should have 3-9 characters in upper case";
+      alphaOnly(action.payload);
+      if (!validateTokenTagLength(action.payload) || isUpperCase(action.payload) || !alphaOnly(action.payload)) {
+        localErrors[actionTypes.ERC20_TAG_CHANGED] = "Should have 3-9 characters in upper case";
       } else {
         localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
       }
+      // if (alphaOnly(action.payload)) {
+      //   localErrors[actionTypes.ERC20_TAG_CHANGED] = "Only letters are accepted";
+      // } else {
+      //   localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
+      // }
       return {
         ...state,
         erc20TokenTag: action.payload,
@@ -334,8 +317,7 @@ export default function(state = initialState, action) {
       if (validateTwitterLink(action.payload)) {
         localErrors[actionTypes.TWITTER_LINK_CHANGED] = "";
       } else {
-        localErrors[actionTypes.TWITTER_LINK_CHANGED] =
-          "Not a valid twitter link";
+        localErrors[actionTypes.TWITTER_LINK_CHANGED] = "Not a valid twitter link";
       }
       return {
         ...state,
@@ -345,6 +327,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.TEAM_ADDRESS_CHANGED: {
+      console.log(action.payload.value, "payload");
       if (action.payload.isValid) {
         localErrors[actionTypes.TEAM_ADDRESS_CHANGED] = "";
       } else {

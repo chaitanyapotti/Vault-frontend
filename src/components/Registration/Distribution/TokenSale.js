@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { CUICard, CUIFormInput, CUIButton } from "../../../helpers/material-ui";
+import { CUIFormInput, CUIButton } from "../../../helpers/material-ui";
 import { CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import {
@@ -180,7 +180,6 @@ class TokenSale extends React.Component {
             <CUIButton
               type={CUIButtonType.RAISED}
               buttonColor={CUIInputColor.PRIMARY}
-              id="calculateTokens"
               label="Calculate"
               // disabled={!this.state.validPassword}
               onClick={this.onCalculateTokenClicked}
@@ -217,7 +216,7 @@ const mapDispatchToProps = dispatch =>
       tokenPriceFactorChangedAction,
       calculateTokens
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(

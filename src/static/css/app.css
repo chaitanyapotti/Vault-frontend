@@ -48,7 +48,7 @@ a {
   color: #fff;
 }
 
-button:focus{
+button:focus {
   outline: none !important;
 }
 
@@ -533,4 +533,11 @@ button:focus{
   margin-bottom: 0px;
   margin-top: 0px;
   transition: 100ms;
+}
+
+.btn.focus,
+.btn:focus,
+.btn:hover {
+  color: #ffffff !important;
+  text-decoration: none;
 }

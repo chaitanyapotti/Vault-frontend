@@ -23,7 +23,8 @@ import {
   validateMaxEtherContribution,
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
-  validateDate
+  validateDate,
+  validateTotalSaleTokens
 } from "../../helpers/common/validationHelperFunctions";
 import { newProjectRegistration } from "../../actions/projectRegistrationActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
@@ -61,7 +62,8 @@ class Registration extends Component {
       round2TargetEth,
       round3TargetUSD,
       round3TargetEth,
-      tokenPriceFactor
+      tokenPriceFactor,
+      totalSaleTokens
     } = this.props || {};
     return (
       <Grid>
@@ -109,8 +111,9 @@ class Registration extends Component {
                   !validateLength(round3TargetEth) ||
                   !validateLength(round3TargetUSD) ||
                   !validateLength(tokenPriceFactor) ||
-                  !validateDate(daicoStartDate)||
-                  !validateDate(daicoEndDate)
+                  !validateDate(daicoStartDate) ||
+                  !validateDate(daicoEndDate) ||
+                  validateTotalSaleTokens(totalSaleTokens)
                 }
               />
             </div>
@@ -160,6 +163,7 @@ const mapStateToProps = state => {
     round3TargetUSD,
     round3TargetEth,
     tokenPriceFactor,
+    totalSaleTokens,
     errors
   } = state.projectRegistrationData || {};
   return {
@@ -191,6 +195,7 @@ const mapStateToProps = state => {
     round2TargetEth,
     round3TargetUSD,
     round3TargetEth,
+    totalSaleTokens,
     tokenPriceFactor
   };
 };

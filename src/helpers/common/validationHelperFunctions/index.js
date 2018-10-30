@@ -4,7 +4,12 @@ const validateAdminName = name => {
   }
   return true;
 };
-
+const validateTotalSaleTokens = input => {
+  if (input === 0) {
+    return true;
+  }
+  return false;
+};
 const validateMaxEtherContribution = input => {
   if (input < 0.1) {
     return true;
@@ -103,5 +108,6 @@ export {
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
   validateInitialTap,
-  validateDate
+  validateDate,
+  validateTotalSaleTokens
 };

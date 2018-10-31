@@ -97,8 +97,8 @@ export const buyTokens = (version, contractAddress, userLocalPublicAddress, amou
     })
     .on("receipt", receipt => {
       dispatch(isBuyButtonSpinning(false));
-      getTokenBalance(version, contractAddress, userLocalPublicAddress);
-      getRoundTokensSold(version, contractAddress, round);
+      dispatch(getTokenBalance(version, contractAddress, userLocalPublicAddress));
+      dispatch(getRoundTokensSold(version, contractAddress, round));
     })
     .on("error", error => {
       console.error(error.message);

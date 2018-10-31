@@ -7,7 +7,6 @@ import { currentRound } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
-import ProjectDetailSaleEnd from "../../containers/ProjectDetailSaleEnd";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
 
 class ProjectGovernance extends Component {
@@ -51,7 +50,8 @@ class ProjectGovernance extends Component {
       initialFundRelease,
       crowdSaleAddress,
       daicoTokenAddress,
-      etherPrice
+      etherPrice,
+      xfrDetails
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
@@ -144,6 +144,7 @@ class ProjectGovernance extends Component {
         );
       case "2":
       case "3":
+      case "4":
         return (
           <ProjectDetailGovernance
             version={version}
@@ -169,34 +170,7 @@ class ProjectGovernance extends Component {
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
             etherPrice={etherPrice}
-          />
-        );
-      case "4":
-        return (
-          <ProjectDetailSaleEnd
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            currentRoundNumber={currentRoundNumber}
-            daicoTokenAddress={daicoTokenAddress}
-            etherPrice={etherPrice}
+            xfrDetails={xfrDetails}
           />
         );
       case "5":

@@ -135,8 +135,7 @@ class ProjectDetailCrowdSale extends Component {
       buttonSpinning,
       signinStatusFlag,
       buyButtonSpinning,
-      tokenBalance,
-      projectDetails
+      tokenBalance
     } = this.props || {};
     console.log(tokenBalance);
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
@@ -144,7 +143,7 @@ class ProjectDetailCrowdSale extends Component {
       <Grid>
         <CUICard style={{ padding: "40px 50px" }}>
           <TimeLine
-            fundsCollected={etherCollected}
+            fundsCollected={formatFromWei(etherCollected, 3)}
             roundGoal={getR1Goal(this.props)}
             startDate={new Date(startDateTime)}
             endDate={new Date(r1EndTime)}
@@ -174,7 +173,6 @@ class ProjectDetailCrowdSale extends Component {
             <PDetailCrowdSale
               individualCap={formatFromWei(maximumEtherContribution)}
               voteSaturationLimit={capPercent / 100}
-              s
               killFrequency="Quarterly"
               initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30)}
               initialFundRelease={formatFromWei(initialFundRelease)}
@@ -182,8 +180,8 @@ class ProjectDetailCrowdSale extends Component {
               hardCapCapitalisation={getSoftCap(this.props)}
               dilutedCapitalisation={getHardCap(this.props)}
               tokenDataVisibitlity={isCurrentMember}
-              tokenBalance={parseFloat(tokenBalance) / Math.pow(10, 18)}
-              buyableTokens={significantDigits(getR1Price(this.props) * parseFloat(projectDetails.maximumEtherContribution))}
+              tokenBalance={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
+              buyableTokens={formatCurrencyNumber(getR1Price(this.props) * parseFloat(maximumEtherContribution), 0)}
             />
           </Col>
         </Row>
@@ -231,14 +229,12 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, deployerReducer, signinManagerData, fetchPriceReducer, projectPreStartReducer, projectDetailGovernanceReducer } =
-    state || {};
-  const { etherCollected, roundInfo, buyButtonSpinning } = projectCrowdSaleReducer || {};
+  const { projectCrowdSaleReducer, deployerReducer, signinManagerData, fetchPriceReducer, projectPreStartReducer } = state || {};
+  const { etherCollected, roundInfo, buyButtonSpinning, tokenBalance } = projectCrowdSaleReducer || {};
   const { projectDetails } = deployerReducer || {};
   const { prices } = fetchPriceReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
-  const { tokenBalance } = projectDetailGovernanceReducer || {};
   return {
     isCurrentMember,
     buttonSpinning,

@@ -14,14 +14,22 @@ import {
   getKillConsensus,
   getTapPollConsensus,
   getCurrentTap,
-  getXfrData
+  getXfrData,
+  getKillPollVote,
+  voteInKillPoll,
+  revokeVoteInKillPoll,
+  getTapPollVote,
+  voteInTapPoll,
+  revokeVoteInTapPoll,
+  getXfrPollVote,
+  voteInXfr1Poll,
+  voteInXfr2Poll,
+  revokeVoteInXfr1Poll,
+  revokeVoteInXfr2Poll
 } from "../../actions/projectDetailGovernanceActions/index";
 import {
   formatFromWei,
   getRoundPrice,
-  getR1Goal,
-  getHardCap,
-  getSoftCap,
   formatCurrencyNumber,
   formatMoney,
   formatDate,
@@ -65,10 +73,14 @@ class ProjectDetailGovernance extends Component {
       getKillConsensus: fetchKillConsensus,
       getTapPollConsensus: fetchTapPollConsensus,
       getCurrentTap: fetchCurrentTap,
-      getXfrData: fetchXfrData
+      getXfrData: fetchXfrData,
+      getKillPollVote: fetchKillPollVote,
+      getTapPollVote: fetchTapPollVote,
+      getXfrPollVote: fetchXfrPollVote
     } = this.props || {};
     etherPriceFetch("ETH");
-    fetchRoundTokensSold(version, crowdSaleAddress, parseInt(currentRoundNumber, 10) - 1);
+    const roundNumber = currentRoundNumber === "4" ? 2 : parseInt(currentRoundNumber, 10) - 1;
+    fetchRoundTokensSold(version, crowdSaleAddress, roundNumber);
     fetchTokensUnderGovernance(version, daicoTokenAddress);
     fetchCurrentKillPollIndex(version, pollFactoryAddress);
     fetchRemainingEtherBalance(version, pollFactoryAddress);
@@ -80,6 +92,9 @@ class ProjectDetailGovernance extends Component {
     if (signinStatusFlag > 2) {
       checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
       fetchTokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
+      fetchKillPollVote(version, pollFactoryAddress, userLocalPublicAddress);
+      fetchTapPollVote(version, pollFactoryAddress, userLocalPublicAddress);
+      fetchXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress);
     }
   }
 
@@ -92,11 +107,18 @@ class ProjectDetailGovernance extends Component {
       membershipAddress,
       signinStatusFlag,
       daicoTokenAddress,
-      getTokenBalance: fetchTokenBalance
+      pollFactoryAddress,
+      getTokenBalance: fetchTokenBalance,
+      getKillPollVote: fetchKillPollVote,
+      getTapPollVote: fetchTapPollVote,
+      getXfrPollVote: fetchXfrPollVote
     } = this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
       checkWhiteListStatus(version, membershipAddress, localAddress);
       fetchTokenBalance(version, daicoTokenAddress, localAddress);
+      fetchKillPollVote(version, pollFactoryAddress, localAddress);
+      fetchTapPollVote(version, pollFactoryAddress, localAddress);
+      fetchXfrPollVote(version, pollFactoryAddress, localAddress);
     }
   }
 
@@ -109,9 +131,10 @@ class ProjectDetailGovernance extends Component {
     const { roundInfo } = this.props || {};
     const { tokenRate } = roundInfo;
     const { currentRoundNumber } = this.props || {};
+    const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
     return (
       <div>
-        <div>Level {currentRoundNumber} price</div>
+        <div>Level {roundNumber} price</div>
         <div>{1 / tokenRate} ETH</div>
       </div>
     );
@@ -129,7 +152,8 @@ class ProjectDetailGovernance extends Component {
     const { currentRoundNumber } = this.props || {};
     const { roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
-    // based on tokens sold
+    if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
+
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
       0
@@ -138,7 +162,7 @@ class ProjectDetailGovernance extends Component {
 
   getVoteShare = () => {
     const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
-    const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * Math.pow(10, 18);
+    const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * Math.pow(10, 18) || 0;
     return userShare > capPercent / 100 ? capPercent / 100 : userShare;
   };
 
@@ -154,7 +178,7 @@ class ProjectDetailGovernance extends Component {
     const { ETH: etherPrice } = prices || {};
     const tokenPrice = this.getPrice() * parseFloat(etherPrice);
     const { tokenBalance } = this.props || {};
-    return formatMoney(tokenPrice * parseFloat(formatFromWei(tokenBalance)));
+    return formatMoney(tokenPrice * parseFloat(formatFromWei(tokenBalance)) || 0);
   };
 
   getMyRefundValue = () => {
@@ -167,17 +191,17 @@ class ProjectDetailGovernance extends Component {
       softCap += parseFloat(amount);
     }
     const denom = parseFloat(totalSupply) - softCap;
-    return formatMoney(formatFromWei((parseFloat(tokenBalance) / denom) * parseFloat(remainingEtherBalance) * etherPrice));
+    return formatMoney(formatFromWei((parseFloat(tokenBalance) / denom) * parseFloat(remainingEtherBalance) * etherPrice || 0));
   };
 
   getKillConsensus = () => {
     const { killConsensus, tokensUnderGovernance } = this.props || {};
-    return (parseFloat(killConsensus) / parseFloat(tokensUnderGovernance)) * 100;
+    return significantDigits(parseFloat(killConsensus) / parseFloat(tokensUnderGovernance) || 0);
   };
 
   getTapPollConsensus = () => {
     const { tapPollConsensus, tokensUnderGovernance } = this.props || {};
-    return parseFloat(tapPollConsensus) / parseFloat(tokensUnderGovernance);
+    return significantDigits(parseFloat(tapPollConsensus) / parseFloat(tokensUnderGovernance) || 0);
   };
 
   getTradeUrl = () => {
@@ -212,9 +236,69 @@ class ProjectDetailGovernance extends Component {
   };
 
   onKillClick = () => {
-    const { version, pollFactoryAddress, voteInKillPoll: killVote } = this.props || {};
-    killVote(version, pollFactoryAddress);
+    const { version, voteInKillPoll: killVote, userLocalPublicAddress, killVoteData, pollFactoryAddress } = this.props || {};
+    const { killPollAddress } = killVoteData || {};
+    killVote(version, killPollAddress, userLocalPublicAddress, pollFactoryAddress);
     // or revokeVoteInKillPoll();
+  };
+
+  onRevokeKillClick = () => {
+    const { version, revokeVoteInKillPoll: killUnVote, userLocalPublicAddress, killVoteData, pollFactoryAddress } = this.props || {};
+    const { killPollAddress } = killVoteData || {};
+    killUnVote(version, killPollAddress, userLocalPublicAddress, pollFactoryAddress);
+  };
+
+  onTapClick = () => {
+    const { version, voteInTapPoll: tapVote, userLocalPublicAddress, tapVoteData, pollFactoryAddress } = this.props || {};
+    const { tapPollAddress } = tapVoteData || {};
+    tapVote(version, tapPollAddress, userLocalPublicAddress, pollFactoryAddress);
+    // or revokeVoteInKillPoll();
+  };
+
+  onRevokeTapClick = () => {
+    const { version, revokeVoteInTapPoll: tapUnVote, userLocalPublicAddress, tapVoteData, pollFactoryAddress } = this.props || {};
+    const { tapPollAddress } = tapVoteData || {};
+    tapUnVote(version, tapPollAddress, userLocalPublicAddress, pollFactoryAddress);
+  };
+
+  onXfr1Click = () => {
+    const { version, voteInXfr1Poll: xfr1Vote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { poll1 } = xfrData || {};
+    const { address } = poll1 || {};
+    xfr1Vote(version, address, userLocalPublicAddress, pollFactoryAddress);
+  };
+
+  onXfr2Click = () => {
+    const { version, voteInXfr2Poll: xfr2Vote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { poll2 } = xfrData || {};
+    const { address } = poll2 || {};
+    xfr2Vote(version, address, userLocalPublicAddress, pollFactoryAddress);
+  };
+
+  onRevokeXfr1Click = () => {
+    const { version, revokeVoteInXfr1Poll: xfr1RevokeVote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { poll1 } = xfrData || {};
+    const { address } = poll1 || {};
+    xfr1RevokeVote(version, address, userLocalPublicAddress, pollFactoryAddress);
+  };
+
+  onRevokeXfr2Click = () => {
+    const { version, revokeVoteInXfr2Poll: xfr2RevokeVote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { poll2 } = xfrData || {};
+    const { address } = poll2 || {};
+    xfr2RevokeVote(version, address, userLocalPublicAddress, pollFactoryAddress);
+  };
+
+  getKillVoteStatus = () => {
+    const { killVoteData } = this.props || {};
+    const { voted } = killVoteData || {};
+    return voted;
+  };
+
+  getTapVoteStatus = () => {
+    const { tapVoteData } = this.props || {};
+    const { voted } = tapVoteData || {};
+    return voted;
   };
 
   render() {
@@ -234,7 +318,15 @@ class ProjectDetailGovernance extends Component {
       xfrData,
       buttonSpinning,
       signinStatusFlag,
-      buyButtonSpinning
+      buyButtonSpinning,
+      killButtonSpinning,
+      tapButtonSpinning,
+      xfr1ButtonSpinning,
+      xfr2ButtonSpinning,
+      xfrDetails,
+      xfrVoteData,
+      tokensUnderGovernance,
+      currentRoundNumber
     } = this.props || {};
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
     return (
@@ -252,11 +344,11 @@ class ProjectDetailGovernance extends Component {
               whitepaper={whitepaper}
               lastRoundInfo={this.getLastRoundInfo()}
               buttonText="Get Whitelisted"
-              buttonVisibility={!isCurrentMember}
+              buttonVisibility={!isCurrentMember && currentRoundNumber !== "4"}
               buttonSpinning={buttonSpinning}
               onClick={this.onWhiteListClickInternal}
               signinStatusFlag={signinStatusFlag}
-              buyButtonVisibility={isCurrentMember}
+              buyButtonVisibility={isCurrentMember && currentRoundNumber !== "4"}
               onBuyClick={this.buyTokens}
               buyButtonText="Buy"
               tradeButtonVisibility
@@ -275,7 +367,11 @@ class ProjectDetailGovernance extends Component {
               yourRefundValue={this.getMyRefundValue()}
               totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
               killConsensus={this.getKillConsensus()}
+              killVoteStatus={this.getKillVoteStatus()}
               onKillClick={this.onKillClick}
+              onRevokeKillClick={this.onRevokeKillClick}
+              killButtonSpinning={killButtonSpinning}
+              signinStatusFlag={signinStatusFlag}
             />
           </Col>
         </Row>
@@ -283,16 +379,33 @@ class ProjectDetailGovernance extends Component {
         <Row className="push--top">
           <Col xs={12} lg={6}>
             <TapCard
-              currentTapAmount={(parseFloat(currentTap, 10) * 86400 * 30) / Math.pow(10, 18)}
-              tapIncrementUnit={tapIncrementFactor}
+              currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30))}
+              tapIncrementUnit={tapIncrementFactor / 100}
               incrementApproval={this.getTapPollConsensus()}
+              tapVoteStatus={this.getTapVoteStatus()}
+              onTapClick={this.onTapClick}
+              onRevokeTapClick={this.onRevokeTapClick}
+              tapButtonSpinning={tapButtonSpinning}
+              signinStatusFlag={signinStatusFlag}
             />
           </Col>
         </Row>
 
         <Row className="push--top">
           <Col xs={12} lg={6}>
-            <FundReq data={xfrData} />
+            <FundReq
+              data={xfrData}
+              details={xfrDetails}
+              xfrVoteData={xfrVoteData}
+              signinStatusFlag={signinStatusFlag}
+              onRevokeXfr1Click={this.onRevokeXfr1Click}
+              onXfr1Click={this.onXfr1Click}
+              xfr1ButtonSpinning={xfr1ButtonSpinning}
+              onRevokeXfr2Click={this.onRevokeXfr2Click}
+              onXfr2Click={this.onXfr2Click}
+              xfr2ButtonSpinning={xfr2ButtonSpinning}
+              tokensUnderGovernance={tokensUnderGovernance}
+            />
           </Col>
         </Row>
         <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
@@ -319,8 +432,23 @@ class ProjectDetailGovernance extends Component {
 const mapStateToProps = state => {
   const { projectCrowdSaleReducer, projectDetailGovernanceReducer, projectPreStartReducer, signinManagerData, fetchPriceReducer } = state || {};
   const { etherCollected, roundInfo, tokenBalance, buyButtonSpinning } = projectCrowdSaleReducer || {};
-  const { tokensUnderGovernance, killPollIndex, remainingEtherBalance, killConsensus, totalSupply, tapPollConsensus, currentTap, xfrData } =
-    projectDetailGovernanceReducer || {};
+  const {
+    tokensUnderGovernance,
+    killPollIndex,
+    remainingEtherBalance,
+    killConsensus,
+    totalSupply,
+    tapPollConsensus,
+    currentTap,
+    xfrData,
+    killVoteData,
+    tapVoteData,
+    killButtonSpinning,
+    tapButtonSpinning,
+    xfr1ButtonSpinning,
+    xfr2ButtonSpinning,
+    xfrVoteData
+  } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { prices } = fetchPriceReducer || {};
@@ -343,7 +471,14 @@ const mapStateToProps = state => {
     userLocalPublicAddress,
     signinStatusFlag,
     buyButtonSpinning,
-    prices
+    prices,
+    killVoteData,
+    tapVoteData,
+    killButtonSpinning,
+    tapButtonSpinning,
+    xfrVoteData,
+    xfr1ButtonSpinning,
+    xfr2ButtonSpinning
   };
 };
 
@@ -363,7 +498,18 @@ const mapDispatchToProps = dispatch =>
       getXfrData,
       onWhiteListClick,
       fetchPrice,
-      checkWhiteList
+      checkWhiteList,
+      getKillPollVote,
+      getTapPollVote,
+      voteInTapPoll,
+      voteInKillPoll,
+      revokeVoteInKillPoll,
+      revokeVoteInTapPoll,
+      getXfrPollVote,
+      voteInXfr1Poll,
+      voteInXfr2Poll,
+      revokeVoteInXfr1Poll,
+      revokeVoteInXfr2Poll
     },
     dispatch
   );

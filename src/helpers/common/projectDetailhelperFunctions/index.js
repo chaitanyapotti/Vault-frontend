@@ -56,7 +56,7 @@ const formatNumberToINRFormat = number => {
 };
 
 const secondsToDhms = seconds => {
-  const secs = Number(seconds);
+  const secs = Number(seconds) / 1000;
   const y = Math.floor(secs / (3600 * 24 * 365));
   const mo = Math.floor((secs % (3600 * 24 * 365)) / (30 * 24 * 3600));
   const d = Math.floor((secs % (30 * 24 * 3600)) / (24 * 3600));

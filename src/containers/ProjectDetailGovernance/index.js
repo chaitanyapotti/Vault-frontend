@@ -79,7 +79,8 @@ class ProjectDetailGovernance extends Component {
       getXfrPollVote: fetchXfrPollVote
     } = this.props || {};
     etherPriceFetch("ETH");
-    fetchRoundTokensSold(version, crowdSaleAddress, parseInt(currentRoundNumber, 10) - 1);
+    const roundNumber = currentRoundNumber === "4" ? 2 : parseInt(currentRoundNumber, 10) - 1;
+    fetchRoundTokensSold(version, crowdSaleAddress, roundNumber);
     fetchTokensUnderGovernance(version, daicoTokenAddress);
     fetchCurrentKillPollIndex(version, pollFactoryAddress);
     fetchRemainingEtherBalance(version, pollFactoryAddress);
@@ -130,9 +131,10 @@ class ProjectDetailGovernance extends Component {
     const { roundInfo } = this.props || {};
     const { tokenRate } = roundInfo;
     const { currentRoundNumber } = this.props || {};
+    const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
     return (
       <div>
-        <div>Level {currentRoundNumber} price</div>
+        <div>Level {roundNumber} price</div>
         <div>{1 / tokenRate} ETH</div>
       </div>
     );
@@ -150,7 +152,8 @@ class ProjectDetailGovernance extends Component {
     const { currentRoundNumber } = this.props || {};
     const { roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
-    // based on tokens sold
+    if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
+
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
       0
@@ -322,7 +325,8 @@ class ProjectDetailGovernance extends Component {
       xfr2ButtonSpinning,
       xfrDetails,
       xfrVoteData,
-      tokensUnderGovernance
+      tokensUnderGovernance,
+      currentRoundNumber
     } = this.props || {};
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
     return (
@@ -340,11 +344,11 @@ class ProjectDetailGovernance extends Component {
               whitepaper={whitepaper}
               lastRoundInfo={this.getLastRoundInfo()}
               buttonText="Get Whitelisted"
-              buttonVisibility={!isCurrentMember}
+              buttonVisibility={!isCurrentMember && currentRoundNumber !== "4"}
               buttonSpinning={buttonSpinning}
               onClick={this.onWhiteListClickInternal}
               signinStatusFlag={signinStatusFlag}
-              buyButtonVisibility={isCurrentMember}
+              buyButtonVisibility={isCurrentMember && currentRoundNumber !== "4"}
               onBuyClick={this.buyTokens}
               buyButtonText="Buy"
               tradeButtonVisibility

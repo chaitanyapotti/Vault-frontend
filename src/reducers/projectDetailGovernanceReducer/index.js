@@ -15,19 +15,8 @@ export const initialState = {
   xfrVoteData: []
 };
 
-export default function(state = initialState, action) {
+export default (state = initialState, action) => {
   switch (action.type) {
-    // case actionTypes.MEMBERSHIP_ASSIGNED:
-    //   return {
-    //     ...state,
-    //     membershipAssigned: true
-    //   };
-
-    // case actionTypes.MEMBERSHIP_FAILED:
-    //   return {
-    //     ...state,
-    //     membershipAssigned: false
-    //   };
     case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED: {
       const { rec } = action.payload;
       return {
@@ -136,4 +125,4 @@ export default function(state = initialState, action) {
     default:
       return state;
   }
-}
+};

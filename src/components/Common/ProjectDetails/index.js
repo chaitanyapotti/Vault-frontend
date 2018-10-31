@@ -5,7 +5,6 @@ import ProjectPreStartName from "./ProjectPreStartName";
 import ProjectCrowdSaleName from "./ProjectCrowdSaleName";
 import ProjectGovernanceName from "./ProjectGovernanceName";
 import ProjectRefundName from "./ProjectRefundName";
-import ProjectSaleEndName from "./ProjectSaleEndName";
 import ProjectName from "./ProjectName";
 import TapCard from "./TapCard";
 import FundReq from "./FundReq/FundReq";
@@ -24,6 +23,5 @@ export {
   TokenChart,
   ProjectCrowdSaleName,
   ProjectGovernanceName,
-  ProjectRefundName,
-  ProjectSaleEndName
+  ProjectRefundName
 };

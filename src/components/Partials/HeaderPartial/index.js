@@ -229,8 +229,8 @@ class HeaderPartial extends React.Component {
         >
           <Grid>
             <Row>
-              <Col>
-                <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "85px" }}>
+              <Col xs={12}>
+                <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "85px", padding: 0 }}>
                   {scrnWdh < 768 ? (
                     <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
                       <MenuIcon />
@@ -273,7 +273,7 @@ class HeaderPartial extends React.Component {
                     </div>
                     <div className="text--primary txt-m wdh-100" style={{ paddingTop: "10px" }}>
                       {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
-                      <div>
+                      <div className="text--center">
                         {
                           {
                             0: (

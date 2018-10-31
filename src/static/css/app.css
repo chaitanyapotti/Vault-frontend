@@ -3,6 +3,7 @@
 @import "desktop.css";
 @import "mobile.css";
 @import "header.css";
+@import "loaderAnimation.css";
 
 @font-face {
   font-family: "Montserrat";

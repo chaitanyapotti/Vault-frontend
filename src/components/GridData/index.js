@@ -52,19 +52,27 @@ class GridData extends React.Component {
     });
 
   render() {
+    const { tableData, columns, ...rest } = this.props || {};
     const options = {
       filterType: "dropdown",
       responsive: "scroll",
       selectableRows: false,
       onRowClick: (currentRowsSelected, allRowsSelected) => {
-        const _id = currentRowsSelected && currentRowsSelected[8];
-        this.props.history.push({
-          pathname: `/governance/details`,
-          search: `?projectid=${_id}`
-        });
-      }
+        const length = currentRowsSelected.length;
+        const _id = currentRowsSelected && currentRowsSelected[length-1];
+        const {rowClickFn, onRowClick} = this.props || {};
+        {
+          rowClickFn ? 
+           onRowClick(_id)
+           :
+           this.props.history.push({
+             pathname: `/governance/details`,
+             search: `?projectid=${_id}`
+           });
+        }
+      },
+      ...rest
     };
-    const { tableData, columns } = this.props || {};
     return (
       <MuiThemeProvider theme={this.getMuiTheme()}>
         <MUIDataTable data={tableData} columns={columns} options={options} />

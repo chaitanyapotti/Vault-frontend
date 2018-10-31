@@ -133,6 +133,7 @@ class DaicoDetails extends React.Component {
                 required
                 inputType={CUIInputType.TEXT}
                 full
+                forceNumDec
                 inputName="Initial Fund Release"
                 inputLabel="Initial Fund Release"
                 inputPlaceholder="Eg. 100"
@@ -150,6 +151,7 @@ class DaicoDetails extends React.Component {
                 required
                 inputType={CUIInputType.TEXT}
                 full
+                forceNumDec
                 inputName="Max Ether Contribution"
                 inputLabel="Max Ether Cap (ETH)"
                 inputPlaceholder="Eg. 5"
@@ -182,6 +184,7 @@ class DaicoDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
+                forceNumDec
                 inputName="Initial Tap Value"
                 inputLabel="Initial Tap (ETH/Mo)"
                 inputPlaceholder="Eg. 100"
@@ -201,6 +204,7 @@ class DaicoDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
+                forceNumDec
                 inputName="Tap Increment Factor"
                 inputLabel="Tap Increment Factor"
                 inputPlaceholder="Eg. 1.5"
@@ -222,6 +226,7 @@ class DaicoDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
+                forceNumDec
                 inputName="Vote Saturation Limit"
                 inputLabel="Vote Saturation Limit"
                 inputPlaceholder="Eg. 0.05%"

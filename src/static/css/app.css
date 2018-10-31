@@ -399,12 +399,9 @@ button:focus {
 /* Circular Image List */
 /* -------------------------------------------------- */
 
-<<<<<<< HEAD
-=======
 .circle-img-list {
   /*padding: 10px 0;*/
 }
->>>>>>> c15d436703fb028429d67c7af8b9f499c04d6539
 
 .circle-img-list-itm {
   position: relative;

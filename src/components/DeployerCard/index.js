@@ -4,7 +4,8 @@ import { CUICard } from "../../helpers/material-ui";
 import LoadingButton from "../Common/LoadingButton";
 
 const DeployerCard = props => {
-  const { signinStatusFlag, treasuryStateNumber, label, refundBySoftCapFailSpinning, refundByKillButtonSpinning, onRefundClick } = props || {};
+  const { signinStatusFlag, treasuryStateNumber, tokenBalance, label, refundBySoftCapFailSpinning, refundByKillButtonSpinning, onRefundClick } =
+    props || {};
   return (
     <div className="push-top--50">
       <CUICard style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}>
@@ -18,7 +19,7 @@ const DeployerCard = props => {
             </Tooltip>
           ) : (
             <LoadingButton
-              disabled={treasuryStateNumber !== "2" && treasuryStateNumber !== "4"}
+              disabled={(treasuryStateNumber !== "2" && treasuryStateNumber !== "4") || tokenBalance === "0"}
               onClick={onRefundClick}
               loading={refundByKillButtonSpinning || refundBySoftCapFailSpinning}
             >

@@ -3,9 +3,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { refundByKill, refundBySoftCapFail } from "../../actions/projectRefundActions/index";
 import { getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
-import { formatFromWei, formatMoney, formatCurrencyNumber } from "../../helpers/common/projectDetailhelperFunctions";
+import { formatFromWei, formatCurrencyNumber } from "../../helpers/common/projectDetailhelperFunctions";
 import DeployerCard from "../../components/DeployerCard";
-import { fetchPrice } from "../../actions/priceFetchActions/index";
 import { getRemainingEtherBalance, getTotalSupply } from "../../actions/projectDetailGovernanceActions/index";
 
 class ProjectDetailRefund extends Component {
@@ -36,25 +35,28 @@ class ProjectDetailRefund extends Component {
   }
 
   onRefundClick = () => {
-    const { version, pollFactoryAddress, treasuryStateNumber, userLocalPublicAddress, refundByKill: killRefund, refundBySoftCapFail: softCapRefund } =
-      this.props || {};
-    if (treasuryStateNumber === "2") softCapRefund(version, pollFactoryAddress, userLocalPublicAddress);
-    if (treasuryStateNumber === "4") killRefund(version, pollFactoryAddress, userLocalPublicAddress);
+    const {
+      version,
+      pollFactoryAddress,
+      treasuryStateNumber,
+      userLocalPublicAddress,
+      daicoTokenAddress,
+      refundByKill: killRefund,
+      refundBySoftCapFail: softCapRefund
+    } = this.props || {};
+    if (treasuryStateNumber === "2") softCapRefund(version, pollFactoryAddress, userLocalPublicAddress, daicoTokenAddress);
+    if (treasuryStateNumber === "4") killRefund(version, pollFactoryAddress, userLocalPublicAddress, daicoTokenAddress);
   };
 
   getMyRefundValue = () => {
-    const { remainingEtherBalance, tokenBalance, totalSupply, foundationDetails } = this.props || {};
-    let softCap = 0;
-    for (let index = 0; index < foundationDetails.length; index += 1) {
-      const { amount } = foundationDetails[index];
-      softCap += parseFloat(amount);
-    }
-    const denom = parseFloat(totalSupply) - softCap;
+    const { remainingEtherBalance, tokenBalance, totalSupply } = this.props || {};
+    const denom = parseFloat(totalSupply);
     return formatFromWei((parseFloat(tokenBalance) / denom) * parseFloat(remainingEtherBalance) || 0, 3);
   };
 
   render() {
-    const { tokenTag, tokenBalance, treasuryStateNumber, refundByKillButtonSpinning, refundBySoftCapFailSpinning, signinStatusFlag } = this.props || {};
+    const { tokenTag, tokenBalance, treasuryStateNumber, refundByKillButtonSpinning, refundBySoftCapFailSpinning, signinStatusFlag } =
+      this.props || {};
     return (
       <div>
         <DeployerCard
@@ -63,6 +65,7 @@ class ProjectDetailRefund extends Component {
           onRefundClick={this.onRefundClick}
           signinStatusFlag={signinStatusFlag}
           treasuryStateNumber={treasuryStateNumber}
+          tokenBalance={tokenBalance}
           btnLabel="Refund"
           label={`You are eligible for a refund of ${this.getMyRefundValue()} ETH against your balance of ${formatCurrencyNumber(
             formatFromWei(tokenBalance, 0),

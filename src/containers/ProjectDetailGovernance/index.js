@@ -338,7 +338,8 @@ class ProjectDetailGovernance extends Component {
       xfrVoteData,
       tokensUnderGovernance,
       currentRoundNumber,
-      killFinalizeButtonSpinning
+      killFinalizeButtonSpinning,
+      roundInfo
     } = this.props || {};
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
     return (
@@ -432,7 +433,7 @@ class ProjectDetailGovernance extends Component {
         <BuyModal
           open={buyModalOpen}
           onClose={this.handleBuyClose}
-          price={getRoundPrice(this.props)}
+          roundInfo={roundInfo}
           tokenTag={tokenTag}
           buyButtonSpinning={buyButtonSpinning}
           buyTokensOnClick={this.buyTokensOnClick}

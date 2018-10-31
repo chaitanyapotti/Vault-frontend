@@ -10,8 +10,9 @@ import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelpe
 import LoadingButton from "../LoadingButton";
 
 const BuyModal = props => {
-  const { open, onClose, price, tokenTag, buyTokensOnClick, onChange, inputText, buyButtonSpinning } = props || {};
-  const labelValue = formatCurrencyNumber(parseFloat(inputText) * parseFloat(price) * Math.pow(10, 18), 0);
+  const { open, onClose, roundInfo, tokenTag, buyTokensOnClick, onChange, inputText, buyButtonSpinning } = props || {};
+  const { tokenRate } = roundInfo || {};
+  const labelValue = formatCurrencyNumber(parseFloat(inputText) * parseFloat(tokenRate), 0);
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">

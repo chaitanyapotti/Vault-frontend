@@ -116,7 +116,7 @@ class ProjectDetailCrowdSale extends Component {
     const [round1, ...rest] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (new Date(r1EndTime * 1000) > new Date() && totalTokensSold < tokenCount) return true;
+    if (new Date(r1EndTime) < new Date() && totalTokensSold < tokenCount) return true;
 
     return false;
   };
@@ -148,7 +148,8 @@ class ProjectDetailCrowdSale extends Component {
       signinStatusFlag,
       buyButtonSpinning,
       tokenBalance,
-      r1FinalizeButtonSpinning
+      r1FinalizeButtonSpinning,
+      roundInfo
     } = this.props || {};
     console.log(tokenBalance);
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
@@ -218,7 +219,7 @@ class ProjectDetailCrowdSale extends Component {
         <BuyModal
           open={buyModalOpen}
           onClose={this.handleBuyClose}
-          price={getR1Price(this.props)}
+          roundInfo={roundInfo}
           tokenTag={tokenTag}
           buyButtonSpinning={buyButtonSpinning}
           buyTokensOnClick={this.buyTokensOnClick}

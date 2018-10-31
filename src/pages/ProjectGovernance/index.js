@@ -60,13 +60,11 @@ class ProjectGovernance extends Component {
           <p>The project has not been deployed yet</p>
         </div>
       );
-
     if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
       return (
         <ProjectDetailRefund
           version={version}
           tokenTag={tokenTag}
-          foundationDetails={foundationDetails}
           pollFactoryAddress={pollFactoryAddress}
           daicoTokenAddress={daicoTokenAddress}
           treasuryStateNumber={treasuryStateNumber}

@@ -174,17 +174,15 @@ class ProjectDetailGovernance extends Component {
   };
 
   getMyTokenValue = () => {
-    const { prices } = this.props || {};
+    const { prices, tokenBalance } = this.props || {};
     const { ETH: etherPrice } = prices || {};
     const tokenPrice = this.getPrice() * parseFloat(etherPrice);
-    const { tokenBalance } = this.props || {};
     return formatMoney(tokenPrice * parseFloat(formatFromWei(tokenBalance)) || 0);
   };
 
   getMyRefundValue = () => {
-    const { prices } = this.props || {};
+    const { prices, remainingEtherBalance, tokenBalance, totalSupply, foundationDetails } = this.props || {};
     const { ETH: etherPrice } = prices || {};
-    const { remainingEtherBalance, tokenBalance, totalSupply, foundationDetails } = this.props || {};
     let softCap = 0;
     for (let index = 0; index < foundationDetails.length; index += 1) {
       const { amount } = foundationDetails[index];

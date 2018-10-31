@@ -65,26 +65,9 @@ class ProjectGovernance extends Component {
       return (
         <ProjectDetailRefund
           version={version}
-          membershipAddress={membershipAddress}
-          projectName={projectName}
           tokenTag={tokenTag}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          startDateTime={startDateTime}
-          maximumEtherContribution={maximumEtherContribution}
-          capPercent={capPercent}
-          initialTapAmount={initialTapAmount}
-          tapIncrementFactor={tapIncrementFactor}
-          isCurrentMember={isCurrentMember}
-          rounds={rounds}
-          totalMintableSupply={totalMintableSupply}
           foundationDetails={foundationDetails}
-          r1EndTime={r1EndTime}
           pollFactoryAddress={pollFactoryAddress}
-          initialFundRelease={initialFundRelease}
-          crowdSaleAddress={crowdSaleAddress}
-          currentRoundNumber={currentRoundNumber}
           daicoTokenAddress={daicoTokenAddress}
           treasuryStateNumber={treasuryStateNumber}
         />

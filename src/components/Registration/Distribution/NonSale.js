@@ -1,18 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { CUIFormInput, CUIButton } from "../../../helpers/material-ui";
+import { CUIFormInput } from "../../../helpers/material-ui";
 import {
   CUIInputType,
-  CUIButtonType,
-  CUIInputColor
 } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../../Common/FormComponents";
 
-import { Table } from "semantic-ui-react";
 import { Tooltip, Legend, Pie, PieChart, Cell, Label, LabelList, Sector } from "recharts";
-
+import GridData from "../../../components/GridData";
 import {
   addNonSaleEntityAction,
   entityNameChangedAction,
@@ -34,16 +31,6 @@ const CHARTCOLORS = [
   "#e1f4ff",
   "#2e71ac"
 ];
-
-const NonSaleEntitiesTableHeader = () => (
-  <Table.Header>
-    <Table.Row>
-      <Table.HeaderCell>Name</Table.HeaderCell>
-      <Table.HeaderCell>Percentage</Table.HeaderCell>
-      <Table.HeaderCell>Address</Table.HeaderCell>
-    </Table.Row>
-  </Table.Header>
-);
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -123,24 +110,6 @@ class NonSale extends React.Component {
     this.props.nonSaleEntityEditAction(entityTableIndex);
   };
 
-  populateNonSaleEntities = () => {
-    let nonSaleEntitiesTable = this.props.nonSaleEntities;
-    if (nonSaleEntitiesTable && nonSaleEntitiesTable.length > 0) {
-      return nonSaleEntitiesTable.filter(entity => entity.entityName !== "Unallocated").map((entity, index) => {
-            return  <Table.Row
-                key={index}
-                onClick={this.handleNonSaleEntityEdit.bind(this, index)}
-              >
-                <Table.Cell>{entity.entityName}</Table.Cell>
-                <Table.Cell>{entity.entityPercentage}</Table.Cell>
-                <Table.Cell>{entity.entityAddress}</Table.Cell>
-              </Table.Row>
-      });
-    } else {
-      return null;
-    }
-  };
-
   renderCustomizedLabel = () => {
     const { x, y, width, height, value } = this.props;
     const radius = 10;
@@ -182,17 +151,40 @@ class NonSale extends React.Component {
   }
 
   render() {
-    console.log("Combined entities: ",this.props.saleEntities.concat(this.props.nonSaleEntities))
+    const {nonSaleEntities, history} = this.props || {};
+    let nonSaleEntitiesTable = nonSaleEntities;
+    const data = nonSaleEntitiesTable.length > 0 && 
+      nonSaleEntitiesTable.filter(entity => entity.entityName !== "Unallocated").map((item, index)=> {
+      const { entityName, entityPercentage, entityAddress } = item || {};
+      const dataArray = [
+        entityName,
+        entityPercentage,
+        entityAddress,
+        index
+      ];
+      return dataArray;
+    });
     return (
       <div className="push-top--50">
         <div className="txt-xl">Non Sale Distribution <span>(50% of Supply)</span></div>
         <hr />
         <div>
           {this.props.unallocatedTokensPer < 50 ? (
-            <Table>
-              <NonSaleEntitiesTableHeader />
-              <Table.Body>{this.populateNonSaleEntities()}</Table.Body>
-            </Table>
+            <GridData
+              history={history}
+              tableData={data}
+              filter={false}
+              search={false}
+              viewColumns={false}
+              rowClickFn = {true}
+              onRowClick={this.handleNonSaleEntityEdit}
+              columns={[
+                "Name",
+                "Percentage",
+                "Address",
+                { name: "Id", options: { display: false } }
+              ]}
+            />
           ) : null}
         </div>
         {
@@ -206,10 +198,6 @@ class NonSale extends React.Component {
               inputLabel="Name of the Entity"
               inputPlaceholder=""
               inputValue={this.props.entityName}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
               onChange={this.onChangeEntityName}
             />
           </Col>
@@ -221,10 +209,6 @@ class NonSale extends React.Component {
               inputLabel="Percentage of Total Tokens Supply"
               inputPlaceholder=""
               inputValue={this.props.entityPercentage}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
               onChange={this.onChangeEntityPercentage}
             />
           </Col>
@@ -236,10 +220,6 @@ class NonSale extends React.Component {
               inputLabel="Entity Addres"
               inputPlaceholder=""
               inputValue={this.props.entityAddress}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
               onChange={this.onChangeEntityAddress}
             />
           </Col>

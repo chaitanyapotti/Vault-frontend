@@ -1,60 +1,59 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { ProjectName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
-import { onWhiteListClick } from "../../actions/projectPreStartActions/index";
+import Warning from "@material-ui/icons/Warning";
+import { ProjectPreStartName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
+import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
-import { formatDate } from "../../helpers/common/projectDetailhelperFunctions";
+import { formatDate, formatFromWei, getR1Price, getSoftCap, getHardCap } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
+import AlertModal from "../../components/Common/AlertModal";
 
 class ProjectDetailPreStart extends Component {
+  state = {
+    modalOpen: false
+  };
+
+  handleClose = () => this.setState({ modalOpen: false });
+
   componentDidMount() {
-    const { fetchPrice: etherPriceFetch } = this.props || {};
+    const {
+      fetchPrice: etherPriceFetch,
+      checkWhiteList: checkWhiteListStatus,
+      version,
+      membershipAddress,
+      signinStatusFlag,
+      userLocalPublicAddress
+    } = this.props || {};
     etherPriceFetch("ETH");
+    if (signinStatusFlag > 2) {
+      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
+    }
   }
 
-  getPrice = () => {
-    const { rounds } = this.props || {};
-    const [round1, ...rest] = rounds || {};
-    const { tokenRate } = round1 || {}; // tokens/wei
-    return 1 / parseFloat(tokenRate, 10);
-  };
+  componentDidUpdate(prevProps) {
+    const { userLocalPublicAddress: prevAddress, signinStatusFlag: prevFlag } = prevProps || "";
+    const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag } =
+      this.props || {};
+    if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
+      checkWhiteListStatus(version, membershipAddress, localAddress);
+    }
+  }
 
   getRoundText = () =>
     // Always Constant for all daicos
     "3 Round DAICO";
 
-  getR3Price = () => {
-    const { rounds } = this.props || {};
-    const round3 = [...rounds].pop() || {};
-    const { tokenRate } = round3 || {}; // tokens/wei
-    return 1 / parseFloat(tokenRate, 10);
-  };
-
-  getSoftCap = () => {
-    // TODO: For now using ether.. when ether price is brought, it is implemented, convert to $
-    const { rounds, prices } = this.props || {};
-    const { ETH: etherPrice } = prices || {};
-    let softCap = 0;
-    for (let index = 0; index < rounds.length; index += 1) {
-      const { tokenCount } = rounds[index];
-      softCap += parseFloat(tokenCount);
-    }
-    return Math.round(softCap * this.getR3Price() * Math.pow(10, -18) * parseFloat(etherPrice)).toString();
-  };
-
-  getHardCap = () => {
-    const { totalMintableSupply, prices } = this.props || {};
-    const { ETH: etherPrice } = prices || {};
-    const hardCap = parseFloat(totalMintableSupply) * this.getR3Price() * etherPrice * Math.pow(10, -18);
-    return Math.round(hardCap).toString();
-  };
-
   onWhiteListClickInternal = () => {
-    const { version, membershipAddress, onWhiteListClick: whiteListClick } = this.props || {};
-    // this.props.checkWhiteList(version, "Protocol", membershipAddress);
-    whiteListClick(version, "Protocol", membershipAddress);
+    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
+    if (isVaultMember) {
+      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
+    } else {
+      this.setState({
+        modalOpen: true
+      });
+    }
   };
 
   getStartDate = () => {
@@ -74,38 +73,45 @@ class ProjectDetailPreStart extends Component {
       capPercent,
       initialTapAmount,
       tapIncrementFactor,
+      initialFundRelease,
       isCurrentMember,
       rounds,
-      foundationDetails
+      foundationDetails,
+      buttonSpinning,
+      signinStatusFlag
     } = this.props || {};
+    const { modalOpen } = this.state;
     return (
       <Grid>
         <Row>
           <Col xs={12} lg={6}>
-            <ProjectName
+            <ProjectPreStartName
               projectName={projectName}
               priceIncrementFlag={false}
               tokenTag={tokenTag}
-              price={this.getPrice()}
+              price={getR1Price(this.props)}
               roundText={this.getRoundText()}
               description={description}
               urls={urls}
               whitepaper={whitepaper}
               buttonText="Get Whitelisted"
               buttonVisibility={!isCurrentMember}
+              buttonSpinning={buttonSpinning}
               onClick={this.onWhiteListClickInternal}
+              signinStatusFlag={signinStatusFlag}
             />
           </Col>
           <Col xs={12} lg={6}>
             <PDetailPreStart
               icoStartDate={formatDate(startDateTime)}
-              individualCap={parseFloat(maximumEtherContribution) / Math.pow(10, 18)}
+              individualCap={formatFromWei(maximumEtherContribution, 3)}
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
-              initialTapAmount={(parseFloat(initialTapAmount) * 86400 * 30) / Math.pow(10, 18)}
-              tapIncrementUnit={tapIncrementFactor}
-              hardCapCapitalisation={this.getSoftCap()}
-              dilutedCapitalisation={this.getHardCap()}
+              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
+              tapIncrementUnit={parseFloat(tapIncrementFactor) / 100}
+              hardCapCapitalisation={getSoftCap(this.props)}
+              dilutedCapitalisation={getHardCap(this.props)}
+              initialFundRelease={formatFromWei(initialFundRelease)}
             />
           </Col>
         </Row>
@@ -117,6 +123,13 @@ class ProjectDetailPreStart extends Component {
             </CUICard>
           </Col>
         </Row>
+
+        <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
+          <div className="text--center text--danger">
+            <Warning style={{ width: "2em", height: "2em" }} />
+          </div>
+          <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
+        </AlertModal>
       </Grid>
     );
   }
@@ -126,19 +139,25 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       onWhiteListClick,
-      fetchPrice
+      fetchPrice,
+      checkWhiteList
     },
     dispatch
   );
 
 const mapStateToProps = state => {
-  const { projectPreStartReducer, fetchPriceReducer } = state || {};
+  const { projectPreStartReducer, fetchPriceReducer, signinManagerData } = state || {};
   const { prices } = fetchPriceReducer || {};
-  const { isCurrentMember } = projectPreStartReducer || {};
+  const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
 
   return {
     isCurrentMember,
-    prices
+    buttonSpinning,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag
   };
 };
 

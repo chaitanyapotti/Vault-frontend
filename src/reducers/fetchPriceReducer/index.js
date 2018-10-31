@@ -1,12 +1,10 @@
-/* global document, window */
-/* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
 
 const initialState = {
   prices: { ETH: 200 }
 };
 
-export default function(state = initialState, action) {
+export default (state = initialState, action) => {
   const localPrices = JSON.parse(JSON.stringify(state.prices));
   switch (action.type) {
     case actionTypes.PRICE_FETCHED: {
@@ -20,4 +18,4 @@ export default function(state = initialState, action) {
     default:
       return state;
   }
-}
+};

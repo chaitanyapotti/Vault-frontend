@@ -1,25 +1,74 @@
 /* eslint camelcase: 0 */
 
-import React, { Component } from "react";
-import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page } from "@syncfusion/ej2-react-grids";
-import { DataManager } from "@syncfusion/ej2-data";
+import React from "react";
+import MUIDataTable from "mui-datatables";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
-class GridData extends Component {
-  render() {
-    const data = new DataManager({
-      url: "https://js.syncfusion.com/demos/ejServices/Wcf/Northwind.svc/Orders/",
+class GridData extends React.Component {
+  getMuiTheme = () =>
+    createMuiTheme({
+      overrides: {
+        MUIDataTableBodyCell: {
+          root: {
+            fontSize: "16px"
+          }
+        },
+        MUIDataTableHeadCell: {
+          root: {
+            fontSize: "16px"
+          }
+        },
+        MUIDataTableFooterCell: {
+          root: {
+            fontSize: "16px"
+          }
+        },
+        MuiTypography: {
+          root: {
+            fontSize: "16px"
+          },
+          caption:{
+            fontSize: '1rem'
+          }
+        },
+        MuiTableCell:{
+          root:{
+            padding: '10px 20px 10px 20px'
+          }
+        },
+        MuiTablePagination:{
+          select:{
+            fontSize: '14px'
+          }
+        },
+        MuiTableRow:{
+          root:{
+            "&:hover":{
+              cursor: 'pointer'
+            }
+          }
+        }
+      }
     });
+
+  render() {
+    const options = {
+      filterType: "dropdown",
+      responsive: "scroll",
+      selectableRows: false,
+      onRowClick: (currentRowsSelected, allRowsSelected) => {
+        const _id = currentRowsSelected && currentRowsSelected[8];
+        this.props.history.push({
+          pathname: `/governance/details`,
+          search: `?projectid=${_id}`
+        });
+      }
+    };
+    const { tableData, columns } = this.props || {};
     return (
-      <GridComponent dataSource={data} allowPaging height={268}>
-        <ColumnsDirective>
-          <ColumnDirective field="OrderID" width="100" textAlign="Right" />
-          <ColumnDirective field="CustomerID" width="100" />
-          <ColumnDirective field="EmployeeID" width="100" textAlign="Right" />
-          <ColumnDirective field="Freight" width="100" format="C2" textAlign="Right" />
-          <ColumnDirective field="ShipCountry" width="100" />
-        </ColumnsDirective>
-        <Inject services={[Page]} />
-      </GridComponent>
+      <MuiThemeProvider theme={this.getMuiTheme()}>
+        <MUIDataTable data={tableData} columns={columns} options={options} />
+      </MuiThemeProvider>
     );
   }
 }

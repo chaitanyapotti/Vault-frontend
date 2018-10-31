@@ -3,19 +3,19 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  refundSuccess: false,
+  refundSuccess: false
 };
 
-export default function(state = initialState, action) {
+export default (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.REFUND_SUCCESS:
+    case actionTypes.REFUND_SUCCESS: {
       const { receipt } = action.payload;
       return {
         ...state,
-        refundSuccess: receipt,
+        refundSuccess: receipt
       };
-
+    }
     default:
       return state;
   }
-}
+};

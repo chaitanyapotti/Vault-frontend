@@ -1,41 +1,41 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Loader } from "semantic-ui-react";
 import FeaturedProject from "../../components/FeaturedProject";
 import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-
+import MasonaryLayout from "../../components/Common/MasonaryLayout";
+import {CUICircularProgress} from "../../helpers/material-ui";
 class FeaturedProjects extends Component {
   componentDidMount() {
-    this.props.getFeaturedProjects();
-    this.props.featuredProjectsLoaderAction();
+    const { getFeaturedProjects: fetchFeaturedProjects, featuredProjectsLoaderAction: loader } = this.props || {};
+    fetchFeaturedProjects();
+    loader();
   }
 
   render() {
-    const { featuredProjects } = this.props;
+    const { featuredProjects, showFeaturedProjectsLoader, featuredProjectsRetrievedSuccessfully, featuredProjectsRetrieveFailureMessage } =
+      this.props || {};
     return (
       <div>
         <div className="text--center sbhdr-txt txt-xl txt-bold">FEATURED PROJECTS</div>
-        {this.props.showFeaturedProjectsLoader ? (
-          <Loader active={this.props.showFeaturedProjectsLoader} />
-        ) : this.props.featuredProjectsRetrievedSuccessfully ? (
+        {showFeaturedProjectsLoader ? (
+          <CUICircularProgress color="secondary" />
+        ) : featuredProjectsRetrievedSuccessfully ? (
           <div className="push-top--35">
             <Grid>
-              <Row>
+              <MasonaryLayout columns={3}>
                 {featuredProjects.map((item, index) => {
-                  const { projectName, description } = item;
+                  const { projectName, description, _id } = item;
                   return (
-                    <Col xs={12} lg={4}>
-                      <FeaturedProject key={index} projectName={projectName} description={description} />
-                    </Col>
+                      <FeaturedProject key={index} projectName={projectName} description={description} projectId={_id} history={this.props.history}/>
                   )
                 })}
-              </Row>
+              </MasonaryLayout>
             </Grid>
           </div>
         ) : (
-          <h1>{this.props.featuredProjectsRetrieveFailureMessage}</h1>
+          <h1>{featuredProjectsRetrieveFailureMessage}</h1>
         )}
       </div>
     );
@@ -49,7 +49,7 @@ const mapStateToProps = state => {
     featuredProjects,
     showFeaturedProjectsLoader,
     featuredProjectsRetrieveFailureMessage,
-    featuredProjectsRetrievedSuccessfully,
+    featuredProjectsRetrievedSuccessfully
   };
 };
 
@@ -57,12 +57,12 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getFeaturedProjects,
-      featuredProjectsLoaderAction,
+      featuredProjectsLoaderAction
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(FeaturedProjects);

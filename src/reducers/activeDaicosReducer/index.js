@@ -6,7 +6,7 @@ export const initialState = {
   activeDaicosTable: [],
   showActiveDaicosLoader: true,
   activeDaicosRetrieveFailureMessage: "",
-  activeDaicosRetrievedSuccessFully: false,
+  activeDaicosRetrievedSuccessFully: false
 };
 
 export default function(state = initialState, action) {
@@ -16,7 +16,7 @@ export default function(state = initialState, action) {
         ...state,
         showActiveDaicosLoader: false,
         activeDaicosTable: action.payload,
-        activeDaicosRetrievedSuccessFully: true,
+        activeDaicosRetrievedSuccessFully: true
       };
 
     case actionTypes.ACTIVE_DAICOS_FAILED:
@@ -24,14 +24,14 @@ export default function(state = initialState, action) {
         ...state,
         showActiveDaicosLoader: false,
         activeDaicosRetrieveFailureMessage: action.payload,
-        activeDaicosRetrievedSuccessFully: false,
+        activeDaicosRetrievedSuccessFully: false
       };
 
     case actionTypes.SHOW_ACTIVE_DAICOS_LOADER:
       return {
         ...state,
         showActiveDaicosLoader: true,
-        activeDaicosRetrievedSuccessFully: false,
+        activeDaicosRetrievedSuccessFully: false
       };
 
     default:

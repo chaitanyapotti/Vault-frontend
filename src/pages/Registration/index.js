@@ -9,7 +9,8 @@ import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Re
 import { CUIButton } from "../../helpers/material-ui";
 import { CUIButtonType, CUIInputColor } from "../../static/js/variables";
 import { newProjectRegistration } from "../../actions/projectRegistrationActions";
-import {ButtonComponent} from "../../components/Common/FormComponents";
+import { ButtonComponent } from "../../components/Common/FormComponents";
+
 class Registration extends Component {
   handlePublishDaico = e => {
     this.props.newProjectRegistration(this.props.projectRegistrationData, this.props.userLocalPublicAddress);
@@ -23,14 +24,12 @@ class Registration extends Component {
             <IdentityDetails />
           </Col>
           <Col xs={12} lg={5}>
-            <div style={{textAlign: 'center'}}>
-              <ButtonComponent
-                style={{width: '85%'}}
-                label="Publish DAICO"
-                onClick={this.handlePublishDaico}
-              />
+            <div style={{ textAlign: "center" }}>
+              <ButtonComponent style={{ width: "85%" }} label="Publish DAICO" onClick={this.handlePublishDaico} />
             </div>
-            <div className="push--top"><DaicoDetails /></div>
+            <div className="push--top">
+              <DaicoDetails />
+            </div>
           </Col>
         </Row>
 
@@ -49,19 +48,19 @@ const mapStateToProps = state => {
   const { userLocalPublicAddress } = state.signinManagerData || {};
   return {
     projectRegistrationData,
-    userLocalPublicAddress,
+    userLocalPublicAddress
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      newProjectRegistration,
+      newProjectRegistration
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Registration);

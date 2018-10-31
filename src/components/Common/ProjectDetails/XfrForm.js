@@ -19,13 +19,13 @@ class XfrForm extends Component {
               inputName="Xfr Title"
               inputLabel="Xfr Title"
               inputPlaceholder="App Redesign"
-            //   inputValue={this.props.adminName}
+              //   inputValue={this.props.adminName}
               textFocus
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
-            //   onChange={this.onChangeName}
+              //   onChange={this.onChangeName}
             />
           </Col>
           <Col lg={6}>
@@ -35,39 +35,39 @@ class XfrForm extends Component {
               inputName="Xfr Amount"
               inputLabel="Xfr Amount"
               inputPlaceholder="500 ETH"
-            //   inputValue={this.props.adminName}
+              //   inputValue={this.props.adminName}
               textFocus
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
-            //   onChange={this.onChangeName}
+              //   onChange={this.onChangeName}
             />
           </Col>
         </Row>
 
         <Row>
-            <Col>
-                <CUIFormInput
-                    inputType={CUIInputType.TEXT}
-                    full
-                    multiline
-                    rowsMax="4"
-                    inputName="Description"
-                    inputLabel="Description"
-                    inputPlaceholder="Describe aboout fund request briefly"
-                    textFocus
-                />
-            </Col>
+          <Col>
+            <CUIFormInput
+              inputType={CUIInputType.TEXT}
+              full
+              multiline
+              rowsMax="4"
+              inputName="Description"
+              inputLabel="Description"
+              inputPlaceholder="Describe aboout fund request briefly"
+              textFocus
+            />
+          </Col>
         </Row>
 
         <Row className="push--top">
-            <Col lg={4}>
-                <ButtonComponent  label="Publish" />
-            </Col>
-            <Col lg={8}>
-                <div className="text--right">This poll will end in 30 days of publishing</div>
-            </Col>
+          <Col lg={4}>
+            <ButtonComponent label="Publish" />
+          </Col>
+          <Col lg={8}>
+            <div className="text--right">This poll will end in 30 days of publishing</div>
+          </Col>
         </Row>
       </Grid>
     );

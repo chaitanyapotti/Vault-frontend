@@ -2,13 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import qs from "qs";
-// import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
-import ProjectDetailSaleEnd from "../../containers/ProjectDetailSaleEnd";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
 
 class ProjectGovernance extends Component {
@@ -16,19 +14,15 @@ class ProjectGovernance extends Component {
     // Do Routing here - use query string
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
-    // this.props.currentRound()
     if ("projectid" in params) {
       const { currentRound: currentRoundDetailsFetch } = this.props || {};
       currentRoundDetailsFetch(params.projectid);
     } else {
-      this.props.history.push({
+      const { history } = this.props || {};
+      history.push({
         pathname: `/`
       });
     }
-
-    // const { version, crowdSaleAddress } = this.props.projectDetails || {};
-    // console.log(version, crowdSaleAddress);
-    // this.props.currentRound(version, crowdSaleAddress);
   }
 
   render() {
@@ -56,18 +50,18 @@ class ProjectGovernance extends Component {
       initialFundRelease,
       crowdSaleAddress,
       daicoTokenAddress,
-      etherPrice
+      xfrDetails
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
     if (currentDeploymentIndicator !== 12)
       return (
         <div>
-          <p>The project hasn't been deployed yet</p>
+          <p>The project has not been deployed yet</p>
         </div>
       );
 
-    if (treasuryStateNumber === "3") {
+    if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
       return (
         <ProjectDetailRefund
           version={version}
@@ -92,7 +86,7 @@ class ProjectGovernance extends Component {
           crowdSaleAddress={crowdSaleAddress}
           currentRoundNumber={currentRoundNumber}
           daicoTokenAddress={daicoTokenAddress}
-          etherPrice={etherPrice}
+          treasuryStateNumber={treasuryStateNumber}
         />
       );
     }
@@ -117,7 +111,7 @@ class ProjectGovernance extends Component {
             rounds={rounds}
             totalMintableSupply={totalMintableSupply}
             foundationDetails={foundationDetails}
-            etherPrice={etherPrice}
+            initialFundRelease={initialFundRelease}
           />
         );
       case "1":
@@ -143,11 +137,12 @@ class ProjectGovernance extends Component {
             pollFactoryAddress={pollFactoryAddress}
             initialFundRelease={initialFundRelease}
             crowdSaleAddress={crowdSaleAddress}
-            etherPrice={etherPrice}
+            daicoTokenAddress={daicoTokenAddress}
           />
         );
       case "2":
       case "3":
+      case "4":
         return (
           <ProjectDetailGovernance
             version={version}
@@ -172,63 +167,7 @@ class ProjectGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
-            etherPrice={etherPrice}
-          />
-        );
-      case "4":
-        return (
-          <ProjectDetailSaleEnd
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            currentRoundNumber={currentRoundNumber}
-            daicoTokenAddress={daicoTokenAddress}
-            etherPrice={etherPrice}
-          />
-        );
-      case "5":
-        return (
-          <ProjectDetailRefund
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            currentRoundNumber={currentRoundNumber}
-            daicoTokenAddress={daicoTokenAddress}
-            etherPrice={etherPrice}
+            xfrDetails={xfrDetails}
           />
         );
       default:
@@ -238,7 +177,7 @@ class ProjectGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { deployerReducer, projectGovernanceReducer, fetchPriceReducer } = state || {};
+  const { deployerReducer, projectGovernanceReducer } = state || {};
   const { projectDetails, ts } = deployerReducer || {};
   const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
 
@@ -264,5 +203,3 @@ const connector = connect(
 )(ProjectGovernance);
 
 export default withRouter(connector);
-
-// TODO: Do the Proptypes validation to all childrens

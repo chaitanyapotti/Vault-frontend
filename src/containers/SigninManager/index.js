@@ -13,7 +13,11 @@ class SigninManager extends Component {
   initAddressPoll() {
     if (!this.interval) {
       this.interval = setInterval(() => {
-        this.props.fetchCurrentAccount(this.props.userPreviousLocalPublicAddress);
+        this.props.fetchCurrentAccount(
+          this.props.userPreviousLocalPublicAddress,
+          this.props.metamaskPreviousNetworkName,
+          this.props.metamaskPreviousInstallationState
+        );
       }, 1000);
     }
   }
@@ -34,14 +38,23 @@ class SigninManager extends Component {
 }
 
 const mapStateToProps = state => {
-  const { userRegistered, userServerPublicAddress, userIsIssuer, userLocalPublicAddress, userPreviousLocalPublicAddress } =
-    state.signinManagerData || {};
+  const {
+    userRegistered,
+    userServerPublicAddress,
+    userIsIssuer,
+    userLocalPublicAddress,
+    userPreviousLocalPublicAddress,
+    metamaskPreviousNetworkName,
+    metamaskPreviousInstallationState
+  } = state.signinManagerData || {};
   return {
     userRegistered,
     userServerPublicAddress,
     userIsIssuer,
     userLocalPublicAddress,
     userPreviousLocalPublicAddress,
+    metamaskPreviousNetworkName,
+    metamaskPreviousInstallationState
   };
 };
 
@@ -50,11 +63,11 @@ const mapDispatchToProps = dispatch =>
     {
       checkUserRegistration,
       fetchCurrentAccount,
-      checkVaultMembership,
+      checkVaultMembership
     },
-    dispatch,
+    dispatch
   );
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SigninManager);

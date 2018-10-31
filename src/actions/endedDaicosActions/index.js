@@ -12,25 +12,25 @@ export function getEndedDaicos() {
           if (response.data.message === constants.SUCCESS) {
             dispatch({
               type: actionTypes.ENDED_DAICOS_SUCCESS,
-              payload: response.data.data,
+              payload: response.data.data
             });
           } else {
             dispatch({
               type: actionTypes.ENDED_DAICOS_FAILED,
-              payload: constants.ENDED_DAICOS_FAILED_MESSAGE,
+              payload: constants.ENDED_DAICOS_FAILED_MESSAGE
             });
           }
         } else {
           dispatch({
             type: actionTypes.ENDED_DAICOS_FAILED,
-            payload: constants.ENDED_DAICOS_FAILED_MESSAGE,
+            payload: constants.ENDED_DAICOS_FAILED_MESSAGE
           });
         }
       })
       .catch(err => {
         dispatch({
           type: actionTypes.ENDED_DAICOS_FAILED,
-          payload: constants.ENDED_DAICOS_FAILED_MESSAGE,
+          payload: constants.ENDED_DAICOS_FAILED_MESSAGE
         });
       });
   };
@@ -40,7 +40,7 @@ export function showEndedDaicosLoaderAction() {
   return dispatch => {
     dispatch({
       type: actionTypes.SHOW_ENDED_DAICOS_LOADER,
-      payload: null,
+      payload: null
     });
   };
 }

@@ -1,33 +1,71 @@
-import React from "react";
+import React, { Component } from "react";
 import { CUICard } from "../../../../helpers/material-ui";
 import ReqType from "./ReqType";
-import XfrForm from "../XfrForm";
-class FundReq extends React.Component {
+
+class FundReq extends Component {
   getObject1 = () => {
-    const { data } = this.props || {};
+    const { data, details, xfrVoteData, signinStatusFlag, onRevokeXfr1Click, onXfr1Click, xfr1ButtonSpinning, tokensUnderGovernance } =
+      this.props || {};
     const { poll1 } = data || {};
-    const { amount, consensus, endTime } = poll1 || {};
-    return endTime ? <ReqType amount={amount} consensus={consensus} endTime={new Date(endTime).toDateString()} /> : <span> Nothing deployed</span>;
+    const { amount, consensus, endTime, address } = poll1 || {};
+    const requiredData = details.filter(x => x.address === address);
+    const { name, description, startDate } = requiredData[0] || {};
+    const requiredVote = xfrVoteData.filter(x => x.address === address) || {};
+    const { voted } = requiredVote[0] || false;
+    return endTime ? (
+      <CUICard style={{ padding: "40px 50px" }}>
+        <ReqType
+          amount={amount}
+          consensus={consensus}
+          endTime={endTime}
+          name={name}
+          description={description}
+          startDate={startDate}
+          voted={voted}
+          signinStatusFlag={signinStatusFlag}
+          onRevokeXfrClick={onRevokeXfr1Click}
+          onXfrClick={onXfr1Click}
+          xfrButtonSpinning={xfr1ButtonSpinning}
+          tokensUnderGovernance={tokensUnderGovernance}
+        />
+      </CUICard>
+    ) : null;
   };
 
   getObject2 = () => {
-    const { data } = this.props || {};
+    const { data, details, xfrVoteData, signinStatusFlag, onRevokeXfr2Click, onXfr2Click, xfr2ButtonSpinning, tokensUnderGovernance } =
+      this.props || {};
     const { poll2 } = data || {};
-    const { amount, consensus, endTime } = poll2 || {};
-    return endTime ? <ReqType amount={amount} consensus={consensus} endTime={new Date(endTime).toDateString()} /> : <span> Nothing deployed</span>;
+    const { amount, consensus, endTime, address } = poll2 || {};
+    const requiredData = details.filter(x => x.address === address);
+    const { name, description, startDate } = requiredData[0] || {}; //
+    const requiredVote = xfrVoteData.filter(x => x.address === address) || {};
+    const { voted } = requiredVote[0] || false;
+    return endTime ? (
+      <CUICard style={{ padding: "40px 50px" }}>
+        <ReqType
+          amount={amount}
+          consensus={consensus}
+          endTime={endTime}
+          name={name}
+          description={description}
+          startDate={startDate}
+          voted={voted}
+          signinStatusFlag={signinStatusFlag}
+          onRevokeXfrClick={onRevokeXfr2Click}
+          onXfrClick={onXfr2Click}
+          xfrButtonSpinning={xfr2ButtonSpinning}
+          tokensUnderGovernance={tokensUnderGovernance}
+        />
+      </CUICard>
+    ) : null;
   };
 
-  getObject2 = () => {};
-
   render() {
-    console.log("props in fund req", this.props);
     return (
       <div>
-        <CUICard style={{ padding: "40px 50px" }}>
-          <XfrForm />
-        </CUICard>
-        <CUICard style={{ padding: "40px 50px" }}>{this.getObject1()}</CUICard>
-        <CUICard style={{ padding: "40px 50px" }}>{this.getObject2()}</CUICard>
+        {this.getObject1()}
+        {this.getObject2()}
       </div>
     );
   }

@@ -13,6 +13,7 @@ import projectCrowdSaleReducer from "./projectCrowdSaleReducer";
 import projectDetailGovernanceReducer from "./projectDetailGovernanceReducer";
 import projectRefundReducer from "./projectRefundReducer";
 import fetchPriceReducer from "./fetchPriceReducer";
+import searchReducer from "./searchReducer";
 
 export default {
   app,
@@ -29,5 +30,6 @@ export default {
   projectCrowdSaleReducer,
   projectDetailGovernanceReducer,
   projectRefundReducer,
-  fetchPriceReducer
+  fetchPriceReducer,
+  searchReducer
 };

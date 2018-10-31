@@ -12,85 +12,117 @@ export const initialState = {
   tapPollConsensus: "0",
   currentTap: "0",
   xfrData: {},
+  xfrVoteData: []
 };
 
-export default function(state = initialState, action) {
+export default (state = initialState, action) => {
   switch (action.type) {
-    // case actionTypes.MEMBERSHIP_ASSIGNED:
-    //   return {
-    //     ...state,
-    //     membershipAssigned: true
-    //   };
-
-    // case actionTypes.MEMBERSHIP_FAILED:
-    //   return {
-    //     ...state,
-    //     membershipAssigned: false
-    //   };
-
-    case actionTypes.TOKEN_BALANCE_RECEIVED:
-      const { receipt } = action.payload;
-      return {
-        ...state,
-        tokenBalance: receipt,
-      };
-
-    case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED:
+    case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED: {
       const { rec } = action.payload;
       return {
         ...state,
-        tokensUnderGovernance: rec,
+        tokensUnderGovernance: rec
       };
+    }
     case actionTypes.KILL_POLL_INDEX_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        killPollIndex: receipt,
+        killPollIndex: receipt
       };
     }
     case actionTypes.REMAINING_ETHER_BALANCE_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        remainingEtherBalance: receipt,
+        remainingEtherBalance: receipt
       };
     }
     case actionTypes.TOTAL_SUPPLY_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        totalSupply: receipt,
+        totalSupply: receipt
       };
     }
     case actionTypes.KILL_CONSENSUS_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        killConsensus: receipt,
+        killConsensus: receipt
       };
     }
     case actionTypes.TAP_CONSENSUS_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        tapPollConsensus: receipt,
+        tapPollConsensus: receipt
       };
     }
     case actionTypes.CURRENT_TAP_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        currentTap: receipt,
+        currentTap: receipt
       };
     }
     case actionTypes.XFR_DATA_RECEIVED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        xfrData: receipt,
+        xfrData: receipt
+      };
+    }
+    case actionTypes.KILL_POLL_VOTE_RECEIVED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        killVoteData: receipt
+      };
+    }
+    case actionTypes.TAP_POLL_VOTE_RECEIVED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        tapVoteData: receipt
+      };
+    }
+    case actionTypes.KILL_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        killButtonSpinning: receipt
+      };
+    }
+    case actionTypes.TAP_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        tapButtonSpinning: receipt
+      };
+    }
+    case actionTypes.XFR_POLL_VOTE_RECEIVED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        xfrVoteData: receipt
+      };
+    }
+    case actionTypes.XFR1_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        xfr1ButtonSpinning: receipt
+      };
+    }
+    case actionTypes.XFR2_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        xfr2ButtonSpinning: receipt
       };
     }
     default:
       return state;
   }
-}
+};

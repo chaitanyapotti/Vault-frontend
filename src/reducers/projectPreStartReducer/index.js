@@ -1,25 +1,19 @@
-/* global document, window */
-/* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  isCurrentMember: false
+  isCurrentMember: false,
+  buttonSpinning: false
 };
 
-export default function(state = initialState, action) {
+export default (state = initialState, action) => {
   switch (action.type) {
-    // case actionTypes.MEMBERSHIP_ASSIGNED:
-    //   return {
-    //     ...state,
-    //     membershipAssigned: true
-    //   };
-
-    // case actionTypes.MEMBERSHIP_FAILED:
-    //   return {
-    //     ...state,
-    //     membershipAssigned: false
-    //   };
-
+    case actionTypes.BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        buttonSpinning: receipt
+      };
+    }
     case actionTypes.WHITELIST_CHECK: {
       const { receipt } = action.payload;
       return {
@@ -30,4 +24,4 @@ export default function(state = initialState, action) {
     default:
       return state;
   }
-}
+};

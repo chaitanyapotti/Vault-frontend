@@ -2,10 +2,9 @@ import axios from "axios";
 import actionTypes from "../../action_types";
 import config from "../../config";
 import constants from "../../constants";
-import web3 from "../../helpers/web3";
+import { checkMetaMask } from "../../helpers/common/validationHelperFunctions";
 
 export function newProjectRegistration(projectData, userLocalPublicAddress) {
-  
   let foundationDetails = [];
   const { nonSaleEntities, totalSaleTokens } = projectData || [];
   let totalNonSaleTokens = 0;
@@ -14,14 +13,14 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       foundationDetails.push({
         address: nonSaleEntities[i]["entityAddress"],
         amount: Math.round(
-          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 100
+          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 50
         ),
         description: nonSaleEntities[i]["entityName"]
       });
       totalNonSaleTokens =
         totalNonSaleTokens +
         Math.round(
-          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 100
+          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 50
         );
     }
   }
@@ -33,15 +32,15 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     r1EndTime: projectData.daicoEndDate,
     rounds: [
       {
-        tokenCount: projectData.round1Tokens,
+        tokenCount: projectData.round1Tokens* Math.pow(10, 18),
         tokenRate: projectData.round1Rate
       },
       {
-        tokenCount: projectData.round2Tokens,
+        tokenCount: projectData.round2Tokens* Math.pow(10, 18) ,
         tokenRate: projectData.round2Rate
       },
       {
-        tokenCount: projectData.round3Tokens,
+        tokenCount: projectData.round3Tokens* Math.pow(10, 18),
         tokenRate: projectData.round3Rate
       }
     ],
@@ -167,17 +166,11 @@ export function entityAddressChangedAction(value) {
   };
 }
 
-async function checkMetaMask(address) {
-  const isValid = await web3.utils.isAddress(address);
-  return isValid;
-}
-
 export function teamAddressChangedAction(value) {
-  return async dispatch => {
-    const isValid = await checkMetaMask(value);
+  return dispatch => {
     dispatch({
       type: actionTypes.TEAM_ADDRESS_CHANGED,
-      payload: { value, isValid }
+      payload: value
     });
   };
 }
@@ -354,6 +347,7 @@ export function voteSaturationLimitChangedAction(value) {
 // }
 
 export function daicoStartDateChangedAction(value) {
+  console.log(value);
   return dispatch => {
     dispatch({
       type: actionTypes.DAICO_START_DATE_CHANGED,

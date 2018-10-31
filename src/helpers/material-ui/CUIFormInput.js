@@ -63,6 +63,7 @@ const CUIFormInput = props => {
         inputProps,
         inputPrefixSuffix,
         forceNumeric,
+        forceNumDec,
         error,
         helperText,
         hintText,
@@ -84,7 +85,7 @@ const CUIFormInput = props => {
       cuiTextProps.onFocus = onFocus;
       cuiTextProps.onBlur = onBlur;
       cuiTextProps.onKeyDown = e => {
-        handleInputKeydown(e, onKeyDownSelector, forceNumeric);
+        handleInputKeydown(e, onKeyDownSelector, forceNumeric, forceNumDec);
       };
 
       return <TextField {...cuiTextProps} />;

@@ -2,13 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { CUIFormInput, CUIButton } from "../../../helpers/material-ui";
-import {
-  CUIInputType,
-  CUIButtonType,
-  CUIInputColor
-} from "../../../static/js/variables";
+import { CUIInputType } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../../Common/FormComponents";
+import actionTypes from "../../../action_types";
 
 import { Table } from "semantic-ui-react";
 import { Tooltip, Legend, Pie, PieChart, Cell, Label, LabelList, Sector } from "recharts";
@@ -21,19 +18,10 @@ import {
   nonSaleEntityEditAction
 } from "../../../actions/projectRegistrationActions";
 
+import { validateLength, validateDecimal, validateEntityPercentage } from "../../../helpers/common/validationHelperFunctions";
+
 // const CHARTCOLORS = ['#e1f4ff', '#b0ddff', '#7ec3fe', '#65b6fd', '#4ca9fc', '#3d8dd4', '#2e71ac', '#1e5583', '#0f395b', '#001d33']
-const CHARTCOLORS = [
-  "#001d33",
-  "#0f395b",
-  "#1e5583",
-  "#3d8dd4",
-  "#4ca9fc",
-  "#65b6fd",
-  "#7ec3fe",
-  "#b0ddff",
-  "#e1f4ff",
-  "#2e71ac"
-];
+const CHARTCOLORS = ["#001d33", "#0f395b", "#1e5583", "#3d8dd4", "#4ca9fc", "#65b6fd", "#7ec3fe", "#b0ddff", "#e1f4ff", "#2e71ac"];
 
 const NonSaleEntitiesTableHeader = () => (
   <Table.Header>
@@ -47,8 +35,7 @@ const NonSaleEntitiesTableHeader = () => (
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
-  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-    fill, payload, percent, value } = props;
+  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
   const sx = cx + (outerRadius + 10) * cos;
@@ -63,7 +50,7 @@ const renderActiveShape = (props) => {
     <g>
       <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>{payload.name}</text>
       <Sector
-      isAnimationActive={true}
+        isAnimationActive={true}
         cx={cx}
         cy={cy}
         innerRadius={innerRadius}
@@ -72,12 +59,12 @@ const renderActiveShape = (props) => {
         endAngle={endAngle}
         fill={fill}
       />
-      <Sector 
+      <Sector
         cx={cx}
         cy={cy}
         startAngle={startAngle}
         endAngle={endAngle}
-        innerRadius={outerRadius-1}
+        innerRadius={outerRadius - 1}
         outerRadius={outerRadius + 1}
         fill={fill}
       />
@@ -91,13 +78,29 @@ const renderActiveShape = (props) => {
   );
 };
 
-
 class NonSale extends React.Component {
-
   constructor(props) {
     super(props);
-    this.state = {nonTokenSalePieActiveIndex: 100, centerValue: 0};
+    this.state = { nonTokenSalePieActiveIndex: 100, centerValue: 0 };
   }
+
+  componentDidUpdate(prevProps) {
+    const { errors } = this.props || {};
+    if (prevProps.errors !== errors) {
+      this.getErrorMsg();
+    }
+  }
+
+  getErrorMsg = propName => {
+    const { errors } = this.props || {};
+    if (errors) {
+      if (errors.hasOwnProperty(propName)) {
+        return errors[propName];
+      }
+      return "";
+    }
+    return "";
+  };
 
   handleAddNewEntity = () => {
     this.props.addNonSaleEntityAction(
@@ -126,16 +129,16 @@ class NonSale extends React.Component {
   populateNonSaleEntities = () => {
     let nonSaleEntitiesTable = this.props.nonSaleEntities;
     if (nonSaleEntitiesTable && nonSaleEntitiesTable.length > 0) {
-      return nonSaleEntitiesTable.map((entity, index) => (
-        <Table.Row
-          key={index}
-          onClick={this.handleNonSaleEntityEdit.bind(this, index)}
-        >
-          <Table.Cell>{entity.entityName}</Table.Cell>
-          <Table.Cell>{entity.entityPercentage}</Table.Cell>
-          <Table.Cell>{entity.entityAddress}</Table.Cell>
-        </Table.Row>
-      ));
+      return nonSaleEntitiesTable.filter(entity => entity.entityName !== "Unallocated").map((entity, index) => {
+            return  <Table.Row
+                key={index}
+                onClick={this.handleNonSaleEntityEdit.bind(this, index)}
+              >
+                <Table.Cell>{entity.entityName}</Table.Cell>
+                <Table.Cell>{entity.entityPercentage}</Table.Cell>
+                <Table.Cell>{entity.entityAddress}</Table.Cell>
+              </Table.Row>
+      });
     } else {
       return null;
     }
@@ -153,52 +156,54 @@ class NonSale extends React.Component {
     //            fontFamily='sans-serif'
     //            fill="#e1f4ff"
     //            textAnchor="middle">{50}%</text>
-  //   return <svg height="21" width="40">
-  //   <path d="M15 0 L8 20 L22 20 Z" />
-  // </svg>
-  return <g>
-    <circle cx={x} cy={y - radius} r={radius} fill="#8884d8" />
-  </g>
+    //   return <svg height="21" width="40">
+    //   <path d="M15 0 L8 20 L22 20 Z" />
+    // </svg>
+    return <g>
+      <circle cx={x} cy={y - radius} r={radius} fill="#8884d8" />
+    </g>
     // return this.props.nonSaleEntities.map((entry, index) => (
     //   <svg height="210" width="400">
     //     <path d="M150 0 L75 200 L225 200 Z" />
     //   </svg>
     // ))
-  } 
+  }
 
   onPieEnter = (data, index) => {
-    console.log("on pie enter: ", data, index)
     this.setState({
       nonTokenSalePieActiveIndex: index,
-      centerValue: parseInt(parseFloat(data.payload.entityPercentage)*this.props.totalSaleTokens/100) || 0
+      centerValue: parseInt(2*parseFloat(data.payload.entityPercentage) * this.props.totalSaleTokens / 100) || 0
     });
   }
 
   onPieLeave = (data, index) => {
     this.setState({
       nonTokenSalePieActiveIndex: 100,
-      centerValue: this.props.totalSaleTokens || 0
+      centerValue: 2*this.props.totalSaleTokens || 0
     });
   }
 
   render() {
+    const { entityName, entityAddress, entityPercentage} = this.props || {}
     return (
       <div className="push-top--50">
-        <div className="txt-xl">Non Sale Distribution</div>
+        <div className="txt-xl">Non Sale Distribution <span>(50% of Supply)</span></div>
         <hr />
         <div>
-          {this.props.nonSaleEntities.length > 0 ? (
+          {this.props.unallocatedTokensPer < 50 ? (
             <Table>
               <NonSaleEntitiesTableHeader />
               <Table.Body>{this.populateNonSaleEntities()}</Table.Body>
             </Table>
           ) : null}
         </div>
-        <Row>
+        {
+          this.props.unallocatedTokensPer>0?
+          <Row>
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
-              full
+              required
               inputName="Name of the Entity"
               inputLabel="Name of the Entity"
               inputPlaceholder=""
@@ -214,8 +219,9 @@ class NonSale extends React.Component {
             <CUIFormInput
               inputType={CUIInputType.TEXT}
               full
-              inputName="Percentage of Non-Sale Tokens"
-              inputLabel="Percentage of Non-Sale Tokens"
+              forceNumDec
+              inputName="Percentage of Total Tokens Supply"
+              inputLabel="Percentage of Total Tokens Supply"
               inputPlaceholder=""
               inputValue={this.props.entityPercentage}
               // onBlur={this.onBlurAge}
@@ -223,6 +229,8 @@ class NonSale extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeEntityPercentage}
+              error={!!this.getErrorMsg(actionTypes.ENTITY_PERCENTAGE_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.ENTITY_PERCENTAGE_CHANGED)}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -238,10 +246,21 @@ class NonSale extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeEntityAddress}
+              error={!!this.getErrorMsg(actionTypes.ENTITY_ADDRESS_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.ENTITY_ADDRESS_CHANGED)}
             />
           </Col>
         </Row>
-
+          : null
+        }
+        {this.props.unallocatedTokensPer>0? 
+          <Row>
+        <Col>
+            Currently unallocated: {this.props.unallocatedTokensPer}%
+          </Col>
+        </Row>
+        : null
+        }
         <Row>
           <Col>
             <div className="push--top">
@@ -249,70 +268,81 @@ class NonSale extends React.Component {
                 label="Add To token Distribution Chart"
                 style={{ width: "100%" }}
                 onClick={this.handleAddNewEntity}
+                disabled={
+                  !validateLength(entityName) ||
+                  !validateLength(entityAddress) ||
+                  !validateLength(entityPercentage) ||
+                  !validateDecimal(entityPercentage) ||
+                  validateEntityPercentage(parseFloat(entityPercentage))
+                }
               />
             </div>
           </Col>
         </Row>
 
-        <Row>
-          <PieChart width={600} height={400}>
-            <Legend layout='vertical' iconSize={32} verticalAlign="middle" align="left" onMouseEnter={this.onPieEnter} onMouseLeave={this.onPieLeave}/>
-            <Tooltip />
-            <Pie
-              //isAnimationActive={true}
-              data={this.props.nonSaleEntities}
-              activeIndex={this.state.nonTokenSalePieActiveIndex}
-              activeShape={renderActiveShape}
-              cx={250}
-              cy={200}
-              innerRadius={100}
-              outerRadius={150}
-              fill="#8884d8"
-              dataKey="entityPercentage"
-              nameKey="entityName"
-              onMouseEnter={this.onPieEnter}
-              onMouseLeave={this.onPieLeave}
-            >
-            <LabelList position="outside" offset={15} formatter={(index) => `${index} %`} fill="black" stroke="#000000"/>
-            {/* <LabelList position="outside" content={this.renderCustomizedLabel}/> */}
-              <Label width={30} position="center">
-                {this.state.centerValue}
-                Tokens
+        {
+          this.props.totalSaleTokens > 0 ?
+            <Row>
+              <PieChart width={600} height={400}>
+                <Legend layout='vertical' iconSize={32} verticalAlign="middle" align="left" onMouseEnter={this.onPieEnter} onMouseLeave={this.onPieLeave} />
+                <Tooltip />
+                <Pie
+                  //isAnimationActive={true}
+                  data={(this.props.saleEntities.concat(this.props.nonSaleEntities))}
+                  activeIndex={this.state.nonTokenSalePieActiveIndex}
+                  activeShape={renderActiveShape}
+                  cx={250}
+                  cy={200}
+                  innerRadius={100}
+                  outerRadius={150}
+                  fill="#8884d8"
+                  dataKey="entityPercentage"
+                  nameKey="entityName"
+                  onMouseEnter={this.onPieEnter}
+                  onMouseLeave={this.onPieLeave}
+                >
+                  <LabelList position="outside" offset={15} formatter={(index) => `${index} %`} fill="black" stroke="#000000" />
+                  {/* <LabelList position="outside" content={this.renderCustomizedLabel}/> */}
+                  <Label width={30} position="center">
+                    {this.state.centerValue}
+                    Tokens
               </Label>
-              {/* {this.props.nonSaleEntities.map((entry, index) => (
+                  {/* {this.props.nonSaleEntities.map((entry, index) => (
                 <Label width={30} position="outside">
                   {index}
                 </Label>
               ))} */}
-              {this.props.nonSaleEntities.map((entry, index) => (
-                <Cell
-                  key={index}
-                  fill={CHARTCOLORS[index % CHARTCOLORS.length]}
-                >
-                </Cell>
-              ))}
-            </Pie>
-          </PieChart>
-        </Row>
+                  {(this.props.saleEntities.concat(this.props.nonSaleEntities)).map((entry, index) => (
+                    <Cell
+                      key={index}
+                      fill={CHARTCOLORS[index % CHARTCOLORS.length]}
+                    >
+                    </Cell>
+                  ))}
+                </Pie>
+              </PieChart>
+            </Row>
+            :
+            null
+        }
+        
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  var {
+  const { nonSaleEntities, totalSaleTokens, entityName, entityPercentage, entityAddress, saleEntities, unallocatedTokensPer, errors } =
+    state.projectRegistrationData || {};
+  return {
     nonSaleEntities,
     totalSaleTokens,
     entityName,
     entityPercentage,
-    entityAddress
-  } = state.projectRegistrationData || {};
-  return {
-    nonSaleEntities: nonSaleEntities,
-    totalSaleTokens: totalSaleTokens,
-    entityName: entityName,
-    entityPercentage: entityPercentage,
-    entityAddress: entityAddress
+    entityAddress,
+    saleEntities,
+    unallocatedTokensPer,
+    errors
   };
 };
 

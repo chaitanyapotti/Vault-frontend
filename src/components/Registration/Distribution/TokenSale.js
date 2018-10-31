@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { CUICard, CUIFormInput, CUIButton } from "../../../helpers/material-ui";
-import { CUIInputType, CUIButtonType, CUIInputColor, CS_COLORS } from "../../../static/js/variables";
+import { CUIFormInput } from "../../../helpers/material-ui";
+import { CUIInputType } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import {
   round1TargetUSDChangedAction,
@@ -14,6 +14,9 @@ import {
   tokenPriceFactorChangedAction,
   calculateTokens
 } from "../../../actions/projectRegistrationActions";
+import actionTypes from "../../../action_types";
+import { ButtonComponent } from "../../Common/FormComponents";
+import { validateTokenPriceFactor, validateLength } from "../../../helpers/common/validationHelperFunctions";
 
 class TokenSale extends React.Component {
   onChangeRound1TargetUSD = e => {
@@ -41,14 +44,47 @@ class TokenSale extends React.Component {
   };
 
   onCalculateTokenClicked = e => {
-    this.props.calculateTokens()
+    this.props.calculateTokens();
+  };
+
+  componentDidUpdate(prevProps) {
+    const { errors } = this.props || {};
+    if (prevProps.errors !== errors) {
+      this.getErrorMsg();
+    }
   }
+
+  getErrorMsg = propName => {
+    const { errors } = this.props || {};
+    if (errors) {
+      if (errors.hasOwnProperty(propName)) {
+        return errors[propName];
+      }
+      return "";
+    }
+    return "";
+  };
 
   onChangeTokenPriceFactor = e => {
     this.props.tokenPriceFactorChangedAction(e.target.value);
   };
 
   render() {
+    const {
+      round1TargetUSD,
+      round1TargetEth,
+      round1Rate,
+      round2Rate,
+      round3Rate,
+      round2TargetUSD,
+      round2TargetEth,
+      round3TargetUSD,
+      round3Tokens,
+      round2Tokens,
+      round1Tokens,
+      round3TargetEth,
+      tokenPriceFactor
+    } = this.props || {};
     return (
       <div>
         <div className="txt-xl">Token Sale Distribution</div>
@@ -59,10 +95,11 @@ class TokenSale extends React.Component {
               inputType={CUIInputType.TEXT}
               required
               full
+              forceNumeric
               inputName="Round1 Target in USD"
               inputLabel="Round1 Target in USD"
               inputPlaceholder=""
-              inputValue={this.props.round1TargetUSD}
+              inputValue={round1TargetUSD}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -75,10 +112,11 @@ class TokenSale extends React.Component {
               inputType={CUIInputType.TEXT}
               required
               full
+              forceNumeric
               inputName="Round1 Target in Eth"
               inputLabel="Round1 Target in Eth"
               inputPlaceholder=""
-              inputValue={this.props.round1TargetEth}
+              inputValue={round1TargetEth}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -87,17 +125,24 @@ class TokenSale extends React.Component {
             />
           </Col>
         </Row>
-
+        {round1Tokens > 0 ? (
+          <Row>
+            <label>
+              Total round 1 tokens {round1Tokens} at {round1Rate} eth/token
+            </label>
+          </Row>
+        ) : null}
         <Row>
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
               required
               full
+              forceNumeric
               inputName="Round2 Target in USD"
               inputLabel="Round2 Target in USD"
               inputPlaceholder=""
-              inputValue={this.props.round2TargetUSD}
+              inputValue={round2TargetUSD}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -110,10 +155,11 @@ class TokenSale extends React.Component {
               inputType={CUIInputType.TEXT}
               required
               full
+              forceNumeric
               inputName="Round2 Target in Eth"
               inputLabel="Round2 Target in Eth"
               inputPlaceholder=""
-              inputValue={this.props.round2TargetEth}
+              inputValue={round2TargetEth}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -122,17 +168,24 @@ class TokenSale extends React.Component {
             />
           </Col>
         </Row>
-
+        {round2Tokens > 0 ? (
+          <Row>
+            <label>
+              Total round 2 tokens {round2Tokens} at {round2Rate} eth/token
+            </label>
+          </Row>
+        ) : null}
         <Row>
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
               required
               full
+              forceNumeric
               inputName="Round3 Target in USD"
               inputLabel="Round3 Target in USD"
               inputPlaceholder=""
-              inputValue={this.props.round3TargetUSD}
+              inputValue={round3TargetUSD}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -145,10 +198,11 @@ class TokenSale extends React.Component {
               inputType={CUIInputType.TEXT}
               required
               full
+              forceNumeric
               inputName="Round3 Target in Eth"
               inputLabel="Round3 Target in Eth"
               inputPlaceholder=""
-              inputValue={this.props.round3TargetEth}
+              inputValue={round3TargetEth}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -157,33 +211,49 @@ class TokenSale extends React.Component {
             />
           </Col>
         </Row>
+        {round3Tokens > 0 ? (
+          <Row>
+            <label>
+              Total round 3 tokens {round3Tokens} at {round3Rate} eth/token
+            </label>
+          </Row>
+        ) : null}
         <Row>
           <Col>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
               required
               full
+              forceNumDec
               inputName="Token price factor"
               inputLabel="Token price factor"
               inputPlaceholder=""
-              inputValue={this.props.tokenPriceFactor}
+              inputValue={tokenPriceFactor}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeTokenPriceFactor}
+              error={!!this.getErrorMsg(actionTypes.TOKEN_PRICE_FACTOR_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.TOKEN_PRICE_FACTOR_CHANGED)}
             />
           </Col>
         </Row>
         <Row>
-          <Col>
-            <CUIButton
-              type={CUIButtonType.RAISED}
-              buttonColor={CUIInputColor.PRIMARY}
-              id="calculateTokens"
+          <Col lg={12}>
+            <ButtonComponent
               label="Calculate"
-              // disabled={!this.state.validPassword}
               onClick={this.onCalculateTokenClicked}
+              disabled={
+                !validateTokenPriceFactor(tokenPriceFactor) ||
+                !validateLength(round1TargetEth) ||
+                !validateLength(round1TargetUSD) ||
+                !validateLength(round2TargetEth) ||
+                !validateLength(round2TargetUSD) ||
+                !validateLength(round3TargetEth) ||
+                !validateLength(round3TargetUSD) ||
+                !validateLength(tokenPriceFactor)
+              }
             />
           </Col>
         </Row>
@@ -193,15 +263,39 @@ class TokenSale extends React.Component {
 }
 
 const mapStateToProps = state => {
-  var { round1TargetUSD, round1TargetEth, round2TargetUSD, round2TargetEth, round3TargetUSD, round3TargetEth, tokenPriceFactor } = state.projectRegistrationData || {};
+  const {
+    round1TargetUSD,
+    round1TargetEth,
+    round2TargetUSD,
+    round2TargetEth,
+    round3TargetUSD,
+    round3TargetEth,
+    tokenPriceFactor,
+    round1Tokens,
+    round2Tokens,
+    round3Tokens,
+    round1Rate,
+    round2Rate,
+    round3Rate,
+    totalSaleTokens,
+    errors
+  } = state.projectRegistrationData || {};
   return {
-    round1TargetUSD: round1TargetUSD,
-    round1TargetEth: round1TargetEth,
-    round2TargetUSD: round2TargetUSD,
-    round2TargetEth: round2TargetEth,
-    round3TargetUSD: round3TargetUSD,
-    round3TargetEth: round3TargetEth,
-    tokenPriceFactor:tokenPriceFactor
+    round1TargetUSD,
+    round1TargetEth,
+    round2TargetUSD,
+    round2TargetEth,
+    round3TargetUSD,
+    round3TargetEth,
+    tokenPriceFactor,
+    round1Tokens,
+    round2Tokens,
+    round3Tokens,
+    round1Rate,
+    round2Rate,
+    round3Rate,
+    totalSaleTokens,
+    errors
   };
 };
 
@@ -217,10 +311,10 @@ const mapDispatchToProps = dispatch =>
       tokenPriceFactorChangedAction,
       calculateTokens
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(TokenSale);

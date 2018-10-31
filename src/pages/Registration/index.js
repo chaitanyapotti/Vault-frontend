@@ -4,19 +4,103 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import Warning from "@material-ui/icons/Warning";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Registration";
-import { CUIButton } from "../../helpers/material-ui";
-import { CUIButtonType, CUIInputColor } from "../../static/js/variables";
+import {
+  validateAdminName,
+  validateLength,
+  validateEmail,
+  isUpperCase,
+  validateTwitterLink,
+  validateFacebookLink,
+  validateWebsiteUrl,
+  validateGitLink,
+  validateMediumLink,
+  validateTelegramLink,
+  validateProjectNameLength,
+  validateTokenTagLength,
+  alphaOnly,
+  validateMaxEtherContribution,
+  validateTapIncrementFactor,
+  validateVoteSaturationLimit,
+  validateDate,
+  validateTotalSaleTokens,
+  validateTokenPriceFactor,
+  checkMetaMask,
+  validateUniqueName
+} from "../../helpers/common/validationHelperFunctions";
 import { newProjectRegistration } from "../../actions/projectRegistrationActions";
+import { getProjectNames } from "../../actions/projectNamesActions";
+import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
+import AlertModal from "../../components/Common/AlertModal";
 
 class Registration extends Component {
-  handlePublishDaico = e => {
-    this.props.newProjectRegistration(this.props.projectRegistrationData, this.props.userLocalPublicAddress);
+  state = {
+    modalOpen: false,
+    modalMessage: ""
   };
 
+  componentDidMount() {
+    const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags } = this.props || {};
+    fetchProjectNames();
+    fetchTokenTags();
+  }
+
+  handlePublishDaico = e => {
+    const {
+      initialFundRelease,
+      round1TargetEth,
+      initialTapValue,
+      newProjectRegistration: projectRegistration,
+      projectRegistrationData: registrationData,
+      userLocalPublicAddress: localAddress
+    } = this.props || {};
+    if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
+      this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
+    } else if (parseFloat(initialTapValue) >= parseFloat(initialFundRelease)) {
+      this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than Initial Fund Release" });
+    } else {
+      projectRegistration(registrationData, localAddress);
+    }
+  };
+
+  handleClose = () => this.setState({ modalOpen: false });
+
   render() {
+    const {
+      adminName,
+      adminEmail,
+      projectName,
+      projectDescription,
+      erc20TokenTag,
+      websiteLink,
+      telegramLink,
+      githubLink,
+      mediumLink,
+      facebookLink,
+      twitterLink,
+      teamAddress,
+      maxEtherContribution,
+      tapIncrementFactor,
+      voteSaturationLimit,
+      initialFundRelease,
+      initialTapValue,
+      daicoStartDate,
+      daicoEndDate,
+      round1TargetUSD,
+      round1TargetEth,
+      round2TargetUSD,
+      round2TargetEth,
+      round3TargetUSD,
+      round3TargetEth,
+      tokenPriceFactor,
+      totalSaleTokens,
+      projectNames,
+      tokenTags
+    } = this.props || {};
+    const { modalOpen, modalMessage } = this.state;
     return (
       <Grid>
         <Row className="push--top">
@@ -25,7 +109,52 @@ class Registration extends Component {
           </Col>
           <Col xs={12} lg={5}>
             <div style={{ textAlign: "center" }}>
-              <ButtonComponent style={{ width: "85%" }} label="Publish DAICO" onClick={this.handlePublishDaico} />
+              <ButtonComponent
+                style={{ width: "85%" }}
+                label="Publish DAICO"
+                onClick={this.handlePublishDaico}
+                disabled={
+                  !validateAdminName(adminName) ||
+                  !validateLength(adminName) ||
+                  !validateLength(projectDescription) ||
+                  !validateLength(projectName) ||
+                  !validateEmail(adminEmail) ||
+                  !validateFacebookLink(facebookLink) ||
+                  !validateMediumLink(mediumLink) ||
+                  !validateGitLink(githubLink) ||
+                  !validateTwitterLink(twitterLink) ||
+                  !validateWebsiteUrl(websiteLink) ||
+                  !validateTelegramLink(telegramLink) ||
+                  isUpperCase(erc20TokenTag) ||
+                  !validateLength(erc20TokenTag) ||
+                  !validateTokenTagLength(erc20TokenTag) ||
+                  !checkMetaMask(teamAddress) ||
+                  !validateProjectNameLength(projectName) ||
+                  !alphaOnly(erc20TokenTag) ||
+                  !alphaOnly(projectName) ||
+                  validateMaxEtherContribution(maxEtherContribution) ||
+                  !validateLength(maxEtherContribution) ||
+                  validateVoteSaturationLimit(voteSaturationLimit) ||
+                  !validateLength(voteSaturationLimit) ||
+                  validateTapIncrementFactor(tapIncrementFactor) ||
+                  !validateLength(tapIncrementFactor) ||
+                  !validateLength(initialTapValue) ||
+                  !validateLength(initialFundRelease) ||
+                  !validateLength(round1TargetEth) ||
+                  !validateLength(round1TargetUSD) ||
+                  !validateLength(round2TargetEth) ||
+                  !validateLength(round2TargetUSD) ||
+                  !validateLength(round3TargetEth) ||
+                  !validateLength(round3TargetUSD) ||
+                  !validateLength(tokenPriceFactor) ||
+                  !validateDate(daicoStartDate) ||
+                  !validateDate(daicoEndDate) ||
+                  validateTotalSaleTokens(totalSaleTokens) ||
+                  !validateTokenPriceFactor(tokenPriceFactor) ||
+                  validateUniqueName(projectNames, projectName) ||
+                  validateUniqueName(tokenTags, erc20TokenTag)
+                }
+              />
             </div>
             <div className="push--top">
               <DaicoDetails />
@@ -38,6 +167,12 @@ class Registration extends Component {
             <Distribution />
           </Col>
         </Row>
+        <AlertModal open={modalOpen} handleClose={this.handleClose}>
+          <div className="text--center text--danger">
+            <Warning style={{ width: "2em", height: "2em" }} />
+          </div>
+          <div className="text--center push--top">{modalMessage}</div>
+        </AlertModal>
       </Grid>
     );
   }
@@ -46,16 +181,80 @@ class Registration extends Component {
 const mapStateToProps = state => {
   const { projectRegistrationData } = state || {};
   const { userLocalPublicAddress } = state.signinManagerData || {};
+  const {
+    adminName,
+    adminEmail,
+    projectName,
+    erc20TokenTag,
+    projectDescription,
+    websiteLink,
+    telegramLink,
+    githubLink,
+    mediumLink,
+    facebookLink,
+    twitterLink,
+    teamAddress,
+    initialFundRelease,
+    maxEtherContribution,
+    initialTapValue,
+    tapIncrementFactor,
+    voteSaturationLimit,
+    daicoStartDate,
+    daicoEndDate,
+    round1TargetUSD,
+    round1TargetEth,
+    round2TargetUSD,
+    round2TargetEth,
+    round3TargetUSD,
+    round3TargetEth,
+    tokenPriceFactor,
+    totalSaleTokens,
+    errors,
+    projectNames,
+    tokenTags
+  } = state.projectRegistrationData || {};
   return {
     projectRegistrationData,
-    userLocalPublicAddress
+    userLocalPublicAddress,
+    adminName,
+    adminEmail,
+    projectName,
+    erc20TokenTag,
+    projectDescription,
+    websiteLink,
+    telegramLink,
+    githubLink,
+    mediumLink,
+    facebookLink,
+    twitterLink,
+    teamAddress,
+    errors,
+    initialFundRelease,
+    maxEtherContribution,
+    initialTapValue,
+    tapIncrementFactor,
+    voteSaturationLimit,
+    daicoStartDate,
+    daicoEndDate,
+    round1TargetUSD,
+    round1TargetEth,
+    round2TargetUSD,
+    round2TargetEth,
+    round3TargetUSD,
+    round3TargetEth,
+    totalSaleTokens,
+    tokenPriceFactor,
+    projectNames,
+    tokenTags
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      newProjectRegistration
+      newProjectRegistration,
+      getProjectNames,
+      getTokenTags
     },
     dispatch
   );

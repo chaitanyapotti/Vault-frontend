@@ -1,12 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { CUICard, CUIFormInput, CUIButton } from "../../helpers/material-ui";
-import {
-  CUIInputType,
-  CUIButtonType,
-  CUIInputColor
-} from "../../static/js/variables";
+import { CUICard, CUIFormInput } from "../../helpers/material-ui";
+import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import {
   adminNameChangedAction,
@@ -79,15 +75,17 @@ class IdentityDetails extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (prevProps.errors !== this.props.errors) {
+    const { errors } = this.props || {};
+    if (prevProps.errors !== errors) {
       this.getErrorMsg();
     }
   }
 
   getErrorMsg = propName => {
-    if (this.props.errors) {
-      if (this.props.errors.hasOwnProperty(propName)) {
-        return this.props.errors[propName];
+    const { errors } = this.props || {};
+    if (errors) {
+      if (errors.hasOwnProperty(propName)) {
+        return errors[propName];
       }
       return "";
     }
@@ -95,6 +93,20 @@ class IdentityDetails extends React.Component {
   };
 
   render() {
+    const {
+      adminName,
+      adminEmail,
+      projectName,
+      erc20TokenTag,
+      projectDescription,
+      twitterLink,
+      githubLink,
+      facebookLink,
+      telegramLink,
+      mediumLink,
+      teamAddress,
+      websiteLink
+    } = this.props || {};
     return (
       <CUICard style={{ padding: "40px 67px" }}>
         <div className="txt-xl">Identity Details</div>
@@ -108,7 +120,7 @@ class IdentityDetails extends React.Component {
               inputName="Admin Name"
               inputLabel="Admin Name"
               inputPlaceholder="Eg. Adam Smith"
-              inputValue={this.props.adminName}
+              inputValue={adminName}
               textFocus
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -127,7 +139,7 @@ class IdentityDetails extends React.Component {
               inputName="Admin Email"
               inputLabel="Admin Email"
               inputPlaceholder="Eg. admin@electus.network"
-              inputValue={this.props.adminEmail}
+              inputValue={adminEmail}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -148,7 +160,7 @@ class IdentityDetails extends React.Component {
               inputName="Project Name"
               inputLabel="Project Name"
               inputPlaceholder="Eg. Electus"
-              inputValue={this.props.projectName}
+              inputValue={projectName}
               textFocus
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -167,7 +179,7 @@ class IdentityDetails extends React.Component {
               inputName="ERC20 Ticker"
               inputLabel="ERC20 Ticker"
               inputPlaceholder="Eg. ELE"
-              inputValue={this.props.erc20TokenTag}
+              inputValue={erc20TokenTag}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -188,7 +200,7 @@ class IdentityDetails extends React.Component {
               inputName="Project Description"
               inputLabel="Project Description"
               inputPlaceholder="Eg. Protocol for Decentralized Organizations"
-              inputValue={this.props.projectDescription}
+              inputValue={projectDescription}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -207,7 +219,7 @@ class IdentityDetails extends React.Component {
               inputName="Website Link"
               inputLabel="Website Link"
               inputPlaceholder="Eg. electus.network"
-              inputValue={this.props.websiteLink}
+              inputValue={websiteLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -225,7 +237,7 @@ class IdentityDetails extends React.Component {
               inputName="Telegram Link"
               inputLabel="Telegram Link"
               inputPlaceholder="Eg. https://t.me/joinchat/FwqASEdUSqFIPNBNwPZzfgz"
-              inputValue={this.props.telegramLink}
+              inputValue={telegramLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -246,7 +258,7 @@ class IdentityDetails extends React.Component {
               inputName="Github Link"
               inputLabel="Github Link"
               inputPlaceholder="Eg. https://github.com/chaitanyapotti/"
-              inputValue={this.props.githubLink}
+              inputValue={githubLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -264,7 +276,7 @@ class IdentityDetails extends React.Component {
               inputName="Medium Link"
               inputLabel="Medium Link"
               inputPlaceholder="Eg. https://medium.com/@ParthaB"
-              inputValue={this.props.mediumLink}
+              inputValue={mediumLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -285,7 +297,7 @@ class IdentityDetails extends React.Component {
               inputName="Facebook Link"
               inputLabel="Facebook Link"
               inputPlaceholder="Eg. https://www.facebook.com/electusnetwork/"
-              inputValue={this.props.facebookLink}
+              inputValue={facebookLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -303,7 +315,7 @@ class IdentityDetails extends React.Component {
               inputName="Twitter Link"
               inputLabel="Twitter Link"
               inputPlaceholder="Eg. https://twitter.com/ElectusNetwork"
-              inputValue={this.props.twitterLink}
+              inputValue={twitterLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -323,7 +335,7 @@ class IdentityDetails extends React.Component {
               inputName="Team Address"
               inputLabel="Team Address"
               inputPlaceholder="Eg. 0xdbf6df7e94e3019e1705e699a8874ac5f6ed753e"
-              inputValue={this.props.teamAddress}
+              inputValue={teamAddress}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -337,11 +349,7 @@ class IdentityDetails extends React.Component {
         <Row>
           <Col>
             <div className="text--right push--top">
-              <ButtonComponent
-                id="uploadWhitepaper"
-                label="Upload Whitepaper"
-                onClick={this.uploadWhitePaper}
-              />
+              <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitePaper} />
             </div>
           </Col>
         </Row>

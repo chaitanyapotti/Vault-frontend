@@ -78,6 +78,11 @@ export const isXfr2ButtonSpinning = receipt => ({
   type: actionTypes.XFR2_BUTTON_SPINNING
 });
 
+export const isKillFinalizeButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_FINALIZE_BUTTON_SPINNING
+});
+
 export const getTokensUnderGovernance = (version, contractAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking
   const network = "rinkeby";
@@ -537,5 +542,31 @@ export const revokeVoteInXfr2Poll = (version, contractAddress, userLocalPublicAd
     .catch(err => {
       console.error(err.message);
       dispatch(isXfr2ButtonSpinning(false));
+    });
+};
+
+export const finalizeKill = (version, pollFactoryAddress, userLocalPublicAddress) => dispatch => {
+  dispatch(isKillFinalizeButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
+    .then(ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, pollFactoryAddress, { from: userLocalPublicAddress });
+      ipollInstance.methods
+        .executeKill()
+        .send({ from: userLocalPublicAddress })
+        .on("receipt", receipt => {
+          dispatch(getCurrentKillPollIndex(version, pollFactoryAddress));
+          dispatch(isKillFinalizeButtonSpinning(false));
+        })
+        .on("error", error => {
+          console.error(error.message);
+          dispatch(isKillFinalizeButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isKillFinalizeButtonSpinning(false));
     });
 };

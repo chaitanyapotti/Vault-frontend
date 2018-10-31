@@ -20,7 +20,10 @@ const PDetailGovernance = props => {
     killVoteStatus,
     killButtonSpinning,
     onRevokeKillClick,
-    signinStatusFlag
+    signinStatusFlag,
+    onKillFinalizeClick,
+    killFinalizeButtonSpinning,
+    killFinish
   } = props || {};
   return (
     <CUICard style={{ padding: "40px 50px" }}>
@@ -71,6 +74,15 @@ const PDetailGovernance = props => {
           Kill Consensus: <span className="text--secondary">{killConsensus}%</span>
         </Col>
       </Row>
+      <div className="text-left">
+        {
+          <span className="hli">
+            <LoadingButton onClick={onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!killFinish}>
+              Kill Project
+            </LoadingButton>
+          </span>
+        }
+      </div>
       <div className="text-right">
         {signinStatusFlag <= 3 ? (
           <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
@@ -80,11 +92,11 @@ const PDetailGovernance = props => {
           </Tooltip>
         ) : killVoteStatus === "false" ? (
           <LoadingButton onClick={onKillClick} type="danger" loading={killButtonSpinning}>
-            Kill Project
+            Vote in Kill Poll
           </LoadingButton>
         ) : (
           <LoadingButton onClick={onRevokeKillClick} loading={killButtonSpinning}>
-            UnKill Project
+            UnVote in Kill Poll
           </LoadingButton>
         )}
       </div>

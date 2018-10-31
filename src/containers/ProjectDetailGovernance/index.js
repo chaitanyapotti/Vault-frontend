@@ -25,7 +25,8 @@ import {
   voteInXfr1Poll,
   voteInXfr2Poll,
   revokeVoteInXfr1Poll,
-  revokeVoteInXfr2Poll
+  revokeVoteInXfr2Poll,
+  finalizeKill
 } from "../../actions/projectDetailGovernanceActions/index";
 import {
   formatFromWei,
@@ -301,6 +302,18 @@ class ProjectDetailGovernance extends Component {
     return voted;
   };
 
+  killFinish = () => {
+    const { killPollIndex, r1EndTime } = this.props || {};
+    const endDate = new Date(r1EndTime);
+    endDate.setDate(endDate.getDate() + (killPollIndex + 1) * 89);
+    return endDate < new Date();
+  };
+
+  onKillFinalizeClick = () => {
+    const { version, pollFactoryAddress, finalizeKill: killFinalize, userLocalPublicAddress } = this.props || {};
+    killFinalize(version, pollFactoryAddress, userLocalPublicAddress);
+  };
+
   render() {
     const {
       projectName,
@@ -326,7 +339,8 @@ class ProjectDetailGovernance extends Component {
       xfrDetails,
       xfrVoteData,
       tokensUnderGovernance,
-      currentRoundNumber
+      currentRoundNumber,
+      killFinalizeButtonSpinning
     } = this.props || {};
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
     return (
@@ -372,6 +386,9 @@ class ProjectDetailGovernance extends Component {
               onRevokeKillClick={this.onRevokeKillClick}
               killButtonSpinning={killButtonSpinning}
               signinStatusFlag={signinStatusFlag}
+              onKillFinalizeClick={this.onKillFinalizeClick}
+              killFinalizeButtonSpinning={killFinalizeButtonSpinning}
+              killFinish={this.killFinish()}
             />
           </Col>
         </Row>
@@ -447,7 +464,8 @@ const mapStateToProps = state => {
     tapButtonSpinning,
     xfr1ButtonSpinning,
     xfr2ButtonSpinning,
-    xfrVoteData
+    xfrVoteData,
+    killFinalizeButtonSpinning
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
@@ -478,7 +496,8 @@ const mapStateToProps = state => {
     tapButtonSpinning,
     xfrVoteData,
     xfr1ButtonSpinning,
-    xfr2ButtonSpinning
+    xfr2ButtonSpinning,
+    killFinalizeButtonSpinning
   };
 };
 
@@ -509,7 +528,8 @@ const mapDispatchToProps = dispatch =>
       voteInXfr1Poll,
       voteInXfr2Poll,
       revokeVoteInXfr1Poll,
-      revokeVoteInXfr2Poll
+      revokeVoteInXfr2Poll,
+      finalizeKill
     },
     dispatch
   );

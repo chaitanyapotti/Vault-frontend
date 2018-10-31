@@ -17,7 +17,6 @@ import ProjectGovernance from "./pages/ProjectGovernance";
 import SigninManager from "./containers/SigninManager";
 import Register from "./containers/Register";
 import store from "./store";
-import "semantic-ui-css/semantic.min.css";
 import Search from "./pages/Search";
 
 class App extends Component {
@@ -27,7 +26,7 @@ class App extends Component {
         <Router>
           <VaultApp dispatch={store.dispatch} getState={store.getState} history={this.props.history}>
             <Switch>
-              <Route exact path="/" component={FeaturedProjects} history={this.props.history}/>
+              <Route exact path="/" component={FeaturedProjects} history={this.props.history} />
               <Route exact path="/mytokens" component={Governance} />
               <Route strict path="/governance/details" component={ProjectGovernance} history={this.props.history} />
               <Route exact path="/projects" component={AllProjects} />

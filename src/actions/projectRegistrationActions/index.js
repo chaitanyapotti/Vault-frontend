@@ -1,30 +1,26 @@
 import axios from "axios";
+import FormData from "form-data";
 import actionTypes from "../../action_types";
 import config from "../../config";
 import constants from "../../constants";
-import { checkMetaMask } from "../../helpers/common/validationHelperFunctions";
+
+const httpClient = axios.create();
 
 export function newProjectRegistration(projectData, userLocalPublicAddress) {
-  let foundationDetails = [];
+  const foundationDetails = [];
   const { nonSaleEntities, totalSaleTokens } = projectData || [];
   let totalNonSaleTokens = 0;
   if (nonSaleEntities.length > 0) {
-    for (let i = 0; i < nonSaleEntities.length; i++) {
+    for (let i = 0; i < nonSaleEntities.length; i += 1) {
       foundationDetails.push({
-        address: nonSaleEntities[i]["entityAddress"],
-        amount: Math.round(
-          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 50
-        ),
-        description: nonSaleEntities[i]["entityName"]
+        address: nonSaleEntities[i].entityAddress,
+        amount: Math.round((totalSaleTokens * nonSaleEntities[i].entityPercentage) / 50),
+        description: nonSaleEntities[i].entityName
       });
-      totalNonSaleTokens =
-        totalNonSaleTokens +
-        Math.round(
-          (totalSaleTokens * nonSaleEntities[i]["entityPercentage"]) / 50
-        );
+      totalNonSaleTokens += Math.round((totalSaleTokens * nonSaleEntities[i].entityPercentage) / 50);
     }
   }
-  let projectObject = {
+  const projectObject = {
     projectName: projectData.projectName,
     description: projectData.projectDescription,
     startDateTime: projectData.daicoStartDate,
@@ -32,35 +28,26 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     r1EndTime: projectData.daicoEndDate,
     rounds: [
       {
-        tokenCount: projectData.round1Tokens* Math.pow(10, 18),
+        tokenCount: projectData.round1Tokens * Math.pow(10, 18),
         tokenRate: projectData.round1Rate
       },
       {
-        tokenCount: projectData.round2Tokens* Math.pow(10, 18) ,
+        tokenCount: projectData.round2Tokens * Math.pow(10, 18),
         tokenRate: projectData.round2Rate
       },
       {
-        tokenCount: projectData.round3Tokens* Math.pow(10, 18),
+        tokenCount: projectData.round3Tokens * Math.pow(10, 18),
         tokenRate: projectData.round3Rate
       }
     ],
     minimumEtherContribution: "100000000000000000",
-    maximumEtherContribution: Math.round(
-      parseFloat(projectData.maxEtherContribution) * Math.pow(10, 18)
-    ),
-    foundationDetails: foundationDetails,
-    initialFundRelease: Math.round(
-      parseFloat(projectData.initialFundRelease) * Math.pow(10, 18)
-    ),
+    maximumEtherContribution: Math.round(parseFloat(projectData.maxEtherContribution) * Math.pow(10, 18)),
+    foundationDetails,
+    initialFundRelease: Math.round(parseFloat(projectData.initialFundRelease) * Math.pow(10, 18)),
     teamAddress: projectData.teamAddress,
     killPollStartDate: projectData.daicoEndDate,
-    initialTapAmount: Math.round(
-      (parseFloat(projectData.initialTapValue) * Math.pow(10, 18)) /
-        (30 * 86400)
-    ),
-    tapIncrementFactor: Math.round(
-      parseFloat(projectData.tapIncrementFactor) * 100
-    ),
+    initialTapAmount: Math.round((parseFloat(projectData.initialTapValue) * Math.pow(10, 18)) / (30 * 86400)),
+    tapIncrementFactor: Math.round(parseFloat(projectData.tapIncrementFactor) * 100),
     tokenTag: projectData.erc20TokenTag,
     adminName: projectData.adminName,
     email: projectData.adminEmail,
@@ -113,6 +100,98 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       });
 }
 
+export function uploadThumbnailAction(thumbnailImage, userLocalPublicAddress, doctype) {
+  const form = new FormData();
+  form.append("file", thumbnailImage);
+  return dispatch => {
+    dispatch({
+      type: actionTypes.UPLOADING_THUMBNAIL,
+      payload: true
+    });
+    httpClient({
+      method: "post",
+      url: `${config.api_base_url}/db/projects/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}`,
+      data: form,
+      config: { headers: { "Content-Type": "multipart/form-data" } }
+    })
+      .then(response => {
+        if (response.status === 200) {
+          dispatch({
+            type: actionTypes.THUMBNAIL_UPLOAD_SUCCESS,
+            payload: response.data.data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.THUMBNAIL_UPLOAD_FAILED,
+            payload: false
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch({
+          type: actionTypes.THUMBNAIL_UPLOAD_FAILED,
+          payload: err.message
+        });
+      });
+  };
+}
+
+export function thumbnailChangedAction(thumbnailImage) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.THUMBNAIL_CHANGED,
+      payload: thumbnailImage
+    });
+  };
+}
+
+export function uploadWhitepaperAction(whitepaperPDF, userLocalPublicAddress, doctype) {
+  const form = new FormData();
+  form.append("file", whitepaperPDF);
+  return dispatch => {
+    dispatch({
+      type: actionTypes.UPLOADING_WHITEPAPER,
+      payload: true
+    });
+    httpClient({
+      method: "post",
+      url: `${config.api_base_url}/db/projects/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}`,
+      data: form,
+      config: { headers: { "Content-Type": "multipart/form-data" } }
+    })
+      .then(response => {
+        if (response.status === 200) {
+          dispatch({
+            type: actionTypes.WHITEPAPER_UPLOAD_SUCCESS,
+            payload: response.data.data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.WHITEPAPER_UPLOAD_FAILED,
+            payload: false
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch({
+          type: actionTypes.WHITEPAPER_UPLOAD_FAILED,
+          payload: err.message
+        });
+      });
+  };
+}
+
+export function whitepaperChangedAction(whitepaperPDF) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.WHITEPAPER_CHANGED,
+      payload: whitepaperPDF
+    });
+  };
+}
+
 export function nonSaleEntityEditAction(index) {
   return dispatch => {
     dispatch({
@@ -122,18 +201,14 @@ export function nonSaleEntityEditAction(index) {
   };
 }
 
-export function addNonSaleEntityAction(
-  entityName,
-  entityPercentage,
-  entityAddress
-) {
+export function addNonSaleEntityAction(entityName, entityPercentage, entityAddress) {
   return dispatch => {
     dispatch({
       type: actionTypes.ADD_NON_SALE_ENTITY,
       payload: {
-        entityName: entityName,
-        entityPercentage: entityPercentage,
-        entityAddress: entityAddress
+        entityName,
+        entityPercentage,
+        entityAddress
       }
     });
   };

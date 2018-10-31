@@ -63,9 +63,7 @@ export const initialState = {
   tapIncrementFactor: "",
   voteSaturationLimit: "",
   saleEntities: [],
-  nonSaleEntities: [
-    { entityName: "Unallocated", entityPercentage: 50, entityAddress: "NA" }
-  ],
+  nonSaleEntities: [{ entityName: "Unallocated", entityPercentage: 50, entityAddress: "NA" }],
   unallocatedTokensPer: 50,
   entityName: "",
   entityPercentage: "",
@@ -74,6 +72,12 @@ export const initialState = {
   projectNamesRetrieveFailureMessage: "",
   tokenTags: [],
   tokenTagsRetrieveFailureMessage: "",
+  whitepaperPDF: "",
+  whitepaperUrl: "",
+  uploadingWhitepaper: false,
+  thumbnailImage: "",
+  uploadingThumbnail: false,
+  thumbnailUrl: "",
   errors: {
     [actionTypes.ADMIN_NAME_CHANGED]: "",
     [actionTypes.ADMIN_EMAIL_CHANGED]: ""
@@ -107,6 +111,39 @@ export default function(state = initialState, action) {
         tokenTagsRetrieveFailureMessage: action.payload
       };
     }
+
+    case actionTypes.THUMBNAIL_CHANGED: {
+      return { ...state, thumbnailImage: action.payload}
+    }
+
+    case actionTypes.UPLOADING_THUMBNAIL: {
+      return { ...state, uploadingThumbnail : true}
+    }
+
+    case actionTypes.THUMBNAIL_UPLOAD_SUCCESS: {
+      return { ...state, uploadingThumbnail: false, thumbnailUrl: action.payload}
+    }
+
+    case actionTypes.THUMBNAIL_UPLOAD_FAILED: {
+      return { ...state, uploadingThumbnail: false, thumbnailUrl: ""}
+    }
+
+    case actionTypes.WHITEPAPER_CHANGED: {
+      return { ...state, whitepaperPDF: action.payload}
+    }
+
+    case actionTypes.UPLOADING_WHITEPAPER: {
+      return { ...state, uploadingWhitepaper: true}
+    }
+
+    case actionTypes.WHITEPAPER_UPLOAD_SUCCESS: {
+      return { ...state, uploadingWhitepaper: false, whitepaperUrl: action.payload}
+    }
+
+    case actionTypes.WHITEPAPER_UPLOAD_FAILED: {
+      return { ...state, uploadingWhitepaper: false, whitepaperUrl: ""}
+    }
+
     case actionTypes.NON_SALE_ENTITY_EDIT: {
       let nonSaleEntities = state.nonSaleEntities;
       let editEntity = nonSaleEntities.splice(action.payload, 1);

@@ -344,7 +344,10 @@ export const checkIssuer = userLocalPublicAddress => dispatch => {
     })
     .catch(err => {
       console.error(err.message);
-      dispatch(isAlreadyVaultMember(false));
+      dispatch({
+        type: actionTypes.ISISSUER_CHECK,
+        payload: false
+      })
     });
 };
 

@@ -16,7 +16,11 @@ import {
   mediumLinkChangedAction,
   facebookLinkChangedAction,
   twitterLinkChangedAction,
-  teamAddressChangedAction
+  teamAddressChangedAction,
+  whitepaperChangedAction,
+  uploadWhitepaperAction,
+  thumbnailChangedAction,
+  uploadThumbnailAction
 } from "../../actions/projectRegistrationActions";
 import { ButtonComponent } from "../Common/FormComponents";
 import actionTypes from "../../action_types";
@@ -70,8 +74,20 @@ class IdentityDetails extends React.Component {
     this.props.teamAddressChangedAction(e.target.value);
   };
 
-  uploadWhitePaper = () => {
-    console.log("upload white paper button action");
+  whitepaperChanged = e => {
+    this.props.whitepaperChangedAction(e.target.files[0]);
+  };
+
+  uploadWhitepaper = () => {
+    this.props.uploadWhitepaperAction(this.props.whitepaperPDF, this.props.userLocalPublicAddress, "whitepaper");
+  };
+
+  thumbnailChanged = e => {
+    this.props.thumbnailChangedAction(e.target.files[0]);
+  };
+
+  uploadThumbnail = () => {
+    this.props.uploadThumbnailAction(this.props.thumbnailImage, this.props.userLocalPublicAddress, "thumbnail");
   };
 
   componentDidUpdate(prevProps) {
@@ -105,7 +121,11 @@ class IdentityDetails extends React.Component {
       telegramLink,
       mediumLink,
       teamAddress,
-      websiteLink
+      websiteLink,
+      uploadingWhitepaper,
+      whitepaperUrl,
+      uploadingThumbnail,
+      thumbnailUrl
     } = this.props || {};
     return (
       <CUICard style={{ padding: "40px 67px" }}>
@@ -347,11 +367,26 @@ class IdentityDetails extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col>
-            <div className="text--right push--top">
-              <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitePaper} />
-            </div>
-          </Col>
+          <div className="text--right push--top">
+            <Col>
+              <input type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
+            </Col>
+            <Col>
+              <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitepaper} />
+              {uploadingWhitepaper ? <div>Uploading</div> : <div>{whitepaperUrl} </div>}
+            </Col>
+          </div>
+        </Row>
+        <Row>
+          <div className="text--right push--top">
+            <Col>
+              <input type="file" accept="image/*" onChange={this.thumbnailChanged} />
+            </Col>
+            <Col>
+              <ButtonComponent id="uploadThumbnail" label="Upload Thumbnail" onClick={this.uploadThumbnail} />
+              {uploadingThumbnail ? <div>Uploading</div> : <div>{thumbnailUrl} </div>}
+            </Col>
+          </div>
         </Row>
       </CUICard>
     );
@@ -372,8 +407,15 @@ const mapStateToProps = state => {
     facebookLink,
     twitterLink,
     teamAddress,
+    whitepaperPDF,
+    uploadingWhitepaper,
+    whitepaperUrl,
+    thumbnailImage,
+    uploadingThumbnail,
+    thumbnailUrl,
     errors
   } = state.projectRegistrationData || {};
+  const { userLocalPublicAddress } = state.signinManagerData || {};
   return {
     adminName,
     adminEmail,
@@ -387,7 +429,14 @@ const mapStateToProps = state => {
     facebookLink,
     twitterLink,
     teamAddress,
-    errors
+    whitepaperPDF,
+    uploadingWhitepaper,
+    whitepaperUrl,
+    thumbnailImage,
+    uploadingThumbnail,
+    thumbnailUrl,
+    errors,
+    userLocalPublicAddress
   };
 };
 
@@ -405,7 +454,11 @@ const mapDispatchToProps = dispatch =>
       mediumLinkChangedAction,
       facebookLinkChangedAction,
       twitterLinkChangedAction,
-      teamAddressChangedAction
+      teamAddressChangedAction,
+      whitepaperChangedAction,
+      uploadWhitepaperAction,
+      thumbnailChangedAction,
+      uploadThumbnailAction
     },
     dispatch
   );

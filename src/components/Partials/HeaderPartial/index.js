@@ -208,9 +208,12 @@ class HeaderPartial extends React.Component {
         <MenuItem onClick={this.onHandleProjectsClicked}>
           <div>Projects</div>
         </MenuItem>
-        <MenuItem onClick={this.onHandleGovernanceClicked}>
-          <div>My Tokens</div>
-        </MenuItem>
+        {this.props.signinStatusFlag === 5 || this.props.signinStatusFlag === 6 ?
+          <MenuItem onClick={this.onHandleGovernanceClicked}>
+            <div>My Tokens</div>
+          </MenuItem>
+          : null
+        }
         <MenuItem>
           <div>Publish ICO</div>
         </MenuItem>
@@ -263,11 +266,14 @@ class HeaderPartial extends React.Component {
                         Projects
                       </div>
                     </div>
-                    <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
-                        My Tokens
+                    {this.props.signinStatusFlag === 5 || this.props.signinStatusFlag === 6 ?
+                      <div className="hdr-itm-pad text--primary txt-m">
+                        <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
+                          My Tokens
+                        </div>
                       </div>
-                    </div>
+                      : null
+                    }
                     <div className="hdr-itm-pad text--primary txt-m">
                       <div className="hvr-underline-from-left">Publish ICO</div>
                     </div>
@@ -349,9 +355,12 @@ class HeaderPartial extends React.Component {
             <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked}>
               Projects
             </div>
-            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
-              My Tokens
+            {this.props.signinStatusFlag === 5 || this.props.signinStatusFlag === 6 ?
+              <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
+                My Tokens
             </div>
+              : null
+            }
             <div className="hdr-itm-pad text--primary txt-m">Publish ICO</div>
           </div>
         </Drawer>

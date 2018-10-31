@@ -77,13 +77,15 @@ const mapStateToProps = state => {
   const { userTokensTable, showUserTokensLoader, userTokensRetrieveFailureMessage, userTokensRetrievedSuccessFully } = state.userTokensData || {};
   const { prices } = state.fetchPriceReducer || {};
   const { userLocalPublicAddress } = state.signinManagerData || {};
+  const { signinStatusFlag } = state.signinManagerData || {};
   return {
     userTokensTable,
     showUserTokensLoader,
     userTokensRetrieveFailureMessage,
     userTokensRetrievedSuccessFully,
     prices,
-    userLocalPublicAddress
+    userLocalPublicAddress,
+    signinStatusFlag
   };
 };
 

@@ -147,7 +147,7 @@ class NonSale extends React.Component {
   };
 
   render() {
-    const { nonSaleEntities, history } = this.props || {};
+    const { nonSaleEntities, history, entityName, entityPercentage, entityAddress } = this.props || {};
     const nonSaleEntitiesTable = nonSaleEntities;
     const data =
       nonSaleEntitiesTable.length > 0 &&

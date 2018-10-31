@@ -6,6 +6,7 @@ export const initialState = {
   etherCollected: 0,
   roundInfo: {},
   buyButtonSpinning: false,
+  r1FinalizeButtonSpinning: false,
   tokenBalance: ""
 };
 
@@ -37,6 +38,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         tokenBalance: receipt
+      };
+    }
+    case actionTypes.R1_FINALIZE_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        r1FinalizeButtonSpinning: receipt
       };
     }
     default:

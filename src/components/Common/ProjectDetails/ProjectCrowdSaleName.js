@@ -24,7 +24,10 @@ const ProjectCrowdSaleName = props => {
     buyButtonVisibility,
     onBuyClick,
     buyButtonText,
-    signinStatusFlag
+    signinStatusFlag,
+    r1Finish,
+    onR1FinalizeClick,
+    r1FinalizeButtonSpinning
   } = props || {};
   const { website } = urls;
   return (
@@ -94,6 +97,13 @@ const ProjectCrowdSaleName = props => {
               <LoadingButton onClick={onBuyClick}>{buyButtonText}</LoadingButton>
             </span>
           ) : null}
+          {
+            <span className="hli">
+              <LoadingButton onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning} disabled={!r1Finish}>
+                End Round 1
+              </LoadingButton>
+            </span>
+          }
         </Col>
       </Row>
     </CUICard>
@@ -101,9 +111,3 @@ const ProjectCrowdSaleName = props => {
 };
 
 export default ProjectCrowdSaleName;
-
-// : (
-//   <span>
-//     Successfully Bought <img src="/assets/Vault/whitelist.svg" alt="Buy checked" width="20" height="20" />
-//   </span>
-// )

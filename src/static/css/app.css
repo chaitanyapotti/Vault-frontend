@@ -48,7 +48,7 @@ a {
   color: #fff;
 }
 
-button:focus{
+button:focus {
   outline: none !important;
 }
 
@@ -494,6 +494,14 @@ button:focus{
   box-shadow: 0px 5px 25px 0px rgba(76, 169, 252, 0.25) !important;
 }
 
+.MuiLinearProgress-bar-178.MuiLinearProgress-barColorSecondary-180.MuiLinearProgress-bar1Determinate-182 {
+  border-radius: 0px !important;
+}
+
+.MuiLinearProgress-root-170.MuiLinearProgress-colorSecondary-172 {
+  border-radius: 0px !important;
+}
+
 .blue-button {
   width: 120px;
   height: 32px;
@@ -508,6 +516,11 @@ button:focus{
   margin-top: 5px;
   margin-left: 120px;
   transition: 100ms;
+}
+
+.MuiPaper-root-20.MuiPaper-elevation8-30.MuiPaper-rounded-21.MuiCard-root-169 {
+  box-shadow: 0px 0px 0px 0px #ffffff00 !important;
+  border: 1px solid #eaeaea !important;
 }
 
 .blue-button:hover {

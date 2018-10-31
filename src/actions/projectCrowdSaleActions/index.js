@@ -24,6 +24,11 @@ export const tokenBalanceReceived = receipt => ({
   type: actionTypes.TOKEN_BALANCE_RECEIVED
 });
 
+export const isR1FinalizeButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.R1_FINALIZE_BUTTON_SPINNING
+});
+
 export const getEtherCollected = (version, contractAddress) => async dispatch => {
   // doesn't call blockchain. await is non blocking
   const network = "rinkeby";
@@ -103,5 +108,31 @@ export const buyTokens = (version, contractAddress, userLocalPublicAddress, amou
     .on("error", error => {
       console.error(error.message);
       dispatch(isBuyButtonSpinning(false));
+    });
+};
+
+export const finalizeR1 = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+  dispatch(isR1FinalizeButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })
+    .then(res => {
+      const { data } = res.data || {};
+      const { abi } = data || {};
+      const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      // TODO: to send country attributes of the user
+      instance.methods
+        .finalizeRoundOne()
+        .send({ from: userLocalPublicAddress })
+        .on("receipt", receipt => {
+          dispatch(isR1FinalizeButtonSpinning(false));
+        })
+        .on("error", error => {
+          console.error(error.message);
+          dispatch(isR1FinalizeButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isR1FinalizeButtonSpinning(false));
     });
 };

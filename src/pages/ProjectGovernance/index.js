@@ -50,7 +50,6 @@ class ProjectGovernance extends Component {
       initialFundRelease,
       crowdSaleAddress,
       daicoTokenAddress,
-      etherPrice,
       xfrDetails
     } = projectDetails || {};
     // currentRoundNumber = "2";
@@ -62,7 +61,7 @@ class ProjectGovernance extends Component {
         </div>
       );
 
-    if (treasuryStateNumber === "3") {
+    if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
       return (
         <ProjectDetailRefund
           version={version}
@@ -87,7 +86,7 @@ class ProjectGovernance extends Component {
           crowdSaleAddress={crowdSaleAddress}
           currentRoundNumber={currentRoundNumber}
           daicoTokenAddress={daicoTokenAddress}
-          etherPrice={etherPrice}
+          treasuryStateNumber={treasuryStateNumber}
         />
       );
     }
@@ -112,7 +111,6 @@ class ProjectGovernance extends Component {
             rounds={rounds}
             totalMintableSupply={totalMintableSupply}
             foundationDetails={foundationDetails}
-            etherPrice={etherPrice}
             initialFundRelease={initialFundRelease}
           />
         );
@@ -139,7 +137,7 @@ class ProjectGovernance extends Component {
             pollFactoryAddress={pollFactoryAddress}
             initialFundRelease={initialFundRelease}
             crowdSaleAddress={crowdSaleAddress}
-            etherPrice={etherPrice}
+            daicoTokenAddress={daicoTokenAddress}
           />
         );
       case "2":
@@ -169,36 +167,7 @@ class ProjectGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
-            etherPrice={etherPrice}
             xfrDetails={xfrDetails}
-          />
-        );
-      case "5":
-        return (
-          <ProjectDetailRefund
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            currentRoundNumber={currentRoundNumber}
-            daicoTokenAddress={daicoTokenAddress}
-            etherPrice={etherPrice}
           />
         );
       default:

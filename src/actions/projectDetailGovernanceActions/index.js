@@ -53,19 +53,9 @@ export const isKillButtonSpinning = receipt => ({
   type: actionTypes.KILL_BUTTON_SPINNING
 });
 
-export const votedInKillPoll = receipt => ({
-  payload: { receipt },
-  type: "VOTED_KILL_POLL"
-});
-
-export const revokedVoteInKillPoll = receipt => ({
-  payload: { receipt },
-  type: "REVOKED_VOTE_KILL_POLL"
-});
-
 export const tapPollVote = receipt => ({
   payload: { receipt },
-  type: "TAP_POLL_VOTE_RECEIVED"
+  type: actionTypes.TAP_POLL_VOTE_RECEIVED
 });
 
 export const isTapButtonSpinning = receipt => ({
@@ -73,44 +63,19 @@ export const isTapButtonSpinning = receipt => ({
   type: actionTypes.TAP_BUTTON_SPINNING
 });
 
-export const votedInTapPoll = receipt => ({
+export const xfrPollVote = receipt => ({
   payload: { receipt },
-  type: "VOTED_TAP_POLL"
+  type: actionTypes.XFR_POLL_VOTE_RECEIVED
 });
 
-export const revokedVoteInTapPoll = receipt => ({
+export const isXfr1ButtonSpinning = receipt => ({
   payload: { receipt },
-  type: "REVOKED_VOTE_TAP_POLL"
+  type: actionTypes.XFR1_BUTTON_SPINNING
 });
 
-export const xfrPollVote1 = receipt => ({
+export const isXfr2ButtonSpinning = receipt => ({
   payload: { receipt },
-  type: "XFR_POLL1_VOTE_RECEIVED"
-});
-
-export const votedInXfrPoll1 = receipt => ({
-  payload: { receipt },
-  type: "VOTED_XFR_POLL1"
-});
-
-export const revokedVoteInXfrPoll1 = receipt => ({
-  payload: { receipt },
-  type: "REVOKED_VOTE_XFR_POLL1"
-});
-
-export const xfrPollVote2 = receipt => ({
-  payload: { receipt },
-  type: "XFR_POLL2_VOTE_RECEIVED"
-});
-
-export const votedInXfrPoll2 = receipt => ({
-  payload: { receipt },
-  type: "VOTED_XFR_POLL2"
-});
-
-export const revokedVoteInXfrPoll2 = receipt => ({
-  payload: { receipt },
-  type: "REVOKED_VOTE_XFR_POLL2"
+  type: actionTypes.XFR2_BUTTON_SPINNING
 });
 
 export const getTokensUnderGovernance = (version, contractAddress) => dispatch => {
@@ -304,7 +269,7 @@ export const getKillPollVote = (version, contractAddress, userLocalPublicAddress
 };
 
 // name: PollFactory, address: pollFactoryAddress
-export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isKillButtonSpinning(true));
   axios
@@ -317,8 +282,9 @@ export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress)
         .vote(0)
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getKillConsensus(version, pollFactoryAddress));
           dispatch(isKillButtonSpinning(false));
-          getKillPollVote(version, contractAddress, userLocalPublicAddress);
         })
         .on("error", error => {
           console.error(error.message);
@@ -332,7 +298,7 @@ export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress)
 };
 
 // name: PollFactory, address: pollFactoryAddress
-export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isKillButtonSpinning(true));
   axios
@@ -345,8 +311,9 @@ export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAd
         .revokeVote()
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getKillConsensus(version, pollFactoryAddress));
           dispatch(isKillButtonSpinning(false));
-          getKillPollVote(version, contractAddress, userLocalPublicAddress);
         })
         .on("error", error => {
           console.error(error.message);
@@ -381,7 +348,7 @@ export const getTapPollVote = (version, contractAddress, userLocalPublicAddress)
 };
 
 // name: PollFactory, address: pollFactoryAddress returns boolean
-export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isTapButtonSpinning(true));
   axios
@@ -394,8 +361,9 @@ export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress) 
         .vote(0)
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getTapPollConsensus(version, pollFactoryAddress));
           dispatch(isTapButtonSpinning(false));
-          getTapPollVote(version, contractAddress, userLocalPublicAddress);
         })
         .on("error", error => {
           console.error(error.message);
@@ -409,7 +377,7 @@ export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress) 
 };
 
 // name: PollFactory, address: pollFactoryAddress
-export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isTapButtonSpinning(true));
   axios
@@ -422,8 +390,9 @@ export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAdd
         .revokeVote()
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getTapPollConsensus(version, pollFactoryAddress));
           dispatch(isTapButtonSpinning(false));
-          getTapPollVote(version, contractAddress, userLocalPublicAddress);
         })
         .on("error", error => {
           console.error(error.message);
@@ -436,97 +405,137 @@ export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAdd
     });
 };
 
-// export function getXfrPollVote(version, contractAddress, index) {
-//   return async dispatch => {
-//     // doesn't call blockchain. await is non blocking
-//     const accounts = await web3.eth.getAccounts();
-//     axios
-//       .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-//       .then(res => {
-//         const { data } = res.data || {};
-//         const { abi } = data || {};
-//         const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-//         instance.methods
-//           .xfrPollData(index)
-//           .call()
-//           .then(xfrPollDetails => {
-//             const { xfrPollAddress } = xfrPollDetails;
-//             axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-//               const { data } = ipollData.data || {};
-//               const { abi } = data || {};
-//               const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
-//               ipollInstance.methods
-//                 .voters(accounts[0])
-//                 .call()
-//                 .then(response => {
-//                   const { voted } = response;
-//                   dispatch(index === 0 ? xfrPollVote1(voted) : xfrPollVote2(voted));
-//                 });
-//             });
-//           });
-//       })
-//       .catch(err => console.error(err.message));
-//   };
-// }
+export const getXfrPollVote = (version, contractAddress, userLocalPublicAddress) => async dispatch => {
+  // doesn't call blockchain. await is non blocking
+  const network = "rinkeby";
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/xfrpollvote`, {
+      params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        dispatch(xfrPollVote(data));
+      } else {
+        dispatch(xfrPollVote("false"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(xfrPollVote("false"));
+    });
+};
 
-// // name: PollFactory, address: pollFactoryAddress returns boolean
-// export function voteInXfrPoll(version, contractAddress, index) {
-//   return async dispatch => {
-//     // doesn't call blockchain. await is non blocking
-//     const accounts = await web3.eth.getAccounts();
-//     axios
-//       .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-//       .then(res => {
-//         const { data } = res.data || {};
-//         const { abi } = data || {};
-//         const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-//         instance.methods
-//           .xfrPollData(index)
-//           .call()
-//           .then(xfrPollDetails => {
-//             const { xfrPollAddress } = xfrPollDetails;
-//             axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-//               const { data } = ipollData.data || {};
-//               const { abi } = data || {};
-//               const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
-//               ipollInstance.methods
-//                 .vote(0)
-//                 .send({ from: accounts[0] })
-//                 .then(response => dispatch(index === 0 ? votedInXfrPoll1(response) : votedInXfrPoll2(response)));
-//             });
-//           });
-//       })
-//       .catch(err => console.error(err.message));
-//   };
-// }
+// name: PollFactory, address: pollFactoryAddress returns boolean
+export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isXfr1ButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      ipollInstance.methods
+        .vote(0)
+        .send({ from: userLocalPublicAddress })
+        .on("receipt", receipt => {
+          dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getXfrData(version, pollFactoryAddress));
+          dispatch(isXfr1ButtonSpinning(false));
+        })
+        .on("error", error => {
+          console.error(error.message);
+          dispatch(isXfr1ButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isXfr1ButtonSpinning(false));
+    });
+};
 
-// // name: PollFactory, address: pollFactoryAddress
-// export function revokeVoteInXfrPoll(version, contractAddress, index) {
-//   return async dispatch => {
-//     // doesn't call blockchain. await is non blocking
-//     const accounts = await web3.eth.getAccounts();
-//     axios
-//       .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-//       .then(res => {
-//         const { data } = res.data || {};
-//         const { abi } = data || {};
-//         const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-//         instance.methods
-//           .xfrPollData(index)
-//           .call()
-//           .then(xfrPollDetails => {
-//             const { xfrPollAddress } = xfrPollDetails;
-//             axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-//               const { data } = ipollData.data || {};
-//               const { abi } = data || {};
-//               const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
-//               ipollInstance.methods
-//                 .revokeVote()
-//                 .send({ from: accounts[0] })
-//                 .then(response => dispatch(index === 0 ? revokedVoteInXfrPoll1(response) : revokedVoteInXfrPoll2(response)));
-//             });
-//           });
-//       })
-//       .catch(err => console.error(err.message));
-//   };
-// }
+export const voteInXfr2Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isXfr2ButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      ipollInstance.methods
+        .vote(0)
+        .send({ from: userLocalPublicAddress })
+        .on("receipt", receipt => {
+          dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getXfrData(version, pollFactoryAddress));
+          dispatch(isXfr2ButtonSpinning(false));
+        })
+        .on("error", error => {
+          console.error(error.message);
+          dispatch(isXfr2ButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isXfr2ButtonSpinning(false));
+    });
+};
+
+// name: PollFactory, address: pollFactoryAddress returns boolean
+export const revokeVoteInXfr1Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isXfr1ButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      ipollInstance.methods
+        .revokeVote()
+        .send({ from: userLocalPublicAddress })
+        .on("receipt", receipt => {
+          dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getXfrData(version, pollFactoryAddress));
+          dispatch(isXfr1ButtonSpinning(false));
+        })
+        .on("error", error => {
+          console.error(error.message);
+          dispatch(isXfr1ButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isXfr1ButtonSpinning(false));
+    });
+};
+
+export const revokeVoteInXfr2Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isXfr2ButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      ipollInstance.methods
+        .revokeVote()
+        .send({ from: userLocalPublicAddress })
+        .on("receipt", receipt => {
+          dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getXfrData(version, pollFactoryAddress));
+          dispatch(isXfr2ButtonSpinning(false));
+        })
+        .on("error", error => {
+          console.error(error.message);
+          dispatch(isXfr2ButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isXfr2ButtonSpinning(false));
+    });
+};

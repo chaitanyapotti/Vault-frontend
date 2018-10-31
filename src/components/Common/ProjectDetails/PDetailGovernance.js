@@ -1,7 +1,8 @@
 import React from "react";
+import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
-import { ButtonComponent } from "../FormComponents";
+import LoadingButton from "../LoadingButton";
 
 const PDetailGovernance = props => {
   const {
@@ -15,7 +16,11 @@ const PDetailGovernance = props => {
     yourRefundValue,
     totalRefundableBalance,
     killConsensus,
-    onKillClick
+    onKillClick,
+    killVoteStatus,
+    killButtonSpinning,
+    onRevokeKillClick,
+    signinStatusFlag
   } = props || {};
   return (
     <CUICard style={{ padding: "40px 50px" }}>
@@ -67,7 +72,21 @@ const PDetailGovernance = props => {
         </Col>
       </Row>
       <div className="text-right">
-        <ButtonComponent type="danger" onClick={onKillClick} label="Kill Project" />
+        {signinStatusFlag <= 3 ? (
+          <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+            <div>
+              <LoadingButton disabled>Kill Project</LoadingButton>
+            </div>
+          </Tooltip>
+        ) : killVoteStatus === "false" ? (
+          <LoadingButton onClick={onKillClick} type="danger" loading={killButtonSpinning}>
+            Kill Project
+          </LoadingButton>
+        ) : (
+          <LoadingButton onClick={onRevokeKillClick} loading={killButtonSpinning}>
+            UnKill Project
+          </LoadingButton>
+        )}
       </div>
     </CUICard>
   );

@@ -11,7 +11,7 @@ import {
   formatTokenPrice,
   r1EndsIn,
   significantDigits,
-  formatNumberToINRFormat
+  formatCurrencyNumber
 } from "../../helpers/common/projectDetailhelperFunctions";
 
 class UserTokens extends Component {
@@ -41,7 +41,7 @@ class UserTokens extends Component {
       const dataArray = [
         projectName,
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
-        `${formatNumberToINRFormat(balance)}(${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
+        `${formatCurrencyNumber(balance, 0)}(${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
         projectHealth,
         `${tapIncrement}(Yes)`,
         `${killConsensus}(No)`,
@@ -56,7 +56,17 @@ class UserTokens extends Component {
         <GridData
           history={history}
           tableData={data}
-          columns={["Name", "Price(USD)*", "Tokens", "Health", "Tap Increment*", "Kill Consensus", "Next Kill In", "XFRs", {name: "Id",options: {display: false}}]}
+          columns={[
+            "Name",
+            "Price(USD)*",
+            "Tokens",
+            "Health",
+            "Tap Increment*",
+            "Kill Consensus",
+            "Next Kill In",
+            "XFRs",
+            { name: "Id", options: { display: false } }
+          ]}
         />
       </div>
     );

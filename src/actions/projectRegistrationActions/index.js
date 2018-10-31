@@ -3,6 +3,9 @@ import actionTypes from "../../action_types";
 import config from "../../config";
 import constants from "../../constants";
 import web3 from "../../helpers/web3";
+import FormData from 'form-data';
+
+const httpClient = axios.create();
 
 export function newProjectRegistration(projectData, userLocalPublicAddress) {
   
@@ -113,6 +116,99 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
         });
       });
 }
+
+export function uploadThumbnailAction(thumbnailImage, userLocalPublicAddress, doctype) {
+  let form = new FormData();
+  form.append('file', thumbnailImage);
+  return (dispatch) =>{
+    dispatch({
+      type: actionTypes.UPLOADING_THUMBNAIL,
+      payload: true
+    })
+    httpClient({
+      method: 'post',
+      url: `${config.api_base_url}/db/projects/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}`,
+      data: form,
+      config: { headers: { 'Content-Type': 'multipart/form-data', } }
+  })
+      .then((response) => {
+          if (response.status === 200) {
+              dispatch({
+                type: actionTypes.THUMBNAIL_UPLOAD_SUCCESS,
+                payload: response.data.data
+              })    
+          }else{
+            dispatch({
+              type: actionTypes.THUMBNAIL_UPLOAD_FAILED,
+              payload: false
+            })    
+          }
+      })
+      .catch((err) => {
+        console.log(err)
+        dispatch({
+          type: actionTypes.THUMBNAIL_UPLOAD_FAILED,
+          payload: err.message
+        })    
+      })
+  }
+}
+
+export function thumbnailChangedAction(thumbnailImage) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.THUMBNAIL_CHANGED,
+      payload: thumbnailImage
+    });
+  };
+}
+
+export function uploadWhitepaperAction(whitepaperPDF, userLocalPublicAddress, doctype) {
+  let form = new FormData();
+  form.append('file', whitepaperPDF);
+  return (dispatch) =>{
+    dispatch({
+      type: actionTypes.UPLOADING_WHITEPAPER,
+      payload: true
+    })
+    httpClient({
+      method: 'post',
+      url: `${config.api_base_url}/db/projects/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}`,
+      data: form,
+      config: { headers: { 'Content-Type': 'multipart/form-data', } }
+  })
+      .then((response) => {
+          if (response.status === 200) {
+              dispatch({
+                type: actionTypes.WHITEPAPER_UPLOAD_SUCCESS,
+                payload: response.data.data
+              })    
+          }else{
+            dispatch({
+              type: actionTypes.WHITEPAPER_UPLOAD_FAILED,
+              payload: false
+            })    
+          }
+      })
+      .catch((err) => {
+        console.log(err)
+        dispatch({
+          type: actionTypes.WHITEPAPER_UPLOAD_FAILED,
+          payload: err.message
+        })    
+      })
+  }
+}
+
+export function whitepaperChangedAction(whitepaperPDF) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.WHITEPAPER_CHANGED,
+      payload: whitepaperPDF
+    });
+  };
+}
+
 
 export function nonSaleEntityEditAction(index) {
   return dispatch => {

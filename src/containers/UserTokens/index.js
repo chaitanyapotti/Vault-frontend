@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import { Table, Loader } from "semantic-ui-react";
 import { showUserTokensLoaderAction } from "../../actions/userTokensActions";
 import {Grid, Row, Col} from "../../helpers/react-flexbox-grid";
+
 class UserTokensTableBody extends Component {
   handleTableRowClicked = projectid => {
     this.props.history.push({
@@ -53,6 +54,14 @@ const UserTokensTableHeader = () => (
 );
 
 class UserTokens extends Component {
+  componentDidMount(){
+    if (this.props.signinStatusFlag<4){
+      this.props.history.push({
+        pathname: `/`
+      });
+    }
+  }
+
   render() {
     return (
       <div>
@@ -68,8 +77,8 @@ class UserTokens extends Component {
             <UserTokensTableBody userTokensTable={this.props.userTokensTable} history={this.props.history} />
           </Table>
         ) : (
-          <h3>{this.props.userTokensRetrieveFailureMessage}</h3>
-        )}
+              <h3>{this.props.userTokensRetrieveFailureMessage}</h3>
+            )}
       </div>
     );
   }
@@ -77,11 +86,13 @@ class UserTokens extends Component {
 
 const mapStateToProps = state => {
   const { userTokensTable, showUserTokensLoader, userTokensRetrieveFailureMessage, userTokensRetrievedSuccessFully } = state.userTokensData || {};
+  const { signinStatusFlag } = state.signinManagerData || {};
   return {
     userTokensTable,
     showUserTokensLoader,
     userTokensRetrieveFailureMessage,
     userTokensRetrievedSuccessFully,
+    signinStatusFlag
   };
 };
 

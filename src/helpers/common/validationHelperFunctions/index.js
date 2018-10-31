@@ -1,3 +1,5 @@
+import web3 from "../../web3";
+
 const validateAdminName = name => {
   if (name.length > 100) {
     return false;
@@ -10,6 +12,12 @@ const validateTotalSaleTokens = input => {
   }
   return false;
 };
+const validateUniqueName = (names, input) => {
+  if (names.includes(input)) {
+    return true;
+  }
+  return false;
+};
 const validateMaxEtherContribution = input => {
   if (input < 0.1) {
     return true;
@@ -18,6 +26,28 @@ const validateMaxEtherContribution = input => {
 };
 const validateTapIncrementFactor = input => {
   if (input < 1 || input > 2) {
+    return true;
+  }
+  return false;
+};
+const validateTokenPriceFactor = input => {
+  if (input >= 1 && input <= 2 && input.toString().length < 4) {
+    return true;
+  }
+  return false;
+};
+const validateEntityPercentage = input => {
+  if (input > 50) {
+    return true;
+  }
+  return false;
+};
+
+const validateDecimal = input => {
+  if (input <= 10 && input.length < 4) {
+    return true;
+  }
+  if (input > 10 && input.length < 5) {
     return true;
   }
   return false;
@@ -53,6 +83,7 @@ const validateTokenTagLength = input => {
   return true;
 };
 const alphaOnly = event => /^[a-zA-Z]+$/i.test(event);
+const numberOnly = event => /^[0-9]+$/i.test(event);
 const validateDate = date => {
   console.log(date);
   if (date) {
@@ -77,8 +108,12 @@ const validateWebsiteUrl = websiteUrl => {
   const re = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i;
   return re.test(websiteUrl);
 };
+const checkMetaMask = address => {
+  const isValid = web3.utils.isAddress(address);
+  return isValid;
+};
 const validateGitLink = gitLink => {
-  const re = /^(?:https?:\/\/)?(?:www\.)?github\.com\/(#!\/)?[a-zA-Z0-9_]+$/i;
+  const re = /^(?:https?:\/\/)?(?:www\.)?github\.com\/(?:#!\/)?[a-zA-Z0-9_]+$/i;
   return re.test(gitLink);
 };
 const validateMediumLink = mediumLink => {
@@ -86,7 +121,7 @@ const validateMediumLink = mediumLink => {
   return re.test(mediumLink);
 };
 const validateTelegramLink = telegramLink => {
-  const re = /^(?:https?:\/\/)?(?:www\.)?t\.me\/(#!\/)?[a-zA-Z0-9_]+$/i;
+  const re = /^(?:https?:\/\/)?(?:www\.)?t\.me\/joinchat\/[a-zA-Z0-9_]+$/i;
   return re.test(telegramLink);
 };
 
@@ -109,5 +144,11 @@ export {
   validateVoteSaturationLimit,
   validateInitialTap,
   validateDate,
-  validateTotalSaleTokens
+  validateTotalSaleTokens,
+  validateTokenPriceFactor,
+  numberOnly,
+  checkMetaMask,
+  validateUniqueName,
+  validateDecimal,
+  validateEntityPercentage
 };

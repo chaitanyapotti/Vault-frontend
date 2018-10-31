@@ -16,7 +16,12 @@ import {
   alphaOnly,
   validateMaxEtherContribution,
   validateTapIncrementFactor,
-  validateVoteSaturationLimit
+  validateVoteSaturationLimit,
+  validateTokenPriceFactor,
+  validateUniqueName,
+  validateDecimal,
+  validateEntityPercentage,
+  checkMetaMask
 } from "../../helpers/common/validationHelperFunctions";
 
 export const initialState = {
@@ -65,16 +70,43 @@ export const initialState = {
   entityName: "",
   entityPercentage: "",
   entityAddress: "",
+  projectNames: [],
+  projectNamesRetrieveFailureMessage: "",
+  tokenTags: [],
+  tokenTagsRetrieveFailureMessage: "",
   errors: {
     [actionTypes.ADMIN_NAME_CHANGED]: "",
     [actionTypes.ADMIN_EMAIL_CHANGED]: ""
   }
 };
 
-export default function (state = initialState, action) {
+export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
-
+    case actionTypes.FETCH_PROJECT_NAMES_SUCCESS: {
+      return {
+        ...state,
+        projectNames: action.payload
+      };
+    }
+    case actionTypes.FETCH_PROJECT_NAMES_FAILED: {
+      return {
+        ...state,
+        projectNamesRetrieveFailureMessage: action.payload
+      };
+    }
+    case actionTypes.FETCH_TOKEN_TAGS_SUCCESS: {
+      return {
+        ...state,
+        tokenTags: action.payload
+      };
+    }
+    case actionTypes.FETCH_TOKEN_TAGS_FAILED: {
+      return {
+        ...state,
+        tokenTagsRetrieveFailureMessage: action.payload
+      };
+    }
     case actionTypes.NON_SALE_ENTITY_EDIT: {
       let nonSaleEntities = state.nonSaleEntities;
       let editEntity = nonSaleEntities.splice(action.payload, 1);
@@ -82,8 +114,7 @@ export default function (state = initialState, action) {
         nonSaleEntities.splice(nonSaleEntities.indexOf({ entityName: "Unallocated" }), 1);
       }
       
-      const { entityName, entityAddress, entityPercentage } =
-        editEntity[0] || "";
+      const { entityName, entityAddress, entityPercentage } = editEntity[0] || "";
       let unallocatedTokensPer = state.unallocatedTokensPer
       unallocatedTokensPer = unallocatedTokensPer + entityPercentage
       nonSaleEntities.push({
@@ -149,14 +180,15 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.CALCULATE_TOKENS: {
+      const { tokenPriceFactor, round1TargetEth, round2TargetEth, round3TargetEth } = state || {};
       var round3Rate = 100;
       var round2Rate =
-        parseFloat(state.tokenPriceFactor).toFixed(1) * round3Rate;
+        parseFloat(tokenPriceFactor).toFixed(1) * round3Rate;
       var round1Rate =
-        Math.pow(parseFloat(state.tokenPriceFactor).toFixed(1), 2) * round3Rate;
-      var round1N = round1Rate * parseInt(state.round1TargetEth);
-      var round2N = round2Rate * parseInt(state.round2TargetEth);
-      var round3N = round3Rate * parseInt(state.round3TargetEth);
+        Math.pow(parseFloat(tokenPriceFactor).toFixed(1), 2) * round3Rate;
+      var round1N = round1Rate * parseInt(round1TargetEth);
+      var round2N = round2Rate * parseInt(round2TargetEth);
+      var round3N = round3Rate * parseInt(round3TargetEth);
       var N = round1N + round2N + round3N;
       var K = Math.round(500000000 / N);
       var round1Tokens = round1N * K
@@ -181,9 +213,15 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.ENTITY_ADDRESS_CHANGED: {
+      if (checkMetaMask(action.payload)) {
+        localErrors[actionTypes.ENTITY_ADDRESS_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.ENTITY_ADDRESS_CHANGED] = "Not a Valid Address";
+      }
       return {
         ...state,
-        entityAddress: action.payload
+        entityAddress: action.payload,
+        errors: localErrors
       };
     }
 
@@ -195,17 +233,30 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.ENTITY_PERCENTAGE_CHANGED: {
+      if (validateEntityPercentage(parseFloat(action.payload))) {
+        localErrors[actionTypes.ENTITY_PERCENTAGE_CHANGED] = "Should be in between 1 & 50";
+      } else if (!validateDecimal(action.payload)) {
+        localErrors[actionTypes.ENTITY_PERCENTAGE_CHANGED] = "Only 1 Decimal Allowed";
+      } else {
+        localErrors[actionTypes.ENTITY_PERCENTAGE_CHANGED] = "";
+      }
       return {
         ...state,
-        entityPercentage: action.payload
+        entityPercentage: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.TOKEN_PRICE_FACTOR_CHANGED: {
-      const tokenPriceFactor = action.payload || 0;
+      if (!validateTokenPriceFactor(parseFloat(action.payload))) {
+        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "Should be in between 1 & 2. one decimal place allowed";
+      } else {
+        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "";
+      }
       return {
         ...state,
-        tokenPriceFactor: tokenPriceFactor
+        tokenPriceFactor: action.payload,
+        errors: localErrors
       };
     }
 
@@ -243,8 +294,11 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.PROJECT_NAME_CHANGED: {
+      const { projectNames } = state || {};
       if (!validateProjectNameLength(action.payload) || !alphaOnly(action.payload)) {
         localErrors[actionTypes.PROJECT_NAME_CHANGED] = "Only Letters are allowed & length should be less than 32 ";
+      } else if (validateUniqueName(projectNames, action.payload)) {
+        localErrors[actionTypes.PROJECT_NAME_CHANGED] = "project name is not unique ";
       } else {
         localErrors[actionTypes.PROJECT_NAME_CHANGED] = "";
       }
@@ -256,9 +310,11 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.ERC20_TAG_CHANGED: {
-      alphaOnly(action.payload);
+      const { tokenTags } = state || {};
       if (!validateTokenTagLength(action.payload) || isUpperCase(action.payload) || !alphaOnly(action.payload)) {
         localErrors[actionTypes.ERC20_TAG_CHANGED] = "Should have 3-9 characters in upper case";
+      } else if (validateUniqueName(tokenTags, action.payload)) {
+        localErrors[actionTypes.ERC20_TAG_CHANGED] = "token tag is not unique";
       } else {
         localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
       }
@@ -364,8 +420,7 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.TEAM_ADDRESS_CHANGED: {
-      console.log(action.payload.value, "payload");
-      if (action.payload.isValid) {
+      if (checkMetaMask(action.payload)) {
         localErrors[actionTypes.TEAM_ADDRESS_CHANGED] = "";
       } else {
         localErrors[actionTypes.TEAM_ADDRESS_CHANGED] = "Not a valid address";

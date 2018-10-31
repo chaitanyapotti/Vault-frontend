@@ -77,7 +77,6 @@ class DaicoDetails extends React.Component {
   }
 
   getErrorMsg = propName => {
-    console.log("yeee");
     if (this.props.errors) {
       if (this.props.errors.hasOwnProperty(propName)) {
         return this.props.errors[propName];
@@ -98,7 +97,7 @@ class DaicoDetails extends React.Component {
     const month = daicoStartDate && daicoStartDate.getMonth();
     const date = daicoStartDate && daicoStartDate.getDate();
     const newDate = new Date(year, month, date);
-    return new Date(newDate.setMonth(newDate.getMonth()+2))
+    return new Date(newDate.setMonth(newDate.getMonth() + 2));
   }
 
   render() {

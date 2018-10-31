@@ -2,13 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { CUIFormInput, CUIButton } from "../../../helpers/material-ui";
-import {
-  CUIInputType,
-  CUIButtonType,
-  CUIInputColor
-} from "../../../static/js/variables";
+import { CUIInputType } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../../Common/FormComponents";
+import actionTypes from "../../../action_types";
 
 import { Table } from "semantic-ui-react";
 import { Tooltip, Legend, Pie, PieChart, Cell, Label, LabelList, Sector } from "recharts";
@@ -21,19 +18,10 @@ import {
   nonSaleEntityEditAction
 } from "../../../actions/projectRegistrationActions";
 
+import { validateLength, validateDecimal, validateEntityPercentage } from "../../../helpers/common/validationHelperFunctions";
+
 // const CHARTCOLORS = ['#e1f4ff', '#b0ddff', '#7ec3fe', '#65b6fd', '#4ca9fc', '#3d8dd4', '#2e71ac', '#1e5583', '#0f395b', '#001d33']
-const CHARTCOLORS = [
-  "#001d33",
-  "#0f395b",
-  "#1e5583",
-  "#3d8dd4",
-  "#4ca9fc",
-  "#65b6fd",
-  "#7ec3fe",
-  "#b0ddff",
-  "#e1f4ff",
-  "#2e71ac"
-];
+const CHARTCOLORS = ["#001d33", "#0f395b", "#1e5583", "#3d8dd4", "#4ca9fc", "#65b6fd", "#7ec3fe", "#b0ddff", "#e1f4ff", "#2e71ac"];
 
 const NonSaleEntitiesTableHeader = () => (
   <Table.Header>
@@ -47,8 +35,7 @@ const NonSaleEntitiesTableHeader = () => (
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
-  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-    fill, payload, percent, value } = props;
+  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
   const sx = cx + (outerRadius + 10) * cos;
@@ -91,13 +78,29 @@ const renderActiveShape = (props) => {
   );
 };
 
-
 class NonSale extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = { nonTokenSalePieActiveIndex: 100, centerValue: 0 };
   }
+
+  componentDidUpdate(prevProps) {
+    const { errors } = this.props || {};
+    if (prevProps.errors !== errors) {
+      this.getErrorMsg();
+    }
+  }
+
+  getErrorMsg = propName => {
+    const { errors } = this.props || {};
+    if (errors) {
+      if (errors.hasOwnProperty(propName)) {
+        return errors[propName];
+      }
+      return "";
+    }
+    return "";
+  };
 
   handleAddNewEntity = () => {
     this.props.addNonSaleEntityAction(
@@ -167,7 +170,6 @@ class NonSale extends React.Component {
   }
 
   onPieEnter = (data, index) => {
-    console.log("on pie enter: ", data, index)
     this.setState({
       nonTokenSalePieActiveIndex: index,
       centerValue: parseInt(2*parseFloat(data.payload.entityPercentage) * this.props.totalSaleTokens / 100) || 0
@@ -182,7 +184,7 @@ class NonSale extends React.Component {
   }
 
   render() {
-    console.log("Combined entities: ",this.props.saleEntities.concat(this.props.nonSaleEntities))
+    const { entityName, entityAddress, entityPercentage} = this.props || {}
     return (
       <div className="push-top--50">
         <div className="txt-xl">Non Sale Distribution <span>(50% of Supply)</span></div>
@@ -201,7 +203,7 @@ class NonSale extends React.Component {
           <Col xs={12} lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
-              full
+              required
               inputName="Name of the Entity"
               inputLabel="Name of the Entity"
               inputPlaceholder=""
@@ -217,6 +219,7 @@ class NonSale extends React.Component {
             <CUIFormInput
               inputType={CUIInputType.TEXT}
               full
+              forceNumDec
               inputName="Percentage of Total Tokens Supply"
               inputLabel="Percentage of Total Tokens Supply"
               inputPlaceholder=""
@@ -226,6 +229,8 @@ class NonSale extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeEntityPercentage}
+              error={!!this.getErrorMsg(actionTypes.ENTITY_PERCENTAGE_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.ENTITY_PERCENTAGE_CHANGED)}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -241,6 +246,8 @@ class NonSale extends React.Component {
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
               onChange={this.onChangeEntityAddress}
+              error={!!this.getErrorMsg(actionTypes.ENTITY_ADDRESS_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.ENTITY_ADDRESS_CHANGED)}
             />
           </Col>
         </Row>
@@ -254,8 +261,6 @@ class NonSale extends React.Component {
         </Row>
         : null
         }
-        
-
         <Row>
           <Col>
             <div className="push--top">
@@ -263,6 +268,13 @@ class NonSale extends React.Component {
                 label="Add To token Distribution Chart"
                 style={{ width: "100%" }}
                 onClick={this.handleAddNewEntity}
+                disabled={
+                  !validateLength(entityName) ||
+                  !validateLength(entityAddress) ||
+                  !validateLength(entityPercentage) ||
+                  !validateDecimal(entityPercentage) ||
+                  validateEntityPercentage(parseFloat(entityPercentage))
+                }
               />
             </div>
           </Col>
@@ -320,23 +332,17 @@ class NonSale extends React.Component {
 }
 
 const mapStateToProps = state => {
-  var {
+  const { nonSaleEntities, totalSaleTokens, entityName, entityPercentage, entityAddress, saleEntities, unallocatedTokensPer, errors } =
+    state.projectRegistrationData || {};
+  return {
     nonSaleEntities,
     totalSaleTokens,
     entityName,
     entityPercentage,
     entityAddress,
     saleEntities,
-    unallocatedTokensPer
-  } = state.projectRegistrationData || {};
-  return {
-    nonSaleEntities: nonSaleEntities,
-    totalSaleTokens: totalSaleTokens,
-    entityName: entityName,
-    entityPercentage: entityPercentage,
-    entityAddress: entityAddress,
-    saleEntities: saleEntities,
-    unallocatedTokensPer: unallocatedTokensPer
+    unallocatedTokensPer,
+    errors
   };
 };
 

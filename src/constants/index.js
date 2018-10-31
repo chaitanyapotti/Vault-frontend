@@ -9,7 +9,9 @@ const constants = {
   PROJECT_REGISTRATION_FAILED_MESSAGE: "Project registration failed.",
   ENDED_DAICOS_FAILED_MESSAGE: "Failed to retrieve Ended DAICOs, please reload the page.",
   UPCOMING_DAICOS_FAILED_MESSAGE: "Failed to retrieve Upcoming DAICOs, please reload the page.",
-  USER_TOKENS_FAILED_MESSAGE: "Failed to retrieve User Tokens, please reload the page."
+  USER_TOKENS_FAILED_MESSAGE: "Failed to retrieve User Tokens, please reload the page.",
+  PROJECT_NAMES_FAILED_MESSAGE: "Failed to retrieve Project Names, please reload the page.",
+  TOKEN_TAGS_FAILED_MESSAGE: "Failed to retrieve Token Tags, please reload the page."
 };
 
 export default constants;

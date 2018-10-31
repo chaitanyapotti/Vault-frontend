@@ -2,10 +2,9 @@ import axios from "axios";
 import actionTypes from "../../action_types";
 import config from "../../config";
 import constants from "../../constants";
-import web3 from "../../helpers/web3";
+import { checkMetaMask } from "../../helpers/common/validationHelperFunctions";
 
 export function newProjectRegistration(projectData, userLocalPublicAddress) {
-  
   let foundationDetails = [];
   const { nonSaleEntities, totalSaleTokens } = projectData || [];
   let totalNonSaleTokens = 0;
@@ -167,17 +166,11 @@ export function entityAddressChangedAction(value) {
   };
 }
 
-export function checkMetaMask(address) {
-  const isValid = web3.utils.isAddress(address);
-  return isValid;
-}
-
 export function teamAddressChangedAction(value) {
   return dispatch => {
-    const isValid = checkMetaMask(value);
     dispatch({
       type: actionTypes.TEAM_ADDRESS_CHANGED,
-      payload: { value, isValid }
+      payload: value
     });
   };
 }

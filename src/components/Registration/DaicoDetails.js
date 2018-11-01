@@ -18,14 +18,20 @@ import actionTypes from "../../action_types";
 import DTPicker from "../Common/DTPicker";
 
 class DaicoDetails extends React.Component {
-  state = {
-    selectedDate: null
-  };
+  // state = {
+  //   selectedRound1StartDate: null,
+  //   selectedRound1EndDate: null
+  // };
 
-  handleDateChange = date => {
-    console.log("date", date);
-    this.setState({ selectedDate: date });
-  };
+  // handleStartDateChange = date => {
+  //   console.log("date", date);
+  //   this.setState({ selectedRound1StartDate: date });
+  // };
+
+  // handleEndDateChange = date => {
+  //   console.log("date", date);
+  //   this.setState({ selectedRound1EndDate: date });
+  // };
 
   onChangeIniFundVal = e => {
     this.props.initialFundReleaseChangedAction(e.target.value);
@@ -52,12 +58,12 @@ class DaicoDetails extends React.Component {
   //   this.props.daicoRoundsChangedAction(e.target.value);
   // };
 
-  onChangeDaicoStart = e => {
-    this.props.daicoStartDateChangedAction(e.target.value);
+  onChangeDaicoStart = date => {
+    this.props.daicoStartDateChangedAction(date);
   };
 
-  onChangeDaicoEnd = e => {
-    this.props.daicoEndDateChangedAction(e.target.value);
+  onChangeDaicoEnd = date => {
+    this.props.daicoEndDateChangedAction(date);
   };
 
   uploadDaico = () => {
@@ -80,7 +86,23 @@ class DaicoDetails extends React.Component {
     return "";
   };
 
+  getEndMinDate = () => {
+    const myDate = new Date();
+    return new Date(myDate.setDate(myDate.getDate()+5));
+  }
+
+  getEndMaxDate = () => {
+    const{daicoStartDate} = this.props || {};
+    const year = daicoStartDate && daicoStartDate.getFullYear();
+    const month = daicoStartDate && daicoStartDate.getMonth();
+    const date = daicoStartDate && daicoStartDate.getDate();
+    const newDate = new Date(year, month, date);
+    return new Date(newDate.setMonth(newDate.getMonth() + 2));
+  }
+
   render() {
+    const { daicoStartDate, daicoEndDate, initialFundRelease, maxEtherContribution, initialTapValue, tapIncrementFactor, voteSaturationLimit } =
+      this.props || {};
     return (
       <div>
         <CUICard style={{ padding: "40px 50px" }}>
@@ -88,22 +110,20 @@ class DaicoDetails extends React.Component {
           <hr />
           <Row>
             <Col xs={12} lg={6}>
-              <DTPicker selectedDate={this.state.selectedDate} handleDateChange={this.handleDateChange} />
+              <DTPicker 
+                selectedDate={daicoStartDate} 
+                disablePast={true} 
+                label="Round 1 Start Date" 
+                handleDateChange={this.onChangeDaicoStart} 
+              />
             </Col>
             <Col xs={12} lg={6}>
-              <CUIFormInput
-                required
-                inputType={CUIInputType.TEXT}
-                full
-                inputName="Round 1 End Date"
-                inputLabel="Round 1 End Date"
-                inputPlaceholder="Eg. 25-10-2018"
-                inputValue={this.props.daicoEndDate}
-                // onBlur={this.onBlurAge}
-                // error={this.state.errorAgeText !== ''}
-                // helperText={this.state.errorAgeText}
-                // onKeyDownSelector="Admin"
-                onChange={this.onChangeDaicoEnd}
+              <DTPicker 
+                selectedDate={daicoEndDate} 
+                minDate={this.getEndMinDate()}  
+                maxDate={this.getEndMaxDate()}
+                label="Round 1 End Date" 
+                handleDateChange={this.onChangeDaicoEnd} 
               />
             </Col>
           </Row>
@@ -113,18 +133,17 @@ class DaicoDetails extends React.Component {
                 required
                 inputType={CUIInputType.TEXT}
                 full
+                forceNumDec
                 inputName="Initial Fund Release"
                 inputLabel="Initial Fund Release"
-                inputPlaceholder="Eg. Aman"
-                inputValue={this.props.initialFundRelease}
+                inputPlaceholder="Eg. 100"
+                inputValue={initialFundRelease}
                 textFocus
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}
                 // helperText={this.state.errorAgeText}
                 // onKeyDownSelector="Admin"
                 onChange={this.onChangeIniFundVal}
-                error={!!this.getErrorMsg(actionTypes.INITIAL_FUND_RELEASE_CHANGED)}
-                helperText={this.getErrorMsg(actionTypes.INITIAL_FUND_RELEASE_CHANGED)}
               />
             </Col>
             <Col xs={12} lg={6}>
@@ -132,10 +151,11 @@ class DaicoDetails extends React.Component {
                 required
                 inputType={CUIInputType.TEXT}
                 full
+                forceNumDec
                 inputName="Max Ether Contribution"
-                inputLabel="Max Ether Contribution"
+                inputLabel="Max Ether Cap (ETH)"
                 inputPlaceholder="Eg. 5"
-                inputValue={this.props.maxEtherContribution}
+                inputValue={maxEtherContribution}
                 textFocus
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}
@@ -164,10 +184,11 @@ class DaicoDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
+                forceNumDec
                 inputName="Initial Tap Value"
-                inputLabel="Initial Tap Value"
-                inputPlaceholder="Eg. 100 eth/month"
-                inputValue={this.props.initialTapValue}
+                inputLabel="Initial Tap (ETH/Mo)"
+                inputPlaceholder="Eg. 100"
+                inputValue={initialTapValue}
                 textFocus
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}
@@ -183,10 +204,11 @@ class DaicoDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
+                forceNumDec
                 inputName="Tap Increment Factor"
                 inputLabel="Tap Increment Factor"
                 inputPlaceholder="Eg. 1.5"
-                inputValue={this.props.tapIncrementFactor}
+                inputValue={tapIncrementFactor}
                 textFocus
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}
@@ -204,10 +226,11 @@ class DaicoDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
+                forceNumDec
                 inputName="Vote Saturation Limit"
                 inputLabel="Vote Saturation Limit"
                 inputPlaceholder="Eg. 0.05%"
-                inputValue={this.props.voteSaturationLimit}
+                inputValue={voteSaturationLimit}
                 textFocus
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}

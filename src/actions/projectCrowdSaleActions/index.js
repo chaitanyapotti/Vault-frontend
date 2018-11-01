@@ -94,6 +94,7 @@ export const getTokenBalance = (version, contractAddress, userLocalPublicAddress
 
 export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount, round) => dispatch => {
   dispatch(isBuyButtonSpinning(true));
+  console.log(amount);
   web3.eth
     .sendTransaction({
       from: userLocalPublicAddress,

@@ -35,7 +35,9 @@ class FeaturedProjects extends Component {
             </Grid>
           </div>
         ) : (
-          <h1>{featuredProjectsRetrieveFailureMessage}</h1>
+          <Grid>
+            <h1 className="text--center push-top--50">{featuredProjectsRetrieveFailureMessage}</h1>
+          </Grid>
         )}
       </div>
     );

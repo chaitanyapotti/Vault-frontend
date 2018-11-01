@@ -122,6 +122,13 @@ export default (state = initialState, action) => {
         xfr2ButtonSpinning: receipt
       };
     }
+    case actionTypes.KILL_FINALIZE_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        killFinalizeButtonSpinning: receipt
+      };
+    }
     default:
       return state;
   }

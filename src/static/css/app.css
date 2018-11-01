@@ -3,6 +3,7 @@
 @import "desktop.css";
 @import "mobile.css";
 @import "header.css";
+@import "loaderAnimation.css";
 
 @font-face {
   font-family: "Montserrat";
@@ -543,4 +544,11 @@ button:focus {
   margin-bottom: 0px;
   margin-top: 0px;
   transition: 100ms;
+}
+
+.btn.focus,
+.btn:focus,
+.btn:hover {
+  color: #ffffff !important;
+  text-decoration: none;
 }

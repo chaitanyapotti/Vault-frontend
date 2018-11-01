@@ -208,9 +208,12 @@ class HeaderPartial extends React.Component {
         <MenuItem onClick={this.onHandleProjectsClicked}>
           <div>Projects</div>
         </MenuItem>
-        <MenuItem onClick={this.onHandleGovernanceClicked}>
-          <div>My Tokens</div>
-        </MenuItem>
+        {this.props.signinStatusFlag === 5 || this.props.signinStatusFlag === 6 ?
+          <MenuItem onClick={this.onHandleGovernanceClicked}>
+            <div>My Tokens</div>
+          </MenuItem>
+          : null
+        }
         <MenuItem>
           <div>Publish ICO</div>
         </MenuItem>
@@ -229,8 +232,8 @@ class HeaderPartial extends React.Component {
         >
           <Grid>
             <Row>
-              <Col>
-                <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "85px" }}>
+              <Col xs={12}>
+                <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "85px", padding: 0 }}>
                   {scrnWdh < 768 ? (
                     <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
                       <MenuIcon />
@@ -263,17 +266,20 @@ class HeaderPartial extends React.Component {
                         Projects
                       </div>
                     </div>
-                    <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
-                        My Tokens
+                    {this.props.signinStatusFlag === 5 || this.props.signinStatusFlag === 6 ?
+                      <div className="hdr-itm-pad text--primary txt-m">
+                        <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
+                          My Tokens
+                        </div>
                       </div>
-                    </div>
+                      : null
+                    }
                     <div className="hdr-itm-pad text--primary txt-m">
                       <div className="hvr-underline-from-left">Publish ICO</div>
                     </div>
                     <div className="text--primary txt-m wdh-100" style={{ paddingTop: "10px" }}>
                       {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
-                      <div>
+                      <div className="text--center">
                         {
                           {
                             0: (
@@ -349,9 +355,12 @@ class HeaderPartial extends React.Component {
             <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked}>
               Projects
             </div>
-            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
-              My Tokens
+            {this.props.signinStatusFlag === 5 || this.props.signinStatusFlag === 6 ?
+              <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
+                My Tokens
             </div>
+              : null
+            }
             <div className="hdr-itm-pad text--primary txt-m">Publish ICO</div>
           </div>
         </Drawer>

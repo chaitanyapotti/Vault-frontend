@@ -40,7 +40,7 @@ import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
 import BuyModal from "../../components/Common/BuyModal";
 
-class ProjectDetailGovernance extends Component {
+class IssuerDetailGovernance extends Component {
   state = {
     modalOpen: false,
     buyModalOpen: false,
@@ -536,4 +536,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProjectDetailGovernance);
+)(IssuerDetailGovernance);

@@ -1,6 +1,28 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
+import {
+  validateAdminName,
+  validateEmail,
+  isUpperCase,
+  validateTwitterLink,
+  validateFacebookLink,
+  validateWebsiteUrl,
+  validateGitLink,
+  validateMediumLink,
+  validateTelegramLink,
+  validateProjectNameLength,
+  validateTokenTagLength,
+  alphaOnly,
+  validateMaxEtherContribution,
+  validateTapIncrementFactor,
+  validateVoteSaturationLimit,
+  validateTokenPriceFactor,
+  validateUniqueName,
+  validateDecimal,
+  validateEntityPercentage,
+  checkMetaMask
+} from "../../helpers/common/validationHelperFunctions";
 
 export const initialState = {
   adminName: "",
@@ -16,8 +38,8 @@ export const initialState = {
   twitterLink: "",
   initialFundRelease: "",
   daicoRounds: "",
-  daicoStartDate: "",
-  daicoEndDate: "",
+  daicoStartDate: null,
+  daicoEndDate: null,
   round1TargetUSD: "",
   round1TargetEth: "",
   round2TargetUSD: "",
@@ -30,22 +52,32 @@ export const initialState = {
   round1Rate: 0,
   round2Rate: 0,
   round3Rate: 100,
+  totalSaleTokens: 0,
   ethPrice: 210,
-  tokenPriceFactor: 0,
+  tokenPriceFactor: "",
   nonSaleDistribution: [],
   project_id: "",
   teamAddress: "",
   maxEtherContribution: "",
   initialTapValue: "",
   tapIncrementFactor: "",
-  voteSaturationLimit: 0,
-  totalSaleTokens: 0,
-  nonSaleEntities: [
-    { entityName: "Unallocated", entityPercentage: 100, entityAddress: "NA" }
-  ],
+  voteSaturationLimit: "",
+  saleEntities: [],
+  nonSaleEntities: [{ entityName: "Unallocated", entityPercentage: 50, entityAddress: "NA" }],
+  unallocatedTokensPer: 50,
   entityName: "",
   entityPercentage: "",
   entityAddress: "",
+  projectNames: [],
+  projectNamesRetrieveFailureMessage: "",
+  tokenTags: [],
+  tokenTagsRetrieveFailureMessage: "",
+  whitepaperPDF: "",
+  whitepaperUrl: "",
+  uploadingWhitepaper: false,
+  thumbnailImage: "",
+  uploadingThumbnail: false,
+  thumbnailUrl: "",
   errors: {
     [actionTypes.ADMIN_NAME_CHANGED]: "",
     [actionTypes.ADMIN_EMAIL_CHANGED]: ""
@@ -54,63 +86,179 @@ export const initialState = {
 
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
-  function validateEmail(email) {
-    var re = /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/;
-    return re.test(email);
-  }
-  function isUpperCase(str) {
-    return str !== str.toUpperCase();
-  }
-  function validateTwitterLink(twitterLink) {
-    var re = /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/(#!\/)?[a-zA-Z0-9_]+$/i;
-    return re.test(twitterLink);
-  }
-  function validateFacebookLink(facebookLink) {
-    var re = /(?:https?:\/\/)?(?:www\.)?(?:facebook|fb|m\.facebook)\.(?:com|me)\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]+)(?:\/)?/i;
-    return re.test(facebookLink);
-  }
-  function validateWebsiteUrl(websiteUrl) {
-    var re = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i;
-    return re.test(websiteUrl);
-  }
-  function validateGitLink(gitLink) {
-    var re = /^(?:https?:\/\/)?(?:www\.)?github\.com\/(#!\/)?[a-zA-Z0-9_]+$/i;
-    return re.test(gitLink);
-  }
-  function validateMediumLink(mediumLink) {
-    var re = /^(?:https?:\/\/)?(?:www\.)?medium\.com\/(@)?[a-zA-Z0-9_]+$/i;
-    return re.test(mediumLink);
-  }
-  function validateTelegramLink(telegramLink) {
-    var re = /^(?:https?:\/\/)?(?:www\.)?t\.me\/(#!\/)?[a-zA-Z0-9_]+$/i;
-    return re.test(telegramLink);
-  }
   switch (action.type) {
+    case actionTypes.FETCH_PROJECT_NAMES_SUCCESS: {
+      return {
+        ...state,
+        projectNames: action.payload
+      };
+    }
+    case actionTypes.FETCH_PROJECT_NAMES_FAILED: {
+      return {
+        ...state,
+        projectNamesRetrieveFailureMessage: action.payload
+      };
+    }
+    case actionTypes.FETCH_TOKEN_TAGS_SUCCESS: {
+      return {
+        ...state,
+        tokenTags: action.payload
+      };
+    }
+    case actionTypes.FETCH_TOKEN_TAGS_FAILED: {
+      return {
+        ...state,
+        tokenTagsRetrieveFailureMessage: action.payload
+      };
+    }
+
+    case actionTypes.THUMBNAIL_CHANGED: {
+      return { ...state, thumbnailImage: action.payload}
+    }
+
+    case actionTypes.UPLOADING_THUMBNAIL: {
+      return { ...state, uploadingThumbnail : true}
+    }
+
+    case actionTypes.THUMBNAIL_UPLOAD_SUCCESS: {
+      return { ...state, uploadingThumbnail: false, thumbnailUrl: action.payload}
+    }
+
+    case actionTypes.THUMBNAIL_UPLOAD_FAILED: {
+      return { ...state, uploadingThumbnail: false, thumbnailUrl: ""}
+    }
+
+    case actionTypes.WHITEPAPER_CHANGED: {
+      return { ...state, whitepaperPDF: action.payload}
+    }
+
+    case actionTypes.UPLOADING_WHITEPAPER: {
+      return { ...state, uploadingWhitepaper: true}
+    }
+
+    case actionTypes.WHITEPAPER_UPLOAD_SUCCESS: {
+      return { ...state, uploadingWhitepaper: false, whitepaperUrl: action.payload}
+    }
+
+    case actionTypes.WHITEPAPER_UPLOAD_FAILED: {
+      return { ...state, uploadingWhitepaper: false, whitepaperUrl: ""}
+    }
+
     case actionTypes.NON_SALE_ENTITY_EDIT: {
       let nonSaleEntities = state.nonSaleEntities;
       let editEntity = nonSaleEntities.splice(action.payload, 1);
-      const { entityName, entityAddress, entityPercentage } =
-        editEntity[0] || "";
-      if (entityName === "Unallocated") {
-        nonSaleEntities.push(editEntity[0]);
-        return {
-          ...state,
+      if (nonSaleEntities.indexOf({ entityName: "Unallocated" }) != -1){
+        nonSaleEntities.splice(nonSaleEntities.indexOf({ entityName: "Unallocated" }), 1);
+      }
+      
+      const { entityName, entityAddress, entityPercentage } = editEntity[0] || "";
+      let unallocatedTokensPer = state.unallocatedTokensPer
+      unallocatedTokensPer = unallocatedTokensPer + entityPercentage
+      nonSaleEntities.push({
+          entityName: "Unallocated",
+          entityPercentage: unallocatedTokensPer,
+          entityAddress: "NA"
+        })
+      return {
+        ...state,
+        unallocatedTokensPer: unallocatedTokensPer, 
+        entityName: entityName,
+          entityPercentage: entityPercentage,
+          entityAddress: entityAddress,
           nonSaleEntities: nonSaleEntities
-        };
+      }  
+    }
+
+    case actionTypes.ADD_NON_SALE_ENTITY: {
+      let nonSaleEntities = state.nonSaleEntities;
+      let unallocatedTokensPer = state.unallocatedTokensPer;
+      // nonSaleEntities.pop();
+      
+      if (action.payload) {
+        if (action.payload.entityPercentage<=0 || isNaN(action.payload.entityPercentage)){
+          return {...state}
+        }
+        var slicedUnallocated = nonSaleEntities.splice(nonSaleEntities.indexOf({ entityName: "Unallocated" }), 1);
+        if (unallocatedTokensPer - action.payload.entityPercentage < 0) {
+          nonSaleEntities.push(slicedUnallocated[0])
+          return { ...state, nonSaleEntities: nonSaleEntities}
+        } else {
+          nonSaleEntities.push(action.payload);
+          if (unallocatedTokensPer - action.payload.entityPercentage> 0) {
+            nonSaleEntities.push({
+              entityName: "Unallocated",
+              entityPercentage: unallocatedTokensPer - action.payload.entityPercentage,
+              entityAddress: "NA"
+            });
+            return {
+              ...state,
+              nonSaleEntities: nonSaleEntities,
+              entityName: "",
+              entityPercentage: "",
+              entityAddress: "",
+              unallocatedTokensPer: unallocatedTokensPer - action.payload.entityPercentage
+            }
+          } else {
+            return {
+              ...state,
+              nonSaleEntities: nonSaleEntities,
+              entityName: "",
+              entityPercentage: "",
+              entityAddress: "",
+              unallocatedTokensPer: unallocatedTokensPer- action.payload.entityPercentage
+            }
+          }
+        }
       } else {
         return {
-          ...state,
-          entityName: entityName,
-          entityPercentage: entityPercentage,
-          entityAddress: entityAddress
+          ...state
         };
       }
     }
 
-    case actionTypes.ENTITY_ADDRESS_CHANGED: {
+    case actionTypes.CALCULATE_TOKENS: {
+      const { tokenPriceFactor, round1TargetEth, round2TargetEth, round3TargetEth } = state || {};
+      var round3Rate = 100;
+      var round2Rate =
+        parseFloat(tokenPriceFactor).toFixed(1) * round3Rate;
+      var round1Rate =
+        Math.pow(parseFloat(tokenPriceFactor).toFixed(1), 2) * round3Rate;
+      var round1N = round1Rate * parseInt(round1TargetEth);
+      var round2N = round2Rate * parseInt(round2TargetEth);
+      var round3N = round3Rate * parseInt(round3TargetEth);
+      var N = round1N + round2N + round3N;
+      var K = Math.round(500000000 / N);
+      var round1Tokens = round1N * K
+      var round2Tokens = round2N * K
+      var round3Tokens = round3N * K
+      var totalSaleTokens = round1Tokens + round2Tokens + round3Tokens
+      var saleEntities = []
+      saleEntities.push({ entityName: "Round1", entityPercentage: parseFloat((round1Tokens * 50 / totalSaleTokens).toFixed(2)), entityAddress: "NA" })
+      saleEntities.push({ entityName: "Round2", entityPercentage: parseFloat((round2Tokens * 50 / totalSaleTokens).toFixed(2)), entityAddress: "NA" })
+      saleEntities.push({ entityName: "Round3", entityPercentage: parseFloat((round3Tokens * 50 / totalSaleTokens).toFixed(2)), entityAddress: "NA" })
       return {
         ...state,
-        entityAddress: action.payload
+        round1Tokens: round1Tokens,
+        round2Tokens: round2Tokens,
+        round3Tokens: round3Tokens,
+        round1Rate: round1Rate * K,
+        round2Rate: round2Rate * K,
+        round3Rate: round3Rate * K,
+        totalSaleTokens: totalSaleTokens,
+        saleEntities: saleEntities
+      };
+    }
+
+    case actionTypes.ENTITY_ADDRESS_CHANGED: {
+      if (checkMetaMask(action.payload)) {
+        localErrors[actionTypes.ENTITY_ADDRESS_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.ENTITY_ADDRESS_CHANGED] = "Not a Valid Address";
+      }
+      return {
+        ...state,
+        entityAddress: action.payload,
+        errors: localErrors
       };
     }
 
@@ -122,70 +270,30 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.ENTITY_PERCENTAGE_CHANGED: {
-      return {
-        ...state,
-        entityPercentage: action.payload
-      };
-    }
-
-    case actionTypes.ADD_NON_SALE_ENTITY: {
-      let nonSaleEntities = state.nonSaleEntities;
-      nonSaleEntities.pop();
-      if (action.payload) {
-        nonSaleEntities.push(action.payload);
-        let total = 0;
-        for (let i = 0; i < nonSaleEntities.length; i++) {
-          total += nonSaleEntities[i]["entityPercentage"];
-        }
-        if (total < 100) {
-          nonSaleEntities.push({
-            entityName: "Unallocated",
-            entityPercentage: 100 - total,
-            entityAddress: "NA"
-          });
-        }
-        return {
-          ...state,
-          nonSaleEntities: nonSaleEntities,
-          entityName: "",
-          entityPercentage: "",
-          entityAddress: ""
-        };
+      if (validateEntityPercentage(parseFloat(action.payload))) {
+        localErrors[actionTypes.ENTITY_PERCENTAGE_CHANGED] = "Should be in between 1 & 50";
+      } else if (!validateDecimal(action.payload)) {
+        localErrors[actionTypes.ENTITY_PERCENTAGE_CHANGED] = "Only 1 Decimal Allowed";
       } else {
-        return {
-          ...state
-        };
+        localErrors[actionTypes.ENTITY_PERCENTAGE_CHANGED] = "";
       }
-    }
-
-    case actionTypes.CALCULATE_TOKENS: {
-      var round3Rate = 100;
-      var round2Rate =
-        parseFloat(state.tokenPriceFactor).toFixed(1) * round3Rate;
-      var round1Rate =
-        Math.pow(parseFloat(state.tokenPriceFactor).toFixed(1), 2) * round3Rate;
-      var round1N = round1Rate * parseInt(state.round1TargetEth);
-      var round2N = round2Rate * parseInt(state.round2TargetEth);
-      var round3N = round3Rate * parseInt(state.round3TargetEth);
-      var N = round1N + round2N + round3N;
-      var K = Math.round(500000000 / N);
       return {
         ...state,
-        round1Tokens: round1N * K * Math.pow(10, 18),
-        round2Tokens: round2N * K * Math.pow(10, 18),
-        round3Tokens: round3N * K * Math.pow(10, 18),
-        round1Rate: round1Rate * K,
-        round2Rate: round2Rate * K,
-        round3Rate: round3Rate * K,
-        totalSaleTokens: round1N * K + round2N * K + round3N * K
+        entityPercentage: action.payload,
+        errors: localErrors
       };
     }
 
     case actionTypes.TOKEN_PRICE_FACTOR_CHANGED: {
-      const tokenPriceFactor = action.payload || 0;
+      if (!validateTokenPriceFactor(parseFloat(action.payload))) {
+        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "Should be in between 1 & 2. one decimal place allowed";
+      } else {
+        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "";
+      }
       return {
         ...state,
-        tokenPriceFactor: tokenPriceFactor
+        tokenPriceFactor: action.payload,
+        errors: localErrors
       };
     }
 
@@ -197,7 +305,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.ADMIN_NAME_CHANGED: {
-      if (action.payload.length > 100) {
+      if (!validateAdminName(action.payload)) {
         localErrors[actionTypes.ADMIN_NAME_CHANGED] = "Can't have such length";
       } else {
         localErrors[actionTypes.ADMIN_NAME_CHANGED] = "";
@@ -223,9 +331,11 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.PROJECT_NAME_CHANGED: {
-      if (action.payload.length > 32) {
-        localErrors[actionTypes.PROJECT_NAME_CHANGED] =
-          "Can't have such length";
+      const { projectNames } = state || {};
+      if (!validateProjectNameLength(action.payload) || !alphaOnly(action.payload)) {
+        localErrors[actionTypes.PROJECT_NAME_CHANGED] = "Only Letters are allowed & length should be less than 32 ";
+      } else if (validateUniqueName(projectNames, action.payload)) {
+        localErrors[actionTypes.PROJECT_NAME_CHANGED] = "project name is not unique ";
       } else {
         localErrors[actionTypes.PROJECT_NAME_CHANGED] = "";
       }
@@ -237,16 +347,19 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.ERC20_TAG_CHANGED: {
-      if (
-        action.payload.length < 3 ||
-        action.payload.length > 9 ||
-        isUpperCase(action.payload.toString())
-      ) {
-        localErrors[actionTypes.ERC20_TAG_CHANGED] =
-          "Should have 3-9 characters in upper case";
+      const { tokenTags } = state || {};
+      if (!validateTokenTagLength(action.payload) || isUpperCase(action.payload) || !alphaOnly(action.payload)) {
+        localErrors[actionTypes.ERC20_TAG_CHANGED] = "Should have 3-9 characters in upper case";
+      } else if (validateUniqueName(tokenTags, action.payload)) {
+        localErrors[actionTypes.ERC20_TAG_CHANGED] = "token tag is not unique";
       } else {
         localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
       }
+      // if (alphaOnly(action.payload)) {
+      //   localErrors[actionTypes.ERC20_TAG_CHANGED] = "Only letters are accepted";
+      // } else {
+      //   localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
+      // }
       return {
         ...state,
         erc20TokenTag: action.payload,
@@ -334,8 +447,7 @@ export default function(state = initialState, action) {
       if (validateTwitterLink(action.payload)) {
         localErrors[actionTypes.TWITTER_LINK_CHANGED] = "";
       } else {
-        localErrors[actionTypes.TWITTER_LINK_CHANGED] =
-          "Not a valid twitter link";
+        localErrors[actionTypes.TWITTER_LINK_CHANGED] = "Not a valid twitter link";
       }
       return {
         ...state,
@@ -345,7 +457,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.TEAM_ADDRESS_CHANGED: {
-      if (action.payload.isValid) {
+      if (checkMetaMask(action.payload)) {
         localErrors[actionTypes.TEAM_ADDRESS_CHANGED] = "";
       } else {
         localErrors[actionTypes.TEAM_ADDRESS_CHANGED] = "Not a valid address";
@@ -384,9 +496,8 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED: {
-      if (parseFloat(action.payload) < 0.1) {
-        localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] =
-          "should be greater than 0.1";
+      if (validateMaxEtherContribution(parseFloat(action.payload))) {
+        localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "should be greater than 0.1";
       } else {
         localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "";
       }
@@ -398,6 +509,16 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.INITIAL_TAP_VALUE_CHANGED: {
+      // const { initialFundRelease } = state || {};
+      // let fundRelease;
+      // if (initialFundRelease.length === 0) {
+      //   fundRelease = 0;
+      // } else fundRelease = initialFundRelease;
+      // if (validateInitialTap(parseFloat(action.payload), fundRelease)) {
+      //   localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "should be lesser than initial fund release";
+      // } else {
+      //   localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "";
+      // }
       return {
         ...state,
         initialTapValue: action.payload
@@ -405,9 +526,8 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.TAP_INCREMENT_FACTOR_CHANGED: {
-      if (parseFloat(action.payload) < 1 || parseFloat(action.payload) > 2) {
-        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] =
-          "should be in between 1 and 2";
+      if (validateTapIncrementFactor(parseFloat(action.payload))) {
+        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "should be in between 1 and 2";
       } else {
         localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "";
       }
@@ -419,9 +539,8 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.VOTE_SATURATION_LIMIT_CHANGED: {
-      if (parseFloat(action.payload) < 0.1 || parseFloat(action.payload) > 10) {
-        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] =
-          "should be in between 0.1 and 10";
+      if (validateVoteSaturationLimit(parseFloat(action.payload))) {
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "should be in between 0.1 and 10";
       } else {
         localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "";
       }

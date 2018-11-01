@@ -1,12 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { CUICard, CUIFormInput, CUIButton } from "../../helpers/material-ui";
-import {
-  CUIInputType,
-  CUIButtonType,
-  CUIInputColor
-} from "../../static/js/variables";
+import { CUICard, CUIFormInput } from "../../helpers/material-ui";
+import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import {
   adminNameChangedAction,
@@ -20,7 +16,11 @@ import {
   mediumLinkChangedAction,
   facebookLinkChangedAction,
   twitterLinkChangedAction,
-  teamAddressChangedAction
+  teamAddressChangedAction,
+  whitepaperChangedAction,
+  uploadWhitepaperAction,
+  thumbnailChangedAction,
+  uploadThumbnailAction
 } from "../../actions/projectRegistrationActions";
 import { ButtonComponent } from "../Common/FormComponents";
 import actionTypes from "../../action_types";
@@ -74,20 +74,34 @@ class IdentityDetails extends React.Component {
     this.props.teamAddressChangedAction(e.target.value);
   };
 
-  uploadWhitePaper = () => {
-    console.log("upload white paper button action");
+  whitepaperChanged = e => {
+    this.props.whitepaperChangedAction(e.target.files[0]);
+  };
+
+  uploadWhitepaper = () => {
+    this.props.uploadWhitepaperAction(this.props.whitepaperPDF, this.props.userLocalPublicAddress, "whitepaper");
+  };
+
+  thumbnailChanged = e => {
+    this.props.thumbnailChangedAction(e.target.files[0]);
+  };
+
+  uploadThumbnail = () => {
+    this.props.uploadThumbnailAction(this.props.thumbnailImage, this.props.userLocalPublicAddress, "thumbnail");
   };
 
   componentDidUpdate(prevProps) {
-    if (prevProps.errors !== this.props.errors) {
+    const { errors } = this.props || {};
+    if (prevProps.errors !== errors) {
       this.getErrorMsg();
     }
   }
 
   getErrorMsg = propName => {
-    if (this.props.errors) {
-      if (this.props.errors.hasOwnProperty(propName)) {
-        return this.props.errors[propName];
+    const { errors } = this.props || {};
+    if (errors) {
+      if (errors.hasOwnProperty(propName)) {
+        return errors[propName];
       }
       return "";
     }
@@ -95,6 +109,24 @@ class IdentityDetails extends React.Component {
   };
 
   render() {
+    const {
+      adminName,
+      adminEmail,
+      projectName,
+      erc20TokenTag,
+      projectDescription,
+      twitterLink,
+      githubLink,
+      facebookLink,
+      telegramLink,
+      mediumLink,
+      teamAddress,
+      websiteLink,
+      uploadingWhitepaper,
+      whitepaperUrl,
+      uploadingThumbnail,
+      thumbnailUrl
+    } = this.props || {};
     return (
       <CUICard style={{ padding: "40px 67px" }}>
         <div className="txt-xl">Identity Details</div>
@@ -108,7 +140,7 @@ class IdentityDetails extends React.Component {
               inputName="Admin Name"
               inputLabel="Admin Name"
               inputPlaceholder="Eg. Adam Smith"
-              inputValue={this.props.adminName}
+              inputValue={adminName}
               textFocus
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -127,7 +159,7 @@ class IdentityDetails extends React.Component {
               inputName="Admin Email"
               inputLabel="Admin Email"
               inputPlaceholder="Eg. admin@electus.network"
-              inputValue={this.props.adminEmail}
+              inputValue={adminEmail}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -148,7 +180,7 @@ class IdentityDetails extends React.Component {
               inputName="Project Name"
               inputLabel="Project Name"
               inputPlaceholder="Eg. Electus"
-              inputValue={this.props.projectName}
+              inputValue={projectName}
               textFocus
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -167,7 +199,7 @@ class IdentityDetails extends React.Component {
               inputName="ERC20 Ticker"
               inputLabel="ERC20 Ticker"
               inputPlaceholder="Eg. ELE"
-              inputValue={this.props.erc20TokenTag}
+              inputValue={erc20TokenTag}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -188,7 +220,7 @@ class IdentityDetails extends React.Component {
               inputName="Project Description"
               inputLabel="Project Description"
               inputPlaceholder="Eg. Protocol for Decentralized Organizations"
-              inputValue={this.props.projectDescription}
+              inputValue={projectDescription}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -207,7 +239,7 @@ class IdentityDetails extends React.Component {
               inputName="Website Link"
               inputLabel="Website Link"
               inputPlaceholder="Eg. electus.network"
-              inputValue={this.props.websiteLink}
+              inputValue={websiteLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -225,7 +257,7 @@ class IdentityDetails extends React.Component {
               inputName="Telegram Link"
               inputLabel="Telegram Link"
               inputPlaceholder="Eg. https://t.me/joinchat/FwqASEdUSqFIPNBNwPZzfgz"
-              inputValue={this.props.telegramLink}
+              inputValue={telegramLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -246,7 +278,7 @@ class IdentityDetails extends React.Component {
               inputName="Github Link"
               inputLabel="Github Link"
               inputPlaceholder="Eg. https://github.com/chaitanyapotti/"
-              inputValue={this.props.githubLink}
+              inputValue={githubLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -264,7 +296,7 @@ class IdentityDetails extends React.Component {
               inputName="Medium Link"
               inputLabel="Medium Link"
               inputPlaceholder="Eg. https://medium.com/@ParthaB"
-              inputValue={this.props.mediumLink}
+              inputValue={mediumLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -285,7 +317,7 @@ class IdentityDetails extends React.Component {
               inputName="Facebook Link"
               inputLabel="Facebook Link"
               inputPlaceholder="Eg. https://www.facebook.com/electusnetwork/"
-              inputValue={this.props.facebookLink}
+              inputValue={facebookLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -303,7 +335,7 @@ class IdentityDetails extends React.Component {
               inputName="Twitter Link"
               inputLabel="Twitter Link"
               inputPlaceholder="Eg. https://twitter.com/ElectusNetwork"
-              inputValue={this.props.twitterLink}
+              inputValue={twitterLink}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -323,7 +355,7 @@ class IdentityDetails extends React.Component {
               inputName="Team Address"
               inputLabel="Team Address"
               inputPlaceholder="Eg. 0xdbf6df7e94e3019e1705e699a8874ac5f6ed753e"
-              inputValue={this.props.teamAddress}
+              inputValue={teamAddress}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -335,15 +367,26 @@ class IdentityDetails extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col>
-            <div className="text--right push--top">
-              <ButtonComponent
-                id="uploadWhitepaper"
-                label="Upload Whitepaper"
-                onClick={this.uploadWhitePaper}
-              />
-            </div>
-          </Col>
+          <div className="text--right push--top">
+            <Col>
+              <input type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
+            </Col>
+            <Col>
+              <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitepaper} />
+              {uploadingWhitepaper ? <div>Uploading</div> : <div>{whitepaperUrl} </div>}
+            </Col>
+          </div>
+        </Row>
+        <Row>
+          <div className="text--right push--top">
+            <Col>
+              <input type="file" accept="image/*" onChange={this.thumbnailChanged} />
+            </Col>
+            <Col>
+              <ButtonComponent id="uploadThumbnail" label="Upload Thumbnail" onClick={this.uploadThumbnail} />
+              {uploadingThumbnail ? <div>Uploading</div> : <div>{thumbnailUrl} </div>}
+            </Col>
+          </div>
         </Row>
       </CUICard>
     );
@@ -364,8 +407,15 @@ const mapStateToProps = state => {
     facebookLink,
     twitterLink,
     teamAddress,
+    whitepaperPDF,
+    uploadingWhitepaper,
+    whitepaperUrl,
+    thumbnailImage,
+    uploadingThumbnail,
+    thumbnailUrl,
     errors
   } = state.projectRegistrationData || {};
+  const { userLocalPublicAddress } = state.signinManagerData || {};
   return {
     adminName,
     adminEmail,
@@ -379,7 +429,14 @@ const mapStateToProps = state => {
     facebookLink,
     twitterLink,
     teamAddress,
-    errors
+    whitepaperPDF,
+    uploadingWhitepaper,
+    whitepaperUrl,
+    thumbnailImage,
+    uploadingThumbnail,
+    thumbnailUrl,
+    errors,
+    userLocalPublicAddress
   };
 };
 
@@ -397,7 +454,11 @@ const mapDispatchToProps = dispatch =>
       mediumLinkChangedAction,
       facebookLinkChangedAction,
       twitterLinkChangedAction,
-      teamAddressChangedAction
+      teamAddressChangedAction,
+      whitepaperChangedAction,
+      uploadWhitepaperAction,
+      thumbnailChangedAction,
+      uploadThumbnailAction
     },
     dispatch
   );

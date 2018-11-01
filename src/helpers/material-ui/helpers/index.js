@@ -13,7 +13,7 @@ const selectIcon = (iconColor, style) => () => {
     position: "absolute",
     bottom: 10,
     right: 10,
-    pointerEvents: "none",
+    pointerEvents: "none"
   };
   return (
     <span style={{ ...defaultStyle, ...style }}>
@@ -36,11 +36,31 @@ const renderAutocompleteInput = inputProps => {
   return <TextField InputProps={{ inputRef: ref }} {...other} />;
 };
 
-const handleInputKeydown = (event, onKeyDownSelector, forceNumeric) => {
+const handleInputKeydown = (event, onKeyDownSelector, forceNumeric, forceNumDec) => {
   if (onKeyDownSelector) {
     if (event.keyCode === 13) {
       const submitButton = document.getElementById(onKeyDownSelector);
       submitButton.click();
+    }
+  }
+
+  if (forceNumDec) {
+    // Allow: backspace, delete, tab and escape
+    if (
+      event.keyCode === 46 ||
+      event.keyCode === 8 ||
+      event.keyCode === 9 ||
+      event.keyCode === 27 ||
+      event.keyCode === 190 ||
+      // Allow: Ctrl+A
+      (event.keyCode === 65 && event.ctrlKey === true) ||
+      // Allow: home, end, left, right
+      (event.keyCode >= 35 && event.keyCode <= 39)
+    ) {
+      // let it happen, don't do anything
+    } else if (event.shiftKey || ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105))) {
+      // Ensure that it is a number and stop the keypress
+      event.preventDefault();
     }
   }
 
@@ -51,6 +71,7 @@ const handleInputKeydown = (event, onKeyDownSelector, forceNumeric) => {
       event.keyCode === 8 ||
       event.keyCode === 9 ||
       event.keyCode === 27 ||
+      // event.keyCode === 190 ||
       // Allow: Ctrl+A
       (event.keyCode === 65 && event.ctrlKey === true) ||
       // Allow: home, end, left, right

@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { CUIModal, CUIModalActions, CUIModalContent } from "../../../helpers/material-ui";
 import { ButtonComponent } from "../FormComponents";
 
-class AlertModal extends Component {
-  render() {
-    const { open, children, handleClose, link } = this.props || {};
-    return (
-      <div>
+const AlertModal = props => {
+  const { open, children, handleClose, link } = props || {};
+  return (
+    <div>
+      {link ? (
         <CUIModal open={open}>
           <CUIModalContent>{children}</CUIModalContent>
           <CUIModalActions>
@@ -17,9 +17,16 @@ class AlertModal extends Component {
             </Link>
           </CUIModalActions>
         </CUIModal>
-      </div>
-    );
-  }
-}
+      ) : (
+        <CUIModal open={open}>
+          <CUIModalContent>{children}</CUIModalContent>
+          <CUIModalActions>
+            <ButtonComponent onClick={handleClose} label="Ok" />
+          </CUIModalActions>
+        </CUIModal>
+      )}
+    </div>
+  );
+};
 
 export default AlertModal;

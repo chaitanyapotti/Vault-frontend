@@ -13,8 +13,8 @@ export const projectDetailsFetched = data => ({
   type: actionTypes.PROJECT_DETAILS_FETCHED
 });
 
-export const treasuryStateFetchSuccess = data => ({
-  payload: { data },
+export const treasuryStateFetchSuccess = receipt => ({
+  payload: { receipt },
   type: actionTypes.TREASURY_STATE_FETCHED
 });
 
@@ -25,7 +25,7 @@ export const currentRound = projectid => async dispatch => {
       const { status, data: projectData } = response || {};
       if (status === 200) {
         const { data } = projectData || {};
-        const { version, crowdSaleAddress } = data || {};
+        const { version, crowdSaleAddress, pollFactoryAddress } = data || {};
         dispatch(projectDetailsFetched(data));
         const network = "rinkeby";
         axios
@@ -47,7 +47,7 @@ export const currentRound = projectid => async dispatch => {
           });
         axios
           .get(`${config.api_base_url}/web3/pollfactory/state`, {
-            params: { version: version.toString(), network, address: crowdSaleAddress }
+            params: { version: version.toString(), network, address: pollFactoryAddress }
           })
           .then(stateResponse => {
             const { data: currentRoundData } = stateResponse || {};

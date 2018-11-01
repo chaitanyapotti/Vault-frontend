@@ -2,6 +2,8 @@ import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
+import { getTotalSupply, getRemainingEtherBalance } from "../projectDetailGovernanceActions";
+import { getTokenBalance } from "../projectCrowdSaleActions";
 
 export const refundByKillButtonSpinning = receipt => ({
   payload: { receipt },
@@ -13,7 +15,7 @@ export const refundBySoftCapFailButtonSpinning = receipt => ({
   type: actionTypes.REFUND_BY_SOFT_CAP_FAIL_BUTTON_SPINNING
 });
 
-export const refundByKill = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const refundByKill = (version, contractAddress, userLocalPublicAddress, daicoTokenAddress) => dispatch => {
   dispatch(refundByKillButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
@@ -25,6 +27,9 @@ export const refundByKill = (version, contractAddress, userLocalPublicAddress) =
         .refundByKill()
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
+          dispatch(getRemainingEtherBalance(version, contractAddress));
+          dispatch(getTotalSupply(version, daicoTokenAddress));
           dispatch(refundByKillButtonSpinning(false));
         })
         .on("error", error => {
@@ -38,7 +43,7 @@ export const refundByKill = (version, contractAddress, userLocalPublicAddress) =
     });
 };
 
-export const refundBySoftCapFail = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const refundBySoftCapFail = (version, contractAddress, userLocalPublicAddress, daicoTokenAddress) => dispatch => {
   dispatch(refundBySoftCapFailButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
@@ -50,6 +55,9 @@ export const refundBySoftCapFail = (version, contractAddress, userLocalPublicAdd
         .refundBySoftcapFail()
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
+          dispatch(getRemainingEtherBalance(version, contractAddress));
+          dispatch(getTotalSupply(version, daicoTokenAddress));
           dispatch(refundBySoftCapFailButtonSpinning(false));
         })
         .on("error", error => {

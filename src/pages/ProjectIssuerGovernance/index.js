@@ -4,12 +4,10 @@ import { bindActionCreators } from "redux";
 import qs from "qs";
 import { withRouter } from "react-router-dom";
 import { currentRound } from "../../actions/projectGovernanceActions/index";
-import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
-import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
-import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
-import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
+import IssuerDetailPreGovernance from "../../containers/IssuerDetailPreGovernance";
+import IssuerDetailGovernance from "../../containers/IssuerDetailGovernance";
 
-class ProjectGovernance extends Component {
+class ProjectIssuerGovernance extends Component {
   componentDidMount() {
     // Do Routing here - use query string
     const currentUrl = new URL(window.location.href);
@@ -53,7 +51,7 @@ class ProjectGovernance extends Component {
       xfrDetails
     } = projectDetails || {};
     // currentRoundNumber = "2";
-
+    // Redirect to form if cdi !== 12
     if (currentDeploymentIndicator !== 12)
       return (
         <div>
@@ -61,43 +59,21 @@ class ProjectGovernance extends Component {
         </div>
       );
     if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
-      return (
-        <ProjectDetailRefund
-          version={version}
-          tokenTag={tokenTag}
-          pollFactoryAddress={pollFactoryAddress}
-          daicoTokenAddress={daicoTokenAddress}
-          treasuryStateNumber={treasuryStateNumber}
-        />
-      );
+      return null;
+      // <ProjectDetailRefund
+      //   version={version}
+      //   tokenTag={tokenTag}
+      //   pollFactoryAddress={pollFactoryAddress}
+      //   daicoTokenAddress={daicoTokenAddress}
+      //   treasuryStateNumber={treasuryStateNumber}
+      // />
     }
 
     switch (currentRoundNumber) {
       case "0":
-        return (
-          <ProjectDetailPreStart
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            initialFundRelease={initialFundRelease}
-          />
-        );
       case "1":
         return (
-          <ProjectDetailCrowdSale
+          <IssuerDetailPreGovernance
             version={version}
             membershipAddress={membershipAddress}
             projectName={projectName}
@@ -114,18 +90,14 @@ class ProjectGovernance extends Component {
             rounds={rounds}
             totalMintableSupply={totalMintableSupply}
             foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
             initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            daicoTokenAddress={daicoTokenAddress}
           />
         );
       case "2":
       case "3":
       case "4":
         return (
-          <ProjectDetailGovernance
+          <IssuerDetailGovernance
             version={version}
             membershipAddress={membershipAddress}
             projectName={projectName}
@@ -181,6 +153,6 @@ const mapDispatchToProps = dispatch =>
 const connector = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProjectGovernance);
+)(ProjectIssuerGovernance);
 
 export default withRouter(connector);

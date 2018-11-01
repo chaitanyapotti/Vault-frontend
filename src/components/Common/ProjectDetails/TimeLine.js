@@ -40,7 +40,7 @@ const TimeLine = props => {
           Started on: {startDate.toDateString()}
         </Col>
         <Col lg={4} className="txt-m push-half-h--bottom text-center">
-          Days Left: {Math.round(Math.abs(endDate - new Date()) / 86400 / 1000)} days
+          Days Left: {Math.round((endDate > new Date() ? endDate - new Date() : 0) / 86400 / 1000)} days
         </Col>
         <Col lg={4} className="txt-m push-half-h--bottom text-right">
           Ends on: {endDate.toDateString()}

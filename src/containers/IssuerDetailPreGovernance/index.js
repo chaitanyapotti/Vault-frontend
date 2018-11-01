@@ -19,7 +19,7 @@ import { CUICard } from "../../helpers/material-ui";
 import AlertModal from "../../components/Common/AlertModal";
 import BuyModal from "../../components/Common/BuyModal";
 
-class ProjectDetailCrowdSale extends Component {
+class IssuerDetailPreGovernance extends Component {
   state = {
     modalOpen: false,
     buyModalOpen: false,
@@ -270,4 +270,4 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProjectDetailCrowdSale);
+)(IssuerDetailPreGovernance);

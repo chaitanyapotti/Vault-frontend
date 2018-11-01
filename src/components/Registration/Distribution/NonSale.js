@@ -147,7 +147,7 @@ class NonSale extends React.Component {
   };
 
   render() {
-    const { nonSaleEntities, history, entityName, entityPercentage, entityAddress } = this.props || {};
+    const { nonSaleEntities, history, entityName, entityPercentage, entityAddress, errors } = this.props || {};
     const nonSaleEntitiesTable = nonSaleEntities;
     const data =
       nonSaleEntitiesTable.length > 0 &&
@@ -235,13 +235,13 @@ class NonSale extends React.Component {
                   !validateLength(entityAddress) ||
                   !validateLength(entityPercentage) ||
                   !validateDecimal(entityPercentage) ||
-                  validateEntityPercentage(parseFloat(entityPercentage))
+                  errors[actionTypes.ENTITY_PERCENTAGE_CHANGED] !== "" ||
+                  errors[actionTypes.ENTITY_ADDRESS_CHANGED] !== ""
                 }
               />
             </div>
           </Col>
         </Row>
-
         {this.props.totalSaleTokens > 0 ? (
           <Row>
             <PieChart width={600} height={400}>

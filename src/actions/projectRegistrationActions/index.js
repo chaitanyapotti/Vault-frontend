@@ -3,6 +3,7 @@ import FormData from "form-data";
 import actionTypes from "../../action_types";
 import config from "../../config";
 import constants from "../../constants";
+import web3 from "../../helpers/web3";
 
 const httpClient = axios.create();
 
@@ -233,19 +234,21 @@ export function entityPercentageChangedAction(value) {
 }
 
 export function entityAddressChangedAction(value) {
-  return dispatch => {
+  return async dispatch => {
+    const isValid = value ? await web3.utils.isAddress(value) : false;
     dispatch({
       type: actionTypes.ENTITY_ADDRESS_CHANGED,
-      payload: value
+      payload: { value, isValid }
     });
   };
 }
 
 export function teamAddressChangedAction(value) {
-  return dispatch => {
+  return async dispatch => {
+    const isValid = value ? await web3.utils.isAddress(value) : false;
     dispatch({
       type: actionTypes.TEAM_ADDRESS_CHANGED,
-      payload: value
+      payload: { value, isValid }
     });
   };
 }

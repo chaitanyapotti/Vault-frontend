@@ -87,12 +87,16 @@ class DaicoDetails extends React.Component {
   };
 
   getEndMinDate = () => {
-    const myDate = new Date();
-    return new Date(myDate.setDate(myDate.getDate()+5));
-  }
+    const { daicoStartDate } = this.props || {};
+    const year = daicoStartDate && daicoStartDate.getFullYear();
+    const month = daicoStartDate && daicoStartDate.getMonth();
+    const date = daicoStartDate && daicoStartDate.getDate();
+    const newDate = new Date(year, month, date);
+    return new Date(newDate.setDate(newDate.getDate() + 5));
+  };
 
   getEndMaxDate = () => {
-    const{daicoStartDate} = this.props || {};
+    const { daicoStartDate } = this.props || {};
     const year = daicoStartDate && daicoStartDate.getFullYear();
     const month = daicoStartDate && daicoStartDate.getMonth();
     const date = daicoStartDate && daicoStartDate.getDate();

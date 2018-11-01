@@ -36,13 +36,21 @@ class Featuredproject extends Component {
       //   style={{ margin: "0 auto" }}
       // />
       <CUICard className={classes.card}>
-        <CUICardMedia component="img" alt="daico" className={classes.media} height="200" image={thumbnailUrl} title="Contemplative Reptile" />
+        <CUICardMedia
+          component="img"
+          alt="daico"
+          onClick={() => this.onClick(projectId)}
+          className={classes.media}
+          height="200"
+          image={thumbnailUrl}
+          title="Contemplative Reptile"
+        />
         <CUICardText>
           <div>{projectName}</div>
           <div>{description}</div>
         </CUICardText>
         <CUICardActions>
-          <ButtonComponent label="Know More" onClick={this.onClick(projectId)} />
+          <ButtonComponent label="Know More" onClick={() => this.onClick(projectId)} />
         </CUICardActions>
       </CUICard>
     );

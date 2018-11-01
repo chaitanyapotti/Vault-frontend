@@ -141,6 +141,9 @@
 .ftr-cnt{
     height: 215px;
     background-color: #ffffff;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .ftr-logo{

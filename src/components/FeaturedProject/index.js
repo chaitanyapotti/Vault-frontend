@@ -15,7 +15,7 @@ const styles = {
   }
 };
 class Featuredproject extends Component {
-  handleCardClicked = projectid => {
+  onClick = projectid => {
     const { history } = this.props || {};
     history.push({
       pathname: `/governance/details`,
@@ -24,7 +24,7 @@ class Featuredproject extends Component {
   };
 
   render() {
-    const { classes, projectName, description, thumbnailUrl } = this.props || {};
+    const { classes, projectName, description, thumbnailUrl, projectId } = this.props || {};
     return (
       // <CUICard
       //   className="blue-shadow"
@@ -42,7 +42,7 @@ class Featuredproject extends Component {
           <div>{description}</div>
         </CUICardText>
         <CUICardActions>
-          <ButtonComponent label="Know More" onClick={console.log("sasaj")} />
+          <ButtonComponent label="Know More" onClick={this.onClick(projectId)} />
         </CUICardActions>
       </CUICard>
     );

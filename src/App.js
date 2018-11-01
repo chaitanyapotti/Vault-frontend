@@ -12,6 +12,7 @@ import LandingPage from "./pages/LandingPage";
 import AllProjects from "./pages/AllProjects";
 import Governance from "./pages/Governance";
 import FeaturedProjects from "./pages/FeaturedProjects";
+import ProjectIssuerGovernance from "./pages/ProjectIssuerGovernance";
 import Deployer from "./pages/Deployer";
 import ProjectGovernance from "./pages/ProjectGovernance";
 import SigninManager from "./containers/SigninManager";
@@ -19,30 +20,30 @@ import Register from "./containers/Register";
 import store from "./store";
 import Search from "./pages/Search";
 
-class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Router>
-          <VaultApp dispatch={store.dispatch} getState={store.getState} history={this.props.history}>
-            <Switch>
-              <Route exact path="/" component={FeaturedProjects} history={this.props.history} />
-              <Route exact path="/mytokens" component={Governance} />
-              <Route strict path="/governance/details" component={ProjectGovernance} history={this.props.history} />
-              <Route exact path="/projects" component={AllProjects} />
-              <Route exact path="/landing" component={LandingPage} />
-              <Route exact path="/registration" component={Registration} />
-              <Route exact path="/dashboard" component={Dashboard} />
-              <Route exact path="/deploy" component={Deployer} />
-              <Route exact path="/register" component={Register} />
-              <Route path="/search" component={Search} />
-            </Switch>
-            <SigninManager />
-          </VaultApp>
-        </Router>
-      </Provider>
-    );
-  }
-}
+const App = props => {
+  const { history } = props || {};
+  return (
+    <Provider store={store}>
+      <Router>
+        <VaultApp dispatch={store.dispatch} getState={store.getState} history={history}>
+          <Switch>
+            <Route exact path="/" component={FeaturedProjects} history={history} />
+            <Route exact path="/mytokens" component={Governance} />
+            <Route strict path="/governance/details" component={ProjectGovernance} history={history} />
+            <Route strict path="/issuergovernance/details" component={ProjectIssuerGovernance} history={history} />
+            <Route exact path="/projects" component={AllProjects} />
+            <Route exact path="/landing" component={LandingPage} />
+            <Route exact path="/registration" component={Registration} />
+            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/deploy" component={Deployer} />
+            <Route exact path="/register" component={Register} />
+            <Route path="/search" component={Search} />
+          </Switch>
+          <SigninManager />
+        </VaultApp>
+      </Router>
+    </Provider>
+  );
+};
 
 export default App;

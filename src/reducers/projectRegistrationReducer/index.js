@@ -87,6 +87,15 @@ export const initialState = {
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
+
+    case actionTypes.PROJECT_STATES_SUCCESS: {
+      console.log("project details: ", action.payload)
+      const { state } = action.payload || {}
+      return {
+        ...state, state
+      }
+    }
+
     case actionTypes.FETCH_PROJECT_NAMES_SUCCESS: {
       return {
         ...state,

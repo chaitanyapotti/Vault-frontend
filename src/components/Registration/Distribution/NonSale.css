@@ -1,0 +1,7 @@
+.recharts-layer.recharts-pie-sector{
+    transition: 500ms;
+}
+
+.recharts-layer.recharts-pie-sector:hover{
+    transform:scale3d(1, 1, 2);
+}

@@ -42,7 +42,7 @@ class ActiveDaicos extends Component {
       const { projectName, rounds, currentRound, startDateTime, r1EndTime, raisedAmount, tokenPrice, _id } = item || {};
       const dataArray = [
         projectName,
-        `${currentRound + 1} of 3`,
+        `${currentRound} of 3`,
         this.calculateRoundGoal(rounds[0], ETH),
         this.calculateFinalGoal(rounds, ETH),
         formatMoney(formatFromWei(parseFloat(raisedAmount) * parseFloat(ETH)), 0),

@@ -8,9 +8,9 @@ class FundReq extends Component {
       this.props || {};
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
-    const requiredData = details.filter(x => x.address === address);
+    const requiredData = details ? details.filter(x => x.address === address) : [];
     const { name, description, startDate } = requiredData[0] || {};
-    const requiredVote = xfrVoteData.filter(x => x.address === address) || {};
+    const requiredVote = xfrVoteData ? xfrVoteData.filter(x => x.address === address) : [];
     const { voted } = requiredVote[0] || false;
     return endTime ? (
       <CUICard style={{ padding: "40px 50px" }}>
@@ -37,9 +37,9 @@ class FundReq extends Component {
       this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime, address } = poll2 || {};
-    const requiredData = details.filter(x => x.address === address);
+    const requiredData = details ? details.filter(x => x.address === address) : [];
     const { name, description, startDate } = requiredData[0] || {}; //
-    const requiredVote = xfrVoteData.filter(x => x.address === address) || {};
+    const requiredVote = xfrVoteData ? xfrVoteData.filter(x => x.address === address) : [];
     const { voted } = requiredVote[0] || false;
     return endTime ? (
       <CUICard style={{ padding: "40px 50px" }}>

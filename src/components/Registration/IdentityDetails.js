@@ -376,27 +376,32 @@ class IdentityDetails extends React.Component {
             />
           </Col>
         </Row>
-        <Row>
-          <div className="text--right push--top">
-            <Col>
-              <input type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
+        <Row className="push--top">
+            <Col lg={8}>
+              <div class="upload-btn-wrapper">
+                <button class="upload-btn">Choose file</button>
+                <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
+              </div>
+              <span className="push--left">{this.props.whitepaperPDF.name}</span>
             </Col>
-            <Col>
+            <Col lg={4}>
               <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitepaper} />
               {uploadingWhitepaper ? <div>Uploading</div> : <div>{whitepaperUrl} </div>}
             </Col>
-          </div>
         </Row>
-        <Row>
-          <div className="text--right push--top">
-            <Col>
-              <input type="file" accept="image/*" onChange={this.thumbnailChanged} />
+
+        <Row className="push--top">
+            <Col lg={8}>
+            <div class="upload-btn-wrapper">
+              <button class="upload-btn">Choose file</button>
+              <input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
+            </div>
+            <span className="push--left">{this.props.thumbnailImage.name}</span>
             </Col>
-            <Col>
+            <Col lg={4}>
               <ButtonComponent id="uploadThumbnail" label="Upload Thumbnail" onClick={this.uploadThumbnail} />
               {uploadingThumbnail ? <div>Uploading</div> : <div>{thumbnailUrl} </div>}
             </Col>
-          </div>
         </Row>
       </CUICard>
     );

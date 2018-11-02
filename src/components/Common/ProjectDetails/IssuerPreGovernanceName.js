@@ -17,6 +17,7 @@ const IssuerPreGovernanceName = props => {
     whitepaper,
     lastRoundInfo,
     StartRound1Visibility,
+    StartRound1Enabled,
     priceIncrementFlag,
     signinStatusFlag,
     r1Finish,
@@ -78,8 +79,7 @@ const IssuerPreGovernanceName = props => {
           {signinStatusFlag === 6 ? (
             StartRound1Visibility ? (
               <div className="hli">
-                <LoadingButton onClick={onStartR1Click} loading={startR1ButtonSpinning}>
-                  {" "}
+                <LoadingButton onClick={onStartR1Click} disabled={!StartRound1Enabled} loading={startR1ButtonSpinning}>
                   Start Round 1
                 </LoadingButton>
               </div>

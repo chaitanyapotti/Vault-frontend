@@ -89,7 +89,11 @@ class IssuerDetailPreGovernance extends Component {
               description={description}
               urls={urls}
               whitepaper={whitepaper}
-              StartRound1Visibility={currentRoundNumber === "0" && new Date() > new Date(startDateTime) && new Date() < new Date(r1EndTime)}
+              StartRound1Enabled={currentRoundNumber === "0" && new Date() > new Date(startDateTime) && new Date() < new Date(r1EndTime)}
+              StartRound1Visibility={
+                (currentRoundNumber === "0" && new Date() < new Date(startDateTime)) ||
+                (currentRoundNumber === "0" && new Date() > new Date(startDateTime) && new Date() < new Date(r1EndTime))
+              }
               startR1ButtonSpinning={startR1ButtonSpinning}
               signinStatusFlag={signinStatusFlag}
               r1Finish={this.r1Finish()}

@@ -27,14 +27,17 @@ import { ButtonComponent } from "../Common/FormComponents";
 import actionTypes from "../../action_types";
 
 class IdentityDetails extends React.Component {
-
-  componentDidMount(){
-    if (this.props.userLocalPublicAddress){
-      this.props.fetchProjectStates(this.props.userLocalPublicAddress)
-    }else{
-      this.props.fetchProjectStates("0xb758c38326Df3D75F1cf0DA14Bb8220Ca4231e74")
+  componentDidMount() {
+    if (this.props.userLocalPublicAddress) {
+      this.props.fetchProjectStates(this.props.userLocalPublicAddress);
+    } else {
+      this.props.fetchProjectStates("0xb758c38326Df3D75F1cf0DA14Bb8220Ca4231e74");
     }
   }
+
+  state = {
+    thumbnailFile: ""
+  };
 
   onChangeName = e => {
     this.props.adminNameChangedAction(e.target.value);
@@ -94,6 +97,7 @@ class IdentityDetails extends React.Component {
 
   thumbnailChanged = e => {
     this.props.thumbnailChangedAction(e.target.files[0]);
+    this.setState({ thumbnailFile: URL.createObjectURL(e.target.files[0]) });
   };
 
   uploadThumbnail = () => {
@@ -377,31 +381,38 @@ class IdentityDetails extends React.Component {
           </Col>
         </Row>
         <Row className="push--top">
-            <Col lg={8}>
-              <div class="upload-btn-wrapper">
-                <button class="upload-btn">Choose file</button>
-                <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
-              </div>
-              <span className="push--left">{this.props.whitepaperPDF.name}</span>
-            </Col>
-            <Col lg={4}>
-              <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitepaper} />
-              {uploadingWhitepaper ? <div>Uploading</div> : <div>{whitepaperUrl} </div>}
-            </Col>
+          <Col lg={8}>
+            <div className="upload-btn-wrapper">
+              <button className="upload-btn">Choose file</button>
+              <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
+            </div>
+            <span className="push--left">{this.props.whitepaperPDF.name}</span>
+          </Col>
+          <Col lg={4}>
+            <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitepaper} />
+            {uploadingWhitepaper ? <div>Uploading</div> : <div>{whitepaperUrl} </div>}
+          </Col>
         </Row>
 
         <Row className="push--top">
-            <Col lg={8}>
-            <div class="upload-btn-wrapper">
-              <button class="upload-btn">Choose file</button>
+          <Col lg={8}>
+            <div className="upload-btn-wrapper">
+              <button className="upload-btn">Choose file</button>
               <input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
             </div>
             <span className="push--left">{this.props.thumbnailImage.name}</span>
-            </Col>
-            <Col lg={4}>
-              <ButtonComponent id="uploadThumbnail" label="Upload Thumbnail" onClick={this.uploadThumbnail} />
-              {uploadingThumbnail ? <div>Uploading</div> : <div>{thumbnailUrl} </div>}
-            </Col>
+          </Col>
+          <Col lg={4}>
+            <ButtonComponent id="uploadThumbnail" label="Upload Thumbnail" onClick={this.uploadThumbnail} />
+            {uploadingThumbnail ? <div>Uploading</div> : <div>{thumbnailUrl} </div>}
+          </Col>
+        </Row>
+        <Row className="push--top">
+          <Col lg={12}>
+            <div className="text--center">
+              {this.state.thumbnailFile && <img src={this.state.thumbnailFile} width="345" height="200" style={{ backgroundSize: "contain" }} />}
+            </div>
+          </Col>
         </Row>
       </CUICard>
     );

@@ -26,6 +26,9 @@ import { ButtonComponent } from "../Common/FormComponents";
 import actionTypes from "../../action_types";
 
 class IdentityDetails extends React.Component {
+  state={
+    thumbnailFile: ''
+  }
   onChangeName = e => {
     this.props.adminNameChangedAction(e.target.value);
   };
@@ -84,6 +87,7 @@ class IdentityDetails extends React.Component {
 
   thumbnailChanged = e => {
     this.props.thumbnailChangedAction(e.target.files[0]);
+    this.setState({thumbnailFile: URL.createObjectURL(e.target.files[0])});
   };
 
   uploadThumbnail = () => {
@@ -392,6 +396,15 @@ class IdentityDetails extends React.Component {
               <ButtonComponent id="uploadThumbnail" label="Upload Thumbnail" onClick={this.uploadThumbnail} />
               {uploadingThumbnail ? <div>Uploading</div> : <div>{thumbnailUrl} </div>}
             </Col>
+        </Row>
+        <Row className="push--top">
+          <Col lg={12}>
+            <div className="text--center">
+              {this.state.thumbnailFile && 
+                <img src={this.state.thumbnailFile} width="345" height="200" style={{backgroundSize: 'contain'}} />
+              }
+            </div>
+          </Col>
         </Row>
       </CUICard>
     );

@@ -304,7 +304,7 @@ class HeaderPartial extends React.Component {
                               <div>
                                 {this.props.userLocalPublicAddress}
                                 <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>
-                                  Get Vault
+                                  Register for Vault
                                 </ButtonComponent>
                               </div>
                             ),

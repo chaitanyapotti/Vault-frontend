@@ -501,7 +501,7 @@ button:focus {
 }
 
 .blue-button {
-  width: 120px;
+  width: 200px;
   height: 32px;
   background-color: #4ca9fc;
   border-radius: 2.25em;
@@ -533,11 +533,13 @@ button:focus {
   color: #ffffff !important;
 }
 
-
+.grey-border {
+  box-shadow: 0px 0px 0px 0px #ffffff00;
+}
 
 .register {
   background-color: #4ca9fc;
-  border-radius: 100px !important;
+  border-radius: 200px !important;
   border: None;
   width: 100px;
   color: #ffffff !important;

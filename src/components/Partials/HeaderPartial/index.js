@@ -278,7 +278,7 @@ class HeaderPartial extends React.Component {
                     <div className="hdr-itm-pad text--primary txt-m">
                       <div className="hvr-underline-from-left">Publish ICO</div>
                     </div>
-                    <div className="text--primary txt-m wdh-100" style={{ paddingTop: "10px" }}>
+                    <div className="text--primary txt-m push--top">
                       {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
                       <div className="text--center">
                         {
@@ -290,35 +290,35 @@ class HeaderPartial extends React.Component {
                             ),
                             1: (
                               <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                Please Sign in <img className="push--left" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
+                                Sign in <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
                               </a>
                             ),
                             2: (
                               <div>
                                 Wrong network.
-                                {this.props.userLocalPublicAddress}
+                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
                                 {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                               </div>
                             ),
                             3: (
-                              <div>
-                                {this.props.userLocalPublicAddress}
+                              <div className="pos-rel" style={{top: '-10px'}}>
                                 <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>
                                   Register for Vault
                                 </ButtonComponent>
+                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
                               </div>
                             ),
                             4: (
                               <div>
                                 Welcome to the vault.
-                                {this.props.userLocalPublicAddress}
+                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
                                 {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                               </div>
                             ),
                             5: (
                               <div>
                                 Welcome to the vault, Issuer.
-                                {this.props.userLocalPublicAddress}
+                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
                               </div>
                             )
                           }[this.props.signinStatusFlag]

@@ -20,12 +20,22 @@ import {
   whitepaperChangedAction,
   uploadWhitepaperAction,
   thumbnailChangedAction,
-  uploadThumbnailAction
+  uploadThumbnailAction,
+  fetchProjectStates
 } from "../../actions/projectRegistrationActions";
 import { ButtonComponent } from "../Common/FormComponents";
 import actionTypes from "../../action_types";
 
 class IdentityDetails extends React.Component {
+
+  componentDidMount(){
+    if (this.props.userLocalPublicAddress){
+      this.props.fetchProjectStates(this.props.userLocalPublicAddress)
+    }else{
+      this.props.fetchProjectStates("0xb758c38326Df3D75F1cf0DA14Bb8220Ca4231e74")
+    }
+  }
+
   onChangeName = e => {
     this.props.adminNameChangedAction(e.target.value);
   };
@@ -366,27 +376,32 @@ class IdentityDetails extends React.Component {
             />
           </Col>
         </Row>
-        <Row>
-          <div className="text--right push--top">
-            <Col>
-              <input type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
+        <Row className="push--top">
+            <Col lg={8}>
+              <div class="upload-btn-wrapper">
+                <button class="upload-btn">Choose file</button>
+                <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
+              </div>
+              <span className="push--left">{this.props.whitepaperPDF.name}</span>
             </Col>
-            <Col>
+            <Col lg={4}>
               <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitepaper} />
               {uploadingWhitepaper ? <div>Uploading</div> : <div>{whitepaperUrl} </div>}
             </Col>
-          </div>
         </Row>
-        <Row>
-          <div className="text--right push--top">
-            <Col>
-              <input type="file" accept="image/*" onChange={this.thumbnailChanged} />
+
+        <Row className="push--top">
+            <Col lg={8}>
+            <div class="upload-btn-wrapper">
+              <button class="upload-btn">Choose file</button>
+              <input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
+            </div>
+            <span className="push--left">{this.props.thumbnailImage.name}</span>
             </Col>
-            <Col>
+            <Col lg={4}>
               <ButtonComponent id="uploadThumbnail" label="Upload Thumbnail" onClick={this.uploadThumbnail} />
               {uploadingThumbnail ? <div>Uploading</div> : <div>{thumbnailUrl} </div>}
             </Col>
-          </div>
         </Row>
       </CUICard>
     );
@@ -458,7 +473,8 @@ const mapDispatchToProps = dispatch =>
       whitepaperChangedAction,
       uploadWhitepaperAction,
       thumbnailChangedAction,
-      uploadThumbnailAction
+      uploadThumbnailAction,
+      fetchProjectStates
     },
     dispatch
   );

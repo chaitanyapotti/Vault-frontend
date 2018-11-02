@@ -83,7 +83,8 @@ class TokenSale extends React.Component {
       round2Tokens,
       round1Tokens,
       round3TargetEth,
-      tokenPriceFactor
+      tokenPriceFactor,
+      errors
     } = this.props || {};
     return (
       <div>
@@ -245,7 +246,7 @@ class TokenSale extends React.Component {
               label="Calculate"
               onClick={this.onCalculateTokenClicked}
               disabled={
-                !validateTokenPriceFactor(tokenPriceFactor) ||
+                errors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] !== "" ||
                 !validateLength(round1TargetEth) ||
                 !validateLength(round1TargetUSD) ||
                 !validateLength(round2TargetEth) ||

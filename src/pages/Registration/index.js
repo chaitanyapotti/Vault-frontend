@@ -30,11 +30,12 @@ import {
   checkMetaMask,
   validateUniqueName
 } from "../../helpers/common/validationHelperFunctions";
-import { newProjectRegistration } from "../../actions/projectRegistrationActions";
+import { newProjectRegistration, saveProjectStates } from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
 import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import AlertModal from "../../components/Common/AlertModal";
+import actionTypes from "../../action_types";
 
 class Registration extends Component {
   state = {
@@ -55,7 +56,8 @@ class Registration extends Component {
       initialTapValue,
       newProjectRegistration: projectRegistration,
       projectRegistrationData: registrationData,
-      userLocalPublicAddress: localAddress
+      userLocalPublicAddress: localAddress,
+      saveProjectStates: saveProjectStates
     } = this.props || {};
     if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
       this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
@@ -63,6 +65,7 @@ class Registration extends Component {
       this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than Initial Fund Release" });
     } else {
       projectRegistration(registrationData, localAddress);
+      saveProjectStates(registrationData, localAddress);
     }
   };
 
@@ -96,10 +99,11 @@ class Registration extends Component {
       round3TargetUSD,
       round3TargetEth,
       tokenPriceFactor,
-      totalSaleTokens,
       projectNames,
-      tokenTags
+      tokenTags,
+      errors
     } = this.props || {};
+    console.log(teamAddress, "t");
     const { modalOpen, modalMessage } = this.state;
     return (
       <Grid>
@@ -114,21 +118,21 @@ class Registration extends Component {
                 label="Publish DAICO"
                 onClick={this.handlePublishDaico}
                 disabled={
-                  !validateAdminName(adminName) ||
+                  errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
                   !validateLength(adminName) ||
                   !validateLength(projectDescription) ||
                   !validateLength(projectName) ||
-                  !validateEmail(adminEmail) ||
-                  !validateFacebookLink(facebookLink) ||
-                  !validateMediumLink(mediumLink) ||
-                  !validateGitLink(githubLink) ||
-                  !validateTwitterLink(twitterLink) ||
-                  !validateWebsiteUrl(websiteLink) ||
-                  !validateTelegramLink(telegramLink) ||
+                  errors[actionTypes.ADMIN_EMAIL_CHANGED] !== "" ||
+                  errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
+                  errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
+                  errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
+                  errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
+                  errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
+                  errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
                   isUpperCase(erc20TokenTag) ||
                   !validateLength(erc20TokenTag) ||
                   !validateTokenTagLength(erc20TokenTag) ||
-                  !checkMetaMask(teamAddress) ||
+                  errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
                   !validateProjectNameLength(projectName) ||
                   !alphaOnly(erc20TokenTag) ||
                   !alphaOnly(projectName) ||
@@ -149,7 +153,6 @@ class Registration extends Component {
                   !validateLength(tokenPriceFactor) ||
                   !validateDate(daicoStartDate) ||
                   !validateDate(daicoEndDate) ||
-                  validateTotalSaleTokens(totalSaleTokens) ||
                   !validateTokenPriceFactor(tokenPriceFactor) ||
                   validateUniqueName(projectNames, projectName) ||
                   validateUniqueName(tokenTags, erc20TokenTag)
@@ -253,6 +256,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       newProjectRegistration,
+      saveProjectStates, 
       getProjectNames,
       getTokenTags
     },

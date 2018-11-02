@@ -10,6 +10,8 @@ import TapCard from "./TapCard";
 import FundReq from "./FundReq/FundReq";
 import TimeLine from "./TimeLine";
 import TokenChart from "./TokenChart";
+import IPreGovernanceDetails from "./IPreGovernanceDetails";
+import IssuerPreGovernanceName from "./IssuerPreGovernanceName";
 
 export {
   PDetailCrowdSale,
@@ -23,5 +25,7 @@ export {
   TokenChart,
   ProjectCrowdSaleName,
   ProjectGovernanceName,
-  ProjectRefundName
+  ProjectRefundName,
+  IPreGovernanceDetails,
+  IssuerPreGovernanceName
 };

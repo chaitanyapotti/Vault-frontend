@@ -3,6 +3,7 @@ import FormData from "form-data";
 import actionTypes from "../../action_types";
 import config from "../../config";
 import constants from "../../constants";
+import web3 from "../../helpers/web3";
 
 const httpClient = axios.create();
 
@@ -14,7 +15,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     for (let i = 0; i < nonSaleEntities.length; i += 1) {
       foundationDetails.push({
         address: nonSaleEntities[i].entityAddress,
-        amount: Math.round((totalSaleTokens * nonSaleEntities[i].entityPercentage) / 50),
+        amount: Math.round((totalSaleTokens * nonSaleEntities[i].entityPercentage) / 50)* Math.pow(10, 18),
         description: nonSaleEntities[i].entityName
       });
       totalNonSaleTokens += Math.round((totalSaleTokens * nonSaleEntities[i].entityPercentage) / 50);
@@ -98,6 +99,71 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
           payload: constants.PROJECT_REGISTRATION_FAILED_MESSAGE
         });
       });
+}
+
+export function saveProjectStates(projectData, userLocalPublicAddress){
+  return dispatch =>
+    axios
+      .post(`${config.api_base_url}/db/projects/formstates?useraddress=${userLocalPublicAddress}`, projectData)
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message === constants.SUCCESS) {
+            dispatch({
+              type: actionTypes.PROJECT_STATES_SAVED_SUCCESS,
+              payload: response.data.data.project_id
+            });
+          } else {
+            dispatch({
+              type: actionTypes.PROJECT_STATES_SAVED_FAILED,
+              payload: response.data.reason
+            });
+          }
+        } else {
+          dispatch({
+            type: actionTypes.PROJECT_STATES_SAVED_FAILED,
+            payload: constants.PROJECT_STATES_SAVED_FAILED_MESSAGE
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch({
+          type: actionTypes.PROJECT_STATES_SAVED_FAILED,
+          payload: constants.PROJECT_STATES_SAVED_FAILED_MESSAGE
+        });
+      });
+}
+
+export function fetchProjectStates(userLocalPublicAddress){
+  return dispatch => 
+  axios
+    .get(`${config.api_base_url}/db/projects/formstates`, { params: { useraddress: userLocalPublicAddress } })
+    .then( response => {
+      if (response.status === 200) {
+        if (response.data.message === constants.SUCCESS) {
+          dispatch({
+            type: actionTypes.PROJECT_STATES_SUCCESS,
+            payload: response.data.data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.PROJECT_STATES_FAILED,
+            payload: response.data.reason
+          });
+        }
+      } else {
+        dispatch({
+          type: actionTypes.PROJECT_STATES_FAILED,
+          payload: constants.PROJECT_STATES_FAILED_MESSAGE
+        });
+      }
+    }).catch(error => {
+      console.log(error)
+      dispatch({
+        type: actionTypes.PROJECT_STATES_FAILED,
+        payload: constants.PROJECT_STATES_FAILED_MESSAGE
+      });
+    })
 }
 
 export function uploadThumbnailAction(thumbnailImage, userLocalPublicAddress, doctype) {
@@ -233,19 +299,21 @@ export function entityPercentageChangedAction(value) {
 }
 
 export function entityAddressChangedAction(value) {
-  return dispatch => {
+  return async dispatch => {
+    const isValid = value ? await web3.utils.isAddress(value) : false;
     dispatch({
       type: actionTypes.ENTITY_ADDRESS_CHANGED,
-      payload: value
+      payload: { value, isValid }
     });
   };
 }
 
 export function teamAddressChangedAction(value) {
-  return dispatch => {
+  return async dispatch => {
+    const isValid = value ? await web3.utils.isAddress(value) : false;
     dispatch({
       type: actionTypes.TEAM_ADDRESS_CHANGED,
-      payload: value
+      payload: { value, isValid }
     });
   };
 }

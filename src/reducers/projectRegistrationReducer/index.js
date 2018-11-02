@@ -87,6 +87,15 @@ export const initialState = {
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
+
+    case actionTypes.PROJECT_STATES_SUCCESS: {
+      console.log("project details: ", action.payload)
+      const { state } = action.payload || {}
+      return {
+        ...state, state
+      }
+    }
+
     case actionTypes.FETCH_PROJECT_NAMES_SUCCESS: {
       return {
         ...state,
@@ -250,14 +259,12 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.ENTITY_ADDRESS_CHANGED: {
-      if (checkMetaMask(action.payload)) {
-        localErrors[actionTypes.ENTITY_ADDRESS_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.ENTITY_ADDRESS_CHANGED] = "Not a Valid Address";
-      }
+      const { isValid, value } = action.payload;
+      console.log(isValid, value);
+      localErrors[actionTypes.ENTITY_ADDRESS_CHANGED] = isValid ? "" : "Not a Valid Address";
       return {
         ...state,
-        entityAddress: action.payload,
+        entityAddress: value,
         errors: localErrors
       };
     }
@@ -457,11 +464,8 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.TEAM_ADDRESS_CHANGED: {
-      if (checkMetaMask(action.payload)) {
-        localErrors[actionTypes.TEAM_ADDRESS_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.TEAM_ADDRESS_CHANGED] = "Not a valid address";
-      }
+      const { isValid } = action.payload;
+      localErrors[actionTypes.TEAM_ADDRESS_CHANGED] = isValid ? "" : "Not a Valid Address";
       return {
         ...state,
         teamAddress: action.payload.value,

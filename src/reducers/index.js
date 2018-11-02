@@ -14,6 +14,7 @@ import projectDetailGovernanceReducer from "./projectDetailGovernanceReducer";
 import projectRefundReducer from "./projectRefundReducer";
 import fetchPriceReducer from "./fetchPriceReducer";
 import searchReducer from "./searchReducer";
+import issuerDetailGovernanceReducer from "./issuerDetailGovernanceReducer";
 
 export default {
   app,
@@ -31,5 +32,6 @@ export default {
   projectDetailGovernanceReducer,
   projectRefundReducer,
   fetchPriceReducer,
-  searchReducer
+  searchReducer,
+  issuerDetailGovernanceReducer
 };

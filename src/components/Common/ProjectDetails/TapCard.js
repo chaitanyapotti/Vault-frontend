@@ -5,8 +5,17 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
 
 const TapCard = props => {
-  const { currentTapAmount, tapIncrementUnit, incrementApproval, onTapClick, tapVoteStatus, tapButtonSpinning, onRevokeTapClick, signinStatusFlag } =
-    props || {};
+  const {
+    currentTapAmount,
+    tapIncrementUnit,
+    incrementApproval,
+    onTapClick,
+    tapVoteStatus,
+    tapButtonSpinning,
+    onRevokeTapClick,
+    signinStatusFlag,
+    canTapClick
+  } = props || {};
   return (
     <div>
       <CUICard style={{ padding: "40px 50px" }}>
@@ -33,11 +42,11 @@ const TapCard = props => {
               </div>
             </Tooltip>
           ) : tapVoteStatus === "true" ? (
-            <LoadingButton onClick={onRevokeTapClick} type="danger" loading={tapButtonSpinning}>
+            <LoadingButton onClick={onRevokeTapClick} type="danger" loading={tapButtonSpinning} disabled={!canTapClick}>
               Reject
             </LoadingButton>
           ) : (
-            <LoadingButton onClick={onTapClick} loading={tapButtonSpinning}>
+            <LoadingButton onClick={onTapClick} loading={tapButtonSpinning} disabled={!canTapClick}>
               Approve
             </LoadingButton>
           )}

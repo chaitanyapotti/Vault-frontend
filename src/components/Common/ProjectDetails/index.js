@@ -12,6 +12,9 @@ import TimeLine from "./TimeLine";
 import TokenChart from "./TokenChart";
 import IPreGovernanceDetails from "./IPreGovernanceDetails";
 import IssuerPreGovernanceName from "./IssuerPreGovernanceName";
+import IssuerGovernanceName from "./IssuerGovernanceName";
+import IssuerPDetailGovernance from "./IssuerPDetailGovernance";
+import IssuerTapCard from "./IssuerTapCard";
 
 export {
   PDetailCrowdSale,
@@ -27,5 +30,8 @@ export {
   ProjectGovernanceName,
   ProjectRefundName,
   IPreGovernanceDetails,
-  IssuerPreGovernanceName
+  IssuerPreGovernanceName,
+  IssuerGovernanceName,
+  IssuerPDetailGovernance,
+  IssuerTapCard
 };

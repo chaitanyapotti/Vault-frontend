@@ -29,11 +29,6 @@ export const isR1FinalizeButtonSpinning = receipt => ({
   type: actionTypes.R1_FINALIZE_BUTTON_SPINNING
 });
 
-export const isStartR1ButtonSpinning = receipt => ({
-  payload: { receipt },
-  type: actionTypes.Start_R1_BUTTON_SPINNING
-});
-
 export const getEtherCollected = (version, contractAddress) => async dispatch => {
   // doesn't call blockchain. await is non blocking
   const network = "rinkeby";
@@ -57,6 +52,7 @@ export const getEtherCollected = (version, contractAddress) => async dispatch =>
 
 export const getRoundTokensSold = (version, contractAddress, round) => async dispatch => {
   // doesn't call blockchain. await is non blocking
+  console.log("herer");
   const network = "rinkeby";
   axios
     .get(`${config.api_base_url}/web3/crowdsale/round/details`, {
@@ -64,6 +60,7 @@ export const getRoundTokensSold = (version, contractAddress, round) => async dis
     })
     .then(response => {
       if (response.status === 200) {
+        console.log(response.data);
         const { data } = response.data;
         dispatch(roundInfoReceived(data));
       } else {
@@ -140,31 +137,5 @@ export const finalizeR1 = (version, contractAddress, userLocalPublicAddress) => 
     .catch(err => {
       console.error(err.message);
       dispatch(isR1FinalizeButtonSpinning(false));
-    });
-};
-
-export const startR1 = (version, contractAddress, userLocalPublicAddress) => dispatch => {
-  dispatch(isStartR1ButtonSpinning(true));
-  axios
-    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })
-    .then(res => {
-      const { data } = res.data || {};
-      const { abi } = data || {};
-      const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
-      // TODO: to send country attributes of the user
-      instance.methods
-        .startRoundOne()
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(isStartR1ButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isStartR1ButtonSpinning(false));
-        });
-    })
-    .catch(err => {
-      console.error(err.message);
-      dispatch(isStartR1ButtonSpinning(false));
     });
 };

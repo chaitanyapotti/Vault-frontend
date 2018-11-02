@@ -20,12 +20,22 @@ import {
   whitepaperChangedAction,
   uploadWhitepaperAction,
   thumbnailChangedAction,
-  uploadThumbnailAction
+  uploadThumbnailAction,
+  fetchProjectStates
 } from "../../actions/projectRegistrationActions";
 import { ButtonComponent } from "../Common/FormComponents";
 import actionTypes from "../../action_types";
 
 class IdentityDetails extends React.Component {
+
+  componentDidMount(){
+    if (this.props.userLocalPublicAddress){
+      this.props.fetchProjectStates(this.props.userLocalPublicAddress)
+    }else{
+      this.props.fetchProjectStates("0xb758c38326Df3D75F1cf0DA14Bb8220Ca4231e74")
+    }
+  }
+
   onChangeName = e => {
     this.props.adminNameChangedAction(e.target.value);
   };
@@ -458,7 +468,8 @@ const mapDispatchToProps = dispatch =>
       whitepaperChangedAction,
       uploadWhitepaperAction,
       thumbnailChangedAction,
-      uploadThumbnailAction
+      uploadThumbnailAction,
+      fetchProjectStates
     },
     dispatch
   );

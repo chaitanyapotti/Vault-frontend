@@ -30,7 +30,7 @@ import {
   checkMetaMask,
   validateUniqueName
 } from "../../helpers/common/validationHelperFunctions";
-import { newProjectRegistration } from "../../actions/projectRegistrationActions";
+import { newProjectRegistration, saveProjectStates } from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
 import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
@@ -56,7 +56,8 @@ class Registration extends Component {
       initialTapValue,
       newProjectRegistration: projectRegistration,
       projectRegistrationData: registrationData,
-      userLocalPublicAddress: localAddress
+      userLocalPublicAddress: localAddress,
+      saveProjectStates: saveProjectStates
     } = this.props || {};
     if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
       this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
@@ -64,6 +65,7 @@ class Registration extends Component {
       this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than Initial Fund Release" });
     } else {
       projectRegistration(registrationData, localAddress);
+      saveProjectStates(registrationData, localAddress);
     }
   };
 
@@ -254,6 +256,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       newProjectRegistration,
+      saveProjectStates, 
       getProjectNames,
       getTokenTags
     },

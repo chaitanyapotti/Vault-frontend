@@ -88,9 +88,12 @@ class ProjectIssuerGovernance extends Component {
             tapIncrementFactor={tapIncrementFactor}
             isCurrentMember={isCurrentMember}
             rounds={rounds}
+            r1EndTime={r1EndTime}
             totalMintableSupply={totalMintableSupply}
             foundationDetails={foundationDetails}
             initialFundRelease={initialFundRelease}
+            currentRoundNumber={currentRoundNumber}
+            treasuryStateNumber={treasuryStateNumber}
           />
         );
       case "2":

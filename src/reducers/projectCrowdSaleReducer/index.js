@@ -7,6 +7,7 @@ export const initialState = {
   roundInfo: {},
   buyButtonSpinning: false,
   r1FinalizeButtonSpinning: false,
+  startR1ButtonSpinning: false,
   tokenBalance: ""
 };
 
@@ -45,6 +46,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         r1FinalizeButtonSpinning: receipt
+      };
+    }
+    case actionTypes.Start_R1_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        startR1ButtonSpinning: receipt
       };
     }
     default:

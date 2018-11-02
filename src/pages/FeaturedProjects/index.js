@@ -5,7 +5,8 @@ import FeaturedProject from "../../components/FeaturedProject";
 import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
-import {CUICircularProgress} from "../../helpers/material-ui";
+import { CUICircularProgress } from "../../helpers/material-ui";
+
 class FeaturedProjects extends Component {
   componentDidMount() {
     const { getFeaturedProjects: fetchFeaturedProjects, featuredProjectsLoaderAction: loader } = this.props || {};
@@ -14,7 +15,7 @@ class FeaturedProjects extends Component {
   }
 
   render() {
-    const { featuredProjects, showFeaturedProjectsLoader, featuredProjectsRetrievedSuccessfully, featuredProjectsRetrieveFailureMessage } =
+    const { featuredProjects, showFeaturedProjectsLoader, featuredProjectsRetrievedSuccessfully, featuredProjectsRetrieveFailureMessage, history } =
       this.props || {};
     return (
       <div>
@@ -26,10 +27,17 @@ class FeaturedProjects extends Component {
             <Grid>
               <MasonaryLayout columns={3}>
                 {featuredProjects.map((item, index) => {
-                  const { projectName, description, _id } = item;
+                  const { projectName, description, _id, thumbnailUrl } = item;
                   return (
-                      <FeaturedProject key={index} projectName={projectName} description={description} projectId={_id} history={this.props.history}/>
-                  )
+                    <FeaturedProject
+                      key={index}
+                      projectName={projectName}
+                      description={description}
+                      projectId={_id}
+                      history={history}
+                      thumbnailUrl={thumbnailUrl}
+                    />
+                  );
                 })}
               </MasonaryLayout>
             </Grid>

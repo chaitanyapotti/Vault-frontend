@@ -21,9 +21,8 @@ const PDetailGovernance = props => {
     killButtonSpinning,
     onRevokeKillClick,
     signinStatusFlag,
-    onKillFinalizeClick,
-    killFinalizeButtonSpinning,
-    killFinish
+    canUnlockTokens,
+    onUnlockTokensClick
   } = props || {};
   return (
     <CUICard style={{ padding: "40px 50px" }}>
@@ -75,13 +74,9 @@ const PDetailGovernance = props => {
         </Col>
       </Row>
       <div className="text-left">
-        {
-          <span className="hli">
-            <LoadingButton onClick={onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!killFinish}>
-              Kill Project
-            </LoadingButton>
-          </span>
-        }
+        <LoadingButton onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
+          Unlock All Tokkens
+        </LoadingButton>
       </div>
       <div className="text-right">
         {signinStatusFlag <= 3 ? (

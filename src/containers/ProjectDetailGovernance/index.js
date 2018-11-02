@@ -6,6 +6,7 @@ import { ProjectGovernanceName, PDetailGovernance, TapCard, FundReq } from "../.
 import { getRoundTokensSold, buyTokens, getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { CUICard } from "../../helpers/material-ui";
 import {
   getTokensUnderGovernance,
   getCurrentKillPollIndex,
@@ -39,13 +40,19 @@ import {
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
 import BuyModal from "../../components/Common/BuyModal";
+import LoadingButton from "../../components/Common/LoadingButton";
 
 class ProjectDetailGovernance extends Component {
   state = {
     modalOpen: false,
     buyModalOpen: false,
-    buyAmount: ""
+    buyAmount: "",
+    unlockTokensModalOpen: false
   };
+
+  handleUnlockTokensOpen = () => this.setState({ unlockTokensModalOpen: true });
+
+  handleUnlockTokensClose = () => this.setState({ unlockTokensModalOpen: false });
 
   handleBuyClose = () => this.setState({ buyModalOpen: false });
 
@@ -312,6 +319,57 @@ class ProjectDetailGovernance extends Component {
     killFinalize(version, pollFactoryAddress, userLocalPublicAddress);
   };
 
+  canUnlockTokens = () => {
+    const { xfrVoteData, tapVoteData, killVoteData } = this.props || {};
+    const { voted: killVoted } = killVoteData || {};
+    const { voted: tapVoted } = tapVoteData || {};
+    const { voted: xfr1Voted } = xfrVoteData[0] || {};
+    const { voted: xfr2Voted } = xfrVoteData[0] || {};
+    return killVoted || tapVoted || xfr1Voted || xfr2Voted;
+  };
+
+  unlockTokensClick = () => {
+    const { xfrVoteData, tapVoteData, killVoteData } = this.props || {};
+    const { voted: killVoted } = killVoteData || {};
+    const { voted: tapVoted } = tapVoteData || {};
+    const { voted: xfr1Voted } = xfrVoteData[0] || {};
+    const { voted: xfr2Voted } = xfrVoteData[0] || {};
+    if (killVoted) {
+      this.onRevokeKillClick();
+    }
+    if (tapVoted) {
+      this.onRevokeTapClick();
+    }
+    if (xfr1Voted) {
+      this.onRevokeXfr1Click();
+    }
+    if (xfr2Voted) {
+      this.onRevokeXfr2Click();
+    }
+  };
+
+  unlockPollsCount = () => {
+    const { xfrVoteData, tapVoteData, killVoteData } = this.props || {};
+    let pollCount = 0;
+    const { voted: killVoted } = killVoteData || {};
+    const { voted: tapVoted } = tapVoteData || {};
+    const { voted: xfr1Voted } = xfrVoteData[0] || {};
+    const { voted: xfr2Voted } = xfrVoteData[0] || {};
+    if (killVoted) {
+      pollCount += 1;
+    }
+    if (tapVoted) {
+      pollCount += 1;
+    }
+    if (xfr1Voted) {
+      pollCount += 1;
+    }
+    if (xfr2Voted) {
+      pollCount += 1;
+    }
+    return pollCount;
+  };
+
   render() {
     const {
       projectName,
@@ -341,10 +399,31 @@ class ProjectDetailGovernance extends Component {
       killFinalizeButtonSpinning,
       roundInfo
     } = this.props || {};
-    const { modalOpen, buyModalOpen, buyAmount } = this.state;
+    const { modalOpen, buyModalOpen, buyAmount, unlockTokensModalOpen } = this.state;
     return (
       <Grid>
-        <Row>
+        {this.killFinish() ? (
+          <CUICard style={{ padding: "40px 50px" }}>
+            <Grid>
+              <Row>
+                <Col lg={12}>
+                  <div>Kill Consensus has exceeded 80%</div>
+                </Col>
+              </Row>
+              <Row>
+                <Col lg={6}>
+                  <div> Click on the button to initiate “ KIILL ” execution</div>
+                </Col>
+                <Col lg={6}>
+                  <LoadingButton onClick={this.onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!this.killFinish()}>
+                    Kill Project
+                  </LoadingButton>
+                </Col>
+              </Row>
+            </Grid>
+          </CUICard>
+        ) : null}
+        <Row className="push--top">
           <Col xs={12} lg={6}>
             <ProjectGovernanceName
               projectName={projectName}
@@ -380,6 +459,7 @@ class ProjectDetailGovernance extends Component {
               yourRefundValue={this.getMyRefundValue()}
               totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
               killConsensus={this.getKillConsensus()}
+              canUnlockTokens={this.canUnlockTokens()}
               killVoteStatus={this.getKillVoteStatus()}
               onKillClick={this.onKillClick}
               onRevokeKillClick={this.onRevokeKillClick}
@@ -388,6 +468,7 @@ class ProjectDetailGovernance extends Component {
               onKillFinalizeClick={this.onKillFinalizeClick}
               killFinalizeButtonSpinning={killFinalizeButtonSpinning}
               killFinish={this.killFinish()}
+              onUnlockTokensClick={this.handleUnlockTokensOpen}
             />
           </Col>
         </Row>
@@ -429,6 +510,14 @@ class ProjectDetailGovernance extends Component {
             <Warning style={{ width: "2em", height: "2em" }} />
           </div>
           <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
+        </AlertModal>
+        <AlertModal killButtonSpinning ={killButtonSpinning}
+        tapButtonSpinning = {tapButtonSpinning}
+        xfr1ButtonSpinning = {xfr1ButtonSpinning}
+        xfr2ButtonSpinning ={xfr2ButtonSpinning} open={unlockTokensModalOpen} handleClose={this.handleUnlockTokensClose} metamask= "metamask" onProceedClick={this.unlockTokensClick}>
+          <div className="text--center push--top">
+            You have voted in {this.unlockPollsCount()} polls. You would have to sign {this.unlockPollsCount()} transactions to unlock your tokens.
+          </div>
         </AlertModal>
         <BuyModal
           open={buyModalOpen}

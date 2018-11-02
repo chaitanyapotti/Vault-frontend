@@ -20,6 +20,7 @@ import { CUIAppBar, CUIButtonIcon } from "../../../helpers/material-ui";
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
+import "./style.css";
 
 const images = {
   metamask: "/assets/Footer/metamask.png"
@@ -303,7 +304,7 @@ class HeaderPartial extends React.Component {
                               <div>
                                 {this.props.userLocalPublicAddress}
                                 <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>
-                                  Become a Vault Member
+                                  Get Vault
                                 </ButtonComponent>
                               </div>
                             ),

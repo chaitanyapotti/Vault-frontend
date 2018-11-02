@@ -34,7 +34,7 @@ class Featuredproject extends Component {
       //   extra={extra}
       //   style={{ margin: "0 auto" }}
       // />
-      <CUICard className={classes.card}>
+      <CUICard className={classes.card} className="blue-shadow">
           <CUICardMedia
             component="img"
             alt="daico"

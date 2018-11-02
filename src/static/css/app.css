@@ -537,6 +537,7 @@ button:focus {
   background-color: #4ca9fc;
   border-radius: 100px !important;
   border: None;
+  width: 100px;
   color: #ffffff !important;
   font-family: "Montserrat" !important;
   font-size: 20px;

@@ -42,8 +42,8 @@ class AllProjects extends Component {
       }
     ]
     return (
-      <Grid>
-        <CUITabs style={{color: 'black !important'}} onChange={this.handleChange} value={this.state.value} indicatorColor="black" iconList={list} />
+      <Grid >
+        <CUITabs style={{color: 'black !important'}} onChange={this.handleChange} value={this.state.value} indicatorColor="black" iconList={list}/>
         {value === 'active' && <TabContainer><ActiveDaicos history={this.props.history} /></TabContainer>}
         {value === 'upcoming' && <TabContainer><UpcomingDaicos history={this.props.history} /></TabContainer>}
         {value === 'ended' && <TabContainer><EndedDaicos history={this.props.history} /></TabContainer>}

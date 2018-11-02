@@ -16,23 +16,23 @@ import {
   entityAddressChangedAction,
   nonSaleEntityEditAction
 } from "../../../actions/projectRegistrationActions";
-
+import { validateLength, validateDecimal, validateEntityPercentage } from "../../../helpers/common/validationHelperFunctions";
 import "./NonSale.css";
 
 // const CHARTCOLORS = ['#e1f4ff', '#b0ddff', '#7ec3fe', '#65b6fd', '#4ca9fc', '#3d8dd4', '#2e71ac', '#1e5583', '#0f395b', '#001d33']
-const CHARTCOLORS = [
-  "#001d33",
-  "#0f395b",
-  "#1e5583",
-  "#3d8dd4",
-  "#4ca9fc",
-  "#65b6fd",
-  "#7ec3fe",
-  "#b0ddff",
-  "#e1f4ff",
-  "#2e71ac"
-];
-import { validateLength, validateDecimal, validateEntityPercentage } from "../../../helpers/common/validationHelperFunctions";
+// const CHARTCOLORS = [
+//   "#001d33",
+//   "#0f395b",
+//   "#1e5583",
+//   "#3d8dd4",
+//   "#4ca9fc",
+//   "#65b6fd",
+//   "#7ec3fe",
+//   "#b0ddff",
+//   "#e1f4ff",
+//   "#2e71ac"
+// ];
+
 
 // const CHARTCOLORS = ['#e1f4ff', '#b0ddff', '#7ec3fe', '#65b6fd', '#4ca9fc', '#3d8dd4', '#2e71ac', '#1e5583', '#0f395b', '#001d33']
 const CHARTCOLORS = ["#001d33", "#0f395b", "#1e5583", "#3d8dd4", "#4ca9fc", "#65b6fd", "#7ec3fe", "#b0ddff", "#e1f4ff", "#2e71ac"];

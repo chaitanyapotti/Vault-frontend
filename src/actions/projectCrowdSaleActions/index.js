@@ -52,7 +52,6 @@ export const getEtherCollected = (version, contractAddress) => async dispatch =>
 
 export const getRoundTokensSold = (version, contractAddress, round) => async dispatch => {
   // doesn't call blockchain. await is non blocking
-  console.log("herer");
   const network = "rinkeby";
   axios
     .get(`${config.api_base_url}/web3/crowdsale/round/details`, {
@@ -60,7 +59,6 @@ export const getRoundTokensSold = (version, contractAddress, round) => async dis
     })
     .then(response => {
       if (response.status === 200) {
-        console.log(response.data);
         const { data } = response.data;
         dispatch(roundInfoReceived(data));
       } else {

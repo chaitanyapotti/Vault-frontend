@@ -3,6 +3,7 @@ import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
 import { getCurrentTap } from "../projectDetailGovernanceActions/index";
+import { currentRound } from "../projectGovernanceActions/index";
 
 export const isStartNewRoundButtonSpinning = receipt => ({
   payload: { receipt },
@@ -39,7 +40,12 @@ export const isWithdrawButtonSpinning = receipt => ({
   type: actionTypes.WITHDRAW_BUTTON_SPINNING
 });
 
-export const startR1 = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const currentWithdrawableAmountReceived = receipt => ({
+  payload: { receipt },
+  type: actionTypes.CURRENT_WITHDRAWABLE_AMOUNT_RECEIVED
+});
+
+export const startR1 = (version, contractAddress, userLocalPublicAddress, projectid) => dispatch => {
   dispatch(isStartR1ButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })
@@ -51,6 +57,7 @@ export const startR1 = (version, contractAddress, userLocalPublicAddress) => dis
         .startNewRound()
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(currentRound(projectid));
           dispatch(isStartR1ButtonSpinning(false));
         })
         .on("error", error => {
@@ -64,7 +71,7 @@ export const startR1 = (version, contractAddress, userLocalPublicAddress) => dis
     });
 };
 
-export const startNewRound = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const startNewRound = (version, contractAddress, userLocalPublicAddress, projectid) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isStartNewRoundButtonSpinning(true));
   axios
@@ -77,6 +84,7 @@ export const startNewRound = (version, contractAddress, userLocalPublicAddress) 
         .startNewRound()
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(currentRound(projectid));
           dispatch(isStartNewRoundButtonSpinning(false));
         })
         .on("error", error => {
@@ -211,6 +219,7 @@ export const withdrawAmount = (version, contractAddress, userLocalPublicAddress,
         .withdrawAmount(weiAmount)
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getCurrentWithdrawableAmount(version, contractAddress));
           dispatch(isWithdrawButtonSpinning(false));
         })
         .on("error", error => {
@@ -221,5 +230,25 @@ export const withdrawAmount = (version, contractAddress, userLocalPublicAddress,
     .catch(err => {
       console.error(err.message);
       dispatch(isWithdrawButtonSpinning(false));
+    });
+};
+
+export const getCurrentWithdrawableAmount = (version, contractAddress) => dispatch => {
+  const network = "rinkeby";
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/withdrawableamount`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        dispatch(currentWithdrawableAmountReceived(data));
+      } else {
+        dispatch(currentWithdrawableAmountReceived({}));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(currentWithdrawableAmountReceived({}));
     });
 };

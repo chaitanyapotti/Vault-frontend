@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import Warning from "@material-ui/icons/Warning";
 import { IssuerGovernanceName, IssuerPDetailGovernance, FundReq, IssuerTapCard } from "../../components/Common/ProjectDetails";
 import { getRoundTokensSold, buyTokens, getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
 import {
@@ -10,7 +9,8 @@ import {
   incrementTap,
   deployXfrPoll,
   withdrawXfrAmount,
-  withdrawAmount
+  withdrawAmount,
+  getCurrentWithdrawableAmount
 } from "../../actions/issuerDetailGovernanceActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -27,20 +27,12 @@ import {
 } from "../../actions/projectDetailGovernanceActions/index";
 import { formatFromWei, formatCurrencyNumber, formatDate, significantDigits } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
-import AlertModal from "../../components/Common/AlertModal";
 import XfrForm from "../../components/Common/ProjectDetails/XfrForm";
+import IssuerWithdrawCard from "../../components/Common/ProjectDetails/IssuerWithdrawCard";
 
 class IssuerDetailGovernance extends Component {
   state = {
-    modalOpen: false,
-    buyModalOpen: false,
-    buyAmount: ""
-  };
-
-  handleBuyClose = () => this.setState({ buyModalOpen: false });
-
-  handleClose = () => {
-    this.setState({ modalOpen: false });
+    withdrawableAmount: ""
   };
 
   componentDidMount() {
@@ -59,7 +51,8 @@ class IssuerDetailGovernance extends Component {
       getKillConsensus: fetchKillConsensus,
       getTapPollConsensus: fetchTapPollConsensus,
       getCurrentTap: fetchCurrentTap,
-      getXfrData: fetchXfrData
+      getXfrData: fetchXfrData,
+      getCurrentWithdrawableAmount: fetchCurrentWithdrawableAmount
     } = this.props || {};
     etherPriceFetch("ETH");
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10) - 1;
@@ -72,6 +65,7 @@ class IssuerDetailGovernance extends Component {
     fetchTapPollConsensus(version, pollFactoryAddress);
     fetchCurrentTap(version, pollFactoryAddress);
     fetchXfrData(version, pollFactoryAddress);
+    fetchCurrentWithdrawableAmount(version, pollFactoryAddress);
   }
 
   componentDidUpdate(prevProps) {
@@ -138,21 +132,6 @@ class IssuerDetailGovernance extends Component {
     return significantDigits(parseFloat(tapPollConsensus) / parseFloat(tokensUnderGovernance) || 0);
   };
 
-  buyTokensOnClick = () => {
-    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, currentRoundNumber } = this.props || {};
-    const { buyAmount } = this.state || {};
-    // // TODO: need to add how many tokens to buy
-    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, parseInt(currentRoundNumber, 10) - 1);
-  };
-
-  buyTokens = () => {
-    this.setState({ buyModalOpen: true });
-  };
-
-  onBuyAmountChange = e => {
-    this.setState({ buyAmount: e.target.value });
-  };
-
   getstartNewRoundText = () => {
     const { currentRoundNumber } = this.props || {};
     return `Start Round ${parseInt(currentRoundNumber, 10) + 1}`;
@@ -165,8 +144,8 @@ class IssuerDetailGovernance extends Component {
   };
 
   onStartNewRoundClick = () => {
-    const { startNewRound: startRound, version, crowdSaleAddress, userLocalPublicAddress } = this.props || {};
-    startRound(version, crowdSaleAddress, userLocalPublicAddress);
+    const { startNewRound: startRound, version, crowdSaleAddress, userLocalPublicAddress, projectid } = this.props || {};
+    startRound(version, crowdSaleAddress, userLocalPublicAddress, projectid);
   };
 
   canIncreaseTap = () => {
@@ -197,6 +176,16 @@ class IssuerDetailGovernance extends Component {
     return signinStatusFlag === 5 && ownerAddress === userLocalPublicAddress;
   };
 
+  onWithdrawAmountChange = e => {
+    this.setState({ withdrawableAmount: e.target.value });
+  };
+
+  onWithdrawAmountClick = () => {
+    const { version, withdrawAmount: withdrawAmountClick, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
+    const { withdrawableAmount } = this.state;
+    withdrawAmountClick(version, pollFactoryAddress, userLocalPublicAddress, withdrawableAmount);
+  };
+
   render() {
     const {
       projectName,
@@ -218,9 +207,11 @@ class IssuerDetailGovernance extends Component {
       tokensUnderGovernance,
       startNewRoundButtonSpinning,
       deployTapPollButtonSpinning,
-      incrementTapButtonSpinning
+      incrementTapButtonSpinning,
+      withdrawButtonSpinning,
+      currentWithdrawableAmount
     } = this.props || {};
-    const { modalOpen, buyModalOpen, buyAmount } = this.state;
+    const { withdrawableAmount } = this.state;
     return (
       <Grid>
         <Row>
@@ -270,6 +261,16 @@ class IssuerDetailGovernance extends Component {
               onDeployTapPollClick={this.onDeployTapPollClick}
             />
           </Col>
+          <Col xs={12} lg={6}>
+            <IssuerWithdrawCard
+              currentWithdrawableAmount={formatFromWei(currentWithdrawableAmount, 3)}
+              isPermissioned={this.isPermissioned()}
+              withdrawButtonSpinning={withdrawButtonSpinning}
+              onWithdrawAmountClick={this.onWithdrawAmountClick}
+              inputText={withdrawableAmount}
+              onChange={this.onWithdrawAmountChange}
+            />
+          </Col>
         </Row>
 
         <Row className="push--top">
@@ -305,7 +306,8 @@ const mapStateToProps = state => {
     issuerDetailGovernanceReducer
   } = state || {};
   const { etherCollected, roundInfo, tokenBalance, buyButtonSpinning } = projectCrowdSaleReducer || {};
-  const { startNewRoundButtonSpinning, incrementTapButtonSpinning, deployTapPollButtonSpinning } = issuerDetailGovernanceReducer || {};
+  const { startNewRoundButtonSpinning, incrementTapButtonSpinning, deployTapPollButtonSpinning, currentWithdrawableAmount, withdrawButtonSpinning } =
+    issuerDetailGovernanceReducer || {};
   const {
     tokensUnderGovernance,
     killPollIndex,
@@ -357,7 +359,9 @@ const mapStateToProps = state => {
     killFinalizeButtonSpinning,
     startNewRoundButtonSpinning,
     incrementTapButtonSpinning,
-    deployTapPollButtonSpinning
+    deployTapPollButtonSpinning,
+    currentWithdrawableAmount,
+    withdrawButtonSpinning
   };
 };
 
@@ -384,7 +388,8 @@ const mapDispatchToProps = dispatch =>
       incrementTap,
       deployXfrPoll,
       withdrawXfrAmount,
-      withdrawAmount
+      withdrawAmount,
+      getCurrentWithdrawableAmount
     },
     dispatch
   );

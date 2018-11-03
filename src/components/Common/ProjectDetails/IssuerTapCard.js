@@ -39,7 +39,9 @@ const IssuerTapCard = props => {
           {!isPermissioned || !canIncreaseTap ? (
             <div className="hli">
               <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
-                <LoadingButton disabled>Increase Tap</LoadingButton>
+                <div>
+                  <LoadingButton disabled>Increase Tap</LoadingButton>
+                </div>
               </Tooltip>
             </div>
           ) : (

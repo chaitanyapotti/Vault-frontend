@@ -42,8 +42,8 @@ class IssuerDetailPreGovernance extends Component {
   };
 
   onStartR1Click = () => {
-    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress } = this.props || {};
-    r1Start(version, crowdSaleAddress, userLocalPublicAddress);
+    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress, projectid } = this.props || {};
+    r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid);
   };
 
   render() {

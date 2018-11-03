@@ -50,7 +50,8 @@ class ProjectIssuerGovernance extends Component {
       daicoTokenAddress,
       xfrDetails,
       ownerAddress,
-      tapAcceptancePercent
+      tapAcceptancePercent,
+      _id
     } = projectDetails || {};
     // currentRoundNumber = "2";
     // Redirect to form if cdi !== 12
@@ -91,6 +92,7 @@ class ProjectIssuerGovernance extends Component {
           xfrDetails={xfrDetails}
           ownerAddress={ownerAddress}
           tapAcceptancePercent={tapAcceptancePercent}
+          projectid={_id}
         />
       );
     }
@@ -118,6 +120,7 @@ class ProjectIssuerGovernance extends Component {
           initialFundRelease={initialFundRelease}
           currentRoundNumber={currentRoundNumber}
           treasuryStateNumber={treasuryStateNumber}
+          projectid={_id}
         />
       );
     }

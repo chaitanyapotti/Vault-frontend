@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { IssuerGovernanceName, IssuerPDetailGovernance, FundReq, IssuerTapCard } from "../../components/Common/ProjectDetails";
+import { IssuerGovernanceName, IssuerPDetailGovernance, IssuerTapCard, IssuerFundReq } from "../../components/Common/ProjectDetails";
 import { getRoundTokensSold, buyTokens, getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
 import {
   startNewRound,
@@ -32,7 +32,10 @@ import IssuerWithdrawCard from "../../components/Common/ProjectDetails/IssuerWit
 
 class IssuerDetailGovernance extends Component {
   state = {
-    withdrawableAmount: ""
+    withdrawableAmount: "",
+    titleText: "",
+    descriptionText: "",
+    amountText: ""
   };
 
   componentDidMount() {
@@ -180,10 +183,80 @@ class IssuerDetailGovernance extends Component {
     this.setState({ withdrawableAmount: e.target.value });
   };
 
+  onTitleTextChange = e => {
+    this.setState({ titleText: e.target.value });
+  };
+
+  onAmountTextChange = e => {
+    this.setState({ amountText: e.target.value });
+  };
+
+  onDescriptionTextChange = e => {
+    this.setState({ descriptionText: e.target.value });
+  };
+
   onWithdrawAmountClick = () => {
     const { version, withdrawAmount: withdrawAmountClick, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
     const { withdrawableAmount } = this.state;
     withdrawAmountClick(version, pollFactoryAddress, userLocalPublicAddress, withdrawableAmount);
+  };
+
+  canDeployXfrPoll = () => {
+    const { xfrData } = this.props || {};
+    const { poll1, poll2 } = xfrData || {};
+    const { address: poll1Address } = poll1 || {};
+    const { address: poll2Address } = poll2 || {};
+    const { amountText, titleText, descriptionText } = this.state;
+    return (
+      (poll1Address === "0x0000000000000000000000000000000000000000" || poll2Address === "0x0000000000000000000000000000000000000000") &&
+      amountText !== "" &&
+      titleText !== "" &&
+      descriptionText !== ""
+    );
+  };
+
+  canWithdrawXfrAmount = () => {
+    const { xfrData, xfrRejectionPercent, tokensUnderGovernance } = this.props || {};
+    const { poll1, poll2 } = xfrData || {};
+    const { consensus: poll1Consensus, endTime: poll1EndTime } = poll1 || {};
+    const { consensus: poll2Consensus, endTime: poll2EndTime } = poll2 || {};
+    return (
+      (parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
+        new Date() > new Date(poll1EndTime * 1000)) ||
+      (parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) && new Date() > new Date(poll2EndTime * 1000))
+    );
+  };
+
+  getWithdrawableXfrAmount = () => {
+    const { xfrData, xfrRejectionPercent, tokensUnderGovernance } = this.props || {};
+    const { poll1, poll2 } = xfrData || {};
+    const { consensus: poll1Consensus, endTime: poll1EndTime, amount: poll1RequestedAmount } = poll1 || {};
+    const { consensus: poll2Consensus, endTime: poll2EndTime, amount: poll2RequestedAmount } = poll2 || {};
+    let totalAmount = 0;
+    if (
+      parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
+      new Date() > new Date(poll1EndTime * 1000)
+    ) {
+      totalAmount += formatFromWei(poll1RequestedAmount, 3);
+    }
+    if (
+      parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) &&
+      new Date() > new Date(poll2EndTime * 1000)
+    ) {
+      totalAmount += formatFromWei(poll2RequestedAmount, 3);
+    }
+    return totalAmount;
+  };
+
+  onDeployXfrClick = () => {
+    const { version, deployXfrPoll: deployXfrPollClick, userLocalPublicAddress, pollFactoryAddress, projectid } = this.props || {};
+    const { titleText, amountText, descriptionText } = this.state;
+    deployXfrPollClick(version, pollFactoryAddress, userLocalPublicAddress, amountText, titleText, descriptionText, projectid);
+  };
+
+  onWithdrawXfrAmountClick = () => {
+    const { version, withdrawXfrAmount: withdrawXfrAmountClick, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
+    withdrawXfrAmountClick(version, pollFactoryAddress, userLocalPublicAddress);
   };
 
   render() {
@@ -199,19 +272,17 @@ class IssuerDetailGovernance extends Component {
       tapIncrementFactor,
       currentTap,
       xfrData,
-      signinStatusFlag,
-      xfr1ButtonSpinning,
-      xfr2ButtonSpinning,
       xfrDetails,
-      xfrVoteData,
       tokensUnderGovernance,
       startNewRoundButtonSpinning,
       deployTapPollButtonSpinning,
       incrementTapButtonSpinning,
       withdrawButtonSpinning,
-      currentWithdrawableAmount
+      currentWithdrawableAmount,
+      deployXfrButtonSpinning,
+      withdrawXfrButtonSpinning
     } = this.props || {};
-    const { withdrawableAmount } = this.state;
+    const { withdrawableAmount, titleText, descriptionText, amountText } = this.state;
     return (
       <Grid>
         <Row>
@@ -272,23 +343,29 @@ class IssuerDetailGovernance extends Component {
             />
           </Col>
         </Row>
-
         <Row className="push--top">
           <Col xs={12} lg={6}>
-            <XfrForm />
-            <FundReq
-              data={xfrData}
-              details={xfrDetails}
-              xfrVoteData={xfrVoteData}
-              signinStatusFlag={signinStatusFlag}
-              onRevokeXfr1Click={this.onRevokeXfr1Click}
-              onXfr1Click={this.onXfr1Click}
-              xfr1ButtonSpinning={xfr1ButtonSpinning}
-              onRevokeXfr2Click={this.onRevokeXfr2Click}
-              onXfr2Click={this.onXfr2Click}
-              xfr2ButtonSpinning={xfr2ButtonSpinning}
-              tokensUnderGovernance={tokensUnderGovernance}
+            <XfrForm
+              titleText={titleText}
+              onTitleTextChange={this.onTitleTextChange}
+              amountText={amountText}
+              onAmountTextChange={this.onAmountTextChange}
+              descriptionText={descriptionText}
+              onDescriptionTextChange={this.onDescriptionTextChange}
+              isPermissioned={this.isPermissioned()}
+              canDeployXfrPoll={this.canDeployXfrPoll()}
+              deployXfrButtonSpinning={deployXfrButtonSpinning}
+              onDeployXfrClick={this.onDeployXfrClick}
+              canWithdrawXfrAmount={this.canWithdrawXfrAmount()}
+              withdrawXfrButtonSpinning={withdrawXfrButtonSpinning}
+              onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
+              getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
             />
+          </Col>
+        </Row>
+        <Row className="push--top">
+          <Col xs={12} lg={6}>
+            <IssuerFundReq data={xfrData} details={xfrDetails} tokensUnderGovernance={tokensUnderGovernance} />
           </Col>
         </Row>
       </Grid>
@@ -306,8 +383,15 @@ const mapStateToProps = state => {
     issuerDetailGovernanceReducer
   } = state || {};
   const { etherCollected, roundInfo, tokenBalance, buyButtonSpinning } = projectCrowdSaleReducer || {};
-  const { startNewRoundButtonSpinning, incrementTapButtonSpinning, deployTapPollButtonSpinning, currentWithdrawableAmount, withdrawButtonSpinning } =
-    issuerDetailGovernanceReducer || {};
+  const {
+    startNewRoundButtonSpinning,
+    incrementTapButtonSpinning,
+    deployTapPollButtonSpinning,
+    currentWithdrawableAmount,
+    withdrawButtonSpinning,
+    withdrawXfrButtonSpinning,
+    deployXfrButtonSpinning
+  } = issuerDetailGovernanceReducer || {};
   const {
     tokensUnderGovernance,
     killPollIndex,
@@ -361,7 +445,9 @@ const mapStateToProps = state => {
     incrementTapButtonSpinning,
     deployTapPollButtonSpinning,
     currentWithdrawableAmount,
-    withdrawButtonSpinning
+    withdrawButtonSpinning,
+    withdrawXfrButtonSpinning,
+    deployXfrButtonSpinning
   };
 };
 
@@ -389,7 +475,8 @@ const mapDispatchToProps = dispatch =>
       deployXfrPoll,
       withdrawXfrAmount,
       withdrawAmount,
-      getCurrentWithdrawableAmount
+      getCurrentWithdrawableAmount,
+      withdrawXfrAmount
     },
     dispatch
   );

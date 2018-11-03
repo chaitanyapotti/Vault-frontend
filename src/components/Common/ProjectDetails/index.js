@@ -15,6 +15,7 @@ import IssuerPreGovernanceName from "./IssuerPreGovernanceName";
 import IssuerGovernanceName from "./IssuerGovernanceName";
 import IssuerPDetailGovernance from "./IssuerPDetailGovernance";
 import IssuerTapCard from "./IssuerTapCard";
+import IssuerFundReq from "./FundReq/IssuerFundReq";
 
 export {
   PDetailCrowdSale,
@@ -33,5 +34,6 @@ export {
   IssuerPreGovernanceName,
   IssuerGovernanceName,
   IssuerPDetailGovernance,
-  IssuerTapCard
+  IssuerTapCard,
+  IssuerFundReq
 };

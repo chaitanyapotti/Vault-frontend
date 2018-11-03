@@ -4,7 +4,7 @@ export const initialState = {
   startNewRoundButtonSpinning: false,
   deployTapPollButtonSpinning: false,
   incrementTapButtonSpinning: false,
-  deployXfrPollButtonSpinning: false,
+  deployXfrButtonSpinning: false,
   withdrawXfrButtonSpinning: false,
   withdrawButtonSpinning: false,
   currentWithdrawableAmount: "0"
@@ -37,7 +37,7 @@ export default (state = initialState, action) => {
       const { receipt } = action.payload;
       return {
         ...state,
-        deployXfrPollButtonSpinning: receipt
+        deployXfrButtonSpinning: receipt
       };
     }
     case actionTypes.WITHDRAW_XFR_BUTTON_SPINNING: {

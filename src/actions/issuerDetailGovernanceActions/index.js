@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
-import { getCurrentTap } from "../projectDetailGovernanceActions/index";
+import { getCurrentTap, getXfrData } from "../projectDetailGovernanceActions/index";
 import { currentRound } from "../projectGovernanceActions/index";
 
 export const isStartNewRoundButtonSpinning = receipt => ({
@@ -152,7 +152,7 @@ export const incrementTap = (version, contractAddress, userLocalPublicAddress) =
     });
 };
 
-export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, amount) => dispatch => {
+export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, amount, titleText, descriptionText, projectid) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isDeployXfrPollButtonSpinning(true));
   axios
@@ -166,7 +166,16 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
         .createXfr(weiAmount)
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getXfrData(version, contractAddress));
           dispatch(isDeployXfrPollButtonSpinning(false));
+          axios
+            .patch(`${config.api_base_url}/db/projects/xfrs?projectid=${projectid}`, {
+              name: titleText,
+              description: descriptionText,
+              address: receipt.contractAddress,
+              startDate: new Date()
+            })
+            .then(resp => console.log(resp));
         })
         .on("error", error => {
           console.error(error.message);
@@ -192,6 +201,7 @@ export const withdrawXfrAmount = (version, contractAddress, userLocalPublicAddre
         .withdrawXfrAmount()
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
+          dispatch(getXfrData(version, contractAddress));
           dispatch(isWithdrawXfrButtonSpinning(false));
         })
         .on("error", error => {

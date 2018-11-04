@@ -12,7 +12,13 @@ export const initialState = {
   tapPollConsensus: "0",
   currentTap: "0",
   xfrData: {},
-  xfrVoteData: []
+  xfrVoteData: [],
+  killPollsHistoryData: [],
+  killPollsHistoryRetrieveFailureMessage: "",
+  tapPollsHistoryData: [],
+  tapPollsHistoryRetrieveFailureMessage: "",
+  xfrPollsHistoryData: [],
+  xfrPollsHistoryRetrieveFailureMessage: ""
 };
 
 export default (state = initialState, action) => {
@@ -29,6 +35,49 @@ export default (state = initialState, action) => {
       return {
         ...state,
         killPollIndex: receipt
+      };
+    }
+    case actionTypes.KILL_POLLS_HISTORY_SUCCESS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        killPollsHistoryData: receipt
+      };
+    }
+    case actionTypes.KILL_POLLS_HISTORY_FAILED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        killPollsHistoryRetrieveFailureMessage: receipt
+      };
+    }
+
+    case actionTypes.TAP_POLLS_HISTORY_SUCCESS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        tapPollsHistoryData: receipt
+      };
+    }
+    case actionTypes.TAP_POLLS_HISTORY_FAILED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        tapPollsHistoryRetrieveFailureMessage: receipt
+      };
+    }
+    case actionTypes.XFR_POLLS_HISTORY_SUCCESS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        xfrPollsHistoryData: receipt
+      };
+    }
+    case actionTypes.XFR_POLLS_HISTORY_FAILED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        xfrPollsHistoryRetrieveFailureMessage: receipt
       };
     }
     case actionTypes.REMAINING_ETHER_BALANCE_RECEIVED: {

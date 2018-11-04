@@ -43,7 +43,7 @@ const AlertModal = props => {
         <CUIModal open={open}>
           <CUIModalContent>{children}</CUIModalContent>
           <CUIModalActions>
-            <ButtonComponent onClick={handleClose} label="Ok" />
+            <ButtonComponent onClick={handleClose} label="Close" />
           </CUIModalActions>
         </CUIModal>
       )}

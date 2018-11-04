@@ -27,32 +27,53 @@ import {
   voteInXfr2Poll,
   revokeVoteInXfr1Poll,
   revokeVoteInXfr2Poll,
-  finalizeKill
+  finalizeKill,
+  getKillPollsHistory,
+  getTapPollsHistory,
+  getXfrPollsHistory
 } from "../../actions/projectDetailGovernanceActions/index";
 import {
   formatFromWei,
-  getRoundPrice,
   formatCurrencyNumber,
   formatMoney,
   formatDate,
-  significantDigits
+  significantDigits,
+  pollState,
+  daysTookForTapPoll,
+  xfrResult
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
 import BuyModal from "../../components/Common/BuyModal";
 import LoadingButton from "../../components/Common/LoadingButton";
+import GridData from "../../components/GridData";
 
 class ProjectDetailGovernance extends Component {
   state = {
     modalOpen: false,
     buyModalOpen: false,
     buyAmount: "",
-    unlockTokensModalOpen: false
+    unlockTokensModalOpen: false,
+    killPollsHistoryModalOpen: false,
+    tapPollsHistoryModalOpen: false,
+    xfrPollsHistoryModalOpen: false
   };
 
   handleUnlockTokensOpen = () => this.setState({ unlockTokensModalOpen: true });
 
   handleUnlockTokensClose = () => this.setState({ unlockTokensModalOpen: false });
+
+  handleKillPollsHistoryOpen = () => this.setState({ killPollsHistoryModalOpen: true });
+
+  handleKillPollsHistoryClose = () => this.setState({ killPollsHistoryModalOpen: false });
+
+  handleTapPollsHistoryOpen = () => this.setState({ tapPollsHistoryModalOpen: true });
+
+  handleTapPollsHistoryClose = () => this.setState({ tapPollsHistoryModalOpen: false });
+
+  handleXfrPollsHistoryOpen = () => this.setState({ xfrPollsHistoryModalOpen: true });
+
+  handleXfrPollsHistoryClose = () => this.setState({ xfrPollsHistoryModalOpen: false });
 
   handleBuyClose = () => this.setState({ buyModalOpen: false });
 
@@ -62,6 +83,7 @@ class ProjectDetailGovernance extends Component {
 
   componentDidMount() {
     const {
+      projectid,
       version,
       crowdSaleAddress,
       currentRoundNumber,
@@ -84,9 +106,15 @@ class ProjectDetailGovernance extends Component {
       getXfrData: fetchXfrData,
       getKillPollVote: fetchKillPollVote,
       getTapPollVote: fetchTapPollVote,
-      getXfrPollVote: fetchXfrPollVote
+      getXfrPollVote: fetchXfrPollVote,
+      getKillPollsHistory: fetchKillPollsHistory,
+      getTapPollsHistory: fetchTapPollsHistory,
+      getXfrPollsHistory: fetchXfrPollsHistory
     } = this.props || {};
     etherPriceFetch("ETH");
+    fetchKillPollsHistory(projectid);
+    fetchTapPollsHistory(projectid);
+    fetchXfrPollsHistory(projectid);
     const roundNumber = currentRoundNumber === "4" ? 2 : parseInt(currentRoundNumber, 10) - 1;
     fetchRoundTokensSold(version, crowdSaleAddress, roundNumber);
     fetchTokensUnderGovernance(version, daicoTokenAddress);
@@ -179,6 +207,18 @@ class ProjectDetailGovernance extends Component {
     const endDate = new Date(r1EndTime);
     endDate.setDate(endDate.getDate() + (killPollIndex + 1) * 90);
     return endDate.toDateString();
+  };
+
+  getKillPollStartDate = killPollEndDate => {
+    const endDate = new Date(killPollEndDate * 1000);
+    const startDate = endDate.setDate(endDate.getDate() - 89);
+    return new Date(startDate);
+  };
+
+  getXfrEndDate = xfrStartDate => {
+    const startDate = new Date(xfrStartDate * 1000);
+    const endDate = startDate.setDate(startDate.getDate() + 29);
+    return new Date(endDate);
   };
 
   getMyTokenValue = () => {
@@ -397,9 +437,46 @@ class ProjectDetailGovernance extends Component {
       tokensUnderGovernance,
       currentRoundNumber,
       killFinalizeButtonSpinning,
-      roundInfo
+      roundInfo,
+      killPollsHistoryData,
+      tapPollsHistoryData,
+      xfrPollsHistoryData,
+      xfrRejectionPercent,
+      history
     } = this.props || {};
-    const { modalOpen, buyModalOpen, buyAmount, unlockTokensModalOpen } = this.state;
+    const { modalOpen, buyModalOpen, buyAmount, unlockTokensModalOpen, killPollsHistoryModalOpen, tapPollsHistoryModalOpen, xfrPollsHistoryModalOpen } = this.state;
+
+    const killHistoryData = killPollsHistoryData.map(item => {
+      const { address, endTime, consensus } = item || {};
+      const dataArray = [
+        address,
+        pollState(this.getKillPollStartDate(endTime), new Date(endTime * 1000)),
+        formatDate(new Date(endTime * 1000)),
+        significantDigits((parseFloat(consensus))/(formatFromWei(parseFloat(tokensUnderGovernance), 0)))
+      ];
+      return dataArray;
+    });
+    const tapHistoryData = tapPollsHistoryData.map(item => {
+      const { address, startTime, endTime } = item || {};
+      const dataArray = [
+        address,
+        formatDate(new Date(startTime * 1000)),
+        daysTookForTapPoll(startTime, endTime),
+      ];
+      return dataArray;
+    });
+    const xfrHistoryData = xfrPollsHistoryData.map(item => {
+      const { address, startTime, consensus } = item || {};
+      const xfrStartTime= new Date(startTime * 1000)
+      const xfrConsensus = significantDigits((parseFloat(consensus))/(formatFromWei(parseFloat(tokensUnderGovernance), 0)))
+      const dataArray = [
+        address,
+        formatDate(xfrStartTime),
+        xfrResult(xfrStartTime, this.getXfrEndDate(startTime), xfrConsensus, xfrRejectionPercent),
+        xfrConsensus,
+      ];
+      return dataArray;
+    });
     return (
       <Grid>
         {this.killFinish() ? (
@@ -469,6 +546,7 @@ class ProjectDetailGovernance extends Component {
               killFinalizeButtonSpinning={killFinalizeButtonSpinning}
               killFinish={this.killFinish()}
               onUnlockTokensClick={this.handleUnlockTokensOpen}
+              onKillPollsHistoryClick={this.handleKillPollsHistoryOpen}
             />
           </Col>
         </Row>
@@ -484,6 +562,8 @@ class ProjectDetailGovernance extends Component {
               onRevokeTapClick={this.onRevokeTapClick}
               tapButtonSpinning={tapButtonSpinning}
               signinStatusFlag={signinStatusFlag}
+              onUnlockTokensClick={this.handleUnlockTokensOpen}
+              onTapPollsHistoryClick={this.handleTapPollsHistoryOpen}
             />
           </Col>
         </Row>
@@ -502,6 +582,7 @@ class ProjectDetailGovernance extends Component {
               onXfr2Click={this.onXfr2Click}
               xfr2ButtonSpinning={xfr2ButtonSpinning}
               tokensUnderGovernance={tokensUnderGovernance}
+              onXfrPollHistoryClick={this.handleXfrPollsHistoryOpen}
             />
           </Col>
         </Row>
@@ -518,6 +599,48 @@ class ProjectDetailGovernance extends Component {
           <div className="text--center push--top">
             You have voted in {this.unlockPollsCount()} polls. You would have to sign {this.unlockPollsCount()} transactions to unlock your tokens.
           </div>
+        </AlertModal>
+        <AlertModal open={killPollsHistoryModalOpen} handleClose={this.handleKillPollsHistoryClose}>
+        <div>
+        <GridData
+        history={history}
+        tableData={killHistoryData}
+        filter={false}
+          columns={[
+            "Poll Address",
+            "State",
+            "End Date",
+            "Consensus"
+          ]}
+        />
+      </div>
+        </AlertModal>
+        <AlertModal open={tapPollsHistoryModalOpen} handleClose={this.handleTapPollsHistoryClose}>
+        <div>
+        <GridData
+        tableData={tapHistoryData}
+        filter={false}
+          columns={[
+            "Poll Address",
+            "Deployed On",
+            "Took Time To Complete"
+          ]}
+        />
+      </div>
+        </AlertModal>
+        <AlertModal open={xfrPollsHistoryModalOpen} handleClose={this.handleXfrPollsHistoryClose}>
+        <div>
+        <GridData
+        tableData={xfrHistoryData}
+        filter={false}
+          columns={[
+            "Poll Address",
+            "Deployed On",
+            "Result",
+            "Consensus"
+          ]}
+        />
+      </div>
         </AlertModal>
         <BuyModal
           open={buyModalOpen}
@@ -553,7 +676,10 @@ const mapStateToProps = state => {
     xfr1ButtonSpinning,
     xfr2ButtonSpinning,
     xfrVoteData,
-    killFinalizeButtonSpinning
+    killFinalizeButtonSpinning,
+    killPollsHistoryData,
+    tapPollsHistoryData,
+    xfrPollsHistoryData
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
@@ -585,7 +711,10 @@ const mapStateToProps = state => {
     xfrVoteData,
     xfr1ButtonSpinning,
     xfr2ButtonSpinning,
-    killFinalizeButtonSpinning
+    killFinalizeButtonSpinning,
+    killPollsHistoryData,
+    tapPollsHistoryData,
+    xfrPollsHistoryData
   };
 };
 
@@ -617,7 +746,10 @@ const mapDispatchToProps = dispatch =>
       voteInXfr2Poll,
       revokeVoteInXfr1Poll,
       revokeVoteInXfr2Poll,
-      finalizeKill
+      finalizeKill,
+      getKillPollsHistory,
+      getTapPollsHistory,
+      getXfrPollsHistory
     },
     dispatch
   );

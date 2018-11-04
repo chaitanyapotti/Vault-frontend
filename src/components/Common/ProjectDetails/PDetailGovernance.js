@@ -22,7 +22,8 @@ const PDetailGovernance = props => {
     onRevokeKillClick,
     signinStatusFlag,
     canUnlockTokens,
-    onUnlockTokensClick
+    onUnlockTokensClick,
+    onKillPollsHistoryClick
   } = props || {};
   return (
     <CUICard style={{ padding: "40px 50px" }}>
@@ -53,7 +54,6 @@ const PDetailGovernance = props => {
           Next Kill Attempt: <span className="text--secondary">{nextKillAttempt}</span>
         </Col>
       </Row>
-
       <Row className="push-half--top">
         <Col lg={6} className="txt">
           Your Token Value: <span className="text--secondary">{yourTokenValue}</span>
@@ -73,28 +73,35 @@ const PDetailGovernance = props => {
           Kill Consensus: <span className="text--secondary">{killConsensus}%</span>
         </Col>
       </Row>
-      <div className="text-left">
-        <LoadingButton onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
-          Unlock All Tokkens
-        </LoadingButton>
-      </div>
-      <div className="text-right">
-        {signinStatusFlag <= 3 ? (
-          <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-            <div>
-              <LoadingButton disabled>Kill Project</LoadingButton>
-            </div>
-          </Tooltip>
-        ) : killVoteStatus === "false" ? (
-          <LoadingButton onClick={onKillClick} type="danger" loading={killButtonSpinning}>
-            Vote in Kill Poll
+      <Row>
+        <Col lg={6} className="push--top">
+          <LoadingButton onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
+            Unlock All Tokkens
           </LoadingButton>
-        ) : (
-          <LoadingButton onClick={onRevokeKillClick} loading={killButtonSpinning}>
-            UnVote in Kill Poll
-          </LoadingButton>
-        )}
-      </div>
+        </Col>
+        <Col lg={6} className="push--top text-right">
+          {signinStatusFlag <= 3 ? (
+            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+              <div>
+                <LoadingButton disabled>Kill Project</LoadingButton>
+              </div>
+            </Tooltip>
+          ) : killVoteStatus === "false" ? (
+            <LoadingButton onClick={onKillClick} type="danger" loading={killButtonSpinning}>
+              Vote in Kill Poll
+            </LoadingButton>
+          ) : (
+            <LoadingButton onClick={onRevokeKillClick} loading={killButtonSpinning}>
+              UnVote in Kill Poll
+            </LoadingButton>
+          )}
+        </Col>
+      </Row>
+      <Row>
+        <Col lg={12} className="push--top text-right">
+          <LoadingButton onClick={onKillPollsHistoryClick}>Kill Polls History</LoadingButton>
+        </Col>
+      </Row>
     </CUICard>
   );
 };

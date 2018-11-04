@@ -20,16 +20,31 @@ const formatFromWei = (input, precision = 0) => Math.round(parseFloat(input) * M
 const formatTokenPrice = (input, precision = 0) => parseFloat(parseFloat(input) * Math.pow(10, -18)).toPrecision(precision);
 
 const formatCent = tokenPrice => {
-  console.log(tokenPrice);
   if (tokenPrice < 100) {
     return `${tokenPrice}¢`;
   }
-  console.log(tokenPrice);
   return `$${tokenPrice}`;
+};
+
+const pollState = (startTime, endTime) => {
+  const presentDate = new Date();
+  if (presentDate < startTime) {
+    return "Tentative";
+  }
+  if (startTime < presentDate < endTime) {
+    return "Active";
+  }
+  if (presentDate > endTime) {
+    return "Past";
+  }
+  return null;
 };
 
 const significantDigits = number => {
   let input = number;
+  if (input === 0) {
+    return 0;
+  }
   if (input < 1) {
     input *= 100;
   }
@@ -42,6 +57,26 @@ const significantDigits = number => {
   const shift = Math.pow(10, depth);
   const roundedNum = Math.round(shift * input) / shift;
   return roundedNum;
+};
+
+const daysTookForTapPoll = (startTime, endTime) => {
+  if (endTime) {
+    secondsToDhms(endTime - startTime);
+  }
+  return "Yet To Complete";
+};
+
+const xfrResult = (startTime, endTime, consensus, xfrRejectionPercent) => {
+  const presentDate = new Date();
+  let result;
+  if (startTime < presentDate < endTime) {
+    result = "Ongoing";
+  } else if (consensus < xfrRejectionPercent) {
+    result = "Success";
+  } else {
+    result = "Fail";
+  }
+  return result;
 };
 
 const formatNumberToINRFormat = number => {
@@ -192,5 +227,8 @@ export {
   getRoundPrice,
   formatCurrencyNumber,
   significantDigits,
-  formatNumberToINRFormat
+  formatNumberToINRFormat,
+  pollState,
+  daysTookForTapPoll,
+  xfrResult
 };

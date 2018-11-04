@@ -4,6 +4,82 @@ import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
 import constants from "../../constants";
 
+export const getVoteHistogramData = (projectid) => async dispatch => {
+  const network = "rinkeby";
+  // await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/projectweb3/votehistogram`, {
+      params: { network, projectid }
+    })
+    .then(response => {
+      const { status, data: voteHistogramData } = response || {};
+      const { data, message } = voteHistogramData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch({
+            type: actionTypes.VOTE_HISTOGRAM_DATA_SUCCESS,
+            payload: data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.VOTE_HISTOGRAM_DATA_FAILED,
+            payload: constants.VOTE_HISTOGRAM_DATA_FAILED_MESSAGE
+          });
+        }
+      } else {
+        dispatch({
+          type: actionTypes.VOTE_HISTOGRAM_DATA_FAILED,
+          payload: constants.VOTE_HISTOGRAM_DATA_FAILED_MESSAGE
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      dispatch({
+        type: actionTypes.VOTE_HISTOGRAM_DATA_FAILED,
+        payload: err.message
+      });
+    });
+};
+
+export const getSpendCurveData = (version, address) => async dispatch => {
+  const network = "rinkeby";
+  // await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/spendcurve`, {
+      params: { address, network, version }
+    })
+    .then(response => {
+      const { status, data: spendCurveData } = response || {};
+      const { data, message } = spendCurveData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch({
+            type: actionTypes.SPEND_CURVE_DATA_SUCCESS,
+            payload: data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.SPEND_CURVE_DATA_FAILED,
+            payload: constants.SPEND_CURVE_DATA_FAILED_MESSAGE
+          });
+        }
+      } else {
+        dispatch({
+          type: actionTypes.SPEND_CURVE_DATA_FAILED,
+          payload: constants.SPEND_CURVE_DATA_FAILED_MESSAGE
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      dispatch({
+        type: actionTypes.SPEND_CURVE_DATA_FAILED,
+        payload: err.message
+      });
+    });
+};
+
 export const tokensUnderGovernanceReceived = receipt => ({
   payload: { rec: receipt },
   type: actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED

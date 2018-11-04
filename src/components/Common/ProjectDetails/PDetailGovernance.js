@@ -76,7 +76,7 @@ const PDetailGovernance = props => {
       <Row>
         <Col lg={6} className="push--top">
           <LoadingButton onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
-            Unlock All Tokkens
+            Unlock All Tokens
           </LoadingButton>
         </Col>
         <Col lg={6} className="push--top text-right">

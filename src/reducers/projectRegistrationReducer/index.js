@@ -93,8 +93,14 @@ export default function(state = initialState, action) {
       console.log("project details: ", action.payload)
       const { allowEditAll } = state || false
       const { state } = action.payload || {}
-      return {
-        ...state, state, project_id: "", allowEditAll: allowEditAll
+      if (action.payload){
+        return {
+          ...state, state, project_id: "", allowEditAll: allowEditAll
+        }  
+      }else{
+        return {
+          ...state, project_id: "", allowEditAll: allowEditAll
+        }
       }
     }
 

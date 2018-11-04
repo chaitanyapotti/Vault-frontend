@@ -234,3 +234,14 @@
     background-color: #2185d6;
     display: block;
 }
+
+/* Whitelits */
+.wht-lst-info-cnt{
+    width: 70%;
+    margin: 0 auto;
+}
+
+.upld-img-plachldr{
+    height: 250px;
+    border: 1px solid;
+}

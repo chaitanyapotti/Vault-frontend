@@ -33,7 +33,7 @@ const PDetailGovernance = props => {
           Your Tokens: <span className="text--secondary">{yourTokens}</span>
         </Col>
         <Col lg={6} className="txt">
-          Your Vote Share: <span className="text--secondary">{yourVoteShare}%</span>
+          Your Vote Weight: <span className="text--secondary">{yourVoteShare}%</span>
         </Col>
       </Row>
 
@@ -76,7 +76,7 @@ const PDetailGovernance = props => {
       <Row>
         <Col lg={6} className="push--top">
           <LoadingButton onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
-            Unlock All Tokkens
+            Unlock All Tokens
           </LoadingButton>
         </Col>
         <Col lg={6} className="push--top text-right">

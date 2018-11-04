@@ -198,7 +198,7 @@ class ProjectDetailGovernance extends Component {
 
   getVoteShare = () => {
     const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
-    const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * Math.pow(10, 18) || 0;
+    const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * 100 || 0;
     return userShare > capPercent / 100 ? capPercent / 100 : userShare;
   };
 

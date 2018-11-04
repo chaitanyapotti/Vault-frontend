@@ -20,20 +20,12 @@ import {
   whitepaperChangedAction,
   uploadWhitepaperAction,
   thumbnailChangedAction,
-  uploadThumbnailAction,
-  fetchProjectStates
+  uploadThumbnailAction
 } from "../../actions/projectRegistrationActions";
 import { ButtonComponent } from "../Common/FormComponents";
 import actionTypes from "../../action_types";
 
 class IdentityDetails extends React.Component {
-  componentDidMount() {
-    if (this.props.userLocalPublicAddress) {
-      this.props.fetchProjectStates(this.props.userLocalPublicAddress);
-    } else {
-      this.props.fetchProjectStates("0xb758c38326Df3D75F1cf0DA14Bb8220Ca4231e74");
-    }
-  }
 
   state = {
     thumbnailFile: ""
@@ -139,7 +131,8 @@ class IdentityDetails extends React.Component {
       uploadingWhitepaper,
       whitepaperUrl,
       uploadingThumbnail,
-      thumbnailUrl
+      thumbnailUrl,
+      allowEditAll
     } = this.props || {};
     return (
       <CUICard style={{ padding: "40px 67px" }}>
@@ -156,6 +149,7 @@ class IdentityDetails extends React.Component {
               inputPlaceholder="Eg. Adam Smith"
               inputValue={adminName}
               textFocus
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -174,6 +168,7 @@ class IdentityDetails extends React.Component {
               inputLabel="Admin Email"
               inputPlaceholder="Eg. admin@electus.network"
               inputValue={adminEmail}
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -196,6 +191,7 @@ class IdentityDetails extends React.Component {
               inputPlaceholder="Eg. Electus"
               inputValue={projectName}
               textFocus
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -214,6 +210,7 @@ class IdentityDetails extends React.Component {
               inputLabel="ERC20 Ticker"
               inputPlaceholder="Eg. ELE"
               inputValue={erc20TokenTag}
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -370,6 +367,7 @@ class IdentityDetails extends React.Component {
               inputLabel="Team Address"
               inputPlaceholder="Eg. 0xdbf6df7e94e3019e1705e699a8874ac5f6ed753e"
               inputValue={teamAddress}
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -439,7 +437,8 @@ const mapStateToProps = state => {
     thumbnailImage,
     uploadingThumbnail,
     thumbnailUrl,
-    errors
+    errors,
+    allowEditAll
   } = state.projectRegistrationData || {};
   const { userLocalPublicAddress } = state.signinManagerData || {};
   return {
@@ -462,7 +461,8 @@ const mapStateToProps = state => {
     uploadingThumbnail,
     thumbnailUrl,
     errors,
-    userLocalPublicAddress
+    userLocalPublicAddress,
+    allowEditAll
   };
 };
 
@@ -484,8 +484,7 @@ const mapDispatchToProps = dispatch =>
       whitepaperChangedAction,
       uploadWhitepaperAction,
       thumbnailChangedAction,
-      uploadThumbnailAction,
-      fetchProjectStates
+      uploadThumbnailAction
     },
     dispatch
   );

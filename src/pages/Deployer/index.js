@@ -167,7 +167,12 @@ class Deployer extends Component {
   };
 
   redirectHome = () => {
-    this.props.history.push("/");
+    // this.props.history.push("/issuergovernance/details");
+    const { _id } = this.props.projectDetails || {};
+    this.props.history.push({
+      pathname: `/issuergovernance/details`,
+      search: `?projectid=${_id}`
+    });
   };
 
   getStepContent = () => {
@@ -247,16 +252,15 @@ class Deployer extends Component {
     "Set Crowdsale in Poll Factory",
     "Create Kill Polls",
     "Create Kill Polls 2",
-    "Mint Foundation Tokens",
-    "Route to Main Net"
+    "Mint Foundation Tokens"
   ];
 
   render() {
     const { projectDetails } = this.props || {};
-    const { currentDeploymentIndicator } = projectDetails || {};
+    const { currentDeploymentIndicator, _id } = projectDetails || {};
     return (
       <Grid>
-        <CustomizedStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={currentDeploymentIndicator} />
+        <CustomizedStepper history={this.props.history} getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={currentDeploymentIndicator} projectid={_id}/>
       </Grid>
     );
   }

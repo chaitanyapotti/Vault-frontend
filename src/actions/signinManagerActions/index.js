@@ -323,7 +323,6 @@ export const checkIssuer = userLocalPublicAddress => dispatch => {
     .then(response => {
       if (response.status === 200) {
         const { data } = response.data;
-        console.log("isIssuer data", data)
         if (data) {
           dispatch({
             type: actionTypes.ISISSUER_CHECK,

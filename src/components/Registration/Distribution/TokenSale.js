@@ -84,6 +84,7 @@ class TokenSale extends React.Component {
       round1Tokens,
       round3TargetEth,
       tokenPriceFactor,
+      allowEditAll,
       errors
     } = this.props || {};
     return (
@@ -101,6 +102,7 @@ class TokenSale extends React.Component {
               inputLabel="Round1 Target in USD"
               inputPlaceholder=""
               inputValue={round1TargetUSD}
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -118,6 +120,7 @@ class TokenSale extends React.Component {
               inputLabel="Round1 Target in Eth"
               inputPlaceholder=""
               inputValue={round1TargetEth}
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -144,6 +147,7 @@ class TokenSale extends React.Component {
               inputLabel="Round2 Target in USD"
               inputPlaceholder=""
               inputValue={round2TargetUSD}
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -161,6 +165,7 @@ class TokenSale extends React.Component {
               inputLabel="Round2 Target in Eth"
               inputPlaceholder=""
               inputValue={round2TargetEth}
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -187,6 +192,7 @@ class TokenSale extends React.Component {
               inputLabel="Round3 Target in USD"
               inputPlaceholder=""
               inputValue={round3TargetUSD}
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -204,6 +210,7 @@ class TokenSale extends React.Component {
               inputLabel="Round3 Target in Eth"
               inputPlaceholder=""
               inputValue={round3TargetEth}
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -230,6 +237,7 @@ class TokenSale extends React.Component {
               inputLabel="Token price factor"
               inputPlaceholder=""
               inputValue={tokenPriceFactor}
+              disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -279,6 +287,7 @@ const mapStateToProps = state => {
     round2Rate,
     round3Rate,
     totalSaleTokens,
+    allowEditAll,
     errors
   } = state.projectRegistrationData || {};
   return {
@@ -296,6 +305,7 @@ const mapStateToProps = state => {
     round2Rate,
     round3Rate,
     totalSaleTokens,
+    allowEditAll,
     errors
   };
 };

@@ -359,19 +359,19 @@ export function calculateTokens() {
   };
 }
 
-export function tokenPriceFactorChangedAction(value) {
+export function r1BonusChangedAction(value) {
   return dispatch => {
     dispatch({
-      type: actionTypes.TOKEN_PRICE_FACTOR_CHANGED,
+      type: actionTypes.R1_BONUS_CHANGED,
       payload: value
     });
   };
 }
 
-export function r3TokenPriceFactorChangedAction(value) {
+export function r2BonusChangedAction(value) {
   return dispatch => {
     dispatch({
-      type: actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED,
+      type: actionTypes.R2_BONUS_CHANGED,
       payload: value
     });
   };

@@ -17,7 +17,8 @@ import {
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
   validateDate,
-  validateUniqueName
+  validateUniqueName,
+  validateTotalSaleTokens
 } from "../../helpers/common/validationHelperFunctions";
 import { newProjectRegistration, saveProjectStates, fetchProjectStates, fetchProjectDeploymentIndicator } from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
@@ -88,13 +89,6 @@ class Registration extends Component {
       projectName,
       projectDescription,
       erc20TokenTag,
-      websiteLink,
-      telegramLink,
-      githubLink,
-      mediumLink,
-      facebookLink,
-      twitterLink,
-      teamAddress,
       maxEtherContribution,
       tapIncrementFactor,
       voteSaturationLimit,
@@ -102,17 +96,11 @@ class Registration extends Component {
       initialTapValue,
       daicoStartDate,
       daicoEndDate,
-      round1TargetUSD,
-      round1TargetEth,
-      round2TargetUSD,
-      round2TargetEth,
-      round3TargetUSD,
-      round3TargetEth,
-      tokenPriceFactor,
       projectNames,
       tokenTags,
       errors,
-      project_id
+      project_id,
+      totalSaleTokens
     } = this.props || {};
     const { modalOpen, modalMessage } = this.state;
 
@@ -165,19 +153,11 @@ class Registration extends Component {
                   !validateLength(tapIncrementFactor) ||
                   !validateLength(initialTapValue) ||
                   !validateLength(initialFundRelease) ||
-                  !validateLength(round1TargetEth) ||
-                  !validateLength(round1TargetUSD) ||
-                  !validateLength(round2TargetEth) ||
-                  !validateLength(round2TargetUSD) ||
-                  !validateLength(round3TargetEth) ||
-                  !validateLength(round3TargetUSD) ||
-                  !validateLength(tokenPriceFactor) ||
                   !validateDate(daicoStartDate) ||
                   !validateDate(daicoEndDate) ||
-                  errors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] !== "" ||
-                  errors[actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED] !== "" ||
                   validateUniqueName(projectNames, projectName) ||
-                  validateUniqueName(tokenTags, erc20TokenTag)
+                  validateUniqueName(tokenTags, erc20TokenTag) ||
+                  validateTotalSaleTokens(totalSaleTokens)
                 }
               />
             </div>
@@ -232,7 +212,8 @@ const mapStateToProps = state => {
     round2TargetEth,
     round3TargetUSD,
     round3TargetEth,
-    tokenPriceFactor,
+    r1Bonus,
+    r2Bonus,
     totalSaleTokens,
     errors,
     projectNames,
@@ -269,7 +250,8 @@ const mapStateToProps = state => {
     round3TargetUSD,
     round3TargetEth,
     totalSaleTokens,
-    tokenPriceFactor,
+    r1Bonus,
+    r2Bonus,
     projectNames,
     tokenTags,
     project_id,
@@ -281,7 +263,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       newProjectRegistration,
-      saveProjectStates, 
+      saveProjectStates,
       getProjectNames,
       getTokenTags,
       fetchProjectStates,

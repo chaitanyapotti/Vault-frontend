@@ -17,12 +17,10 @@ import {
   validateMaxEtherContribution,
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
-  validateTokenPriceFactorRange,
-  validateTokenPriceFactorDecimal,
+  validateR2BonusRange,
   validateUniqueName,
   validateDecimal,
-  validateEntityPercentage,
-  validateR3TokenPriceFactorRange
+  validateEntityPercentage
 } from "../../helpers/common/validationHelperFunctions";
 
 export const initialState = {
@@ -55,8 +53,8 @@ export const initialState = {
   round3Rate: 100,
   totalSaleTokens: 0,
   ethPrice: 210,
-  tokenPriceFactor: "",
-  r3TokenPriceFactor: "",
+  r1Bonus: "",
+  r2Bonus: "",
   nonSaleDistribution: [],
   project_id: "",
   teamAddress: "",
@@ -95,8 +93,11 @@ export default function(state = initialState, action) {
       console.log("project details: ", action.payload)
       const { allowEditAll } = state || false
       const { state } = action.payload || {}
+      // return {
+      //   ...state, state, project_id: "", allowEditAll: allowEditAll
+      // }
       return {
-        ...state, state, project_id: "", allowEditAll: allowEditAll
+        ...state
       }
     }
 
@@ -307,32 +308,27 @@ export default function(state = initialState, action) {
       };
     }
 
-    case actionTypes.TOKEN_PRICE_FACTOR_CHANGED: {
-      if (!validateTokenPriceFactorRange(parseFloat(action.payload))) {
-        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "Should be in between 1 & 2";
-      } else if (!validateTokenPriceFactorDecimal(parseFloat(action.payload))) {
-        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "one decimal place allowed";
-      } else {
-        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "";
-      }
+    case actionTypes.R1_BONUS_CHANGED: {
+      // if (!validateR1BonusRange(parseFloat(action.payload))) {
+      //   localErrors[actionTypes.R1_BONUS_CHANGED] = "Should be in between 1 & 100";
+      // } else {
+      //   localErrors[actionTypes.R1_BONUS_CHANGED] = "";
+      // }
       return {
         ...state,
-        tokenPriceFactor: action.payload,
-        errors: localErrors
+        r1Bonus: action.payload
       };
     }
 
-    case actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED: {
-      if (!validateTokenPriceFactorDecimal(parseFloat(action.payload))) {
-        localErrors[actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED] = "one decimal place allowed";
-      } else if (!validateR3TokenPriceFactorRange(parseFloat(action.payload))) {
-        localErrors[actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED] = "Should be in between 1 & 100";
+    case actionTypes.R2_BONUS_CHANGED: {
+      if (!validateR2BonusRange(parseFloat(action.payload))) {
+        localErrors[actionTypes.R2_BONUS_CHANGED] = "Should be in between 1 & 100";
       } else {
-        localErrors[actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED] = "";
+        localErrors[actionTypes.R2_BONUS_CHANGED] = "";
       }
       return {
         ...state,
-        r3TokenPriceFactor: action.payload,
+        r2Bonus: action.payload,
         errors: localErrors
       };
     }

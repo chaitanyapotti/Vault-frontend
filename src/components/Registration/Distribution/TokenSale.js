@@ -11,9 +11,9 @@ import {
   round2TargetEthChangedAction,
   round3TargetUSDChangedAction,
   round3TargetEthChangedAction,
-  tokenPriceFactorChangedAction,
+  r1BonusChangedAction,
   calculateTokens,
-  r3TokenPriceFactorChangedAction
+  r2BonusChangedAction
 } from "../../../actions/projectRegistrationActions";
 import actionTypes from "../../../action_types";
 import { ButtonComponent } from "../../Common/FormComponents";
@@ -66,12 +66,12 @@ class TokenSale extends React.Component {
     return "";
   };
 
-  onChangeTokenPriceFactor = e => {
-    this.props.tokenPriceFactorChangedAction(e.target.value);
+  onChangeR1Bonus = e => {
+    this.props.r1BonusChangedAction(e.target.value);
   };
 
-  onChangeR3TokenPriceFactor = e => {
-    this.props.r3TokenPriceFactorChangedAction(e.target.value);
+  onChangeR2Bonus = e => {
+    this.props.r2BonusChangedAction(e.target.value);
   };
 
   render() {
@@ -88,8 +88,8 @@ class TokenSale extends React.Component {
       round2Tokens,
       round1Tokens,
       round3TargetEth,
-      tokenPriceFactor,
-      r3TokenPriceFactor,
+      r1Bonus,
+      r2Bonus,
       allowEditAll,
       errors
     } = this.props || {};
@@ -198,7 +198,7 @@ class TokenSale extends React.Component {
               inputLabel="Round3 Target in USD"
               inputPlaceholder=""
               inputValue={round3TargetUSD}
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -238,19 +238,19 @@ class TokenSale extends React.Component {
               inputType={CUIInputType.TEXT}
               required
               full
-              forceNumDec
-              inputName="Round-2 Token price factor"
-              inputLabel="Round-2 Token price factor"
+              forceNumeric
+              inputName="Round1 Bonus"
+              inputLabel="Round1 Bonus"
               inputPlaceholder=""
-              inputValue={tokenPriceFactor}
+              inputValue={r1Bonus}
               disabled = {!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
-              onChange={this.onChangeTokenPriceFactor}
-              error={!!this.getErrorMsg(actionTypes.TOKEN_PRICE_FACTOR_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.TOKEN_PRICE_FACTOR_CHANGED)}
+              onChange={this.onChangeR1Bonus}
+              // error={!!this.getErrorMsg(actionTypes.R1_BONUS_CHANGED)}
+              // helperText={this.getErrorMsg(actionTypes.R1_BONUS_CHANGED)}
             />
           </Col>
           <Col lg={6}>
@@ -258,18 +258,18 @@ class TokenSale extends React.Component {
               inputType={CUIInputType.TEXT}
               required
               full
-              forceNumDec
-              inputName="Round-3 Token price factor"
-              inputLabel="Round-3 Token price factor"
+              forceNumeric
+              inputName="Round2 Bonus"
+              inputLabel="Round2 Bonus"
               inputPlaceholder=""
-              inputValue={r3TokenPriceFactor}
+              inputValue={r2Bonus}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
               // onKeyDownSelector="Admin"
-              onChange={this.onChangeR3TokenPriceFactor}
-              error={!!this.getErrorMsg(actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED)}
+              onChange={this.onChangeR2Bonus}
+              error={!!this.getErrorMsg(actionTypes.R2_BONUS_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.R2_BONUS_CHANGED)}
             />
           </Col>
         </Row>
@@ -279,16 +279,16 @@ class TokenSale extends React.Component {
               label="Calculate"
               onClick={this.onCalculateTokenClicked}
               disabled={
-                errors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] !== "" ||
-                errors[actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED] !== "" ||
+                errors[actionTypes.R1_BONUS_CHANGED] !== "" ||
+                errors[actionTypes.R2_BONUS_CHANGED] !== "" ||
                 !validateLength(round1TargetEth) ||
                 !validateLength(round1TargetUSD) ||
                 !validateLength(round2TargetEth) ||
                 !validateLength(round2TargetUSD) ||
                 !validateLength(round3TargetEth) ||
                 !validateLength(round3TargetUSD) ||
-                !validateLength(tokenPriceFactor)||
-                !validateLength(r3TokenPriceFactor)
+                !validateLength(r1Bonus) ||
+                !validateLength(r2Bonus)
               }
             />
           </Col>
@@ -306,8 +306,8 @@ const mapStateToProps = state => {
     round2TargetEth,
     round3TargetUSD,
     round3TargetEth,
-    tokenPriceFactor,
-    r3TokenPriceFactor,
+    r1Bonus,
+    r2Bonus,
     round1Tokens,
     round2Tokens,
     round3Tokens,
@@ -325,8 +325,8 @@ const mapStateToProps = state => {
     round2TargetEth,
     round3TargetUSD,
     round3TargetEth,
-    tokenPriceFactor,
-    r3TokenPriceFactor,
+    r1Bonus,
+    r2Bonus,
     round1Tokens,
     round2Tokens,
     round3Tokens,
@@ -348,9 +348,9 @@ const mapDispatchToProps = dispatch =>
       round2TargetEthChangedAction,
       round3TargetUSDChangedAction,
       round3TargetEthChangedAction,
-      tokenPriceFactorChangedAction,
+      r1BonusChangedAction,
       calculateTokens,
-      r3TokenPriceFactorChangedAction
+      r2BonusChangedAction
     },
     dispatch
   );

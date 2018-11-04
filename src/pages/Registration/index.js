@@ -30,8 +30,11 @@ import actionTypes from "../../action_types";
 class Registration extends Component {
   state = {
     modalOpen: false,
-    modalMessage: ""
+    modalMessage: "",
+    calculateTokensModal: false
   };
+
+  handleCalculateTokensOpen = () => this.setState({ calculateTokensModal: true });
 
   componentDidMount() {
     const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags, userLocalPublicAddress, signinStatusFlag } = this.props || {};
@@ -102,7 +105,7 @@ class Registration extends Component {
       project_id,
       totalSaleTokens
     } = this.props || {};
-    const { modalOpen, modalMessage } = this.state;
+    const { modalOpen, modalMessage, calculateTokensModal } = this.state;
 
     {
       project_id != "" ? this.props.history.push({
@@ -173,6 +176,12 @@ class Registration extends Component {
           </Col>
         </Row>
         <AlertModal open={modalOpen} handleClose={this.handleClose}>
+          <div className="text--center text--danger">
+            <Warning style={{ width: "2em", height: "2em" }} />
+          </div>
+          <div className="text--center push--top">{modalMessage}</div>
+        </AlertModal>
+        <AlertModal open={calculateTokensModal} handleClose={this.handleClose}>
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />
           </div>

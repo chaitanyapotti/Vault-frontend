@@ -1,9 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import Warning from "@material-ui/icons/Warning";
 import { CUIFormInput } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import AlertModal from "../../Common/AlertModal";
 import {
   round1TargetUSDChangedAction,
   round1TargetEthChangedAction,
@@ -20,6 +22,13 @@ import { ButtonComponent } from "../../Common/FormComponents";
 import { validateLength } from "../../../helpers/common/validationHelperFunctions";
 
 class TokenSale extends React.Component {
+  state = {
+    modalOpen: false,
+    modalMessage: ""
+  };
+
+  handleClose = () => this.setState({ modalOpen: false });
+
   onChangeRound1TargetUSD = e => {
     this.props.round1TargetUSDChangedAction(e.target.value);
   };
@@ -45,6 +54,13 @@ class TokenSale extends React.Component {
   };
 
   onCalculateTokenClicked = e => {
+    const { r1Bonus, r2Bonus } = this.props || {};
+    if (parseFloat(r1Bonus) < parseFloat(r2Bonus)) {
+      this.setState({ modalOpen: true, modalMessage: `Round 1 bonus should be atleast as much as the round 2 bonus: ${r2Bonus}%` });
+    }
+    if (parseFloat(r1Bonus) > 100 + 2 * parseFloat(r2Bonus)) {
+      this.setState({ modalOpen: true, modalMessage: `Round 1 bonus should be less than ${100 + 2 * r2Bonus}% to prevent a price jump of more than doubling between Round 1 & 2.` });
+    }
     this.props.calculateTokens();
   };
 
@@ -93,6 +109,7 @@ class TokenSale extends React.Component {
       allowEditAll,
       errors
     } = this.props || {};
+    const { modalOpen, modalMessage } = this.state || {};
     return (
       <div>
         <div className="txt-xl">Token Sale Distribution</div>
@@ -108,7 +125,7 @@ class TokenSale extends React.Component {
               inputLabel="Round1 Target in USD"
               inputPlaceholder=""
               inputValue={round1TargetUSD}
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -126,7 +143,7 @@ class TokenSale extends React.Component {
               inputLabel="Round1 Target in Eth"
               inputPlaceholder=""
               inputValue={round1TargetEth}
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -153,7 +170,7 @@ class TokenSale extends React.Component {
               inputLabel="Round2 Target in USD"
               inputPlaceholder=""
               inputValue={round2TargetUSD}
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -171,7 +188,7 @@ class TokenSale extends React.Component {
               inputLabel="Round2 Target in Eth"
               inputPlaceholder=""
               inputValue={round2TargetEth}
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -216,7 +233,7 @@ class TokenSale extends React.Component {
               inputLabel="Round3 Target in Eth"
               inputPlaceholder=""
               inputValue={round3TargetEth}
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -243,7 +260,7 @@ class TokenSale extends React.Component {
               inputLabel="Round1 Bonus"
               inputPlaceholder=""
               inputValue={r1Bonus}
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -279,7 +296,6 @@ class TokenSale extends React.Component {
               label="Calculate"
               onClick={this.onCalculateTokenClicked}
               disabled={
-                errors[actionTypes.R1_BONUS_CHANGED] !== "" ||
                 errors[actionTypes.R2_BONUS_CHANGED] !== "" ||
                 !validateLength(round1TargetEth) ||
                 !validateLength(round1TargetUSD) ||
@@ -293,6 +309,12 @@ class TokenSale extends React.Component {
             />
           </Col>
         </Row>
+        <AlertModal open={modalOpen} handleClose={this.handleClose}>
+          <div className="text--center text--danger">
+            <Warning style={{ width: "2em", height: "2em" }} />
+          </div>
+          <div className="text--center push--top">{modalMessage}</div>
+        </AlertModal>
       </div>
     );
   }

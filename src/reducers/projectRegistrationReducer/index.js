@@ -20,8 +20,10 @@ import {
   validateR2BonusRange,
   validateUniqueName,
   validateDecimal,
-  validateEntityPercentage
+  validateEntityPercentage,
 } from "../../helpers/common/validationHelperFunctions";
+
+import {significantDigits} from "../../helpers/common/projectDetailhelperFunctions"
 
 export const initialState = {
   adminName: "",
@@ -88,14 +90,13 @@ export const initialState = {
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
-
     case actionTypes.PROJECT_STATES_SUCCESS: {
       console.log("project details: ", action.payload)
       const { allowEditAll } = state || false
-      const { state } = action.payload || {}
+      const { state:oldState } = action.payload || {}
       if (action.payload){
         return {
-          ...state, state, project_id: "", allowEditAll: allowEditAll
+          ...state, oldState, project_id: "", allowEditAll: allowEditAll
         }  
       }else{
         return {
@@ -105,9 +106,9 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS:{
-      const deploymentIndicator = action.payload.currentDeploymentIndicator || 0
+      const { currentDeploymentIndicator } = action.payload || 0 
       let allowEditAll = false
-      if (deploymentIndicator>0){
+      if (currentDeploymentIndicator>0){
         allowEditAll = false
       }else{
         allowEditAll = true
@@ -143,7 +144,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.THUMBNAIL_CHANGED: {
-      return { ...state, thumbnailImage: action.payload}
+      return { ...state, thumbnailImage: action.payload };
     }
 
     case actionTypes.UPLOADING_THUMBNAIL: {
@@ -252,9 +253,9 @@ export default function(state = initialState, action) {
       var round3Rate = 100;
       var round2Rate = (1+parseFloat(r2Bonus)/100)*round3Rate;
       var round1Rate = (1+parseFloat(r1Bonus)/100)*round3Rate;
-      var round1N = round1Rate * parseInt(round1TargetEth);
-      var round2N = round2Rate * parseInt(round2TargetEth);
-      var round3N = round3Rate * parseInt(round3TargetEth);
+      var round1N = round1Rate * parseFloat(round1TargetEth);
+      var round2N = round2Rate * parseFloat(round2TargetEth);
+      var round3N = round3Rate * parseFloat(round3TargetEth);
       var N = round1N + round2N + round3N;
       var K = Math.round(500000000 / N);
       var round1Tokens = round1N * K
@@ -267,13 +268,13 @@ export default function(state = initialState, action) {
       saleEntities.push({ entityName: "Round3", entityPercentage: parseFloat((round3Tokens * 50 / totalSaleTokens).toFixed(2)), entityAddress: "NA" })
       return {
         ...state,
-        round1Tokens: round1Tokens,
-        round2Tokens: round2Tokens,
-        round3Tokens: round3Tokens,
-        round1Rate: round1Rate * K,
-        round2Rate: round2Rate * K,
-        round3Rate: round3Rate * K,
-        totalSaleTokens: totalSaleTokens,
+        round1Tokens: significantDigits(round1Tokens),
+        round2Tokens: significantDigits(round2Tokens),
+        round3Tokens: significantDigits(round3Tokens),
+        round1Rate: significantDigits(round1Rate * K),
+        round2Rate: significantDigits(round2Rate * K),
+        round3Rate: significantDigits(round3Rate * K),
+        totalSaleTokens: significantDigits(totalSaleTokens),
         saleEntities: saleEntities
       };
     }

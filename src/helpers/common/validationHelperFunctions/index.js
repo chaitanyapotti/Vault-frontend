@@ -121,11 +121,11 @@ const checkMetaMask = address => {
   return isValid;
 };
 const validateGitLink = gitLink => {
-  const re = /^(?:https?:\/\/)?(?:www\.)?github\.com\/(?:#!\/)?[a-zA-Z0-9_]+$/i;
+  const re = /^(?:https?:\/\/)?(?:www\.)?github\.com\/(?:#!\/)?[a-zA-Z0-9_/-]+$/i;
   return re.test(gitLink);
 };
 const validateMediumLink = mediumLink => {
-  const re = /^(?:https?:\/\/)?(?:www\.)?medium\.com\/(@)?[a-zA-Z0-9_]+$/i;
+  const re = /^(?:https?:\/\/)?(?:www\.)?medium\.com\/(?:@\/)?[a-zA-Z0-9/@-]+$/i;
   return re.test(mediumLink);
 };
 const validateTelegramLink = telegramLink => {

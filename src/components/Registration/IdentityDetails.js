@@ -26,7 +26,6 @@ import { ButtonComponent } from "../Common/FormComponents";
 import actionTypes from "../../action_types";
 
 class IdentityDetails extends React.Component {
-
   state = {
     thumbnailFile: ""
   };
@@ -81,6 +80,7 @@ class IdentityDetails extends React.Component {
 
   whitepaperChanged = e => {
     this.props.whitepaperChangedAction(e.target.files[0]);
+    this.uploadWhitepaper();
   };
 
   uploadWhitepaper = () => {
@@ -90,6 +90,7 @@ class IdentityDetails extends React.Component {
   thumbnailChanged = e => {
     this.props.thumbnailChangedAction(e.target.files[0]);
     this.setState({ thumbnailFile: URL.createObjectURL(e.target.files[0]) });
+    this.uploadThumbnail();
   };
 
   uploadThumbnail = () => {
@@ -149,7 +150,7 @@ class IdentityDetails extends React.Component {
               inputPlaceholder="Eg. Adam Smith"
               inputValue={adminName}
               textFocus
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -168,7 +169,7 @@ class IdentityDetails extends React.Component {
               inputLabel="Admin Email"
               inputPlaceholder="Eg. admin@electus.network"
               inputValue={adminEmail}
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -191,7 +192,7 @@ class IdentityDetails extends React.Component {
               inputPlaceholder="Eg. Electus"
               inputValue={projectName}
               textFocus
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -210,7 +211,7 @@ class IdentityDetails extends React.Component {
               inputLabel="ERC20 Ticker"
               inputPlaceholder="Eg. ELE"
               inputValue={erc20TokenTag}
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -367,7 +368,7 @@ class IdentityDetails extends React.Component {
               inputLabel="Team Address"
               inputPlaceholder="Eg. 0xdbf6df7e94e3019e1705e699a8874ac5f6ed753e"
               inputValue={teamAddress}
-              disabled = {!allowEditAll}
+              disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
               // helperText={this.state.errorAgeText}
@@ -378,31 +379,21 @@ class IdentityDetails extends React.Component {
             />
           </Col>
         </Row>
+
         <Row className="push--top">
-          <Col lg={8}>
+          <Col lg={6}>
             <div className="upload-btn-wrapper">
-              <button className="upload-btn">Choose file</button>
+              <ButtonComponent >Upload Whitepaper</ButtonComponent>
               <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
             </div>
             <span className="push--left">{this.props.whitepaperPDF.name}</span>
           </Col>
-          <Col lg={4}>
-            <ButtonComponent id="uploadWhitepaper" label="Upload Whitepaper" onClick={this.uploadWhitepaper} />
-            {uploadingWhitepaper ? <div>Uploading</div> : <div>{whitepaperUrl} </div>}
-          </Col>
-        </Row>
-
-        <Row className="push--top">
-          <Col lg={8}>
+          <Col lg={6}>
             <div className="upload-btn-wrapper">
-              <button className="upload-btn">Choose file</button>
+              <ButtonComponent>Upload Thumbnail</ButtonComponent>
               <input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
             </div>
-            <span className="push--left">{this.props.thumbnailImage.name}</span>
-          </Col>
-          <Col lg={4}>
-            <ButtonComponent id="uploadThumbnail" label="Upload Thumbnail" onClick={this.uploadThumbnail} />
-            {uploadingThumbnail ? <div>Uploading</div> : <div>{thumbnailUrl} </div>}
+            <span>{this.props.thumbnailImage.name}</span>
           </Col>
         </Row>
         <Row className="push--top">

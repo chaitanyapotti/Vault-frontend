@@ -1,7 +1,7 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  currentRoundNumber: 0,
+  currentRoundNumber: "0",
   treasuryStateNumber: "0"
 };
 

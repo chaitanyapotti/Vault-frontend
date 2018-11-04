@@ -14,7 +14,10 @@ const constants = {
   UPCOMING_DAICOS_FAILED_MESSAGE: "Failed to retrieve Upcoming DAICOs, please reload the page.",
   USER_TOKENS_FAILED_MESSAGE: "Failed to retrieve User Tokens, please reload the page.",
   PROJECT_NAMES_FAILED_MESSAGE: "Failed to retrieve Project Names, please reload the page.",
-  TOKEN_TAGS_FAILED_MESSAGE: "Failed to retrieve Token Tags, please reload the page."
+  TOKEN_TAGS_FAILED_MESSAGE: "Failed to retrieve Token Tags, please reload the page.",
+  PROJECT_STATES_FAILED_MESSAGE: "Failed to retrieve previously stored information.",
+  PROJECT_STATES_SAVED_FAILED_MESSAGE: "Failed to save current form states.",
+  PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE: "Failed to retrieve deployment indicator, please revisit the page again."
 };
 
 export default constants;

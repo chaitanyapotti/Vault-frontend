@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { IPreGovernanceDetails, IssuerPreGovernanceName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
-import { getEtherCollected, getRoundTokensSold, finalizeR1, startR1 } from "../../actions/projectCrowdSaleActions/index";
+import { getEtherCollected, getRoundTokensSold, finalizeR1 } from "../../actions/projectCrowdSaleActions/index";
+import { startR1 } from "../../actions/issuerDetailGovernanceActions/index";
 import { formatFromWei, getR1Price, getR1Goal, getHardCap, getSoftCap, formatDate } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -41,8 +42,8 @@ class IssuerDetailPreGovernance extends Component {
   };
 
   onStartR1Click = () => {
-    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress } = this.props || {};
-    r1Start(version, crowdSaleAddress, userLocalPublicAddress);
+    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress, projectid } = this.props || {};
+    r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid);
   };
 
   render() {

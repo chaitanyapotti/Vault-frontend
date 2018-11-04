@@ -4,8 +4,9 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
+import { ButtonComponent } from "../FormComponents";
 
-const ProjectGovernanceName = props => {
+const IssuerGovernanceName = props => {
   const {
     urls,
     projectName,
@@ -18,15 +19,11 @@ const ProjectGovernanceName = props => {
     lastRoundInfo,
     buttonText,
     onClick,
-    buttonVisibility,
     priceIncrementFlag,
-    buttonSpinning,
-    buyButtonVisibility,
-    onBuyClick,
-    buyButtonText,
-    signinStatusFlag,
-    tradeButtonVisibility,
-    tradeUrl
+    startNewRoundButtonSpinning,
+    isPermissioned,
+    onEditClick,
+    canStartNewRound
   } = props || {};
   const { website } = urls;
   return (
@@ -77,36 +74,36 @@ const ProjectGovernanceName = props => {
           </div>
         </Col>
         <Col lg={6} className="text-right hl">
-          {signinStatusFlag <= 2 ? (
+          {!isPermissioned || !canStartNewRound ? (
             <div className="hli">
-              <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+              <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
                 <div>
-                  <LoadingButton tooltip="This feature is only for Vault Members" disabled>
-                    {buttonText}
-                  </LoadingButton>
+                  <LoadingButton disabled>{buttonText}</LoadingButton>
                 </div>
               </Tooltip>
             </div>
-          ) : buttonVisibility ? (
+          ) : (
             <span className="hli">
-              <LoadingButton onClick={onClick} loading={buttonSpinning}>
+              <LoadingButton onClick={onClick} loading={startNewRoundButtonSpinning} disabled={!canStartNewRound}>
                 {buttonText}
               </LoadingButton>
             </span>
-          ) : buyButtonVisibility ? (
+          )}
+          {!isPermissioned ? (
+            <div className="hli">
+              <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
+                <LoadingButton disabled>Edit</LoadingButton>
+              </Tooltip>
+            </div>
+          ) : (
             <span className="hli">
-              <LoadingButton onClick={onBuyClick}>{buyButtonText}</LoadingButton>
+              <ButtonComponent onClick={onEditClick} label="Edit" />
             </span>
-          ) : null}
-          {tradeButtonVisibility ? (
-            <a className="hli push-left--13" href={tradeUrl} target="_blank" rel="noopener noreferrer">
-              <LoadingButton onClick={null}>Trade</LoadingButton>
-            </a>
-          ) : null}
+          )}
         </Col>
       </Row>
     </CUICard>
   );
 };
 
-export default ProjectGovernanceName;
+export default IssuerGovernanceName;

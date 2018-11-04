@@ -19,7 +19,7 @@ import {
   validateDate,
   validateUniqueName
 } from "../../helpers/common/validationHelperFunctions";
-import { newProjectRegistration } from "../../actions/projectRegistrationActions";
+import { newProjectRegistration, saveProjectStates, fetchProjectStates, fetchProjectDeploymentIndicator } from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
 import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
@@ -33,7 +33,19 @@ class Registration extends Component {
   };
 
   componentDidMount() {
-    const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags } = this.props || {};
+    const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags, userLocalPublicAddress, signinStatusFlag } = this.props || {};
+    if (signinStatusFlag!=5){
+      this.props.history.push({
+        pathname: `/`
+      })
+    }
+    if (userLocalPublicAddress) {
+      this.props.fetchProjectStates(userLocalPublicAddress);
+      this.props.fetchProjectDeploymentIndicator(userLocalPublicAddress);
+    } else {
+      this.props.fetchProjectStates("0xb758c38326Df3D75F1cf0DA14Bb8220Ca4231e74");
+      this.props.fetchProjectDeploymentIndicator("0xb758c38326Df3D75F1cf0DA14Bb8220Ca4231e74");
+    }
     fetchProjectNames();
     fetchTokenTags();
   }
@@ -45,7 +57,8 @@ class Registration extends Component {
       initialTapValue,
       newProjectRegistration: projectRegistration,
       projectRegistrationData: registrationData,
-      userLocalPublicAddress: localAddress
+      userLocalPublicAddress: localAddress,
+      saveProjectStates: saveProjectStates
     } = this.props || {};
     if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
       this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
@@ -53,8 +66,18 @@ class Registration extends Component {
       this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than Initial Fund Release" });
     } else {
       projectRegistration(registrationData, localAddress);
+      saveProjectStates(registrationData, localAddress);
     }
   };
+
+  handleSaveButtonClicked = () => {
+    const {
+      projectRegistrationData: registrationData,
+      userLocalPublicAddress: localAddress,
+      saveProjectStates: saveProjectStates
+    } = this.props || {};
+    saveProjectStates(registrationData, localAddress);
+  }
 
   handleClose = () => this.setState({ modalOpen: false });
 
@@ -88,10 +111,17 @@ class Registration extends Component {
       tokenPriceFactor,
       projectNames,
       tokenTags,
-      errors
+      errors,
+      project_id
     } = this.props || {};
-    console.log(teamAddress, "t");
     const { modalOpen, modalMessage } = this.state;
+
+    {
+      project_id != "" ? this.props.history.push({
+        pathname: `/issuergovernance/details`,
+        search: `?projectid=${project_id}`
+      }) : null
+    }
     return (
       <Grid>
         <Row className="push--top">
@@ -100,8 +130,12 @@ class Registration extends Component {
           </Col>
           <Col xs={12} lg={5}>
             <div style={{ textAlign: "center" }}>
+            <ButtonComponent 
+              style={{ width: "45%" }}
+              label="Save"
+              onClick={this.handleSaveButtonClicked} />
               <ButtonComponent
-                style={{ width: "85%" }}
+                style={{ width: "45%" }}
                 label="Publish DAICO"
                 onClick={this.handlePublishDaico}
                 disabled={
@@ -171,7 +205,7 @@ class Registration extends Component {
 
 const mapStateToProps = state => {
   const { projectRegistrationData } = state || {};
-  const { userLocalPublicAddress } = state.signinManagerData || {};
+  const { userLocalPublicAddress, signinStatusFlag } = state.signinManagerData || {};
   const {
     adminName,
     adminEmail,
@@ -202,7 +236,8 @@ const mapStateToProps = state => {
     totalSaleTokens,
     errors,
     projectNames,
-    tokenTags
+    tokenTags,
+    project_id
   } = state.projectRegistrationData || {};
   return {
     projectRegistrationData,
@@ -236,7 +271,9 @@ const mapStateToProps = state => {
     totalSaleTokens,
     tokenPriceFactor,
     projectNames,
-    tokenTags
+    tokenTags,
+    project_id,
+    signinStatusFlag
   };
 };
 
@@ -244,8 +281,11 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       newProjectRegistration,
+      saveProjectStates, 
       getProjectNames,
-      getTokenTags
+      getTokenTags,
+      fetchProjectStates,
+      fetchProjectDeploymentIndicator
     },
     dispatch
   );

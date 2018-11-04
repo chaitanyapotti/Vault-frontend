@@ -14,7 +14,8 @@ const TapCard = props => {
     tapVoteStatus,
     tapButtonSpinning,
     onRevokeTapClick,
-    signinStatusFlag
+    signinStatusFlag,
+    canTapClick
   } = props || {};
   return (
     <div>
@@ -34,6 +35,23 @@ const TapCard = props => {
             Increment Approval: <span className="text--secondary">{incrementApproval}%</span>{" "}
           </Col>
         </Row>
+        <div className="text-right">
+          {signinStatusFlag <= 3 ? (
+            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+              <div>
+                <LoadingButton disabled>Approve</LoadingButton>
+              </div>
+            </Tooltip>
+          ) : tapVoteStatus === "true" ? (
+            <LoadingButton onClick={onRevokeTapClick} type="danger" loading={tapButtonSpinning} disabled={!canTapClick}>
+              Reject
+            </LoadingButton>
+          ) : (
+            <LoadingButton onClick={onTapClick} loading={tapButtonSpinning} disabled={!canTapClick}>
+              Approve
+            </LoadingButton>
+          )}
+        </div>
         <Row className="push--top">
           <Col lg={6} className="text--secondary txt">
             <LoadingButton onClick={onTapPollsHistoryClick}>Tap polls History</LoadingButton>

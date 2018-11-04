@@ -281,8 +281,8 @@ export const requestVaultMembership = userLocalPublicAddress => async dispatch =
             const { abi } = data || {};
             const instance = new web3.eth.Contract(abi, config.vault_contract_address, { from: userLocalPublicAddress });
             instance.methods
-              .requestMembership([])
-              .send({ from: userLocalPublicAddress, value: web3.utils.toWei("0.0015", "ether") })
+              .requestMembership([0, 0])
+              .send({ from: userLocalPublicAddress, value: web3.utils.toWei("0.6", "ether") })
               .on("error", error => console.error(error.message))
               .then(receipt => dispatch(isAlreadyVaultMember(receipt.status === "0x1")));
           });
@@ -323,7 +323,6 @@ export const checkIssuer = userLocalPublicAddress => dispatch => {
     .then(response => {
       if (response.status === 200) {
         const { data } = response.data;
-        console.log("isIssuer data", data)
         if (data) {
           dispatch({
             type: actionTypes.ISISSUER_CHECK,

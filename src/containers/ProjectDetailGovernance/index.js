@@ -247,6 +247,7 @@ class ProjectDetailGovernance extends Component {
 
   getTapPollConsensus = () => {
     const { tapPollConsensus, tokensUnderGovernance } = this.props || {};
+    if (tapPollConsensus === "No Poll") return 0;
     return significantDigits(parseFloat(tapPollConsensus) / parseFloat(tokensUnderGovernance) || 0);
   };
 
@@ -359,6 +360,11 @@ class ProjectDetailGovernance extends Component {
     killFinalize(version, pollFactoryAddress, userLocalPublicAddress);
   };
 
+  canTapClick = () => {
+    const { tapPollConsensus } = this.props || {};
+    return tapPollConsensus !== "No Poll";
+  }
+  
   canUnlockTokens = () => {
     const { xfrVoteData, tapVoteData, killVoteData } = this.props || {};
     const { voted: killVoted } = killVoteData || {};
@@ -562,6 +568,7 @@ class ProjectDetailGovernance extends Component {
               onRevokeTapClick={this.onRevokeTapClick}
               tapButtonSpinning={tapButtonSpinning}
               signinStatusFlag={signinStatusFlag}
+              canTapClick={this.canTapClick()}
               onUnlockTokensClick={this.handleUnlockTokensOpen}
               onTapPollsHistoryClick={this.handleTapPollsHistoryOpen}
             />

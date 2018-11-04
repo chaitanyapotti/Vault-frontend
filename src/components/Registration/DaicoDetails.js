@@ -87,8 +87,9 @@ class DaicoDetails extends React.Component {
   };
 
   getEndMinDate = () => {
-    const { daicoStartDate } = this.props || {};
-    const year = daicoStartDate && daicoStartDate.getFullYear();
+    let { daicoStartDate } = this.props || {};
+    daicoStartDate = new Date(daicoStartDate) || new Date();
+    const year =  daicoStartDate && daicoStartDate.getFullYear();
     const month = daicoStartDate && daicoStartDate.getMonth();
     const date = daicoStartDate && daicoStartDate.getDate();
     const newDate = new Date(year, month, date);
@@ -96,7 +97,8 @@ class DaicoDetails extends React.Component {
   };
 
   getEndMaxDate = () => {
-    const { daicoStartDate } = this.props || {};
+    let { daicoStartDate } = this.props || {};
+    daicoStartDate = new Date(daicoStartDate) || new Date();
     const year = daicoStartDate && daicoStartDate.getFullYear();
     const month = daicoStartDate && daicoStartDate.getMonth();
     const date = daicoStartDate && daicoStartDate.getDate();
@@ -105,8 +107,10 @@ class DaicoDetails extends React.Component {
   }
 
   render() {
-    const { daicoStartDate, daicoEndDate, initialFundRelease, maxEtherContribution, initialTapValue, tapIncrementFactor, voteSaturationLimit } =
+    const { daicoEndDate, initialFundRelease, maxEtherContribution, initialTapValue, tapIncrementFactor, voteSaturationLimit, allowEditAll } =
       this.props || {};
+    const { daicoStartDate } = this.props || {};
+    // console.log("daico start date: ", daicoStartDate)
     return (
       <div>
         <CUICard style={{ padding: "40px 50px" }}>
@@ -114,21 +118,34 @@ class DaicoDetails extends React.Component {
           <hr />
           <Row>
             <Col xs={12} lg={6}>
+            {allowEditAll?
               <DTPicker 
                 selectedDate={daicoStartDate} 
                 disablePast={true} 
                 label="Round 1 Start Date" 
                 handleDateChange={this.onChangeDaicoStart} 
               />
+            :<div>
+              {daicoStartDate}
+            </div>
+              
+            }
+              
             </Col>
             <Col xs={12} lg={6}>
+            {allowEditAll?
               <DTPicker 
                 selectedDate={daicoEndDate} 
                 minDate={this.getEndMinDate()}  
                 maxDate={this.getEndMaxDate()}
                 label="Round 1 End Date" 
                 handleDateChange={this.onChangeDaicoEnd} 
-              />
+              />:
+              <div>
+              {daicoEndDate}
+              </div>              
+            }
+              
             </Col>
           </Row>
           <Row>
@@ -143,6 +160,7 @@ class DaicoDetails extends React.Component {
                 inputPlaceholder="Eg. 100"
                 inputValue={initialFundRelease}
                 textFocus
+                disabled = {!allowEditAll}
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}
                 // helperText={this.state.errorAgeText}
@@ -161,6 +179,7 @@ class DaicoDetails extends React.Component {
                 inputPlaceholder="Eg. 5"
                 inputValue={maxEtherContribution}
                 textFocus
+                disabled = {!allowEditAll}
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}
                 // helperText={this.state.errorAgeText}
@@ -194,6 +213,7 @@ class DaicoDetails extends React.Component {
                 inputPlaceholder="Eg. 100"
                 inputValue={initialTapValue}
                 textFocus
+                disabled = {!allowEditAll}
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}
                 // helperText={this.state.errorAgeText}
@@ -214,6 +234,7 @@ class DaicoDetails extends React.Component {
                 inputPlaceholder="Eg. 1.5"
                 inputValue={tapIncrementFactor}
                 textFocus
+                disabled = {!allowEditAll}
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}
                 // helperText={this.state.errorAgeText}
@@ -236,6 +257,7 @@ class DaicoDetails extends React.Component {
                 inputPlaceholder="Eg. 0.05%"
                 inputValue={voteSaturationLimit}
                 textFocus
+                disabled = {!allowEditAll}
                 // onBlur={this.onBlurAge}
                 // error={this.state.errorAgeText !== ''}
                 // helperText={this.state.errorAgeText}
@@ -262,6 +284,7 @@ const mapStateToProps = state => {
     initialTapValue,
     tapIncrementFactor,
     voteSaturationLimit,
+    allowEditAll,
     errors
   } = state.projectRegistrationData || {};
   return {
@@ -273,6 +296,7 @@ const mapStateToProps = state => {
     initialTapValue,
     tapIncrementFactor,
     voteSaturationLimit,
+    allowEditAll,
     errors
   };
 };

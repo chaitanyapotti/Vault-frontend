@@ -1,6 +1,5 @@
 import axios from "axios";
 import config from "../../config";
-import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
 import constants from "../../constants";
 

@@ -1,70 +1,44 @@
 import React, { Component } from "react";
 import { CUICard } from "../../../../helpers/material-ui";
-import ReqType from "./ReqType";
+import IssuerReqType from "./IssuerReqType";
 
-class FundReq extends Component {
+class IssuerFundReq extends Component {
   getObject1 = () => {
-    const {
-      data,
-      details,
-      onXfrPollHistoryClick,
-      xfrVoteData,
-      signinStatusFlag,
-      onRevokeXfr1Click,
-      onXfr1Click,
-      xfr1ButtonSpinning,
-      tokensUnderGovernance
-    } = this.props || {};
+    const { data, details, tokensUnderGovernance } = this.props || {};
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
     const requiredData = details ? details.filter(x => x.address === address) : [];
     const { name, description, startDate } = requiredData[0] || {};
-    const requiredVote = xfrVoteData ? xfrVoteData.filter(x => x.address === address) : [];
-    const { voted } = requiredVote[0] || false;
     return endTime ? (
       <CUICard style={{ padding: "40px 50px" }}>
-        <ReqType
+        <IssuerReqType
           amount={amount}
           consensus={consensus}
           endTime={endTime}
           name={name}
           description={description}
           startDate={startDate}
-          voted={voted}
-          signinStatusFlag={signinStatusFlag}
-          onRevokeXfrClick={onRevokeXfr1Click}
-          onXfrClick={onXfr1Click}
-          xfrButtonSpinning={xfr1ButtonSpinning}
           tokensUnderGovernance={tokensUnderGovernance}
-          onXfrPollHistoryClick={onXfrPollHistoryClick}
         />
       </CUICard>
     ) : null;
   };
 
   getObject2 = () => {
-    const { data, details, xfrVoteData, signinStatusFlag, onRevokeXfr2Click, onXfr2Click, xfr2ButtonSpinning, tokensUnderGovernance } =
-      this.props || {};
+    const { data, details, tokensUnderGovernance } = this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime, address } = poll2 || {};
     const requiredData = details ? details.filter(x => x.address === address) : [];
-    const { name, description, startDate } = requiredData[0] || {}; //
-    const requiredVote = xfrVoteData ? xfrVoteData.filter(x => x.address === address) : [];
-    const { voted } = requiredVote[0] || false;
+    const { name, description, startDate } = requiredData[0] || {};
     return endTime ? (
       <CUICard style={{ padding: "40px 50px" }}>
-        <ReqType
+        <IssuerReqType
           amount={amount}
           consensus={consensus}
           endTime={endTime}
           name={name}
           description={description}
           startDate={startDate}
-          voted={voted}
-          signinStatusFlag={signinStatusFlag}
-          onRevokeXfrClick={onRevokeXfr2Click}
-          onXfrClick={onXfr2Click}
-          xfrButtonSpinning={xfr2ButtonSpinning}
           tokensUnderGovernance={tokensUnderGovernance}
         />
       </CUICard>
@@ -81,4 +55,4 @@ class FundReq extends Component {
   }
 }
 
-export default FundReq;
+export default IssuerFundReq;

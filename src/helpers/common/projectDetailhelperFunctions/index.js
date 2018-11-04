@@ -42,9 +42,7 @@ const pollState = (startTime, endTime) => {
 
 const significantDigits = number => {
   let input = number;
-  if (input === 0) {
-    return 0;
-  }
+  if (input === 0) return input;
   if (input < 1) {
     input *= 100;
   }

@@ -80,6 +80,7 @@ export const initialState = {
   thumbnailImage: "",
   uploadingThumbnail: false,
   thumbnailUrl: "",
+  allowEditAll: false,
   errors: {
     [actionTypes.ADMIN_NAME_CHANGED]: "",
     [actionTypes.ADMIN_EMAIL_CHANGED]: ""
@@ -89,6 +90,29 @@ export const initialState = {
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
+
+    case actionTypes.PROJECT_STATES_SUCCESS: {
+      console.log("project details: ", action.payload)
+      const { allowEditAll } = state || false
+      const { state } = action.payload || {}
+      return {
+        ...state, state, project_id: "", allowEditAll: allowEditAll
+      }
+    }
+
+    case actionTypes.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS:{
+      const deploymentIndicator = action.payload.currentDeploymentIndicator || 0
+      let allowEditAll = false
+      if (deploymentIndicator>0){
+        allowEditAll = false
+      }else{
+        allowEditAll = true
+      }
+      return {
+        ...state, allowEditAll: allowEditAll
+      }
+    }
+
     case actionTypes.FETCH_PROJECT_NAMES_SUCCESS: {
       return {
         ...state,

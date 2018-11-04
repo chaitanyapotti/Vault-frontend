@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Warning from "@material-ui/icons/Warning";
-import { ProjectGovernanceName, PDetailGovernance, TapCard, FundReq } from "../../components/Common/ProjectDetails";
+import { ProjectGovernanceName, PDetailGovernance, TapCard, FundReq, SpendCurve, VoteHistogram } from "../../components/Common/ProjectDetails";
 import { getRoundTokensSold, buyTokens, getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -573,6 +573,10 @@ class ProjectDetailGovernance extends Component {
               onTapPollsHistoryClick={this.handleTapPollsHistoryOpen}
             />
           </Col>
+          <Col xs={12} lg={6}>
+            <SpendCurve
+            />
+          </Col> 
         </Row>
 
         <Row className="push--top">
@@ -590,6 +594,10 @@ class ProjectDetailGovernance extends Component {
               xfr2ButtonSpinning={xfr2ButtonSpinning}
               tokensUnderGovernance={tokensUnderGovernance}
               onXfrPollHistoryClick={this.handleXfrPollsHistoryOpen}
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <VoteHistogram
             />
           </Col>
         </Row>

@@ -19,6 +19,7 @@ import SigninManager from "./containers/SigninManager";
 import Register from "./containers/Register";
 import store from "./store";
 import Search from "./pages/Search";
+import WhiteList from "./pages/WhiteList";
 
 const App = props => {
   const { history } = props || {};
@@ -36,7 +37,7 @@ const App = props => {
             <Route exact path="/registration" component={Registration} />
             <Route exact path="/dashboard" component={Dashboard} />
             <Route exact path="/deploy" component={Deployer} />
-            <Route exact path="/register" component={Register} />
+            <Route exact path="/register" component={WhiteList} />
             <Route path="/search" component={Search} />
           </Switch>
           <SigninManager />

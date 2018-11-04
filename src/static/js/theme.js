@@ -4,7 +4,7 @@ import { isMobile } from "../../helpers/common/deviceDetect";
 
 const customTheme = {
   typography: {
-    fontFamily: "Roboto",
+    fontFamily: "Montserrat",
   },
   palette: {
     [CUIColor.PRIMARY]: {

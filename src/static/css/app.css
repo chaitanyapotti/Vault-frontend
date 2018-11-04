@@ -54,6 +54,10 @@ a {
   cursor: pointer;
 }
 
+text{
+  font-size: 16px !important;
+}
+
 .hide {
   display: none;
 }

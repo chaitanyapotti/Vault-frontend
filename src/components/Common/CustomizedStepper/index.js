@@ -60,7 +60,7 @@ class CustomizedStepper extends React.Component {
         <Stepper alternativeLabel activeStep={activeStep} connector={connector}>
           {steps.map(label => (
             <Step key={label}>
-              <StepLabel>{label}</StepLabel>
+              <StepLabel><div className="txt">{label}</div></StepLabel>
             </Step>
           ))}
         </Stepper>

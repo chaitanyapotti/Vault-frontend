@@ -77,7 +77,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
           if (response.data.message === constants.SUCCESS) {
             dispatch({
               type: actionTypes.PROJECT_REGISTRATION_SUCCESS,
-              payload: response.data.data.project_id
+              payload: response.data.data
             });
           } else {
             dispatch({
@@ -110,7 +110,7 @@ export function saveProjectStates(projectData, userLocalPublicAddress){
           if (response.data.message === constants.SUCCESS) {
             dispatch({
               type: actionTypes.PROJECT_STATES_SAVED_SUCCESS,
-              payload: response.data.data.project_id
+              payload: response.data.data
             });
           } else {
             dispatch({
@@ -162,6 +162,38 @@ export function fetchProjectStates(userLocalPublicAddress){
       dispatch({
         type: actionTypes.PROJECT_STATES_FAILED,
         payload: constants.PROJECT_STATES_FAILED_MESSAGE
+      });
+    })
+}
+
+export function fetchProjectDeploymentIndicator(userLocalPublicAddress){
+  return dispatch => 
+  axios
+    .get(`${config.api_base_url}/db/projects/deployment/indicator`, { params: { useraddress: userLocalPublicAddress } })
+    .then( response => {
+      if (response.status === 200) {
+        if (response.data.message === constants.SUCCESS) {
+          dispatch({
+            type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS,
+            payload: response.data.data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
+            payload: response.data.reason
+          });
+        }
+      } else {
+        dispatch({
+          type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
+          payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
+        });
+      }
+    }).catch(error => {
+      console.log(error)
+      dispatch({
+        type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
+        payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
       });
     })
 }

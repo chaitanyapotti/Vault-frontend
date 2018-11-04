@@ -155,16 +155,20 @@ class HeaderPartial extends React.Component {
   onHandleProjectsClicked = () => {
     this.props.history.push({
       pathname: `/projects`
-      // search: "?contract=" + this.props.searchText
     });
   };
 
   onHandleGovernanceClicked = () => {
     this.props.history.push({
       pathname: `/mytokens`
-      // search: "?contract=" + this.props.searchText
     });
   };
+
+  onHandlePublishDaicoClicked = () => {
+    this.props.history.push({
+      pathname: `/registration`
+    });
+  }
 
   searchProject = e => {
     this.setState({
@@ -208,15 +212,19 @@ class HeaderPartial extends React.Component {
         <MenuItem onClick={this.onHandleProjectsClicked}>
           <div>Projects</div>
         </MenuItem>
-        {this.props.signinStatusFlag === 5 || this.props.signinStatusFlag === 6 ?
+        {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ?
           <MenuItem onClick={this.onHandleGovernanceClicked}>
             <div>My Tokens</div>
           </MenuItem>
           : null
         }
-        <MenuItem>
-          <div>Publish ICO</div>
-        </MenuItem>
+        {this.props.signinStatusFlag === 5 ?
+          <MenuItem onClick={this.onHandlePublishDaicoClicked}>
+            <div>Publish DAICO</div>
+          </MenuItem> :
+          null
+        }
+
       </Menu>
     );
 
@@ -239,8 +247,8 @@ class HeaderPartial extends React.Component {
                       <MenuIcon />
                     </CUIButtonIcon>
                   ) : (
-                    <div />
-                  )}
+                      <div />
+                    )}
 
                   <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                     <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
@@ -266,7 +274,7 @@ class HeaderPartial extends React.Component {
                         Projects
                       </div>
                     </div>
-                    {this.props.signinStatusFlag === 5 || this.props.signinStatusFlag === 6 ?
+                    {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ?
                       <div className="hdr-itm-pad text--primary txt-m">
                         <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
                           My Tokens
@@ -274,9 +282,14 @@ class HeaderPartial extends React.Component {
                       </div>
                       : null
                     }
-                    <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left">Publish ICO</div>
-                    </div>
+                    {this.props.signinStatusFlag === 5 ?
+                      <div className="hdr-itm-pad text--primary txt-m">
+                        <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">Publish DAICO</div>
+                      </div>
+                      :
+                      null
+                    }
+
                     <div className="text--primary txt-m push--top">
                       {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
                       <div className="text--center">
@@ -295,29 +308,29 @@ class HeaderPartial extends React.Component {
                             2: (
                               <div>
                                 Wrong network.
-                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
                                 {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                               </div>
                             ),
                             3: (
-                              <div className="pos-rel" style={{top: '-10px'}}>
+                              <div className="pos-rel" style={{ top: '-10px' }}>
                                 <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>
                                   Become a Vault Member
                                 </ButtonComponent>
-                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
                               </div>
                             ),
                             4: (
                               <div>
                                 Welcome to the vault.
-                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
                                 {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                               </div>
                             ),
                             5: (
                               <div>
                                 Welcome to the vault, Issuer.
-                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
                               </div>
                             )
                           }[this.props.signinStatusFlag]
@@ -355,13 +368,19 @@ class HeaderPartial extends React.Component {
             <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked}>
               Projects
             </div>
-            {this.props.signinStatusFlag === 5 || this.props.signinStatusFlag === 6 ?
+            {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ?
               <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
                 My Tokens
             </div>
               : null
             }
-            <div className="hdr-itm-pad text--primary txt-m">Publish ICO</div>
+            {this.props.signinStatusFlag === 5 ?
+              <div className="hdr-itm-pad text--primary txt-m">
+                <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">Publish DAICO</div>
+              </div>
+              :
+              null
+            }
           </div>
         </Drawer>
       </div>

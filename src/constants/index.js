@@ -14,6 +14,7 @@ const constants = {
   TOKEN_TAGS_FAILED_MESSAGE: "Failed to retrieve Token Tags, please reload the page.",
   PROJECT_STATES_FAILED_MESSAGE: "Failed to retrieve previously stored information.",
   PROJECT_STATES_SAVED_FAILED_MESSAGE: "Failed to save current form states.",
+  PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE: "Failed to retrieve deployment indicator, please revisit the page again."
 };
 
 export default constants;

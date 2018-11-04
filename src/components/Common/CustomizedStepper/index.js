@@ -41,6 +41,15 @@ const styles = theme => ({
 
 class CustomizedStepper extends React.Component {
   
+  redirectToIssuerPage = () => {
+    // this.props.history.push("/issuergovernance/details");
+    const { projectid } = this.props || "";
+    this.props.history.push({
+      pathname: `/issuergovernance/details`,
+      search: `?projectid=${projectid}`
+    });
+  };
+
   render() {
     const { classes, getSteps, activeStep, getStepContent } = this.props;
     const steps = getSteps();
@@ -67,12 +76,7 @@ class CustomizedStepper extends React.Component {
         <div>
           {activeStep === steps.length ? (
             <div>
-              <Typography className={classes.instructions}>
-                All steps completed - you&quot;re finished
-              </Typography>
-              <Button onClick={this.handleReset} className={classes.button}>
-                Reset
-              </Button>
+              {this.redirectToIssuerPage()}
             </div>
           ) : (
             <div>

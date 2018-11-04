@@ -8,16 +8,8 @@ import Warning from "@material-ui/icons/Warning";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Registration";
 import {
-  validateAdminName,
   validateLength,
-  validateEmail,
   isUpperCase,
-  validateTwitterLink,
-  validateFacebookLink,
-  validateWebsiteUrl,
-  validateGitLink,
-  validateMediumLink,
-  validateTelegramLink,
   validateProjectNameLength,
   validateTokenTagLength,
   alphaOnly,
@@ -25,10 +17,8 @@ import {
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
   validateDate,
-  validateTotalSaleTokens,
-  validateTokenPriceFactor,
-  checkMetaMask,
-  validateUniqueName
+  validateUniqueName,
+  validateTotalSaleTokens
 } from "../../helpers/common/validationHelperFunctions";
 import { newProjectRegistration, saveProjectStates, fetchProjectStates, fetchProjectDeploymentIndicator } from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
@@ -40,8 +30,11 @@ import actionTypes from "../../action_types";
 class Registration extends Component {
   state = {
     modalOpen: false,
-    modalMessage: ""
+    modalMessage: "",
+    calculateTokensModal: false
   };
+
+  handleCalculateTokensOpen = () => this.setState({ calculateTokensModal: true });
 
   componentDidMount() {
     const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags, userLocalPublicAddress, signinStatusFlag } = this.props || {};
@@ -99,13 +92,6 @@ class Registration extends Component {
       projectName,
       projectDescription,
       erc20TokenTag,
-      websiteLink,
-      telegramLink,
-      githubLink,
-      mediumLink,
-      facebookLink,
-      twitterLink,
-      teamAddress,
       maxEtherContribution,
       tapIncrementFactor,
       voteSaturationLimit,
@@ -113,19 +99,13 @@ class Registration extends Component {
       initialTapValue,
       daicoStartDate,
       daicoEndDate,
-      round1TargetUSD,
-      round1TargetEth,
-      round2TargetUSD,
-      round2TargetEth,
-      round3TargetUSD,
-      round3TargetEth,
-      tokenPriceFactor,
       projectNames,
       tokenTags,
       errors,
-      project_id
+      project_id,
+      totalSaleTokens
     } = this.props || {};
-    const { modalOpen, modalMessage } = this.state;
+    const { modalOpen, modalMessage, calculateTokensModal } = this.state;
 
     {
       project_id != "" ? this.props.history.push({
@@ -176,18 +156,11 @@ class Registration extends Component {
                   !validateLength(tapIncrementFactor) ||
                   !validateLength(initialTapValue) ||
                   !validateLength(initialFundRelease) ||
-                  !validateLength(round1TargetEth) ||
-                  !validateLength(round1TargetUSD) ||
-                  !validateLength(round2TargetEth) ||
-                  !validateLength(round2TargetUSD) ||
-                  !validateLength(round3TargetEth) ||
-                  !validateLength(round3TargetUSD) ||
-                  !validateLength(tokenPriceFactor) ||
                   !validateDate(daicoStartDate) ||
                   !validateDate(daicoEndDate) ||
-                  !validateTokenPriceFactor(tokenPriceFactor) ||
                   validateUniqueName(projectNames, projectName) ||
-                  validateUniqueName(tokenTags, erc20TokenTag)
+                  validateUniqueName(tokenTags, erc20TokenTag) ||
+                  validateTotalSaleTokens(totalSaleTokens)
                 }
               />
             </div>
@@ -203,6 +176,12 @@ class Registration extends Component {
           </Col>
         </Row>
         <AlertModal open={modalOpen} handleClose={this.handleClose}>
+          <div className="text--center text--danger">
+            <Warning style={{ width: "2em", height: "2em" }} />
+          </div>
+          <div className="text--center push--top">{modalMessage}</div>
+        </AlertModal>
+        <AlertModal open={calculateTokensModal} handleClose={this.handleClose}>
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />
           </div>
@@ -242,7 +221,8 @@ const mapStateToProps = state => {
     round2TargetEth,
     round3TargetUSD,
     round3TargetEth,
-    tokenPriceFactor,
+    r1Bonus,
+    r2Bonus,
     totalSaleTokens,
     errors,
     projectNames,
@@ -279,7 +259,8 @@ const mapStateToProps = state => {
     round3TargetUSD,
     round3TargetEth,
     totalSaleTokens,
-    tokenPriceFactor,
+    r1Bonus,
+    r2Bonus,
     projectNames,
     tokenTags,
     project_id,
@@ -291,7 +272,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       newProjectRegistration,
-      saveProjectStates, 
+      saveProjectStates,
       getProjectNames,
       getTokenTags,
       fetchProjectStates,

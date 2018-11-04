@@ -17,12 +17,13 @@ import {
   validateMaxEtherContribution,
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
-  validateTokenPriceFactor,
+  validateR2BonusRange,
   validateUniqueName,
   validateDecimal,
   validateEntityPercentage,
-  checkMetaMask
 } from "../../helpers/common/validationHelperFunctions";
+
+import {significantDigits} from "../../helpers/common/projectDetailhelperFunctions"
 
 export const initialState = {
   adminName: "",
@@ -54,7 +55,8 @@ export const initialState = {
   round3Rate: 100,
   totalSaleTokens: 0,
   ethPrice: 210,
-  tokenPriceFactor: "",
+  r1Bonus: "",
+  r2Bonus: "",
   nonSaleDistribution: [],
   project_id: "",
   teamAddress: "",
@@ -88,20 +90,25 @@ export const initialState = {
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
-
     case actionTypes.PROJECT_STATES_SUCCESS: {
       console.log("project details: ", action.payload)
       const { allowEditAll } = state || false
-      const { state } = action.payload || {}
-      return {
-        ...state, state, project_id: "", allowEditAll: allowEditAll
+      const { state:oldState } = action.payload || {}
+      if (action.payload){
+        return {
+          ...state, oldState, project_id: "", allowEditAll: allowEditAll
+        }  
+      }else{
+        return {
+          ...state, project_id: "", allowEditAll: allowEditAll
+        }
       }
     }
 
     case actionTypes.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS:{
-      const deploymentIndicator = action.payload.currentDeploymentIndicator || 0
+      const { currentDeploymentIndicator } = action.payload || 0 
       let allowEditAll = false
-      if (deploymentIndicator>0){
+      if (currentDeploymentIndicator>0){
         allowEditAll = false
       }else{
         allowEditAll = true
@@ -137,7 +144,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.THUMBNAIL_CHANGED: {
-      return { ...state, thumbnailImage: action.payload}
+      return { ...state, thumbnailImage: action.payload };
     }
 
     case actionTypes.UPLOADING_THUMBNAIL: {
@@ -241,15 +248,14 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.CALCULATE_TOKENS: {
-      const { tokenPriceFactor, round1TargetEth, round2TargetEth, round3TargetEth } = state || {};
+      // B1, B2 => R1,R2 (Ri=1+(Bi/100))
+      const { r1Bonus, round1TargetEth, round2TargetEth, round3TargetEth, r2Bonus } = state || {};
       var round3Rate = 100;
-      var round2Rate =
-        parseFloat(tokenPriceFactor).toFixed(1) * round3Rate;
-      var round1Rate =
-        Math.pow(parseFloat(tokenPriceFactor).toFixed(1), 2) * round3Rate;
-      var round1N = round1Rate * parseInt(round1TargetEth);
-      var round2N = round2Rate * parseInt(round2TargetEth);
-      var round3N = round3Rate * parseInt(round3TargetEth);
+      var round2Rate = (1+parseFloat(r2Bonus)/100)*round3Rate;
+      var round1Rate = (1+parseFloat(r1Bonus)/100)*round3Rate;
+      var round1N = round1Rate * parseFloat(round1TargetEth);
+      var round2N = round2Rate * parseFloat(round2TargetEth);
+      var round3N = round3Rate * parseFloat(round3TargetEth);
       var N = round1N + round2N + round3N;
       var K = Math.round(500000000 / N);
       var round1Tokens = round1N * K
@@ -262,13 +268,13 @@ export default function(state = initialState, action) {
       saleEntities.push({ entityName: "Round3", entityPercentage: parseFloat((round3Tokens * 50 / totalSaleTokens).toFixed(2)), entityAddress: "NA" })
       return {
         ...state,
-        round1Tokens: round1Tokens,
-        round2Tokens: round2Tokens,
-        round3Tokens: round3Tokens,
-        round1Rate: round1Rate * K,
-        round2Rate: round2Rate * K,
-        round3Rate: round3Rate * K,
-        totalSaleTokens: totalSaleTokens,
+        round1Tokens: significantDigits(round1Tokens),
+        round2Tokens: significantDigits(round2Tokens),
+        round3Tokens: significantDigits(round3Tokens),
+        round1Rate: significantDigits(round1Rate * K),
+        round2Rate: significantDigits(round2Rate * K),
+        round3Rate: significantDigits(round3Rate * K),
+        totalSaleTokens: significantDigits(totalSaleTokens),
         saleEntities: saleEntities
       };
     }
@@ -306,15 +312,27 @@ export default function(state = initialState, action) {
       };
     }
 
-    case actionTypes.TOKEN_PRICE_FACTOR_CHANGED: {
-      if (!validateTokenPriceFactor(parseFloat(action.payload))) {
-        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "Should be in between 1 & 2. one decimal place allowed";
+    case actionTypes.R1_BONUS_CHANGED: {
+      // if (!validateR1BonusRange(parseFloat(action.payload))) {
+      //   localErrors[actionTypes.R1_BONUS_CHANGED] = "Should be in between 1 & 100";
+      // } else {
+      //   localErrors[actionTypes.R1_BONUS_CHANGED] = "";
+      // }
+      return {
+        ...state,
+        r1Bonus: action.payload
+      };
+    }
+
+    case actionTypes.R2_BONUS_CHANGED: {
+      if (!validateR2BonusRange(parseFloat(action.payload))) {
+        localErrors[actionTypes.R2_BONUS_CHANGED] = "Should be in between 1 & 100";
       } else {
-        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "";
+        localErrors[actionTypes.R2_BONUS_CHANGED] = "";
       }
       return {
         ...state,
-        tokenPriceFactor: action.payload,
+        r2Bonus: action.payload,
         errors: localErrors
       };
     }

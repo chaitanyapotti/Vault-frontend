@@ -16,6 +16,8 @@ import IssuerGovernanceName from "./IssuerGovernanceName";
 import IssuerPDetailGovernance from "./IssuerPDetailGovernance";
 import IssuerTapCard from "./IssuerTapCard";
 import IssuerFundReq from "./FundReq/IssuerFundReq";
+import SpendCurve from "./SpendCurve";
+import VoteHistogram from "./VoteHistogram";
 
 export {
   PDetailCrowdSale,
@@ -35,5 +37,7 @@ export {
   IssuerGovernanceName,
   IssuerPDetailGovernance,
   IssuerTapCard,
-  IssuerFundReq
+  IssuerFundReq,
+  SpendCurve,
+  VoteHistogram
 };

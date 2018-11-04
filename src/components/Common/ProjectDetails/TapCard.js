@@ -7,6 +7,7 @@ import LoadingButton from "../LoadingButton";
 const TapCard = props => {
   const {
     currentTapAmount,
+    onTapPollsHistoryClick,
     tapIncrementUnit,
     incrementApproval,
     onTapClick,
@@ -51,6 +52,30 @@ const TapCard = props => {
             </LoadingButton>
           )}
         </div>
+        <Row className="push--top">
+          <Col lg={6} className="text--secondary txt">
+            <LoadingButton onClick={onTapPollsHistoryClick}>Tap polls History</LoadingButton>
+          </Col>
+          <Col lg={6} className="text-right hl">
+            <div className="text-right">
+              {signinStatusFlag <= 3 ? (
+                <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+                  <div>
+                    <LoadingButton disabled>Approve</LoadingButton>
+                  </div>
+                </Tooltip>
+              ) : tapVoteStatus === "true" ? (
+                <LoadingButton onClick={onRevokeTapClick} type="danger" loading={tapButtonSpinning}>
+                  Reject
+                </LoadingButton>
+              ) : (
+                <LoadingButton onClick={onTapClick} loading={tapButtonSpinning}>
+                  Approve
+                </LoadingButton>
+              )}
+            </div>
+          </Col>
+        </Row>
       </CUICard>
     </div>
   );

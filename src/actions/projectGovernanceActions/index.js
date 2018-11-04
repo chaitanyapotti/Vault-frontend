@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from "../../config";
 import actionTypes from "../../action_types";
+import constants from "../../constants";
 
 export const currentRoundFetchSuccess = receipt => ({
   payload: { receipt },
@@ -16,6 +17,41 @@ export const treasuryStateFetchSuccess = receipt => ({
   payload: { receipt },
   type: actionTypes.TREASURY_STATE_FETCHED
 });
+
+export const killPollsHistoryFetchSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_POLLS_HISTORY_SUCCESS
+});
+
+export const killPollsHistoryFetchFailed = () => ({
+  payload: constants.KILL_POLLS_HISTORY_FAILED_MESSAGE,
+  type: actionTypes.KILL_POLLS_HISTORY_FAILED
+});
+
+export const getKillPollsHistory = projectid => async dispatch => {
+  const network = "rinkeby";
+  // await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/projectweb3/xfrPollHistory`, {
+      params: { projectid, network }
+    })
+    .then(response => {
+      const { status, data: killPollsHistorytData } = response || {};
+      const { data, message } = killPollsHistorytData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch(killPollsHistoryFetchSuccess(data));
+        } else {
+          dispatch(killPollsHistoryFetchFailed());
+        }
+      } else {
+        dispatch(killPollsHistoryFetchFailed());
+      }
+    })
+    .catch(err => {
+      dispatch(killPollsHistoryFetchFailed());
+    });
+};
 
 export const currentRound = projectid => async dispatch => {
   axios

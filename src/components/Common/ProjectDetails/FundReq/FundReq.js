@@ -4,8 +4,17 @@ import ReqType from "./ReqType";
 
 class FundReq extends Component {
   getObject1 = () => {
-    const { data, details, xfrVoteData, signinStatusFlag, onRevokeXfr1Click, onXfr1Click, xfr1ButtonSpinning, tokensUnderGovernance } =
-      this.props || {};
+    const {
+      data,
+      details,
+      onXfrPollHistoryClick,
+      xfrVoteData,
+      signinStatusFlag,
+      onRevokeXfr1Click,
+      onXfr1Click,
+      xfr1ButtonSpinning,
+      tokensUnderGovernance
+    } = this.props || {};
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
     const requiredData = details ? details.filter(x => x.address === address) : [];
@@ -27,6 +36,7 @@ class FundReq extends Component {
           onXfrClick={onXfr1Click}
           xfrButtonSpinning={xfr1ButtonSpinning}
           tokensUnderGovernance={tokensUnderGovernance}
+          onXfrPollHistoryClick={onXfrPollHistoryClick}
         />
       </CUICard>
     ) : null;

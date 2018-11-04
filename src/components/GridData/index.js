@@ -27,24 +27,24 @@ class GridData extends React.Component {
           root: {
             fontSize: "16px"
           },
-          caption:{
-            fontSize: '1rem'
+          caption: {
+            fontSize: "1rem"
           }
         },
-        MuiTableCell:{
-          root:{
-            padding: '10px 20px 10px 20px'
+        MuiTableCell: {
+          root: {
+            padding: "10px 20px 10px 20px"
           }
         },
-        MuiTablePagination:{
-          select:{
-            fontSize: '14px'
+        MuiTablePagination: {
+          select: {
+            fontSize: "14px"
           }
         },
-        MuiTableRow:{
-          root:{
-            "&:hover":{
-              cursor: 'pointer'
+        MuiTableRow: {
+          root: {
+            "&:hover": {
+              cursor: "pointer"
             }
           }
         }
@@ -52,23 +52,22 @@ class GridData extends React.Component {
     });
 
   render() {
-    const { tableData, columns, ...rest } = this.props || {};
+    const { tableData, columns, history, ...rest } = this.props || {};
     const options = {
       filterType: "dropdown",
       responsive: "scroll",
       selectableRows: false,
       onRowClick: (currentRowsSelected, allRowsSelected) => {
         const length = currentRowsSelected.length;
-        const _id = currentRowsSelected && currentRowsSelected[length-1];
-        const {rowClickFn, onRowClick} = this.props || {};
+        const _id = currentRowsSelected && currentRowsSelected[length - 1];
+        const { rowClickFn, onRowClick } = this.props || {};
         {
-          rowClickFn ? 
-           onRowClick(_id)
-           :
-           this.props.history.push({
-             pathname: `/governance/details`,
-             search: `?projectid=${_id}`
-           });
+          rowClickFn
+            ? onRowClick(_id)
+            : history.push({
+                pathname: `/governance/details`,
+                search: `?projectid=${_id}`
+              });
         }
       },
       ...rest

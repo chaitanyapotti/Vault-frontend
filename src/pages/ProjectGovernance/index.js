@@ -52,7 +52,8 @@ class ProjectGovernance extends Component {
       daicoTokenAddress,
       xfrDetails,
       _id,
-      xfrRejectionPercent
+      xfrRejectionPercent,
+      projectHealth
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
@@ -128,6 +129,7 @@ class ProjectGovernance extends Component {
       case "4":
         return (
           <ProjectDetailGovernance
+          projectHealth={projectHealth}
             version={version}
             membershipAddress={membershipAddress}
             projectName={projectName}

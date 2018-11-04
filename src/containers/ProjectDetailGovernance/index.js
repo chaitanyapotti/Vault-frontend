@@ -30,7 +30,9 @@ import {
   finalizeKill,
   getKillPollsHistory,
   getTapPollsHistory,
-  getXfrPollsHistory
+  getXfrPollsHistory,
+  getSpendCurveData,
+  getVoteHistogramData
 } from "../../actions/projectDetailGovernanceActions/index";
 import {
   formatFromWei,
@@ -109,9 +111,13 @@ class ProjectDetailGovernance extends Component {
       getXfrPollVote: fetchXfrPollVote,
       getKillPollsHistory: fetchKillPollsHistory,
       getTapPollsHistory: fetchTapPollsHistory,
-      getXfrPollsHistory: fetchXfrPollsHistory
+      getXfrPollsHistory: fetchXfrPollsHistory,
+      getSpendCurveData: fetchSpendCurveData,
+      getVoteHistogramData:fetchVoteHistogramData
     } = this.props || {};
     etherPriceFetch("ETH");
+    // fetchSpendCurveData(version, pollFactoryAddress)
+    fetchVoteHistogramData(projectid)
     fetchKillPollsHistory(projectid);
     fetchTapPollsHistory(projectid);
     fetchXfrPollsHistory(projectid);
@@ -448,6 +454,13 @@ class ProjectDetailGovernance extends Component {
       tapPollsHistoryData,
       xfrPollsHistoryData,
       xfrRejectionPercent,
+      voteHistogramData,
+      totalVotes,
+      collectiveVoteWeight,
+      projectHealth,
+      spendCurveData,
+      initialFundRelease,
+      startDateTime,
       history
     } = this.props || {};
     const { modalOpen, buyModalOpen, buyAmount, unlockTokensModalOpen, killPollsHistoryModalOpen, tapPollsHistoryModalOpen, xfrPollsHistoryModalOpen } = this.state;
@@ -495,7 +508,7 @@ class ProjectDetailGovernance extends Component {
               </Row>
               <Row>
                 <Col lg={6}>
-                  <div> Click on the button to initiate “ KIILL ” execution</div>
+                  <div> Click on the button to initiate “ KILL ” execution</div>
                 </Col>
                 <Col lg={6}>
                   <LoadingButton onClick={this.onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!this.killFinish()}>
@@ -575,6 +588,9 @@ class ProjectDetailGovernance extends Component {
           </Col>
           <Col xs={12} lg={6}>
             <SpendCurve
+            spendCurveData = {spendCurveData}
+            initialFundRelease = {initialFundRelease}
+            startDateTime = {startDateTime}
             />
           </Col> 
         </Row>
@@ -597,7 +613,11 @@ class ProjectDetailGovernance extends Component {
             />
           </Col>
           <Col xs={12} lg={6}>
-            <VoteHistogram
+            <VoteHistogram 
+            voteHistogramData={voteHistogramData}
+            totalVotes = {totalVotes}
+            collectiveVoteWeight = {collectiveVoteWeight}
+            projectHealth = {projectHealth}
             />
           </Col>
         </Row>
@@ -694,7 +714,10 @@ const mapStateToProps = state => {
     killFinalizeButtonSpinning,
     killPollsHistoryData,
     tapPollsHistoryData,
-    xfrPollsHistoryData
+    xfrPollsHistoryData,
+    voteHistogramData,
+    totalVotes,
+    collectiveVoteWeight
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
@@ -729,7 +752,10 @@ const mapStateToProps = state => {
     killFinalizeButtonSpinning,
     killPollsHistoryData,
     tapPollsHistoryData,
-    xfrPollsHistoryData
+    xfrPollsHistoryData,
+    voteHistogramData,
+    totalVotes,
+    collectiveVoteWeight
   };
 };
 
@@ -764,7 +790,9 @@ const mapDispatchToProps = dispatch =>
       finalizeKill,
       getKillPollsHistory,
       getTapPollsHistory,
-      getXfrPollsHistory
+      getXfrPollsHistory,
+      getSpendCurveData,
+      getVoteHistogramData
     },
     dispatch
   );

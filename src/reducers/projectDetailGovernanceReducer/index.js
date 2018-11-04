@@ -1,6 +1,7 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
+import { significantDigits } from "../../helpers/common/projectDetailhelperFunctions"
 
 export const initialState = {
   tokenBalance: "0",
@@ -18,11 +19,54 @@ export const initialState = {
   tapPollsHistoryData: [],
   tapPollsHistoryRetrieveFailureMessage: "",
   xfrPollsHistoryData: [],
-  xfrPollsHistoryRetrieveFailureMessage: ""
+  xfrPollsHistoryRetrieveFailureMessage: "",
+  spendCurveData: {
+    allXfrData: [{
+      consensus: "625000000",
+      timestamp: 1540883901,
+      xfrAddress: "0xEfA52B1F0b90f0747d91607e3ca5fD3249F97A42"
+    }],
+    tapData: [{
+      amount: 385802469136 * 1.5, timestamp: 1540684800
+    }, {
+      amount: 385802469136 * 1.5 * 1.5, timestamp: 1541030400
+    }],
+    withdrawData: [{ amount: "0.5", timestamp: 1540425600 }, { amount: "0.5", timestamp: 1541222822 }],
+    withdrawXfrData: [
+      {
+        amount: "0.3",
+        timestamp: 1540857600
+      }
+    ]
+  },
+  voteHistogramData: {},
+  totalVotes: 0,
+  collectiveVoteWeight: 0,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    
+    case actionTypes.VOTE_HISTOGRAM_DATA_SUCCESS: {
+      // console.log("vote histogram data: " ,action.payload)
+      const { binDict, collectiveVoteWeight } = action.payload || {}
+      let histArray = []
+      let totalVotes = 0
+      for (var key in binDict){
+        let d = binDict[key]
+        // d["max"] = significantDigits(d["max"])
+        // d["min"] = significantDigits(d["min"])
+        totalVotes += d["voters"]
+        histArray.push(d)
+      }
+      return {...state, voteHistogramData: histArray, totalVotes: totalVotes, collectiveVoteWeight: collectiveVoteWeight}
+    }
+
+    case actionTypes.SPEND_CURVE_DATA_SUCCESS: {
+      console.log("spend curve data: " ,action.payload)
+      return {...state, spendCurveData: action.payload}
+    }
+
     case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED: {
       const { rec } = action.payload;
       return {

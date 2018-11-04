@@ -30,8 +30,20 @@ const validateTapIncrementFactor = input => {
   }
   return false;
 };
-const validateTokenPriceFactor = input => {
-  if (input >= 1 && input <= 2 && input.toString().length < 4) {
+const validateTokenPriceFactorRange = input => {
+  if (input >= 1 && input <= 2) {
+    return true;
+  }
+  return false;
+};
+const validateR3TokenPriceFactorRange = input => {
+  if (input >= 1 && input <= 100) {
+    return true;
+  }
+  return false;
+};
+const validateTokenPriceFactorDecimal = input => {
+  if (input.toString().length < 4) {
     return true;
   }
   return false;
@@ -147,7 +159,9 @@ export {
   validateInitialTap,
   validateDate,
   validateTotalSaleTokens,
-  validateTokenPriceFactor,
+  validateTokenPriceFactorRange,
+  validateR3TokenPriceFactorRange,
+  validateTokenPriceFactorDecimal,
   numberOnly,
   checkMetaMask,
   validateUniqueName,

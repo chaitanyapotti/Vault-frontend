@@ -12,11 +12,12 @@ import {
   round3TargetUSDChangedAction,
   round3TargetEthChangedAction,
   tokenPriceFactorChangedAction,
-  calculateTokens
+  calculateTokens,
+  r3TokenPriceFactorChangedAction
 } from "../../../actions/projectRegistrationActions";
 import actionTypes from "../../../action_types";
 import { ButtonComponent } from "../../Common/FormComponents";
-import { validateTokenPriceFactor, validateLength } from "../../../helpers/common/validationHelperFunctions";
+import { validateLength } from "../../../helpers/common/validationHelperFunctions";
 
 class TokenSale extends React.Component {
   onChangeRound1TargetUSD = e => {
@@ -69,6 +70,10 @@ class TokenSale extends React.Component {
     this.props.tokenPriceFactorChangedAction(e.target.value);
   };
 
+  onChangeR3TokenPriceFactor = e => {
+    this.props.r3TokenPriceFactorChangedAction(e.target.value);
+  };
+
   render() {
     const {
       round1TargetUSD,
@@ -84,6 +89,7 @@ class TokenSale extends React.Component {
       round1Tokens,
       round3TargetEth,
       tokenPriceFactor,
+      r3TokenPriceFactor,
       errors
     } = this.props || {};
     return (
@@ -220,14 +226,14 @@ class TokenSale extends React.Component {
           </Row>
         ) : null}
         <Row>
-          <Col>
+          <Col lg={6}>
             <CUIFormInput
               inputType={CUIInputType.TEXT}
               required
               full
               forceNumDec
-              inputName="Token price factor"
-              inputLabel="Token price factor"
+              inputName="Round-2 Token price factor"
+              inputLabel="Round-2 Token price factor"
               inputPlaceholder=""
               inputValue={tokenPriceFactor}
               // onBlur={this.onBlurAge}
@@ -239,6 +245,25 @@ class TokenSale extends React.Component {
               helperText={this.getErrorMsg(actionTypes.TOKEN_PRICE_FACTOR_CHANGED)}
             />
           </Col>
+          <Col lg={6}>
+            <CUIFormInput
+              inputType={CUIInputType.TEXT}
+              required
+              full
+              forceNumDec
+              inputName="Round-3 Token price factor"
+              inputLabel="Round-3 Token price factor"
+              inputPlaceholder=""
+              inputValue={r3TokenPriceFactor}
+              // onBlur={this.onBlurAge}
+              // error={this.state.errorAgeText !== ''}
+              // helperText={this.state.errorAgeText}
+              // onKeyDownSelector="Admin"
+              onChange={this.onChangeR3TokenPriceFactor}
+              error={!!this.getErrorMsg(actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED)}
+            />
+          </Col>
         </Row>
         <Row>
           <Col lg={12}>
@@ -247,13 +272,15 @@ class TokenSale extends React.Component {
               onClick={this.onCalculateTokenClicked}
               disabled={
                 errors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] !== "" ||
+                errors[actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED] !== "" ||
                 !validateLength(round1TargetEth) ||
                 !validateLength(round1TargetUSD) ||
                 !validateLength(round2TargetEth) ||
                 !validateLength(round2TargetUSD) ||
                 !validateLength(round3TargetEth) ||
                 !validateLength(round3TargetUSD) ||
-                !validateLength(tokenPriceFactor)
+                !validateLength(tokenPriceFactor)||
+                !validateLength(r3TokenPriceFactor)
               }
             />
           </Col>
@@ -272,6 +299,7 @@ const mapStateToProps = state => {
     round3TargetUSD,
     round3TargetEth,
     tokenPriceFactor,
+    r3TokenPriceFactor,
     round1Tokens,
     round2Tokens,
     round3Tokens,
@@ -289,6 +317,7 @@ const mapStateToProps = state => {
     round3TargetUSD,
     round3TargetEth,
     tokenPriceFactor,
+    r3TokenPriceFactor,
     round1Tokens,
     round2Tokens,
     round3Tokens,
@@ -310,7 +339,8 @@ const mapDispatchToProps = dispatch =>
       round3TargetUSDChangedAction,
       round3TargetEthChangedAction,
       tokenPriceFactorChangedAction,
-      calculateTokens
+      calculateTokens,
+      r3TokenPriceFactorChangedAction
     },
     dispatch
   );

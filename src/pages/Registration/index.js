@@ -8,16 +8,8 @@ import Warning from "@material-ui/icons/Warning";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Registration";
 import {
-  validateAdminName,
   validateLength,
-  validateEmail,
   isUpperCase,
-  validateTwitterLink,
-  validateFacebookLink,
-  validateWebsiteUrl,
-  validateGitLink,
-  validateMediumLink,
-  validateTelegramLink,
   validateProjectNameLength,
   validateTokenTagLength,
   alphaOnly,
@@ -25,9 +17,6 @@ import {
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
   validateDate,
-  validateTotalSaleTokens,
-  validateTokenPriceFactor,
-  checkMetaMask,
   validateUniqueName
 } from "../../helpers/common/validationHelperFunctions";
 import { newProjectRegistration } from "../../actions/projectRegistrationActions";
@@ -151,7 +140,8 @@ class Registration extends Component {
                   !validateLength(tokenPriceFactor) ||
                   !validateDate(daicoStartDate) ||
                   !validateDate(daicoEndDate) ||
-                  !validateTokenPriceFactor(tokenPriceFactor) ||
+                  errors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] !== "" ||
+                  errors[actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED] !== "" ||
                   validateUniqueName(projectNames, projectName) ||
                   validateUniqueName(tokenTags, erc20TokenTag)
                 }

@@ -271,6 +271,15 @@ export function tokenPriceFactorChangedAction(value) {
   };
 }
 
+export function r3TokenPriceFactorChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED,
+      payload: value
+    });
+  };
+}
+
 export function adminNameChangedAction(value) {
   return dispatch => {
     dispatch({

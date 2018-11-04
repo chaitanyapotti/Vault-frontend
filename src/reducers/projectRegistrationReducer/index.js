@@ -17,11 +17,12 @@ import {
   validateMaxEtherContribution,
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
-  validateTokenPriceFactor,
+  validateTokenPriceFactorRange,
+  validateTokenPriceFactorDecimal,
   validateUniqueName,
   validateDecimal,
   validateEntityPercentage,
-  checkMetaMask
+  validateR3TokenPriceFactorRange
 } from "../../helpers/common/validationHelperFunctions";
 
 export const initialState = {
@@ -55,6 +56,7 @@ export const initialState = {
   totalSaleTokens: 0,
   ethPrice: 210,
   tokenPriceFactor: "",
+  r3TokenPriceFactor: "",
   nonSaleDistribution: [],
   project_id: "",
   teamAddress: "",
@@ -217,12 +219,11 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.CALCULATE_TOKENS: {
-      const { tokenPriceFactor, round1TargetEth, round2TargetEth, round3TargetEth } = state || {};
+      // B1, B2 => R1,R2 (Ri=1+(Bi/100))
+      const { r1Bonus, round1TargetEth, round2TargetEth, round3TargetEth, r2Bonus } = state || {};
       var round3Rate = 100;
-      var round2Rate =
-        parseFloat(tokenPriceFactor).toFixed(1) * round3Rate;
-      var round1Rate =
-        Math.pow(parseFloat(tokenPriceFactor).toFixed(1), 2) * round3Rate;
+      var round2Rate = (1+parseFloat(r2Bonus)/100)*round3Rate;
+      var round1Rate = (1+parseFloat(r1Bonus)/100)*round3Rate;
       var round1N = round1Rate * parseInt(round1TargetEth);
       var round2N = round2Rate * parseInt(round2TargetEth);
       var round3N = round3Rate * parseInt(round3TargetEth);
@@ -283,14 +284,31 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.TOKEN_PRICE_FACTOR_CHANGED: {
-      if (!validateTokenPriceFactor(parseFloat(action.payload))) {
-        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "Should be in between 1 & 2. one decimal place allowed";
+      if (!validateTokenPriceFactorRange(parseFloat(action.payload))) {
+        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "Should be in between 1 & 2";
+      } else if (!validateTokenPriceFactorDecimal(parseFloat(action.payload))) {
+        localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "one decimal place allowed";
       } else {
         localErrors[actionTypes.TOKEN_PRICE_FACTOR_CHANGED] = "";
       }
       return {
         ...state,
         tokenPriceFactor: action.payload,
+        errors: localErrors
+      };
+    }
+
+    case actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED: {
+      if (!validateTokenPriceFactorDecimal(parseFloat(action.payload))) {
+        localErrors[actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED] = "one decimal place allowed";
+      } else if (!validateR3TokenPriceFactorRange(parseFloat(action.payload))) {
+        localErrors[actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED] = "Should be in between 1 & 100";
+      } else {
+        localErrors[actionTypes.R3_TOKEN_PRICE_FACTOR_CHANGED] = "";
+      }
+      return {
+        ...state,
+        r3TokenPriceFactor: action.payload,
         errors: localErrors
       };
     }

@@ -52,6 +52,27 @@ class Registration extends Component {
     }
     fetchProjectNames();
     fetchTokenTags();
+    window.addEventListener("scroll", this.checkOffset);
+  }
+
+  // Function to make the docked btn sticky
+  checkOffset = () => {
+    const dckdBtnCnt = document.querySelector('#dckd-btn');
+    const footer = document.querySelector('#footer');
+
+    function getRectTop(el){
+      var rect = el.getBoundingClientRect();
+      return rect.top;
+    }
+    
+    if((getRectTop(dckdBtnCnt) + document.body.scrollTop) + dckdBtnCnt.offsetHeight >= (getRectTop(footer) + document.body.scrollTop) - 10)
+      dckdBtnCnt.style.position = 'relative';
+    if(document.body.scrollTop + window.innerHeight < (getRectTop(footer) + document.body.scrollTop))
+      dckdBtnCnt.style.position = 'fixed'; // restore when you scroll up
+    }
+  
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.checkOffset);
   }
 
   handlePublishDaico = e => {
@@ -114,23 +135,20 @@ class Registration extends Component {
       }) : null
     }
     return (
-      <Grid>
-        <Row className="push--top">
-          <Col xs={12} lg={7}>
-            <IdentityDetails />
-          </Col>
-          <Col xs={12} lg={5}>
-            <div style={{ textAlign: "center" }}>
-            <ButtonComponent 
-              style={{ width: "45%" }}
-              label="Save"
-              onClick={this.handleSaveButtonClicked} />
-              <ButtonComponent
-                style={{ width: "45%" }}
-                label="Publish DAICO"
-                onClick={this.handlePublishDaico}
-                disabled={
-                  errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
+      <div>
+        <Grid>
+          <Row className="push--top">
+            <Col xs={12} lg={7}>
+              <IdentityDetails />
+            </Col>
+            <Col xs={12} lg={5}>
+              <div style={{ textAlign: "center" }}>
+                <ButtonComponent
+                  style={{ width: "85%" }}
+                  label="Publish DAICO"
+                  onClick={this.handlePublishDaico}
+                  disabled={
+                    errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
                   !validateLength(adminName) ||
                   !validateLength(projectDescription) ||
                   !validateLength(projectName) ||
@@ -161,33 +179,42 @@ class Registration extends Component {
                   validateUniqueName(projectNames, projectName) ||
                   validateUniqueName(tokenTags, erc20TokenTag) ||
                   validateTotalSaleTokens(totalSaleTokens)
-                }
-              />
-            </div>
-            <div className="push--top">
-              <DaicoDetails />
-            </div>
-          </Col>
-        </Row>
+                  }
+                />
+              </div>
+              <div className="push--top">
+                <DaicoDetails />
+              </div>
+            </Col>
+          </Row>
 
-        <Row className="push--top push--bottom">
-          <Col xs={12} lg={7}>
-            <Distribution />
-          </Col>
-        </Row>
-        <AlertModal open={modalOpen} handleClose={this.handleClose}>
-          <div className="text--center text--danger">
-            <Warning style={{ width: "2em", height: "2em" }} />
-          </div>
-          <div className="text--center push--top">{modalMessage}</div>
-        </AlertModal>
-        <AlertModal open={calculateTokensModal} handleClose={this.handleClose}>
-          <div className="text--center text--danger">
-            <Warning style={{ width: "2em", height: "2em" }} />
-          </div>
-          <div className="text--center push--top">{modalMessage}</div>
-        </AlertModal>
-      </Grid>
+          <Row className="push--top push--bottom">
+            <Col xs={12} lg={7}>
+              <Distribution />
+            </Col>
+          </Row>
+          <AlertModal open={modalOpen} handleClose={this.handleClose}>
+            <div className="text--center text--danger">
+              <Warning style={{ width: "2em", height: "2em" }} />
+            </div>
+            <div className="text--center push--top">{modalMessage}</div>
+          </AlertModal>
+        </Grid>
+        <div id="dckd-btn" className="soft dckd-btn-cnt">
+          <Grid>
+            <div className="float--right">
+              <ButtonComponent 
+                label="Save"
+              />
+              <span className="push--left">
+                <ButtonComponent 
+                  label="Publish Daico"
+                />
+              </span>
+            </div>
+          </Grid>
+        </div>
+    </div>
     );
   }
 }

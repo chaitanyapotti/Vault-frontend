@@ -182,6 +182,11 @@ class HeaderPartial extends React.Component {
     }
   };
 
+  signinButtonClicked = e => {
+    
+  }
+
+
   render() {
 
     const { anchorEl, mobileMoreAnchorEl } = this.state;
@@ -305,9 +310,11 @@ class HeaderPartial extends React.Component {
                                   </a>
                                 ),
                                 1: (
-                                  <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                    <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> Sign in 
-                                  </a>
+                                  <CUIButton onClick={this.signinButtonClicked}>
+                                  <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> Sign in 
+                                  </CUIButton>
+                                    
+                                  
                                 ),
                                 2: (
                                   <div>

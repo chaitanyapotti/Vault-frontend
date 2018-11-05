@@ -39,6 +39,15 @@ const App = props => {
             <Route exact path="/deploy" component={Deployer} />
             <Route exact path="/register" component={WhiteList} />
             <Route path="/search" component={Search} />
+            <Route
+              path="/pollscan"
+              component={() => {
+                console.log("address: ", window.location);
+                const searchPart = window.location.search;
+                ((window.location = `https://pollscan.io/contract${searchPart}`));
+
+              }}
+            />
           </Switch>
           <SigninManager />
         </VaultApp>

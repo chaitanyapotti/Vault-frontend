@@ -3,6 +3,7 @@
 import React from "react";
 import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { withRouter } from "react-router-dom";
 
 class GridData extends React.Component {
   getMuiTheme = () =>
@@ -60,14 +61,17 @@ class GridData extends React.Component {
       onRowClick: (currentRowsSelected, allRowsSelected) => {
         const length = currentRowsSelected.length;
         const _id = currentRowsSelected && currentRowsSelected[length - 1];
-        const { rowClickFn, onRowClick } = this.props || {};
+        const address = currentRowsSelected && currentRowsSelected[0];
+        const { rowClickFn, onRowClick, rowClickPollHistory } = this.props || {};
         {
           rowClickFn
             ? onRowClick(_id)
-            : history.push({
-                pathname: `/governance/details`,
-                search: `?projectid=${_id}`
-              });
+            : rowClickPollHistory
+              ? window.open(`/pollscan?contract=${address}`).focus()
+              : history.push({
+                  pathname: `/governance/details`,
+                  search: `?projectid=${_id}`
+                });
         }
       },
       ...rest
@@ -80,4 +84,4 @@ class GridData extends React.Component {
   }
 }
 
-export default GridData;
+export default withRouter(GridData);

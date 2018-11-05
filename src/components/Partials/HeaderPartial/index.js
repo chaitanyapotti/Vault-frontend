@@ -16,7 +16,7 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import Drawer from "@material-ui/core/Drawer";
 import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
 import { CUIAppBar, CUIButtonIcon } from "../../../helpers/material-ui";
-
+import { getSearchResults } from "../../../actions/searchActions/index";
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
@@ -168,7 +168,7 @@ class HeaderPartial extends React.Component {
     this.props.history.push({
       pathname: `/registration`
     });
-  }
+  };
 
   searchProject = e => {
     this.setState({
@@ -178,17 +178,20 @@ class HeaderPartial extends React.Component {
 
   handleSearch = e => {
     if (e.keyCode === 13) {
-      this.props.history.push(`/search?q=${this.state.searchText}`);
+      const { history, getSearchResults: fetchSearchResults } = this.props || {};
+      const { searchText } = this.state;
+      fetchSearchResults(searchText);
+      history.push(`/search?q=${searchText}`);
     }
   };
 
   render() {
-
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-    const { isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked } = this.props || {}
+    const { isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked } =
+      this.props || {};
 
     const renderMenu = (
       <Menu
@@ -214,19 +217,16 @@ class HeaderPartial extends React.Component {
         <MenuItem onClick={this.onHandleProjectsClicked}>
           <div>Projects</div>
         </MenuItem>
-        {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ?
+        {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
           <MenuItem onClick={this.onHandleGovernanceClicked}>
             <div>My Tokens</div>
           </MenuItem>
-          : null
-        }
-        {this.props.signinStatusFlag === 5 ?
+        ) : null}
+        {this.props.signinStatusFlag === 5 ? (
           <MenuItem onClick={this.onHandlePublishDaicoClicked}>
             <div>Publish DAICO</div>
-          </MenuItem> :
-          null
-        }
-
+          </MenuItem>
+        ) : null}
       </Menu>
     );
 
@@ -251,8 +251,8 @@ class HeaderPartial extends React.Component {
                           <MenuIcon />
                         </CUIButtonIcon>
                       ) : (
-                          <div />
-                        )}
+                        <div />
+                      )}
 
                       <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                         <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
@@ -276,23 +276,22 @@ class HeaderPartial extends React.Component {
                         <div className="hdr-itm-pad text--primary txt-m">
                           <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked}>
                             Projects
-                </div>
+                          </div>
                         </div>
-                        {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ?
+                        {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
                           <div className="hdr-itm-pad text--primary txt-m">
                             <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
                               My Tokens
-                  </div>
+                            </div>
                           </div>
-                          : null
-                        }
-                        {this.props.signinStatusFlag === 5 ?
+                        ) : null}
+                        {this.props.signinStatusFlag === 5 ? (
                           <div className="hdr-itm-pad text--primary txt-m">
-                            <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">Publish DAICO</div>
+                            <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">
+                              Publish DAICO
+                            </div>
                           </div>
-                          :
-                          null
-                        }
+                        ) : null}
 
                         <div className="text--primary txt-m push--top">
                           {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
@@ -312,29 +311,37 @@ class HeaderPartial extends React.Component {
                                 2: (
                                   <div>
                                     Wrong network.
-                          <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                    <div style={{ width: "150px" }} className="txt-ellipsis">
+                                      {this.props.userLocalPublicAddress}
+                                    </div>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 3: (
-                                  <div className="pos-rel" style={{ top: '-10px' }}>
+                                  <div className="pos-rel" style={{ top: "-10px" }}>
                                     <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>
                                       Become a Vault Member
-                          </ButtonComponent>
-                                    <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                    </ButtonComponent>
+                                    <div style={{ width: "150px" }} className="txt-ellipsis">
+                                      {this.props.userLocalPublicAddress}
+                                    </div>
                                   </div>
                                 ),
                                 4: (
                                   <div>
                                     Welcome to the vault.
-                          <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                    <div style={{ width: "150px" }} className="txt-ellipsis">
+                                      {this.props.userLocalPublicAddress}
+                                    </div>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 5: (
                                   <div>
                                     Welcome to the vault, Issuer.
-                          <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                    <div style={{ width: "150px" }} className="txt-ellipsis">
+                                      {this.props.userLocalPublicAddress}
+                                    </div>
                                   </div>
                                 )
                               }[this.props.signinStatusFlag]
@@ -365,33 +372,30 @@ class HeaderPartial extends React.Component {
                 <CUIButtonIcon onClick={this.handleDrawerClose}>
                   <div>
                     <ChevronLeft /> Back
-        </div>
+                  </div>
                 </CUIButtonIcon>
               </div>
               <div className={classes.drawerInner}>
                 <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked}>
                   Projects
-      </div>
-                {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ?
+                </div>
+                {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
                   <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
                     My Tokens
-      </div>
-                  : null
-                }
-                {this.props.signinStatusFlag === 5 ?
-                  <div className="hdr-itm-pad text--primary txt-m">
-                    <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">Publish DAICO</div>
                   </div>
-                  :
-                  null
-                }
+                ) : null}
+                {this.props.signinStatusFlag === 5 ? (
+                  <div className="hdr-itm-pad text--primary txt-m">
+                    <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">
+                      Publish DAICO
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </Drawer>
           </div>
         ) : null}
-
       </div>
-
     );
   }
 }
@@ -404,17 +408,27 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       openRegistrationFormAction,
-      closeRegistrationFormAction
+      closeRegistrationFormAction,
+      getSearchResults
     },
     dispatch
   );
 
 const mapStateToProps = state => {
-  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress,
+  const {
+    userRegistered,
+    userServerPublicAddress,
+    userIsIssuer,
+    showRegistrationForm,
+    isVaultMember,
+    userLocalPublicAddress,
     signinStatusFlag,
-    isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked
-  } =
-    state.signinManagerData || {};
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked
+  } = state.signinManagerData || {};
   return {
     userRegistered,
     userServerPublicAddress,

@@ -370,8 +370,8 @@ export default function(state = initialState, action) {
 
     case actionTypes.PROJECT_NAME_CHANGED: {
       const { projectNames } = state || {};
-      if (!validateProjectNameLength(action.payload) || !alphaOnly(action.payload)) {
-        localErrors[actionTypes.PROJECT_NAME_CHANGED] = "Only Letters are allowed & length should be less than 32 ";
+      if (!validateProjectNameLength(action.payload)) {
+        localErrors[actionTypes.PROJECT_NAME_CHANGED] = "Length should be less than 32 ";
       } else if (validateUniqueName(projectNames, action.payload)) {
         localErrors[actionTypes.PROJECT_NAME_CHANGED] = "project name is not unique ";
       } else {

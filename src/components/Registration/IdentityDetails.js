@@ -383,14 +383,14 @@ class IdentityDetails extends React.Component {
         <Row className="push--top">
           <Col lg={6}>
             <div className="upload-btn-wrapper">
-              <ButtonComponent >Upload Whitepaper</ButtonComponent>
+              <ButtonComponent onClick={() => console.log("clicked")}>Upload Whitepaper</ButtonComponent>
               <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
             </div>
             <span className="push--left">{this.props.whitepaperPDF.name}</span>
           </Col>
           <Col lg={6}>
             <div className="upload-btn-wrapper">
-              <ButtonComponent>Upload Thumbnail</ButtonComponent>
+              <ButtonComponent onClick={() => console.log("clicked")}>Upload Thumbnail</ButtonComponent>
               <input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
             </div>
             <span>{this.props.thumbnailImage.name}</span>

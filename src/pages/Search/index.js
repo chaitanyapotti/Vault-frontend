@@ -34,8 +34,9 @@ class Search extends Component {
           <Grid>
             <MasonaryLayout columns={3}>
               {searchResult.map((item, index) => {
-                const { projectName, description, _id, tokenTag } = item || {};
+                const { projectName, description, _id, tokenTag, urls } = item || {};
                 const { history } = this.props || {};
+                const { website } = urls || {};
                 const onClick = () => {
                   history.push({
                     pathname: `/governance/details`,
@@ -50,6 +51,7 @@ class Search extends Component {
                     description={description}
                     _id={_id}
                     onClick={onClick}
+                    website={website}
                   />
                 );
               })}

@@ -327,14 +327,14 @@ class HeaderPartial extends React.Component {
                                 4: (
                                   <div>
                                     <CUIButton>
-                                    {this.props.userLocalPublicAddress}
+                                    {this.props.userLocalPublicAddress.slice(0, 6)}
                                     </CUIButton>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 5: (
                                   <div>
-                                    <CUIButton>{this.props.userLocalPublicAddress}</CUIButton>
+                                    <CUIButton>{this.props.userLocalPublicAddress.slice(0, 6)}</CUIButton>
                                   </div>
                                 )
                               }[this.props.signinStatusFlag]

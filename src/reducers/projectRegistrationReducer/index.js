@@ -573,8 +573,8 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.TAP_INCREMENT_FACTOR_CHANGED: {
-      if (validateTapIncrementFactor(parseFloat(action.payload))) {
-        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "should be in between 1 and 2";
+      if (validateTapIncrementFactor(parseFloat(action.payload)) || !validateDecimal(action.payload)) {
+        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "should be in between 1 and 2, only one decimal allowed";
       } else {
         localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "";
       }
@@ -586,8 +586,8 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.VOTE_SATURATION_LIMIT_CHANGED: {
-      if (validateVoteSaturationLimit(parseFloat(action.payload))) {
-        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "should be in between 0.1 and 10";
+      if (validateVoteSaturationLimit(parseFloat(action.payload)) || !validateDecimal(action.payload)) {
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "should be in between 0.1 and 10, only one decimal allowed";
       } else {
         localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "";
       }

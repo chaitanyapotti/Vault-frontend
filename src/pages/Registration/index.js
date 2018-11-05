@@ -171,7 +171,7 @@ class Registration extends Component {
                   label="Publish Daico"
                   onClick={this.handlePublishDaico}
                   disabled={
-                    errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
+                  errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
                   !validateLength(adminName) ||
                   !validateLength(projectDescription) ||
                   !validateLength(projectName) ||
@@ -182,24 +182,24 @@ class Registration extends Component {
                   errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
                   errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
                   errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
+                  errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
+                  errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
                   isUpperCase(erc20TokenTag) ||
                   !validateLength(erc20TokenTag) ||
                   !validateTokenTagLength(erc20TokenTag) ||
                   errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
                   !validateProjectNameLength(projectName) ||
                   !alphaOnly(erc20TokenTag) ||
-                  !alphaOnly(projectName) ||
+                  !alphaOnly(projectName)||
                   validateMaxEtherContribution(maxEtherContribution) ||
                   !validateLength(maxEtherContribution) ||
-                  validateVoteSaturationLimit(voteSaturationLimit) ||
                   !validateLength(voteSaturationLimit) ||
-                  validateTapIncrementFactor(tapIncrementFactor) ||
                   !validateLength(tapIncrementFactor) ||
                   !validateLength(initialTapValue) ||
                   !validateLength(initialFundRelease) ||
                   !validateDate(daicoStartDate) ||
-                  !validateDate(daicoEndDate) ||
-                  validateUniqueName(projectNames, projectName) ||
+                  !validateDate(daicoEndDate)||
+                  validateUniqueName(projectNames, projectName)||
                   validateUniqueName(tokenTags, erc20TokenTag) ||
                   validateTotalSaleTokens(totalSaleTokens)
                   }

@@ -13,6 +13,8 @@ const validateTotalSaleTokens = input => {
   return false;
 };
 const validateUniqueName = (names, input) => {
+  console.log(names, "n");
+  console.log(input, "in");
   if (names.includes(input)) {
     return true;
   }

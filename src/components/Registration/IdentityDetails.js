@@ -149,7 +149,6 @@ class IdentityDetails extends React.Component {
               inputLabel="Admin Name"
               inputPlaceholder="Eg. Adam Smith"
               inputValue={adminName}
-              textFocus
               disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}
@@ -191,7 +190,6 @@ class IdentityDetails extends React.Component {
               inputLabel="Project Name"
               inputPlaceholder="Eg. Electus"
               inputValue={projectName}
-              textFocus
               disabled={!allowEditAll}
               // onBlur={this.onBlurAge}
               // error={this.state.errorAgeText !== ''}

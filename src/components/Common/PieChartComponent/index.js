@@ -7,7 +7,8 @@ export default class PieChartComponent extends Component {
   
   constructor(props) {
     super(props);
-    this.state = { nonTokenSalePieActiveIndex: 100, centerValue: 0, showTooltip: false };
+    const { totalSaleTokens } = this.props || 0
+    this.state = { nonTokenSalePieActiveIndex: 100, centerValue: 2*totalSaleTokens, showTooltip: false };
   }
 
   onPieEnter = (data, index) => {

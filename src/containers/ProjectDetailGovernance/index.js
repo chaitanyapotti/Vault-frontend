@@ -639,13 +639,15 @@ class ProjectDetailGovernance extends Component {
         <div>
         <GridData
         history={history}
+        rowClickPollHistory
         tableData={killHistoryData}
         filter={false}
           columns={[
-            "Poll Address",
+            "Address",
             "State",
             "End Date",
-            "Consensus"
+            "Consensus",
+            { name: "Id", options: { display: false } }
           ]}
         />
       </div>
@@ -653,6 +655,7 @@ class ProjectDetailGovernance extends Component {
         <AlertModal open={tapPollsHistoryModalOpen} handleClose={this.handleTapPollsHistoryClose}>
         <div>
         <GridData
+        rowClickPollHistory
         tableData={tapHistoryData}
         filter={false}
           columns={[
@@ -666,6 +669,7 @@ class ProjectDetailGovernance extends Component {
         <AlertModal open={xfrPollsHistoryModalOpen} handleClose={this.handleXfrPollsHistoryClose}>
         <div>
         <GridData
+        rowClickPollHistory
         tableData={xfrHistoryData}
         filter={false}
           columns={[

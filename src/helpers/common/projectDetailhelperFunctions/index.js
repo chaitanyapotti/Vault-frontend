@@ -26,6 +26,10 @@ const formatCent = tokenPrice => {
   return `$${tokenPrice}`;
 };
 
+const win = address => {
+  window.open(`/pollscan?contract=${address}`);
+};
+
 const pollState = (startTime, endTime) => {
   const presentDate = new Date();
   if (presentDate < startTime) {
@@ -228,5 +232,6 @@ export {
   formatNumberToINRFormat,
   pollState,
   daysTookForTapPoll,
-  xfrResult
+  xfrResult,
+  win
 };

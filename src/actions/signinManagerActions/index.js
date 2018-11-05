@@ -200,9 +200,9 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
     // console.log("printing current provider: ", web3.currentProvider)
     if (web3.currentProvider === null) {
       if (metamaskPreviousInstallationState=== false){
-
+        return
       }else{
-        dispatch({
+        return dispatch({
           type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
           payload: false
         })
@@ -231,7 +231,7 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
               })
             }
             if (networkName==='rinkeby'){
-              if (accounts[0].toLowerCase() !== userPreviousLocalPublicAddress.toLowerCase()) {
+              if (accounts[0] !== userPreviousLocalPublicAddress) {
                 dispatch({
                   type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
                   payload: accounts[0]
@@ -256,10 +256,7 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
         }
       })
       .catch(err => {
-        dispatch({
-          type: actionTypes.USER_REGISTRATION_CHECK_FAILED,
-          payload: constants.FAILED_TO_GET_PUBLIC_ADDRESS
-        });
+        console.log(err)
       });
   };
 }

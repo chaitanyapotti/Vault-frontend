@@ -15,7 +15,7 @@ import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import Drawer from "@material-ui/core/Drawer";
 import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
-import { CUIAppBar, CUIButtonIcon } from "../../../helpers/material-ui";
+import { CUIAppBar, CUIButtonIcon, CUIButton } from "../../../helpers/material-ui";
 
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 import { ButtonComponent } from "../../Common/FormComponents";
@@ -301,17 +301,17 @@ class HeaderPartial extends React.Component {
                               {
                                 0: (
                                   <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                    <img className="push--left" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
+                                     <img className="push--left" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> Install
                                   </a>
                                 ),
                                 1: (
                                   <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                    Sign in <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
+                                    <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> Sign in 
                                   </a>
                                 ),
                                 2: (
                                   <div>
-                                    Wrong network.
+                                    <CUIButton>Wrong network</CUIButton> 
                           <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
@@ -326,15 +326,15 @@ class HeaderPartial extends React.Component {
                                 ),
                                 4: (
                                   <div>
-                                    Welcome to the vault.
-                          <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                    <CUIButton>
+                                    {this.props.userLocalPublicAddress}
+                                    </CUIButton>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 5: (
                                   <div>
-                                    Welcome to the vault, Issuer.
-                          <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                    <CUIButton>{this.props.userLocalPublicAddress}</CUIButton>
                                   </div>
                                 )
                               }[this.props.signinStatusFlag]

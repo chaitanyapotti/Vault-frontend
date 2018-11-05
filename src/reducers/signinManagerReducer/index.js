@@ -7,7 +7,7 @@ export const initialState = {
   userServerPublicAddress: "",
   userIsIssuer: false,
   userLocalPublicAddress: "",
-  userPreviousLocalPublicAddress: "",
+  userPreviousLocalPublicAddress: null,
   otpFromServer: "",
   otpFromUser: "",
   otpFailed: false,
@@ -22,7 +22,7 @@ export const initialState = {
   vaultPaymentPendingStatus: false,
   signinStatusFlag: 0,
   networkName: "",
-  metamaskPreviousInstallationState: false,
+  metamaskPreviousInstallationState: null,
   metamaskPreviousNetworkName: "",
   isIssuerChecked: false,
   isMetamaskNetworkChecked: false,
@@ -77,7 +77,11 @@ export default function(state = initialState, action) {
         ...state,
         signinStatusFlag: 0,
         metamaskPreviousInstallationState: action.payload,
-        isMetamaskInstallationChecked: true
+        isMetamaskInstallationChecked: true,
+        isMetamaskNetworkChecked: true,
+        isIssuerChecked: true,
+        isUserDefaultAccountChecked: true,
+        isVaultMembershipChecked: true
       };
     }
 
@@ -121,7 +125,10 @@ export default function(state = initialState, action) {
         userLocalPublicAddress: "",
         userPreviousLocalPublicAddress: "",
         signinStatusFlag: 1,
-        isUserDefaultAccountChecked: true
+        isUserDefaultAccountChecked: true,
+        isIssuerChecked: true,
+        isMetamaskNetworkChecked: true,
+        isVaultMembershipChecked: true
       };
     }
 

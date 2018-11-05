@@ -58,7 +58,10 @@ export default function(state = initialState, action) {
         ...state,
         signinStatusFlag: 2,
         metamaskPreviousNetworkName: action.payload,
-        isMetamaskNetworkChecked: true
+        isMetamaskNetworkChecked: true,
+        isIssuerChecked: true,
+        isUserDefaultAccountChecked: true,
+        isVaultMembershipChecked: true
       };
     }
 

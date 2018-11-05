@@ -20,6 +20,8 @@ import { CUIAppBar, CUIButtonIcon, CUIButton } from "../../../helpers/material-u
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
+import AlertModal from "../../Common/AlertModal";
+import Warning from "@material-ui/icons/Warning";
 
 const images = {
   metamask: "/assets/Footer/metamask.png"
@@ -108,8 +110,13 @@ class HeaderPartial extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
-    searchText: ""
+    searchText: "",
+    signInModalOpen: false
   };
+
+  handleSignInModalOpen = () => this.setState({ signInModalOpen: true });
+
+  handleSignInModalClose = () => this.setState({ signInModalOpen: false });
 
   handleFormCloseButtonClicked = event => {
     this.props.closeRegistrationFormAction();
@@ -194,6 +201,7 @@ class HeaderPartial extends React.Component {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const { isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked } = this.props || {}
+    const { signInModalOpen } = this.state || {};
 
     const renderMenu = (
       <Menu
@@ -310,7 +318,7 @@ class HeaderPartial extends React.Component {
                                   </a>
                                 ),
                                 1: (
-                                  <CUIButton onClick={this.signinButtonClicked}>
+                                  <CUIButton onClick={this.handleSignInModalOpen}>
                                   <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> Sign in 
                                   </CUIButton>
                                     
@@ -396,7 +404,12 @@ class HeaderPartial extends React.Component {
             </Drawer>
           </div>
         ) : null}
-
+        <AlertModal open={signInModalOpen} handleClose={this.handleSignInModalClose}>
+        <div className="text--center text--danger">
+          <Warning style={{ width: "2em", height: "2em" }} />
+        </div>
+        <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
+      </AlertModal>
       </div>
 
     );

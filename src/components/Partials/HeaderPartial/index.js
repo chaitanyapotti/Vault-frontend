@@ -183,10 +183,12 @@ class HeaderPartial extends React.Component {
   };
 
   render() {
+
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const { isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked } = this.props || {}
 
     const renderMenu = (
       <Menu
@@ -229,161 +231,167 @@ class HeaderPartial extends React.Component {
     );
 
     return (
-      <div className={classes.root}>
-        <CUIAppBar
-          position="static"
-          style={
-            scrnWdh < 768
-              ? { height: "60px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
-              : { height: "85px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
-          }
-        >
-          <Grid>
-            <Row>
-              <Col xs={12}>
-                <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "85px", padding: 0 }}>
-                  {scrnWdh < 768 ? (
-                    <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
-                      <MenuIcon />
-                    </CUIButtonIcon>
-                  ) : (
-                      <div />
-                    )}
+      <div>
+        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
+          <div className={classes.root}>
+            <CUIAppBar
+              position="static"
+              style={
+                scrnWdh < 768
+                  ? { height: "60px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
+                  : { height: "85px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
+              }
+            >
+              <Grid>
+                <Row>
+                  <Col xs={12}>
+                    <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "85px", padding: 0 }}>
+                      {scrnWdh < 768 ? (
+                        <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
+                          <MenuIcon />
+                        </CUIButtonIcon>
+                      ) : (
+                          <div />
+                        )}
 
-                  <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                    <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
-                  </Typography>
-                  <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                      <SearchIcon />
-                    </div>
-                    <InputBase
-                      placeholder="Search…"
-                      classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput
-                      }}
-                      onChange={this.searchProject}
-                      onKeyDown={this.handleSearch}
-                    />
-                  </div>
-                  <div className={classes.grow} />
-                  <div className={classes.sectionDesktop}>
-                    <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked}>
-                        Projects
+                      <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                        <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
+                      </Typography>
+                      <div className={classes.search}>
+                        <div className={classes.searchIcon}>
+                          <SearchIcon />
+                        </div>
+                        <InputBase
+                          placeholder="Search…"
+                          classes={{
+                            root: classes.inputRoot,
+                            input: classes.inputInput
+                          }}
+                          onChange={this.searchProject}
+                          onKeyDown={this.handleSearch}
+                        />
                       </div>
-                    </div>
-                    {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ?
-                      <div className="hdr-itm-pad text--primary txt-m">
-                        <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
-                          My Tokens
+                      <div className={classes.grow} />
+                      <div className={classes.sectionDesktop}>
+                        <div className="hdr-itm-pad text--primary txt-m">
+                          <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked}>
+                            Projects
+                </div>
+                        </div>
+                        {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ?
+                          <div className="hdr-itm-pad text--primary txt-m">
+                            <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
+                              My Tokens
+                  </div>
+                          </div>
+                          : null
+                        }
+                        {this.props.signinStatusFlag === 5 ?
+                          <div className="hdr-itm-pad text--primary txt-m">
+                            <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">Publish DAICO</div>
+                          </div>
+                          :
+                          null
+                        }
+
+                        <div className="text--primary txt-m push--top">
+                          {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
+                          <div className="text--center">
+                            {
+                              {
+                                0: (
+                                  <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
+                                    <img className="push--left" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
+                                  </a>
+                                ),
+                                1: (
+                                  <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
+                                    Sign in <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
+                                  </a>
+                                ),
+                                2: (
+                                  <div>
+                                    Wrong network.
+                          <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                    {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
+                                  </div>
+                                ),
+                                3: (
+                                  <div className="pos-rel" style={{ top: '-10px' }}>
+                                    <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>
+                                      Become a Vault Member
+                          </ButtonComponent>
+                                    <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                  </div>
+                                ),
+                                4: (
+                                  <div>
+                                    Welcome to the vault.
+                          <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                    {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
+                                  </div>
+                                ),
+                                5: (
+                                  <div>
+                                    Welcome to the vault, Issuer.
+                          <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
+                                  </div>
+                                )
+                              }[this.props.signinStatusFlag]
+                            }
+                          </div>
                         </div>
                       </div>
-                      : null
-                    }
-                    {this.props.signinStatusFlag === 5 ?
-                      <div className="hdr-itm-pad text--primary txt-m">
-                        <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">Publish DAICO</div>
+                      <div className={classes.sectionMobile}>
+                        <CUIButtonIcon aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+                          <MoreIcon />
+                        </CUIButtonIcon>
                       </div>
-                      :
-                      null
-                    }
-
-                    <div className="text--primary txt-m push--top">
-                      {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
-                      <div className="text--center">
-                        {
-                          {
-                            0: (
-                              <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                <img className="push--left" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
-                              </a>
-                            ),
-                            1: (
-                              <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                Sign in <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
-                              </a>
-                            ),
-                            2: (
-                              <div>
-                                Wrong network.
-                                <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
-                                {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
-                              </div>
-                            ),
-                            3: (
-                              <div className="pos-rel" style={{ top: '-10px' }}>
-                                <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>
-                                  Become a Vault Member
-                                </ButtonComponent>
-                                <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
-                              </div>
-                            ),
-                            4: (
-                              <div>
-                                Welcome to the vault.
-                                <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
-                                {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
-                              </div>
-                            ),
-                            5: (
-                              <div>
-                                Welcome to the vault, Issuer.
-                                <div style={{ width: '150px' }} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
-                              </div>
-                            )
-                          }[this.props.signinStatusFlag]
-                        }
-                      </div>
-                    </div>
-                  </div>
-                  <div className={classes.sectionMobile}>
-                    <CUIButtonIcon aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                      <MoreIcon />
-                    </CUIButtonIcon>
-                  </div>
-                </Toolbar>
-              </Col>
-            </Row>
-          </Grid>
-        </CUIAppBar>
-        {renderMenu}
-        {renderMobileMenu}
-        <Drawer
-          variant="persistent"
-          classes={{
-            paper: classes.drawerPaper
-          }}
-          open={this.state.drawerIsOpen}
-        >
-          <div className={classes.drawerHeader}>
-            <CUIButtonIcon onClick={this.handleDrawerClose}>
-              <div>
-                <ChevronLeft /> Back
+                    </Toolbar>
+                  </Col>
+                </Row>
+              </Grid>
+            </CUIAppBar>
+            {renderMenu}
+            {renderMobileMenu}
+            <Drawer
+              variant="persistent"
+              classes={{
+                paper: classes.drawerPaper
+              }}
+              open={this.state.drawerIsOpen}
+            >
+              <div className={classes.drawerHeader}>
+                <CUIButtonIcon onClick={this.handleDrawerClose}>
+                  <div>
+                    <ChevronLeft /> Back
+        </div>
+                </CUIButtonIcon>
               </div>
-            </CUIButtonIcon>
-          </div>
-          <div className={classes.drawerInner}>
-            <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked}>
-              Projects
-            </div>
-            {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ?
-              <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
-                My Tokens
-            </div>
-              : null
-            }
-            {this.props.signinStatusFlag === 5 ?
-              <div className="hdr-itm-pad text--primary txt-m">
-                <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">Publish DAICO</div>
-              </div>
-              :
-              null
-            }
-          </div>
-        </Drawer>
+              <div className={classes.drawerInner}>
+                <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked}>
+                  Projects
       </div>
+                {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ?
+                  <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
+                    My Tokens
+      </div>
+                  : null
+                }
+                {this.props.signinStatusFlag === 5 ?
+                  <div className="hdr-itm-pad text--primary txt-m">
+                    <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">Publish DAICO</div>
+                  </div>
+                  :
+                  null
+                }
+              </div>
+            </Drawer>
+          </div>
+        ) : null}
+
+      </div>
+
     );
   }
 }
@@ -402,7 +410,10 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress, signinStatusFlag } =
+  const { userRegistered, userServerPublicAddress, userIsIssuer, showRegistrationForm, isVaultMember, userLocalPublicAddress,
+    signinStatusFlag,
+    isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked
+  } =
     state.signinManagerData || {};
   return {
     userRegistered,
@@ -411,7 +422,12 @@ const mapStateToProps = state => {
     showRegistrationForm,
     isVaultMember,
     userLocalPublicAddress,
-    signinStatusFlag
+    signinStatusFlag,
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked
   };
 };
 

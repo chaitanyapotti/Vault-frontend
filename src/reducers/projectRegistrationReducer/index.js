@@ -93,11 +93,9 @@ export default function(state = initialState, action) {
     case actionTypes.PROJECT_STATES_SUCCESS: {
       console.log("project details: ", action.payload)
       const { allowEditAll } = state || false
-      const { state:oldState } = action.payload || {}
-      if (action.payload){
-        return {
-          ...state, oldState, project_id: "", allowEditAll: allowEditAll
-        }  
+      if ('state' in action.payload){
+        const { state } = action.payload
+        return { ...state, state, project_id: "", allowEditAll: allowEditAll}
       }else{
         return {
           ...state, project_id: "", allowEditAll: allowEditAll

@@ -163,7 +163,7 @@ class Registration extends Component {
         <div id="dckd-btn" className="soft dckd-btn-cnt">
           <Grid>
             <div className="float--right">
-              <ButtonComponent 
+              <ButtonComponent onClick={this.handleSaveButtonClicked}
                 label="Save"
               />
               <span className="push--left">

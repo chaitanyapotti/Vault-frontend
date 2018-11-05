@@ -23,6 +23,11 @@ import WhiteList from "./pages/WhiteList";
 
 const App = props => {
   const { history } = props || {};
+  // console.log("logging store: ", store.getState())
+  // const { signinManagerData } = store.getState() || {}
+  // console.log("signin data: ", signinManagerData)
+  // const {isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked} = signinManagerData || {}
+  // console.log("required states: ", isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked)
   return (
     <Provider store={store}>
       <Router>

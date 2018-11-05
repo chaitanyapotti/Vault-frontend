@@ -242,10 +242,17 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
             }
           })
         } else {
-          dispatch({
-            type: actionTypes.USER_LOGGED_OUT,
-            payload: ""
-          });
+          if (userPreviousLocalPublicAddress!=""){
+            dispatch({
+              type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
+              payload: ""
+            });
+          }
+          
+          // dispatch({
+          //   type: actionTypes.USER_LOGGED_OUT,
+          //   payload: ""
+          // });
         }
       })
       .catch(err => {

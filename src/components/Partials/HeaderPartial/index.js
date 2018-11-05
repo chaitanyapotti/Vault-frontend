@@ -408,7 +408,7 @@ class HeaderPartial extends React.Component {
         <div className="text--center text--danger">
           <Warning style={{ width: "2em", height: "2em" }} />
         </div>
-        <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
+        <div className="text--center push--top">You are not signed in. Please use the browser extension to use metamask</div>
       </AlertModal>
       </div>
 

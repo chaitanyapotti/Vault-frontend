@@ -142,10 +142,33 @@ class Registration extends Component {
               <IdentityDetails />
             </Col>
             <Col xs={12} lg={5}>
-              <div style={{ textAlign: "center" }}>
-                <ButtonComponent
-                  style={{ width: "85%" }}
-                  label="Publish DAICO"
+              <div>
+                <DaicoDetails />
+              </div>
+            </Col>
+          </Row>
+
+          <Row className="push--top push--bottom">
+            <Col xs={12} lg={7}>
+              <Distribution />
+            </Col>
+          </Row>
+          <AlertModal open={modalOpen} handleClose={this.handleClose}>
+            <div className="text--center text--danger">
+              <Warning style={{ width: "2em", height: "2em" }} />
+            </div>
+            <div className="text--center push--top">{modalMessage}</div>
+          </AlertModal>
+        </Grid>
+        <div id="dckd-btn" className="soft dckd-btn-cnt">
+          <Grid>
+            <div className="float--right">
+              <ButtonComponent 
+                label="Save"
+              />
+              <span className="push--left">
+                <ButtonComponent 
+                  label="Publish Daico"
                   onClick={this.handlePublishDaico}
                   disabled={
                     errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
@@ -180,35 +203,6 @@ class Registration extends Component {
                   validateUniqueName(tokenTags, erc20TokenTag) ||
                   validateTotalSaleTokens(totalSaleTokens)
                   }
-                />
-              </div>
-              <div className="push--top">
-                <DaicoDetails />
-              </div>
-            </Col>
-          </Row>
-
-          <Row className="push--top push--bottom">
-            <Col xs={12} lg={7}>
-              <Distribution />
-            </Col>
-          </Row>
-          <AlertModal open={modalOpen} handleClose={this.handleClose}>
-            <div className="text--center text--danger">
-              <Warning style={{ width: "2em", height: "2em" }} />
-            </div>
-            <div className="text--center push--top">{modalMessage}</div>
-          </AlertModal>
-        </Grid>
-        <div id="dckd-btn" className="soft dckd-btn-cnt">
-          <Grid>
-            <div className="float--right">
-              <ButtonComponent 
-                label="Save"
-              />
-              <span className="push--left">
-                <ButtonComponent 
-                  label="Publish Daico"
                 />
               </span>
             </div>

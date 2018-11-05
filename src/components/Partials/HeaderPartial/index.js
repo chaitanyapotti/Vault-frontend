@@ -16,7 +16,7 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import Drawer from "@material-ui/core/Drawer";
 import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
 import { CUIAppBar, CUIButtonIcon, CUIButton } from "../../../helpers/material-ui";
-
+import { getSearchResults } from "../../../actions/searchActions/index";
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
@@ -189,7 +189,10 @@ class HeaderPartial extends React.Component {
 
   handleSearch = e => {
     if (e.keyCode === 13) {
-      this.props.history.push(`/search?q=${this.state.searchText}`);
+      const { history, getSearchResults: fetchSearchResults } = this.props || {};
+      const { searchText } = this.state;
+      fetchSearchResults(searchText);
+      history.push(`/search?q=${searchText}`);
     }
   };
 
@@ -420,7 +423,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       openRegistrationFormAction,
-      closeRegistrationFormAction
+      closeRegistrationFormAction,
+      getSearchResults
     },
     dispatch
   );

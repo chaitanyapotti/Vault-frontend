@@ -239,6 +239,13 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
                 dispatch(checkVaultMembership(accounts[0]));
                 dispatch(checkIssuer(accounts[0]));
               }
+            }else{
+              if (accounts[0] !== userPreviousLocalPublicAddress) {
+                dispatch({
+                  type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
+                  payload: accounts[0]
+                });
+              }
             }
           })
         } else {

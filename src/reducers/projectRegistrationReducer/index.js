@@ -93,11 +93,9 @@ export default function(state = initialState, action) {
     case actionTypes.PROJECT_STATES_SUCCESS: {
       console.log("project details: ", action.payload)
       const { allowEditAll } = state || false
-      const { state:oldState } = action.payload || {}
-      if (action.payload){
-        return {
-          ...state, oldState, project_id: "", allowEditAll: allowEditAll
-        }  
+      if ('state' in action.payload){
+        const { state: oldState } = action.payload
+        return { ...oldState, project_id: "", allowEditAll: allowEditAll}
       }else{
         return {
           ...state, project_id: "", allowEditAll: allowEditAll
@@ -176,11 +174,23 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.NON_SALE_ENTITY_EDIT: {
+      console.log("table index: ", action.payload)
       let nonSaleEntities = state.nonSaleEntities;
-      let editEntity = nonSaleEntities.splice(action.payload, 1);
-      if (nonSaleEntities.indexOf({ entityName: "Unallocated" }) != -1){
-        nonSaleEntities.splice(nonSaleEntities.indexOf({ entityName: "Unallocated" }), 1);
+      let editEntity = nonSaleEntities.splice(action.payload[3], 1);
+      console.log("non sale entities: ", nonSaleEntities)
+      console.log("index of unallocated: ",nonSaleEntities.indexOf({ entityName: "Unallocated" }))
+      var unallocIndex = 100
+      for (let obj in nonSaleEntities){
+        if (nonSaleEntities[obj].entityName==="Unallocated"){
+          unallocIndex = obj
+        }
       }
+      if (unallocIndex!=100){
+        nonSaleEntities.splice(unallocIndex, 1);
+      }
+      // if (nonSaleEntities.indexOf({ entityName: "Unallocated" }) != -1){
+      //   nonSaleEntities.splice(nonSaleEntities.indexOf({ entityName: "Unallocated" }), 1);
+      // }
       
       const { entityName, entityAddress, entityPercentage } = editEntity[0] || "";
       let unallocatedTokensPer = state.unallocatedTokensPer
@@ -563,8 +573,8 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.TAP_INCREMENT_FACTOR_CHANGED: {
-      if (validateTapIncrementFactor(parseFloat(action.payload))) {
-        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "should be in between 1 and 2";
+      if (validateTapIncrementFactor(parseFloat(action.payload)) || !validateDecimal(action.payload)) {
+        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "should be in between 1 and 2, only one decimal allowed";
       } else {
         localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "";
       }
@@ -576,8 +586,8 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.VOTE_SATURATION_LIMIT_CHANGED: {
-      if (validateVoteSaturationLimit(parseFloat(action.payload))) {
-        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "should be in between 0.1 and 10";
+      if (validateVoteSaturationLimit(parseFloat(action.payload)) || !validateDecimal(action.payload)) {
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "should be in between 0.1 and 10, only one decimal allowed";
       } else {
         localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "";
       }

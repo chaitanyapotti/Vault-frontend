@@ -57,6 +57,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         signinStatusFlag: 2,
+        networkName: action.payload,
         metamaskPreviousNetworkName: action.payload,
         isMetamaskNetworkChecked: true,
         isIssuerChecked: true,
@@ -104,33 +105,66 @@ export default function(state = initialState, action) {
         userPreviousLocalPublicAddress: action.payload
       };
     case types.USER_DEFAULT_ACCOUNT_CHANGED:
-    if (action.payload){
-      return {
-        ...state,
-        userRegistered: false,
-        userIsIssuer: false,
-        isVaultMember: false,
-        userServerPublicAddress: "",
-        userLocalPublicAddress: action.payload,
-        userPreviousLocalPublicAddress: action.payload,
-        isUserDefaultAccountChecked: true
-      };
+    const networkName = state.networkName
+    if (networkName==="rinkeby"){
+      if (action.payload){
+        return {
+          ...state,
+          userRegistered: false,
+          userIsIssuer: false,
+          isVaultMember: false,
+          userServerPublicAddress: "",
+          userLocalPublicAddress: action.payload,
+          userPreviousLocalPublicAddress: action.payload,
+          isUserDefaultAccountChecked: true
+        };
+      }else{
+        return {
+          ...state,
+          userRegistered: false,
+          userIsIssuer: false,
+          isVaultMember: false,
+          userServerPublicAddress: "",
+          userLocalPublicAddress: "",
+          userPreviousLocalPublicAddress: "",
+          signinStatusFlag: 1,
+          isUserDefaultAccountChecked: true,
+          isIssuerChecked: true,
+          isMetamaskNetworkChecked: true,
+          isVaultMembershipChecked: true
+        };
+      }
     }else{
-      return {
-        ...state,
-        userRegistered: false,
-        userIsIssuer: false,
-        isVaultMember: false,
-        userServerPublicAddress: "",
-        userLocalPublicAddress: "",
-        userPreviousLocalPublicAddress: "",
-        signinStatusFlag: 1,
-        isUserDefaultAccountChecked: true,
-        isIssuerChecked: true,
-        isMetamaskNetworkChecked: true,
-        isVaultMembershipChecked: true
-      };
+      if (action.payload!=""){
+        return {
+          ...state,
+          userRegistered: false,
+          userIsIssuer: false,
+          isVaultMember: false,
+          userServerPublicAddress: "",
+          userLocalPublicAddress: action.payload,
+          userPreviousLocalPublicAddress: action.payload,
+          isUserDefaultAccountChecked: true,
+          signinStatusFlag: 2
+        };
+      }else{
+        return {
+          ...state,
+          userRegistered: false,
+          userIsIssuer: false,
+          isVaultMember: false,
+          userServerPublicAddress: "",
+          userLocalPublicAddress: "",
+          userPreviousLocalPublicAddress: "",
+          signinStatusFlag: 1,
+          isUserDefaultAccountChecked: true,
+          isIssuerChecked: true,
+          isMetamaskNetworkChecked: true,
+          isVaultMembershipChecked: true
+        };
+      }
     }
+    
 
     case types.OTP_SENT_TO_USER_SUCCESS:
       return {

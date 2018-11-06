@@ -19,7 +19,6 @@ const ProjectGovernanceName = props => {
     buttonText,
     onClick,
     buttonVisibility,
-    priceIncrementFlag,
     buttonSpinning,
     buyButtonVisibility,
     onBuyClick,
@@ -41,7 +40,7 @@ const ProjectGovernanceName = props => {
               </div>
               <div className="txt">
                 {price} ETH
-                {priceIncrementFlag ? <span className="txt-inc">{` ${priceIncrement}`}</span> : <div />}
+                {<span className="txt-inc">{` ${priceIncrement}%`}</span>}
               </div>
             </div>
           </div>

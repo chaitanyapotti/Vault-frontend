@@ -2,9 +2,9 @@ import axios from "axios";
 import config from "../../config";
 import actionTypes from "../../action_types";
 
-export function priceFetched(price, ticker) {
+export function priceFetched(data) {
   return {
-    payload: { price, ticker },
+    payload: { data },
     type: actionTypes.PRICE_FETCHED
   };
 }
@@ -18,14 +18,14 @@ export function fetchPrice(ticker) {
       .then(response => {
         if (response.status === 200) {
           const { data } = response.data || {};
-          const { quote } = data || {};
-          const { USD } = quote || {};
-          const { price } = USD || "200";
-          dispatch(priceFetched(price, ticker));
+          dispatch(priceFetched(data));
         } else {
-          dispatch(priceFetched("200"));
+          dispatch(priceFetched({}));
         }
       })
-      .catch(err => console.error(err.message));
+      .catch(err => {
+        console.error(err.message);
+        dispatch(priceFetched({}));
+      });
   };
 }

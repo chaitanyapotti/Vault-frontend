@@ -37,7 +37,8 @@ class ActiveDaicos extends Component {
 
   render() {
     const { activeDaicosTable, prices, history } = this.props || {};
-    const { ETH } = prices || {};
+    let { ETH } = prices || {};
+    ETH = ETH.price || {};
     const data = activeDaicosTable.map(item => {
       const { projectName, rounds, currentRound, startDateTime, r1EndTime, raisedAmount, tokenPrice, _id } = item || {};
       const dataArray = [

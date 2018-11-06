@@ -197,7 +197,8 @@ const getR3Price = props => {
 
 const getSoftCap = props => {
   const { rounds, prices } = props || {};
-  const { ETH: etherPrice } = prices || {};
+  const { ETH } = prices || {};
+  const { price: etherPrice } = ETH || {};
   let softCap = 0;
   for (let index = 0; index < rounds.length; index += 1) {
     const { tokenCount } = rounds[index];
@@ -208,7 +209,8 @@ const getSoftCap = props => {
 
 const getHardCap = props => {
   const { totalMintableSupply, prices } = props || {};
-  const { ETH: etherPrice } = prices || {};
+  const { ETH } = prices || {};
+  const { price: etherPrice } = ETH || {};
   return formatMoney(formatFromWei(parseFloat(totalMintableSupply) * getR3Price(props) * etherPrice), 0);
 };
 

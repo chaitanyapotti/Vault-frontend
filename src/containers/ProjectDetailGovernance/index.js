@@ -95,7 +95,8 @@ class ProjectDetailGovernance extends Component {
       signinStatusFlag,
       membershipAddress,
       userLocalPublicAddress,
-      fetchPrice: etherPriceFetch,
+      tokenTag,
+      fetchPrice: priceFetch,
       checkWhiteList: checkWhiteListStatus,
       getTokenBalance: fetchTokenBalance,
       getTokensUnderGovernance: fetchTokensUnderGovernance,
@@ -115,7 +116,8 @@ class ProjectDetailGovernance extends Component {
       getSpendCurveData: fetchSpendCurveData,
       getVoteHistogramData: fetchVoteHistogramData
     } = this.props || {};
-    etherPriceFetch("ETH");
+    priceFetch("ETH");
+    priceFetch(tokenTag);
     // fetchSpendCurveData(version, pollFactoryAddress)
     fetchVoteHistogramData(projectid);
     fetchKillPollsHistory(projectid);
@@ -164,9 +166,12 @@ class ProjectDetailGovernance extends Component {
     }
   }
 
-  getPriceIncrement = () =>
-    // TODO: to use external api
-    "(+31.23%)";
+  getPriceIncrement = () => {
+    const { tokenTag, prices } = this.props || {};
+    const { [tokenTag]: tokenPrice } = prices || {};
+    const { change } = tokenPrice || {};
+    return change;
+  };
 
   getLastRoundInfo = () => {
     // TODO: get current round and price
@@ -184,9 +189,15 @@ class ProjectDetailGovernance extends Component {
 
   getPrice = () => {
     // TODO: to use external API
-    const { roundInfo } = this.props || {};
-    const { tokenRate } = roundInfo;
-    return 1 / tokenRate;
+    const { tokenTag, prices } = this.props || {};
+    const { [tokenTag]: tokenPrice } = prices || {};
+    const { price } = tokenPrice || {};
+    if (!price) {
+      const { roundInfo } = this.props || {};
+      const { tokenRate } = roundInfo || {};
+      return 1 / tokenRate;
+    }
+    return price;
     // return 0.009861;
   };
 
@@ -229,14 +240,16 @@ class ProjectDetailGovernance extends Component {
 
   getMyTokenValue = () => {
     const { prices, tokenBalance } = this.props || {};
-    const { ETH: etherPrice } = prices || {};
+    const { ETH } = prices || {};
+    const { price: etherPrice } = ETH || {};
     const tokenPrice = this.getPrice() * parseFloat(etherPrice);
     return formatMoney(tokenPrice * parseFloat(formatFromWei(tokenBalance)) || 0);
   };
 
   getMyRefundValue = () => {
     const { prices, remainingEtherBalance, tokenBalance, totalSupply, foundationDetails } = this.props || {};
-    const { ETH: etherPrice } = prices || {};
+    const { ETH } = prices || {};
+    const { price: etherPrice } = ETH || {};
     let softCap = 0;
     for (let index = 0; index < foundationDetails.length; index += 1) {
       const { amount } = foundationDetails[index];

@@ -45,8 +45,9 @@ class IssuerDetailGovernance extends Component {
       currentRoundNumber,
       pollFactoryAddress,
       daicoTokenAddress,
+      tokenTag,
       getRoundTokensSold: fetchRoundTokensSold,
-      fetchPrice: etherPriceFetch,
+      fetchPrice: priceFetch,
       getTokensUnderGovernance: fetchTokensUnderGovernance,
       getCurrentKillPollIndex: fetchCurrentKillPollIndex,
       getRemainingEtherBalance: fetchRemainingEtherBalance,
@@ -57,7 +58,8 @@ class IssuerDetailGovernance extends Component {
       getXfrData: fetchXfrData,
       getCurrentWithdrawableAmount: fetchCurrentWithdrawableAmount
     } = this.props || {};
-    etherPriceFetch("ETH");
+    priceFetch("ETH");
+    priceFetch(tokenTag);
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10) - 1;
     fetchRoundTokensSold(version, crowdSaleAddress, roundNumber);
     fetchTokensUnderGovernance(version, daicoTokenAddress);
@@ -71,16 +73,12 @@ class IssuerDetailGovernance extends Component {
     fetchCurrentWithdrawableAmount(version, pollFactoryAddress);
   }
 
-  componentDidUpdate(prevProps) {
-    const { userLocalPublicAddress: prevAddress, signinStatusFlag: prevFlag } = prevProps || "";
-    const { userLocalPublicAddress: localAddress, signinStatusFlag } = this.props || {};
-    if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
-    }
-  }
-
-  getPriceIncrement = () =>
-    // TODO: to use external api
-    "(+31.23%)";
+  getPriceIncrement = () => {
+    const { tokenTag, prices } = this.props || {};
+    const { [tokenTag]: tokenPrice } = prices || {};
+    const { change } = tokenPrice || {};
+    return change;
+  };
 
   getLastRoundInfo = () => {
     // TODO: get current round and price
@@ -97,11 +95,15 @@ class IssuerDetailGovernance extends Component {
   };
 
   getPrice = () => {
-    // TODO: to use external API
-    const { roundInfo } = this.props || {};
-    const { tokenRate } = roundInfo;
-    return 1 / tokenRate;
-    // return 0.009861;
+    const { tokenTag, prices } = this.props || {};
+    const { [tokenTag]: tokenPrice } = prices || {};
+    const { price } = tokenPrice || {};
+    if (!price) {
+      const { roundInfo } = this.props || {};
+      const { tokenRate } = roundInfo || {};
+      return 1 / tokenRate;
+    }
+    return price;
   };
 
   getRoundText = () => {

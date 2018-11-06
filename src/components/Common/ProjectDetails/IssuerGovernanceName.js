@@ -19,7 +19,6 @@ const IssuerGovernanceName = props => {
     lastRoundInfo,
     buttonText,
     onClick,
-    priceIncrementFlag,
     startNewRoundButtonSpinning,
     isPermissioned,
     onEditClick,
@@ -38,7 +37,7 @@ const IssuerGovernanceName = props => {
               </div>
               <div className="txt">
                 {price} ETH
-                {priceIncrementFlag ? <span className="txt-inc">{` ${priceIncrement}`}</span> : <div />}
+                {<span className="txt-inc">{` ${priceIncrement}%`}</span>}
               </div>
             </div>
           </div>

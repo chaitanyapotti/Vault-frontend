@@ -36,7 +36,8 @@ class UpcomingDaicos extends Component {
 
   render() {
     const { upcomingDaicosTable, prices, history } = this.props || {};
-    const { ETH } = prices || {};
+    let { ETH } = prices || {};
+    ETH = ETH.price || {};
     const data = upcomingDaicosTable.map(item => {
       const { projectName, rounds, startDateTime, r1EndTime, _id } = item || {};
       const dataArray = [
@@ -54,7 +55,11 @@ class UpcomingDaicos extends Component {
     });
     return (
       <div>
-        <GridData history={history} tableData={data} columns={["Name", "Rounds", "R1 Goal", "Final Goal", "Price*", "Starts at", "R1 Ends on", {name: "Id",options: {display: false}}]} />
+        <GridData
+          history={history}
+          tableData={data}
+          columns={["Name", "Rounds", "R1 Goal", "Final Goal", "Price*", "Starts at", "R1 Ends on", { name: "Id", options: { display: false } }]}
+        />
       </div>
     );
   }

@@ -36,7 +36,8 @@ class EndedDaicos extends Component {
 
   render() {
     const { endedDaicosTable, prices, history } = this.props || {};
-    const { ETH } = prices || {};
+    let { ETH } = prices || {};
+    ETH = ETH.price || {};
     const data = endedDaicosTable.map(item => {
       const { projectName, startDateTime, endedAt, raisedAmount, tokenPrice, killConsensus, _id } = item || {};
       const dataArray = [

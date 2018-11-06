@@ -35,7 +35,8 @@ class UserTokens extends Component {
 
   render() {
     const { userTokensTable, prices, history } = this.props || {};
-    const { ETH } = prices || {};
+    let { ETH } = prices || {};
+    ETH = ETH.price || {};
     const data = userTokensTable.map(item => {
       const { projectName, tokenPrice, balance, projectHealth, tapIncrement, killConsensus, killPollStartDate, xfrCount, _id } = item || {};
       const dataArray = [

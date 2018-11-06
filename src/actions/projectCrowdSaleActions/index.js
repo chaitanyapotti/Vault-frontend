@@ -92,7 +92,7 @@ export const getTokenBalance = (version, contractAddress, userLocalPublicAddress
     });
 };
 
-export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount, round) => dispatch => {
+export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount, round, daicoTokenAddress) => dispatch => {
   dispatch(isBuyButtonSpinning(true));
   console.log(amount);
   web3.eth
@@ -102,9 +102,9 @@ export const buyTokens = (version, contractAddress, userLocalPublicAddress, amou
       value: web3.utils.toWei(amount, "ether")
     })
     .on("receipt", receipt => {
-      dispatch(isBuyButtonSpinning(false));
-      dispatch(getTokenBalance(version, contractAddress, userLocalPublicAddress));
+      dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
       dispatch(getRoundTokensSold(version, contractAddress, round));
+      dispatch(isBuyButtonSpinning(false));
     })
     .on("error", error => {
       console.error(error.message);

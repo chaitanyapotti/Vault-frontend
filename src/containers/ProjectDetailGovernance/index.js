@@ -113,11 +113,11 @@ class ProjectDetailGovernance extends Component {
       getTapPollsHistory: fetchTapPollsHistory,
       getXfrPollsHistory: fetchXfrPollsHistory,
       getSpendCurveData: fetchSpendCurveData,
-      getVoteHistogramData:fetchVoteHistogramData
+      getVoteHistogramData: fetchVoteHistogramData
     } = this.props || {};
     etherPriceFetch("ETH");
     // fetchSpendCurveData(version, pollFactoryAddress)
-    fetchVoteHistogramData(projectid)
+    fetchVoteHistogramData(projectid);
     fetchKillPollsHistory(projectid);
     fetchTapPollsHistory(projectid);
     fetchXfrPollsHistory(projectid);
@@ -176,7 +176,7 @@ class ProjectDetailGovernance extends Component {
     const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
     return (
       <div>
-        <div>Level {roundNumber} price</div>
+        <div>Round {roundNumber} price</div>
         <div>{1 / tokenRate} ETH</div>
       </div>
     );
@@ -274,10 +274,11 @@ class ProjectDetailGovernance extends Component {
   };
 
   buyTokensOnClick = () => {
-    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, currentRoundNumber } = this.props || {};
+    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, currentRoundNumber, daicoTokenAddress } = this.props || {};
     const { buyAmount } = this.state || {};
     // // TODO: need to add how many tokens to buy
-    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, parseInt(currentRoundNumber, 10) - 1);
+    const roundNumber = currentRoundNumber === "4" ? 2 : parseInt(currentRoundNumber, 10) - 1;
+    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, roundNumber, daicoTokenAddress);
   };
 
   buyTokens = () => {
@@ -369,8 +370,8 @@ class ProjectDetailGovernance extends Component {
   canTapClick = () => {
     const { tapPollConsensus } = this.props || {};
     return tapPollConsensus !== "No Poll";
-  }
-  
+  };
+
   canUnlockTokens = () => {
     const { xfrVoteData, tapVoteData, killVoteData } = this.props || {};
     const { voted: killVoted } = killVoteData || {};
@@ -463,7 +464,15 @@ class ProjectDetailGovernance extends Component {
       startDateTime,
       history
     } = this.props || {};
-    const { modalOpen, buyModalOpen, buyAmount, unlockTokensModalOpen, killPollsHistoryModalOpen, tapPollsHistoryModalOpen, xfrPollsHistoryModalOpen } = this.state;
+    const {
+      modalOpen,
+      buyModalOpen,
+      buyAmount,
+      unlockTokensModalOpen,
+      killPollsHistoryModalOpen,
+      tapPollsHistoryModalOpen,
+      xfrPollsHistoryModalOpen
+    } = this.state;
 
     const killHistoryData = killPollsHistoryData.map(item => {
       const { address, endTime, consensus } = item || {};
@@ -471,28 +480,24 @@ class ProjectDetailGovernance extends Component {
         address,
         pollState(this.getKillPollStartDate(endTime), new Date(endTime * 1000)),
         formatDate(new Date(endTime * 1000)),
-        significantDigits((parseFloat(consensus))/(formatFromWei(parseFloat(tokensUnderGovernance), 0)))
+        significantDigits(parseFloat(consensus) / formatFromWei(parseFloat(tokensUnderGovernance), 0))
       ];
       return dataArray;
     });
     const tapHistoryData = tapPollsHistoryData.map(item => {
       const { address, startTime, endTime } = item || {};
-      const dataArray = [
-        address,
-        formatDate(new Date(startTime * 1000)),
-        daysTookForTapPoll(startTime, endTime),
-      ];
+      const dataArray = [address, formatDate(new Date(startTime * 1000)), daysTookForTapPoll(startTime, endTime)];
       return dataArray;
     });
     const xfrHistoryData = xfrPollsHistoryData.map(item => {
       const { address, startTime, consensus } = item || {};
-      const xfrStartTime= new Date(startTime * 1000)
-      const xfrConsensus = significantDigits((parseFloat(consensus))/(formatFromWei(parseFloat(tokensUnderGovernance), 0)))
+      const xfrStartTime = new Date(startTime * 1000);
+      const xfrConsensus = significantDigits(parseFloat(consensus) / formatFromWei(parseFloat(tokensUnderGovernance), 0));
       const dataArray = [
         address,
         formatDate(xfrStartTime),
         xfrResult(xfrStartTime, this.getXfrEndDate(startTime), xfrConsensus, xfrRejectionPercent),
-        xfrConsensus,
+        xfrConsensus
       ];
       return dataArray;
     });
@@ -587,12 +592,8 @@ class ProjectDetailGovernance extends Component {
             />
           </Col>
           <Col xs={12} lg={6}>
-            <SpendCurve
-            spendCurveData = {spendCurveData}
-            initialFundRelease = {initialFundRelease}
-            startDateTime = {startDateTime}
-            />
-          </Col> 
+            <SpendCurve spendCurveData={spendCurveData} initialFundRelease={initialFundRelease} startDateTime={startDateTime} />
+          </Col>
         </Row>
 
         <Row className="push--top">
@@ -613,11 +614,11 @@ class ProjectDetailGovernance extends Component {
             />
           </Col>
           <Col xs={12} lg={6}>
-            <VoteHistogram 
-            voteHistogramData={voteHistogramData}
-            totalVotes = {totalVotes}
-            collectiveVoteWeight = {collectiveVoteWeight}
-            projectHealth = {projectHealth}
+            <VoteHistogram
+              voteHistogramData={voteHistogramData}
+              totalVotes={totalVotes}
+              collectiveVoteWeight={collectiveVoteWeight}
+              projectHealth={projectHealth}
             />
           </Col>
         </Row>
@@ -627,59 +628,50 @@ class ProjectDetailGovernance extends Component {
           </div>
           <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
         </AlertModal>
-        <AlertModal killButtonSpinning ={killButtonSpinning}
-        tapButtonSpinning = {tapButtonSpinning}
-        xfr1ButtonSpinning = {xfr1ButtonSpinning}
-        xfr2ButtonSpinning ={xfr2ButtonSpinning} open={unlockTokensModalOpen} handleClose={this.handleUnlockTokensClose} metamask= "metamask" onProceedClick={this.unlockTokensClick}>
+        <AlertModal
+          killButtonSpinning={killButtonSpinning}
+          tapButtonSpinning={tapButtonSpinning}
+          xfr1ButtonSpinning={xfr1ButtonSpinning}
+          xfr2ButtonSpinning={xfr2ButtonSpinning}
+          open={unlockTokensModalOpen}
+          handleClose={this.handleUnlockTokensClose}
+          metamask="metamask"
+          onProceedClick={this.unlockTokensClick}
+        >
           <div className="text--center push--top">
             You have voted in {this.unlockPollsCount()} polls. You would have to sign {this.unlockPollsCount()} transactions to unlock your tokens.
           </div>
         </AlertModal>
         <AlertModal open={killPollsHistoryModalOpen} handleClose={this.handleKillPollsHistoryClose}>
-        <div>
-        <GridData
-        history={history}
-        rowClickPollHistory
-        tableData={killHistoryData}
-        filter={false}
-          columns={[
-            "Address",
-            "State",
-            "End Date",
-            "Consensus",
-            { name: "Id", options: { display: false } }
-          ]}
-        />
-      </div>
+          <div>
+            <GridData
+              history={history}
+              rowClickPollHistory
+              tableData={killHistoryData}
+              filter={false}
+              columns={["Address", "State", "End Date", "Consensus", { name: "Id", options: { display: false } }]}
+            />
+          </div>
         </AlertModal>
         <AlertModal open={tapPollsHistoryModalOpen} handleClose={this.handleTapPollsHistoryClose}>
-        <div>
-        <GridData
-        rowClickPollHistory
-        tableData={tapHistoryData}
-        filter={false}
-          columns={[
-            "Poll Address",
-            "Deployed On",
-            "Took Time To Complete"
-          ]}
-        />
-      </div>
+          <div>
+            <GridData
+              rowClickPollHistory
+              tableData={tapHistoryData}
+              filter={false}
+              columns={["Poll Address", "Deployed On", "Took Time To Complete"]}
+            />
+          </div>
         </AlertModal>
         <AlertModal open={xfrPollsHistoryModalOpen} handleClose={this.handleXfrPollsHistoryClose}>
-        <div>
-        <GridData
-        rowClickPollHistory
-        tableData={xfrHistoryData}
-        filter={false}
-          columns={[
-            "Poll Address",
-            "Deployed On",
-            "Result",
-            "Consensus"
-          ]}
-        />
-      </div>
+          <div>
+            <GridData
+              rowClickPollHistory
+              tableData={xfrHistoryData}
+              filter={false}
+              columns={["Poll Address", "Deployed On", "Result", "Consensus"]}
+            />
+          </div>
         </AlertModal>
         <BuyModal
           open={buyModalOpen}

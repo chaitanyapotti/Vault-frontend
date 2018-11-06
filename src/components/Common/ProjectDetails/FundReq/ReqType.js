@@ -22,7 +22,6 @@ const ReqType = props => {
   } = props || {};
   return (
     <div>
-      <div>Exceptional Fund Requests</div>
       <Row className="txt-g-secondary txt-m">
         <Col lg={6}>
           <div>{name}</div>
@@ -41,7 +40,7 @@ const ReqType = props => {
       <Row className="push--top">
         <Col lg={6} className="txt">
           Approval Rate:{" "}
-          <span className="text--secondary"> {significantDigits(parseFloat(consensus) / parseFloat(tokensUnderGovernance) || 0)}%</span>
+          <span className="text--secondary"> {100 - significantDigits(parseFloat(consensus) / parseFloat(tokensUnderGovernance) || 0)}%</span>
         </Col>
         <Col lg={6} className="txt">
           Ends in: <span className="text--secondary">{formatDate(endTime * 1000)}</span>

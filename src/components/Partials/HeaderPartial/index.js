@@ -20,7 +20,7 @@ import { getSearchResults } from "../../../actions/searchActions/index";
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
-import AlertModal from "../../Common/AlertModal";
+import AlertModal from "..git /../Common/AlertModal";
 import Warning from "@material-ui/icons/Warning";
 
 const images = {

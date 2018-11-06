@@ -15,7 +15,7 @@ export function isIssuerFlagToggled() {
 
 export function verifyPhoneNumber(serverOtp, userOtp, isIssuer, publicAddress, phoneNumber, countryCode) {
   return dispatch => {
-    if (serverOtp === userOtp) {
+    if (serverOtp.toString() === userOtp.toString()) {
       axios
         .post(`${config.api_base_url}/db/users/register`, {
           publicaddress: publicAddress,

@@ -15,6 +15,7 @@ import projectRefundReducer from "./projectRefundReducer";
 import fetchPriceReducer from "./fetchPriceReducer";
 import searchReducer from "./searchReducer";
 import issuerDetailGovernanceReducer from "./issuerDetailGovernanceReducer";
+import userRegistrationData from "./userRegistrationReducer";
 
 export default {
   app,
@@ -33,5 +34,6 @@ export default {
   projectRefundReducer,
   fetchPriceReducer,
   searchReducer,
-  issuerDetailGovernanceReducer
+  issuerDetailGovernanceReducer,
+  userRegistrationData
 };

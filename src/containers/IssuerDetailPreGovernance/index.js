@@ -46,6 +46,16 @@ class IssuerDetailPreGovernance extends Component {
     r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid);
   };
 
+  isPermissioned = () => {
+    const { signinStatusFlag, ownerAddress, userLocalPublicAddress } = this.props || {};
+    return signinStatusFlag === 5 && ownerAddress === userLocalPublicAddress;
+  };
+
+  onEditClick = () => {
+    const { history } = this.props || {};
+    history.push("/registration");
+  };
+
   render() {
     const {
       projectName,
@@ -101,6 +111,8 @@ class IssuerDetailPreGovernance extends Component {
               onR1FinalizeClick={this.onR1FinalizeClick}
               r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
               onStartR1Click={this.onStartR1Click}
+              isPermissioned={this.isPermissioned()}
+              onEditClick={this.onEditClick}
             />
           </Col>
           <Col xs={12} lg={6}>

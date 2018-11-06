@@ -24,7 +24,7 @@ class ProjectIssuerGovernance extends Component {
   }
 
   render() {
-    const { currentRoundNumber, projectDetails, treasuryStateNumber } = this.props || {};
+    const { currentRoundNumber, projectDetails, treasuryStateNumber, history } = this.props || {};
     const {
       currentDeploymentIndicator,
       projectName,
@@ -62,7 +62,7 @@ class ProjectIssuerGovernance extends Component {
         </div>
       );
     if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
-      return null;
+      return <div>The project has ended</div>;
     }
     if (treasuryStateNumber === "3" && currentRoundNumber !== "0") {
       return (
@@ -93,6 +93,7 @@ class ProjectIssuerGovernance extends Component {
           ownerAddress={ownerAddress}
           tapAcceptancePercent={tapAcceptancePercent}
           projectid={_id}
+          history={history}
         />
       );
     }
@@ -121,6 +122,8 @@ class ProjectIssuerGovernance extends Component {
           currentRoundNumber={currentRoundNumber}
           treasuryStateNumber={treasuryStateNumber}
           projectid={_id}
+          ownerAddress={ownerAddress}
+          history={history}
         />
       );
     }

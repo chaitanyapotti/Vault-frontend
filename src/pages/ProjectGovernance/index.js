@@ -129,7 +129,7 @@ class ProjectGovernance extends Component {
       case "4":
         return (
           <ProjectDetailGovernance
-          projectHealth={projectHealth}
+            projectHealth={projectHealth}
             version={version}
             membershipAddress={membershipAddress}
             projectName={projectName}

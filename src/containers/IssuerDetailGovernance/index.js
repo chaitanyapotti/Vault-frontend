@@ -172,7 +172,10 @@ class IssuerDetailGovernance extends Component {
     incrementTapAmount(version, pollFactoryAddress, userLocalPublicAddress);
   };
 
-  onEditClick = () => {};
+  onEditClick = () => {
+    const { history } = this.props || {};
+    history.push("/registration");
+  };
 
   isPermissioned = () => {
     const { signinStatusFlag, ownerAddress, userLocalPublicAddress } = this.props || {};

@@ -50,8 +50,7 @@ const App = props => {
               component={() => {
                 console.log("address: ", window.location);
                 const searchPart = window.location.search;
-                ((window.location = `https://pollscan.io/contract${searchPart}`));
-
+                window.location = `https://pollscan.io/contract${searchPart}`;
               }}
             />
           </Switch>

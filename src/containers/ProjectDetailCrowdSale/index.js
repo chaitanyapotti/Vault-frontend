@@ -97,10 +97,10 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   buyTokensOnClick = () => {
-    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress } = this.props || {};
+    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, daicoTokenAddress } = this.props || {};
     const { buyAmount } = this.state || {};
     // // TODO: need to add how many tokens to buy
-    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, 0);
+    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, 0, daicoTokenAddress);
   };
 
   buyTokens = () => {

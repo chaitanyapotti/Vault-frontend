@@ -2,6 +2,83 @@ import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
+import constants from "../../constants";
+
+export const getVoteHistogramData = (projectid) => async dispatch => {
+  const network = "rinkeby";
+  // await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/projectweb3/votehistogram`, {
+      params: { network, projectid }
+    })
+    .then(response => {
+      const { status, data: voteHistogramData } = response || {};
+      const { data, message } = voteHistogramData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch({
+            type: actionTypes.VOTE_HISTOGRAM_DATA_SUCCESS,
+            payload: data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.VOTE_HISTOGRAM_DATA_FAILED,
+            payload: constants.VOTE_HISTOGRAM_DATA_FAILED_MESSAGE
+          });
+        }
+      } else {
+        dispatch({
+          type: actionTypes.VOTE_HISTOGRAM_DATA_FAILED,
+          payload: constants.VOTE_HISTOGRAM_DATA_FAILED_MESSAGE
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      dispatch({
+        type: actionTypes.VOTE_HISTOGRAM_DATA_FAILED,
+        payload: err.message
+      });
+    });
+};
+
+export const getSpendCurveData = (version, address) => async dispatch => {
+  const network = "rinkeby";
+  // await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/spendcurve`, {
+      params: { address, network, version }
+    })
+    .then(response => {
+      const { status, data: spendCurveData } = response || {};
+      const { data, message } = spendCurveData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch({
+            type: actionTypes.SPEND_CURVE_DATA_SUCCESS,
+            payload: data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.SPEND_CURVE_DATA_FAILED,
+            payload: constants.SPEND_CURVE_DATA_FAILED_MESSAGE
+          });
+        }
+      } else {
+        dispatch({
+          type: actionTypes.SPEND_CURVE_DATA_FAILED,
+          payload: constants.SPEND_CURVE_DATA_FAILED_MESSAGE
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      dispatch({
+        type: actionTypes.SPEND_CURVE_DATA_FAILED,
+        payload: err.message
+      });
+    });
+};
 
 export const tokensUnderGovernanceReceived = receipt => ({
   payload: { rec: receipt },
@@ -82,6 +159,111 @@ export const isKillFinalizeButtonSpinning = receipt => ({
   payload: { receipt },
   type: actionTypes.KILL_FINALIZE_BUTTON_SPINNING
 });
+
+export const killPollsHistoryFetchSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_POLLS_HISTORY_SUCCESS
+});
+
+export const killPollsHistoryFetchFailed = () => ({
+  payload: constants.KILL_POLLS_HISTORY_FAILED_MESSAGE,
+  type: actionTypes.KILL_POLLS_HISTORY_FAILED
+});
+
+export const tapPollsHistoryFetchSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.TAP_POLLS_HISTORY_SUCCESS
+});
+
+export const tapPollsHistoryFetchFailed = () => ({
+  payload: constants.TAP_POLLS_HISTORY_FAILED_MESSAGE,
+  type: actionTypes.TAP_POLLS_HISTORY_FAILED
+});
+
+export const xfrPollsHistoryFetchSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.XFR_POLLS_HISTORY_SUCCESS
+});
+
+export const xfrPollsHistoryFetchFailed = () => ({
+  payload: constants.XFR_POLLS_HISTORY_FAILED_MESSAGE,
+  type: actionTypes.XFR_POLLS_HISTORY_FAILED
+});
+
+export const getKillPollsHistory = projectid => async dispatch => {
+  const network = "rinkeby";
+  // await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/projectweb3/killPollHistory`, {
+      params: { projectid, network }
+    })
+    .then(response => {
+      const { status, data: killPollsHistorytData } = response || {};
+      const { data, message } = killPollsHistorytData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch(killPollsHistoryFetchSuccess(data));
+        } else {
+          dispatch(killPollsHistoryFetchFailed());
+        }
+      } else {
+        dispatch(killPollsHistoryFetchFailed());
+      }
+    })
+    .catch(err => {
+      dispatch(killPollsHistoryFetchFailed());
+    });
+};
+
+export const getTapPollsHistory = projectid => async dispatch => {
+  const network = "rinkeby";
+  // await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/projectweb3/tapPollHistory`, {
+      params: { projectid, network }
+    })
+    .then(response => {
+      const { status, data: tapPollsHistorytData } = response || {};
+      const { data, message } = tapPollsHistorytData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch(tapPollsHistoryFetchSuccess(data));
+        } else {
+          dispatch(tapPollsHistoryFetchFailed());
+        }
+      } else {
+        dispatch(tapPollsHistoryFetchFailed());
+      }
+    })
+    .catch(err => {
+      dispatch(tapPollsHistoryFetchFailed());
+    });
+};
+
+export const getXfrPollsHistory = projectid => async dispatch => {
+  const network = "rinkeby";
+  // await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/projectweb3/xfrPollHistory`, {
+      params: { projectid, network }
+    })
+    .then(response => {
+      const { status, data: xfrPollsHistorytData } = response || {};
+      const { data, message } = xfrPollsHistorytData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch(xfrPollsHistoryFetchSuccess(data));
+        } else {
+          dispatch(xfrPollsHistoryFetchFailed());
+        }
+      } else {
+        dispatch(xfrPollsHistoryFetchFailed());
+      }
+    })
+    .catch(err => {
+      dispatch(xfrPollsHistoryFetchFailed());
+    });
+};
 
 export const getTokensUnderGovernance = (version, contractAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking

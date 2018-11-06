@@ -74,13 +74,16 @@ class NonSale extends React.Component {
   };
 
   handleNonSaleEntityEdit = entityTableIndex => {
-    this.props.nonSaleEntityEditAction(entityTableIndex);
+    const { allowEditAll } = this.props || false;
+    if (allowEditAll){
+      this.props.nonSaleEntityEditAction(entityTableIndex);
+    }
   };
 
 
 
   render() {
-    const { nonSaleEntities, history, entityName, entityPercentage, entityAddress, errors } = this.props || {};
+    const { nonSaleEntities, history, entityName, entityPercentage, entityAddress, allowEditAll, errors } = this.props || {};
     const nonSaleEntitiesTable = nonSaleEntities;
     const data =
       nonSaleEntitiesTable.length > 0 &&
@@ -120,6 +123,7 @@ class NonSale extends React.Component {
                 inputPlaceholder=""
                 inputValue={this.props.entityName}
                 onChange={this.onChangeEntityName}
+                disabled = {!allowEditAll}
               />
             </Col>
             <Col xs={12} lg={6}>
@@ -132,6 +136,7 @@ class NonSale extends React.Component {
                 inputPlaceholder=""
                 inputValue={this.props.entityPercentage}
                 onChange={this.onChangeEntityPercentage}
+                disabled = {!allowEditAll}
                 error={!!this.getErrorMsg(actionTypes.ENTITY_PERCENTAGE_CHANGED)}
                 helperText={this.getErrorMsg(actionTypes.ENTITY_PERCENTAGE_CHANGED)}
               />
@@ -143,6 +148,7 @@ class NonSale extends React.Component {
                 inputName="Entity Address"
                 inputLabel="Entity Addres"
                 inputPlaceholder=""
+                disabled = {!allowEditAll}
                 inputValue={this.props.entityAddress}
                 onChange={this.onChangeEntityAddress}
                 error={!!this.getErrorMsg(actionTypes.ENTITY_ADDRESS_CHANGED)}
@@ -186,9 +192,8 @@ class NonSale extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { nonSaleEntities, totalSaleTokens, entityName, entityPercentage, entityAddress, saleEntities, unallocatedTokensPer, errors } =
+  const { nonSaleEntities, totalSaleTokens, entityName, entityPercentage, entityAddress, saleEntities, unallocatedTokensPer, allowEditAll, errors } =
     state.projectRegistrationData || {};
-    console.log("nonSalePie Data: ", nonSaleEntities, saleEntities)
   return {
     nonSaleEntities,
     totalSaleTokens,
@@ -197,6 +202,7 @@ const mapStateToProps = state => {
     entityAddress,
     saleEntities,
     unallocatedTokensPer,
+    allowEditAll,
     errors
   };
 };

@@ -13,6 +13,8 @@ const validateTotalSaleTokens = input => {
   return false;
 };
 const validateUniqueName = (names, input) => {
+  console.log(names, "n");
+  console.log(input, "in");
   if (names.includes(input)) {
     return true;
   }
@@ -30,8 +32,14 @@ const validateTapIncrementFactor = input => {
   }
   return false;
 };
-const validateTokenPriceFactor = input => {
-  if (input >= 1 && input <= 2 && input.toString().length < 4) {
+const validateR1BonusRange = input => {
+  if (input <= 100) {
+    return true;
+  }
+  return false;
+};
+const validateR2BonusRange = input => {
+  if (input >= 1 && input <= 100) {
     return true;
   }
   return false;
@@ -115,11 +123,11 @@ const checkMetaMask = address => {
   return isValid;
 };
 const validateGitLink = gitLink => {
-  const re = /^(?:https?:\/\/)?(?:www\.)?github\.com\/(?:#!\/)?[a-zA-Z0-9_]+$/i;
+  const re = /^(?:https?:\/\/)?(?:www\.)?github\.com\/(?:#!\/)?[a-zA-Z0-9_/-]+$/i;
   return re.test(gitLink);
 };
 const validateMediumLink = mediumLink => {
-  const re = /^(?:https?:\/\/)?(?:www\.)?medium\.com\/(@)?[a-zA-Z0-9_]+$/i;
+  const re = /^(?:https?:\/\/)?(?:www\.)?medium\.com\/(?:@\/)?[a-zA-Z0-9/@-]+$/i;
   return re.test(mediumLink);
 };
 const validateTelegramLink = telegramLink => {
@@ -147,7 +155,8 @@ export {
   validateInitialTap,
   validateDate,
   validateTotalSaleTokens,
-  validateTokenPriceFactor,
+  validateR1BonusRange,
+  validateR2BonusRange,
   numberOnly,
   checkMetaMask,
   validateUniqueName,

@@ -8,6 +8,11 @@ import { CUILinearProgress } from "../../../helpers/material-ui";
 const TimeLine = props => {
   const { fundsCollected, roundGoal, startDate, endDate } = props || {};
   const progressValue = Math.round((parseFloat(fundsCollected) / parseFloat(roundGoal)) * 100);
+  // Calculate the progress of time
+  const totalDays = Math.round((endDate > startDate ? endDate - startDate : 0) / 86400 / 1000);
+  const leftDays = Math.round((endDate > new Date() ? endDate - new Date() : 0) / 86400 / 1000);
+  const timeProgress = Math.round((parseFloat(totalDays - leftDays) / parseFloat(totalDays)) * 100);
+
   return (
     <Grid>
       <Row>
@@ -48,10 +53,11 @@ const TimeLine = props => {
       </Row>
 
       <div>
-        <CUILinearProgress style={{ height: 7, borderRadius: 7 }} value={50} />
+        <CUILinearProgress style={{ height: 7, borderRadius: 7 }} value={timeProgress} />
       </div>
     </Grid>
   );
 };
 
 export default TimeLine;
+

@@ -8,16 +8,8 @@ import Warning from "@material-ui/icons/Warning";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Registration";
 import {
-  validateAdminName,
   validateLength,
-  validateEmail,
   isUpperCase,
-  validateTwitterLink,
-  validateFacebookLink,
-  validateWebsiteUrl,
-  validateGitLink,
-  validateMediumLink,
-  validateTelegramLink,
   validateProjectNameLength,
   validateTokenTagLength,
   alphaOnly,
@@ -25,12 +17,10 @@ import {
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
   validateDate,
-  validateTotalSaleTokens,
-  validateTokenPriceFactor,
-  checkMetaMask,
-  validateUniqueName
+  validateUniqueName,
+  validateTotalSaleTokens
 } from "../../helpers/common/validationHelperFunctions";
-import { newProjectRegistration, saveProjectStates } from "../../actions/projectRegistrationActions";
+import { newProjectRegistration, saveProjectStates, fetchProjectStates, fetchProjectDeploymentIndicator } from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
 import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
@@ -40,13 +30,49 @@ import actionTypes from "../../action_types";
 class Registration extends Component {
   state = {
     modalOpen: false,
-    modalMessage: ""
+    modalMessage: "",
+    calculateTokensModal: false
   };
 
+  handleCalculateTokensOpen = () => this.setState({ calculateTokensModal: true });
+
   componentDidMount() {
-    const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags } = this.props || {};
+    const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags, userLocalPublicAddress, signinStatusFlag } = this.props || {};
+    if (signinStatusFlag!=5){
+      this.props.history.push({
+        pathname: `/`
+      })
+    }
+    if (userLocalPublicAddress) {
+      this.props.fetchProjectStates(userLocalPublicAddress);
+      this.props.fetchProjectDeploymentIndicator(userLocalPublicAddress);
+    } else {
+      this.props.fetchProjectStates("0xb758c38326Df3D75F1cf0DA14Bb8220Ca4231e74");
+      this.props.fetchProjectDeploymentIndicator("0xb758c38326Df3D75F1cf0DA14Bb8220Ca4231e74");
+    }
     fetchProjectNames();
     fetchTokenTags();
+    window.addEventListener("scroll", this.checkOffset);
+  }
+
+  // Function to make the docked btn sticky
+  checkOffset = () => {
+    const dckdBtnCnt = document.querySelector('#dckd-btn');
+    const footer = document.querySelector('#footer');
+
+    function getRectTop(el){
+      var rect = el.getBoundingClientRect();
+      return rect.top;
+    }
+    
+    if((getRectTop(dckdBtnCnt) + document.body.scrollTop) + dckdBtnCnt.offsetHeight >= (getRectTop(footer) + document.body.scrollTop) - 10)
+      dckdBtnCnt.style.position = 'relative';
+    if(document.body.scrollTop + window.innerHeight < (getRectTop(footer) + document.body.scrollTop))
+      dckdBtnCnt.style.position = 'fixed'; // restore when you scroll up
+    }
+  
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.checkOffset);
   }
 
   handlePublishDaico = e => {
@@ -69,6 +95,15 @@ class Registration extends Component {
     }
   };
 
+  handleSaveButtonClicked = () => {
+    const {
+      projectRegistrationData: registrationData,
+      userLocalPublicAddress: localAddress,
+      saveProjectStates: saveProjectStates
+    } = this.props || {};
+    saveProjectStates(registrationData, localAddress);
+  }
+
   handleClose = () => this.setState({ modalOpen: false });
 
   render() {
@@ -78,13 +113,6 @@ class Registration extends Component {
       projectName,
       projectDescription,
       erc20TokenTag,
-      websiteLink,
-      telegramLink,
-      githubLink,
-      mediumLink,
-      facebookLink,
-      twitterLink,
-      teamAddress,
       maxEtherContribution,
       tapIncrementFactor,
       voteSaturationLimit,
@@ -92,32 +120,57 @@ class Registration extends Component {
       initialTapValue,
       daicoStartDate,
       daicoEndDate,
-      round1TargetUSD,
-      round1TargetEth,
-      round2TargetUSD,
-      round2TargetEth,
-      round3TargetUSD,
-      round3TargetEth,
-      tokenPriceFactor,
       projectNames,
       tokenTags,
-      errors
+      errors,
+      project_id,
+      totalSaleTokens
     } = this.props || {};
-    console.log(teamAddress, "t");
-    const { modalOpen, modalMessage } = this.state;
+    const { modalOpen, modalMessage, calculateTokensModal } = this.state;
+
+    {
+      project_id != "" ? this.props.history.push({
+        pathname: `/issuergovernance/details`,
+        search: `?projectid=${project_id}`
+      }) : null
+    }
     return (
-      <Grid>
-        <Row className="push--top">
-          <Col xs={12} lg={7}>
-            <IdentityDetails />
-          </Col>
-          <Col xs={12} lg={5}>
-            <div style={{ textAlign: "center" }}>
-              <ButtonComponent
-                style={{ width: "85%" }}
-                label="Publish DAICO"
-                onClick={this.handlePublishDaico}
-                disabled={
+      <div>
+        <Grid>
+          <Row className="push--top">
+            <Col xs={12} lg={7}>
+              <IdentityDetails />
+            </Col>
+            <Col xs={12} lg={5}>
+              <div>
+                <DaicoDetails />
+              </div>
+            </Col>
+          </Row>
+
+          <Row className="push--top push--bottom">
+            <Col xs={12} lg={7}>
+              <Distribution />
+            </Col>
+          </Row>
+          <AlertModal open={modalOpen} handleClose={this.handleClose}>
+            <div className="text--center text--danger">
+              <Warning style={{ width: "2em", height: "2em" }} />
+            </div>
+            <div className="text--center push--top">{modalMessage}</div>
+          </AlertModal>
+        </Grid>
+        <div id="dckd-btn" className="soft dckd-btn-cnt">
+          <Grid>
+            <div className="float--right">
+              <ButtonComponent onClick={this.handleSaveButtonClicked}
+                label="Save"
+              />
+              <span className="push--left">
+                <ButtonComponent 
+                  label="Publish Daico"
+                  onClick={this.handlePublishDaico}
+                  disabled={
                   errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
                   !validateLength(adminName) ||
                   !validateLength(projectDescription) ||
@@ -129,61 +182,40 @@ class Registration extends Component {
                   errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
                   errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
                   errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
+                  errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
+                  errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
                   isUpperCase(erc20TokenTag) ||
                   !validateLength(erc20TokenTag) ||
                   !validateTokenTagLength(erc20TokenTag) ||
                   errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
                   !validateProjectNameLength(projectName) ||
                   !alphaOnly(erc20TokenTag) ||
-                  !alphaOnly(projectName) ||
+                  !alphaOnly(projectName)||
                   validateMaxEtherContribution(maxEtherContribution) ||
                   !validateLength(maxEtherContribution) ||
-                  validateVoteSaturationLimit(voteSaturationLimit) ||
                   !validateLength(voteSaturationLimit) ||
-                  validateTapIncrementFactor(tapIncrementFactor) ||
                   !validateLength(tapIncrementFactor) ||
                   !validateLength(initialTapValue) ||
                   !validateLength(initialFundRelease) ||
-                  !validateLength(round1TargetEth) ||
-                  !validateLength(round1TargetUSD) ||
-                  !validateLength(round2TargetEth) ||
-                  !validateLength(round2TargetUSD) ||
-                  !validateLength(round3TargetEth) ||
-                  !validateLength(round3TargetUSD) ||
-                  !validateLength(tokenPriceFactor) ||
                   !validateDate(daicoStartDate) ||
-                  !validateDate(daicoEndDate) ||
-                  !validateTokenPriceFactor(tokenPriceFactor) ||
-                  validateUniqueName(projectNames, projectName) ||
-                  validateUniqueName(tokenTags, erc20TokenTag)
-                }
-              />
+                  !validateDate(daicoEndDate)||
+                  validateUniqueName(projectNames, projectName)||
+                  validateUniqueName(tokenTags, erc20TokenTag) ||
+                  validateTotalSaleTokens(totalSaleTokens)
+                  }
+                />
+              </span>
             </div>
-            <div className="push--top">
-              <DaicoDetails />
-            </div>
-          </Col>
-        </Row>
-
-        <Row className="push--top push--bottom">
-          <Col xs={12} lg={7}>
-            <Distribution />
-          </Col>
-        </Row>
-        <AlertModal open={modalOpen} handleClose={this.handleClose}>
-          <div className="text--center text--danger">
-            <Warning style={{ width: "2em", height: "2em" }} />
-          </div>
-          <div className="text--center push--top">{modalMessage}</div>
-        </AlertModal>
-      </Grid>
+          </Grid>
+        </div>
+    </div>
     );
   }
 }
 
 const mapStateToProps = state => {
   const { projectRegistrationData } = state || {};
-  const { userLocalPublicAddress } = state.signinManagerData || {};
+  const { userLocalPublicAddress, signinStatusFlag } = state.signinManagerData || {};
   const {
     adminName,
     adminEmail,
@@ -210,11 +242,13 @@ const mapStateToProps = state => {
     round2TargetEth,
     round3TargetUSD,
     round3TargetEth,
-    tokenPriceFactor,
+    r1Bonus,
+    r2Bonus,
     totalSaleTokens,
     errors,
     projectNames,
-    tokenTags
+    tokenTags,
+    project_id
   } = state.projectRegistrationData || {};
   return {
     projectRegistrationData,
@@ -246,9 +280,12 @@ const mapStateToProps = state => {
     round3TargetUSD,
     round3TargetEth,
     totalSaleTokens,
-    tokenPriceFactor,
+    r1Bonus,
+    r2Bonus,
     projectNames,
-    tokenTags
+    tokenTags,
+    project_id,
+    signinStatusFlag
   };
 };
 
@@ -256,9 +293,11 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       newProjectRegistration,
-      saveProjectStates, 
+      saveProjectStates,
       getProjectNames,
-      getTokenTags
+      getTokenTags,
+      fetchProjectStates,
+      fetchProjectDeploymentIndicator
     },
     dispatch
   );

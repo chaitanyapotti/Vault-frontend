@@ -7,7 +7,7 @@ export const initialState = {
   userServerPublicAddress: "",
   userIsIssuer: false,
   userLocalPublicAddress: "",
-  userPreviousLocalPublicAddress: "",
+  userPreviousLocalPublicAddress: null,
   otpFromServer: "",
   otpFromUser: "",
   otpFailed: false,
@@ -22,8 +22,13 @@ export const initialState = {
   vaultPaymentPendingStatus: false,
   signinStatusFlag: 0,
   networkName: "",
-  metamaskPreviousInstallationState: false,
-  metamaskPreviousNetworkName: ""
+  metamaskPreviousInstallationState: null,
+  metamaskPreviousNetworkName: "",
+  isIssuerChecked: false,
+  isMetamaskNetworkChecked: false,
+  isMetamaskInstallationChecked: false, 
+  isUserDefaultAccountChecked: false, 
+  isVaultMembershipChecked: false
 };
 
 export default function(state = initialState, action) {
@@ -32,12 +37,12 @@ export default function(state = initialState, action) {
       const isIssuer = action.payload;
       const signinStatusFlag = state.signinStatusFlag;
       if (signinStatusFlag === 4 && isIssuer) {
-        return { ...state, signinStatusFlag: 5 };
+        return { ...state, signinStatusFlag: 5, isIssuerChecked: true };
       }
       if (isIssuer) {
-        return { ...state, userIsIssuer: true };
+        return { ...state, userIsIssuer: true, isIssuerChecked: true };
       }
-      return { ...state, userIsIssuer: false };
+      return { ...state, userIsIssuer: false, isIssuerChecked: true };
     }
 
     case types.METAMASK_NETWORK: {
@@ -45,13 +50,19 @@ export default function(state = initialState, action) {
         return {
           ...state,
           networkName: "rinkeby",
-          metamaskPreviousNetworkName: action.payload
+          metamaskPreviousNetworkName: action.payload,
+          isMetamaskNetworkChecked: true
         };
       }
       return {
         ...state,
         signinStatusFlag: 2,
-        metamaskPreviousNetworkName: action.payload
+        networkName: action.payload,
+        metamaskPreviousNetworkName: action.payload,
+        isMetamaskNetworkChecked: true,
+        isIssuerChecked: true,
+        isUserDefaultAccountChecked: true,
+        isVaultMembershipChecked: true
       };
     }
 
@@ -59,13 +70,19 @@ export default function(state = initialState, action) {
       if (action.payload) {
         return {
           ...state,
-          metamaskPreviousInstallationState: action.payload
+          metamaskPreviousInstallationState: action.payload,
+          isMetamaskInstallationChecked: true
         };
       }
       return {
         ...state,
         signinStatusFlag: 0,
-        metamaskPreviousInstallationState: action.payload
+        metamaskPreviousInstallationState: action.payload,
+        isMetamaskInstallationChecked: true,
+        isMetamaskNetworkChecked: true,
+        isIssuerChecked: true,
+        isUserDefaultAccountChecked: true,
+        isVaultMembershipChecked: true
       };
     }
 
@@ -80,6 +97,7 @@ export default function(state = initialState, action) {
         userPreviousLocalPublicAddress: publicAddress
       };
     }
+
     case types.USER_LOCAL_ACCOUNT_ADDRESS:
       return {
         ...state,
@@ -87,27 +105,66 @@ export default function(state = initialState, action) {
         userPreviousLocalPublicAddress: action.payload
       };
     case types.USER_DEFAULT_ACCOUNT_CHANGED:
-      return {
-        ...state,
-        userRegistered: false,
-        userIsIssuer: false,
-        isVaultMember: false,
-        userServerPublicAddress: "",
-        userLocalPublicAddress: action.payload,
-        userPreviousLocalPublicAddress: action.payload
-      };
-
-    case types.USER_LOGGED_OUT:
-      return {
-        ...state,
-        userRegistered: false,
-        userIsIssuer: false,
-        isVaultMember: false,
-        userServerPublicAddress: "",
-        userLocalPublicAddress: "",
-        userPreviousLocalPublicAddress: "",
-        signinStatusFlag: 1
-      };
+    const networkName = state.networkName
+    if (networkName==="rinkeby"){
+      if (action.payload){
+        return {
+          ...state,
+          userRegistered: false,
+          userIsIssuer: false,
+          isVaultMember: false,
+          userServerPublicAddress: "",
+          userLocalPublicAddress: action.payload,
+          userPreviousLocalPublicAddress: action.payload,
+          isUserDefaultAccountChecked: true
+        };
+      }else{
+        return {
+          ...state,
+          userRegistered: false,
+          userIsIssuer: false,
+          isVaultMember: false,
+          userServerPublicAddress: "",
+          userLocalPublicAddress: "",
+          userPreviousLocalPublicAddress: "",
+          signinStatusFlag: 1,
+          isUserDefaultAccountChecked: true,
+          isIssuerChecked: true,
+          isMetamaskNetworkChecked: true,
+          isVaultMembershipChecked: true
+        };
+      }
+    }else{
+      if (action.payload!=""){
+        return {
+          ...state,
+          userRegistered: false,
+          userIsIssuer: false,
+          isVaultMember: false,
+          userServerPublicAddress: "",
+          userLocalPublicAddress: action.payload,
+          userPreviousLocalPublicAddress: action.payload,
+          isUserDefaultAccountChecked: true,
+          signinStatusFlag: 2
+        };
+      }else{
+        return {
+          ...state,
+          userRegistered: false,
+          userIsIssuer: false,
+          isVaultMember: false,
+          userServerPublicAddress: "",
+          userLocalPublicAddress: "",
+          userPreviousLocalPublicAddress: "",
+          signinStatusFlag: 1,
+          isUserDefaultAccountChecked: true,
+          isIssuerChecked: true,
+          isMetamaskNetworkChecked: true,
+          isVaultMembershipChecked: true
+        };
+      }
+    }
+    
 
     case types.OTP_SENT_TO_USER_SUCCESS:
       return {
@@ -192,7 +249,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isVaultMember: action.payload,
-        signinStatusFlag
+        signinStatusFlag,
+        isVaultMembershipChecked: true
       };
     }
     case types.PHONE_NUMBER_IS_VERIFIED:

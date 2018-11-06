@@ -26,7 +26,7 @@ class ProjectGovernance extends Component {
   }
 
   render() {
-    const { currentRoundNumber, projectDetails, treasuryStateNumber } = this.props || {};
+    const { currentRoundNumber, projectDetails, treasuryStateNumber, history } = this.props || {};
     const {
       currentDeploymentIndicator,
       projectName,
@@ -50,7 +50,10 @@ class ProjectGovernance extends Component {
       initialFundRelease,
       crowdSaleAddress,
       daicoTokenAddress,
-      xfrDetails
+      xfrDetails,
+      _id,
+      xfrRejectionPercent,
+      projectHealth
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
@@ -126,6 +129,7 @@ class ProjectGovernance extends Component {
       case "4":
         return (
           <ProjectDetailGovernance
+            projectHealth={projectHealth}
             version={version}
             membershipAddress={membershipAddress}
             projectName={projectName}
@@ -149,6 +153,9 @@ class ProjectGovernance extends Component {
             currentRoundNumber={currentRoundNumber}
             daicoTokenAddress={daicoTokenAddress}
             xfrDetails={xfrDetails}
+            projectid={_id}
+            xfrRejectionPercent={xfrRejectionPercent}
+            history={history}
           />
         );
       default:

@@ -19,9 +19,15 @@ import SigninManager from "./containers/SigninManager";
 import Register from "./containers/Register";
 import store from "./store";
 import Search from "./pages/Search";
+import WhiteList from "./pages/WhiteList";
 
 const App = props => {
   const { history } = props || {};
+  // console.log("logging store: ", store.getState())
+  // const { signinManagerData } = store.getState() || {}
+  // console.log("signin data: ", signinManagerData)
+  // const {isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked} = signinManagerData || {}
+  // console.log("required states: ", isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked)
   return (
     <Provider store={store}>
       <Router>
@@ -36,8 +42,17 @@ const App = props => {
             <Route exact path="/registration" component={Registration} />
             <Route exact path="/dashboard" component={Dashboard} />
             <Route exact path="/deploy" component={Deployer} />
+            {/* <Route exact path="/register" component={WhiteList} /> */}
             <Route exact path="/register" component={Register} />
             <Route path="/search" component={Search} />
+            <Route
+              path="/pollscan"
+              component={() => {
+                console.log("address: ", window.location);
+                const searchPart = window.location.search;
+                window.location = `https://pollscan.io/contract${searchPart}`;
+              }}
+            />
           </Switch>
           <SigninManager />
         </VaultApp>

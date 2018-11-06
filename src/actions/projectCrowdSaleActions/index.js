@@ -29,11 +29,6 @@ export const isR1FinalizeButtonSpinning = receipt => ({
   type: actionTypes.R1_FINALIZE_BUTTON_SPINNING
 });
 
-export const isStartR1ButtonSpinning = receipt => ({
-  payload: { receipt },
-  type: actionTypes.Start_R1_BUTTON_SPINNING
-});
-
 export const getEtherCollected = (version, contractAddress) => async dispatch => {
   // doesn't call blockchain. await is non blocking
   const network = "rinkeby";
@@ -97,7 +92,7 @@ export const getTokenBalance = (version, contractAddress, userLocalPublicAddress
     });
 };
 
-export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount, round) => dispatch => {
+export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount, round, daicoTokenAddress) => dispatch => {
   dispatch(isBuyButtonSpinning(true));
   console.log(amount);
   web3.eth
@@ -107,9 +102,9 @@ export const buyTokens = (version, contractAddress, userLocalPublicAddress, amou
       value: web3.utils.toWei(amount, "ether")
     })
     .on("receipt", receipt => {
-      dispatch(isBuyButtonSpinning(false));
-      dispatch(getTokenBalance(version, contractAddress, userLocalPublicAddress));
+      dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
       dispatch(getRoundTokensSold(version, contractAddress, round));
+      dispatch(isBuyButtonSpinning(false));
     })
     .on("error", error => {
       console.error(error.message);
@@ -140,31 +135,5 @@ export const finalizeR1 = (version, contractAddress, userLocalPublicAddress) => 
     .catch(err => {
       console.error(err.message);
       dispatch(isR1FinalizeButtonSpinning(false));
-    });
-};
-
-export const startR1 = (version, contractAddress, userLocalPublicAddress) => dispatch => {
-  dispatch(isStartR1ButtonSpinning(true));
-  axios
-    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })
-    .then(res => {
-      const { data } = res.data || {};
-      const { abi } = data || {};
-      const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
-      // TODO: to send country attributes of the user
-      instance.methods
-        .startRoundOne()
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(isStartR1ButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isStartR1ButtonSpinning(false));
-        });
-    })
-    .catch(err => {
-      console.error(err.message);
-      dispatch(isStartR1ButtonSpinning(false));
     });
 };

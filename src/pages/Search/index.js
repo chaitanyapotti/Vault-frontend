@@ -12,7 +12,6 @@ class Search extends Component {
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
     if ("q" in params) {
-      console.log(params.q);
       const { getSearchResults: getSearchResultsInfo } = this.props || {};
       getSearchResultsInfo(params.q);
     } else {
@@ -21,8 +20,6 @@ class Search extends Component {
         pathname: `/`
       });
     }
-    // const { getSearchResults: getSearchResultsInfo, searchtext } = this.props || {};
-    // getSearchResultsInfo(searchtext);
   }
 
   render() {
@@ -34,8 +31,9 @@ class Search extends Component {
           <Grid>
             <MasonaryLayout columns={3}>
               {searchResult.map((item, index) => {
-                const { projectName, description, _id, tokenTag } = item || {};
+                const { projectName, description, _id, tokenTag, urls } = item || {};
                 const { history } = this.props || {};
+                const { website } = urls || {};
                 const onClick = () => {
                   history.push({
                     pathname: `/governance/details`,
@@ -50,6 +48,7 @@ class Search extends Component {
                     description={description}
                     _id={_id}
                     onClick={onClick}
+                    website={website}
                   />
                 );
               })}
@@ -57,7 +56,9 @@ class Search extends Component {
           </Grid>
         </div>
       </div>
-    ) : null;
+    ) : (
+      <div>No projects found</div>
+    );
   }
 }
 

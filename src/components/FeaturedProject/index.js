@@ -24,7 +24,7 @@ class Featuredproject extends Component {
   };
 
   render() {
-    const { classes, projectName, description, thumbnailUrl, projectId } = this.props || {};
+    const { classes, projectName, description, thumbnailUrl, projectId, website } = this.props || {};
     return (
       // <CUICard
       //   className="blue-shadow"
@@ -49,10 +49,11 @@ class Featuredproject extends Component {
         <CUICardText>
           <div>{projectName}</div>
           <div>{description}</div>
+          <a href={website} target="_blank" rel="noopener noreferrer">
+            Know More
+          </a>
         </CUICardText>
-        <CUICardActions>
-          <ButtonComponent label="Know More" onClick={() => this.onClick(projectId)} />
-        </CUICardActions>
+        <CUICardActions />
       </CUICard>
     );
   }

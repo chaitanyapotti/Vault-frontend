@@ -5,8 +5,18 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
 
 const TapCard = props => {
-  const { currentTapAmount, tapIncrementUnit, incrementApproval, onTapClick, tapVoteStatus, tapButtonSpinning, onRevokeTapClick, signinStatusFlag } =
-    props || {};
+  const {
+    currentTapAmount,
+    onTapPollsHistoryClick,
+    tapIncrementUnit,
+    incrementApproval,
+    onTapClick,
+    tapVoteStatus,
+    tapButtonSpinning,
+    onRevokeTapClick,
+    signinStatusFlag,
+    canTapClick
+  } = props || {};
   return (
     <div>
       <CUICard style={{ padding: "40px 50px" }}>
@@ -25,23 +35,30 @@ const TapCard = props => {
             Increment Approval: <span className="text--secondary">{incrementApproval}%</span>{" "}
           </Col>
         </Row>
-        <div className="text-right">
-          {signinStatusFlag <= 3 ? (
-            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-              <div>
-                <LoadingButton disabled>Approve</LoadingButton>
-              </div>
-            </Tooltip>
-          ) : tapVoteStatus === "true" ? (
-            <LoadingButton onClick={onRevokeTapClick} type="danger" loading={tapButtonSpinning}>
-              Reject
-            </LoadingButton>
-          ) : (
-            <LoadingButton onClick={onTapClick} loading={tapButtonSpinning}>
-              Approve
-            </LoadingButton>
-          )}
-        </div>
+        <Row className="push--top">
+          <Col lg={6} className="text--secondary txt">
+            <LoadingButton onClick={onTapPollsHistoryClick}>Tap polls History</LoadingButton>
+          </Col>
+          <Col lg={6} className="text-right hl">
+            <div className="text-right">
+              {signinStatusFlag <= 3 ? (
+                <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+                  <div>
+                    <LoadingButton disabled>Approve</LoadingButton>
+                  </div>
+                </Tooltip>
+              ) : tapVoteStatus === "true" ? (
+                <LoadingButton onClick={onRevokeTapClick} type="danger" loading={tapButtonSpinning}>
+                  Reject
+                </LoadingButton>
+              ) : (
+                <LoadingButton onClick={onTapClick} loading={tapButtonSpinning}>
+                  Approve
+                </LoadingButton>
+              )}
+            </div>
+          </Col>
+        </Row>
       </CUICard>
     </div>
   );

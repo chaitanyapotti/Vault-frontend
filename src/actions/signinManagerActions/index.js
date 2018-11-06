@@ -200,9 +200,9 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
     // console.log("printing current provider: ", web3.currentProvider)
     if (web3.currentProvider === null) {
       if (metamaskPreviousInstallationState=== false){
-
+        return
       }else{
-        dispatch({
+        return dispatch({
           type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
           payload: false
         })
@@ -231,7 +231,7 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
               })
             }
             if (networkName==='rinkeby'){
-              if (accounts[0].toLowerCase() !== userPreviousLocalPublicAddress.toLowerCase()) {
+              if (accounts[0] !== userPreviousLocalPublicAddress) {
                 dispatch({
                   type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
                   payload: accounts[0]
@@ -239,20 +239,31 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
                 dispatch(checkVaultMembership(accounts[0]));
                 dispatch(checkIssuer(accounts[0]));
               }
+            }else{
+              if (accounts[0] !== userPreviousLocalPublicAddress) {
+                dispatch({
+                  type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
+                  payload: accounts[0]
+                });
+              }
             }
           })
         } else {
-          dispatch({
-            type: actionTypes.USER_LOGGED_OUT,
-            payload: ""
-          });
+          if (userPreviousLocalPublicAddress!=""){
+            dispatch({
+              type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
+              payload: ""
+            });
+          }
+          
+          // dispatch({
+          //   type: actionTypes.USER_LOGGED_OUT,
+          //   payload: ""
+          // });
         }
       })
       .catch(err => {
-        dispatch({
-          type: actionTypes.USER_REGISTRATION_CHECK_FAILED,
-          payload: constants.FAILED_TO_GET_PUBLIC_ADDRESS
-        });
+        console.log(err)
       });
   };
 }
@@ -323,7 +334,6 @@ export const checkIssuer = userLocalPublicAddress => dispatch => {
     .then(response => {
       if (response.status === 200) {
         const { data } = response.data;
-        console.log("isIssuer data", data)
         if (data) {
           dispatch({
             type: actionTypes.ISISSUER_CHECK,

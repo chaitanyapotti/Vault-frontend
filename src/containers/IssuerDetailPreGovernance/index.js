@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { IPreGovernanceDetails, IssuerPreGovernanceName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
-import { getEtherCollected, getRoundTokensSold, finalizeR1, startR1 } from "../../actions/projectCrowdSaleActions/index";
+import { getEtherCollected, getRoundTokensSold, finalizeR1 } from "../../actions/projectCrowdSaleActions/index";
+import { startR1 } from "../../actions/issuerDetailGovernanceActions/index";
 import { formatFromWei, getR1Price, getR1Goal, getHardCap, getSoftCap, formatDate } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -41,8 +42,18 @@ class IssuerDetailPreGovernance extends Component {
   };
 
   onStartR1Click = () => {
-    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress } = this.props || {};
-    r1Start(version, crowdSaleAddress, userLocalPublicAddress);
+    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress, projectid } = this.props || {};
+    r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid);
+  };
+
+  isPermissioned = () => {
+    const { signinStatusFlag, ownerAddress, userLocalPublicAddress } = this.props || {};
+    return signinStatusFlag === 5 && ownerAddress === userLocalPublicAddress;
+  };
+
+  onEditClick = () => {
+    const { history } = this.props || {};
+    history.push("/registration");
   };
 
   render() {
@@ -100,6 +111,8 @@ class IssuerDetailPreGovernance extends Component {
               onR1FinalizeClick={this.onR1FinalizeClick}
               r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
               onStartR1Click={this.onStartR1Click}
+              isPermissioned={this.isPermissioned()}
+              onEditClick={this.onEditClick}
             />
           </Col>
           <Col xs={12} lg={6}>

@@ -24,10 +24,12 @@ const IssuerPreGovernanceName = props => {
     onR1FinalizeClick,
     startR1ButtonSpinning,
     r1FinalizeButtonSpinning,
-    onStartR1Click
+    onStartR1Click,
+    isPermissioned,
+    onEditClick
   } = props || {};
+  console.log(isPermissioned);
   const { website } = urls;
-  console.log(signinStatusFlag, StartRound1Visibility);
   return (
     <CUICard style={{ padding: "40px 40px" }}>
       <Row>
@@ -76,14 +78,14 @@ const IssuerPreGovernanceName = props => {
           </div>
         </Col>
         <Col lg={6} className="text-right hl  ">
-          {signinStatusFlag === 6 ? (
+          {isPermissioned ? (
             StartRound1Visibility ? (
               <div className="hli">
                 <LoadingButton onClick={onStartR1Click} disabled={!StartRound1Enabled} loading={startR1ButtonSpinning}>
                   Start Round 1
                 </LoadingButton>
               </div>
-            ) : r1Finish ? (
+            ) : isPermissioned && r1Finish ? (
               <div className="hli">
                 <LoadingButton onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
                   Initialise Refund
@@ -93,7 +95,9 @@ const IssuerPreGovernanceName = props => {
           ) : null}
           {
             <span className="hli">
-              <LoadingButton disabled={signinStatusFlag !== 6}>Edit</LoadingButton>
+              <LoadingButton onClick={onEditClick} disabled={!isPermissioned}>
+                Edit
+              </LoadingButton>
             </span>
           }
         </Col>

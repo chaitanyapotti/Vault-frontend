@@ -234,3 +234,27 @@
     background-color: #2185d6;
     display: block;
 }
+
+/* Whitelits */
+.wht-lst-info-cnt{
+    width: 70%;
+    margin: 0 auto;
+}
+
+.upld-img-plachldr{
+    height: 250px;
+    border: 1px solid;
+}
+
+/* Docked Button on Registration page */
+
+.dckd-btn-cnt{
+    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+    margin-bottom: 1px;
+    background-color: #ffffff;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+}

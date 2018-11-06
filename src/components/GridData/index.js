@@ -3,6 +3,7 @@
 import React from "react";
 import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { withRouter } from "react-router-dom";
 
 class GridData extends React.Component {
   getMuiTheme = () =>
@@ -27,24 +28,24 @@ class GridData extends React.Component {
           root: {
             fontSize: "16px"
           },
-          caption:{
-            fontSize: '1rem'
+          caption: {
+            fontSize: "1rem"
           }
         },
-        MuiTableCell:{
-          root:{
-            padding: '10px 20px 10px 20px'
+        MuiTableCell: {
+          root: {
+            padding: "10px 20px 10px 20px"
           }
         },
-        MuiTablePagination:{
-          select:{
-            fontSize: '14px'
+        MuiTablePagination: {
+          select: {
+            fontSize: "14px"
           }
         },
-        MuiTableRow:{
-          root:{
-            "&:hover":{
-              cursor: 'pointer'
+        MuiTableRow: {
+          root: {
+            "&:hover": {
+              cursor: "pointer"
             }
           }
         }
@@ -52,23 +53,25 @@ class GridData extends React.Component {
     });
 
   render() {
-    const { tableData, columns, ...rest } = this.props || {};
+    const { tableData, columns, history, ...rest } = this.props || {};
     const options = {
       filterType: "dropdown",
       responsive: "scroll",
       selectableRows: false,
       onRowClick: (currentRowsSelected, allRowsSelected) => {
         const length = currentRowsSelected.length;
-        const _id = currentRowsSelected && currentRowsSelected[length-1];
-        const {rowClickFn, onRowClick} = this.props || {};
+        const _id = currentRowsSelected && currentRowsSelected[length - 1];
+        const address = currentRowsSelected && currentRowsSelected[0];
+        const { rowClickFn, onRowClick, rowClickPollHistory } = this.props || {};
         {
-          rowClickFn ? 
-           onRowClick(_id)
-           :
-           this.props.history.push({
-             pathname: `/governance/details`,
-             search: `?projectid=${_id}`
-           });
+          rowClickFn
+            ? onRowClick(_id)
+            : rowClickPollHistory
+              ? window.open(`/pollscan?contract=${address}`).focus()
+              : history.push({
+                  pathname: `/governance/details`,
+                  search: `?projectid=${_id}`
+                });
         }
       },
       ...rest
@@ -81,4 +84,4 @@ class GridData extends React.Component {
   }
 }
 
-export default GridData;
+export default withRouter(GridData);

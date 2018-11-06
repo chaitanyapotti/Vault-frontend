@@ -17,11 +17,11 @@ const ReqType = props => {
     onXfrClick,
     onRevokeXfrClick,
     xfrButtonSpinning,
-    tokensUnderGovernance
+    tokensUnderGovernance,
+    onXfrPollHistoryClick
   } = props || {};
   return (
     <div>
-      <div>Exceptional Fund Requests</div>
       <Row className="txt-g-secondary txt-m">
         <Col lg={6}>
           <div>{name}</div>
@@ -40,32 +40,36 @@ const ReqType = props => {
       <Row className="push--top">
         <Col lg={6} className="txt">
           Approval Rate:{" "}
-          <span className="text--secondary"> {significantDigits(parseFloat(consensus) / parseFloat(tokensUnderGovernance) || 0)}%</span>
+          <span className="text--secondary"> {100 - significantDigits(parseFloat(consensus) / parseFloat(tokensUnderGovernance) || 0)}%</span>
         </Col>
         <Col lg={6} className="txt">
           Ends in: <span className="text--secondary">{formatDate(endTime * 1000)}</span>
         </Col>
       </Row>
-
-      <div className="push--top">
-        {signinStatusFlag <= 3 ? (
-          <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-            <div>
-              <LoadingButton disabled type="danger">
-                Deny
-              </LoadingButton>
-            </div>
-          </Tooltip>
-        ) : voted ? (
-          <LoadingButton onClick={onRevokeXfrClick} loading={xfrButtonSpinning}>
-            Allow
-          </LoadingButton>
-        ) : (
-          <LoadingButton onClick={onXfrClick} type="danger" loading={xfrButtonSpinning}>
-            Deny
-          </LoadingButton>
-        )}
-      </div>
+      <Row>
+        <Col lg={6} className="push--top">
+          {signinStatusFlag <= 3 ? (
+            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+              <div>
+                <LoadingButton disabled type="danger">
+                  Deny
+                </LoadingButton>
+              </div>
+            </Tooltip>
+          ) : voted ? (
+            <LoadingButton onClick={onRevokeXfrClick} loading={xfrButtonSpinning}>
+              Allow
+            </LoadingButton>
+          ) : (
+            <LoadingButton onClick={onXfrClick} type="danger" loading={xfrButtonSpinning}>
+              Deny
+            </LoadingButton>
+          )}
+        </Col>
+        <Col lg={6} className="push--top text-right">
+          <LoadingButton onClick={onXfrPollHistoryClick}>XFR polls History</LoadingButton>
+        </Col>
+      </Row>
     </div>
   );
 };

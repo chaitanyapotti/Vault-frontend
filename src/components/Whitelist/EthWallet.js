@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { CUIFormInput, CUISelectInput } from "../../helpers/material-ui";
 import {CUIInputType} from "../../static/js/variables";
 
@@ -20,16 +22,15 @@ class EthWallet extends Component {
             <div>
                 <div className="txt-m txt-dbld text--center">STEP: 2 ETH Wallet</div>
                 <div className="txt push--top">
-                    Please state a valid Ethereum wallet address from which you will be sending Ethers and to which we will send 
-                    the UNC tokens in return.
+                    Please state a valid Ethereum wallet address from which you will be sending Ethers and to which you will receive respective tokens.
                 </div>
-                <div className="txt-m txt-dbld push--top">What Ethereum wallet are you using?</div>
+                {/* <div className="txt-m txt-dbld push--top">What Ethereum wallet are you using?</div>
                 <CUISelectInput
                     data={[{value: 'abc'}, {value: 'bdgd'},{value: 'saksjsa'}]} 
                     label="Wallet" 
                     value={wallet} 
                     onChange={this.handleSelect}
-                />
+                /> */}
                 <div className="txt-m txt-dbld push--top">Your ETH Wallet Address</div>
                 <CUIFormInput
                     required
@@ -38,6 +39,7 @@ class EthWallet extends Component {
                     inputName="Address"
                     inputLabel="Address"
                     inputPlaceholder="Metamask"
+                    inputValue={this.props.userLocalPublicAddress}
                     onChange={this.onChangeIniFundVal}
                 />
 
@@ -50,7 +52,7 @@ class EthWallet extends Component {
                     <li>You need to use a standard ERC20 Wallet.</li>
                 </ul>
 
-                <div className="txt-m txt-dbld push--top">How many Electus tokens would you like to purchase? ($)</div>
+                {/* <div className="txt-m txt-dbld push--top">How many Electus tokens would you like to purchase? ($)</div>
                 <CUIFormInput
                     required
                     inputType={CUIInputType.TEXT}
@@ -60,10 +62,27 @@ class EthWallet extends Component {
                     inputPlaceholder="Metamask"
                     onChange={this.onChangeIniFundVal}
                 />
-                <div className="txt-m">Please enter a value between 100 and 2000000</div>
+                <div className="txt-m">Please enter a value between 100 and 2000000</div> */}
             </div> 
         );
     }
 }
  
-export default EthWallet;
+const mapStateToProps = state => {
+    const { userLocalPublicAddress } = state.signinManagerData || {};
+    return {
+        userLocalPublicAddress
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+        },
+        dispatch
+    );
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(EthWallet);

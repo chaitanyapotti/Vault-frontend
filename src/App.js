@@ -42,8 +42,8 @@ const App = props => {
             <Route exact path="/registration" component={Registration} />
             <Route exact path="/dashboard" component={Dashboard} />
             <Route exact path="/deploy" component={Deployer} />
-            {/* <Route exact path="/register" component={WhiteList} /> */}
-            <Route exact path="/register" component={Register} />
+            <Route exact path="/register" component={WhiteList} />
+            {/* <Route exact path="/register" component={Register} /> */}
             <Route path="/search" component={Search} />
             <Route
               path="/pollscan"

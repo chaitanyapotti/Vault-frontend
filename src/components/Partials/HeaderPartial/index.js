@@ -20,12 +20,8 @@ import { getSearchResults } from "../../../actions/searchActions/index";
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
-<<<<<<< .merge_file_a13980
-import "./style.css";
-=======
 import AlertModal from "../../Common/AlertModal";
 import Warning from "@material-ui/icons/Warning";
->>>>>>> .merge_file_a11884
 
 const images = {
   metamask: "/assets/Footer/metamask.png"
@@ -362,63 +358,10 @@ class HeaderPartial extends React.Component {
                           </div>
                         </div>
                       </div>
-<<<<<<< .merge_file_a13980
-                      : null
-                    }
-                    <div className="hdr-itm-pad text--primary txt-m">
-                      <div className="hvr-underline-from-left">Publish ICO</div>
-                    </div>
-                    <div className="text--primary txt-m push--top">
-                      {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
-                      <div className="text--center">
-                        {
-                          {
-                            0: (
-                              <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                <img className="push--left" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
-                              </a>
-                            ),
-                            1: (
-                              <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                Sign in <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
-                              </a>
-                            ),
-                            2: (
-                              <div>
-                                Wrong network.
-                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
-                                {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
-                              </div>
-                            ),
-                            3: (
-                              <div className="pos-rel" style={{top: '-10px'}}>
-                                <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>
-                                  Register for Vault
-                                </ButtonComponent>
-                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
-                              </div>
-                            ),
-                            4: (
-                              <div>
-                                Welcome to the vault.
-                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
-                                {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
-                              </div>
-                            ),
-                            5: (
-                              <div>
-                                Welcome to the vault, Issuer.
-                                <div style={{width: '150px'}} className="txt-ellipsis">{this.props.userLocalPublicAddress}</div>
-                              </div>
-                            )
-                          }[this.props.signinStatusFlag]
-                        }
-=======
                       <div className={classes.sectionMobile}>
                         <CUIButtonIcon aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
                           <MoreIcon />
                         </CUIButtonIcon>
->>>>>>> .merge_file_a11884
                       </div>
                     </Toolbar>
                   </Col>

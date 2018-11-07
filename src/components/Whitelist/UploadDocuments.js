@@ -1,12 +1,28 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { Row, Col } from '../../helpers/react-flexbox-grid';
 import { CUIDivider } from '../../helpers/material-ui';
+import { uploadPassportDocAction, uploadSelfieAction, uploadAddressDocAction } from "../../actions/userRegistrationActions";
 
 class UploadDocuments extends Component {
     constructor(props) {
         super(props);
         this.state = {  }
     }
+
+    passportDocChanged = e => {
+        this.props.uploadPassportDocAction(e.target.files[0], this.props.userLocalPublicAddress, 'passport');
+    };
+
+    selfieChanged = e => {
+        this.props.uploadSelfieAction(e.target.files[0], this.props.userLocalPublicAddress, 'selfie');
+    };
+
+    addressDocChanged = e => {
+        this.props.uploadAddressDocAction(e.target.files[0], this.props.userLocalPublicAddress, 'address');
+    };
+
     render() { 
         return ( 
             <div>
@@ -25,7 +41,7 @@ class UploadDocuments extends Component {
                     </Col>
                     <Col lg={6}>
                         <div className="txt-m txt-dbld push-top--50">Upload Passport Document</div>
-                        <div className="push-half"><input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} /></div>
+                        <div className="push-half"><input name="passportDoc" type="file" accept="image/*, application/pdf" onChange={this.passportDocChanged} /></div>
                         <div className="txt">Accepted file types: jpg, png, gif, jpeg</div>
                         <div className="txt push--top">2 MB maximum file size</div>
                     </Col>
@@ -44,7 +60,7 @@ class UploadDocuments extends Component {
                     </Col>
                     <Col lg={6}>
                         <div className="txt-m txt-dbld push-top--50">Upload Selfie</div>
-                        <div className="push-half"><input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} /></div>
+                        <div className="push-half"><input name="selfie" type="file" accept="image/*" onChange={this.selfieChanged} /></div>
                         <div className="txt">Accepted file types: jpg, png, gif, jpeg</div>
                         <div className="txt push--top">2 MB maximum file size</div>
                     </Col>
@@ -63,7 +79,7 @@ class UploadDocuments extends Component {
                     </Col>
                     <Col lg={6}>
                         <div className="txt-m txt-dbld push-top--50">Upload Proof of Address</div>
-                        <div className="push-half"><input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} /></div>
+                        <div className="push-half"><input name="addressDoc" type="file" accept="image/*, application/pdf" onChange={this.addressDocChanged} /></div>
                         <div className="txt">Accepted file types: jpg, png, gif, jpeg</div>
                         <div className="txt push--top">2 MB maximum file size</div>
                     </Col>
@@ -72,5 +88,25 @@ class UploadDocuments extends Component {
         );
     }
 }
- 
-export default UploadDocuments;
+
+const mapStateToProps = state => {
+    const { userLocalPublicAddress } = state.signinManagerData || {};
+    return {
+        userLocalPublicAddress
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            uploadPassportDocAction,
+            uploadSelfieAction,
+            uploadAddressDocAction
+        },
+        dispatch
+    );
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UploadDocuments);

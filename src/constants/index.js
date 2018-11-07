@@ -19,7 +19,10 @@ const constants = {
   PROJECT_STATES_SAVED_FAILED_MESSAGE: "Failed to save current form states.",
   PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE: "Failed to retrieve deployment indicator, please revisit the page again.",
   SPEND_CURVE_DATA_FAILED_MESSAGE: "Failed to retrieve spend curve data, please reload the page.",
-  VOTE_HISTOGRAM_DATA_FAILED_MESSAGE: "Failed to retrieve histogram data, please reload the page."
+  VOTE_HISTOGRAM_DATA_FAILED_MESSAGE: "Failed to retrieve histogram data, please reload the page.",
+  USER_FORM_STATES_SAVED_FAILED_MESSAGE: "Failed to save user form state.",
+  USER_FORM_STATES_FAILED_MESSAGE: "Failed to retrieve previously stored information.",
+  USER_FORM_SUBMISSION_FAILED_MESSAGE: "Failed to submit the form. Please try again later."
 };
 
 export default constants;

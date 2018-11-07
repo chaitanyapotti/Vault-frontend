@@ -88,7 +88,7 @@ class IssuerDetailGovernance extends Component {
     const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
     return (
       <div>
-        <div>Level {roundNumber} price</div>
+        <div>Round {roundNumber} price</div>
         <div>{1 / tokenRate} ETH</div>
       </div>
     );

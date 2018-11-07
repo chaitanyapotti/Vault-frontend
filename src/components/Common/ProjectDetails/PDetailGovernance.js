@@ -25,6 +25,7 @@ const PDetailGovernance = props => {
     onUnlockTokensClick,
     onKillPollsHistoryClick
   } = props || {};
+  console.log(canUnlockTokens);
   return (
     <CUICard style={{ padding: "40px 50px" }}>
       <div className="txt-xxxl text--primary">Project Details</div>
@@ -75,7 +76,7 @@ const PDetailGovernance = props => {
       </Row>
       <Row>
         <Col lg={6} className="push--top">
-          <LoadingButton onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
+          <LoadingButton onClick={onUnlockTokensClick} disabled={canUnlockTokens}>
             Unlock All Tokens
           </LoadingButton>
         </Col>
@@ -87,11 +88,11 @@ const PDetailGovernance = props => {
               </div>
             </Tooltip>
           ) : killVoteStatus === "false" ? (
-            <LoadingButton onClick={onKillClick} type="danger" loading={killButtonSpinning}>
+            <LoadingButton onClick={onKillClick} type="danger" loading={killButtonSpinning} disabled={parseFloat(yourTokens) <= 0}>
               Vote in Kill Poll
             </LoadingButton>
           ) : (
-            <LoadingButton onClick={onRevokeKillClick} loading={killButtonSpinning}>
+            <LoadingButton onClick={onRevokeKillClick} loading={killButtonSpinning} disabled={parseFloat(yourTokens) <= 0}>
               UnVote in Kill Poll
             </LoadingButton>
           )}

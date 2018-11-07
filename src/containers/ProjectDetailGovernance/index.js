@@ -381,8 +381,9 @@ class ProjectDetailGovernance extends Component {
   };
 
   canTapClick = () => {
-    const { tapPollConsensus } = this.props || {};
-    return tapPollConsensus !== "No Poll";
+    const { tapPollConsensus, tokenBalance } = this.props || {};
+    console.log(tapPollConsensus);
+    return tapPollConsensus !== "No Poll" && parseFloat(tokenBalance) > 0;
   };
 
   canUnlockTokens = () => {
@@ -390,7 +391,8 @@ class ProjectDetailGovernance extends Component {
     const { voted: killVoted } = killVoteData || {};
     const { voted: tapVoted } = tapVoteData || {};
     const { voted: xfr1Voted } = xfrVoteData[0] || {};
-    const { voted: xfr2Voted } = xfrVoteData[0] || {};
+    const { voted: xfr2Voted } = xfrVoteData[1] || {};
+    console.log(killVoted || tapVoted || xfr1Voted || xfr2Voted);
     return killVoted || tapVoted || xfr1Voted || xfr2Voted;
   };
 
@@ -399,7 +401,7 @@ class ProjectDetailGovernance extends Component {
     const { voted: killVoted } = killVoteData || {};
     const { voted: tapVoted } = tapVoteData || {};
     const { voted: xfr1Voted } = xfrVoteData[0] || {};
-    const { voted: xfr2Voted } = xfrVoteData[0] || {};
+    const { voted: xfr2Voted } = xfrVoteData[1] || {};
     if (killVoted) {
       this.onRevokeKillClick();
     }
@@ -420,7 +422,7 @@ class ProjectDetailGovernance extends Component {
     const { voted: killVoted } = killVoteData || {};
     const { voted: tapVoted } = tapVoteData || {};
     const { voted: xfr1Voted } = xfrVoteData[0] || {};
-    const { voted: xfr2Voted } = xfrVoteData[0] || {};
+    const { voted: xfr2Voted } = xfrVoteData[1] || {};
     if (killVoted) {
       pollCount += 1;
     }

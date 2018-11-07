@@ -72,7 +72,7 @@ export const getSpendCurveData = (version, address) => async dispatch => {
       }
     })
     .catch(err => {
-      console.log(err)
+      console.log(err);
       dispatch({
         type: actionTypes.SPEND_CURVE_DATA_FAILED,
         payload: err.message

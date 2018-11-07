@@ -116,8 +116,8 @@ class ProjectDetailGovernance extends Component {
       getVoteHistogramData:fetchVoteHistogramData
     } = this.props || {};
     etherPriceFetch("ETH");
-    // fetchSpendCurveData(version, pollFactoryAddress)
-    fetchVoteHistogramData(projectid)
+    fetchSpendCurveData(version, pollFactoryAddress);
+    fetchVoteHistogramData(projectid);
     fetchKillPollsHistory(projectid);
     fetchTapPollsHistory(projectid);
     fetchXfrPollsHistory(projectid);

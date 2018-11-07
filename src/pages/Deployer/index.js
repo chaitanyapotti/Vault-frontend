@@ -68,7 +68,6 @@ class Deployer extends Component {
       initialFundRelease,
       initialTapAmount,
       killPollStartDate,
-      vaultAddress,
       capPercent,
       killAcceptancePercent,
       xfrRejectionPercent,
@@ -79,10 +78,10 @@ class Deployer extends Component {
     const args = [
       daicoTokenAddress,
       teamAddress,
-      initialFundRelease,
+      initialFundRelease.toString(),
       initialTapAmount,
       new Date(killPollStartDate).getTime() / 1000, // In Unix Time
-      vaultAddress,
+      config.vault_contract_address,
       capPercent,
       killAcceptancePercent,
       xfrRejectionPercent,
@@ -107,7 +106,6 @@ class Deployer extends Component {
       pollFactoryAddress,
       membershipAddress,
       daicoTokenAddress,
-      vaultAddress,
       foundationDetails
     } = this.props.projectDetails || {};
     const args = [
@@ -120,7 +118,7 @@ class Deployer extends Component {
       pollFactoryAddress,
       membershipAddress,
       daicoTokenAddress,
-      vaultAddress,
+      config.vault_contract_address,
       foundationDetails.map(a => a.address),
       foundationDetails.map(a => a.amount)
     ];

@@ -66,6 +66,7 @@ export const deployContractAction = (version, projectid, cdi, args, contractName
       if (response.status === 200) {
         const { data } = response.data || {};
         const { abi, bytecode } = data || {};
+        console.log(abi, bytecode);
         new web3.eth.Contract(abi)
           .deploy({ data: bytecode, arguments: args })
           .send({ from: userLocalPublicAddress })

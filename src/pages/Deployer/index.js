@@ -7,6 +7,7 @@ import { Grid } from "../../helpers/react-flexbox-grid";
 import web3 from "../../helpers/web3";
 import CustomizedStepper from "../../components/Common/CustomizedStepper";
 import DeployerCard from "../../components/DeployerCard";
+import config from "../../config";
 
 class Deployer extends Component {
   componentDidMount() {
@@ -37,7 +38,7 @@ class Deployer extends Component {
     const { userLocalPublicAddress } = this.props || {};
     console.log(userLocalPublicAddress);
     const { version, _id, currentDeploymentIndicator, projectName, tokenTag } = this.props.projectDetails || {};
-    const args = [web3.utils.fromAscii(projectName), web3.utils.fromAscii(tokenTag)];
+    const args = [web3.utils.fromAscii(projectName), web3.utils.fromAscii(tokenTag), config.vault_contract_address];
     this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "Protocol", userLocalPublicAddress);
   };
 
@@ -260,7 +261,13 @@ class Deployer extends Component {
     const { currentDeploymentIndicator, _id } = projectDetails || {};
     return (
       <Grid>
-        <CustomizedStepper history={this.props.history} getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={currentDeploymentIndicator} projectid={_id}/>
+        <CustomizedStepper
+          history={this.props.history}
+          getStepContent={this.getStepContent}
+          getSteps={this.getSteps}
+          activeStep={currentDeploymentIndicator}
+          projectid={_id}
+        />
       </Grid>
     );
   }

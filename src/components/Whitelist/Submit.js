@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { CUIFormInput, CUISelectInput, CUIButton } from "../../helpers/material-ui";
-import {CUIInputType} from "../../static/js/variables";
-import { saveUserFormStates } from "../../actions/userRegistrationActions";
+import { saveUserFormStates, requestVaultMembership, postUserFormData } from "../../actions/userRegistrationActions";
+import {ButtonComponent} from "../../components/Common/FormComponents";
 
 class Submit extends Component {
     constructor(props) {
         super(props);
     }
 
+    handleRequestVaultMembership = () => {
+        this.props.requestVaultMembership(this.props.userLocalPublicAddress, this.props.isIssuerFlag);
+    }
+
     submitForm= () =>{
         console.log("submit form")
         this.props.saveUserFormStates(this.props.userRegistrationData, this.props.userLocalPublicAddress)
+        if (this.props.isVaultMember){
+            this.props.postUserFormData(this.props.userRegistrationData, this.props.userLocalPublicAddress)
+        }
     }
 
     render() { 
@@ -24,7 +30,20 @@ class Submit extends Component {
                     I hereby submit.
                 </div>
                 <div>
-                    <CUIButton onClick={this.submitForm}>Submit</CUIButton>
+                    <ButtonComponent onClick={this.submitForm}>Submit</ButtonComponent>
+                    
+                    {this.props.vaultMembershipRequested?(
+                        <div>
+                            {this.props.isVaultMember?(
+                                <div>Redirect to where? You are already a vault member.</div>
+                            ): (
+                                <div>Your request is pending with us. We shall approve it ASAP.</div>
+                            )}
+                        </div>                       
+                        )
+                    :(<ButtonComponent label="Become a Vault Member" onClick={this.handleRequestVaultMembership} />)}
+                    
+                    
                 </div>
             </div> 
         );
@@ -32,18 +51,24 @@ class Submit extends Component {
 }
  
 const mapStateToProps = state => {
-    const { userLocalPublicAddress } = state.signinManagerData || {};
+    const { userLocalPublicAddress, isVaultMember } = state.signinManagerData || {};
     const { userRegistrationData } = state || {}
+    const { vaultMembershipRequested, isIssuerFlag } = state.userRegistrationData || {}
     return {
         userLocalPublicAddress,
-        userRegistrationData
+        userRegistrationData,
+        vaultMembershipRequested,
+        isVaultMember,
+        isIssuerFlag
     };
 };
 
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
         {
-            saveUserFormStates
+            saveUserFormStates,
+            requestVaultMembership,
+            postUserFormData
         },
         dispatch
     );

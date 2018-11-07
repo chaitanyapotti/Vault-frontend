@@ -10,7 +10,7 @@ import {
     isIssuerFlagToggled,
     checkVaultMembership,
     requestVaultMembership,
-} from "../../actions/signinManagerActions";
+} from "../../actions/userRegistrationActions";
 import { CUICard, CUIFormInput, CUIFormInputLabel, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType, CUIInputColor } from "../../static/js/variables";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -75,6 +75,7 @@ class OtpVerification extends Component {
                                                 inputName="Country Code"
                                                 inputLabel="Country Code"
                                                 inputPlaceholder="+91"
+                                                inputValue={this.props.countryCode}
                                                 onChange={this.handleCountryCodeChanged}
                                             />
                                         </Col>
@@ -85,6 +86,7 @@ class OtpVerification extends Component {
                                                 inputName="Phone Number"
                                                 inputLabel="Phone Number"
                                                 inputPlaceholder="9096xxxxxx"
+                                                inputValue={this.props.phoneNumber}
                                                 onChange={this.handlePhoneNumberChanged}
                                             />
                                         </Col>
@@ -130,7 +132,14 @@ class OtpVerification extends Component {
                                     {this.props.otpVerificationSuccessful ? (
                                         <div className="push--top">OTP Verification Successful. Go to next step.</div>
                                     ) : (
-                                            <div className="push--top">OTP Verification Failed, please try again.</div>
+                                        <div>
+                                        {
+                                            this.props.phoneOrAddressExists?(<div>
+                                                Your public address or Phone number already exists with another account.</div>
+                                                ):(null)
+
+                                    }
+                                        </div>
                                         )}
                                 </div>
                             </CUICard>
@@ -144,6 +153,7 @@ class OtpVerification extends Component {
 }
 
 const mapStateToProps = state => {
+    const { userLocalPublicAddress } = state.signinManagerData || {}
     const {
         phoneNumber,
         countryCode,
@@ -151,11 +161,11 @@ const mapStateToProps = state => {
         otpFromServer,
         otpVerificationSuccessful,
         isIssuerFlag,
-        userLocalPublicAddress,
         isVaultMember,
         isPhoneNumberVerified,
         vaultPaymentPendingStatus,
-    } = state.signinManagerData || {};
+        phoneOrAddressExists
+    } = state.userRegistrationData || {};
     return {
         phoneNumber,
         countryCode,
@@ -167,6 +177,7 @@ const mapStateToProps = state => {
         isVaultMember,
         isPhoneNumberVerified,
         vaultPaymentPendingStatus,
+        phoneOrAddressExists
     };
 };
 

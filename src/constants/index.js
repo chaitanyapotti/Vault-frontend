@@ -22,8 +22,7 @@ const constants = {
   VOTE_HISTOGRAM_DATA_FAILED_MESSAGE: "Failed to retrieve histogram data, please reload the page.",
   USER_FORM_STATES_SAVED_FAILED_MESSAGE: "Failed to save user form state.",
   USER_FORM_STATES_FAILED_MESSAGE: "Failed to retrieve previously stored information.",
-  USER_FORM_STATES_FAILED: "USER_FORM_STATES_FAILED",
-  USER_FORM_STATES_SUCCESS: "USER_FORM_STATES_SUCCESS"
+  USER_FORM_SUBMISSION_FAILED_MESSAGE: "Failed to submit the form. Please try again later."
 };
 
 export default constants;

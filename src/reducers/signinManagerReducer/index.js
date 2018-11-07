@@ -8,13 +8,7 @@ export const initialState = {
   userIsIssuer: false,
   userLocalPublicAddress: "",
   userPreviousLocalPublicAddress: null,
-  otpFromServer: "",
-  otpFromUser: "",
-  otpFailed: false,
-  otpFailedMessage: "",
   showRegistrationForm: false,
-  phoneNumber: "",
-  countryCode: "",
   otpVerificationSuccessful: false,
   isIssuerFlag: false,
   isVaultMember: false,
@@ -26,12 +20,13 @@ export const initialState = {
   metamaskPreviousNetworkName: "",
   isIssuerChecked: false,
   isMetamaskNetworkChecked: false,
-  isMetamaskInstallationChecked: false, 
-  isUserDefaultAccountChecked: false, 
+  isMetamaskInstallationChecked: false,
+  isUserDefaultAccountChecked: false,
   isVaultMembershipChecked: false
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
+
   switch (action.type) {
     case types.ISISSUER_CHECK: {
       const isIssuer = action.payload;
@@ -98,142 +93,90 @@ export default function(state = initialState, action) {
       };
     }
 
-    case types.USER_LOCAL_ACCOUNT_ADDRESS:
+    case types.USER_LOCAL_ACCOUNT_ADDRESS: {
       return {
         ...state,
         userLocalPublicAddress: action.payload,
         userPreviousLocalPublicAddress: action.payload
       };
-    case types.USER_DEFAULT_ACCOUNT_CHANGED:
-    const networkName = state.networkName
-    if (networkName==="rinkeby"){
-      if (action.payload){
-        return {
-          ...state,
-          userRegistered: false,
-          userIsIssuer: false,
-          isVaultMember: false,
-          userServerPublicAddress: "",
-          userLocalPublicAddress: action.payload,
-          userPreviousLocalPublicAddress: action.payload,
-          isUserDefaultAccountChecked: true
-        };
-      }else{
-        return {
-          ...state,
-          userRegistered: false,
-          userIsIssuer: false,
-          isVaultMember: false,
-          userServerPublicAddress: "",
-          userLocalPublicAddress: "",
-          userPreviousLocalPublicAddress: "",
-          signinStatusFlag: 1,
-          isUserDefaultAccountChecked: true,
-          isIssuerChecked: true,
-          isMetamaskNetworkChecked: true,
-          isVaultMembershipChecked: true
-        };
-      }
-    }else{
-      if (action.payload!=""){
-        return {
-          ...state,
-          userRegistered: false,
-          userIsIssuer: false,
-          isVaultMember: false,
-          userServerPublicAddress: "",
-          userLocalPublicAddress: action.payload,
-          userPreviousLocalPublicAddress: action.payload,
-          isUserDefaultAccountChecked: true,
-          signinStatusFlag: 2
-        };
-      }else{
-        return {
-          ...state,
-          userRegistered: false,
-          userIsIssuer: false,
-          isVaultMember: false,
-          userServerPublicAddress: "",
-          userLocalPublicAddress: "",
-          userPreviousLocalPublicAddress: "",
-          signinStatusFlag: 1,
-          isUserDefaultAccountChecked: true,
-          isIssuerChecked: true,
-          isMetamaskNetworkChecked: true,
-          isVaultMembershipChecked: true
-        };
+    }
+
+    case types.USER_DEFAULT_ACCOUNT_CHANGED: {
+      const networkName = state.networkName
+      if (networkName === "rinkeby") {
+        if (action.payload) {
+          return {
+            ...state,
+            userRegistered: false,
+            userIsIssuer: false,
+            isVaultMember: false,
+            userServerPublicAddress: "",
+            userLocalPublicAddress: action.payload,
+            userPreviousLocalPublicAddress: action.payload,
+            isUserDefaultAccountChecked: true
+          };
+        } else {
+          return {
+            ...state,
+            userRegistered: false,
+            userIsIssuer: false,
+            isVaultMember: false,
+            userServerPublicAddress: "",
+            userLocalPublicAddress: "",
+            userPreviousLocalPublicAddress: "",
+            signinStatusFlag: 1,
+            isUserDefaultAccountChecked: true,
+            isIssuerChecked: true,
+            isMetamaskNetworkChecked: true,
+            isVaultMembershipChecked: true
+          };
+        }
+      } else {
+        if (action.payload != "") {
+          return {
+            ...state,
+            userRegistered: false,
+            userIsIssuer: false,
+            isVaultMember: false,
+            userServerPublicAddress: "",
+            userLocalPublicAddress: action.payload,
+            userPreviousLocalPublicAddress: action.payload,
+            isUserDefaultAccountChecked: true,
+            signinStatusFlag: 2
+          };
+        } else {
+          return {
+            ...state,
+            userRegistered: false,
+            userIsIssuer: false,
+            isVaultMember: false,
+            userServerPublicAddress: "",
+            userLocalPublicAddress: "",
+            userPreviousLocalPublicAddress: "",
+            signinStatusFlag: 1,
+            isUserDefaultAccountChecked: true,
+            isIssuerChecked: true,
+            isMetamaskNetworkChecked: true,
+            isVaultMembershipChecked: true
+          };
+        }
       }
     }
-    
 
-    case types.OTP_SENT_TO_USER_SUCCESS:
-      return {
-        ...state,
-        otpFailed: false,
-        otpFromServer: action.payload
-      };
-
-    case types.OTP_SENT_TO_USER_FAILED:
-      return {
-        ...state,
-        otpFailed: true,
-        otpFailedMessage: action.payload
-      };
-
-    case types.SHOW_REGISTRATION_FORM:
+    case types.SHOW_REGISTRATION_FORM:{
       return {
         ...state,
         showRegistrationForm: true
       };
-
-    case types.HIDE_REGISTRATION_FORM:
+    }
+      
+    case types.HIDE_REGISTRATION_FORM:{
       return {
         ...state,
         showRegistrationForm: false
       };
-
-    case types.PHONE_NUMBER_CHANGED:
-      return {
-        ...state,
-        phoneNumber: action.payload
-      };
-
-    case types.COUNTRY_CODE_CHANGED:
-      return {
-        ...state,
-        countryCode: action.payload
-      };
-
-    case types.USER_OTP_INPUT_CHANGED:
-      return {
-        ...state,
-        otpFromUser: action.payload
-      };
-
-    case types.PHONE_VERIFICATION_SUCCESS: {
-      const { publicAddress } = action.payload || "";
-      return {
-        ...state,
-        otpVerificationSuccessful: true,
-        userRegistered: true,
-        userServerPublicAddress: publicAddress
-      };
-    }
-
-    case types.PHONE_VERIFICATION_FAILED:
-      return {
-        ...state,
-        otpVerificationSuccessful: false,
-        userRegistered: false
-      };
-
-    case types.IS_ISSUER_FLAG_TOGGLED: {
-      const isIssuerFlag = state.isIssuerFlag;
-      return {
-        ...state,
-        isIssuerFlag: !isIssuerFlag
-      };
-    }
+    } 
+      
     case types.VAULT_MEMBERSHIP_CHECK: {
       let signinStatusFlag;
       const userIsIssuer = state.userIsIssuer;
@@ -253,17 +196,6 @@ export default function(state = initialState, action) {
         isVaultMembershipChecked: true
       };
     }
-    case types.PHONE_NUMBER_IS_VERIFIED:
-      return {
-        ...state,
-        isPhoneNumberVerified: true
-      };
-
-    case types.PHONE_NUMBER_IS_NOT_VERIFIED:
-      return {
-        ...state,
-        isPhoneNumberVerified: false
-      };
 
     case types.VAULT_MEMBERSHIP_PAYMENT_CHECK_SUCCESS:
       return {

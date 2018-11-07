@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { CUIFormInput, CUIFormInputLabel } from "../../helpers/material-ui";
 import {CUIInputType, CUIInputColor} from "../../static/js/variables";
+import { saveUserFormStates, conditionOneAction, conditionTwoAction } from "../../actions/userRegistrationActions";
 
 class TC extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            check1: false,
-            check2: false
-        }
     }
 
-    onCheck1 = () => this.setState({check1: !this.state.check1});
+    onCheck1 = () => {
+        this.props.conditionOneAction(!this.props.conditionOneAccepted)
+    }
 
-    onCheck2 = () => this.setState({check2: !this.state.check2});
+    onCheck2 = () => {
+        this.props.conditionTwoAction(!this.props.conditionTwoAccepted)
+    }
 
     render() { 
         return ( 
@@ -29,7 +32,7 @@ class TC extends Component {
                             inputType={CUIInputType.CHECKBOX}
                             inputColor={CUIInputColor.PRIMARY}
                             style={{ fontSize: '14px' }}
-                            inputChecked={this.state.check1}
+                            inputChecked={this.props.conditionOneAccepted}
                             onChange={this.onCheck1}
                         />
                         }
@@ -42,7 +45,7 @@ class TC extends Component {
                             inputType={CUIInputType.CHECKBOX}
                             inputColor={CUIInputColor.PRIMARY}
                             style={{ fontSize: '14px' }}
-                            inputChecked={this.state.check2}
+                            inputChecked={this.props.conditionTwoAccepted}
                             onChange={this.onCheck2}
                         />
                         }
@@ -54,4 +57,29 @@ class TC extends Component {
     }
 }
  
-export default TC;
+const mapStateToProps = state => {
+    const { userLocalPublicAddress } = state.signinManagerData || {};
+    const { userRegistrationData } = state || {}
+    const { conditionOneAccepted, conditionTwoAccepted } = state.userRegistrationData || {}
+    return {
+        userLocalPublicAddress,
+        userRegistrationData,
+        conditionOneAccepted,
+        conditionTwoAccepted
+    };
+};
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            saveUserFormStates,
+            conditionOneAction,
+            conditionTwoAction
+        },
+        dispatch
+    );
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TC);

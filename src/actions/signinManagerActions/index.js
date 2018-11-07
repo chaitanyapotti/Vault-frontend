@@ -4,87 +4,7 @@ import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
 import constants from "../../constants";
 
-export function isIssuerFlagToggled() {
-  return dispatch => {
-    dispatch({
-      type: actionTypes.IS_ISSUER_FLAG_TOGGLED,
-      payload: null
-    });
-  };
-}
 
-export function verifyPhoneNumber(serverOtp, userOtp, isIssuer, publicAddress, phoneNumber, countryCode) {
-  return dispatch => {
-    if (serverOtp.toString() === userOtp.toString()) {
-      axios
-        .post(`${config.api_base_url}/db/users/register`, {
-          publicaddress: publicAddress,
-          isissuer: isIssuer,
-          phonenumber: phoneNumber,
-          countrycode: countryCode
-        })
-        .then(response => {
-          if (response.status === 200) {
-            if (response.data.message === constants.SUCCESS) {
-              dispatch({
-                type: actionTypes.PHONE_VERIFICATION_SUCCESS,
-                payload: response.data.data
-              });
-            } else {
-              dispatch({
-                type: actionTypes.PHONE_VERIFICATION_FAILED,
-                payload: response.data.reason
-              });
-            }
-          } else {
-            dispatch({
-              type: actionTypes.PHONE_VERIFICATION_FAILED,
-              payload: constants.PHONE_VERIFICATION_FAILED_MESSAGE
-            });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          dispatch({
-            type: actionTypes.PHONE_VERIFICATION_FAILED,
-            payload: constants.PHONE_VERIFICATION_FAILED_MESSAGE
-          });
-        });
-    } else {
-      dispatch({
-        type: actionTypes.PHONE_VERIFICATION_FAILED,
-        payload: constants.OTP_DID_NOT_MATCH
-      });
-    }
-  };
-}
-
-export function userOtpChanged(otp) {
-  return dispatch => {
-    dispatch({
-      type: actionTypes.USER_OTP_INPUT_CHANGED,
-      payload: otp
-    });
-  };
-}
-
-export function phoneNumberChanged(number) {
-  return dispatch => {
-    dispatch({
-      type: actionTypes.PHONE_NUMBER_CHANGED,
-      payload: number
-    });
-  };
-}
-
-export function countryCodeChanged(code) {
-  return dispatch => {
-    dispatch({
-      type: actionTypes.COUNTRY_CODE_CHANGED,
-      payload: code
-    });
-  };
-}
 
 export function closeRegistrationFormAction() {
   return dispatch => {
@@ -104,40 +24,6 @@ export function openRegistrationFormAction(userRegistered) {
       });
     };
   }
-}
-
-export function sendOtp(phoneNumber, countryCode) {
-  console.log("sending otp");
-  return dispatch => {
-    axios
-      .get(`${config.api_base_url}/db/users/otp`, { params: { phoneNumber: phoneNumber.toString(), countryCode: countryCode.toString() } })
-      .then(response => {
-        if (response.status === 200) {
-          if (response.data.message === constants.SUCCESS) {
-            dispatch({
-              type: actionTypes.OTP_SENT_TO_USER_SUCCESS,
-              payload: response.data.data.otp
-            });
-          } else {
-            dispatch({
-              type: actionTypes.OTP_SENT_TO_USER_FAILED,
-              payload: response.data.reason
-            });
-          }
-        } else {
-          dispatch({
-            type: actionTypes.OTP_SENT_TO_USER_FAILED,
-            payload: constants.OTP_FAILED_MESSAGE
-          });
-        }
-      })
-      .catch(err => {
-        dispatch({
-          type: actionTypes.OTP_SENT_TO_USER_FAILED,
-          payload: constants.OTP_FAILED_MESSAGE
-        });
-      });
-  };
 }
 
 export function checkUserRegistration() {
@@ -193,6 +79,29 @@ export function checkUserRegistration() {
       });
   };
 }
+
+export const checkVaultMembership = userLocalPublicAddress => async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
+      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        if (data === "true") {
+          dispatch(isAlreadyVaultMember(true));
+        } else {
+          dispatch(isAlreadyVaultMember(false));
+          dispatch(checkPhoneVerification(userLocalPublicAddress));
+        }
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isAlreadyVaultMember(false));
+    });
+};
 
 export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPreviousNetworkName, 
   metamaskPreviousInstallationState) {
@@ -268,12 +177,130 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
   };
 }
 
+
 export function isAlreadyVaultMember(receipt) {
   return {
     type: actionTypes.VAULT_MEMBERSHIP_CHECK,
     payload: receipt
   };
 };
+
+
+export function sendOtp(phoneNumber, countryCode) {
+  console.log("sending otp");
+  return dispatch => {
+      axios
+          .get(`${config.api_base_url}/db/users/otp`, { params: { phoneNumber: phoneNumber.toString(), countryCode: countryCode.toString() } })
+          .then(response => {
+              if (response.status === 200) {
+                  if (response.data.message === constants.SUCCESS) {
+                      dispatch({
+                          type: actionTypes.OTP_SENT_TO_USER_SUCCESS,
+                          payload: response.data.data.otp
+                      });
+                  } else {
+                      dispatch({
+                          type: actionTypes.OTP_SENT_TO_USER_FAILED,
+                          payload: response.data.reason
+                      });
+                  }
+              } else {
+                  dispatch({
+                      type: actionTypes.OTP_SENT_TO_USER_FAILED,
+                      payload: constants.OTP_FAILED_MESSAGE
+                  });
+              }
+          })
+          .catch(err => {
+              dispatch({
+                  type: actionTypes.OTP_SENT_TO_USER_FAILED,
+                  payload: constants.OTP_FAILED_MESSAGE
+              });
+          });
+  };
+}
+
+export function isIssuerFlagToggled() {
+  return dispatch => {
+      dispatch({
+          type: actionTypes.IS_ISSUER_FLAG_TOGGLED,
+          payload: null
+      });
+  };
+}
+
+export function phoneNumberChanged(number) {
+  return dispatch => {
+      dispatch({
+          type: actionTypes.PHONE_NUMBER_CHANGED,
+          payload: number
+      });
+  };
+}
+
+export function countryCodeChanged(code) {
+  return dispatch => {
+      dispatch({
+          type: actionTypes.COUNTRY_CODE_CHANGED,
+          payload: code
+      });
+  };
+}
+
+export function verifyPhoneNumber(serverOtp, userOtp, isIssuer, publicAddress, phoneNumber, countryCode) {
+  return dispatch => {
+      if (serverOtp.toString() === userOtp.toString()) {
+          axios
+              .post(`${config.api_base_url}/db/users/register`, {
+                  publicaddress: publicAddress,
+                  isissuer: isIssuer,
+                  phonenumber: phoneNumber,
+                  countrycode: countryCode
+              })
+              .then(response => {
+                  if (response.status === 200) {
+                      if (response.data.message === constants.SUCCESS) {
+                          dispatch({
+                              type: actionTypes.PHONE_VERIFICATION_SUCCESS,
+                              payload: response.data.data
+                          });
+                      } else {
+                          dispatch({
+                              type: actionTypes.PHONE_VERIFICATION_FAILED,
+                              payload: response.data.reason
+                          });
+                      }
+                  } else {
+                      dispatch({
+                          type: actionTypes.PHONE_VERIFICATION_FAILED,
+                          payload: constants.PHONE_VERIFICATION_FAILED_MESSAGE
+                      });
+                  }
+              })
+              .catch(error => {
+                  console.log(error);
+                  dispatch({
+                      type: actionTypes.PHONE_VERIFICATION_FAILED,
+                      payload: constants.PHONE_VERIFICATION_FAILED_MESSAGE
+                  });
+              });
+      } else {
+          dispatch({
+              type: actionTypes.PHONE_VERIFICATION_FAILED,
+              payload: constants.OTP_DID_NOT_MATCH
+          });
+      }
+  };
+}
+
+export function userOtpChanged(otp) {
+  return dispatch => {
+      dispatch({
+          type: actionTypes.USER_OTP_INPUT_CHANGED,
+          payload: otp
+      });
+  };
+}
 
 export const requestVaultMembership = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
@@ -303,28 +330,7 @@ export const requestVaultMembership = userLocalPublicAddress => async dispatch =
     .catch(err => console.error(err.message));
 };
 
-export const checkVaultMembership = userLocalPublicAddress => async dispatch => {
-  const network = await web3.eth.net.getNetworkType();
-  axios
-    .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
-      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
-    })
-    .then(response => {
-      if (response.status === 200) {
-        const { data } = response.data;
-        if (data === "true") {
-          dispatch(isAlreadyVaultMember(true));
-        } else {
-          dispatch(isAlreadyVaultMember(false));
-          dispatch(checkPhoneVerification(userLocalPublicAddress));
-        }
-      }
-    })
-    .catch(err => {
-      console.error(err.message);
-      dispatch(isAlreadyVaultMember(false));
-    });
-};
+
 
 export const checkIssuer = userLocalPublicAddress => dispatch => {
   axios
@@ -361,38 +367,6 @@ export const checkIssuer = userLocalPublicAddress => dispatch => {
     });
 };
 
-export const checkPhoneVerification = userLocalPublicAddress => dispatch => {
-  axios
-    .get(`${config.api_base_url}/db/users/isphoneverified`, { params: { useraddress: userLocalPublicAddress } })
-    .then(response => {
-      if (response.status === 200) {
-        if (response.data.message === constants.SUCCESS) {
-          dispatch({
-            type: actionTypes.PHONE_NUMBER_IS_VERIFIED,
-            payload: true
-          });
-          dispatch(checkVaultMembershipPaymentStatus(userLocalPublicAddress));
-        } else {
-          dispatch({
-            type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
-            payload: false
-          });
-        }
-      } else {
-        dispatch({
-          type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
-          payload: false
-        });
-      }
-    })
-    .catch(err => {
-      dispatch({
-        type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
-        payload: false
-      });
-    });
-};
-
 export const checkVaultMembershipPaymentStatus = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
   axios
@@ -426,4 +400,36 @@ export const checkVaultMembershipPaymentStatus = userLocalPublicAddress => async
         payload: false
       });
     });
+};
+
+export const checkPhoneVerification = userLocalPublicAddress => dispatch => {
+  axios
+      .get(`${config.api_base_url}/db/users/isphoneverified`, { params: { useraddress: userLocalPublicAddress } })
+      .then(response => {
+          if (response.status === 200) {
+              if (response.data.message === constants.SUCCESS) {
+                  dispatch({
+                      type: actionTypes.PHONE_NUMBER_IS_VERIFIED,
+                      payload: true
+                  });
+                  dispatch(checkVaultMembershipPaymentStatus(userLocalPublicAddress));
+              } else {
+                  dispatch({
+                      type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
+                      payload: false
+                  });
+              }
+          } else {
+              dispatch({
+                  type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
+                  payload: false
+              });
+          }
+      })
+      .catch(err => {
+          dispatch({
+              type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
+              payload: false
+          });
+      });
 };

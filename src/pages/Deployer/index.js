@@ -106,12 +106,14 @@ class Deployer extends Component {
       pollFactoryAddress,
       membershipAddress,
       daicoTokenAddress,
-      foundationDetails
+      foundationDetails,
+      startDateTime
     } = this.props.projectDetails || {};
     const args = [
       minimumEtherContribution,
       maximumEtherContribution,
       new Date(r1EndTime).getTime() / 1000,
+      new Date(startDateTime).getTime() / 1000,
       rounds.map(a => a.tokenCount),
       rounds.map(a => a.tokenRate),
       lockedTokensAddress,

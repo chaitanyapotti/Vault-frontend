@@ -20,15 +20,13 @@ export default function(state = initialState, action) {
       const today = new Date();
       const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       const { spendableArrays, xfrDots, tapDots, spentArray, spendableDots, spentDots, dateArray, projectDetails } = state || {};
-      let { startDateTime, initialFundRelease, initialTapAmount } = projectDetails;
+      const { startDateTime, initialFundRelease, initialTapAmount } = projectDetails;
       const daicoStartDate = new Date(startDateTime);
       const daicoStartDateConverted = new Date(daicoStartDate.getFullYear(), daicoStartDate.getMonth(), daicoStartDate.getDate());
       const { tapData, withdrawXfrData, withdrawData } = action.payload || {};
       const tapDataDict = tapDataConverted(tapData);
       const withdrawDataDict = withdrawDataConverted(withdrawData);
       const withdrawXfrDataDict = withdrawXfrDataConverted(withdrawXfrData);
-      console.log(tapDataDict);
-
       let currentArray = [];
       let spentValue = 0;
       const keyx = daicoStartDateConverted.getTime().toString();
@@ -37,9 +35,8 @@ export default function(state = initialState, action) {
       }
       spentArray.push({ date: daicoStartDateConverted, ether: spentValue });
       let tapValue = parseFloat(initialTapAmount) * 86400 * Math.pow(10, -18);
-      initialFundRelease *= Math.pow(10, -18);
-      currentArray.push({ date: daicoStartDateConverted, ether: initialFundRelease });
-      spendableDots.push({ date: daicoStartDateConverted, ether: initialFundRelease });
+      currentArray.push({ date: daicoStartDateConverted, ether: initialFundRelease * Math.pow(10, -18) });
+      spendableDots.push({ date: daicoStartDateConverted, ether: initialFundRelease * Math.pow(10, -18) });
       spentDots.push({ date: daicoStartDateConverted, ether: spentValue });
       dateArray.push({ date: daicoStartDateConverted, ether: 0 });
       const newDatex = new Date(daicoStartDateConverted.setDate(daicoStartDateConverted.getDate() + 1));

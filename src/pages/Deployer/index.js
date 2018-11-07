@@ -110,19 +110,19 @@ class Deployer extends Component {
       startDateTime
     } = this.props.projectDetails || {};
     const args = [
-      minimumEtherContribution,
-      maximumEtherContribution,
-      new Date(r1EndTime).getTime() / 1000,
-      new Date(startDateTime).getTime() / 1000,
-      rounds.map(a => a.tokenCount),
-      rounds.map(a => a.tokenRate),
+      minimumEtherContribution.toString(),
+      maximumEtherContribution.toString(),
+      Math.round(new Date(r1EndTime).getTime() / 1000),
+      Math.round(new Date(startDateTime).getTime() / 1000),
+      rounds.map(a => a.tokenCount.toString()),
+      rounds.map(a => a.tokenRate.toString()),
       lockedTokensAddress,
       pollFactoryAddress,
       membershipAddress,
       daicoTokenAddress,
       config.vault_contract_address,
       foundationDetails.map(a => a.address),
-      foundationDetails.map(a => a.amount)
+      foundationDetails.map(a => a.amount.toString())
     ];
     this.props.deployContractAction(version, _id, currentDeploymentIndicator, args, "CrowdSale", userLocalPublicAddress);
   };

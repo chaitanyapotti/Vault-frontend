@@ -113,7 +113,7 @@ class ProjectDetailGovernance extends Component {
       getKillPollsHistory: fetchKillPollsHistory,
       getTapPollsHistory: fetchTapPollsHistory,
       getXfrPollsHistory: fetchXfrPollsHistory,
-      getSpendCurveData: fetchSpendCurveData,
+      // getSpendCurveData: fetchSpendCurveData,
       getVoteHistogramData: fetchVoteHistogramData
     } = this.props || {};
     priceFetch("ETH");

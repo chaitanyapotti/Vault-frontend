@@ -158,7 +158,7 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
             }
           })
         } else {
-          if (userPreviousLocalPublicAddress!=""){
+          if (userPreviousLocalPublicAddress !== ""){
             dispatch({
               type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
               payload: ""

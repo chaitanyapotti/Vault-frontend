@@ -480,8 +480,7 @@ const mapDispatchToProps = dispatch =>
       deployXfrPoll,
       withdrawXfrAmount,
       withdrawAmount,
-      getCurrentWithdrawableAmount,
-      withdrawXfrAmount
+      getCurrentWithdrawableAmount
     },
     dispatch
   );

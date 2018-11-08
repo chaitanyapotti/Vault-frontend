@@ -75,7 +75,7 @@ class ProjectDetailCrowdSale extends Component {
 
   getRoundText = () => {
     const { rounds, roundInfo } = this.props || {};
-    const [round1, ...rest] = rounds || {};
+    const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
     // based on tokens sold
@@ -113,7 +113,7 @@ class ProjectDetailCrowdSale extends Component {
 
   r1Finish = () => {
     const { r1EndTime, rounds, roundInfo } = this.props || {};
-    const [round1, ...rest] = rounds || {};
+    const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
     if (new Date(r1EndTime) < new Date() && totalTokensSold < tokenCount) return true;

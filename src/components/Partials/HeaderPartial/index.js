@@ -23,9 +23,9 @@ import "../../../static/css/app.css";
 import AlertModal from "../../Common/AlertModal";
 import Warning from "@material-ui/icons/Warning";
 
-const images = {
-  metamask: "/assets/Footer/metamask.png"
-};
+// const images = {
+//   metamask: "/assets/Footer/metamask.png"
+// };
 
 const urls = {
   metamask: "https://metamask.io/"

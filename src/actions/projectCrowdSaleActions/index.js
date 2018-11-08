@@ -1,5 +1,5 @@
 import axios from "axios";
-import { type } from "os";
+// import { type } from "os";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";

@@ -1,7 +1,7 @@
 /* eslint react/require-default-props: 0 */
 /* eslint camelcase: 0 */
 
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import "./static/css/app.css";
@@ -16,7 +16,7 @@ import ProjectIssuerGovernance from "./pages/ProjectIssuerGovernance";
 import Deployer from "./pages/Deployer";
 import ProjectGovernance from "./pages/ProjectGovernance";
 import SigninManager from "./containers/SigninManager";
-import Register from "./containers/Register";
+// import Register from "./containers/Register";
 import store from "./store";
 import Search from "./pages/Search";
 import WhiteList from "./pages/WhiteList";

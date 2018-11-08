@@ -185,7 +185,7 @@ export default function(state = initialState, action) {
           unallocIndex = obj
         }
       }
-      if (unallocIndex!=100){
+      if (unallocIndex!==100){
         nonSaleEntities.splice(unallocIndex, 1);
       }
       // if (nonSaleEntities.indexOf({ entityName: "Unallocated" }) != -1){

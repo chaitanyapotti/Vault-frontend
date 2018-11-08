@@ -5,9 +5,6 @@ import { saveUserFormStates, requestVaultMembership, postUserFormData } from "..
 import {ButtonComponent} from "../../components/Common/FormComponents";
 
 class Submit extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     handleRequestVaultMembership = () => {
         this.props.requestVaultMembership(this.props.userLocalPublicAddress, this.props.isIssuerFlag);

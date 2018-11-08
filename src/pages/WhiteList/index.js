@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {Grid, Row, Col} from "../../helpers/react-flexbox-grid";
+import {Grid } from "../../helpers/react-flexbox-grid";
 import CustomizedStepper from "../../components/Common/CustomizedStepper";
 import {ButtonComponent} from "../../components/Common/FormComponents";
 import { CUICard, CUIDivider } from "../../helpers/material-ui";
@@ -9,9 +9,6 @@ import {Introduction, EthWallet, TC, BuyersInformation, UploadDocuments, Submit,
 import { fetchUserFormStates, backButtonAction, nextButtonAction, saveUserFormStates } from "../../actions/userRegistrationActions"
 
 class WhiteList extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount(){
         if (this.props.userLocalPublicAddress) {

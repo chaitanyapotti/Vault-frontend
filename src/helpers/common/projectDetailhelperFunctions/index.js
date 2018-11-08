@@ -202,7 +202,7 @@ const formatCurrencyNumber = (amount, decimalCount = 2, decimal = ".", thousands
 
 const getR1Price = props => {
   const { rounds } = props || {};
-  const [round1, ...rest] = rounds || {};
+  const [round1] = rounds || {};
   const { tokenRate } = round1 || {}; // tokens/wei
   return formatRateToPrice(tokenRate);
 };
@@ -216,7 +216,7 @@ const getRoundPrice = props => {
 
 const getR1Goal = props => {
   const { rounds } = props || {};
-  const [round1, ...rest] = rounds || {};
+  const [round1] = rounds || {};
   const { tokenRate, tokenCount } = round1 || {}; // tokens/wei
   return formatTokenPrice(parseFloat(tokenCount) / parseFloat(tokenRate), 2);
 };

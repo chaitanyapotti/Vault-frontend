@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import FeaturedProject from "../../components/FeaturedProject";
 import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
 import { CUICircularProgress } from "../../helpers/material-ui";
 

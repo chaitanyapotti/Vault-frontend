@@ -17,7 +17,7 @@ import {
   nonSaleEntityEditAction
 } from "../../../actions/projectRegistrationActions";
 
-import { validateLength, validateDecimal, validateEntityPercentage } from "../../../helpers/common/validationHelperFunctions";
+import { validateLength, validateDecimal } from "../../../helpers/common/validationHelperFunctions";
 
 // const CHARTCOLORS = ['#e1f4ff', '#b0ddff', '#7ec3fe', '#65b6fd', '#4ca9fc', '#3d8dd4', '#2e71ac', '#1e5583', '#0f395b', '#001d33']
 

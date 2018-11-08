@@ -129,10 +129,10 @@ class IdentityDetails extends React.Component {
       mediumLink,
       teamAddress,
       websiteLink,
-      uploadingWhitepaper,
-      whitepaperUrl,
-      uploadingThumbnail,
-      thumbnailUrl,
+      // uploadingWhitepaper,
+      // whitepaperUrl,
+      // uploadingThumbnail,
+      // thumbnailUrl,
       allowEditAll
     } = this.props || {};
     return (
@@ -397,7 +397,7 @@ class IdentityDetails extends React.Component {
         <Row className="push--top">
           <Col lg={12}>
             <div className="text--center">
-              {this.state.thumbnailFile && <img src={this.state.thumbnailFile} width="345" height="200" style={{ backgroundSize: "contain" }} />}
+              {this.state.thumbnailFile && <img alt="thumbnail" src={this.state.thumbnailFile} width="345" height="200" style={{ backgroundSize: "contain" }} />}
             </div>
           </Col>
         </Row>

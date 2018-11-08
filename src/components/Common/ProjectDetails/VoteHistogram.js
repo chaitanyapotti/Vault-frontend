@@ -1,19 +1,19 @@
 import React from "react";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
-import LoadingButton from "../LoadingButton";
-import {BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LabelList}  from "recharts";
+// import LoadingButton from "../LoadingButton";
+import {LineChart, Line, XAxis, YAxis, Tooltip}  from "recharts";
 
-const renderCustomizedLabel = (props) => {
-  const { x, y, value } = props;
-  const radius = 5;
+// const renderCustomizedLabel = (props) => {
+//   const { x } = props;
+//   // const radius = 5;
 
-  return (
-    <g>
-      <circle cx={x} cy={230} r={10} fill="red" />
-    </g>
-  );
-};
+//   return (
+//     <g>
+//       <circle cx={x} cy={230} r={10} fill="red" />
+//     </g>
+//   );
+// };
 
 const VoteHistogram = props => {
   const {

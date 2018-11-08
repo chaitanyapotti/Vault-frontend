@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { CUIFormInput, CUISelectInput } from "../../helpers/material-ui";
+import { CUIFormInput } from "../../helpers/material-ui";
 import {CUIInputType} from "../../static/js/variables";
 
 class EthWallet extends Component {
@@ -17,7 +17,7 @@ class EthWallet extends Component {
     };
 
     render() { 
-        const {wallet} = this.state || {};
+        // const {wallet} = this.state || {};
         return ( 
             <div>
                 <div className="txt-m txt-dbld text--center">STEP: 2 ETH Wallet</div>

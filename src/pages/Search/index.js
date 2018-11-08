@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import qs from "qs";
 import SearchCard from "../../components/Common/SearchCard";
 import { getSearchResults } from "../../actions/searchActions/index";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
 
 class Search extends Component {

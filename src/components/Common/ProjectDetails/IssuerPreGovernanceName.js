@@ -1,5 +1,4 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
@@ -19,7 +18,6 @@ const IssuerPreGovernanceName = props => {
     StartRound1Visibility,
     StartRound1Enabled,
     priceIncrementFlag,
-    signinStatusFlag,
     r1Finish,
     onR1FinalizeClick,
     startR1ButtonSpinning,

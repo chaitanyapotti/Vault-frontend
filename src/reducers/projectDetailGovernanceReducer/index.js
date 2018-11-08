@@ -1,7 +1,7 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
-import { significantDigits } from "../../helpers/common/projectDetailhelperFunctions"
+// import { significantDigits } from "../../helpers/common/projectDetailhelperFunctions"
 
 export const initialState = {
   tokenBalance: "0",

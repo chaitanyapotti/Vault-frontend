@@ -11,7 +11,7 @@ import {
     checkVaultMembership,
     requestVaultMembership,
 } from "../../actions/userRegistrationActions";
-import { CUICard, CUIFormInput, CUIFormInputLabel, CUIDivider } from "../../helpers/material-ui";
+import { CUICard, CUIFormInput, CUIFormInputLabel } from "../../helpers/material-ui";
 import { CUIInputType, CUIInputColor } from "../../static/js/variables";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../../components/Common/FormComponents"

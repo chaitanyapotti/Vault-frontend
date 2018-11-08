@@ -1,19 +1,16 @@
 import React from "react";
 import { CUICard } from "../../../helpers/material-ui";
-import { Row, Col } from "../../../helpers/react-flexbox-grid";
-import LoadingButton from "../LoadingButton";
 import { LineChart, Line, XAxis, YAxis, Tooltip}  from "recharts";
 import { formatFromWei } from "../../../helpers/common/projectDetailhelperFunctions"
  
 const SpendCurve = props => {
   const {
-    spendCurveData,
     initialFundRelease,
     startDateTime
   } = props || {};
 
   let spendableArray = []
-  let xfrArray = []
+  // let xfrArray = []
   let spentArray = []
   spendableArray.push({
     timestamp: new Date(startDateTime).toLocaleString(),  

@@ -14,8 +14,8 @@ import {
   validateTokenTagLength,
   alphaOnly,
   validateMaxEtherContribution,
-  validateTapIncrementFactor,
-  validateVoteSaturationLimit,
+  // validateTapIncrementFactor,
+  // validateVoteSaturationLimit,
   validateDate,
   validateUniqueName,
   validateTotalSaleTokens
@@ -38,7 +38,7 @@ class Registration extends Component {
 
   componentDidMount() {
     const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags, userLocalPublicAddress, signinStatusFlag } = this.props || {};
-    if (signinStatusFlag!=5){
+    if (signinStatusFlag !== 5){
       this.props.history.push({
         pathname: `/`
       })
@@ -83,7 +83,7 @@ class Registration extends Component {
       newProjectRegistration: projectRegistration,
       projectRegistrationData: registrationData,
       userLocalPublicAddress: localAddress,
-      saveProjectStates: saveProjectStates
+      saveProjectStates
     } = this.props || {};
     if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
       this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
@@ -99,7 +99,7 @@ class Registration extends Component {
     const {
       projectRegistrationData: registrationData,
       userLocalPublicAddress: localAddress,
-      saveProjectStates: saveProjectStates
+      saveProjectStates
     } = this.props || {};
     saveProjectStates(registrationData, localAddress);
   }
@@ -109,7 +109,7 @@ class Registration extends Component {
   render() {
     const {
       adminName,
-      adminEmail,
+      // adminEmail,
       projectName,
       projectDescription,
       erc20TokenTag,
@@ -126,14 +126,13 @@ class Registration extends Component {
       project_id,
       totalSaleTokens
     } = this.props || {};
-    const { modalOpen, modalMessage, calculateTokensModal } = this.state;
+    const { modalOpen, modalMessage } = this.state;
 
-    {
-      project_id != "" ? this.props.history.push({
-        pathname: `/issuergovernance/details`,
-        search: `?projectid=${project_id}`
-      }) : null
-    }
+    project_id !== "" ? this.props.history.push({
+      pathname: `/issuergovernance/details`,
+      search: `?projectid=${project_id}`
+    }) : null
+
     return (
       <div>
         <Grid>

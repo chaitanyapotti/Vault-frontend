@@ -132,7 +132,7 @@ export default function (state = initialState, action) {
           };
         }
       } else {
-        if (action.payload != "") {
+        if (action.payload !== "") {
           return {
             ...state,
             userRegistered: false,

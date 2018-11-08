@@ -6,11 +6,7 @@ import { CUIDivider } from '../../helpers/material-ui';
 import { uploadPassportDocAction, uploadSelfieAction, uploadAddressDocAction } from "../../actions/userRegistrationActions";
 
 class UploadDocuments extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {  }
-    }
-
+    
     passportDocChanged = e => {
         this.props.uploadPassportDocAction(e.target.files[0], this.props.userLocalPublicAddress, 'passport');
     };

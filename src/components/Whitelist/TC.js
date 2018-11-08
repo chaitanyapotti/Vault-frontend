@@ -6,10 +6,7 @@ import {CUIInputType, CUIInputColor} from "../../static/js/variables";
 import { saveUserFormStates, conditionOneAction, conditionTwoAction } from "../../actions/userRegistrationActions";
 
 class TC extends Component {
-    constructor(props) {
-        super(props);
-    }
-
+    
     onCheck1 = () => {
         this.props.conditionOneAction(!this.props.conditionOneAccepted)
     }

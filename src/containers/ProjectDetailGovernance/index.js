@@ -119,6 +119,7 @@ class ProjectDetailGovernance extends Component {
     priceFetch("ETH");
     priceFetch(tokenTag);
     // fetchSpendCurveData(version, pollFactoryAddress)
+    fetchSpendCurveData(version, pollFactoryAddress);
     fetchVoteHistogramData(projectid);
     fetchKillPollsHistory(projectid);
     fetchTapPollsHistory(projectid);

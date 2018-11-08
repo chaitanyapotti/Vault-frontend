@@ -30,6 +30,39 @@ const win = address => {
   window.open(`/pollscan?contract=${address}`);
 };
 
+const tapDataConverted = tapData => {
+  const data = {};
+  for (let i = 0; i < tapData.length; i += 1) {
+    const ts = new Date(tapData[i].timestamp * 1000);
+    const tap = parseFloat(tapData[i].amount) * 86400 * Math.pow(10, -18);
+    const newDate = new Date(ts.getFullYear(), ts.getMonth(), ts.getDate());
+    data[newDate.getTime()] = data[newDate.getTime()] > tap ? data[newDate.getTime()] : tap;
+  }
+  return data;
+};
+
+const withdrawDataConverted = withdrawData => {
+  const data = {};
+  for (let i = 0; i < withdrawData.length; i += 1) {
+    const ts = new Date(withdrawData[i].timestamp * 1000);
+    const tap = parseFloat(withdrawData[i].amount);
+    const newDate = new Date(ts.getFullYear(), ts.getMonth(), ts.getDate());
+    data[newDate.getTime()] = data[newDate.getTime()] ? tap + data[newDate.getTime()] : tap;
+  }
+  return data;
+};
+
+const withdrawXfrDataConverted = withdrawXfrData => {
+  const data = {};
+  for (let i = 0; i < withdrawXfrData.length; i += 1) {
+    const ts = new Date(withdrawXfrData[i].timestamp * 1000);
+    const tap = parseFloat(withdrawXfrData[i].amount);
+    const newDate = new Date(ts.getFullYear(), ts.getMonth(), ts.getDate());
+    data[newDate.getTime()] = data[newDate.getTime()] ? tap + data[newDate.getTime()] : tap;
+  }
+  return data;
+};
+
 const pollState = (startTime, endTime) => {
   const presentDate = new Date();
   if (presentDate < startTime) {
@@ -235,5 +268,11 @@ export {
   pollState,
   daysTookForTapPoll,
   xfrResult,
-  win
+  win,
+  tapDataConverted,
+  withdrawDataConverted,
+  withdrawXfrDataConverted,
+  isTodayTapIncrement,
+  isTodayWithdrawl,
+  isTodayXfrWithdrawl
 };

@@ -20,7 +20,7 @@ import {
   validateR2BonusRange,
   validateUniqueName,
   validateDecimal,
-  validateEntityPercentage,
+  validateEntityPercentage
 } from "../../helpers/common/validationHelperFunctions";
 
 import {significantDigits} from "../../helpers/common/projectDetailhelperFunctions"
@@ -535,6 +535,7 @@ export default function(state = initialState, action) {
       };
     }
 
+
     case actionTypes.DAICO_END_DATE_CHANGED: {
       return {
         ...state,
@@ -556,16 +557,6 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.INITIAL_TAP_VALUE_CHANGED: {
-      // const { initialFundRelease } = state || {};
-      // let fundRelease;
-      // if (initialFundRelease.length === 0) {
-      //   fundRelease = 0;
-      // } else fundRelease = initialFundRelease;
-      // if (validateInitialTap(parseFloat(action.payload), fundRelease)) {
-      //   localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "should be lesser than initial fund release";
-      // } else {
-      //   localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "";
-      // }
       return {
         ...state,
         initialTapValue: action.payload

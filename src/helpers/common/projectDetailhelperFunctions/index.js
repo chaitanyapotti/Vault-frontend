@@ -271,8 +271,5 @@ export {
   win,
   tapDataConverted,
   withdrawDataConverted,
-  withdrawXfrDataConverted,
-  isTodayTapIncrement,
-  isTodayWithdrawl,
-  isTodayXfrWithdrawl
+  withdrawXfrDataConverted
 };

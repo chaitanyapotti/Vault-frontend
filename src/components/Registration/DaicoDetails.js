@@ -144,7 +144,7 @@ class DaicoDetails extends React.Component {
                 required
                 inputType={CUIInputType.TEXT}
                 full
-                forceNumeric
+                forceNumDec
                 inputName="Initial Fund Release"
                 inputLabel="Initial Fund Release"
                 inputPlaceholder="Eg. 100"
@@ -155,6 +155,8 @@ class DaicoDetails extends React.Component {
                 // helperText={this.state.errorAgeText}
                 // onKeyDownSelector="Admin"
                 onChange={this.onChangeIniFundVal}
+                error={!!this.getErrorMsg(actionTypes.INITIAL_FUND_RELEASE_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.INITIAL_FUND_RELEASE_CHANGED)}
               />
             </Col>
             <Col xs={12} lg={6}>
@@ -162,7 +164,7 @@ class DaicoDetails extends React.Component {
                 required
                 inputType={CUIInputType.TEXT}
                 full
-                forceNumeric
+                forceNumDec
                 inputName="Max Ether Contribution"
                 inputLabel="Max Ether Cap (ETH)"
                 inputPlaceholder="Eg. 5"
@@ -195,7 +197,7 @@ class DaicoDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
-                forceNumeric
+                forceNumDec
                 inputName="Initial Tap Value"
                 inputLabel="Initial Tap (ETH/Mo)"
                 inputPlaceholder="Eg. 100"

@@ -183,6 +183,8 @@ class Registration extends Component {
                   errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
                   errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
                   errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
+                  errors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] !== "" ||
+                  errors[actionTypes.INITIAL_TAP_VALUE_CHANGED] !== "" ||
                   isUpperCase(erc20TokenTag) ||
                   !validateLength(erc20TokenTag) ||
                   !validateTokenTagLength(erc20TokenTag) ||

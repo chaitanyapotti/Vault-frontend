@@ -51,7 +51,7 @@ const handleInputKeydown = (event, onKeyDownSelector, forceNumeric, forceNumDec)
       event.keyCode === 8 ||
       event.keyCode === 9 ||
       event.keyCode === 27 ||
-      event.keyCode === 190 ||
+      event.keyCode === 110 ||
       // Allow: Ctrl+A
       (event.keyCode === 65 && event.ctrlKey === true) ||
       // Allow: home, end, left, right

@@ -196,7 +196,7 @@ class HeaderPartial extends React.Component {
     }
   };
 
-  signinButtonClicked = e => {};
+  signinButtonClicked = e => { };
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
@@ -265,8 +265,8 @@ class HeaderPartial extends React.Component {
                           <MenuIcon />
                         </CUIButtonIcon>
                       ) : (
-                        <div />
-                      )}
+                          <div />
+                        )}
 
                       <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                         <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
@@ -309,7 +309,6 @@ class HeaderPartial extends React.Component {
                         ) : null}
 
                         <div className="text--primary txt-m push--top">
-                          {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
                           <div className="text--center">
                             {
                               {
@@ -319,13 +318,13 @@ class HeaderPartial extends React.Component {
                                   </a>
                                 ),
                                 1: (
-                                  <CUIButton onClick={this.handleSignInModalOpen}>
+                                  <ButtonComponent onClick={this.handleSignInModalOpen}>
                                     <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> Sign in
-                                  </CUIButton>
+                                  </ButtonComponent>
                                 ),
                                 2: (
                                   <div>
-                                    <CUIButton>Wrong network</CUIButton>
+                                    <ButtonComponent>Wrong network</ButtonComponent>
                                     <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div>
@@ -344,13 +343,13 @@ class HeaderPartial extends React.Component {
                                 ),
                                 4: (
                                   <div>
-                                    <CUIButton>{this.props.userLocalPublicAddress.slice(0, 6)}</CUIButton>
+                                    <ButtonComponent>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 5: (
                                   <div>
-                                    <CUIButton>{this.props.userLocalPublicAddress.slice(0, 6)}</CUIButton>
+                                    <ButtonComponent>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
                                   </div>
                                 )
                               }[this.props.signinStatusFlag]
@@ -408,7 +407,7 @@ class HeaderPartial extends React.Component {
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />
           </div>
-          <div className="text--center push--top">You are not signed in. Please use the browser extension to use metamask</div>
+          <div className="text--center push--top">You are not signed in. Please use the browser extension Metamask to sign in.</div>
         </AlertModal>
       </div>
     );

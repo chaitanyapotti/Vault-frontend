@@ -10,24 +10,6 @@ const SpendCurve = props => {
     spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray
   } = props || {};
 
-  var totalArray = []
-  for (let i in spendableArrays){
-    totalArray = totalArray.concat(spendableArrays[i])
-  }
-
-  console.log(spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray)
-  // let spendableArray = []
-  // // let xfrArray = []
-  // let spentArray = []
-  // spendableArray.push({
-  //   timestamp: new Date(startDateTime).toLocaleString(),  
-  //   ethers: formatFromWei(initialFundRelease),
-  // })
-  // spentArray.push({
-  //   timestamp: new Date(startDateTime).toLocaleString(),  
-  //   ethers: formatFromWei(initialFundRelease) + 5,
-  // })
-
   const plotLineChart = (spendableArrays) => {
     return spendableArrays.map((array, index)=>{
       return (
@@ -37,7 +19,6 @@ const SpendCurve = props => {
     })
 
   }
-  console.log("total array: ", totalArray)
   return (
     <div>
       <CUICard style={{ padding: "10px 10px" }}>

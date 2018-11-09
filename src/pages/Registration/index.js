@@ -189,7 +189,6 @@ class Registration extends Component {
                   errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
                   !validateProjectNameLength(projectName) ||
                   !alphaOnly(erc20TokenTag) ||
-                  !alphaOnly(projectName)||
                   validateMaxEtherContribution(maxEtherContribution) ||
                   !validateLength(maxEtherContribution) ||
                   !validateLength(voteSaturationLimit) ||

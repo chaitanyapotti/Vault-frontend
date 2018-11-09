@@ -25,6 +25,38 @@ const customTheme = {
     },
   },
   overrides: {
+    MUIDataTableBodyCell: {
+      root: {
+        fontSize: "16px"
+      }
+    },
+    MUIDataTableHeadCell: {
+      root: {
+        fontSize: "16px"
+      }
+    },
+    MUIDataTableFooterCell: {
+      root: {
+        fontSize: "16px"
+      }
+    },
+    MuiTableCell: {
+      root: {
+        padding: "10px 20px 10px 20px"
+      }
+    },
+    MuiTablePagination: {
+      select: {
+        fontSize: "14px"
+      }
+    },
+    MuiTableRow: {
+      root: {
+        "&:hover": {
+          cursor: "pointer"
+        }
+      }
+    },
     MuiButton: {
       containedPrimary: {
         backgroundColor: CS_COLORS.PRIMARY,

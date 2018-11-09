@@ -69,18 +69,9 @@ CUITabs.propTypes = {
   style: PropTypes.shape({}),
   icon: PropTypes.node,
   label: PropTypes.string,
-  iconList: PropTypes.arrayOf(
-    PropTypes.shape({
-      class: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      link: PropTypes.string.isRequired,
-    }),
-  ),
   full: PropTypes.bool,
   scroll: PropTypes.bool,
-  indicatorColor: PropTypes.cuiColor,
   textColor: PropTypes.cuiColor,
-  disabled: PropTypes.bool.isRequired,
   value: PropTypes.string.isRequired,
 };
 

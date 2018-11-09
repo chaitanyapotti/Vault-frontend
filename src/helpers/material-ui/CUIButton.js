@@ -78,7 +78,7 @@ CUIButton.defaultProps = {
   style: {},
   isLink: false,
   label: "",
-  type: "flat",
+  type: "text",
   href: undefined,
   id: "",
   isLinkExternal: false,
@@ -93,7 +93,7 @@ CUIButton.defaultProps = {
 };
 
 CUIButton.propTypes = {
-  type: PropTypes.cuiButtonType,
+  // type: PropTypes.cuiButtonType,
   children: PropTypes.node,
   component: PropTypes.func,
   className: PropTypes.string,

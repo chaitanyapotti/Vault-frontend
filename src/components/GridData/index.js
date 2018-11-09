@@ -4,53 +4,8 @@ import React from "react";
 import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import { withRouter } from "react-router-dom";
-
+import {CUIWrapper} from "../../helpers/material-ui";
 class GridData extends React.Component {
-  getMuiTheme = () =>
-    createMuiTheme({
-      overrides: {
-        MUIDataTableBodyCell: {
-          root: {
-            fontSize: "16px"
-          }
-        },
-        MUIDataTableHeadCell: {
-          root: {
-            fontSize: "16px"
-          }
-        },
-        MUIDataTableFooterCell: {
-          root: {
-            fontSize: "16px"
-          }
-        },
-        MuiTypography: {
-          root: {
-            fontSize: "16px"
-          },
-          caption: {
-            fontSize: "1rem"
-          }
-        },
-        MuiTableCell: {
-          root: {
-            padding: "10px 20px 10px 20px"
-          }
-        },
-        MuiTablePagination: {
-          select: {
-            fontSize: "14px"
-          }
-        },
-        MuiTableRow: {
-          root: {
-            "&:hover": {
-              cursor: "pointer"
-            }
-          }
-        }
-      }
-    });
 
   render() {
     const { tableData, columns, history, ...rest } = this.props || {};
@@ -77,9 +32,9 @@ class GridData extends React.Component {
       ...rest
     };
     return (
-      <MuiThemeProvider theme={this.getMuiTheme()}>
+       <CUIWrapper>
         <MUIDataTable data={tableData} columns={columns} options={options} />
-      </MuiThemeProvider>
+       </CUIWrapper>
     );
   }
 }

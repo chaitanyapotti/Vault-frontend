@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -268,9 +267,9 @@ class HeaderPartial extends React.Component {
                         <div />
                       )}
 
-                      <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                      <div className={classes.title}>
                         <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
-                      </Typography>
+                      </div>
                       <div className={classes.search}>
                         <div className={classes.searchIcon}>
                           <SearchIcon />

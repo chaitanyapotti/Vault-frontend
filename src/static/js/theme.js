@@ -5,6 +5,7 @@ import { isMobile } from "../../helpers/common/deviceDetect";
 const customTheme = {
   typography: {
     fontFamily: "Montserrat",
+    useNextVariants: true
   },
   palette: {
     [CUIColor.PRIMARY]: {
@@ -158,7 +159,7 @@ const customTheme = {
         backgroundColor: CS_COLORS.WHITE,
       },
       colorSecondary: {
-        backgroundColor: CS_COLORS.CARD_CRITERIA_TITLE_COLOR,
+        backgroundColor: '#ffffff',
       },
     },
     MuiAvatar: {

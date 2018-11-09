@@ -252,8 +252,8 @@ class HeaderPartial extends React.Component {
               position="static"
               style={
                 scrnWdh < 768
-                  ? { height: "60px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
-                  : { height: "85px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
+                  ? { height: "60px", boxShadow: "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
+                  : { height: "85px", boxShadow: "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
               }
             >
               <Grid>

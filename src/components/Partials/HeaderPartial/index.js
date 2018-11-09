@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -74,12 +73,16 @@ const styles = theme => ({
     alignItems: "center",
     justifyContent: "center"
   },
+  srchlogo:{
+    fill: 'rgba(61, 61, 61, 0.25)'
+  },
   inputRoot: {
     color: "inherit",
     width: "100%",
     height: "inherit",
     backgroundColor: "rgba(0,0,0,0.05)",
-    borderRadius: "30px"
+    borderRadius: "30px",
+    fontSize: '16px'
   },
   inputInput: {
     paddingTop: theme.spacing.unit,
@@ -252,8 +255,8 @@ class HeaderPartial extends React.Component {
               position="static"
               style={
                 scrnWdh < 768
-                  ? { height: "60px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
-                  : { height: "85px", "box-shadow": "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
+                  ? { height: "60px", boxShadow: "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
+                  : { height: "85px", boxShadow: "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
               }
             >
               <Grid>
@@ -268,12 +271,12 @@ class HeaderPartial extends React.Component {
                           <div />
                         )}
 
-                      <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                      <div className={classes.title}>
                         <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
-                      </Typography>
+                      </div>
                       <div className={classes.search}>
                         <div className={classes.searchIcon}>
-                          <SearchIcon />
+                          <SearchIcon className={classes.srchlogo} />
                         </div>
                         <InputBase
                           placeholder="Search…"
@@ -308,18 +311,26 @@ class HeaderPartial extends React.Component {
                           </div>
                         ) : null}
 
-                        <div className="text--primary txt-m push--top">
+                        <div className="text--primary txt-m push-half--top">
                           <div className="text--center">
                             {
                               {
                                 0: (
                                   <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                    <img className="push--left" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> Install
+                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={this.handleSignInModalOpen}>
+                                      <div className="soft-half--sides">
+                                        <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> 
+                                        <span style={{top: '3px'}} className="push-half--left pos-rel">Install</span>
+                                      </div>
+                                    </ButtonComponent>
                                   </a>
                                 ),
                                 1: (
-                                  <ButtonComponent onClick={this.handleSignInModalOpen}>
-                                    <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> Sign in
+                                  <ButtonComponent style={{boxShadow: 'none' }} onClick={this.handleSignInModalOpen}>
+                                    <div className="soft-half--sides">
+                                      <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> 
+                                      <span style={{top: '3px'}} className="push-half--left pos-rel">Sign in</span>
+                                    </div>
                                   </ButtonComponent>
                                 ),
                                 2: (
@@ -328,28 +339,29 @@ class HeaderPartial extends React.Component {
                                     <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div>
+                                    <CUIButton className="btn bg-yellow txt-p-vault txt-dddbld text--white">Wrong network</CUIButton>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 3: (
-                                  <div className="pos-rel" style={{ top: "-10px" }}>
-                                    <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>
-                                      Become a Vault Member
-                                    </ButtonComponent>
+                                  <div>
                                     <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div>
+                                    <ButtonComponent style={{boxShadow: 'none' }} className="register" onClick={this.handleRegistrationButtonClicked}>
+                                      Become a Vault Member
+                                    </ButtonComponent>
                                   </div>
                                 ),
                                 4: (
                                   <div>
-                                    <ButtonComponent>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
+                                    <ButtonComponent style={{boxShadow: 'none' }}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 5: (
                                   <div>
-                                    <ButtonComponent>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
+                                    <ButtonComponent style={{boxShadow: 'none' }}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
                                   </div>
                                 )
                               }[this.props.signinStatusFlag]

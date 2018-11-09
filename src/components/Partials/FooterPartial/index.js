@@ -54,7 +54,7 @@ const FooterPartial = () => (
                 <tr>
                   <td>
                     <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://github.com/chaitanyapotti">
-                      <img src="/assets/Footer/github.png" alt="git-logo" />
+                      <img id="git" src="/assets/Footer/github.png" alt="git-logo" />
                     </a>
                   </td>
                   <td>
@@ -65,13 +65,13 @@ const FooterPartial = () => (
                       rel="noopener noreferrer"
                       href="https://t.me/joinchat/FwqASEdUSqFIPNBNwPZzfg"
                     >
-                      <img src="/assets/Footer/telegram.png" alt="telegram-logo" />
+                      <img id="telegram" src="/assets/Footer/telegram.png" alt="telegram-logo" />
                     </a>
                   </td>
                   <td>
                     <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://medium.com/@ParthaB/">
-                      <img src="/assets/Footer/medium.png" alt="medium-logo" />
-                    </a>
+                      <img id="medium" src="/assets/Footer/medium.png" alt="medium-logo" />
+                    </a> 
                   </td>
                   {/* <td>
                   <a
@@ -86,12 +86,12 @@ const FooterPartial = () => (
                 </td> */}
                   <td>
                     <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://www.facebook.com/electusnetwork/">
-                      <img src="/assets/Footer/fb.png" alt="fb-logo" />
+                      <img id="fb" src="/assets/Footer/fb.png" alt="fb-logo" />
                     </a>
                   </td>
                   <td>
                     <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://www.twitter.com/ElectusNetwork">
-                      <img src="/assets/Footer/twitter.png" alt="twitter-logo" />
+                      <img id="twitter" src="/assets/Footer/twitter.png" alt="twitter-logo" />
                     </a>
                   </td>
                   {/* <td>

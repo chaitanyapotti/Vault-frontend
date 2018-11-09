@@ -129,7 +129,7 @@ class Registration extends Component {
     const { modalOpen, modalMessage } = this.state;
 
     project_id !== "" ? this.props.history.push({
-      pathname: `/issuergovernance/details`,
+      pathname: `/deploy`,
       search: `?projectid=${project_id}`
     }) : null
 

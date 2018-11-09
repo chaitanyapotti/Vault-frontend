@@ -21,6 +21,8 @@ import store from "./store";
 import Search from "./pages/Search";
 import WhiteList from "./pages/WhiteList";
 
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true; 
+
 const App = props => {
   const { history } = props || {};
   // console.log("logging store: ", store.getState())

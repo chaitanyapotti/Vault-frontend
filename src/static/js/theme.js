@@ -5,6 +5,7 @@ import { isMobile } from "../../helpers/common/deviceDetect";
 const customTheme = {
   typography: {
     fontFamily: "Montserrat",
+    useNextVariants: true
   },
   palette: {
     [CUIColor.PRIMARY]: {
@@ -24,6 +25,38 @@ const customTheme = {
     },
   },
   overrides: {
+    MUIDataTableBodyCell: {
+      root: {
+        fontSize: "16px"
+      }
+    },
+    MUIDataTableHeadCell: {
+      root: {
+        fontSize: "16px"
+      }
+    },
+    MUIDataTableFooterCell: {
+      root: {
+        fontSize: "16px"
+      }
+    },
+    MuiTableCell: {
+      root: {
+        padding: "10px 20px 10px 20px"
+      }
+    },
+    MuiTablePagination: {
+      select: {
+        fontSize: "14px"
+      }
+    },
+    MuiTableRow: {
+      root: {
+        "&:hover": {
+          cursor: "pointer"
+        }
+      }
+    },
     MuiButton: {
       containedPrimary: {
         backgroundColor: CS_COLORS.PRIMARY,
@@ -158,7 +191,7 @@ const customTheme = {
         backgroundColor: CS_COLORS.WHITE,
       },
       colorSecondary: {
-        backgroundColor: CS_COLORS.CARD_CRITERIA_TITLE_COLOR,
+        backgroundColor: '#ffffff',
       },
     },
     MuiAvatar: {

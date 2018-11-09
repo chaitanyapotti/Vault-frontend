@@ -25,7 +25,6 @@ const PDetailGovernance = props => {
     onUnlockTokensClick,
     onKillPollsHistoryClick
   } = props || {};
-  console.log(canUnlockTokens);
   return (
     <CUICard style={{ padding: "40px 50px" }}>
       <div className="txt-xxxl text--primary">Project Details</div>

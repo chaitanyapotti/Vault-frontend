@@ -77,7 +77,7 @@ class ProjectDetailGovernance extends Component {
 
   handleXfrPollsHistoryClose = () => this.setState({ xfrPollsHistoryModalOpen: false });
 
-  handleBuyClose = () => this.setState({ buyModalOpen: false });
+  handleBuyClose = () => this.setState({ buyModalOpen: false, buyAmount: "" });
 
   handleClose = () => {
     this.setState({ modalOpen: false });
@@ -383,9 +383,13 @@ class ProjectDetailGovernance extends Component {
 
   canTapClick = () => {
     const { tapPollConsensus, tokenBalance } = this.props || {};
-    console.log(tapPollConsensus);
     return tapPollConsensus !== "No Poll" && parseFloat(tokenBalance) > 0;
   };
+
+  canXfrClick = () => {
+    const { tokenBalance } = this.props || {};
+    return parseFloat(tokenBalance) > 0;
+  }
 
   canUnlockTokens = () => {
     const { xfrVoteData, tapVoteData, killVoteData } = this.props || {};
@@ -393,7 +397,6 @@ class ProjectDetailGovernance extends Component {
     const { voted: tapVoted } = tapVoteData || {};
     const { voted: xfr1Voted } = xfrVoteData[0] || {};
     const { voted: xfr2Voted } = xfrVoteData[1] || {};
-    console.log(killVoted || tapVoted || xfr1Voted || xfr2Voted);
     return killVoted || tapVoted || xfr1Voted || xfr2Voted;
   };
 
@@ -627,6 +630,7 @@ class ProjectDetailGovernance extends Component {
               xfr2ButtonSpinning={xfr2ButtonSpinning}
               tokensUnderGovernance={tokensUnderGovernance}
               onXfrPollHistoryClick={this.handleXfrPollsHistoryOpen}
+              canXfrClick={this.canXfrClick()}
             />
           </Col>
           <Col xs={12} lg={6}>

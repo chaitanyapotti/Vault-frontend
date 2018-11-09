@@ -220,6 +220,14 @@ class IssuerDetailGovernance extends Component {
     );
   };
 
+  canShowXfrPoll = () => {
+    const { xfrData } = this.props || {};
+    const { poll1, poll2 } = xfrData || {};
+    const { address: poll1Address } = poll1 || {};
+    const { address: poll2Address } = poll2 || {};
+    return poll1Address === "0x0000000000000000000000000000000000000000" || poll2Address === "0x0000000000000000000000000000000000000000";
+  };
+
   canWithdrawXfrAmount = () => {
     const { xfrData, xfrRejectionPercent, tokensUnderGovernance } = this.props || {};
     const { poll1, poll2 } = xfrData || {};
@@ -348,26 +356,28 @@ class IssuerDetailGovernance extends Component {
             />
           </Col>
         </Row>
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <XfrForm
-              titleText={titleText}
-              onTitleTextChange={this.onTitleTextChange}
-              amountText={amountText}
-              onAmountTextChange={this.onAmountTextChange}
-              descriptionText={descriptionText}
-              onDescriptionTextChange={this.onDescriptionTextChange}
-              isPermissioned={this.isPermissioned()}
-              canDeployXfrPoll={this.canDeployXfrPoll()}
-              deployXfrButtonSpinning={deployXfrButtonSpinning}
-              onDeployXfrClick={this.onDeployXfrClick}
-              canWithdrawXfrAmount={this.canWithdrawXfrAmount()}
-              withdrawXfrButtonSpinning={withdrawXfrButtonSpinning}
-              onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
-              getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
-            />
-          </Col>
-        </Row>
+        {this.canShowXfrPoll() ? (
+          <Row className="push--top">
+            <Col xs={12} lg={6}>
+              <XfrForm
+                titleText={titleText}
+                onTitleTextChange={this.onTitleTextChange}
+                amountText={amountText}
+                onAmountTextChange={this.onAmountTextChange}
+                descriptionText={descriptionText}
+                onDescriptionTextChange={this.onDescriptionTextChange}
+                isPermissioned={this.isPermissioned()}
+                canDeployXfrPoll={this.canDeployXfrPoll()}
+                deployXfrButtonSpinning={deployXfrButtonSpinning}
+                onDeployXfrClick={this.onDeployXfrClick}
+                canWithdrawXfrAmount={this.canWithdrawXfrAmount()}
+                withdrawXfrButtonSpinning={withdrawXfrButtonSpinning}
+                onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
+                getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
+              />
+            </Col>
+          </Row>
+        ) : null}
         <Row className="push--top">
           <Col xs={12} lg={6}>
             <IssuerFundReq data={xfrData} details={xfrDetails} tokensUnderGovernance={tokensUnderGovernance} />

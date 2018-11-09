@@ -18,7 +18,8 @@ const ReqType = props => {
     onRevokeXfrClick,
     xfrButtonSpinning,
     tokensUnderGovernance,
-    onXfrPollHistoryClick
+    onXfrPollHistoryClick,
+    canXfrClick
   } = props || {};
   return (
     <div>
@@ -57,11 +58,11 @@ const ReqType = props => {
               </div>
             </Tooltip>
           ) : voted ? (
-            <LoadingButton onClick={onRevokeXfrClick} loading={xfrButtonSpinning}>
+            <LoadingButton onClick={onRevokeXfrClick} loading={xfrButtonSpinning} disabled={!canXfrClick}>
               Allow
             </LoadingButton>
           ) : (
-            <LoadingButton onClick={onXfrClick} type="danger" loading={xfrButtonSpinning}>
+            <LoadingButton onClick={onXfrClick} type="danger" loading={xfrButtonSpinning} disabled={!canXfrClick}>
               Deny
             </LoadingButton>
           )}

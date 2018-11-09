@@ -8,6 +8,16 @@ export const txPending = () => ({
   type: actionTypes.BUTTON_SPINNING
 });
 
+export const isDeployContractButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.DEPLOY_CONTRACT_BUTTON_SPINNING
+});
+
+export const isDeployContractStartButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.DEPLOY_CONTRACT_START_BUTTON_SPINNING
+});
+
 export const redoTx = cdi => ({
   payload: { cdi, txHash: "0x" },
   type: actionTypes.TRANSACTION_REDO
@@ -46,7 +56,7 @@ export const fetchProjectDetails = projectid => dispatch =>
               else dispatch(redoTx(currentDeploymentIndicator));
             } else {
               // wait for tx to complete - keep spinner rotating
-              dispatch(txPending());
+              dispatch(isDeployContractButtonSpinning(true));
             }
           });
         }
@@ -59,41 +69,61 @@ export const fetchProjectDetails = projectid => dispatch =>
       dispatch(projectDetailsFetched({}));
     });
 
-export const deployContractAction = (version, projectid, cdi, args, contractName, userLocalPublicAddress) => dispatch =>
+export const deployContractAction = (version, projectid, cdi, args, contractName, userLocalPublicAddress) => dispatch => {
+  dispatch(isDeployContractStartButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
     .then(response => {
       if (response.status === 200) {
         const { data } = response.data || {};
         const { abi, bytecode } = data || {};
-        console.log(abi, bytecode);
         new web3.eth.Contract(abi)
           .deploy({ data: bytecode, arguments: args })
           .send({ from: userLocalPublicAddress })
-          .on("error", error => console.error(error.message))
-          .on("transactionHash", transactionHash => setTxHash(projectid, transactionHash, cdi).then(body => dispatch(receivedTransactionHash(body))))
+          .on("error", error => {
+            console.error(error.message);
+            dispatch(isDeployContractStartButtonSpinning(false));
+          })
+          .on("transactionHash", transactionHash => {
+            setTxHash(projectid, transactionHash, cdi).then(body => {
+              dispatch(receivedTransactionHash(body));
+              dispatch(isDeployContractButtonSpinning(true));
+              dispatch(isDeployContractStartButtonSpinning(false));
+            });
+          })
           .then(newContractInstance =>
             setContractAddress(projectid, cdi, newContractInstance.options.address)
-              .then(body => dispatch(deployedContract(body)))
+              .then(body => {
+                dispatch(deployedContract(body));
+                dispatch(isDeployContractButtonSpinning(false));
+              })
               .catch(err => {
                 console.error(err.message);
+                dispatch(isDeployContractButtonSpinning(false));
+                dispatch(isDeployContractStartButtonSpinning(false));
                 dispatch(receivedTransactionHash({}));
                 dispatch(deployedContract({}));
               })
           );
       } else {
         console.log("database error");
+        dispatch(isDeployContractButtonSpinning(false));
+        dispatch(isDeployContractStartButtonSpinning(false));
         dispatch(receivedTransactionHash({}));
         dispatch(deployedContract({}));
       }
     })
     .catch(err => {
       console.error(err.message);
+      dispatch(isDeployContractButtonSpinning(false));
+      dispatch(isDeployContractStartButtonSpinning(false));
       dispatch(receivedTransactionHash({}));
       dispatch(deployedContract({}));
     });
+};
 
-export const performContractAction = (version, projectid, cdi, args, contractName, contractAddress, userLocalPublicAddress) => dispatch =>
+export const performContractAction = (version, projectid, cdi, args, contractName, contractAddress, userLocalPublicAddress) => dispatch => {
+  dispatch(isDeployContractStartButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
     .then(response => {
@@ -101,29 +131,49 @@ export const performContractAction = (version, projectid, cdi, args, contractNam
         const { data } = response.data || {};
         const { abi } = data || {};
         const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+
         peformSpecificAction(cdi, instance, args, userLocalPublicAddress)
-          .on("error", error => console.error(error.message))
-          .on("transactionHash", transactionHash => setTxHash(projectid, transactionHash, cdi).then(body => dispatch(receivedTransactionHash(body))))
+          .on("error", error => {
+            console.error(error.message);
+            dispatch(isDeployContractStartButtonSpinning(false));
+          })
+          .on("transactionHash", transactionHash =>
+            setTxHash(projectid, transactionHash, cdi).then(body => {
+              dispatch(receivedTransactionHash(body));
+              dispatch(isDeployContractButtonSpinning(true));
+              dispatch(isDeployContractStartButtonSpinning(false));
+            })
+          )
           .then(receipt =>
             setContractAddress(projectid, cdi, null)
-              .then(body => dispatch(deployedContract(body)))
+              .then(body => {
+                dispatch(deployedContract(body));
+                dispatch(isDeployContractButtonSpinning(false));
+              })
               .catch(err => {
                 console.error(err.message);
+                dispatch(isDeployContractButtonSpinning(false));
+                dispatch(isDeployContractStartButtonSpinning(false));
                 dispatch(receivedTransactionHash({}));
                 dispatch(deployedContract({}));
               })
           );
       } else {
         console.log("database error");
+        dispatch(isDeployContractButtonSpinning(false));
+        dispatch(isDeployContractStartButtonSpinning(false));
         dispatch(receivedTransactionHash({}));
         dispatch(deployedContract({}));
       }
     })
     .catch(err => {
       console.error(err.message);
+      dispatch(isDeployContractButtonSpinning(false));
+      dispatch(isDeployContractStartButtonSpinning(false));
       dispatch(receivedTransactionHash({}));
       dispatch(deployedContract({}));
     });
+};
 
 const peformSpecificAction = (cdi, instance, args, userLocalPublicAddress) => {
   switch (cdi) {

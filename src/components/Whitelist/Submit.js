@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { saveUserFormStates, requestVaultMembership, postUserFormData } from "../../actions/userRegistrationActions";
+import { saveUserFormStates, requestVaultMembership, postUserFormData, isIssuerFlagToggled } from "../../actions/userRegistrationActions";
 import {ButtonComponent} from "../../components/Common/FormComponents";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { CUICard, CUIFormInput, CUIFormInputLabel, CUIDivider } from "../../helpers/material-ui";
+import { CUIInputType, CUIInputColor } from "../../static/js/variables";
 
 class Submit extends Component {
     constructor(props) {
@@ -10,16 +13,20 @@ class Submit extends Component {
     }
 
     handleRequestVaultMembership = () => {
-        this.props.requestVaultMembership(this.props.userLocalPublicAddress, this.props.isIssuerFlag);
-    }
-
-    submitForm= () =>{
         console.log("submit form")
         this.props.saveUserFormStates(this.props.userRegistrationData, this.props.userLocalPublicAddress)
         if (this.props.isVaultMember){
             this.props.postUserFormData(this.props.userRegistrationData, this.props.userLocalPublicAddress)
         }
+        this.props.requestVaultMembership(this.props.userLocalPublicAddress, this.props.isIssuerFlag);
     }
+
+
+    handleIssuerFlagToggled = (e) => {
+        // console.log("click", data);
+        this.props.isIssuerFlagToggled();
+    };
+
 
     render() { 
         
@@ -30,8 +37,6 @@ class Submit extends Component {
                     I hereby submit.
                 </div>
                 <div>
-                    <ButtonComponent onClick={this.submitForm}>Submit</ButtonComponent>
-                    
                     {this.props.vaultMembershipRequested?(
                         <div>
                             {this.props.isVaultMember?(
@@ -41,7 +46,56 @@ class Submit extends Component {
                             )}
                         </div>                       
                         )
-                    :(<ButtonComponent label="Become a Vault Member" onClick={this.handleRequestVaultMembership} />)}
+                    :(<div>
+                        <Grid>
+                        <Row className="push--top">
+                            
+                            <Col>
+                            <ButtonComponent label="Become a Vault Member" onClick={this.handleRequestVaultMembership} />
+                            </Col>
+                                        <Col>
+                                            <CUIFormInputLabel
+                                                control={
+                                                    <CUIFormInput
+                                                        inputType={CUIInputType.RADIO}
+                                                        inputColor={CUIInputColor.PRIMARY}
+                                                        inputChecked={this.props.isIssuerFlag}
+                                                        onChange={this.handleIssuerFlagToggled}
+                                                    />
+                                                }
+                                                label="Issuer"
+                                            />
+                                            <span>
+                                            <CUIFormInputLabel
+                                                control={
+                                                    <CUIFormInput
+                                                        inputType={CUIInputType.RADIO}
+                                                        inputColor={CUIInputColor.PRIMARY}
+                                                        inputChecked={!this.props.isIssuerFlag}
+                                                        onChange={this.handleIssuerFlagToggled}
+                                                    />
+                                                }
+                                                label="Investor"
+                                            />
+                                            </span>
+                                        </Col>
+                                    </Row>  
+                                    <Row>
+                                        {this.props.isIssuerFlag?(
+                                            <div>
+                                                You will be able to publish a DAICO and you will be charged 0.5 Ethers.
+                                                </div>
+                                        ):(
+                                            <div>
+                                                You will be able to participate in DAICOs and you will be charged 0.0015 Ethers.
+                                            </div>
+                                        )}
+                                    </Row>
+                            </Grid>
+                    </div>
+                        
+                    
+                    )}
                     
                     
                 </div>
@@ -68,7 +122,8 @@ const mapDispatchToProps = dispatch =>
         {
             saveUserFormStates,
             requestVaultMembership,
-            postUserFormData
+            postUserFormData,
+            isIssuerFlagToggled
         },
         dispatch
     );

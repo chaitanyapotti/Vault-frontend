@@ -36,13 +36,14 @@ class UploadDocuments extends Component {
                 </ul>
 
                 <Row className="push--top">
-                    <Col lg={6} className="upld-img-plachldr">
+                    {/* <Col lg={6} className="upld-img-plachldr">
                         <div>Space for Image display</div>
-                    </Col>
+                    </Col> */}
                     <Col lg={6}>
                         <div className="txt-m txt-dbld push-top--50">Upload Passport Document</div>
                         <div className="push-half"><input name="passportDoc" type="file" accept="image/*, application/pdf" onChange={this.passportDocChanged} /></div>
-                        <div className="txt">Accepted file types: jpg, png, gif, jpeg</div>
+                        <div>{this.props.passportFileName}</div>
+                        <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>
                         <div className="txt push--top">2 MB maximum file size</div>
                     </Col>
                 </Row>
@@ -50,18 +51,19 @@ class UploadDocuments extends Component {
 
                 <div className="txt-m txt-dbld push--top">Selfie Requirements</div>
                 <ul className="txt push--top">
-                    <li>Passport send in colour photograph</li>
+                    <li>Passport size and colour photograph</li>
                     <li>It should be clear headshot image</li>
                 </ul>
 
                 <Row className="push--top">
-                    <Col lg={6} className="upld-img-plachldr">
+                    {/* <Col lg={6} className="upld-img-plachldr">
                         <div>Space for Image display</div>
-                    </Col>
+                    </Col> */}
                     <Col lg={6}>
                         <div className="txt-m txt-dbld push-top--50">Upload Selfie</div>
                         <div className="push-half"><input name="selfie" type="file" accept="image/*" onChange={this.selfieChanged} /></div>
-                        <div className="txt">Accepted file types: jpg, png, gif, jpeg</div>
+                        <div>{this.props.selfieFileName}</div>
+                        <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>
                         <div className="txt push--top">2 MB maximum file size</div>
                     </Col>
                 </Row>
@@ -74,13 +76,14 @@ class UploadDocuments extends Component {
                 </ul>
 
                 <Row className="push--top">
-                    <Col lg={6} className="upld-img-plachldr">
+                    {/* <Col lg={6} className="upld-img-plachldr">
                         <div className="txt-m txt-dbld">Upload Proof of Address</div>
-                    </Col>
+                    </Col> */}
                     <Col lg={6}>
                         <div className="txt-m txt-dbld push-top--50">Upload Proof of Address</div>
                         <div className="push-half"><input name="addressDoc" type="file" accept="image/*, application/pdf" onChange={this.addressDocChanged} /></div>
-                        <div className="txt">Accepted file types: jpg, png, gif, jpeg</div>
+                        <div>{this.props.addressFileName}</div>
+                        <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>
                         <div className="txt push--top">2 MB maximum file size</div>
                     </Col>
                 </Row>
@@ -91,8 +94,14 @@ class UploadDocuments extends Component {
 
 const mapStateToProps = state => {
     const { userLocalPublicAddress } = state.signinManagerData || {};
+    const { passportFileName,
+        selfieFileName,
+        addressFileName } = state.userRegistrationData || {}
     return {
-        userLocalPublicAddress
+        userLocalPublicAddress,
+        passportFileName,
+        selfieFileName,
+        addressFileName
     };
 };
 

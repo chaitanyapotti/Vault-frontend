@@ -5,7 +5,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepConnector from '@material-ui/core/StepConnector';
-import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   root: {
@@ -79,7 +78,7 @@ class CustomizedStepper extends React.Component {
             </div>
           ) : (
             <div>
-              <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+              <div className={classes.instructions}>{getStepContent(activeStep)}</div>
             </div>
           )}
         </div>

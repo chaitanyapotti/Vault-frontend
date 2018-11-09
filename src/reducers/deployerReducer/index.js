@@ -1,12 +1,85 @@
 import types from "../../action_types";
 
+import { tapDataConverted, withdrawDataConverted, withdrawXfrDataConverted } from "../../helpers/common/projectDetailhelperFunctions";
+
 const initialState = {
-  projectDetails: null
+  projectDetails: null,
+  spendableArrays: [],
+  spentArray: [],
+  xfrDots: [],
+  tapDots: [],
+  spendableDots: [],
+  spentDots: [],
+  dateArray: []
 };
 
 export default function(state = initialState, action) {
   let currentProjDetails = JSON.parse(JSON.stringify(state.projectDetails));
   switch (action.type) {
+    case types.SPEND_CURVE_DATA_SUCCESS: {
+      const today = new Date();
+      const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const { spendableArrays, xfrDots, tapDots, spentArray, spendableDots, spentDots, dateArray, projectDetails } = state || {};
+      const { startDateTime, initialFundRelease, initialTapAmount } = projectDetails;
+      const daicoStartDate = new Date(startDateTime);
+      const daicoStartDateConverted = new Date(daicoStartDate.getFullYear(), daicoStartDate.getMonth(), daicoStartDate.getDate());
+      const { tapData, withdrawXfrData, withdrawData } = action.payload || {};
+      const tapDataDict = tapDataConverted(tapData);
+      const withdrawDataDict = withdrawDataConverted(withdrawData);
+      const withdrawXfrDataDict = withdrawXfrDataConverted(withdrawXfrData);
+      let currentArray = [];
+      let spentValue = 0;
+      const keyx = daicoStartDateConverted.getTime().toString();
+      if (withdrawDataDict[keyx]) {
+        spentValue += withdrawDataDict[keyx];
+      }
+      spentArray.push({ date: daicoStartDateConverted.getTime(), ether: spentValue });
+      let tapValue = parseFloat(initialTapAmount) * 86400 * Math.pow(10, -18);
+      currentArray.push({ date: daicoStartDateConverted.getTime(), ether: initialFundRelease * Math.pow(10, -18) });
+      spendableDots.push({ date: daicoStartDateConverted.getTime(), ether: initialFundRelease * Math.pow(10, -18) });
+      spentDots.push({ date: daicoStartDateConverted.getTime(), ether: spentValue });
+      dateArray.push({ date: daicoStartDateConverted.getTime(), ether: 0 });
+      const newDatex = new Date(daicoStartDateConverted.setDate(daicoStartDateConverted.getDate() + 1));
+      for (let d = newDatex; d <= todayDate; d.setDate(d.getDate() + 1)) {
+        spentValue = spentArray[spentArray.length - 1].ether;
+        const key = d.getTime().toString();
+        if (withdrawDataDict[key]) {
+          spentValue += withdrawDataDict[key];
+        }
+        spentArray.push({ date: (new Date(d)).getTime(), ether: spentValue });
+        let previousEther = 0;
+        let currentEther = 0;
+        previousEther = currentArray[currentArray.length - 1].ether;
+        currentEther = previousEther + tapValue;
+        currentArray.push({ date: (new Date(d)).getTime(), ether: currentEther });
+
+        if (tapDataDict[key]) {
+          tapValue = tapDataDict[key];
+          tapDots.push({ date: (new Date(d)).getTime(), ether: 0 });
+          spendableDots.push({ date: (new Date(d)).getTime(), ether: currentEther });
+        }
+
+        if (withdrawXfrDataDict[key]) {
+          spendableArrays.push(currentArray);
+          currentArray = [{ date: (new Date(d)).getTime(), ether: currentEther + withdrawXfrDataDict[key] }];
+          xfrDots.push({ date: (new Date(d)).getTime(), ether: 0 });
+        }
+        dateArray.push({ date: (new Date(d)).getTime(), ether: 0 });
+      }
+      spendableArrays.push(currentArray);
+      let lastArray = [];
+      let endOfSpendable = [];
+      lastArray = spendableArrays[spendableArrays.length - 1] || [];
+      endOfSpendable = lastArray[lastArray.length - 1] || [];
+      spendableDots.push({
+        date: todayDate.getTime(),
+        ether: endOfSpendable.ether || 0
+      });
+      spentDots.push(spentArray[spentArray.length - 1]);
+      console.log("spentDots: ", spentDots)
+      console.log("spendableDots: ", spendableDots)
+      return { ...state, spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray };
+    }
     case types.PROJECT_DETAILS_FETCHED: {
       const { data } = action.payload || {};
       currentProjDetails = data;

@@ -113,12 +113,13 @@ class ProjectDetailGovernance extends Component {
       getKillPollsHistory: fetchKillPollsHistory,
       getTapPollsHistory: fetchTapPollsHistory,
       getXfrPollsHistory: fetchXfrPollsHistory,
-      // getSpendCurveData: fetchSpendCurveData,
+      getSpendCurveData: fetchSpendCurveData,
       getVoteHistogramData: fetchVoteHistogramData
     } = this.props || {};
     priceFetch("ETH");
     priceFetch(tokenTag);
-    // fetchSpendCurveData(version, pollFactoryAddress)
+    fetchSpendCurveData(version, pollFactoryAddress)
+    // fetchSpendCurveData(version, pollFactoryAddress);
     fetchVoteHistogramData(projectid);
     fetchKillPollsHistory(projectid);
     fetchTapPollsHistory(projectid);
@@ -474,10 +475,10 @@ class ProjectDetailGovernance extends Component {
       totalVotes,
       collectiveVoteWeight,
       projectHealth,
-      spendCurveData,
       initialFundRelease,
       startDateTime,
-      history
+      spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray,
+      history      
     } = this.props || {};
     const {
       modalOpen,
@@ -607,7 +608,7 @@ class ProjectDetailGovernance extends Component {
             />
           </Col>
           <Col xs={12} lg={6}>
-            <SpendCurve spendCurveData={spendCurveData} initialFundRelease={initialFundRelease} startDateTime={startDateTime} />
+            <SpendCurve spendableArrays={spendableArrays} spentArray={spentArray} xfrDots={xfrDots} tapDots={tapDots} spendableDots={spendableDots} spentDots={spentDots} dateArray={dateArray} initialFundRelease={initialFundRelease} startDateTime={startDateTime} />
           </Col>
         </Row>
 
@@ -733,6 +734,7 @@ const mapStateToProps = state => {
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { prices } = fetchPriceReducer || {};
+  const { spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray } = state.deployerReducer || {}
 
   return {
     etherCollected,
@@ -766,7 +768,8 @@ const mapStateToProps = state => {
     xfrPollsHistoryData,
     voteHistogramData,
     totalVotes,
-    collectiveVoteWeight
+    collectiveVoteWeight,
+    spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray
   };
 };
 

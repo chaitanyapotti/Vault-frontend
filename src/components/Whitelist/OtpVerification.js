@@ -7,7 +7,6 @@ import {
     phoneNumberChanged,
     userOtpChanged,
     verifyPhoneNumber,
-    isIssuerFlagToggled,
     checkVaultMembership,
     requestVaultMembership,
 } from "../../actions/userRegistrationActions";
@@ -49,11 +48,7 @@ class OtpVerification extends Component {
         );
     };
 
-    handleIssuerFlagToggled = (e) => {
-        // console.log("click", data);
-        this.props.isIssuerFlagToggled();
-    };
-
+    
     handleOtpChanged = (e) => {
         this.props.userOtpChanged(e.target.value);
     };
@@ -95,21 +90,7 @@ class OtpVerification extends Component {
                                         <Col><ButtonComponent label="Send OTP" onClick={this.handleSendOtp} /></Col>
                                     </Row>
 
-                                    <Row className="push--top">
-                                        <Col>
-                                            <CUIFormInputLabel
-                                                control={
-                                                    <CUIFormInput
-                                                        inputType={CUIInputType.CHECKBOX}
-                                                        inputColor={CUIInputColor.PRIMARY}
-                                                        inputChecked={this.props.isIssuerFlag}
-                                                        onChange={this.handleIssuerFlagToggled}
-                                                    />
-                                                }
-                                                label="Please check if you are an Issuer"
-                                            />
-                                        </Col>
-                                    </Row>
+
 
                                     {/* <Row className="push--top"><Col><CUIDivider /></Col></Row> */}
 
@@ -160,7 +141,6 @@ const mapStateToProps = state => {
         otpFromUser,
         otpFromServer,
         otpVerificationSuccessful,
-        isIssuerFlag,
         isVaultMember,
         isPhoneNumberVerified,
         vaultPaymentPendingStatus,
@@ -172,7 +152,6 @@ const mapStateToProps = state => {
         otpFromUser,
         otpFromServer,
         otpVerificationSuccessful,
-        isIssuerFlag,
         userLocalPublicAddress,
         isVaultMember,
         isPhoneNumberVerified,
@@ -189,7 +168,6 @@ const mapDispatchToProps = dispatch =>
             countryCodeChanged,
             userOtpChanged,
             verifyPhoneNumber,
-            isIssuerFlagToggled,
             checkVaultMembership,
             requestVaultMembership,
         },

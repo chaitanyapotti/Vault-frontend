@@ -41,7 +41,7 @@ export const initialState = {
   },
   voteHistogramData: {},
   totalVotes: 0,
-  collectiveVoteWeight: 0,
+  collectiveVoteWeight: 0
 };
 
 export default (state = initialState, action) => {
@@ -60,11 +60,6 @@ export default (state = initialState, action) => {
         histArray.push(d)
       }
       return {...state, voteHistogramData: histArray, totalVotes: totalVotes, collectiveVoteWeight: collectiveVoteWeight}
-    }
-
-    case actionTypes.SPEND_CURVE_DATA_SUCCESS: {
-      console.log("spend curve data: " ,action.payload)
-      return {...state, spendCurveData: action.payload}
     }
 
     case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED: {

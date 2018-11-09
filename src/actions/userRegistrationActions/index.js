@@ -13,6 +13,7 @@ export function postUserFormData(userRegistrationData, userLocalPublicAddress) {
         addressLine1: userRegistrationData.addressLine1,
         addressLine2: userRegistrationData.addressLine2,
     }
+    userFormObject["isIssuer"] = userRegistrationData.isIssuerFlag,
     userFormObject["city"] = userRegistrationData.city
     userFormObject["userState"] = userRegistrationData.userState
     userFormObject["postalCode"] = userRegistrationData.postalCode
@@ -223,13 +224,12 @@ export function sendOtp(phoneNumber, countryCode) {
     };
 }
 
-export function verifyPhoneNumber(serverOtp, userOtp, isIssuer, publicAddress, phoneNumber, countryCode) {
+export function verifyPhoneNumber(serverOtp, userOtp, publicAddress, phoneNumber, countryCode) {
     return dispatch => {
         if (serverOtp.toString() === userOtp.toString()) {
             axios
                 .post(`${config.api_base_url}/db/users/register/phone`, {
                     publicaddress: publicAddress,
-                    isissuer: isIssuer,
                     phonenumber: phoneNumber,
                     countrycode: countryCode
                 })
@@ -374,10 +374,11 @@ export function fetchUserFormStates(userLocalPublicAddress) {
 export function uploadPassportDocAction(passportDoc, userLocalPublicAddress, doctype) {
     const form = new FormData();
     form.append("file", passportDoc);
+    const name = passportDoc.name || ""
     return dispatch => {
         dispatch({
             type: actionTypes.UPLOADING_PASSPORT_DOC,
-            payload: true
+            payload: name
         });
         httpClient({
             method: "post",
@@ -411,10 +412,11 @@ export function uploadPassportDocAction(passportDoc, userLocalPublicAddress, doc
 export function uploadSelfieAction(selfie, userLocalPublicAddress, doctype) {
     const form = new FormData();
     form.append("file", selfie);
+    const name = selfie.name || ""
     return dispatch => {
         dispatch({
             type: actionTypes.UPLOADING_SELFIE,
-            payload: true
+            payload: name
         });
         httpClient({
             method: "post",
@@ -448,10 +450,11 @@ export function uploadSelfieAction(selfie, userLocalPublicAddress, doctype) {
 export function uploadAddressDocAction(addressDoc, userLocalPublicAddress, doctype) {
     const form = new FormData();
     form.append("file", addressDoc);
+    const name = addressDoc.name || ""
     return dispatch => {
         dispatch({
             type: actionTypes.UPLOADING_ADDRESS_DOC,
-            payload: true
+            payload: name
         });
         httpClient({
             method: "post",

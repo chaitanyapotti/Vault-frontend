@@ -170,37 +170,34 @@ class Registration extends Component {
                   label="Publish Daico"
                   onClick={this.handlePublishDaico}
                   disabled={
-                  errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
-                  !validateLength(adminName) ||
-                  !validateLength(projectDescription) ||
-                  !validateLength(projectName) ||
-                  errors[actionTypes.ADMIN_EMAIL_CHANGED] !== "" ||
-                  errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
-                  errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
-                  errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
-                  errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
-                  errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
-                  errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
-                  errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
-                  errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
-                  isUpperCase(erc20TokenTag) ||
-                  !validateLength(erc20TokenTag) ||
-                  !validateTokenTagLength(erc20TokenTag) ||
-                  errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
-                  !validateProjectNameLength(projectName) ||
-                  !alphaOnly(erc20TokenTag) ||
-                  !alphaOnly(projectName)||
-                  validateMaxEtherContribution(maxEtherContribution) ||
-                  !validateLength(maxEtherContribution) ||
-                  !validateLength(voteSaturationLimit) ||
-                  !validateLength(tapIncrementFactor) ||
-                  !validateLength(initialTapValue) ||
-                  !validateLength(initialFundRelease) ||
-                  !validateDate(daicoStartDate) ||
-                  !validateDate(daicoEndDate)||
-                  validateUniqueName(projectNames, projectName)||
-                  validateUniqueName(tokenTags, erc20TokenTag) ||
-                  validateTotalSaleTokens(totalSaleTokens)
+                    errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
+                    errors[actionTypes.ADMIN_EMAIL_CHANGED] !== "" ||
+                    errors[actionTypes.PROJECT_NAME_CHANGED] !== "" ||
+                    errors[actionTypes.ERC20_TAG_CHANGED] !== "" ||
+                    errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
+                    errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
+                    errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
+                    errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
+                    errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
+                    errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
+                    errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
+                    errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
+                    errors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] !== "" ||
+                    errors[actionTypes.INITIAL_TAP_VALUE_CHANGED] !== "" ||
+                    errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
+                    errors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] !== "" ||
+                    !validateLength(adminName) ||
+                    !validateLength(projectDescription) ||
+                    !validateLength(projectName) ||
+                    !validateLength(erc20TokenTag) ||
+                    !validateLength(maxEtherContribution) ||
+                    !validateLength(voteSaturationLimit) ||
+                    !validateLength(tapIncrementFactor) ||
+                    !validateLength(initialTapValue) ||
+                    !validateLength(initialFundRelease) ||
+                    !validateDate(daicoStartDate) ||
+                    !validateDate(daicoEndDate)||
+                    validateTotalSaleTokens(totalSaleTokens)
                   }
                 />
               </span>

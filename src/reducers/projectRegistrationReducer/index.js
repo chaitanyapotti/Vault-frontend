@@ -20,7 +20,9 @@ import {
   validateR2BonusRange,
   validateUniqueName,
   validateDecimal,
-  validateEntityPercentage
+  validateEntityPercentage,
+  validateTwoDecimalPlaces,
+  validateOneDecimalPlace
 } from "../../helpers/common/validationHelperFunctions";
 
 import {significantDigits} from "../../helpers/common/projectDetailhelperFunctions"
@@ -405,11 +407,6 @@ export default function(state = initialState, action) {
       } else {
         localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
       }
-      // if (alphaOnly(action.payload)) {
-      //   localErrors[actionTypes.ERC20_TAG_CHANGED] = "Only letters are accepted";
-      // } else {
-      //   localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
-      // }
       return {
         ...state,
         erc20TokenTag: action.payload,
@@ -517,9 +514,17 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.INITIAL_FUND_RELEASE_CHANGED: {
+      if (parseFloat(action.payload)<10 && !validateTwoDecimalPlaces(action.payload)) {
+        localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "Only 2 Decimals Allowed";
+      } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
+        localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "Only 1 Decimal Allowed";
+      } else {
+        localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "";
+      }
       return {
         ...state,
-        initialFundRelease: action.payload
+        initialFundRelease: action.payload,
+        errors: localErrors
       };
     }
 
@@ -544,7 +549,11 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED: {
-      if (validateMaxEtherContribution(parseFloat(action.payload))) {
+      if (parseFloat(action.payload)<10 && !validateTwoDecimalPlaces(action.payload)) {
+        localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "Only 2 Decimals Allowed";
+      } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
+        localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "Only 1 Decimal Allowed";
+      } else if (validateMaxEtherContribution(parseFloat(action.payload))) {
         localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "should be greater than 0.1";
       } else {
         localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "";
@@ -557,11 +566,20 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.INITIAL_TAP_VALUE_CHANGED: {
+      if (parseFloat(action.payload)<10 && !validateTwoDecimalPlaces(action.payload)) {
+        localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "Only 2 Decimals Allowed";
+      } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
+        localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "Only 1 Decimal Allowed";
+      } else {
+        localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "";
+      }
       return {
         ...state,
-        initialTapValue: action.payload
+        initialTapValue: action.payload,
+        errors: localErrors
       };
     }
+
 
     case actionTypes.TAP_INCREMENT_FACTOR_CHANGED: {
       if (validateTapIncrementFactor(parseFloat(action.payload)) || !validateDecimal(action.payload)) {

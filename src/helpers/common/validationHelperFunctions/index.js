@@ -20,6 +20,20 @@ const validateUniqueName = (names, input) => {
   }
   return false;
 };
+const validateTwoDecimalPlaces = input => {
+  if (parseFloat(input) <10 && input.length < 5) {
+    console.log("s")
+    return true;
+  }
+  return false;
+};
+
+const validateOneDecimalPlace = input => {
+  if (parseFloat(input) >= 10 && input.length < 5) {
+    return true;
+  }
+  return false;
+};
 const validateMaxEtherContribution = input => {
   if (input < 0.1) {
     return true;
@@ -161,5 +175,7 @@ export {
   checkMetaMask,
   validateUniqueName,
   validateDecimal,
-  validateEntityPercentage
+  validateEntityPercentage,
+  validateTwoDecimalPlaces,
+  validateOneDecimalPlace
 };

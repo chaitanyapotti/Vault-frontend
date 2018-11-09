@@ -26,7 +26,7 @@ class ProjectDetailCrowdSale extends Component {
     buyAmount: ""
   };
 
-  handleBuyClose = () => this.setState({ buyModalOpen: false });
+  handleBuyClose = () => this.setState({ buyModalOpen: false, buyAmount: "" });
 
   handleClose = () => {
     this.setState({ modalOpen: false });

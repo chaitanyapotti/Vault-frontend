@@ -31,8 +31,11 @@ class EthWallet extends Component {
                     value={wallet} 
                     onChange={this.handleSelect}
                 /> */}
-                <div className="txt-m txt-dbld push--top">Your ETH Wallet Address</div>
-                <CUIFormInput
+                <div className="txt-m txt-dbld push--top">Your ETH Wallet Address: 
+                    <span>{this.props.userLocalPublicAddress}</span>
+
+                </div>
+                {/* <CUIFormInput
                     required
                     inputType={CUIInputType.TEXT}
                     full
@@ -41,7 +44,7 @@ class EthWallet extends Component {
                     inputPlaceholder="Metamask"
                     inputValue={this.props.userLocalPublicAddress}
                     onChange={this.onChangeIniFundVal}
-                />
+                /> */}
 
                 <div className="txt-m txt-dbld push--top">
                     Ethereum Wallet Requirements

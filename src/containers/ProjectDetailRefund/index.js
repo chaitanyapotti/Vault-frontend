@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { refundByKill, refundBySoftCapFail } from "../../actions/projectRefundActions/index";
 import { getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
 import { formatFromWei, formatCurrencyNumber } from "../../helpers/common/projectDetailhelperFunctions";
-import DeployerCard from "../../components/DeployerCard";
+import RefundCard from "../../components/RefundCard";
 import { getRemainingEtherBalance, getTotalSupply } from "../../actions/projectDetailGovernanceActions/index";
 
 class ProjectDetailRefund extends Component {
@@ -44,6 +44,7 @@ class ProjectDetailRefund extends Component {
       refundByKill: killRefund,
       refundBySoftCapFail: softCapRefund
     } = this.props || {};
+    console.log(treasuryStateNumber);
     if (treasuryStateNumber === "2") softCapRefund(version, pollFactoryAddress, userLocalPublicAddress, daicoTokenAddress);
     if (treasuryStateNumber === "4") killRefund(version, pollFactoryAddress, userLocalPublicAddress, daicoTokenAddress);
   };
@@ -54,12 +55,39 @@ class ProjectDetailRefund extends Component {
     return formatFromWei((parseFloat(tokenBalance) / denom) * parseFloat(remainingEtherBalance) || 0, 3);
   };
 
+  getLabel = () => {
+    const { tokenTag, treasuryStateNumber, tokenBalance } = this.props || {};
+    if (treasuryStateNumber === "2") {
+      return (
+        <div>
+          <div>The DAICO that you are looking for could not successfully reach its Round 1 goal.</div>
+          <div>
+            You are eligible for a refund of {this.getMyRefundValue()} ETH against your balance of
+            {formatCurrencyNumber(formatFromWei(tokenBalance, 0), 0)} {tokenTag} . Click the refund button and sign the transaction to start the
+            refund process
+          </div>
+        </div>
+      );
+    }
+    if (treasuryStateNumber === "4") {
+      return (
+        <div>
+          <div>The DAICO that you are looking for has been killed by investor consensus.</div>
+          <div>
+            You are eligible for a refund of {this.getMyRefundValue()} ETH against your balance of
+            {formatCurrencyNumber(formatFromWei(tokenBalance, 0), 0)} {tokenTag} . Click the refund button and sign the transaction to start the
+            refund process
+          </div>
+        </div>
+      );
+    }
+  };
+
   render() {
-    const { tokenTag, tokenBalance, treasuryStateNumber, refundByKillButtonSpinning, refundBySoftCapFailSpinning, signinStatusFlag } =
-      this.props || {};
+    const { tokenBalance, treasuryStateNumber, refundByKillButtonSpinning, refundBySoftCapFailSpinning, signinStatusFlag } = this.props || {};
     return (
       <div>
-        <DeployerCard
+        <RefundCard
           refundByKillButtonSpinning={refundByKillButtonSpinning}
           refundBySoftCapFailSpinning={refundBySoftCapFailSpinning}
           onRefundClick={this.onRefundClick}
@@ -67,11 +95,7 @@ class ProjectDetailRefund extends Component {
           treasuryStateNumber={treasuryStateNumber}
           tokenBalance={tokenBalance}
           btnLabel="Refund"
-          label={`You are eligible for a refund of ${this.getMyRefundValue()} ETH against your balance of ${formatCurrencyNumber(
-            formatFromWei(tokenBalance, 0),
-            0
-          )} ${tokenTag} . Click ‘Refund’ to proceed.
-          `}
+          label={this.getLabel()}
         />
       </div>
     );

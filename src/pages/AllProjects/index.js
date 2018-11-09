@@ -4,13 +4,12 @@ import UpcomingDaicos from "../../containers/UpcomingDaicos";
 import EndedDaicos from "../../containers/EndedDaicos";
 import {Grid} from "../../helpers/react-flexbox-grid";
 import { CUITabs } from "../../helpers/material-ui";
-import Typography from '@material-ui/core/Typography';
 
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ paddingTop: 8 * 3 }}>
+    <div style={{ paddingTop: 8 * 3 }}>
       {props.children}
-    </Typography>
+    </div>
   );
 }
 class AllProjects extends Component {
@@ -43,7 +42,7 @@ class AllProjects extends Component {
     ]
     return (
       <Grid>
-        <CUITabs style={{color: 'black !important'}} onChange={this.handleChange} value={this.state.value} indicatorColor="black" iconList={list} />
+        <CUITabs style={{color: 'black !important'}} onChange={this.handleChange} value={this.state.value} iconList={list} />
         {value === 'active' && <TabContainer><ActiveDaicos history={this.props.history} /></TabContainer>}
         {value === 'upcoming' && <TabContainer><UpcomingDaicos history={this.props.history} /></TabContainer>}
         {value === 'ended' && <TabContainer><EndedDaicos history={this.props.history} /></TabContainer>}

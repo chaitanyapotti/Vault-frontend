@@ -15,7 +15,8 @@ class FundReq extends Component {
       onRevokeXfr1Click,
       onXfr1Click,
       xfr1ButtonSpinning,
-      tokensUnderGovernance
+      tokensUnderGovernance,
+      canXfrClick
     } = this.props || {};
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
@@ -38,12 +39,13 @@ class FundReq extends Component {
         xfrButtonSpinning={xfr1ButtonSpinning}
         tokensUnderGovernance={tokensUnderGovernance}
         onXfrPollHistoryClick={onXfrPollHistoryClick}
+        canXfrClick={canXfrClick}
       />
     ) : null;
   };
 
   getObject2 = () => {
-    const { data, details, xfrVoteData, signinStatusFlag, onRevokeXfr2Click, onXfr2Click, xfr2ButtonSpinning, tokensUnderGovernance } =
+    const { data, details, xfrVoteData, signinStatusFlag, onRevokeXfr2Click, onXfr2Click, xfr2ButtonSpinning, tokensUnderGovernance, canXfrClick } =
       this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime, address } = poll2 || {};
@@ -65,6 +67,7 @@ class FundReq extends Component {
         onXfrClick={onXfr2Click}
         xfrButtonSpinning={xfr2ButtonSpinning}
         tokensUnderGovernance={tokensUnderGovernance}
+        canXfrClick={canXfrClick}
       />
     ) : null;
   };

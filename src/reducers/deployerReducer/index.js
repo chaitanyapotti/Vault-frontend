@@ -35,12 +35,12 @@ export default function(state = initialState, action) {
       if (withdrawDataDict[keyx]) {
         spentValue += withdrawDataDict[keyx];
       }
-      spentArray.push({ date: daicoStartDateConverted, ether: spentValue });
+      spentArray.push({ date: daicoStartDateConverted.getTime(), ether: spentValue });
       let tapValue = parseFloat(initialTapAmount) * 86400 * Math.pow(10, -18);
-      currentArray.push({ date: daicoStartDateConverted, ether: initialFundRelease * Math.pow(10, -18) });
-      spendableDots.push({ date: daicoStartDateConverted, ether: initialFundRelease * Math.pow(10, -18) });
-      spentDots.push({ date: daicoStartDateConverted, ether: spentValue });
-      dateArray.push({ date: daicoStartDateConverted, ether: 0 });
+      currentArray.push({ date: daicoStartDateConverted.getTime(), ether: initialFundRelease * Math.pow(10, -18) });
+      spendableDots.push({ date: daicoStartDateConverted.getTime(), ether: initialFundRelease * Math.pow(10, -18) });
+      spentDots.push({ date: daicoStartDateConverted.getTime(), ether: spentValue });
+      dateArray.push({ date: daicoStartDateConverted.getTime(), ether: 0 });
       const newDatex = new Date(daicoStartDateConverted.setDate(daicoStartDateConverted.getDate() + 1));
       for (let d = newDatex; d <= todayDate; d.setDate(d.getDate() + 1)) {
         spentValue = spentArray[spentArray.length - 1].ether;
@@ -48,25 +48,25 @@ export default function(state = initialState, action) {
         if (withdrawDataDict[key]) {
           spentValue += withdrawDataDict[key];
         }
-        spentArray.push({ date: new Date(d), ether: spentValue });
+        spentArray.push({ date: new Date(d).getTime(), ether: spentValue });
         let previousEther = 0;
         let currentEther = 0;
         previousEther = currentArray[currentArray.length - 1].ether;
         currentEther = previousEther + tapValue;
-        currentArray.push({ date: new Date(d), ether: currentEther });
+        currentArray.push({ date: new Date(d).getTime(), ether: currentEther });
 
         if (tapDataDict[key]) {
           tapValue = tapDataDict[key];
-          tapDots.push({ date: new Date(d), ether: 0 });
-          spendableDots.push({ date: new Date(d), ether: currentEther });
+          tapDots.push({ date: new Date(d).getTime(), ether: 0 });
+          spendableDots.push({ date: new Date(d).getTime(), ether: currentEther });
         }
 
         if (withdrawXfrDataDict[key]) {
           spendableArrays.push(currentArray);
-          currentArray = [{ date: new Date(d), ether: currentEther + withdrawXfrDataDict[key] }];
-          xfrDots.push({ date: new Date(d), ether: 0 });
+          currentArray = [{ date: new Date(d).getTime(), ether: currentEther + withdrawXfrDataDict[key] }];
+          xfrDots.push({ date: new Date(d).getTime(), ether: 0 });
         }
-        dateArray.push({ date: new Date(d), ether: 0 });
+        dateArray.push({ date: new Date(d).getTime(), ether: 0 });
       }
       spendableArrays.push(currentArray);
       let lastArray = [];
@@ -74,11 +74,11 @@ export default function(state = initialState, action) {
       lastArray = spendableArrays[spendableArrays.length - 1] || [];
       endOfSpendable = lastArray[lastArray.length - 1] || [];
       spendableDots.push({
-        date: todayDate,
+        date: todayDate.getTime(),
         ether: endOfSpendable.ether || 0
       });
       spentDots.push(spentArray[spentArray.length - 1]);
-      return { ...state };
+      return { ...state, spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray };
     }
     case types.PROJECT_DETAILS_FETCHED: {
       const { data } = action.payload || {};

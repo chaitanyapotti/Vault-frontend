@@ -4,8 +4,11 @@ import actionTypes from "../../action_types";
 
 export const initialState = {
     passportUrl: "",
+    passportFileName: "",
     selfieUrl: "",
+    selfieFileName: "",
     addressUrl: "",
+    addressFileName: "",
     addressLine1: "",
     addressLine2: "",
     city: "",
@@ -39,6 +42,27 @@ export const initialState = {
 
 export default function (state = initialState, action) {
     switch (action.type) {
+
+        case actionTypes.UPLOADING_PASSPORT_DOC:{
+            return {
+                ...state, 
+                passportFileName: action.payload
+            }
+        }
+
+        case actionTypes.UPLOADING_SELFIE:{
+            return {
+                ...state, 
+                selfieFileName: action.payload
+            }
+        }
+
+        case actionTypes.UPLOADING_ADDRESS_DOC:{
+            return {
+                ...state, 
+                addressFileName: action.payload
+            }
+        }
 
         case actionTypes.USER_FORM_SUBMISSION_SUCCESS: {
             console.log("user form submitted")

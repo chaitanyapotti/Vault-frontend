@@ -2,11 +2,16 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 
 import { CUICard, CUICardActions, CUICardMedia, CUICardText } from "../../helpers/material-ui";
-// import { ButtonComponent } from "../Common/FormComponents";
+import { ButtonComponent } from "../Common/FormComponents";
 
 const styles = {
   card: {
-    maxWidth: 345
+    "&:hover": {
+      transform: 'translate(0px, -5px) scale(1.02)',
+      transition: '250ms'
+    },
+    maxWidth: 345,
+    boxShadow: '0px 10px 20px 0px rgba(76, 169, 252, 0.5)'
   },
   media: {
     // ⚠️ object-fit is not supported by IE 11.
@@ -46,11 +51,15 @@ class Featuredproject extends Component {
           title="Contemplative Reptile"
         />
         <CUICardText>
-          <div>{projectName}</div>
-          <div>{description}</div>
-          <a href={website} target="_blank" rel="noopener noreferrer">
-            Know More
-          </a>
+          <div className="txt-xxl txt-dbld">{projectName}</div>
+          <div className="push--top fnt-ps dscrptn-lins">{description}</div>
+          <div className="push--top text--right">
+            <a href={website} target="_blank" rel="noopener noreferrer">
+              <ButtonComponent>
+                Know More
+              </ButtonComponent>
+            </a>
+          </div>
         </CUICardText>
         <CUICardActions />
       </CUICard>

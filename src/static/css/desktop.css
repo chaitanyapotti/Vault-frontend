@@ -156,7 +156,9 @@
     cursor: pointer;
 }
 
-
+#git:hover, #telegram:hover, #medium:hover, #fb:hover, #twitter:hover{
+    filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);
+}
 /* Subheaders */
 
 .sbhdr-cnt{
@@ -257,4 +259,11 @@
     left: 0;
     right: 0;
     width: 100%;
+}
+
+/* Faetured Card Description number of lines*/
+.dscrptn-lins{
+    height: 80px;
+    line-height: 20px;
+    overflow: hidden;
 }

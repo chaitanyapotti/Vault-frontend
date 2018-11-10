@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import {withRouter} from "react-router-dom";
 import qs from "qs";
 import { fetchProjectDetails, deployContractAction, performContractAction } from "../../actions/deployerActions/index";
 import { Grid } from "../../helpers/react-flexbox-grid";
@@ -15,6 +16,7 @@ class Deployer extends Component {
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
     if ("projectid" in params) {
+      console.log("first mount: ", params.projectid, window.location.href);
       getProjectDetails(params.projectid);
     } else {
       history.push({
@@ -170,6 +172,7 @@ class Deployer extends Component {
   redirectHome = () => {
     // this.props.history.push("/issuergovernance/details");
     const { _id } = this.props.projectDetails || {};
+    console.log("redirect home: ", _id);
     this.props.history.push({
       pathname: `/issuergovernance/details`,
       search: `?projectid=${_id}`
@@ -292,7 +295,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Deployer);
+)(Deployer));

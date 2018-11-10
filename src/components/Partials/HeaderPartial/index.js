@@ -15,7 +15,7 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import Drawer from "@material-ui/core/Drawer";
 import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
 import { CUIAppBar, CUIButtonIcon, CUIButton } from "../../../helpers/material-ui";
-import { getSearchResults } from "../../../actions/searchActions/index";
+import { getSearchResults, searchTextChangeAction } from "../../../actions/searchActions/index";
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
@@ -113,7 +113,6 @@ class HeaderPartial extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
-    searchText: "",
     signInModalOpen: false
   };
 
@@ -157,45 +156,57 @@ class HeaderPartial extends React.Component {
   };
 
   onHandleLogoClicked = () => {
-    this.setState({ searchText: "" });
+    this.props.searchTextChangeAction("")
+    // this.setState({ searchText: "" });
     this.props.history.push({
       pathname: `/`
     });
   };
 
   onHandleProjectsClicked = () => {
-    this.setState({ searchText: "" });
+    // this.setState({ searchText: "" });
+    this.props.searchTextChangeAction("")
     this.props.history.push({
       pathname: `/projects`
     });
   };
 
   onHandleGovernanceClicked = () => {
-    this.setState({ searchText: "" });
+    // this.setState({ searchText: "" });
+    this.props.searchTextChangeAction("")
     this.props.history.push({
       pathname: `/mytokens`
     });
   };
 
   onHandlePublishDaicoClicked = () => {
-    this.setState({ searchText: "" });
+    this.props.searchTextChangeAction("")
+    // this.setState({ searchText: "" });
     this.props.history.push({
       pathname: `/registration`
     });
   };
 
   searchProject = e => {
-    this.setState({
-      searchText: e.target.value
-    });
+    this.props.searchTextChangeAction(e.target.value)
+    // this.setState({
+    //   searchText: e.target.value
+    // });
   };
 
   handleSearch = e => {
     if (e.keyCode === 13) {
       const { history, getSearchResults: fetchSearchResults } = this.props || {};
-      const { searchText } = this.state;
-      fetchSearchResults(searchText);
-      history.push(`/search?q=${searchText}`);
+      const { searchText } = this.props;
+      if (searchText===""){
+        history.push({
+          pathname: `/`
+        });   
+      }else{
+        fetchSearchResults(searchText);
+        history.push(`/search?q=${searchText}`);
+      }
+      
     }
   };
 
@@ -284,7 +295,7 @@ class HeaderPartial extends React.Component {
                             root: classes.inputRoot,
                             input: classes.inputInput
                           }}
-                          value={this.state.searchText}
+                          value={this.props.searchText}
                           onChange={this.searchProject}
                           onKeyDown={this.handleSearch}
                         />
@@ -317,7 +328,7 @@ class HeaderPartial extends React.Component {
                               {
                                 0: (
                                   <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={this.handleSignInModalOpen}>
+                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={()=>{}}>
                                       <div className="soft-half--sides">
                                         <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> 
                                         <span style={{top: '3px'}} className="push-half--left pos-rel">Install</span>
@@ -435,7 +446,8 @@ const mapDispatchToProps = dispatch =>
     {
       openRegistrationFormAction,
       closeRegistrationFormAction,
-      getSearchResults
+      getSearchResults,
+      searchTextChangeAction
     },
     dispatch
   );
@@ -455,6 +467,10 @@ const mapStateToProps = state => {
     isUserDefaultAccountChecked,
     isVaultMembershipChecked
   } = state.signinManagerData || {};
+
+  const {
+    searchText
+  } = state.searchReducer || {}
   return {
     userRegistered,
     userServerPublicAddress,
@@ -467,7 +483,8 @@ const mapStateToProps = state => {
     isMetamaskNetworkChecked,
     isMetamaskInstallationChecked,
     isUserDefaultAccountChecked,
-    isVaultMembershipChecked
+    isVaultMembershipChecked,
+    searchText
   };
 };
 

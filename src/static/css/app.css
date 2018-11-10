@@ -345,7 +345,7 @@ button:focus {
 }
 
 .hl > .hli {
-  font-size: 14px;
+  font-size: 16px;
   display: inline-block;
   vertical-align: top;
 }
@@ -559,6 +559,21 @@ button:focus {
     display: none !important;
   }
 }
+
+
+/* -------------------------------------------------- */
+/* Extra */
+/* -------------------------------------------------- */
+
+.opacity-75{
+  opacity: 0.75;
+}
+
+.card-brdr{
+  border: 1.75px solid #EAEAEA !important;
+  box-shadow: none !important;
+}
+
 
 /* -------------------------------------------------- */
 /* somesh css edits*/

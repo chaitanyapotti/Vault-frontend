@@ -25,7 +25,7 @@ const ProjectPreStartName = props => {
   } = props || {};
   const { website } = urls;
   return (
-    <CUICard style={{ padding: "40px 40px" }}>
+    <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
@@ -34,7 +34,7 @@ const ProjectPreStartName = props => {
               <div className="txt-xxxl">
                 {projectName} ({tokenTag})
               </div>
-              <div className="txt">
+              <div className="txt opacity-75">
                 {price} ETH
                 {priceIncrementFlag ? <span className="txt-inc">{` ${priceIncrement}`}</span> : <div />}
               </div>
@@ -56,17 +56,17 @@ const ProjectPreStartName = props => {
         </Col>
       </Row>
       <Row className="push-half--top txt">
-        <Col>{description}</Col>
+        <Col lg={12} xs={12} className="fnt-ps">{description}</Col>
       </Row>
       <Row className="push--top">
         <Col lg={6} className="text--secondary txt">
           <div>
-            <a href={whitepaper} target="_blank" rel="noopener noreferrer">
+            <a className="text--secondary" href={whitepaper} target="_blank" rel="noopener noreferrer">
               Read our whitepaper
             </a>
           </div>
           <div>
-            <a href={website} target="_blank" rel="noopener noreferrer">
+            <a className="text--secondary" href={website} target="_blank" rel="noopener noreferrer">
               Learn more on our website
             </a>
           </div>
@@ -75,7 +75,7 @@ const ProjectPreStartName = props => {
           {signinStatusFlag <= 2 ? (
             <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
               <div>
-                <LoadingButton disabled>{buttonText}</LoadingButton>
+                <LoadingButton style={{padding: '0 40px'}} disabled>{buttonText}</LoadingButton>
               </div>
             </Tooltip>
           ) : buttonVisibility ? (

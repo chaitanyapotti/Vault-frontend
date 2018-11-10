@@ -27,7 +27,7 @@ class TokenChart extends Component {
     });
 
     return (
-      <div className="push-top--50">
+      <div>
         <div className="txt-xl text--primary">Token Distribution Chart</div>
         <hr />
         <Row>

@@ -9,7 +9,7 @@ const formatDate = dbDate =>
   //     return number + output;
   //   }
   // });
-  `${moment(dbDate).format("Do MMM YYYY | h:mm A z")}(UTC)`;
+  `${moment(dbDate).format("Do MMM YYYY | h:mm A z")}`;
 
 const formatRateToPrice = rate => parseFloat(1 / parseFloat(rate)).toPrecision(2);
 

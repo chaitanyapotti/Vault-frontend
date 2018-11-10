@@ -17,27 +17,27 @@ class SocialLinks extends Component {
           <tr>
             <td>
               <a target="_blank" href={urls.github} rel="noopener noreferrer">
-                <img className="push--left" src={images.github} width="20" height="20" alt="github" />
+                <img id="git" className="push--left" src={images.github} width="20" height="20" alt="github" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.telegram} rel="noopener noreferrer">
-                <img className="push--left" src={images.telegram} width="20" height="20" alt="telegram" />
+                <img id="telegram" className="push--left" src={images.telegram} width="20" height="20" alt="telegram" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.medium} rel="noopener noreferrer">
-                <img className="push--left" src={images.medium} width="20" height="20" alt="medium" />
+                <img id="medium" className="push--left" src={images.medium} width="20" height="20" alt="medium" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.facebook} rel="noopener noreferrer">
-                <img className="push--left" src={images.facebook} width="20" height="20" alt="facebook" />
+                <img id="fb" className="push--left" src={images.facebook} width="20" height="20" alt="facebook" />
               </a>
             </td>
             <td>
               <a target="_blank" href={urls.twitter} rel="noopener noreferrer">
-                <img className="push--left" src={images.twitter} width="20" height="20" alt="twitter" />
+                <img id="twitter" className="push--left" src={images.twitter} width="20" height="20" alt="twitter" />
               </a>
             </td>
           </tr>

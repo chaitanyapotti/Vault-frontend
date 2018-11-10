@@ -44,25 +44,27 @@ class IssuerFundReq extends Component {
   };
 
   render() {
-    return (
+    const xfr1 = this.getObject1();
+    const xfr2 = this.getObject2();
+    return xfr1 !== null || xfr2 !== null ? (
       <div>
         <CUICard style={{ padding: "40px 50px" }}>
           <div className="txt-xxxl text--primary">Exceptional Fund Requests</div>
           <Divider />
           <Row className="push-top--35">
             <Col lg={12} className="txt">
-              {this.getObject1()}
+              {xfr1}
             </Col>
           </Row>
-          {this.getObject2() !== null ? <Divider /> : null}
+          {xfr2 ? <Divider /> : null}
           <Row className="push-top--35">
             <Col lg={12} className="txt">
-              {this.getObject2()}
+              {xfr2}
             </Col>
           </Row>
         </CUICard>
       </div>
-    );
+    ) : null;
   }
 }
 

@@ -15,7 +15,8 @@ const TapCard = props => {
     tapButtonSpinning,
     onRevokeTapClick,
     signinStatusFlag,
-    canTapClick
+    canTapClick,
+    tapPollConsensus
   } = props || {};
   return (
     <div>
@@ -47,6 +48,8 @@ const TapCard = props => {
                     <LoadingButton disabled>Approve</LoadingButton>
                   </div>
                 </Tooltip>
+              ) : tapPollConsensus === "No Poll" ? (
+                <div> Tap Poll Not Deployed </div>
               ) : tapVoteStatus === "true" ? (
                 <LoadingButton onClick={onRevokeTapClick} type="danger" loading={tapButtonSpinning} disabled={!canTapClick}>
                   Reject

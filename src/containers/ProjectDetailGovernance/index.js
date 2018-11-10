@@ -480,8 +480,16 @@ class ProjectDetailGovernance extends Component {
       projectHealth,
       initialFundRelease,
       startDateTime,
-      spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray,
-      history      
+      spendableArrays,
+      spentArray,
+      xfrDots,
+      tapDots,
+      spendableDots,
+      spentDots,
+      dateArray,
+      history,
+      killAcceptancePercent,
+      tapPollConsensus
     } = this.props || {};
     const {
       modalOpen,
@@ -520,6 +528,7 @@ class ProjectDetailGovernance extends Component {
       ];
       return dataArray;
     });
+    const killOnsensus = parseFloat(this.getKillConsensus()) > parseFloat(killAcceptancePercent);
     return (
       <Grid>
         {this.killFinish() ? (
@@ -527,16 +536,18 @@ class ProjectDetailGovernance extends Component {
             <Grid>
               <Row>
                 <Col lg={12}>
-                  <div>Kill Consensus has exceeded 80%</div>
+                  <div>
+                    {killOnsensus ? (<span>Kill Consensus has exceeded 85%</span>) : (<span>Current Kill Poll has Failed. Click here to start a new one</span>)}
+                  </div>
                 </Col>
               </Row>
               <Row>
                 <Col lg={6}>
-                  <div> Click on the button to initiate “ KILL ” execution</div>
+                  <div> Click on the button to initiate “KILL” execution</div>
                 </Col>
                 <Col lg={6}>
                   <LoadingButton onClick={this.onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!this.killFinish()}>
-                    Kill Project
+                    Kill Execute
                   </LoadingButton>
                 </Col>
               </Row>
@@ -608,6 +619,7 @@ class ProjectDetailGovernance extends Component {
               canTapClick={this.canTapClick()}
               onUnlockTokensClick={this.handleUnlockTokensOpen}
               onTapPollsHistoryClick={this.handleTapPollsHistoryOpen}
+              tapPollConsensus={tapPollConsensus}
             />
           </Col>
           <Col xs={12} lg={6}>

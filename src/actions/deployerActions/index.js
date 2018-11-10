@@ -47,18 +47,7 @@ export const fetchProjectDetails = projectid => dispatch =>
         const { latestTxHash, currentDeploymentIndicator } = data || {};
         dispatch(projectDetailsFetched(data));
         if (latestTxHash !== "0x") {
-          web3.eth.getTransactionReceipt(latestTxHash).then(result => {
-            if (result !== null) {
-              // update ctr address in db and update txhash to "0x"
-              if (result.status)
-                setContractAddress(projectid, currentDeploymentIndicator, result.contractAddress).then(body => dispatch(deployedContract(body)));
-              // redotx;  set txHash to 0x
-              else dispatch(redoTx(currentDeploymentIndicator));
-            } else {
-              // wait for tx to complete - keep spinner rotating
-              dispatch(isDeployContractButtonSpinning(true));
-            }
-          });
+          pollTxHash(latestTxHash, projectid, currentDeploymentIndicator);
         }
       } else {
         dispatch(projectDetailsFetched({}));
@@ -69,17 +58,51 @@ export const fetchProjectDetails = projectid => dispatch =>
       dispatch(projectDetailsFetched({}));
     });
 
+export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator) => dispatch => {
+  let txHash = latestTxHash;
+  const myTimer = setInterval(() => {
+    if (txHash === "0x") clearInterval(myTimer);
+    web3.eth
+      .getTransactionReceipt(latestTxHash)
+      .then(result => {
+        if (result !== null) {
+          // update ctr address in db and update txhash to "0x"
+          if (result.status) {
+            setContractAddress(projectid, currentDeploymentIndicator, result.contractAddress).then(body => {
+              dispatch(deployedContract(body));
+              dispatch(isDeployContractButtonSpinning(false));
+            });
+            txHash = "0x";
+          }
+          // redotx;  set txHash to 0x
+          else dispatch(redoTx(currentDeploymentIndicator));
+        } else {
+          // wait for tx to complete - keep spinner rotating
+          dispatch(isDeployContractButtonSpinning(true));
+        }
+      })
+      .catch(err => {
+        console.error(err.message);
+        dispatch(isDeployContractButtonSpinning(false));
+        dispatch(isDeployContractStartButtonSpinning(false));
+        dispatch(receivedTransactionHash({}));
+        dispatch(deployedContract({}));
+      });
+  }, 2000);
+};
+
 export const deployContractAction = (version, projectid, cdi, args, contractName, userLocalPublicAddress) => dispatch => {
   dispatch(isDeployContractStartButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
-    .then(response => {
+    .then(async response => {
       if (response.status === 200) {
         const { data } = response.data || {};
         const { abi, bytecode } = data || {};
+        const gasPrice = await web3.eth.getGasPrice();
         new web3.eth.Contract(abi)
           .deploy({ data: bytecode, arguments: args })
-          .send({ from: userLocalPublicAddress })
+          .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
           .on("error", error => {
             console.error(error.message);
             dispatch(isDeployContractStartButtonSpinning(false));
@@ -89,10 +112,11 @@ export const deployContractAction = (version, projectid, cdi, args, contractName
               dispatch(receivedTransactionHash(body));
               dispatch(isDeployContractButtonSpinning(true));
               dispatch(isDeployContractStartButtonSpinning(false));
+              dispatch(pollTxHash(transactionHash, projectid, cdi));
             });
           })
-          .then(newContractInstance =>
-            setContractAddress(projectid, cdi, newContractInstance.options.address)
+          .on("receipt", receipt =>
+            setContractAddress(projectid, cdi, receipt.contractAddress)
               .then(body => {
                 dispatch(deployedContract(body));
                 dispatch(isDeployContractButtonSpinning(false));
@@ -126,13 +150,13 @@ export const performContractAction = (version, projectid, cdi, args, contractNam
   dispatch(isDeployContractStartButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
-    .then(response => {
+    .then(async response => {
       if (response.status === 200) {
         const { data } = response.data || {};
         const { abi } = data || {};
         const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
-
-        peformSpecificAction(cdi, instance, args, userLocalPublicAddress)
+        const gasPrice = await web3.eth.getGasPrice();
+        peformSpecificAction(cdi, instance, args, userLocalPublicAddress, gasPrice)
           .on("error", error => {
             console.error(error.message);
             dispatch(isDeployContractStartButtonSpinning(false));
@@ -142,9 +166,10 @@ export const performContractAction = (version, projectid, cdi, args, contractNam
               dispatch(receivedTransactionHash(body));
               dispatch(isDeployContractButtonSpinning(true));
               dispatch(isDeployContractStartButtonSpinning(false));
+              dispatch(pollTxHash(transactionHash, projectid, cdi));
             })
           )
-          .then(receipt =>
+          .on("receipt", receipt =>
             setContractAddress(projectid, cdi, null)
               .then(body => {
                 dispatch(deployedContract(body));
@@ -175,20 +200,26 @@ export const performContractAction = (version, projectid, cdi, args, contractNam
     });
 };
 
-const peformSpecificAction = (cdi, instance, args, userLocalPublicAddress) => {
+const peformSpecificAction = (cdi, instance, args, userLocalPublicAddress, gasPrice) => {
   switch (cdi) {
     case 5:
-      return instance.methods.setTreasuryAddress(args).send({ from: userLocalPublicAddress });
+      return instance.methods
+        .setTreasuryAddress(args)
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() });
     case 6:
     case 7:
     case 8:
-      return instance.methods.setCrowdSaleAddress(args).send({ from: userLocalPublicAddress });
+      return instance.methods
+        .setCrowdSaleAddress(args)
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() });
     case 9:
-      return instance.methods.createKillPolls().send({ from: userLocalPublicAddress });
+      return instance.methods.createKillPolls().send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 20000000000).toString() });
     case 10:
-      return instance.methods.createRemainingKillPolls().send({ from: userLocalPublicAddress });
+      return instance.methods
+        .createRemainingKillPolls()
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() });
     case 11:
-      return instance.methods.mintFoundationTokens().send({ from: userLocalPublicAddress });
+      return instance.methods.mintFoundationTokens().send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() });
     default:
       return null;
   }

@@ -4,6 +4,7 @@ import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
 import { getCurrentTap, getXfrData } from "../projectDetailGovernanceActions/index";
 import { currentRound } from "../projectGovernanceActions/index";
+import { getRoundTokensSold } from "../projectCrowdSaleActions/index";
 
 export const isStartNewRoundButtonSpinning = receipt => ({
   payload: { receipt },
@@ -45,7 +46,7 @@ export const currentWithdrawableAmountReceived = receipt => ({
   type: actionTypes.CURRENT_WITHDRAWABLE_AMOUNT_RECEIVED
 });
 
-export const startR1 = (version, contractAddress, userLocalPublicAddress, projectid) => dispatch => {
+export const startR1 = (version, contractAddress, userLocalPublicAddress, projectid, round) => dispatch => {
   dispatch(isStartR1ButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })
@@ -58,6 +59,7 @@ export const startR1 = (version, contractAddress, userLocalPublicAddress, projec
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
           dispatch(currentRound(projectid));
+          dispatch(getRoundTokensSold(version, contractAddress, round));
           dispatch(isStartR1ButtonSpinning(false));
         })
         .on("error", error => {
@@ -71,7 +73,7 @@ export const startR1 = (version, contractAddress, userLocalPublicAddress, projec
     });
 };
 
-export const startNewRound = (version, contractAddress, userLocalPublicAddress, projectid) => dispatch => {
+export const startNewRound = (version, contractAddress, userLocalPublicAddress, projectid, round) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isStartNewRoundButtonSpinning(true));
   axios
@@ -85,6 +87,7 @@ export const startNewRound = (version, contractAddress, userLocalPublicAddress, 
         .send({ from: userLocalPublicAddress })
         .on("receipt", receipt => {
           dispatch(currentRound(projectid));
+          dispatch(getRoundTokensSold(version, contractAddress, round));
           dispatch(isStartNewRoundButtonSpinning(false));
         })
         .on("error", error => {
@@ -168,6 +171,18 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
         .on("receipt", receipt => {
           dispatch(getXfrData(version, contractAddress));
           dispatch(isDeployXfrPollButtonSpinning(false));
+          dispatch({
+            type: actionTypes.XFR_TITLE_CHANGED,
+            payload: ""
+          });
+          dispatch({
+            type: actionTypes.XFR_AMOUNT_CHANGED,
+            payload: ""
+          });
+          dispatch({
+            type: actionTypes.XFR_DESCRIPTION_CHANGED,
+            payload: ""
+          });
           axios
             .patch(`${config.api_base_url}/db/projects/xfrs?projectid=${projectid}`, {
               name: titleText,
@@ -231,6 +246,10 @@ export const withdrawAmount = (version, contractAddress, userLocalPublicAddress,
         .on("receipt", receipt => {
           dispatch(getCurrentWithdrawableAmount(version, contractAddress));
           dispatch(isWithdrawButtonSpinning(false));
+          dispatch({
+            type: actionTypes.WITHDRAW_AMOUNT_CHANGED,
+            payload: ""
+          });
         })
         .on("error", error => {
           console.error(error.message);
@@ -262,3 +281,39 @@ export const getCurrentWithdrawableAmount = (version, contractAddress) => dispat
       dispatch(currentWithdrawableAmountReceived({}));
     });
 };
+
+export function xfrTitleChanged(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.XFR_TITLE_CHANGED,
+      payload: value
+    });
+  };
+}
+
+export function xfrAmountChanged(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.XFR_AMOUNT_CHANGED,
+      payload: value
+    });
+  };
+}
+
+export function xfrDescriptionChanged(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.XFR_DESCRIPTION_CHANGED,
+      payload: value
+    });
+  };
+}
+
+export function withdrawAmountChanged(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.WITHDRAW_AMOUNT_CHANGED,
+      payload: value
+    });
+  };
+}

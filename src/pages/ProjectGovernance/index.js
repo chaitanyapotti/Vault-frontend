@@ -53,7 +53,8 @@ class ProjectGovernance extends Component {
       xfrDetails,
       _id,
       xfrRejectionPercent,
-      projectHealth
+      projectHealth,
+      killAcceptancePercent
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
@@ -156,6 +157,7 @@ class ProjectGovernance extends Component {
             projectid={_id}
             xfrRejectionPercent={xfrRejectionPercent}
             history={history}
+            killAcceptancePercent={killAcceptancePercent}
           />
         );
       default:

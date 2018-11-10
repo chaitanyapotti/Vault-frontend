@@ -10,7 +10,7 @@ const Subheader = () => (
           Powered By Electus Protocol
         </Col>
         <Col lg={6} className="text--right txt-g-secondary" style={{color: "#4ca9fc"}}>
-          Learn more about Vault & DAICOs
+          <a rel="noreferrer noopener" target="_blank" href="https://storage.googleapis.com/electus/VaultProductDocument.pdf">Learn more about Vault & DAICOs</a> 
         </Col>
       </Row>
     </Grid>

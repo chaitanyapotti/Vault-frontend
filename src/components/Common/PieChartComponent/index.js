@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Tooltip, Legend, Pie, PieChart, Cell, Label, LabelList, Sector } from "recharts";
+import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
 
 const CHARTCOLORS = ["#001d33", "#0f395b", "#1e5583", "#3d8dd4", "#4ca9fc", "#65b6fd", "#7ec3fe", "#b0ddff", "#e1f4ff", "#2e71ac"];
 
@@ -39,13 +40,13 @@ export default class PieChartComponent extends Component {
                 onMouseEnter={this.onPieEnter}
                 onMouseLeave={this.onPieLeave}
               />
-              <Tooltip active={this.state.showTooltip}/>
+              <Tooltip active={this.state.showTooltip} formatter={(value, name) => `${value.toFixed(2)} %`}/>
               <Pie
                 // isAnimationActive={true}
                 data={this.props.saleEntities.concat(this.props.nonSaleEntities)}
                 activeIndex={this.state.nonTokenSalePieActiveIndex}
                 activeShape={renderActiveShape}
-                cx={250}
+                cx={200}
                 cy={200}
                 innerRadius={100}
                 outerRadius={150}
@@ -56,10 +57,10 @@ export default class PieChartComponent extends Component {
                 onMouseLeave={this.onPieLeave}
                 paddingAngle={1.5}
               >
-                <LabelList position="outside" offset={15} formatter={index => `${index} %`} fill="black" stroke="#000000" />
-                <Label width={30} position="center" offset={20}>
-                  {this.state.centerValue}
-                  Tokens
+                {/* <LabelList position="outside" offset={15} formatter={index => `${index} %`} fill="black" stroke="#000000" /> */}
+                <Label width={20} position="center">
+                  
+                  {formatCurrencyNumber(this.state.centerValue, 0)} Tokens
                 </Label>
                 {/* {this.props.nonSaleEntities.map((entry, index) => (
                 <Label width={30} position="outside">

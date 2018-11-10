@@ -39,9 +39,9 @@ class EndedDaicos extends Component {
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = endedDaicosTable.map(item => {
-      const { projectName, startDateTime, endedAt, raisedAmount, tokenPrice, killConsensus, _id } = item || {};
+      const { projectName, startDateTime, endedAt, raisedAmount, tokenPrice, killConsensus, _id, thumbnailUrl } = item || {};
       const dataArray = [
-        projectName,
+        {projectName, thumbnailUrl},
         formatMoney(formatFromWei(parseFloat(raisedAmount)), 0),
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * parseFloat(ETH), 3))),
         `${killConsensus}%`,
@@ -56,7 +56,30 @@ class EndedDaicos extends Component {
         <GridData
           history={history}
           tableData={data}
-          columns={["Name", "Raised*", "Price*", "Kill Consensus", "Started at", "Ended at", { name: "Id", options: { display: false } }]}
+          columns={
+            [
+              {
+                name: "Name",
+                options:{
+                  customBodyRender: (value) => {
+                    const {projectName, thumbnailUrl} = value || {};
+                    return(
+                      <div style={{width:'130px'}} className="hl">
+                        <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                        <div className="hli pos-rel txt push--left" style={{top: '10px'}}>{projectName}</div>
+                      </div>
+                    )
+                  }
+                }
+              }, 
+              "Raised*", 
+              "Price*", 
+              "Kill Consensus", 
+              "Started at (UTC)", 
+              "Ended at (UTC)", 
+              { name: "Id", options: { display: false } }
+            ]
+          }
         />
       </div>
     );

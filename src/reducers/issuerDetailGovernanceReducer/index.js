@@ -7,11 +7,39 @@ export const initialState = {
   deployXfrButtonSpinning: false,
   withdrawXfrButtonSpinning: false,
   withdrawButtonSpinning: false,
-  currentWithdrawableAmount: "0"
+  currentWithdrawableAmount: "0",
+  xfrTitleText: "",
+  xfrAmountText: "",
+  xfrDescriptionText: "",
+  withdrawableAmount: ""
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.XFR_TITLE_CHANGED: {
+      return {
+        ...state,
+        xfrTitleText: action.payload
+      };
+    }
+    case actionTypes.XFR_AMOUNT_CHANGED: {
+      return {
+        ...state,
+        xfrAmountText: action.payload
+      };
+    }
+    case actionTypes.XFR_DESCRIPTION_CHANGED: {
+      return {
+        ...state,
+        xfrDescriptionText: action.payload
+      };
+    }
+    case actionTypes.WITHDRAW_AMOUNT_CHANGED: {
+      return {
+        ...state,
+        withdrawableAmount: action.payload
+      };
+    }
     case actionTypes.START_NEW_ROUND_BUTTON_SPINNING: {
       const { receipt } = action.payload;
       return {

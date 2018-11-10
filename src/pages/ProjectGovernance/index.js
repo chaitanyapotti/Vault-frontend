@@ -8,7 +8,7 @@ import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
-
+import {Grid} from "../../helpers/react-flexbox-grid";
 class ProjectGovernance extends Component {
   componentDidMount() {
     // Do Routing here - use query string
@@ -53,15 +53,16 @@ class ProjectGovernance extends Component {
       xfrDetails,
       _id,
       xfrRejectionPercent,
-      projectHealth
+      projectHealth,
+      killAcceptancePercent
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
     if (currentDeploymentIndicator !== 12)
       return (
-        <div>
-          <p>The project has not been deployed yet</p>
-        </div>
+        <Grid>
+          <div className="text-center txt">The project has not been deployed yet</div>
+        </Grid>
       );
     if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
       return (
@@ -156,6 +157,7 @@ class ProjectGovernance extends Component {
             projectid={_id}
             xfrRejectionPercent={xfrRejectionPercent}
             history={history}
+            killAcceptancePercent={killAcceptancePercent}
           />
         );
       default:

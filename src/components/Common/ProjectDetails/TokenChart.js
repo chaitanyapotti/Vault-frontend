@@ -7,33 +7,33 @@ class TokenChart extends Component {
   render() {
     const { rounds, foundationDetails } = this.props || {};
     let i = 0;
-    let totalSaleTokens = 0;
+    let totalTokens = 0;
     for (let index = 0; index < rounds.length; index += 1) {
       const element = rounds[index];
-      totalSaleTokens += formatFromWei(element.tokenCount, 0);
+      totalTokens += formatFromWei(element.tokenCount, 0);
     }
     for (let index = 0; index < foundationDetails.length; index += 1) {
       const element = foundationDetails[index];
-      totalSaleTokens += formatFromWei(element.amount, 0);
+      totalTokens += formatFromWei(element.amount, 0);
     }
     const interDetails = rounds.map(round => {
       const { tokenCount } = round || 0;
       i += 1;
-      return { entityPercentage: (formatFromWei(tokenCount) / totalSaleTokens) * 100, entityName: `Round ${i}` };
+      return { entityPercentage: (formatFromWei(tokenCount) / totalTokens) * 100, entityName: `Round ${i}` };
     });
     const foundDetails = foundationDetails.map(foundationRequest => {
       const { amount = 0, description = "team" } = foundationRequest;
-      return { entityPercentage: (formatFromWei(amount) / totalSaleTokens) * 100, entityName: description };
+      return { entityPercentage: (formatFromWei(amount) / totalTokens) * 100, entityName: description };
     });
 
     return (
-      <div className="push-top--50">
+      <div>
         <div className="txt-xl text--primary">Token Distribution Chart</div>
         <hr />
         <Row>
           <Col xs={12} lg={6}>
             <div>
-              <PieChartComponent nonSaleEntities={foundDetails} saleEntities={interDetails} totalSaleTokens={totalSaleTokens} />
+              <PieChartComponent nonSaleEntities={foundDetails} saleEntities={interDetails} totalTokens={totalTokens} totalSaleTokens={parseInt(totalTokens/2)}/>
               {/* <PieChart width={400} height={500}>
                 <Legend />
                 <Tooltip />

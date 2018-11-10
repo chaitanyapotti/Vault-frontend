@@ -407,11 +407,6 @@ export default function(state = initialState, action) {
       } else {
         localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
       }
-      // if (alphaOnly(action.payload)) {
-      //   localErrors[actionTypes.ERC20_TAG_CHANGED] = "Only letters are accepted";
-      // } else {
-      //   localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
-      // }
       return {
         ...state,
         erc20TokenTag: action.payload,
@@ -584,6 +579,7 @@ export default function(state = initialState, action) {
         errors: localErrors
       };
     }
+
 
     case actionTypes.TAP_INCREMENT_FACTOR_CHANGED: {
       if (validateTapIncrementFactor(parseFloat(action.payload)) || !validateDecimal(action.payload)) {

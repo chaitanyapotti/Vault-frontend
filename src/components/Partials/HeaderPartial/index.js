@@ -73,12 +73,16 @@ const styles = theme => ({
     alignItems: "center",
     justifyContent: "center"
   },
+  srchlogo:{
+    fill: 'rgba(61, 61, 61, 0.25)'
+  },
   inputRoot: {
     color: "inherit",
     width: "100%",
     height: "inherit",
     backgroundColor: "rgba(0,0,0,0.05)",
-    borderRadius: "30px"
+    borderRadius: "30px",
+    fontSize: '16px'
   },
   inputInput: {
     paddingTop: theme.spacing.unit,
@@ -195,7 +199,7 @@ class HeaderPartial extends React.Component {
     }
   };
 
-  signinButtonClicked = e => {};
+  signinButtonClicked = e => { };
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
@@ -264,15 +268,15 @@ class HeaderPartial extends React.Component {
                           <MenuIcon />
                         </CUIButtonIcon>
                       ) : (
-                        <div />
-                      )}
+                          <div />
+                        )}
 
                       <div className={classes.title}>
                         <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
                       </div>
                       <div className={classes.search}>
                         <div className={classes.searchIcon}>
-                          <SearchIcon />
+                          <SearchIcon className={classes.srchlogo} />
                         </div>
                         <InputBase
                           placeholder="Search…"
@@ -307,49 +311,57 @@ class HeaderPartial extends React.Component {
                           </div>
                         ) : null}
 
-                        <div className="text--primary txt-m push--top">
-                          {/* <div className="add-ellip">{this.props.userServerPublicAddress}</div> */}
+                        <div className="text--primary txt-m push-half--top">
                           <div className="text--center">
                             {
                               {
                                 0: (
                                   <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                    <img className="push--left" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> Install
+                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={this.handleSignInModalOpen}>
+                                      <div className="soft-half--sides">
+                                        <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> 
+                                        <span style={{top: '3px'}} className="push-half--left pos-rel">Install</span>
+                                      </div>
+                                    </ButtonComponent>
                                   </a>
                                 ),
                                 1: (
-                                  <CUIButton onClick={this.handleSignInModalOpen}>
-                                    <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> Sign in
-                                  </CUIButton>
+                                  <ButtonComponent style={{boxShadow: 'none' }} onClick={this.handleSignInModalOpen}>
+                                    <div className="soft-half--sides">
+                                      <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> 
+                                      <span style={{top: '3px'}} className="push-half--left pos-rel">Sign in</span>
+                                    </div>
+                                  </ButtonComponent>
                                 ),
                                 2: (
                                   <div>
-                                    <CUIButton>Wrong network</CUIButton>
+                                    <ButtonComponent>Wrong network</ButtonComponent>
                                     <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div>
+                                    <CUIButton className="btn bg-yellow txt-p-vault txt-dddbld text--white">Wrong network</CUIButton>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 3: (
-                                  <div className="pos-rel" style={{ top: "-10px" }}>
-                                    <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>
-                                      Become a Vault Member
-                                    </ButtonComponent>
+                                  <div>
                                     <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div>
+                                    <ButtonComponent style={{boxShadow: 'none' }} className="register" onClick={this.handleRegistrationButtonClicked}>
+                                      Become a Vault Member
+                                    </ButtonComponent>
                                   </div>
                                 ),
                                 4: (
                                   <div>
-                                    <CUIButton>{this.props.userLocalPublicAddress.slice(0, 6)}</CUIButton>
+                                    <ButtonComponent style={{boxShadow: 'none' }}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 5: (
                                   <div>
-                                    <CUIButton>{this.props.userLocalPublicAddress.slice(0, 6)}</CUIButton>
+                                    <ButtonComponent style={{boxShadow: 'none' }}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
                                   </div>
                                 )
                               }[this.props.signinStatusFlag]
@@ -407,7 +419,7 @@ class HeaderPartial extends React.Component {
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />
           </div>
-          <div className="text--center push--top">You are not signed in. Please use the browser extension to use metamask</div>
+          <div className="text--center push--top">You are not signed in. Please use the browser extension Metamask to sign in.</div>
         </AlertModal>
       </div>
     );

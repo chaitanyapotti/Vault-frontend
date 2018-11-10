@@ -13,10 +13,28 @@
   src: local("Montserrat-Regular"), url(https://fonts.gstatic.com/s/montserrat/v7/zhcz-_WihjSQC0oHJ9TCYL3hpw3pgy2gAi-Ip7WPMi0.woff) format("woff");
 }
 
+@font-face {
+  font-family: 'Product Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans"), local("OpenSans"), url(https://fonts.gstatic.com/s/productsans/v5/HYvgU2fE2nRJvZ5JFAumwegdm0LZdjqr5-oayXSOefg.woff2) format("woff2");
+}
+
  *:before,
  *:after {
   box-sizing: border-box;
  }
+
+/* -------------------------------------------------- */
+/* Font Families */
+/* -------------------------------------------------- */
+
+.fnt-ps {
+  font-family: 'Product Sans'
+}
+
+
+/* End */
 
 html * {
   -webkit-font-smoothing: antialiased;
@@ -54,13 +72,23 @@ a {
   cursor: pointer;
 }
 
+a:hover{
+  text-decoration: none;
+}
+
 button{
   transition: 250ms;
 }
   
 button:hover{
-  box-shadow: 0px 10px 20px 0px rgba(76, 169, 252, 0.5);
-  transform: translate(0px, -5px) 
+  box-shadow: 0px 10px 20px 0px rgba(76, 169, 252, 0.5) !important;
+  transform: translate(0px, -5px) !important;
+  transition: 250ms; 
+}
+
+button:active{
+  background: #198bd1 !important;
+  transition-timing-function: ease-in;
 }
 
 text{
@@ -142,7 +170,7 @@ button:focus {
 /* -------------------------------------------------- */
 
 .text--white {
-  color: #ffffff;
+  color: #ffffff !important;
 }
 
 .text--primary {
@@ -281,6 +309,10 @@ button:focus {
   background: #95959d;
 }
 
+.bg-yellow{
+  background-color:  #f7c34f !important;
+}
+
 /* -------------------------------------------------- */
 /* Link */
 /* -------------------------------------------------- */
@@ -313,7 +345,7 @@ button:focus {
 }
 
 .hl > .hli {
-  font-size: 14px;
+  font-size: 16px;
   display: inline-block;
   vertical-align: top;
 }
@@ -527,6 +559,21 @@ button:focus {
     display: none !important;
   }
 }
+
+
+/* -------------------------------------------------- */
+/* Extra */
+/* -------------------------------------------------- */
+
+.opacity-75{
+  opacity: 0.75;
+}
+
+.card-brdr{
+  border: 1.75px solid #EAEAEA !important;
+  box-shadow: none !important;
+}
+
 
 /* -------------------------------------------------- */
 /* somesh css edits*/

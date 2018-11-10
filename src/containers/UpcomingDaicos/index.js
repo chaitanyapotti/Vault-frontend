@@ -39,9 +39,9 @@ class UpcomingDaicos extends Component {
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = upcomingDaicosTable.map(item => {
-      const { projectName, rounds, startDateTime, r1EndTime, _id } = item || {};
+      const { projectName, rounds, startDateTime, r1EndTime, _id, thumbnailUrl } = item || {};
       const dataArray = [
-        projectName,
+        {projectName, thumbnailUrl},
         rounds.length,
         this.calculateRoundGoal(rounds[0], ETH),
         this.calculateFinalGoal(rounds, ETH),
@@ -58,7 +58,31 @@ class UpcomingDaicos extends Component {
         <GridData
           history={history}
           tableData={data}
-          columns={["Name", "Rounds", "R1 Goal", "Final Goal", "Price*", "Starts at", "R1 Ends on", { name: "Id", options: { display: false } }]}
+          columns={
+            [
+              {
+                name: "Name",
+                options:{
+                  customBodyRender: (value) => {
+                    const {projectName, thumbnailUrl} = value || {};
+                    return(
+                      <div style={{width:'130px'}} className="hl">
+                        <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                        <div className="hli pos-rel txt push--left" style={{top: '10px'}}>{projectName}</div>
+                      </div>
+                    )
+                  }
+                }
+              }, 
+              "Rounds", 
+              "R1 Goal", 
+              "Final Goal", 
+              "Price*", 
+              "Starts at (UTC)", 
+              "R1 Ends on (UTC)", 
+              { name: "Id", options: { display: false } }
+            ]
+          }
         />
       </div>
     );

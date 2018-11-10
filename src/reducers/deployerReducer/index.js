@@ -10,7 +10,9 @@ const initialState = {
   tapDots: [],
   spendableDots: [],
   spentDots: [],
-  dateArray: []
+  dateArray: [],
+  deployContractButtonSpinning: false,
+  deployContractStartButtonSpinning: false
 };
 
 export default function(state = initialState, action) {
@@ -46,25 +48,25 @@ export default function(state = initialState, action) {
         if (withdrawDataDict[key]) {
           spentValue += withdrawDataDict[key];
         }
-        spentArray.push({ date: (new Date(d)).getTime(), ether: spentValue });
+        spentArray.push({ date: new Date(d).getTime(), ether: spentValue });
         let previousEther = 0;
         let currentEther = 0;
         previousEther = currentArray[currentArray.length - 1].ether;
         currentEther = previousEther + tapValue;
-        currentArray.push({ date: (new Date(d)).getTime(), ether: currentEther });
+        currentArray.push({ date: new Date(d).getTime(), ether: currentEther });
 
         if (tapDataDict[key]) {
           tapValue = tapDataDict[key];
-          tapDots.push({ date: (new Date(d)).getTime(), ether: 0 });
-          spendableDots.push({ date: (new Date(d)).getTime(), ether: currentEther });
+          tapDots.push({ date: new Date(d).getTime(), ether: 0 });
+          spendableDots.push({ date: new Date(d).getTime(), ether: currentEther });
         }
 
         if (withdrawXfrDataDict[key]) {
           spendableArrays.push(currentArray);
-          currentArray = [{ date: (new Date(d)).getTime(), ether: currentEther + withdrawXfrDataDict[key] }];
-          xfrDots.push({ date: (new Date(d)).getTime(), ether: 0 });
+          currentArray = [{ date: new Date(d).getTime(), ether: currentEther + withdrawXfrDataDict[key] }];
+          xfrDots.push({ date: new Date(d).getTime(), ether: 0 });
         }
-        dateArray.push({ date: (new Date(d)).getTime(), ether: 0 });
+        dateArray.push({ date: new Date(d).getTime(), ether: 0 });
       }
       spendableArrays.push(currentArray);
       let lastArray = [];
@@ -76,8 +78,6 @@ export default function(state = initialState, action) {
         ether: endOfSpendable.ether || 0
       });
       spentDots.push(spentArray[spentArray.length - 1]);
-      console.log("spentDots: ", spentDots)
-      console.log("spendableDots: ", spendableDots)
       return { ...state, spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray };
     }
     case types.PROJECT_DETAILS_FETCHED: {
@@ -86,6 +86,20 @@ export default function(state = initialState, action) {
       return {
         ...state,
         projectDetails: currentProjDetails
+      };
+    }
+    case types.DEPLOY_CONTRACT_BUTTON_SPINNING: {
+      const { receipt } = action.payload || {};
+      return {
+        ...state,
+        deployContractButtonSpinning: receipt
+      };
+    }
+    case types.DEPLOY_CONTRACT_START_BUTTON_SPINNING: {
+      const { receipt } = action.payload || {};
+      return {
+        ...state,
+        deployContractStartButtonSpinning: receipt
       };
     }
     case types.TRANSACTION_REDO:

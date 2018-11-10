@@ -15,7 +15,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     for (let i = 0; i < nonSaleEntities.length; i += 1) {
       foundationDetails.push({
         address: nonSaleEntities[i].entityAddress,
-        amount: web3.utils.toWei(parseInt(Math.round((totalSaleTokens * nonSaleEntities[i].entityPercentage) / 50)* Math.pow(10, 18), 10)),
+        amount: web3.utils.toWei(Math.round((totalSaleTokens * nonSaleEntities[i].entityPercentage) / 50).toString()),
         description: nonSaleEntities[i].entityName
       });
       totalNonSaleTokens += Math.round((totalSaleTokens * nonSaleEntities[i].entityPercentage) / 50);
@@ -24,31 +24,32 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
   const projectObject = {
     projectName: projectData.projectName,
     description: projectData.projectDescription,
-    startDateTime: projectData.daicoStartDate,
+    startDateTime:new Date(Math.round(new Date(projectData.daicoStartDate).getTime()/1000)*1000),
     ownerAddress: userLocalPublicAddress,
-    r1EndTime: projectData.daicoEndDate,
+    r1EndTime: new Date(Math.round(new Date(projectData.daicoEndDate).getTime()/1000)*1000),
     rounds: [
       {
-        tokenCount:  web3.utils.toWei(parseInt(projectData.round1Tokens * Math.pow(10, 18), 10)),
-        tokenRate: web3.utils.toWei(parseInt(projectData.round1Rate,10))
+        tokenCount:  web3.utils.toWei(projectData.round1Tokens.toString()),
+        tokenRate: parseInt(projectData.round1Rate,10).toString()
       },
       {
-        tokenCount: web3.utils.toWei(parseInt(projectData.round2Tokens * Math.pow(10, 18),10)),
-        tokenRate: web3.utils.toWei(parseInt(projectData.round2Rate,10))
+        tokenCount: web3.utils.toWei(projectData.round2Tokens.toString()),
+        tokenRate: parseInt(projectData.round2Rate,10).toString()
       },
       {
-        tokenCount: web3.utils.toWei(parseInt(projectData.round3Tokens * Math.pow(10, 18), 10)),
-        tokenRate: web3.utils.toWei(parseInt(projectData.round3Rate, 10))
+        tokenCount: web3.utils.toWei(projectData.round3Tokens.toString()),
+        tokenRate: parseInt(projectData.round3Rate, 10).toString()
       }
     ],
     minimumEtherContribution: "100000000000000000",
-    maximumEtherContribution: web3.utils.toWei(parseInt(Math.round(parseFloat(projectData.maxEtherContribution) * Math.pow(10, 18),10),10)),
+    maximumEtherContribution: web3.utils.toWei(Math.round((projectData.maxEtherContribution)).toString()),
+    "vaultAddress" : config.vault_contract_address,
     foundationDetails,
-    initialFundRelease: web3.utils.toWei(parseInt(Math.round(parseFloat(projectData.initialFundRelease) * Math.pow(10, 18)),10)),
+    initialFundRelease: web3.utils.toWei(Math.round(parseFloat(projectData.initialFundRelease)).toString()),
     teamAddress: projectData.teamAddress,
-    killPollStartDate: projectData.daicoEndDate,
-    initialTapAmount:web3.utils.toWei(parseInt(Math.round((parseFloat(projectData.initialTapValue) * Math.pow(10, 18)) / (30 * 86400)),10)),
-    tapIncrementFactor: web3.utils.toWei(parseInt(Math.round(parseFloat(projectData.tapIncrementFactor) * 100),10)),
+    killPollStartDate: new Date(Math.round(new Date(projectData.daicoEndDate).getTime()/1000)*1000),
+    initialTapAmount:web3.utils.toWei(Math.round((parseFloat(projectData.initialTapValue)) / (30 * 86400)).toString()),
+    tapIncrementFactor: (parseInt(parseFloat(projectData.tapIncrementFactor) * 100)).toString(),
     tokenTag: projectData.erc20TokenTag,
     adminName: projectData.adminName,
     email: projectData.adminEmail,
@@ -60,15 +61,18 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       twitter: projectData.twitterLink,
       medium: projectData.mediumLink
     },
-    capPercent: web3.utils.toWei(parseInt(Math.round(parseFloat(projectData.voteSaturationLimit) * 100),10)),
+    capPercent: parseInt(parseFloat(projectData.voteSaturationLimit) * 100).toString(),
     killAcceptancePercent: "80",
     xfrRejectionPercent: "20",
     tapAcceptancePercent: "65",
     network: "rinkeby",
     version: "1",
-    totalMintableSupply: web3.utils.toWei(parseInt(projectData.totalSaleTokens + totalNonSaleTokens,10)),
+    totalMintableSupply: web3.utils.toWei(parseInt(projectData.totalSaleTokens + totalNonSaleTokens,10).toString()),
     currentDeploymentIndicator: 0,
-    latestTxHash: "0x"
+    latestTxHash: "0x",
+    isFeatured: false,
+    currentRound: 0,
+    raisedAmount: 0
   };
 
   return dispatch =>

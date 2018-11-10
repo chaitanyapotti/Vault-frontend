@@ -17,17 +17,18 @@ export const onWhiteListClick = (version, contractName, contractAddress, userLoc
   dispatch(isButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
-    .then(res => {
+    .then(async res => {
       const { data } = res.data || {};
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       // TODO: to send country attributes of the user
       instance.methods
         .requestMembership([])
-        .send({ from: userLocalPublicAddress })
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
         .on("receipt", receipt => {
           dispatch(isButtonSpinning(false));
-          dispatch(isAlreadyWhiteListed(receipt.status === "0x1"));
+          dispatch(isAlreadyWhiteListed(true));
         })
         .on("error", error => {
           console.error(error.message);

@@ -129,7 +129,7 @@ class Registration extends Component {
     const { modalOpen, modalMessage } = this.state;
 
     project_id !== "" ? this.props.history.push({
-      pathname: `/issuergovernance/details`,
+      pathname: `/deploy`,
       search: `?projectid=${project_id}`
     }) : null
 
@@ -191,7 +191,6 @@ class Registration extends Component {
                   errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
                   !validateProjectNameLength(projectName) ||
                   !alphaOnly(erc20TokenTag) ||
-                  !alphaOnly(projectName)||
                   validateMaxEtherContribution(maxEtherContribution) ||
                   !validateLength(maxEtherContribution) ||
                   !validateLength(voteSaturationLimit) ||

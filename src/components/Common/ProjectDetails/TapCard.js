@@ -49,7 +49,7 @@ const TapCard = props => {
                   </div>
                 </Tooltip>
               ) : tapPollConsensus === "No Poll" ? (
-                <div> Tap Poll Not Deployed </div>
+                <div className="text--secondary txt"> Tap Poll Not Deployed </div>
               ) : tapVoteStatus === "true" ? (
                 <LoadingButton onClick={onRevokeTapClick} type="danger" loading={tapButtonSpinning} disabled={!canTapClick}>
                   Reject

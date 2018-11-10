@@ -38,9 +38,9 @@ class UserTokens extends Component {
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = userTokensTable.map(item => {
-      const { projectName, tokenPrice, balance, projectHealth, tapIncrement, killConsensus, killPollStartDate, xfrCount, _id } = item || {};
+      const { projectName, tokenPrice, balance, projectHealth, tapIncrement, killConsensus, killPollStartDate, xfrCount, _id, thumbnailUrl } = item || {};
       const dataArray = [
-        projectName,
+        {projectName, thumbnailUrl},
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
         `${formatCurrencyNumber(balance, 0)}(${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
         projectHealth,
@@ -58,7 +58,20 @@ class UserTokens extends Component {
           history={history}
           tableData={data}
           columns={[
-            "Name",
+            {
+              name: "Name",
+              options:{
+                customBodyRender: (value) => {
+                  const {projectName, thumbnailUrl} = value || {};
+                  return(
+                    <div style={{width:'130px'}} className="hl">
+                      <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                      <div className="hli pos-rel txt push--left" style={{top: '10px'}}>{projectName}</div>
+                    </div>
+                  )
+                }
+              }
+            },
             "Price(USD)*",
             "Tokens",
             "Health",

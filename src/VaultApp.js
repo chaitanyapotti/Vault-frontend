@@ -12,7 +12,7 @@ class VaultApp extends React.PureComponent {
         <CUIWrapper>
           <HeaderPartial history={this.props.history} />
           <SubHeader />
-          <div className="main-content push-top--35">{this.props.children}</div>
+          <div style={{marginBottom: '50px'}} className="main-content push-top--35">{this.props.children}</div>
           <FooterPartial />
         </CUIWrapper>
       </div>

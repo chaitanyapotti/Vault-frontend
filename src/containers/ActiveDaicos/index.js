@@ -40,9 +40,9 @@ class ActiveDaicos extends Component {
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = activeDaicosTable.map(item => {
-      const { projectName, rounds, currentRound, startDateTime, r1EndTime, raisedAmount, tokenPrice, _id } = item || {};
+      const { projectName, rounds, currentRound, startDateTime, r1EndTime, raisedAmount, tokenPrice, _id, thumbnailUrl } = item || {};
       const dataArray = [
-        projectName,
+        {projectName, thumbnailUrl},
         `${currentRound} of 3`,
         this.calculateRoundGoal(rounds[0], ETH),
         this.calculateFinalGoal(rounds, ETH),
@@ -60,13 +60,26 @@ class ActiveDaicos extends Component {
           history={history}
           tableData={data}
           columns={[
-            "Name",
+            {
+              name: "Name",
+              options:{
+                customBodyRender: (value) => {
+                  const {projectName, thumbnailUrl} = value || {};
+                  return(
+                    <div style={{width:'130px'}} className="hl">
+                      <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                      <div className="hli pos-rel txt push--left" style={{top: '10px'}}>{projectName}</div>
+                    </div>
+                  )
+                }
+              }
+            },
             "Current Round",
             "R1 Goal",
             "Final Goal",
             "Raised*",
             "Price*",
-            "Started at",
+            "Started at (UTC)",
             "R1 Ends in",
             { name: "Id", options: { display: false } }
           ]}

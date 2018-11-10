@@ -226,7 +226,7 @@ class IdentityDetails extends React.Component {
               inputType={CUIInputType.TEXT}
               required
               full
-              multiline
+              multiline={true}
               inputName="Project Description"
               inputLabel="Project Description"
               inputPlaceholder="Eg. Protocol for Decentralized Organizations"

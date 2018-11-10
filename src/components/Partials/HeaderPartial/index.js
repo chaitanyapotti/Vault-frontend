@@ -199,7 +199,7 @@ class HeaderPartial extends React.Component {
     }
   };
 
-  signinButtonClicked = e => {};
+  signinButtonClicked = e => { };
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
@@ -268,8 +268,8 @@ class HeaderPartial extends React.Component {
                           <MenuIcon />
                         </CUIButtonIcon>
                       ) : (
-                        <div />
-                      )}
+                          <div />
+                        )}
 
                       <div className={classes.title}>
                         <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
@@ -335,6 +335,7 @@ class HeaderPartial extends React.Component {
                                 ),
                                 2: (
                                   <div>
+                                    <ButtonComponent>Wrong network</ButtonComponent>
                                     <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div>
@@ -418,7 +419,7 @@ class HeaderPartial extends React.Component {
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />
           </div>
-          <div className="text--center push--top">You are not signed in. Please use the browser extension to use metamask</div>
+          <div className="text--center push--top">You are not signed in. Please use the browser extension Metamask to sign in.</div>
         </AlertModal>
       </div>
     );

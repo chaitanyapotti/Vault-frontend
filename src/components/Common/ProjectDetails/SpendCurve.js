@@ -6,35 +6,15 @@ import { formatFromWei } from "../../../helpers/common/projectDetailhelperFuncti
 const SpendCurve = props => {
   const { initialFundRelease, startDateTime, spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray } = props || {};
 
-  let totalArray = [];
-  for (const i in spendableArrays) {
-    totalArray = totalArray.concat(spendableArrays[i]);
-  }
-  // let spendableArray = []
-  // // let xfrArray = []
-  // let spentArray = []
-  // spendableArray.push({
-  //   timestamp: new Date(startDateTime).toLocaleString(),
-  //   ethers: formatFromWei(initialFundRelease),
-  // })
-  // spentArray.push({
-  //   timestamp: new Date(startDateTime).toLocaleString(),
-  //   ethers: formatFromWei(initialFundRelease) + 5,
-  // })
+  const plotLineChart = (spendableArrays) => {
+    return spendableArrays.map((array, index)=>{
+      return (
+        //<Line data={array} type="monotone" dataKey="ether" stroke="#82ca9d" dot={false}/>
+        <Line data={array} type="monotone" dataKey="ether" stroke="#4ca9fc" strokeWidth={2} activeDot={{ r: 5, fill: 'white', stroke: "#4ca9fc", strokeWidth: 2 }} dot={false}/>
+      )
+    })
 
-  const plotLineChart = spendableArrays =>
-    spendableArrays.map((array, index) => (
-      // <Line data={array} type="monotone" dataKey="ether" stroke="#82ca9d" dot={false}/>
-      <Line
-        data={array}
-        type="monotone"
-        dataKey="ether"
-        stroke="#4ca9fc"
-        strokeWidth={2}
-        activeDot={{ r: 5, fill: "white", stroke: "#4ca9fc", strokeWidth: 2 }}
-        dot={false}
-      />
-    ));
+  }
   return (
     <div>
       <CUICard style={{ padding: "10px 10px" }}>

@@ -175,7 +175,7 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
               address: receipt.contractAddress,
               startDate: new Date()
             })
-            .then(resp => console.log(resp));
+            .then(resp => dispatch(currentRound(projectid)));
         })
         .on("error", error => {
           console.error(error.message);

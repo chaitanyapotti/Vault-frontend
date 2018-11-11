@@ -98,14 +98,13 @@ const ProjectCrowdSaleName = props => {
             <span className="hli push-left--13">
               <LoadingButton onClick={onBuyClick}>{buyButtonText}</LoadingButton>
             </span>
-          ) : null}
-          {
+          ) : r1Finish ? (
             <span className="hli">
-              <LoadingButton onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning} disabled={!r1Finish}>
-                End Round 1
+              <LoadingButton onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
+                Initialise Refund
               </LoadingButton>
             </span>
-          }
+          ) : null}
         </Col>
       </Row>
     </CUICard>

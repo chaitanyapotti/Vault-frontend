@@ -10,7 +10,9 @@ const initialState = {
   tapDots: [],
   spendableDots: [],
   spentDots: [],
-  dateArray: []
+  dateArray: [],
+  deployContractButtonSpinning: false,
+  deployContractStartButtonSpinning: false
 };
 
 export default function(state = initialState, action) {
@@ -84,6 +86,20 @@ export default function(state = initialState, action) {
       return {
         ...state,
         projectDetails: currentProjDetails
+      };
+    }
+    case types.DEPLOY_CONTRACT_BUTTON_SPINNING: {
+      const { receipt } = action.payload || {};
+      return {
+        ...state,
+        deployContractButtonSpinning: receipt
+      };
+    }
+    case types.DEPLOY_CONTRACT_START_BUTTON_SPINNING: {
+      const { receipt } = action.payload || {};
+      return {
+        ...state,
+        deployContractStartButtonSpinning: receipt
       };
     }
     case types.TRANSACTION_REDO:

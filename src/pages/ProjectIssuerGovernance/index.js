@@ -138,6 +138,7 @@ class ProjectIssuerGovernance extends Component {
           projectid={_id}
           ownerAddress={ownerAddress}
           history={history}
+          crowdSaleAddress={crowdSaleAddress}
         />
       );
     }

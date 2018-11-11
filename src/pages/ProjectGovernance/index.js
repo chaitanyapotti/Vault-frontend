@@ -9,8 +9,10 @@ import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
 import ContentLoader from "react-content-loader";
+import {Grid} from "../../helpers/react-flexbox-grid";
 
 const MyLoader = () => <ContentLoader />
+
 
 
 class ProjectGovernance extends Component {
@@ -62,7 +64,8 @@ class ProjectGovernance extends Component {
       xfrDetails,
       _id,
       xfrRejectionPercent,
-      projectHealth
+      projectHealth,
+      killAcceptancePercent
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
@@ -72,9 +75,9 @@ class ProjectGovernance extends Component {
 
     if (currentDeploymentIndicator !== 12)
       return (
-        <div>
-          <p>The project has not been deployed yet</p>
-        </div>
+        <Grid>
+          <div className="text-center txt">The project has not been deployed yet</div>
+        </Grid>
       );
     if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
       return (
@@ -169,6 +172,7 @@ class ProjectGovernance extends Component {
             projectid={_id}
             xfrRejectionPercent={xfrRejectionPercent}
             history={history}
+            killAcceptancePercent={killAcceptancePercent}
           />
         );
       default:

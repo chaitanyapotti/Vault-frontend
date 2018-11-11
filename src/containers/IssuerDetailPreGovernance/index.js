@@ -28,7 +28,7 @@ class IssuerDetailPreGovernance extends Component {
 
   r1Finish = () => {
     const { r1EndTime, rounds, roundInfo } = this.props || {};
-    const [round1 ] = rounds || {};
+    const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
     if (new Date(r1EndTime) < new Date() && totalTokensSold < tokenCount) return true;
@@ -42,8 +42,9 @@ class IssuerDetailPreGovernance extends Component {
   };
 
   onStartR1Click = () => {
-    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress, projectid } = this.props || {};
-    r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid);
+    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress, projectid, currentRoundNumber } = this.props || {};
+    const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10) - 1;
+    r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber);
   };
 
   isPermissioned = () => {

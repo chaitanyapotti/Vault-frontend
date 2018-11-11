@@ -3,11 +3,20 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import qs from "qs";
 import { withRouter } from "react-router-dom";
-import { currentRound } from "../../actions/projectGovernanceActions/index";
+import { currentRound, clearGovernanceStates } from "../../actions/projectGovernanceActions/index";
 import IssuerDetailPreGovernance from "../../containers/IssuerDetailPreGovernance";
 import IssuerDetailGovernance from "../../containers/IssuerDetailGovernance";
+import ContentLoader from "react-content-loader";
+
+const MyLoader = () => <ContentLoader />
+
 
 class ProjectIssuerGovernance extends Component {
+
+  componentWillUnmount(){
+    this.props.clearGovernanceStates()
+  }
+
   componentDidMount() {
     // Do Routing here - use query string
     const currentUrl = new URL(window.location.href);
@@ -55,6 +64,11 @@ class ProjectIssuerGovernance extends Component {
     } = projectDetails || {};
     // currentRoundNumber = "2";
     // Redirect to form if cdi !== 12
+
+    if (treasuryStateNumber === "0"){
+      return (<ContentLoader />)
+    }
+
     if (currentDeploymentIndicator !== 12)
       return (
         <div>
@@ -148,7 +162,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      currentRound
+      currentRound,
+      clearGovernanceStates
     },
     dispatch
   );

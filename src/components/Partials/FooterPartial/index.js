@@ -14,19 +14,23 @@ const FooterPartial = () => (
         <Col lg={2}>
           <div className="txt-l txt-ddbld flush fnt-mli">KNOW MORE</div>
           <div className="txt txt-bld push-half--top opacity-70 fnt-italic">
-            <Link to="/whitepaper">
-              <div>White Paper</div>
-            </Link>
-            <a href="https://medium.com/@ParthaB/" target="_blank" rel="noopener noreferrer" alt="blog">
+          <div>
+          <a href="https://storage.googleapis.com/electus/whitepaper.pdf" target="_blank" rel="noopener noreferrer" alt="whitepaper">
+              White Paper
+            </a>
+          </div>
+          <div>
+          <a href="https://medium.com/@ParthaB/" target="_blank" rel="noopener noreferrer" alt="blog">
               Blog
             </a>
+          </div>
           </div>
         </Col>
 
         <Col lg={2} className="push-mob--top15">
-          <div className="txt-l txt-ddbld flush fnt-mli">SOFTWARE</div>
+          <div className="txt-l txt-ddbld flush fnt-mli">SOFTWARES</div>
           <div className="txt txt-bld push-half--top opacity-70 fnt-italic">
-            <Link to="/vault">
+            <Link to="/">
               <div>Vault</div>
             </Link>
             <Link to="/apex">

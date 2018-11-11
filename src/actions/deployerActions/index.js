@@ -39,6 +39,7 @@ export const receivedTransactionHash = body => ({
 });
 
 export const fetchProjectDetails = projectid => dispatch =>
+{console.log("fetching details: ", projectid);
   axios
     .get(`${config.api_base_url}/db/projects`, { params: { projectid } })
     .then(async response => {
@@ -57,6 +58,8 @@ export const fetchProjectDetails = projectid => dispatch =>
       console.error(err.message);
       dispatch(projectDetailsFetched({}));
     });
+  }
+
 
 export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator) => dispatch => {
   let txHash = latestTxHash;

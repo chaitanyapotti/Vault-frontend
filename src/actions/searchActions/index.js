@@ -9,9 +9,21 @@ export function searchResultFetched(data) {
   };
 }
 
-export function getSearchResults(q) {
-  console.log("calling action");
+export function searchTextChangeAction(data){
   return dispatch => {
+    dispatch({
+      type: actionTypes.SEARCH_TEXT_CHANGED,
+      payload: data
+    })
+  }
+}
+
+export function getSearchResults(q) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.SEARCH_TEXT_CHANGED,
+      payload: q
+    })
     axios
       .get(`${config.api_base_url}/db/projects/search`, {
         params: { q }

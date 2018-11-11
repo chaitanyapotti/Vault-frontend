@@ -29,7 +29,7 @@ class Featuredproject extends Component {
   };
 
   render() {
-    const { classes, projectName, description, thumbnailUrl, projectId, website } = this.props || {};
+    const { classes, projectName, description, thumbnailUrl, projectId, website, tokenTag } = this.props || {};
     return (
       // <CUICard
       //   className="blue-shadow"
@@ -51,11 +51,11 @@ class Featuredproject extends Component {
           title="Contemplative Reptile"
         />
         <CUICardText>
-          <div className="txt-xxl txt-dbld">{projectName}</div>
+          <div className="txt-xxl txt-dbld">{`${projectName} (${tokenTag})`}</div>
           <div className="push--top fnt-ps dscrptn-lins">{description}</div>
           <div className="push--top text--right">
             <a href={website} target="_blank" rel="noopener noreferrer">
-              <ButtonComponent>
+              <ButtonComponent onClick={()=>{}}>
                 Know More
               </ButtonComponent>
             </a>

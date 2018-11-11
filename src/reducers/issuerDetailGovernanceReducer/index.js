@@ -11,8 +11,17 @@ export const initialState = {
   xfrTitleText: "",
   xfrAmountText: "",
   xfrDescriptionText: "",
-  withdrawableAmount: ""
+  withdrawableAmount: "",
+  startR1ButtonTransactionHash: "",
+  startNewRoundButtonTransactionHash: "",
+  deployTapPollButtonTransactionHash: "",
+  incrementTapButtonTransactionHash: "",
+  deployXfrPollTransactionHash: "",
+  withdrawXfrButtonTransactionHash: "",
+
 };
+
+
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -22,6 +31,56 @@ export default (state = initialState, action) => {
         xfrTitleText: action.payload
       };
     }
+
+    case actionTypes.WITHDRAW_XFR_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        withdrawXfrButtonTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        withdrawButtonTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        deployXfrPollTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.INCREMENT_TAP_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        incrementTapButtonTransactionHash: transactionHash
+      };
+    }  
+
+
+    case actionTypes.DEPLOY_TAP_POLL_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        deployTapPollButtonTransactionHash: transactionHash
+      };
+    }    
+
+    case actionTypes.START_R1_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        startR1ButtonTransactionHash: transactionHash
+      };
+    }
+
     case actionTypes.XFR_AMOUNT_CHANGED: {
       return {
         ...state,

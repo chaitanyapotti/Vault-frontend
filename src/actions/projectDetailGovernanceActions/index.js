@@ -670,6 +670,10 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
               () => {},
               () => {
                 dispatch(isXfr1ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
               }
             )
           );

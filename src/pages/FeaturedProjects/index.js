@@ -27,7 +27,7 @@ class FeaturedProjects extends Component {
             <Grid>
               <MasonaryLayout columns={3}>
                 {featuredProjects.map((item, index) => {
-                  const { projectName, description, _id, thumbnailUrl, urls } = item;
+                  const { projectName, description, _id, thumbnailUrl, urls, tokenTag } = item;
                   const { website } = urls || {};
                   return (
                     <FeaturedProject
@@ -38,6 +38,7 @@ class FeaturedProjects extends Component {
                       history={history}
                       thumbnailUrl={thumbnailUrl}
                       website={website}
+                      tokenTag={tokenTag}
                     />
                   );
                 })}

@@ -646,12 +646,17 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
         .vote(0)
         .send({ from: userLocalPublicAddress })
         .on("transactionHash", transactionHash => {
+          dispatch(isXfr1ButtonSpinning(false));
           dispatch(
             pollTxHash(
               transactionHash,
               () => {
                 dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
                 dispatch(getXfrData(version, pollFactoryAddress));
+                dispatch({
+                  payload: { transactionHash },
+                  type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
                 dispatch(isXfr1ButtonSpinning(false));
               },
               () => {
@@ -663,10 +668,6 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
               }
             )
           );
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isXfr1ButtonSpinning(false));
         });
     })
     .catch(err => {

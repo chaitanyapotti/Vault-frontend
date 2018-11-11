@@ -73,21 +73,6 @@ const validateDecimal = input => {
   return false;
 };
 
-const validateTwoDecimalPlaces = input => {
-  if (parseFloat(input) <10 && input.length < 5) {
-    console.log("s")
-    return true;
-  }
-  return false;
-};
-
-const validateOneDecimalPlace = input => {
-  if (parseFloat(input) >= 10 && input.length < 5) {
-    return true;
-  }
-  return false;
-};
-
 
 const validateVoteSaturationLimit = input => {
   if (input < 0.1 || input > 10) {

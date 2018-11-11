@@ -4,6 +4,7 @@ import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
 import { getTotalSupply, getRemainingEtherBalance } from "../projectDetailGovernanceActions";
 import { getTokenBalance } from "../projectCrowdSaleActions";
+import { pollTxHash } from "../helperActions";
 
 export const refundByKillButtonSpinning = receipt => ({
   payload: { receipt },
@@ -19,22 +20,49 @@ export const refundByKill = (version, contractAddress, userLocalPublicAddress, d
   dispatch(refundByKillButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-    .then(res => {
+    .then(async res => {
       const { data } = res.data || {};
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       instance.methods
         .refundByKill()
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
-          dispatch(getRemainingEtherBalance(version, contractAddress));
-          dispatch(getTotalSupply(version, daicoTokenAddress));
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
           dispatch(refundByKillButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(refundByKillButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.REFUND_BY_KILL_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
+                dispatch(getRemainingEtherBalance(version, contractAddress));
+                dispatch(getTotalSupply(version, daicoTokenAddress));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.REFUND_BY_KILL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(refundByKillButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.REFUND_BY_KILL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(refundByKillButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.REFUND_BY_KILL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         });
     })
     .catch(err => {
@@ -47,22 +75,49 @@ export const refundBySoftCapFail = (version, contractAddress, userLocalPublicAdd
   dispatch(refundBySoftCapFailButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-    .then(res => {
+    .then(async res => {
       const { data } = res.data || {};
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       instance.methods
         .refundBySoftcapFail()
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
-          dispatch(getRemainingEtherBalance(version, contractAddress));
-          dispatch(getTotalSupply(version, daicoTokenAddress));
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
           dispatch(refundBySoftCapFailButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(refundBySoftCapFailButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.REFUND_BY_SOFTCAPFAIL_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
+                dispatch(getRemainingEtherBalance(version, contractAddress));
+                dispatch(getTotalSupply(version, daicoTokenAddress));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.REFUND_BY_SOFTCAPFAIL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(refundBySoftCapFailButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.REFUND_BY_SOFTCAPFAIL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(refundBySoftCapFailButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.REFUND_BY_SOFTCAPFAIL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         });
     })
     .catch(err => {

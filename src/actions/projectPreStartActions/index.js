@@ -2,6 +2,7 @@ import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
+import { pollTxHash } from "../helperActions";
 
 export const isAlreadyWhiteListed = receipt => ({
   payload: { receipt },
@@ -26,14 +27,41 @@ export const onWhiteListClick = (version, contractName, contractAddress, userLoc
       instance.methods
         .requestMembership([])
         .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
-        .on("receipt", receipt => {
+        .on("transactionHash", transactionHash => {
           dispatch(isButtonSpinning(false));
-          dispatch(isAlreadyWhiteListed(true));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isButtonSpinning(false));
-          dispatch(isAlreadyWhiteListed(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.WHITELIST_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(isAlreadyWhiteListed(true));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.WHITELIST_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isButtonSpinning(false));
+                dispatch(isAlreadyWhiteListed(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.WHITELIST_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isButtonSpinning(false));
+                dispatch(isAlreadyWhiteListed(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.WHITELIST_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         });
     })
     .catch(err => {

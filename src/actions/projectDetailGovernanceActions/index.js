@@ -3,8 +3,9 @@ import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
 import constants from "../../constants";
+import { pollTxHash } from "../helperActions";
 
-export const getVoteHistogramData = (projectid) => async dispatch => {
+export const getVoteHistogramData = projectid => async dispatch => {
   const network = "rinkeby";
   // await web3.eth.net.getNetworkType();
   axios
@@ -34,7 +35,7 @@ export const getVoteHistogramData = (projectid) => async dispatch => {
       }
     })
     .catch(err => {
-      console.log(err)
+      console.log(err);
       dispatch({
         type: actionTypes.VOTE_HISTOGRAM_DATA_FAILED,
         payload: err.message
@@ -468,10 +469,24 @@ export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress,
       ipollInstance.methods
         .vote(0)
         .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-          dispatch(getKillConsensus(version, pollFactoryAddress));
-          dispatch(isKillButtonSpinning(false));
+        .on("transactionHash", transactionHash => {
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+                dispatch(getKillConsensus(version, pollFactoryAddress));
+                dispatch(isKillButtonSpinning(false));
+              },
+              () => {
+                dispatch(isKillButtonSpinning(false));
+              },
+              () => {},
+              () => {
+                dispatch(isKillButtonSpinning(false));
+              }
+            )
+          );
         })
         .on("error", error => {
           console.error(error.message);
@@ -483,7 +498,11 @@ export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress,
       dispatch(isKillButtonSpinning(false));
     });
 };
-
+// .on("receipt", receipt => {
+//   dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+//   dispatch(getKillConsensus(version, pollFactoryAddress));
+//   dispatch(isKillButtonSpinning(false));
+// })
 // name: PollFactory, address: pollFactoryAddress
 export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking
@@ -619,21 +638,41 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
   dispatch(isXfr1ButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-    .then(ipollData => {
+    .then(async ipollData => {
       const { data } = ipollData.data || {};
       const { abi } = data || {};
       const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       ipollInstance.methods
         .vote(0)
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-          dispatch(getXfrData(version, pollFactoryAddress));
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
           dispatch(isXfr1ButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isXfr1ButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+                dispatch(getXfrData(version, pollFactoryAddress));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+                dispatch(isXfr1ButtonSpinning(false));
+              },
+              () => {
+                dispatch(isXfr1ButtonSpinning(false));
+              },
+              () => {},
+              () => {
+                dispatch(isXfr1ButtonSpinning(false));
+              }
+            )
+          );
         });
     })
     .catch(err => {
@@ -641,6 +680,12 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
       dispatch(isXfr1ButtonSpinning(false));
     });
 };
+
+// .on("receipt", receipt => {
+//   dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+//   dispatch(getXfrData(version, pollFactoryAddress));
+//   dispatch(isXfr1ButtonSpinning(false));
+// })
 
 export const voteInXfr2Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
   // doesn't call blockchain. await is non blocking

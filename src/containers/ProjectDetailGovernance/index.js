@@ -745,7 +745,8 @@ const mapStateToProps = state => {
     xfrPollsHistoryData,
     voteHistogramData,
     totalVotes,
-    collectiveVoteWeight
+    collectiveVoteWeight,
+    xfr1ButtonTransactionHash
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
@@ -785,7 +786,8 @@ const mapStateToProps = state => {
     voteHistogramData,
     totalVotes,
     collectiveVoteWeight,
-    spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray
+    spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray,
+    xfr1ButtonTransactionHash
   };
 };
 

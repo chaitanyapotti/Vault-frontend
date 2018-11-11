@@ -3,6 +3,7 @@ import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
+import { pollTxHash } from "../helperActions";
 
 export const etherCollected = receipt => ({
   payload: { receipt },
@@ -94,13 +95,31 @@ export const getTokenBalance = (version, contractAddress, userLocalPublicAddress
 
 export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount, round, daicoTokenAddress) => dispatch => {
   dispatch(isBuyButtonSpinning(true));
-  console.log(amount);
   web3.eth
     .sendTransaction({
       from: userLocalPublicAddress,
       to: contractAddress,
       value: web3.utils.toWei(amount, "ether")
     })
+    .on("transactionHash", transactionHash =>
+      dispatch(
+        pollTxHash(
+          transactionHash,
+          () => {
+            dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
+            dispatch(getRoundTokensSold(version, contractAddress, round));
+            dispatch(isBuyButtonSpinning(false));
+          },
+          () => {
+            dispatch(isBuyButtonSpinning(false));
+          },
+          () => {},
+          () => {
+            dispatch(isBuyButtonSpinning(false));
+          }
+        )
+      )
+    )
     .on("receipt", receipt => {
       dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
       dispatch(getRoundTokensSold(version, contractAddress, round));

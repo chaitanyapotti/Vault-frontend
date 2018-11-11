@@ -42,7 +42,8 @@ import {
   significantDigits,
   pollState,
   daysTookForTapPoll,
-  xfrResult
+  xfrResult,
+  xfrWithdrawStatus
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
@@ -517,13 +518,14 @@ class ProjectDetailGovernance extends Component {
       return dataArray;
     });
     const xfrHistoryData = xfrPollsHistoryData.map(item => {
-      const { address, startTime, consensus } = item || {};
+      const { address, startTime, consensus, amount, endTime } = item || {};
       const xfrStartTime = new Date(startTime * 1000);
       const dataArray = [
         address,
         formatDate(xfrStartTime),
         xfrResult(xfrStartTime, this.getXfrEndDate(startTime), consensus, xfrRejectionPercent),
-        consensus
+        consensus,
+        xfrWithdrawStatus(amount, startTime, endTime)
       ];
       return dataArray;
     });
@@ -700,7 +702,7 @@ class ProjectDetailGovernance extends Component {
               rowClickPollHistory
               tableData={xfrHistoryData}
               filter={false}
-              columns={["Poll Address", "Deployed On", "Result", "Consensus"]}
+              columns={["Poll Address", "Deployed On", "Result", "Consensus", "Withdraw Status"]}
             />
           </div>
         </AlertModal>

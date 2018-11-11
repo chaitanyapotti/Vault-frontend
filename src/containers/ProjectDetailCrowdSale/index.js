@@ -155,7 +155,7 @@ class ProjectDetailCrowdSale extends Component {
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
     return (
       <Grid>
-        <CUICard style={{ padding: "40px 50px" }}>
+        <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
           <TimeLine
             fundsCollected={formatFromWei(etherCollected, 3)}
             roundGoal={getR1Goal(this.props)}

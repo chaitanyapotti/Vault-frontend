@@ -29,23 +29,23 @@ const ProjectGovernanceName = props => {
   } = props || {};
   const { website } = urls;
   return (
-    <CUICard style={{ padding: "40px 40px" }}>
+    <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
-        <Col xs={12} lg={8}>
+        <Col xs={12} lg={9}>
           <div className="hl">
             <span className="prjct-logo hli" />
             <div className="hli push--left text--primary push-half--top">
               <div className="txt-xxxl">
                 {projectName} ({tokenTag})
               </div>
-              <div className="txt">
+              <div className="txt opacity-75">
                 {price} ETH
                 {<span className="txt-inc">{` ${priceIncrement}%`}</span>}
               </div>
             </div>
           </div>
         </Col>
-        <Col lg={4} className="txt-g-secondary txt">
+        <Col lg={3} className="txt-g-secondary txt txt-no-wrp">
           <span>{lastRoundInfo}</span>
         </Col>
       </Row>
@@ -60,22 +60,22 @@ const ProjectGovernanceName = props => {
         </Col>
       </Row>
       <Row className="push-half--top txt">
-        <Col>{description}</Col>
+        <Col lg={12} xs={12} className="fnt-ps">{description}</Col>
       </Row>
       <Row className="push--top">
-        <Col lg={6} className="text--secondary txt">
+        <Col lg={5} className="text--secondary txt">
           <div>
-            <a href={whitepaper} target="_blank" rel="noopener noreferrer">
+            <a className="text--secondary" href={whitepaper} target="_blank" rel="noopener noreferrer">
               Read our whitepaper
             </a>
           </div>
           <div>
-            <a href={website} target="_blank" rel="noopener noreferrer">
+            <a className="text--secondary txt-no-wrp" href={website} target="_blank" rel="noopener noreferrer">
               Learn more on our website
             </a>
           </div>
         </Col>
-        <Col lg={6} className="text-right hl">
+        <Col lg={7} className="text-right hl">
           {signinStatusFlag <= 2 ? (
             <div className="hli">
               <Tooltip title="This feature is only for Vault Members" id="btn-disabled">

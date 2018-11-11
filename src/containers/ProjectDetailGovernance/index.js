@@ -49,7 +49,7 @@ import AlertModal from "../../components/Common/AlertModal";
 import BuyModal from "../../components/Common/BuyModal";
 import LoadingButton from "../../components/Common/LoadingButton";
 import GridData from "../../components/GridData";
-
+import MasonaryLayout from "../../components/Common/MasonaryLayout";
 class ProjectDetailGovernance extends Component {
   state = {
     modalOpen: false,
@@ -181,9 +181,9 @@ class ProjectDetailGovernance extends Component {
     const { currentRoundNumber } = this.props || {};
     const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
     return (
-      <div>
-        <div>Round {roundNumber} price</div>
-        <div>{1 / tokenRate} ETH</div>
+      <div style={{marginTop: '24px'}}>
+        <div className="text-right">Round {roundNumber} price</div>
+        <div className="text-right opacity-75">{1 / tokenRate} ETH</div>
       </div>
     );
   };
@@ -554,106 +554,108 @@ class ProjectDetailGovernance extends Component {
             </Grid>
           </CUICard>
         ) : null}
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <ProjectGovernanceName
-              projectName={projectName}
-              tokenTag={tokenTag}
-              price={this.getPrice()}
-              roundText={this.getRoundText()}
-              priceIncrement={this.getPriceIncrement()}
-              description={description}
-              urls={urls}
-              whitepaper={whitepaper}
-              lastRoundInfo={this.getLastRoundInfo()}
-              buttonText="Get Whitelisted"
-              buttonVisibility={!isCurrentMember && currentRoundNumber !== "4"}
-              buttonSpinning={buttonSpinning}
-              onClick={this.onWhiteListClickInternal}
-              signinStatusFlag={signinStatusFlag}
-              buyButtonVisibility={isCurrentMember && currentRoundNumber !== "4"}
-              onBuyClick={this.buyTokens}
-              buyButtonText="Buy"
-              tradeButtonVisibility
-              tradeUrl={this.getTradeUrl()}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <PDetailGovernance
-              voteSaturationLimit={capPercent / 100}
-              killFrequency="Quarterly"
-              yourTokens={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
-              yourVoteShare={this.getVoteShare()}
-              killAttemptsLeft={7 - killPollIndex}
-              nextKillAttempt={formatDate(this.getNextKillPollStartDate())}
-              yourTokenValue={this.getMyTokenValue()}
-              yourRefundValue={this.getMyRefundValue()}
-              totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
-              killConsensus={this.getKillConsensus()}
-              canUnlockTokens={this.canUnlockTokens()}
-              killVoteStatus={this.getKillVoteStatus()}
-              onKillClick={this.onKillClick}
-              onRevokeKillClick={this.onRevokeKillClick}
-              killButtonSpinning={killButtonSpinning}
-              signinStatusFlag={signinStatusFlag}
-              onKillFinalizeClick={this.onKillFinalizeClick}
-              killFinalizeButtonSpinning={killFinalizeButtonSpinning}
-              killFinish={this.killFinish()}
-              onUnlockTokensClick={this.handleUnlockTokensOpen}
-              onKillPollsHistoryClick={this.handleKillPollsHistoryOpen}
-            />
-          </Col>
-        </Row>
+        <MasonaryLayout columns={2}>
+          {/* <Row className="push--top">
+            <Col xs={12} lg={6}> */}
+              <ProjectGovernanceName
+                projectName={projectName}
+                tokenTag={tokenTag}
+                price={this.getPrice()}
+                roundText={this.getRoundText()}
+                priceIncrement={this.getPriceIncrement()}
+                description={description}
+                urls={urls}
+                whitepaper={whitepaper}
+                lastRoundInfo={this.getLastRoundInfo()}
+                buttonText="Get Whitelisted"
+                buttonVisibility={!isCurrentMember && currentRoundNumber !== "4"}
+                buttonSpinning={buttonSpinning}
+                onClick={this.onWhiteListClickInternal}
+                signinStatusFlag={signinStatusFlag}
+                buyButtonVisibility={isCurrentMember && currentRoundNumber !== "4"}
+                onBuyClick={this.buyTokens}
+                buyButtonText="Buy"
+                tradeButtonVisibility
+                tradeUrl={this.getTradeUrl()}
+              />
+            {/* </Col>
+            <Col xs={12} lg={6}> */}
+              <PDetailGovernance
+                voteSaturationLimit={capPercent / 100}
+                killFrequency="Quarterly"
+                yourTokens={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
+                yourVoteShare={this.getVoteShare()}
+                killAttemptsLeft={7 - killPollIndex}
+                nextKillAttempt={formatDate(this.getNextKillPollStartDate())}
+                yourTokenValue={this.getMyTokenValue()}
+                yourRefundValue={this.getMyRefundValue()}
+                totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
+                killConsensus={this.getKillConsensus()}
+                canUnlockTokens={this.canUnlockTokens()}
+                killVoteStatus={this.getKillVoteStatus()}
+                onKillClick={this.onKillClick}
+                onRevokeKillClick={this.onRevokeKillClick}
+                killButtonSpinning={killButtonSpinning}
+                signinStatusFlag={signinStatusFlag}
+                onKillFinalizeClick={this.onKillFinalizeClick}
+                killFinalizeButtonSpinning={killFinalizeButtonSpinning}
+                killFinish={this.killFinish()}
+                onUnlockTokensClick={this.handleUnlockTokensOpen}
+                onKillPollsHistoryClick={this.handleKillPollsHistoryOpen}
+              />
+            {/* </Col>
+          </Row> */}
 
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <TapCard
-              currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30))}
-              tapIncrementUnit={tapIncrementFactor / 100}
-              incrementApproval={this.getTapPollConsensus()}
-              tapVoteStatus={this.getTapVoteStatus()}
-              onTapClick={this.onTapClick}
-              onRevokeTapClick={this.onRevokeTapClick}
-              tapButtonSpinning={tapButtonSpinning}
-              signinStatusFlag={signinStatusFlag}
-              canTapClick={this.canTapClick()}
-              onUnlockTokensClick={this.handleUnlockTokensOpen}
-              onTapPollsHistoryClick={this.handleTapPollsHistoryOpen}
-              tapPollConsensus={tapPollConsensus}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <SpendCurve spendableArrays={spendableArrays} spentArray={spentArray} xfrDots={xfrDots} tapDots={tapDots} spendableDots={spendableDots} spentDots={spentDots} dateArray={dateArray} initialFundRelease={initialFundRelease} startDateTime={startDateTime} />
-          </Col>
-        </Row>
+          {/* <Row className="push--top">
+            <Col xs={12} lg={6}> */}
+              <TapCard
+                currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30))}
+                tapIncrementUnit={tapIncrementFactor / 100}
+                incrementApproval={this.getTapPollConsensus()}
+                tapVoteStatus={this.getTapVoteStatus()}
+                onTapClick={this.onTapClick}
+                onRevokeTapClick={this.onRevokeTapClick}
+                tapButtonSpinning={tapButtonSpinning}
+                signinStatusFlag={signinStatusFlag}
+                canTapClick={this.canTapClick()}
+                onUnlockTokensClick={this.handleUnlockTokensOpen}
+                onTapPollsHistoryClick={this.handleTapPollsHistoryOpen}
+                tapPollConsensus={tapPollConsensus}
+              />
+            {/* </Col>
+            <Col xs={12} lg={6}> */}
+              <SpendCurve spendableArrays={spendableArrays} spentArray={spentArray} xfrDots={xfrDots} tapDots={tapDots} spendableDots={spendableDots} spentDots={spentDots} dateArray={dateArray} initialFundRelease={initialFundRelease} startDateTime={startDateTime} />
+            {/* </Col>
+          </Row> */}
 
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <FundReq
-              data={xfrData}
-              details={xfrDetails}
-              xfrVoteData={xfrVoteData}
-              signinStatusFlag={signinStatusFlag}
-              onRevokeXfr1Click={this.onRevokeXfr1Click}
-              onXfr1Click={this.onXfr1Click}
-              xfr1ButtonSpinning={xfr1ButtonSpinning}
-              onRevokeXfr2Click={this.onRevokeXfr2Click}
-              onXfr2Click={this.onXfr2Click}
-              xfr2ButtonSpinning={xfr2ButtonSpinning}
-              tokensUnderGovernance={tokensUnderGovernance}
-              onXfrPollHistoryClick={this.handleXfrPollsHistoryOpen}
-              canXfrClick={this.canXfrClick()}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <VoteHistogram
-              voteHistogramData={voteHistogramData}
-              totalVotes={totalVotes}
-              collectiveVoteWeight={collectiveVoteWeight}
-              projectHealth={projectHealth}
-            />
-          </Col>
-        </Row>
+          {/* <Row className="push--top">
+            <Col xs={12} lg={6}> */}
+              <FundReq
+                data={xfrData}
+                details={xfrDetails}
+                xfrVoteData={xfrVoteData}
+                signinStatusFlag={signinStatusFlag}
+                onRevokeXfr1Click={this.onRevokeXfr1Click}
+                onXfr1Click={this.onXfr1Click}
+                xfr1ButtonSpinning={xfr1ButtonSpinning}
+                onRevokeXfr2Click={this.onRevokeXfr2Click}
+                onXfr2Click={this.onXfr2Click}
+                xfr2ButtonSpinning={xfr2ButtonSpinning}
+                tokensUnderGovernance={tokensUnderGovernance}
+                onXfrPollHistoryClick={this.handleXfrPollsHistoryOpen}
+                canXfrClick={this.canXfrClick()}
+              />
+            {/* </Col>
+            <Col xs={12} lg={6}> */}
+              <VoteHistogram
+                voteHistogramData={voteHistogramData}
+                totalVotes={totalVotes}
+                collectiveVoteWeight={collectiveVoteWeight}
+                projectHealth={projectHealth}
+              />
+            {/* </Col>
+          </Row> */}
+        </MasonaryLayout>
         <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />

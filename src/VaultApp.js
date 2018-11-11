@@ -12,7 +12,9 @@ class VaultApp extends React.PureComponent {
         <CUIWrapper>
           <HeaderPartial history={this.props.history} />
           <SubHeader />
-          <div style={{marginBottom: '50px'}} className="main-content push-top--35">{this.props.children}</div>
+          <div style={{ marginBottom: "50px" }} className="main-content push-top--35">
+            {this.props.children}
+          </div>
           <FooterPartial />
         </CUIWrapper>
       </div>
@@ -25,10 +27,10 @@ VaultApp.propTypes = {
   history: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
-  getState: PropTypes.func.isRequired,
+  getState: PropTypes.func.isRequired
 };
 
 export default withRouter(VaultApp);

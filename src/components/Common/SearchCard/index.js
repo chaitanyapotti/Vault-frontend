@@ -1,6 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { CUICard, CUICardActions, CUICardMedia, CUICardText } from "../../../helpers/material-ui";
+import { ButtonComponent } from "../FormComponents";
 // import { ButtonComponent } from "../FormComponents";
 
 const styles = {
@@ -28,11 +29,15 @@ class SearchCard extends React.Component {
           title="Contemplative Reptile"
         />
         <CUICardText>
-          <div>{`${projectName} (${tokenTag})`}</div>
-          <div>{description}</div>
+          <div className="txt-xxl txt-dbld">{`${projectName} (${tokenTag})`}</div>
+          <div className="push--top fnt-ps dscrptn-lins">{description}</div>
+          <div className="push--top text--right">
           <a href={website} target="_blank" rel="noopener noreferrer">
-            Know More
+            <ButtonComponent onClick={()=>{}}>
+              Know More
+            </ButtonComponent>
           </a>
+          </div>
         </CUICardText>
         <CUICardActions />
       </CUICard>

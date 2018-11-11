@@ -3,6 +3,15 @@ import config from "../../config";
 import actionTypes from "../../action_types";
 import constants from "../../constants";
 
+export const clearGovernanceStates = () => {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.CLEAR_GOVERNANCE_STATES,
+      payload: null
+    })
+  }
+}
+
 export const currentRoundFetchSuccess = receipt => ({
   payload: { receipt },
   type: actionTypes.CURRENT_ROUND_FETCHED

@@ -25,8 +25,7 @@ export const initialState = {
   isVaultMembershipChecked: false
 };
 
-export default function (state = initialState, action) {
-
+export default function(state = initialState, action) {
   switch (action.type) {
     case types.ISISSUER_CHECK: {
       const isIssuer = action.payload;
@@ -102,7 +101,7 @@ export default function (state = initialState, action) {
     }
 
     case types.USER_DEFAULT_ACCOUNT_CHANGED: {
-      const networkName = state.networkName
+      const networkName = state.networkName;
       if (networkName === "rinkeby") {
         if (action.payload) {
           return {
@@ -115,68 +114,65 @@ export default function (state = initialState, action) {
             userPreviousLocalPublicAddress: action.payload,
             isUserDefaultAccountChecked: true
           };
-        } else {
-          return {
-            ...state,
-            userRegistered: false,
-            userIsIssuer: false,
-            isVaultMember: false,
-            userServerPublicAddress: "",
-            userLocalPublicAddress: "",
-            userPreviousLocalPublicAddress: "",
-            signinStatusFlag: 1,
-            isUserDefaultAccountChecked: true,
-            isIssuerChecked: true,
-            isMetamaskNetworkChecked: true,
-            isVaultMembershipChecked: true
-          };
         }
-      } else {
-        if (action.payload !== "") {
-          return {
-            ...state,
-            userRegistered: false,
-            userIsIssuer: false,
-            isVaultMember: false,
-            userServerPublicAddress: "",
-            userLocalPublicAddress: action.payload,
-            userPreviousLocalPublicAddress: action.payload,
-            isUserDefaultAccountChecked: true,
-            signinStatusFlag: 2
-          };
-        } else {
-          return {
-            ...state,
-            userRegistered: false,
-            userIsIssuer: false,
-            isVaultMember: false,
-            userServerPublicAddress: "",
-            userLocalPublicAddress: "",
-            userPreviousLocalPublicAddress: "",
-            signinStatusFlag: 1,
-            isUserDefaultAccountChecked: true,
-            isIssuerChecked: true,
-            isMetamaskNetworkChecked: true,
-            isVaultMembershipChecked: true
-          };
-        }
+        return {
+          ...state,
+          userRegistered: false,
+          userIsIssuer: false,
+          isVaultMember: false,
+          userServerPublicAddress: "",
+          userLocalPublicAddress: "",
+          userPreviousLocalPublicAddress: "",
+          signinStatusFlag: 1,
+          isUserDefaultAccountChecked: true,
+          isIssuerChecked: true,
+          isMetamaskNetworkChecked: true,
+          isVaultMembershipChecked: true
+        };
       }
+      if (action.payload !== "") {
+        return {
+          ...state,
+          userRegistered: false,
+          userIsIssuer: false,
+          isVaultMember: false,
+          userServerPublicAddress: "",
+          userLocalPublicAddress: action.payload,
+          userPreviousLocalPublicAddress: action.payload,
+          isUserDefaultAccountChecked: true,
+          signinStatusFlag: 2
+        };
+      }
+      return {
+        ...state,
+        userRegistered: false,
+        userIsIssuer: false,
+        isVaultMember: false,
+        userServerPublicAddress: "",
+        userLocalPublicAddress: "",
+        userPreviousLocalPublicAddress: "",
+        signinStatusFlag: 1,
+        isUserDefaultAccountChecked: true,
+        isIssuerChecked: true,
+        isMetamaskNetworkChecked: true,
+        isVaultMembershipChecked: true
+      };
     }
 
-    case types.SHOW_REGISTRATION_FORM:{
+    case types.SHOW_REGISTRATION_FORM: {
       return {
         ...state,
         showRegistrationForm: true
       };
     }
-      
-    case types.HIDE_REGISTRATION_FORM:{
+
+    case types.HIDE_REGISTRATION_FORM: {
       return {
         ...state,
         showRegistrationForm: false
       };
-    } 
-      
+    }
+
     case types.VAULT_MEMBERSHIP_CHECK: {
       let signinStatusFlag;
       const userIsIssuer = state.userIsIssuer;
@@ -193,6 +189,7 @@ export default function (state = initialState, action) {
         ...state,
         isVaultMember: action.payload,
         signinStatusFlag,
+        userIsIssuer,
         isVaultMembershipChecked: true
       };
     }

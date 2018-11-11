@@ -7,6 +7,15 @@ export const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+
+    case actionTypes.CLEAR_GOVERNANCE_STATES: {
+      return {
+        ...state,
+        currentRoundNumber: "0",
+      treasuryStateNumber: "0"
+      }
+    }
+
     case actionTypes.CURRENT_ROUND_FETCHED: {
       const { receipt } = action.payload;
       return {

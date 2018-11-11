@@ -73,7 +73,7 @@ const IssuerGovernanceName = props => {
           </div>
         </Col>
         <Col lg={6} className="text-right hl">
-          {!isPermissioned || !canStartNewRound ? (
+          {!canStartNewRound ? null : !isPermissioned ? (
             <div className="hli">
               <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
                 <div>

@@ -17,7 +17,7 @@ const SpendCurve = props => {
   }
   return (
     <div>
-      <CUICard style={{ padding: "10px 10px" }}>
+      <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
         <div className="txt-xxxl text--primary">Spend Curve</div>
         <LineChart width={500} height={200} data={dateArray} margin={{ top: 10, right: 30, left: 30, bottom: 10 }}>
           <XAxis dataKey="date" type="number" domain={["dataMin - 100", "dataMax + 100"]} />

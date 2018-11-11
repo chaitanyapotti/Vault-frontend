@@ -638,15 +638,20 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
   dispatch(isXfr1ButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
-    .then(ipollData => {
+    .then(async ipollData => {
       const { data } = ipollData.data || {};
       const { abi } = data || {};
       const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       ipollInstance.methods
         .vote(0)
-        .send({ from: userLocalPublicAddress })
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
         .on("transactionHash", transactionHash => {
           dispatch(isXfr1ButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
           dispatch(
             pollTxHash(
               transactionHash,
@@ -654,7 +659,7 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
                 dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
                 dispatch(getXfrData(version, pollFactoryAddress));
                 dispatch({
-                  payload: { transactionHash },
+                  payload: { transactionHash: "" },
                   type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
                 });
                 dispatch(isXfr1ButtonSpinning(false));

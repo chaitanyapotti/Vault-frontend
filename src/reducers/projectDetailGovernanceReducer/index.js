@@ -49,7 +49,8 @@ export const initialState = {
   voteHistogramData: {},
   totalVotes: 0,
   collectiveVoteWeight: 0,
-  xfr1ButtonTransactionHash: ""
+  xfr1ButtonTransactionHash: "",
+  killButtonTransactionHash: ""
 };
 
 export default (state = initialState, action) => {
@@ -73,6 +74,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         xfr1ButtonTransactionHash: transactionHash
+      };
+    }
+    case actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        killButtonTransactionHash: transactionHash
       };
     }
     case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED: {

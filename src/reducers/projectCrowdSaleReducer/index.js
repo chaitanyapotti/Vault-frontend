@@ -8,7 +8,9 @@ export const initialState = {
   buyButtonSpinning: false,
   r1FinalizeButtonSpinning: false,
   startR1ButtonSpinning: false,
-  tokenBalance: ""
+  tokenBalance: "",
+  buyButtonTransactionHash: "",
+  r1FinalizeButtonTransactionHash: ""
 };
 
 export default (state = initialState, action) => {
@@ -27,6 +29,23 @@ export default (state = initialState, action) => {
         roundInfo: rec
       };
     }
+
+    case actionTypes.R1_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        r1FinalizeButtonTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        buyButtonTransactionHash: transactionHash
+      };
+    }
+
     case actionTypes.BUY_BUTTON_SPINNING: {
       const { receipt } = action.payload;
       return {

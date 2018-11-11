@@ -507,7 +507,7 @@ class ProjectDetailGovernance extends Component {
         address,
         pollState(this.getKillPollStartDate(endTime), new Date(endTime * 1000)),
         formatDate(new Date(endTime * 1000)),
-        significantDigits(parseFloat(consensus) / formatFromWei(parseFloat(tokensUnderGovernance), 0))
+        consensus
       ];
       return dataArray;
     });
@@ -519,12 +519,11 @@ class ProjectDetailGovernance extends Component {
     const xfrHistoryData = xfrPollsHistoryData.map(item => {
       const { address, startTime, consensus } = item || {};
       const xfrStartTime = new Date(startTime * 1000);
-      const xfrConsensus = significantDigits(parseFloat(consensus) / formatFromWei(parseFloat(tokensUnderGovernance), 0));
       const dataArray = [
         address,
         formatDate(xfrStartTime),
-        xfrResult(xfrStartTime, this.getXfrEndDate(startTime), xfrConsensus, xfrRejectionPercent),
-        xfrConsensus
+        xfrResult(xfrStartTime, this.getXfrEndDate(startTime), consensus, xfrRejectionPercent),
+        consensus
       ];
       return dataArray;
     });

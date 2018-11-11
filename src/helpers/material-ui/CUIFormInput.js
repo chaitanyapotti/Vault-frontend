@@ -6,12 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import { CUIButtonIcon, CUIMenu } from ".";
 import { getCUIPrefixSuffix, handleInputKeydown, selectIcon } from "./helpers";
-import {
-  CS_COLORS,
-  CUIInputColor,
-  CUIInputMargin,
-  CUIInputType
-} from "../../static/js/variables";
+import { CS_COLORS, CUIInputColor, CUIInputMargin, CUIInputType } from "../../static/js/variables";
 import PropTypes from "../../PropTypes";
 
 const CUIFormInput = props => {
@@ -64,6 +59,7 @@ const CUIFormInput = props => {
         inputPrefixSuffix,
         forceNumeric,
         forceNumDec,
+        forceAlpha,
         error,
         helperText,
         hintText,
@@ -85,7 +81,7 @@ const CUIFormInput = props => {
       cuiTextProps.onFocus = onFocus;
       cuiTextProps.onBlur = onBlur;
       cuiTextProps.onKeyDown = e => {
-        handleInputKeydown(e, onKeyDownSelector, forceNumeric, forceNumDec);
+        handleInputKeydown(e, onKeyDownSelector, forceNumeric, forceNumDec, forceAlpha);
       };
 
       return <TextField {...cuiTextProps} />;
@@ -207,8 +203,7 @@ const CUIFormInput = props => {
     // }
 
     case CUIInputType.SELECT: {
-      const { items, full, labelStyle, iconColor, onBlur, iconStyle, onFocus } =
-        props || {};
+      const { items, full, labelStyle, iconColor, onBlur, iconStyle, onFocus } = props || {};
       cuiTextProps.fullWidth = full;
       cuiTextProps.type = CUIInputType.TEXT;
       cuiTextProps.select = true;
@@ -222,11 +217,7 @@ const CUIFormInput = props => {
       return (
         <TextField {...cuiTextProps}>
           {items.map(option => (
-            <MenuItem
-              key={option.value}
-              value={option.value}
-              style={{ cursor: "pointer" }}
-            >
+            <MenuItem key={option.value} value={option.value} style={{ cursor: "pointer" }}>
               {option.primaryText}
             </MenuItem>
           ))}
@@ -235,31 +226,14 @@ const CUIFormInput = props => {
     }
 
     case CUIInputType.ICON_SELECT: {
-      const {
-        items,
-        onClick,
-        onClose,
-        iconElement,
-        elementRef,
-        open,
-        listStyle
-      } = props || {};
+      const { items, onClick, onClose, iconElement, elementRef, open, listStyle } = props || {};
       return (
         <div>
           <CUIButtonIcon onClick={onClick}>{iconElement}</CUIButtonIcon>
 
-          <CUIMenu
-            PaperProps={{ style: listStyle }}
-            anchorEl={elementRef}
-            onClose={onClose}
-            open={open}
-          >
+          <CUIMenu PaperProps={{ style: listStyle }} anchorEl={elementRef} onClose={onClose} open={open}>
             {items.map(option => (
-              <MenuItem
-                key={option.value}
-                onClick={option.onClick}
-                style={{ padding: "5px 20px" }}
-              >
+              <MenuItem key={option.value} onClick={option.onClick} style={{ padding: "5px 20px" }}>
                 {option.primaryText}
               </MenuItem>
             ))}
@@ -299,9 +273,7 @@ CUIFormInput.defaultProps = {
   iconColor: CS_COLORS.WHITE,
   iconStyle: {},
   iconElement: null,
-  value: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.string, PropTypes.number)
-  ]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string, PropTypes.number)]).isRequired,
   elementRef: null,
   open: false,
   listStyle: {},
@@ -322,11 +294,7 @@ CUIFormInput.propTypes = {
   inputPlaceholder: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.shape()),
   disabled: PropTypes.bool,
-  inputValue: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.array
-  ]),
+  inputValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.array]),
   labelProps: PropTypes.shape({}),
   InputProps: PropTypes.shape({}),
   inputProps: PropTypes.shape({}),
@@ -348,10 +316,7 @@ CUIFormInput.propTypes = {
   iconElement: PropTypes.node,
   elementRef: PropTypes.shape({}),
   open: PropTypes.bool,
-  inputPrefixSuffix: PropTypes.oneOfType([
-    PropTypes.cuiPrefixSuffixType,
-    PropTypes.node
-  ]),
+  inputPrefixSuffix: PropTypes.oneOfType([PropTypes.cuiPrefixSuffixType, PropTypes.node]),
   listStyle: PropTypes.shape({}),
   render: PropTypes.func,
   onInputChange: PropTypes.func,

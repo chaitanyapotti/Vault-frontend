@@ -6,7 +6,13 @@ import CustomizedStepper from "../../components/Common/CustomizedStepper";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import { CUICard, CUIDivider } from "../../helpers/material-ui";
 import { Introduction, EthWallet, TC, BuyersInformation, UploadDocuments, Submit, OtpVerification } from "../../components/Whitelist";
-import { fetchUserFormStates, backButtonAction, nextButtonAction, saveUserFormStates } from "../../actions/userRegistrationActions";
+import {
+  fetchUserFormStates,
+  backButtonAction,
+  nextButtonAction,
+  saveUserFormStates,
+  verifyPhoneNumber
+} from "../../actions/userRegistrationActions";
 
 class WhiteList extends Component {
   componentDidMount() {
@@ -27,17 +33,83 @@ class WhiteList extends Component {
     "Submit"
   ];
 
+  handleOtpVerification = () => {
+    const { verifyPhoneNumber: verifyNumber, otpFromServer, otpFromUser, phoneNumber, countryCode, userLocalPublicAddress, isIssuerFlag } =
+      this.props || {};
+    verifyNumber(otpFromServer, otpFromUser, userLocalPublicAddress, phoneNumber, countryCode);
+  };
+
   getDisabledStatus = () => {
-    const { conditionOneAccepted, conditionTwoAccepted, activeStep: getActiveStep } = this.props || {};
+    const {
+      conditionOneAccepted,
+      conditionTwoAccepted,
+      activeStep: getActiveStep,
+      addressLine1,
+      addressLine2,
+      city,
+      citizenship,
+      userState,
+      postalCode,
+      country,
+      typeOfDocument,
+      documentNumber,
+      dateOfIssuance,
+      dateOfExpiration,
+      firstName,
+      lastName,
+      gender,
+      dateOfBirth,
+      passportUrl,
+      selfieUrl,
+      addressUrl
+    } = this.props || {};
     switch (getActiveStep) {
-      case 0:
-        return false;
-      case 1:
-        return false;
       case 2:
         return !conditionOneAccepted || !conditionTwoAccepted;
+      case 3:
+        return false;
+      case 4:
+        return (
+          addressLine1 === "" ||
+          addressLine2 === "" ||
+          city === "" ||
+          citizenship === "" ||
+          userState === "" ||
+          postalCode === "" ||
+          country === "" ||
+          typeOfDocument === "" ||
+          documentNumber === "" ||
+          !dateOfIssuance ||
+          !dateOfExpiration ||
+          firstName === "" ||
+          lastName === "" ||
+          gender === "" ||
+          !dateOfBirth
+        );
+      case 5:
+        return passportUrl === "" || selfieUrl === "" || addressUrl === "";
       default:
-        return <div>Default ka kuch karo</div>;
+        return false;
+    }
+  };
+
+  getBackDisabledStatus = () => {
+    const { activeStep: getActiveStep } = this.props || {};
+    switch (getActiveStep) {
+      case 4:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  getVerifyTokenStatus = () => {
+    const { activeStep: getActiveStep } = this.props || {};
+    switch (getActiveStep) {
+      case 3:
+        return true;
+      default:
+        return false;
     }
   };
 
@@ -92,14 +164,16 @@ class WhiteList extends Component {
   };
 
   handleBack = () => {
-    this.props.backButtonAction(this.props.activeStep);
+    const { activeStep: getActiveStep, backButtonAction: BackAction } = this.props || {};
+    BackAction(getActiveStep);
     // this.setState(state => ({
     //   activeStep: state.activeStep - 1,
     // }));
   };
 
   handleNext = () => {
-    this.props.nextButtonAction(this.props.activeStep);
+    const { activeStep: getActiveStep, nextButtonAction: nextAction } = this.props || {};
+    nextAction(getActiveStep);
     // this.setState(state => ({
     //     activeStep: state.activeStep + 1,
     //   }));
@@ -111,7 +185,7 @@ class WhiteList extends Component {
   };
 
   render() {
-    console.log(this.getDisabledStatus(), "logg");
+    const { otpFromServer, otpFromUser } = this.props || {};
     return (
       <Grid>
         <CUICard style={{ padding: "40px 40px", marginBottom: "40px" }}>
@@ -120,13 +194,19 @@ class WhiteList extends Component {
             <CUIDivider />
           </div>
           <div className="push--top text--center">
-            <ButtonComponent label="Back" onClick={this.handleBack} />
+            <ButtonComponent label="Back" onClick={this.handleBack} disabled={this.getBackDisabledStatus()} />
             <span className="push--left">
               <ButtonComponent label="Save" onClick={this.handleSave} />
             </span>
-            <span className="push--left">
-              <ButtonComponent label="Next" onClick={this.handleNext} disabled={this.getDisabledStatus()} />
-            </span>
+            {this.getVerifyTokenStatus() ? (
+              <span className="push--left">
+                <ButtonComponent label="Verify OTP" onClick={this.handleOtpVerification} disabled={otpFromServer === "" || otpFromUser === ""} />
+              </span>
+            ) : (
+              <span className="push--left">
+                <ButtonComponent label="Next" onClick={this.handleNext} disabled={this.getDisabledStatus()} />
+              </span>
+            )}
           </div>
         </CUICard>
       </Grid>
@@ -137,7 +217,34 @@ class WhiteList extends Component {
 const mapStateToProps = state => {
   const { userRegistrationData } = state || {};
   const { userLocalPublicAddress } = state.signinManagerData || {};
-  const { activeStep, conditionOneAccepted, conditionTwoAccepted, phoneNumber, countryCode, otpFromUser } = state.userRegistrationData || {};
+  const {
+    activeStep,
+    conditionOneAccepted,
+    conditionTwoAccepted,
+    phoneNumber,
+    countryCode,
+    otpFromUser,
+    otpFromServer,
+    otpVerificationSuccessful,
+    addressLine1,
+    addressLine2,
+    city,
+    citizenship,
+    userState,
+    postalCode,
+    country,
+    typeOfDocument,
+    documentNumber,
+    dateOfIssuance,
+    dateOfExpiration,
+    firstName,
+    lastName,
+    gender,
+    dateOfBirth,
+    passportUrl,
+    selfieUrl,
+    addressUrl
+  } = state.userRegistrationData || {};
   return {
     userLocalPublicAddress,
     activeStep,
@@ -146,7 +253,27 @@ const mapStateToProps = state => {
     conditionTwoAccepted,
     phoneNumber,
     countryCode,
-    otpFromUser
+    otpFromUser,
+    otpFromServer,
+    otpVerificationSuccessful,
+    addressLine1,
+    addressLine2,
+    city,
+    citizenship,
+    userState,
+    postalCode,
+    country,
+    typeOfDocument,
+    documentNumber,
+    dateOfIssuance,
+    dateOfExpiration,
+    firstName,
+    lastName,
+    gender,
+    dateOfBirth,
+    passportUrl,
+    selfieUrl,
+    addressUrl
   };
 };
 
@@ -156,7 +283,8 @@ const mapDispatchToProps = dispatch =>
       fetchUserFormStates,
       backButtonAction,
       nextButtonAction,
-      saveUserFormStates
+      saveUserFormStates,
+      verifyPhoneNumber
     },
     dispatch
   );

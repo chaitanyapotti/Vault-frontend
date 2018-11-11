@@ -5,6 +5,7 @@ import actionTypes from "../../action_types";
 import { getCurrentTap, getXfrData } from "../projectDetailGovernanceActions/index";
 import { currentRound } from "../projectGovernanceActions/index";
 import { getRoundTokensSold } from "../projectCrowdSaleActions/index";
+import { pollTxHash } from "../helperActions";
 
 export const isStartNewRoundButtonSpinning = receipt => ({
   payload: { receipt },
@@ -50,21 +51,48 @@ export const startR1 = (version, contractAddress, userLocalPublicAddress, projec
   dispatch(isStartR1ButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })
-    .then(res => {
+    .then(async res => {
       const { data } = res.data || {};
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       instance.methods
         .startNewRound()
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(currentRound(projectid));
-          dispatch(getRoundTokensSold(version, contractAddress, round));
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
           dispatch(isStartR1ButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isStartR1ButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.START_R1_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(currentRound(projectid));
+                dispatch(getRoundTokensSold(version, contractAddress, round));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.START_R1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isStartR1ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.START_R1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isStartR1ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.START_R1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         });
     })
     .catch(err => {
@@ -78,21 +106,48 @@ export const startNewRound = (version, contractAddress, userLocalPublicAddress, 
   dispatch(isStartNewRoundButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })
-    .then(res => {
+    .then(async res => {
       const { data } = res.data || {};
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       instance.methods
         .startNewRound()
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(currentRound(projectid));
-          dispatch(getRoundTokensSold(version, contractAddress, round));
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
           dispatch(isStartNewRoundButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isStartNewRoundButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.START_NEW_ROUND_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(currentRound(projectid));
+                dispatch(getRoundTokensSold(version, contractAddress, round));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.START_NEW_ROUND_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isStartNewRoundButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.START_NEW_ROUND_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isStartNewRoundButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.START_NEW_ROUND_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         });
     })
     .catch(err => {
@@ -106,20 +161,47 @@ export const deployTapPoll = (version, contractAddress, userLocalPublicAddress) 
   dispatch(isDeployTapPollButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-    .then(res => {
+    .then(async res => {
       const { data } = res.data || {};
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       instance.methods
         .createTapIncrementPoll()
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(getCurrentTap(version, contractAddress));
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
           dispatch(isDeployTapPollButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isDeployTapPollButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.DEPLOY_TAP_POLL_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getCurrentTap(version, contractAddress));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.DEPLOY_TAP_POLL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isDeployTapPollButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.DEPLOY_TAP_POLL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isDeployTapPollButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.DEPLOY_TAP_POLL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         });
     })
     .catch(err => {
@@ -133,20 +215,47 @@ export const incrementTap = (version, contractAddress, userLocalPublicAddress) =
   dispatch(isIncrementTapButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-    .then(res => {
+    .then(async res => {
       const { data } = res.data || {};
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       instance.methods
         .increaseTap()
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(getCurrentTap(version, contractAddress));
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
           dispatch(isIncrementTapButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isIncrementTapButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.INCREMENT_TAP_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getCurrentTap(version, contractAddress));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.INCREMENT_TAP_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isIncrementTapButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.INCREMENT_TAP_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isIncrementTapButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.INCREMENT_TAP_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         });
     })
     .catch(err => {
@@ -165,12 +274,19 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
       const weiAmount = await web3.utils.toWei(amount, "ether");
+      const gasPrice = await web3.eth.getGasPrice();
       instance.methods
         .createXfr(weiAmount)
-        .send({ from: userLocalPublicAddress })
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
+          dispatch(isDeployXfrPollButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
+          });
+        })
         .on("receipt", receipt => {
           dispatch(getXfrData(version, contractAddress));
-          dispatch(isDeployXfrPollButtonSpinning(false));
           dispatch({
             type: actionTypes.XFR_TITLE_CHANGED,
             payload: ""
@@ -182,6 +298,10 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
           dispatch({
             type: actionTypes.XFR_DESCRIPTION_CHANGED,
             payload: ""
+          });
+          dispatch({
+            payload: { transactionHash: "" },
+            type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
           });
           axios
             .patch(`${config.api_base_url}/db/projects/xfrs?projectid=${projectid}`, {
@@ -195,6 +315,10 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
         .on("error", error => {
           console.error(error.message);
           dispatch(isDeployXfrPollButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash: "" },
+            type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
+          });
         });
     })
     .catch(err => {
@@ -208,20 +332,47 @@ export const withdrawXfrAmount = (version, contractAddress, userLocalPublicAddre
   dispatch(isWithdrawXfrButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-    .then(res => {
+    .then(async res => {
       const { data } = res.data || {};
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       instance.methods
         .withdrawXfrAmount()
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(getXfrData(version, contractAddress));
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
           dispatch(isWithdrawXfrButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isWithdrawXfrButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.WITHDRAW_XFR_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getXfrData(version, contractAddress));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.WITHDRAW_XFR_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isWithdrawXfrButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.WITHDRAW_XFR_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isWithdrawXfrButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.WITHDRAW_XFR_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         });
     })
     .catch(err => {
@@ -240,20 +391,47 @@ export const withdrawAmount = (version, contractAddress, userLocalPublicAddress,
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
       const weiAmount = await web3.utils.toWei(amount, "ether");
+      const gasPrice = await web3.eth.getGasPrice();
       instance.methods
         .withdrawAmount(weiAmount)
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
-          dispatch(getCurrentWithdrawableAmount(version, contractAddress));
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
           dispatch(isWithdrawButtonSpinning(false));
           dispatch({
-            type: actionTypes.WITHDRAW_AMOUNT_CHANGED,
-            payload: ""
+            payload: { transactionHash },
+            type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
           });
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isWithdrawButtonSpinning(false));
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getCurrentWithdrawableAmount(version, contractAddress));
+                dispatch({
+                  type: actionTypes.WITHDRAW_AMOUNT_CHANGED,
+                  payload: ""
+                });
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isWithdrawButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isWithdrawButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         });
     })
     .catch(err => {

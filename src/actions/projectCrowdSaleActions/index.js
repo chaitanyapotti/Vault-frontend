@@ -93,41 +93,50 @@ export const getTokenBalance = (version, contractAddress, userLocalPublicAddress
     });
 };
 
-export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount, round, daicoTokenAddress) => dispatch => {
+export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount, round, daicoTokenAddress) => async dispatch => {
   dispatch(isBuyButtonSpinning(true));
+  const gasPrice = await web3.eth.getGasPrice();
   web3.eth
     .sendTransaction({
       from: userLocalPublicAddress,
       to: contractAddress,
-      value: web3.utils.toWei(amount, "ether")
+      value: web3.utils.toWei(amount, "ether"),
+      gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
     })
-    .on("transactionHash", transactionHash =>
+    .on("transactionHash", transactionHash => {
+      dispatch(isBuyButtonSpinning(false));
+      dispatch({
+        payload: { transactionHash },
+        type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+      });
       dispatch(
         pollTxHash(
           transactionHash,
           () => {
             dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
             dispatch(getRoundTokensSold(version, contractAddress, round));
-            dispatch(isBuyButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash: "" },
+              type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
           },
           () => {
             dispatch(isBuyButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash: "" },
+              type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
           },
           () => {},
           () => {
             dispatch(isBuyButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash: "" },
+              type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
           }
         )
-      )
-    )
-    .on("receipt", receipt => {
-      dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
-      dispatch(getRoundTokensSold(version, contractAddress, round));
-      dispatch(isBuyButtonSpinning(false));
-    })
-    .on("error", error => {
-      console.error(error.message);
-      dispatch(isBuyButtonSpinning(false));
+      );
     });
 };
 
@@ -135,20 +144,47 @@ export const finalizeR1 = (version, contractAddress, userLocalPublicAddress) => 
   dispatch(isR1FinalizeButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })
-    .then(res => {
+    .then(async res => {
       const { data } = res.data || {};
       const { abi } = data || {};
       const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
       // TODO: to send country attributes of the user
       instance.methods
         .finalizeRoundOne()
-        .send({ from: userLocalPublicAddress })
-        .on("receipt", receipt => {
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
           dispatch(isR1FinalizeButtonSpinning(false));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isR1FinalizeButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.R1_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.R1_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isR1FinalizeButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.R1_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isR1FinalizeButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.R1_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         });
     })
     .catch(err => {

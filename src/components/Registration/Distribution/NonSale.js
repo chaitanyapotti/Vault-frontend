@@ -79,11 +79,12 @@ class NonSale extends React.Component {
       });
     return (
       <div className="push-top--50">
-        <div className="txt-xl">
+        <hr/>
+        <div className="txt-xl" style={{ padding: "40px 50px" }}>
           Non Sale Distribution <span>(50% of Supply)</span>
         </div>
         <hr />
-        <div>
+        <div style={{ padding: "20px 50px" }}>
           {this.props.unallocatedTokensPer < 50 ? (
             <GridData
               history={history}
@@ -147,8 +148,8 @@ class NonSale extends React.Component {
             <Col>Currently unallocated: {this.props.unallocatedTokensPer}%</Col>
           </Row>
         ) : null}
-        <Row>
-          <Col>
+        <Row style={{ padding: "20px 50px" }}>
+          <Col lg={12}>
             <div className="push--top">
               <ButtonComponent
                 label="Add To token Distribution Chart"
@@ -166,8 +167,13 @@ class NonSale extends React.Component {
             </div>
           </Col>
         </Row>
+        <hr/>
+        <div className="txt-xl" style={{ padding: "40px 50px" }}>
+          Token Distribution Chart
+        </div>
+        <hr />
         {this.props.totalSaleTokens > 0 ? (
-          <Row>
+          <Row style={{ padding: "20px 50px" }}>
             <PieChartComponent nonSaleEntities={this.props.nonSaleEntities} saleEntities={this.props.saleEntities} totalSaleTokens={this.props.totalSaleTokens}/>
           </Row>
         ) : null}

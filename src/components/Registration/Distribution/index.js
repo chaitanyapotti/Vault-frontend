@@ -8,7 +8,7 @@ class Distribution extends React.Component {
   render() {
     return (
       <div>
-        <CUICard style={{ padding: "40px 67px" }}>
+        <CUICard className="card-brdr" >
           <TokenSale />
           <NonSale />
           {/* <TokenChart /> */}

@@ -16,14 +16,18 @@ class FundReq extends Component {
       onXfr1Click,
       xfr1ButtonSpinning,
       tokensUnderGovernance,
-      canXfrClick
+      canXfrClick,
+      xfr1ButtonTransactionHash
     } = this.props || {};
+    const link = `https://rinkeby.etherscan.io/tx/${xfr1ButtonTransactionHash}`;
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
     const requiredData = details ? details.filter(x => x.address === address) : [];
     const { name, description, startDate } = requiredData[0] || {};
-    const requiredVote = xfrVoteData ? xfrVoteData.filter(x => x.address === address) : [];
+    console.log(xfrVoteData);
+    const requiredVote = Array.isArray(xfrVoteData) ? xfrVoteData.filter(x => x.address === address) : [];
     const { voted } = requiredVote[0] || false;
+    console.log(xfr1ButtonTransactionHash, "2");
     return endTime ? (
       <ReqType
         amount={amount}
@@ -40,19 +44,33 @@ class FundReq extends Component {
         tokensUnderGovernance={tokensUnderGovernance}
         onXfrPollHistoryClick={onXfrPollHistoryClick}
         canXfrClick={canXfrClick}
+        link={link}
+        xfr1ButtonTransactionHash={xfr1ButtonTransactionHash}
       />
     ) : null;
   };
 
   getObject2 = () => {
-    const { data, details, xfrVoteData, signinStatusFlag, onRevokeXfr2Click, onXfr2Click, xfr2ButtonSpinning, tokensUnderGovernance, canXfrClick } =
-      this.props || {};
+    const {
+      data,
+      details,
+      xfrVoteData,
+      signinStatusFlag,
+      onRevokeXfr2Click,
+      onXfr2Click,
+      xfr2ButtonSpinning,
+      tokensUnderGovernance,
+      canXfrClick,
+      xfr2ButtonTransactionHash
+    } = this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime, address } = poll2 || {};
     const requiredData = details ? details.filter(x => x.address === address) : [];
     const { name, description, startDate } = requiredData[0] || {}; //
-    const requiredVote = xfrVoteData ? xfrVoteData.filter(x => x.address === address) : [];
+    const requiredVote = Array.isArray(xfrVoteData) ? xfrVoteData.filter(x => x.address === address) : [];
     const { voted } = requiredVote[0] || false;
+    const xfr2Link = `https://rinkeby.etherscan.io/tx/${xfr2ButtonTransactionHash}`;
+    console.log(xfr2ButtonTransactionHash, "3");
     return endTime ? (
       <ReqType
         amount={amount}
@@ -68,18 +86,26 @@ class FundReq extends Component {
         xfrButtonSpinning={xfr2ButtonSpinning}
         tokensUnderGovernance={tokensUnderGovernance}
         canXfrClick={canXfrClick}
+        xfr2ButtonTransactionHash={xfr2ButtonTransactionHash}
+        link={xfr2Link}
       />
     ) : null;
   };
 
   render() {
-    const {onXfrPollHistoryClick} = this.props || {};
+    const { onXfrPollHistoryClick } = this.props || {};
     return (
       <div>
         <CUICard className="card-brdr">
           <Row style={{ padding: "40px 50px" }}>
-            <Col className="txt-xxxl text--primary" lg={8}>Exceptional Fund Requests</Col>
-            <Col className="push-half--top text-right txt-no-wrp" lg={4}><a rel="noopener" onClick={onXfrPollHistoryClick}>View XFR History</a></Col>
+            <Col className="txt-xxxl text--primary" lg={8}>
+              Exceptional Fund Requests
+            </Col>
+            <Col className="push-half--top text-right txt-no-wrp" lg={4}>
+              <a rel="noopener" onClick={onXfrPollHistoryClick}>
+                View XFR History
+              </a>
+            </Col>
           </Row>
           <Divider />
           <div>

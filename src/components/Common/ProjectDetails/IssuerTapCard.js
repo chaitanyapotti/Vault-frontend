@@ -15,8 +15,12 @@ const IssuerTapCard = props => {
     deployTapPollButtonSpinning,
     canDeployTapPoll,
     onIncrementTapClick,
-    onDeployTapPollClick
+    onDeployTapPollClick,
+    deployTapPollButtonTransactionHash,
+    incrementTapButtonTransactionHash
   } = props || {};
+  const link = `https://rinkeby.etherscan.io/tx/${deployTapPollButtonTransactionHash}`;
+  const tapIncrementLink = `https://rinkeby.etherscan.io/tx/${incrementTapButtonTransactionHash}`;
   return (
     <div>
       <CUICard style={{ padding: "40px 50px" }}>
@@ -44,6 +48,12 @@ const IssuerTapCard = props => {
                 </div>
               </Tooltip>
             </div>
+          ) : incrementTapButtonTransactionHash !== "" ? (
+            <a href={tapIncrementLink} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
           ) : (
             <span className="hli">
               <LoadingButton onClick={onIncrementTapClick} loading={incrementTapButtonSpinning} disabled={!canIncreaseTap}>
@@ -57,6 +67,12 @@ const IssuerTapCard = props => {
                 <LoadingButton disabled>Deploy Tap Poll</LoadingButton>
               </Tooltip>
             </div>
+          ) : deployTapPollButtonTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
           ) : (
             <span className="hli">
               <LoadingButton onClick={onDeployTapPollClick} loading={deployTapPollButtonSpinning} disabled={!canDeployTapPoll}>

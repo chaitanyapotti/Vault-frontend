@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
-import { getCurrentTap, getXfrData } from "../projectDetailGovernanceActions/index";
+import { getCurrentTap, getXfrData, getTapPollConsensus } from "../projectDetailGovernanceActions/index";
 import { currentRound } from "../projectGovernanceActions/index";
 import { getRoundTokensSold } from "../projectCrowdSaleActions/index";
 import { pollTxHash } from "../helperActions";
@@ -152,6 +152,10 @@ export const startNewRound = (version, contractAddress, userLocalPublicAddress, 
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isStartNewRoundButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -184,6 +188,7 @@ export const deployTapPoll = (version, contractAddress, userLocalPublicAddress) 
               transactionHash,
               () => {
                 dispatch(getCurrentTap(version, contractAddress));
+                dispatch(getTapPollConsensus(version, contractAddress));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.DEPLOY_TAP_POLL_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -206,6 +211,10 @@ export const deployTapPoll = (version, contractAddress, userLocalPublicAddress) 
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isDeployTapPollButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -238,6 +247,7 @@ export const incrementTap = (version, contractAddress, userLocalPublicAddress) =
               transactionHash,
               () => {
                 dispatch(getCurrentTap(version, contractAddress));
+                dispatch(getTapPollConsensus(version, contractAddress));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.INCREMENT_TAP_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -260,6 +270,10 @@ export const incrementTap = (version, contractAddress, userLocalPublicAddress) =
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isIncrementTapButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -323,6 +337,10 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
             payload: { transactionHash: "" },
             type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
           });
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isDeployXfrPollButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -377,6 +395,10 @@ export const withdrawXfrAmount = (version, contractAddress, userLocalPublicAddre
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isWithdrawXfrButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -436,6 +458,10 @@ export const withdrawAmount = (version, contractAddress, userLocalPublicAddress,
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isWithdrawButtonSpinning(false));
         });
     })
     .catch(err => {

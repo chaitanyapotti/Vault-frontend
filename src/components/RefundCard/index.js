@@ -5,8 +5,17 @@ import LoadingButton from "../Common/LoadingButton";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 
 const RefundCard = props => {
-  const { signinStatusFlag, treasuryStateNumber, tokenBalance, label, refundBySoftCapFailSpinning, refundByKillButtonSpinning, onRefundClick } =
-    props || {};
+  const {
+    signinStatusFlag,
+    treasuryStateNumber,
+    tokenBalance,
+    label,
+    refundByKillButtonTransactionHash,
+    refundBySoftCapFailSpinning,
+    refundByKillButtonSpinning,
+    onRefundClick
+  } = props || {};
+  const link = `https://rinkeby.etherscan.io/tx/${refundByKillButtonTransactionHash}`;
   return (
     <div className="push-top--50">
       <Grid>
@@ -20,7 +29,13 @@ const RefundCard = props => {
                   </Col>
                   <Col lg={4}>
                     <div className="text--center">
-                      {signinStatusFlag <= 3 ? (
+                      {refundByKillButtonTransactionHash !== "" ? (
+                        <a href={link} target="_blank" rel="noreferrer noopener">
+                          <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                            Status
+                          </LoadingButton>
+                        </a>
+                      ) : signinStatusFlag <= 3 ? (
                         <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
                           <div>
                             <LoadingButton disabled>Refund</LoadingButton>

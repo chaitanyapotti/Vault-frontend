@@ -322,7 +322,13 @@ class IssuerDetailGovernance extends Component {
       xfrTitleText,
       xfrDescriptionText,
       xfrAmountText,
-      withdrawableAmount
+      withdrawableAmount,
+      startNewRoundButtonTransactionHash,
+      deployTapPollButtonTransactionHash,
+      incrementTapButtonTransactionHash,
+      deployXfrPollTransactionHash,
+      withdrawXfrButtonTransactionHash,
+      withdrawButtonTransactionHash
     } = this.props || {};
     return (
       <Grid>
@@ -344,6 +350,7 @@ class IssuerDetailGovernance extends Component {
               onClick={this.onStartNewRoundClick}
               isPermissioned={this.isPermissioned()}
               onEditClick={this.onEditClick}
+              startNewRoundButtonTransactionHash={startNewRoundButtonTransactionHash}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -371,6 +378,8 @@ class IssuerDetailGovernance extends Component {
               canDeployTapPoll={this.canDeployTapPoll()}
               onIncrementTapClick={this.onIncrementTapClick}
               onDeployTapPollClick={this.onDeployTapPollClick}
+              deployTapPollButtonTransactionHash={deployTapPollButtonTransactionHash}
+              incrementTapButtonTransactionHash={incrementTapButtonTransactionHash}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -381,6 +390,7 @@ class IssuerDetailGovernance extends Component {
               onWithdrawAmountClick={this.onWithdrawAmountClick}
               inputText={withdrawableAmount}
               onChange={this.onChangeWithdrawAmount}
+              withdrawButtonTransactionHash={withdrawButtonTransactionHash}
             />
           </Col>
         </Row>
@@ -402,6 +412,8 @@ class IssuerDetailGovernance extends Component {
                 withdrawXfrButtonSpinning={withdrawXfrButtonSpinning}
                 onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
                 getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
+                deployXfrPollTransactionHash={deployXfrPollTransactionHash}
+                withdrawXfrButtonTransactionHash={withdrawXfrButtonTransactionHash}
               />
             </Col>
           </Row>
@@ -437,7 +449,13 @@ const mapStateToProps = state => {
     xfrTitleText,
     xfrDescriptionText,
     xfrAmountText,
-    withdrawableAmount
+    withdrawableAmount,
+    startNewRoundButtonTransactionHash,
+    deployTapPollButtonTransactionHash,
+    incrementTapButtonTransactionHash,
+    deployXfrPollTransactionHash,
+    withdrawXfrButtonTransactionHash,
+    withdrawButtonTransactionHash
   } = issuerDetailGovernanceReducer || {};
   const {
     tokensUnderGovernance,
@@ -498,7 +516,13 @@ const mapStateToProps = state => {
     xfrTitleText,
     xfrDescriptionText,
     xfrAmountText,
-    withdrawableAmount
+    withdrawableAmount,
+    startNewRoundButtonTransactionHash,
+    deployTapPollButtonTransactionHash,
+    incrementTapButtonTransactionHash,
+    deployXfrPollTransactionHash,
+    withdrawXfrButtonTransactionHash,
+    withdrawButtonTransactionHash
   };
 };
 

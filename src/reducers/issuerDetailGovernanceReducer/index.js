@@ -17,7 +17,8 @@ export const initialState = {
   deployTapPollButtonTransactionHash: "",
   incrementTapButtonTransactionHash: "",
   deployXfrPollTransactionHash: "",
-  withdrawXfrButtonTransactionHash: ""
+  withdrawXfrButtonTransactionHash: "",
+  withdrawButtonTransactionHash: ""
 };
 
 export default (state = initialState, action) => {
@@ -37,11 +38,19 @@ export default (state = initialState, action) => {
       };
     }
 
+    case actionTypes.START_NEW_ROUND_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        startNewRoundButtonTransactionHash: transactionHash
+      };
+    }
+
     case actionTypes.START_R1_BUTTON_TRANSACTION_HASH_RECEIVED: {
       const { transactionHash } = action.payload;
       return {
         ...state,
-        whitelistButtonTransactionHash: transactionHash
+        startR1ButtonTransactionHash: transactionHash
       };
     }
 

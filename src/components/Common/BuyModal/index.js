@@ -10,9 +10,10 @@ import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelpe
 import LoadingButton from "../LoadingButton";
 
 const BuyModal = props => {
-  const { open, onClose, roundInfo, tokenTag, buyTokensOnClick, onChange, inputText, buyButtonSpinning } = props || {};
+  const { open, onClose, roundInfo, tokenTag, buyTokensOnClick, onChange, inputText, buyButtonSpinning, buyButtonTransactionHash } = props || {};
   const { tokenRate } = roundInfo || {};
   const labelValue = formatCurrencyNumber(parseFloat(inputText) * parseFloat(tokenRate), 0);
+  const link = `https://rinkeby.etherscan.io/tx/${buyButtonTransactionHash}`;
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
@@ -38,9 +39,17 @@ const BuyModal = props => {
           </p>
         </DialogContent>
         <DialogActions>
-          <LoadingButton onClick={buyTokensOnClick} loading={buyButtonSpinning}>
-            Buy
-          </LoadingButton>
+          {buyButtonTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
+          ) : (
+            <LoadingButton onClick={buyTokensOnClick} loading={buyButtonSpinning}>
+              Buy
+            </LoadingButton>
+          )}
         </DialogActions>
       </Dialog>
     </div>

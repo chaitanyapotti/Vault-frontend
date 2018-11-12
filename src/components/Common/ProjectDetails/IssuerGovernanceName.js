@@ -22,8 +22,10 @@ const IssuerGovernanceName = props => {
     startNewRoundButtonSpinning,
     isPermissioned,
     onEditClick,
-    canStartNewRound
+    canStartNewRound,
+    startNewRoundButtonTransactionHash
   } = props || {};
+  const link = `https://rinkeby.etherscan.io/tx/${startNewRoundButtonTransactionHash}`;
   const { website } = urls;
   return (
     <CUICard style={{ padding: "40px 40px" }}>
@@ -81,6 +83,12 @@ const IssuerGovernanceName = props => {
                 </div>
               </Tooltip>
             </div>
+          ) : startNewRoundButtonTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
           ) : (
             <span className="hli">
               <LoadingButton onClick={onClick} loading={startNewRoundButtonSpinning} disabled={!canStartNewRound}>

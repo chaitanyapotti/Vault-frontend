@@ -137,6 +137,10 @@ export const buyTokens = (version, contractAddress, userLocalPublicAddress, amou
           }
         )
       );
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isBuyButtonSpinning(false));
     });
 };
 

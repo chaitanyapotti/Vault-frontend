@@ -51,8 +51,9 @@ export const initialState = {
   collectiveVoteWeight: 0,
   xfr1ButtonTransactionHash: "",
   killButtonTransactionHash: "",
-  killFinalizeTransactionHash:"",
-  xfr2ButtonTransactionHash:""
+  killFinalizeTransactionHash: "",
+  xfr2ButtonTransactionHash: "",
+  tapButtonTransactionHash: ""
 };
 
 export default (state = initialState, action) => {
@@ -93,6 +94,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         xfr1ButtonTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        tapButtonTransactionHash: transactionHash
       };
     }
     case actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED: {

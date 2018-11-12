@@ -80,10 +80,7 @@ class Registration extends Component {
     const {
       project_id
     } = this.props || {};
-    project_id !== "" ? this.props.history.push({
-      pathname: `/deploy`,
-      search: `?projectid=${project_id}`
-    }) : null
+    project_id !== "" && this.props.history.push(`/deploy?projectid=${project_id}`)
   } 
 
   handlePublishDaico = e => {
@@ -177,7 +174,7 @@ class Registration extends Component {
                 <ButtonComponent 
                   label="Publish Daico"
                   onClick={this.handlePublishDaico}
-                  disabled={
+                  aadisabled={
                   errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
                   !validateLength(adminName) ||
                   !validateLength(projectDescription) ||

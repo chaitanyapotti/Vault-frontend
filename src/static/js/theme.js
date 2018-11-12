@@ -146,7 +146,13 @@ const customTheme = {
     MuiInputLabel: {
       root: {
         color: "rgba(0, 0, 0, 0.35)",
+        fontSize: '16px'
       },
+    },
+    MuiInputBase:{
+      input:{
+        fontSize: '16px'
+      }
     },
     MuiAppBar: {
       root: {

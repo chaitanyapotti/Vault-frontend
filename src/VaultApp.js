@@ -4,7 +4,6 @@ import { withRouter } from "react-router-dom";
 import { HeaderPartial, FooterPartial } from "./components/Partials";
 import SubHeader from "./components/Common/Subheader";
 import { CUIWrapper } from "./helpers/material-ui";
-
 class VaultApp extends React.PureComponent {
   render() {
     return (

@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from 'react-router';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
@@ -180,11 +181,9 @@ class HeaderPartial extends React.Component {
   };
 
   onHandlePublishDaicoClicked = () => {
-    this.props.searchTextChangeAction("")
+    this.props.searchTextChangeAction("");
     // this.setState({ searchText: "" });
-    this.props.history.push({
-      pathname: `/registration`
-    });
+    this.props.history.push( `/registration`);
   };
 
   searchProject = e => {
@@ -420,7 +419,7 @@ class HeaderPartial extends React.Component {
                     <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">
                       Publish DAICO
                     </div>
-                  </div>
+                    </div>
                 ) : null}
               </div>
             </Drawer>

@@ -93,7 +93,6 @@ export const checkVaultMembership = userLocalPublicAddress => async dispatch => 
           dispatch(isAlreadyVaultMember(true));
         } else {
           dispatch(isAlreadyVaultMember(false));
-          dispatch(checkPhoneVerification(userLocalPublicAddress));
         }
       }
     })

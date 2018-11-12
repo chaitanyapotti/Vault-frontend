@@ -24,9 +24,13 @@ const IssuerPreGovernanceName = props => {
     r1FinalizeButtonSpinning,
     onStartR1Click,
     isPermissioned,
-    onEditClick
+    onEditClick,
+    startR1ButtonTransactionHash,
+    r1FinalizeButtonTransactionHash
   } = props || {};
   console.log(isPermissioned);
+  const link = `https://rinkeby.etherscan.io/tx/${startR1ButtonTransactionHash}`;
+  const refundLink = `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`;
   const { website } = urls;
   return (
     <CUICard style={{ padding: "40px 40px" }}>
@@ -83,6 +87,18 @@ const IssuerPreGovernanceName = props => {
                   Start Round 1
                 </LoadingButton>
               </div>
+            ) : startR1ButtonTransactionHash !== "" ? (
+              <a href={link} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            ) : r1FinalizeButtonTransactionHash !== "" ? (
+              <a href={refundLink} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
             ) : isPermissioned && r1Finish ? (
               <div className="hli">
                 <LoadingButton onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>

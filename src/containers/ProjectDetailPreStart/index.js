@@ -78,7 +78,8 @@ class ProjectDetailPreStart extends Component {
       rounds,
       foundationDetails,
       buttonSpinning,
-      signinStatusFlag
+      signinStatusFlag,
+      whitelistButtonTransactionHash
     } = this.props || {};
     const { modalOpen } = this.state;
     return (
@@ -99,6 +100,7 @@ class ProjectDetailPreStart extends Component {
               buttonSpinning={buttonSpinning}
               onClick={this.onWhiteListClickInternal}
               signinStatusFlag={signinStatusFlag}
+              whitelistButtonTransactionHash={whitelistButtonTransactionHash}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -148,7 +150,7 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => {
   const { projectPreStartReducer, fetchPriceReducer, signinManagerData } = state || {};
   const { prices } = fetchPriceReducer || {};
-  const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
+  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
 
   return {
@@ -157,7 +159,8 @@ const mapStateToProps = state => {
     prices,
     isVaultMember,
     userLocalPublicAddress,
-    signinStatusFlag
+    signinStatusFlag,
+    whitelistButtonTransactionHash
   };
 };
 

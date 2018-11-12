@@ -185,6 +185,10 @@ export const finalizeR1 = (version, contractAddress, userLocalPublicAddress) => 
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isR1FinalizeButtonSpinning(false));
         });
     })
     .catch(err => {

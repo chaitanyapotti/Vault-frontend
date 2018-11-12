@@ -93,6 +93,10 @@ export const startR1 = (version, contractAddress, userLocalPublicAddress, projec
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isStartR1ButtonSpinning(false));
         });
     })
     .catch(err => {

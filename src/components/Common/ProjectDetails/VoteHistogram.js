@@ -21,24 +21,30 @@ const VoteHistogram = props => {
   } = props || {};
   return (
     <div>
-      <CUICard style={{ padding: "10px 10px" }}>
+      <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
         <div className="txt-xxxl text--primary">Vote Histogram</div>
         
       <Row className="push--top">
         <Col lg={6} className="txt">
           <div>
-          Total Voters:{" "}
-          <span className="text--secondary"> {totalVotes}</span>
+            <div className="txt-bold">Total Voters:</div>
+            <div className="text--secondary"> {totalVotes}</div>
           </div>
+        </Col>
+        <Col lg={6}>
           <div>
-          Collective Vote Weight:{" "}
-          <span className="text--secondary"> {collectiveVoteWeight}%</span>
+            <div className="txt-bold">Collective Vote Weight:</div>
+            <div className="text--secondary"> {collectiveVoteWeight}%</div>
           </div>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col lg={6}>
           <div>
-          Health:{" "}
-          <span className="text--secondary"> {projectHealth}</span>  
+            <div className="txt-bold">Health:</div>
+            <div className="text--secondary"> {projectHealth}</div>  
           </div>
-          
         </Col>
       </Row>
       {/* <Row className="push--top">
@@ -54,14 +60,16 @@ const VoteHistogram = props => {
         </Col>
       </Row> */}
 
-        <LineChart width={500} height={200} data={voteHistogramData}
-        margin={{top: 10, right: 30, left: 30, bottom: 10}}>
-       
-       <XAxis dataKey="max" tick={false} strokeWidth={3} stroke="#3d3d3d"/>
-       <YAxis yAxisId="left" tick={false} strokeWidth={3} stroke="#3d3d3d"/>
-       <Tooltip cursor={false}/>
-       <Line yAxisId="left" type="monotone" dataKey="voters" stroke="#4ca9fc" strokeWidth={2} activeDot={{r: 5, fill:'white', stroke:"#4ca9fc", strokeWidth:2}} dot={false}>
-       </Line>
+      <LineChart 
+        width={500} 
+        height={200} 
+        data={voteHistogramData}
+        margin={{top: 10, right: 30, left: 30, bottom: 10}}
+      >
+        <XAxis dataKey="max" tick={false} strokeWidth={3} stroke="#3d3d3d"/>
+        <YAxis yAxisId="left" tick={false} strokeWidth={3} stroke="#3d3d3d"/>
+        <Tooltip cursor={false}/>
+        <Line yAxisId="left" type="monotone" dataKey="voters" stroke="#4ca9fc" strokeWidth={2} activeDot={{r: 5, fill:'white', stroke:"#4ca9fc", strokeWidth:2}} dot={false}></Line>
       </LineChart>
       {/* <BarChart width={500} height={250} data={voteHistogramData}
             margin={{top: 10, right: 30, left: 30, bottom: 10}}>

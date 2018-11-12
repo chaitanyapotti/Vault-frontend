@@ -22,7 +22,7 @@ const ReqType = props => {
     canXfrClick
   } = props || {};
   return (
-    <div>
+    <div style={{ padding: "40px 50px" }}>
       <Row className="txt-g-secondary txt-m">
         <Col lg={6}>
           <div>{name}</div>
@@ -36,39 +36,36 @@ const ReqType = props => {
         <div lg={12}>{formatFromWei(amount, 3)} ETH</div>
       </div>
 
-      <div className="push--top txt">{description}</div>
+      <div className="push--top txt fnt-ps">{description}</div>
 
       <Row className="push--top">
-        <Col lg={6} className="txt">
+        <Col lg={5} className="txt txt-no-wrp">
           Approval Rate:{" "}
           <span className="text--secondary"> {100 - significantDigits(parseFloat(consensus) / parseFloat(tokensUnderGovernance) || 0)}%</span>
         </Col>
-        <Col lg={6} className="txt">
+        <Col lg={7} className="txt txt-no-wrp">
           Ends in: <span className="text--secondary">{formatDate(endTime * 1000)}</span>
         </Col>
       </Row>
       <Row>
-        <Col lg={6} className="push--top">
+        <Col lg={12} className="push--top text-right">
           {signinStatusFlag <= 3 ? (
             <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
               <div>
-                <LoadingButton disabled type="danger">
+                <LoadingButton style={{padding: '0 40px'}}  disabled type="danger">
                   Deny
                 </LoadingButton>
               </div>
             </Tooltip>
           ) : voted ? (
-            <LoadingButton onClick={onRevokeXfrClick} loading={xfrButtonSpinning} disabled={!canXfrClick}>
+            <LoadingButton style={{padding: '0 40px'}}  onClick={onRevokeXfrClick} loading={xfrButtonSpinning} disabled={!canXfrClick}>
               Allow
             </LoadingButton>
           ) : (
-            <LoadingButton onClick={onXfrClick} type="danger" loading={xfrButtonSpinning} disabled={!canXfrClick}>
+            <LoadingButton style={{padding: '0 40px'}}  onClick={onXfrClick} type="danger" loading={xfrButtonSpinning} disabled={!canXfrClick}>
               Deny
             </LoadingButton>
           )}
-        </Col>
-        <Col lg={6} className="push--top text-right">
-          <LoadingButton onClick={onXfrPollHistoryClick}>XFR polls History</LoadingButton>
         </Col>
       </Row>
     </div>

@@ -4,7 +4,9 @@ import actionTypes from "../../action_types";
 
 export const initialState = {
   refundByKillButtonSpinning: false,
-  refundBySoftCapFailSpinning: false
+  refundBySoftCapFailSpinning: false,
+  refundByKillButtonTransactionHash: "",
+  refundBySoftcapfailButtonTransactionHash: ""
 };
 
 export default (state = initialState, action) => {
@@ -16,6 +18,21 @@ export default (state = initialState, action) => {
         refundByKillButtonSpinning: receipt
       };
     }
+    case actionTypes.REFUND_BY_KILL_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        refundByKillButtonTransactionHash: transactionHash
+      };
+    }
+    case actionTypes.REFUND_BY_SOFTCAPFAIL_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        refundBySoftcapfailButtonTransactionHash: transactionHash
+      };
+    }
+    
     case actionTypes.REFUND_BY_SOFT_CAP_FAIL_BUTTON_SPINNING: {
       const { receipt } = action.payload;
       return {

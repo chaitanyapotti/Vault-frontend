@@ -49,7 +49,10 @@ export const initialState = {
   voteHistogramData: {},
   totalVotes: 0,
   collectiveVoteWeight: 0,
-  xfr1ButtonTransactionHash: ""
+  xfr1ButtonTransactionHash: "",
+  killButtonTransactionHash: "",
+  killFinalizeTransactionHash:"",
+  xfr2ButtonTransactionHash:""
 };
 
 export default (state = initialState, action) => {
@@ -68,11 +71,35 @@ export default (state = initialState, action) => {
       }
       return { ...state, voteHistogramData: histArray, totalVotes, collectiveVoteWeight };
     }
+
+    case actionTypes.KILL_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        killFinalizeTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        xfr2ButtonTransactionHash: transactionHash
+      };
+    }
+
     case actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED: {
       const { transactionHash } = action.payload;
       return {
         ...state,
         xfr1ButtonTransactionHash: transactionHash
+      };
+    }
+    case actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        killButtonTransactionHash: transactionHash
       };
     }
     case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED: {

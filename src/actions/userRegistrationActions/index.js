@@ -198,28 +198,48 @@ export function sendOtp(phoneNumber, countryCode) {
             .then(response => {
                 if (response.status === 200) {
                     if (response.data.message === constants.SUCCESS) {
+                        console.log(response.data.data.otp, "1");
                         dispatch({
                             type: actionTypes.OTP_SENT_TO_USER_SUCCESS,
                             payload: response.data.data.otp
                         });
+                        dispatch({
+                            type: actionTypes.USER_OTP_INPUT_CHANGED,
+                            payload: ""
+                        })
                     } else {
+                        console.log(response.data.reason, "2");
                         dispatch({
                             type: actionTypes.OTP_SENT_TO_USER_FAILED,
                             payload: response.data.reason
                         });
+                        dispatch({
+                            type: actionTypes.USER_OTP_INPUT_CHANGED,
+                            payload: ""
+                        })
                     }
                 } else {
+                    console.log(constants.OTP_FAILED_MESSAGE, "3");
                     dispatch({
                         type: actionTypes.OTP_SENT_TO_USER_FAILED,
                         payload: constants.OTP_FAILED_MESSAGE
                     });
+                    dispatch({
+                        type: actionTypes.USER_OTP_INPUT_CHANGED,
+                        payload: ""
+                    })
                 }
             })
             .catch(err => {
+                console.log(constants.OTP_FAILED_MESSAGE, "4");
                 dispatch({
                     type: actionTypes.OTP_SENT_TO_USER_FAILED,
                     payload: constants.OTP_FAILED_MESSAGE
                 });
+                dispatch({
+                    type: actionTypes.USER_OTP_INPUT_CHANGED,
+                    payload: ""
+                })
             });
     };
 }

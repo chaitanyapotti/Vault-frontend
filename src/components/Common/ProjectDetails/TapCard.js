@@ -20,42 +20,45 @@ const TapCard = props => {
   } = props || {};
   return (
     <div>
-      <CUICard style={{ padding: "40px 50px" }}>
-        <div className="txt-xxxl text--primary">Tap Increment</div>
+      <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
+        <Row>
+          <Col className="txt-xxxl text--primary" lg={8}>Tap Increment</Col>
+          <Col className="push-half--top text-right" lg={4}><a rel="noopener" onClick={onTapPollsHistoryClick}>View Tap History</a></Col>
+        </Row>
         <Row className="push-top--35">
           <Col lg={6} className="txt">
-            Current Tap Amount: <span className="text--secondary">{currentTapAmount} ETH/month</span>{" "}
+            <div className="txt-bold">Current Tap Amount: </div>
+            <div className="text--secondary">{currentTapAmount} ETH/month</div>{" "}
           </Col>
           <Col lg={6} className="txt">
-            Tap increment Factor: <span className="text--secondary">{tapIncrementUnit}</span>{" "}
+            <div className="txt-bold">Tap increment Factor: </div>
+            <div className="text--secondary">{tapIncrementUnit}</div>{" "}
           </Col>
         </Row>
 
-        <Row>
+        <Row className="push-half--top">
           <Col lg={12} className="txt">
-            Increment Approval: <span className="text--secondary">{incrementApproval}%</span>{" "}
+            <div className="txt-bold">Increment Approval: </div> 
+            <div className="text--secondary">{incrementApproval}%</div>{" "}
           </Col>
         </Row>
         <Row className="push--top">
-          <Col lg={6} className="text--secondary txt">
-            <LoadingButton onClick={onTapPollsHistoryClick}>Tap polls History</LoadingButton>
-          </Col>
-          <Col lg={6} className="text-right hl">
+          <Col lg={12} className="text-right hl">
             <div className="text-right">
               {signinStatusFlag <= 3 ? (
                 <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
                   <div>
-                    <LoadingButton disabled>Approve</LoadingButton>
+                    <LoadingButton style={{padding: '0 40px'}}  disabled>Approve</LoadingButton>
                   </div>
                 </Tooltip>
               ) : tapPollConsensus === "No Poll" ? (
                 <div className="text--secondary txt"> Tap Poll Not Deployed </div>
               ) : tapVoteStatus === "true" ? (
-                <LoadingButton onClick={onRevokeTapClick} type="danger" loading={tapButtonSpinning} disabled={!canTapClick}>
+                <LoadingButton style={{padding: '0 40px'}}  onClick={onRevokeTapClick} type="danger" loading={tapButtonSpinning} disabled={!canTapClick}>
                   Reject
                 </LoadingButton>
               ) : (
-                <LoadingButton onClick={onTapClick} loading={tapButtonSpinning} disabled={!canTapClick}>
+                <LoadingButton style={{padding: '0 40px'}}  onClick={onTapClick} loading={tapButtonSpinning} disabled={!canTapClick}>
                   Approve
                 </LoadingButton>
               )}

@@ -73,22 +73,28 @@ class FundReq extends Component {
   };
 
   render() {
+    const {onXfrPollHistoryClick} = this.props || {};
     return (
       <div>
-        <CUICard style={{ padding: "40px 50px" }}>
-          <div className="txt-xxxl text--primary">Exceptional Fund Requests</div>
+        <CUICard className="card-brdr">
+          <Row style={{ padding: "40px 50px" }}>
+            <Col className="txt-xxxl text--primary" lg={8}>Exceptional Fund Requests</Col>
+            <Col className="push-half--top text-right txt-no-wrp" lg={4}><a rel="noopener" onClick={onXfrPollHistoryClick}>View XFR History</a></Col>
+          </Row>
           <Divider />
-          <Row className="push-top--35">
-            <Col lg={12} className="txt">
-              {this.getObject1()}
-            </Col>
-          </Row>
-          {this.getObject2() !== null ? <Divider /> : null}
-          <Row className="push-top--35">
-            <Col lg={12} className="txt">
-              {this.getObject2()}
-            </Col>
-          </Row>
+          <div>
+            <Row className="push-top--35">
+              <Col lg={12} className="txt">
+                {this.getObject1()}
+              </Col>
+            </Row>
+            {this.getObject2() !== null ? <Divider /> : null}
+            <Row className="push-top--35">
+              <Col lg={12} className="txt">
+                {this.getObject2()}
+              </Col>
+            </Row>
+          </div>
         </CUICard>
       </div>
     );

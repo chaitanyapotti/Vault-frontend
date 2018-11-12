@@ -195,7 +195,7 @@ export const getKillPollsHistory = projectid => async dispatch => {
   const network = "rinkeby";
   // await web3.eth.net.getNetworkType();
   axios
-    .get(`${config.api_base_url}/projectweb3/killPollHistory`, {
+    .get(`${config.api_base_url}/projects/history/killPoll`, {
       params: { projectid, network }
     })
     .then(response => {
@@ -220,7 +220,7 @@ export const getTapPollsHistory = projectid => async dispatch => {
   const network = "rinkeby";
   // await web3.eth.net.getNetworkType();
   axios
-    .get(`${config.api_base_url}/projectweb3/tapPollHistory`, {
+    .get(`${config.api_base_url}/projects/history/tapPoll`, {
       params: { projectid, network }
     })
     .then(response => {
@@ -245,7 +245,7 @@ export const getXfrPollsHistory = projectid => async dispatch => {
   const network = "rinkeby";
   // await web3.eth.net.getNetworkType();
   axios
-    .get(`${config.api_base_url}/projectweb3/xfrPollHistory`, {
+    .get(`${config.api_base_url}/projects/history/xfrPoll`, {
       params: { projectid, network }
     })
     .then(response => {

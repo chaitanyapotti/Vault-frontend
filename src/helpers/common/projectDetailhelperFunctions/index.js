@@ -114,6 +114,21 @@ const xfrResult = (startTime, endTime, consensus, xfrRejectionPercent) => {
   return result;
 };
 
+const xfrWithdrawStatus = (amount, startTime, endTime) => {
+  let result;
+  const presentDateTime = new Date();
+  const convertedStartTime = new Date(startTime * 1000);
+  const convertedEndTime = new Date(endTime * 1000);
+  if (amount > 0) {
+    result = "Y";
+  } else if (presentDateTime > convertedStartTime && presentDateTime < convertedEndTime) {
+    result = "NA";
+  } else {
+    result = "N";
+  }
+  return result;
+};
+
 const formatNumberToINRFormat = number => {
   let n1;
   let num;
@@ -271,5 +286,6 @@ export {
   win,
   tapDataConverted,
   withdrawDataConverted,
-  withdrawXfrDataConverted
+  withdrawXfrDataConverted,
+  xfrWithdrawStatus
 };

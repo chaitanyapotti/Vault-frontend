@@ -62,10 +62,10 @@ export function postUserFormData(userRegistrationData, userLocalPublicAddress) {
 export const requestVaultMembership = (userLocalPublicAddress, isIssuer) => async dispatch => {
     const network = await web3.eth.net.getNetworkType();
     let param2 = 1
-    let ethers  = "0.0015" 
+    let ethers  = "0.0016" 
     if (isIssuer){
         param2 = 0;
-        ethers = "0.5015"
+        ethers = "0.5016"
     }
     axios
       .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
@@ -84,8 +84,22 @@ export const requestVaultMembership = (userLocalPublicAddress, isIssuer) => asyn
               instance.methods
                 .requestMembership([0, param2])
                 .send({ from: userLocalPublicAddress, value: web3.utils.toWei(ethers, "ether") })
-                .on("error", error => console.error(error.message))
-                .then(receipt => dispatch(isAlreadyVaultMember(receipt.status === "0x1")));
+                .on("error", error => {
+                    console.error(error.message)
+                    dispatch({
+                        type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_FAILED,
+                        payload: false
+                    })
+                })
+                .then(receipt =>{
+                    if (receipt.status === "0x1") {
+                        dispatch({
+                            type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_SUCCESS,
+                            payload: true
+                        })
+                    }
+                }                     
+                );
             });
           }
         }
@@ -113,7 +127,6 @@ export const checkVaultMembership = userLocalPublicAddress => async dispatch => 
                     dispatch(isAlreadyVaultMember(true));
                 } else {
                     dispatch(isAlreadyVaultMember(false));
-                    dispatch(checkPhoneVerification(userLocalPublicAddress));
                 }
             }
         })
@@ -123,7 +136,7 @@ export const checkVaultMembership = userLocalPublicAddress => async dispatch => 
         });
 };
 
-export const checkVaultMembershipPaymentStatus = userLocalPublicAddress => async dispatch => {
+export const hasVaultMembershipRequested = userLocalPublicAddress => async dispatch => {
     const network = await web3.eth.net.getNetworkType();
     axios
         .get(`${config.api_base_url}/web3/vaulttoken/ismembershipapprovalpending`, {
@@ -131,20 +144,21 @@ export const checkVaultMembershipPaymentStatus = userLocalPublicAddress => async
         })
         .then(response => {
             if (response.status === 200) {
-                if (response.data === "true") {
+                console.log("mem status: ", response.data)
+                if (response.data.data === "true") {
                     dispatch({
-                        type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_SUCCESS,
+                        type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_SUCCESS,
                         payload: true
                     });
                 } else {
                     dispatch({
-                        type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_SUCCESS,
+                        type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_SUCCESS,
                         payload: false
                     });
                 }
             } else {
                 dispatch({
-                    type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_FAILED,
+                    type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_FAILED,
                     payload: false
                 });
             }
@@ -152,39 +166,7 @@ export const checkVaultMembershipPaymentStatus = userLocalPublicAddress => async
         .catch(err => {
             console.error(err.message);
             dispatch({
-                type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_FAILED,
-                payload: false
-            });
-        });
-};
-
-export const checkPhoneVerification = userLocalPublicAddress => dispatch => {
-    axios
-        .get(`${config.api_base_url}/db/users/isphoneverified`, { params: { useraddress: userLocalPublicAddress } })
-        .then(response => {
-            if (response.status === 200) {
-                if (response.data.message === constants.SUCCESS) {
-                    dispatch({
-                        type: actionTypes.PHONE_NUMBER_IS_VERIFIED,
-                        payload: true
-                    });
-                    dispatch(checkVaultMembershipPaymentStatus(userLocalPublicAddress));
-                } else {
-                    dispatch({
-                        type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
-                        payload: false
-                    });
-                }
-            } else {
-                dispatch({
-                    type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
-                    payload: false
-                });
-            }
-        })
-        .catch(err => {
-            dispatch({
-                type: actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED,
+                type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_FAILED,
                 payload: false
             });
         });

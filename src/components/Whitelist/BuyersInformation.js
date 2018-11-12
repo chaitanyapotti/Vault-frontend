@@ -20,7 +20,8 @@ import {
   lastNameChangedAction,
   genderChangedAction,
   dateOfBirthChangedAction,
-  citizenshipChangedAction
+  citizenshipChangedAction,
+  saveUserFormStates
 } from "../../actions/userRegistrationActions";
 
 class BuyersInformation extends Component {
@@ -29,6 +30,10 @@ class BuyersInformation extends Component {
     this.state = {
       selectedDate: null
     };
+  }
+
+  componentDidMount(){
+    this.props.saveUserFormStates(this.props.userRegistrationData, this.props.userLocalPublicAddress);
   }
 
   onChangeAddressLine1 = e => {
@@ -368,6 +373,7 @@ class BuyersInformation extends Component {
 }
 
 const mapStateToProps = state => {
+  const { userRegistrationData } = state || {};
   const { userLocalPublicAddress } = state.signinManagerData || {};
   const {
     addressLine1,
@@ -402,7 +408,8 @@ const mapStateToProps = state => {
     lastName,
     gender,
     dateOfBirth,
-    citizenship
+    citizenship,
+    userRegistrationData
   };
 };
 
@@ -423,7 +430,8 @@ const mapDispatchToProps = dispatch =>
       lastNameChangedAction,
       genderChangedAction,
       dateOfBirthChangedAction,
-      citizenshipChangedAction
+      citizenshipChangedAction,
+      saveUserFormStates
     },
     dispatch
   );

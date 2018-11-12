@@ -22,6 +22,7 @@ import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
 import AlertModal from "../../Common/AlertModal";
 import Warning from "@material-ui/icons/Warning";
+import ContentLoader from "react-content-loader";
 
 // const images = {
 //   metamask: "/assets/Footer/metamask.png"
@@ -345,7 +346,7 @@ class HeaderPartial extends React.Component {
                                 ),
                                 2: (
                                   <div>
-                                    <ButtonComponent>Wrong network</ButtonComponent>
+                                    <ButtonComponent onClick={()=>{}}>Wrong network</ButtonComponent>
                                     <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div>
@@ -365,13 +366,13 @@ class HeaderPartial extends React.Component {
                                 ),
                                 4: (
                                   <div>
-                                    <ButtonComponent style={{boxShadow: 'none' }}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
+                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={()=>{}}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 5: (
                                   <div>
-                                    <ButtonComponent style={{boxShadow: 'none' }}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
+                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={()=>{}}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
                                   </div>
                                 )
                               }[this.props.signinStatusFlag]
@@ -424,7 +425,7 @@ class HeaderPartial extends React.Component {
               </div>
             </Drawer>
           </div>
-        ) : null}
+        ) : <ContentLoader style={scrnWdh < 768 ? { height: "60px" } : { height: "85px", padding: 0 }}/>}
         <AlertModal open={signInModalOpen} handleClose={this.handleSignInModalClose}>
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />

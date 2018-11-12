@@ -40,7 +40,6 @@ const styles = theme => ({
 class CustomizedStepper extends React.Component {
   
   redirectToIssuerPage = () => {
-    // this.props.history.push("/issuergovernance/details");
     const { projectid } = this.props || "";
     this.props.history.push({
       pathname: `/issuergovernance/details`,

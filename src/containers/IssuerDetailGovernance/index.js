@@ -140,9 +140,9 @@ class IssuerDetailGovernance extends Component {
   };
 
   canStartNewRound = () => {
-    const { roundInfo } = this.props || {};
+    const { roundInfo, currentRoundNumber } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
-    return totalTokensSold === tokenCount;
+    return totalTokensSold === tokenCount && currentRoundNumber <= "3";
   };
 
   onStartNewRoundClick = () => {

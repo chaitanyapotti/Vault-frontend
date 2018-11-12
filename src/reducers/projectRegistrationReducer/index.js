@@ -93,7 +93,6 @@ export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
     case actionTypes.PROJECT_STATES_SUCCESS: {
-      console.log("project details: ", action.payload)
       const { allowEditAll } = state || false
       if ('state' in action.payload){
         const { state: oldState } = action.payload

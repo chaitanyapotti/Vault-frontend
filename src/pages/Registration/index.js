@@ -3,6 +3,7 @@
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import {withRouter} from "react-router-dom";
 import { bindActionCreators } from "redux";
 import Warning from "@material-ui/icons/Warning";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -75,6 +76,16 @@ class Registration extends Component {
     window.removeEventListener("scroll", this.checkOffset);
   }
 
+  componentDidUpdate() {
+    const {
+      project_id
+    } = this.props || {};
+    project_id !== "" ? this.props.history.push({
+      pathname: `/deploy`,
+      search: `?projectid=${project_id}`
+    }) : null
+  } 
+
   handlePublishDaico = e => {
     const {
       initialFundRelease,
@@ -128,10 +139,7 @@ class Registration extends Component {
     } = this.props || {};
     const { modalOpen, modalMessage } = this.state;
 
-    project_id !== "" ? this.props.history.push({
-      pathname: `/deploy`,
-      search: `?projectid=${project_id}`
-    }) : null
+    
 
     return (
       <div>
@@ -300,7 +308,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Registration);
+)(Registration));

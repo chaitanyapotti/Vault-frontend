@@ -21,16 +21,23 @@ export const initialState = {
   xfrPollsHistoryData: [],
   xfrPollsHistoryRetrieveFailureMessage: "",
   spendCurveData: {
-    allXfrData: [{
-      consensus: "625000000",
-      timestamp: 1540883901,
-      xfrAddress: "0xEfA52B1F0b90f0747d91607e3ca5fD3249F97A42"
-    }],
-    tapData: [{
-      amount: 385802469136 * 1.5, timestamp: 1540684800
-    }, {
-      amount: 385802469136 * 1.5 * 1.5, timestamp: 1541030400
-    }],
+    allXfrData: [
+      {
+        consensus: "625000000",
+        timestamp: 1540883901,
+        xfrAddress: "0xEfA52B1F0b90f0747d91607e3ca5fD3249F97A42"
+      }
+    ],
+    tapData: [
+      {
+        amount: 385802469136 * 1.5,
+        timestamp: 1540684800
+      },
+      {
+        amount: 385802469136 * 1.5 * 1.5,
+        timestamp: 1541030400
+      }
+    ],
     withdrawData: [{ amount: "0.5", timestamp: 1540425600 }, { amount: "0.5", timestamp: 1541222822 }],
     withdrawXfrData: [
       {
@@ -41,27 +48,60 @@ export const initialState = {
   },
   voteHistogramData: {},
   totalVotes: 0,
-  collectiveVoteWeight: 0
+  collectiveVoteWeight: 0,
+  xfr1ButtonTransactionHash: "",
+  killButtonTransactionHash: "",
+  killFinalizeTransactionHash:"",
+  xfr2ButtonTransactionHash:""
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    
     case actionTypes.VOTE_HISTOGRAM_DATA_SUCCESS: {
       // console.log("vote histogram data: " ,action.payload)
-      const { binDict, collectiveVoteWeight } = action.payload || {}
-      let histArray = []
-      let totalVotes = 0
-      for (var key in binDict){
-        let d = binDict[key]
+      const { binDict, collectiveVoteWeight } = action.payload || {};
+      const histArray = [];
+      let totalVotes = 0;
+      for (const key in binDict) {
+        const d = binDict[key];
         // d["max"] = significantDigits(d["max"])
         // d["min"] = significantDigits(d["min"])
-        totalVotes += d["voters"]
-        histArray.push(d)
+        totalVotes += d.voters;
+        histArray.push(d);
       }
-      return {...state, voteHistogramData: histArray, totalVotes: totalVotes, collectiveVoteWeight: collectiveVoteWeight}
+      return { ...state, voteHistogramData: histArray, totalVotes, collectiveVoteWeight };
     }
 
+    case actionTypes.KILL_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        killFinalizeTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        xfr2ButtonTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        xfr1ButtonTransactionHash: transactionHash
+      };
+    }
+    case actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        killButtonTransactionHash: transactionHash
+      };
+    }
     case actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED: {
       const { rec } = action.payload;
       return {

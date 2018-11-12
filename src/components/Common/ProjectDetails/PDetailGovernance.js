@@ -26,56 +26,68 @@ const PDetailGovernance = props => {
     onKillPollsHistoryClick
   } = props || {};
   return (
-    <CUICard style={{ padding: "40px 50px" }}>
-      <div className="txt-xxxl text--primary">Project Details</div>
+    <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
+      <Row>
+        <Col className="txt-xxxl text--primary" lg={6}>Project Details</Col>
+        <Col className="push-half--top text-right" lg={6}><a rel="noopener" onClick={onKillPollsHistoryClick}>Kill Polls History</a></Col>
+      </Row>
       <Row className="push-top--35">
         <Col lg={6} className="txt">
-          Your Tokens: <span className="text--secondary">{yourTokens}</span>
+          <div className="txt-bold">Your Tokens:</div>
+          <div className="text--secondary">{yourTokens}</div>
         </Col>
         <Col lg={6} className="txt">
-          Your Vote Weight: <span className="text--secondary">{yourVoteShare}%</span>
-        </Col>
-      </Row>
-
-      <Row className="push-half--top">
-        <Col lg={6} className="txt">
-          Vote Saturation Limit: <span className="text--secondary">{voteSaturationLimit}%</span>
-        </Col>
-        <Col lg={6} className="txt">
-          Kill Attempts Left: <span className="text--secondary">{killAttemptsLeft}</span>
+          <div className="txt-bold">Your Vote Weight: </div>
+          <div className="text--secondary">{yourVoteShare}%</div>
         </Col>
       </Row>
 
       <Row className="push-half--top">
         <Col lg={6} className="txt">
-          Kill Frequency: <span className="text--secondary">{killFrequency}</span>
+          <div className="txt-bold">Vote Saturation Limit: </div>
+          <div className="text--secondary">{voteSaturationLimit}%</div>
         </Col>
         <Col lg={6} className="txt">
-          Next Kill Attempt: <span className="text--secondary">{nextKillAttempt}</span>
+          <div className="txt-bold">Kill Attempts Left:</div> 
+          <div className="text--secondary">{killAttemptsLeft}</div>
+        </Col>
+      </Row>
+
+      <Row className="push-half--top">
+        <Col lg={6} className="txt">
+          <div className="txt-bold">Kill Frequency: </div>
+          <div className="text--secondary">{killFrequency}</div>
+        </Col>
+        <Col lg={6} className="txt">
+          <div className="txt-bold">Next Kill Attempt: </div>
+          <div className="text--secondary">{nextKillAttempt}</div>
         </Col>
       </Row>
       <Row className="push-half--top">
         <Col lg={6} className="txt">
-          Your Token Value: <span className="text--secondary">{yourTokenValue}</span>
+          <div className="txt-bold">Your Token Value: </div>
+          <div className="text--secondary">{yourTokenValue}</div>
         </Col>
         <Col lg={6} className="txt">
-          your Refund Value: <span className="text--secondary">{yourRefundValue}</span>
+          <div className="txt-bold">Your Refund Value:</div> 
+          <div className="text--secondary">{yourRefundValue}</div>
         </Col>
       </Row>
 
       <Row className="push-top--35 txt txt-g-secondary ">
-        <Col lg={12}>
-          Total Refundable Balance: <span className="text--secondary">{totalRefundableBalance} ETH</span>
+        <Col lg={6}>
+          <div className="txt-bold">Total Refundable Balance:</div>
+          <div className="text--secondary">{totalRefundableBalance} ETH</div>
+        </Col>
+        <Col lg={6}>
+          <div className="txt-bold">Kill Consensus: </div>
+          <div className="text--secondary">{killConsensus}%</div>
         </Col>
       </Row>
-      <Row className="txt txt-g-secondary">
-        <Col lg={12}>
-          Kill Consensus: <span className="text--secondary">{killConsensus}%</span>
-        </Col>
-      </Row>
+      
       <Row>
         <Col lg={6} className="push--top">
-          <LoadingButton onClick={onUnlockTokensClick} disabled={canUnlockTokens}>
+          <LoadingButton style={{padding: '0 40px'}} onClick={onUnlockTokensClick} disabled={canUnlockTokens}>
             Unlock All Tokens
           </LoadingButton>
         </Col>
@@ -83,25 +95,25 @@ const PDetailGovernance = props => {
           {signinStatusFlag <= 3 ? (
             <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
               <div>
-                <LoadingButton disabled>Kill Project</LoadingButton>
+                <LoadingButton style={{padding: '0 40px'}} type="danger" disabled>Kill Project</LoadingButton>
               </div>
             </Tooltip>
           ) : killVoteStatus === "false" ? (
-            <LoadingButton onClick={onKillClick} type="danger" loading={killButtonSpinning} disabled={parseFloat(yourTokens) <= 0}>
+            <LoadingButton style={{padding: '0 40px'}} onClick={onKillClick} type="danger" loading={killButtonSpinning} disabled={parseFloat(yourTokens) <= 0}>
               Vote in Kill Poll
             </LoadingButton>
           ) : (
-            <LoadingButton onClick={onRevokeKillClick} loading={killButtonSpinning} disabled={parseFloat(yourTokens) <= 0}>
+            <LoadingButton style={{padding: '0 40px'}} onClick={onRevokeKillClick} loading={killButtonSpinning} disabled={parseFloat(yourTokens) <= 0}>
               UnVote in Kill Poll
             </LoadingButton>
           )}
         </Col>
       </Row>
-      <Row>
+      {/* <Row>
         <Col lg={12} className="push--top text-right">
           <LoadingButton onClick={onKillPollsHistoryClick}>Kill Polls History</LoadingButton>
         </Col>
-      </Row>
+      </Row> */}
     </CUICard>
   );
 };

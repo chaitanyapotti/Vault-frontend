@@ -3,13 +3,24 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import qs from "qs";
 import { withRouter } from "react-router-dom";
-import { currentRound } from "../../actions/projectGovernanceActions/index";
+import { currentRound, clearGovernanceStates } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
+import ContentLoader from "react-content-loader";
 import {Grid} from "../../helpers/react-flexbox-grid";
+
+const MyLoader = () => <ContentLoader />
+
+
+
 class ProjectGovernance extends Component {
+  
+  componentWillUnmount(){
+    this.props.clearGovernanceStates()
+  }
+
   componentDidMount() {
     // Do Routing here - use query string
     const currentUrl = new URL(window.location.href);
@@ -57,6 +68,10 @@ class ProjectGovernance extends Component {
       killAcceptancePercent
     } = projectDetails || {};
     // currentRoundNumber = "2";
+
+    if (treasuryStateNumber === "0"){
+      return (<ContentLoader />)
+    }
 
     if (currentDeploymentIndicator !== 12)
       return (
@@ -182,7 +197,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      currentRound
+      currentRound,
+      clearGovernanceStates
     },
     dispatch
   );

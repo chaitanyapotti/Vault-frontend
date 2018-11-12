@@ -1,18 +1,20 @@
 import React from "react";
 import { CUICard } from "../../helpers/material-ui";
-import { ButtonComponent } from "../Common/FormComponents";
 import LoadingButton from "../Common/LoadingButton";
 
 const DeployerCard = props => {
-  const { btnLabel, onClick, label, deployContractButtonSpinning, latestTxHash, deployContractStartButtonSpinning } = props || {};
+  const { btnLabel, onClick, label, latestTxHash, deployContractStartButtonSpinning } = props || {};
+  const link = `https://rinkeby.etherscan.io/tx/${latestTxHash}`;
   return (
     <div className="push-top--50">
-      {deployContractButtonSpinning ? (
+      {latestTxHash !== "0x" ? (
         <CUICard style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}>
+          <div className="text-center sbhdr-txt push--bottom txt-xl">{label}</div>
           <div className="text--center">
-            This transaction is currently pending. You can View the status
-            <a href={`https://rinkeby.etherscan.io/tx/${latestTxHash}`} target="_blank" rel="noreferrer noopener">
-              here
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
             </a>
           </div>
         </CUICard>

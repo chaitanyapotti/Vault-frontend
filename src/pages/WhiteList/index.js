@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Grid } from "../../helpers/react-flexbox-grid";
+import ContentLoader from "react-content-loader";
 import CustomizedStepper from "../../components/Common/CustomizedStepper";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import { CUICard, CUIDivider } from "../../helpers/material-ui";
@@ -16,10 +17,17 @@ import {
 
 class WhiteList extends Component {
   componentDidMount() {
-    if (this.props.userLocalPublicAddress) {
+    var interval 
+    if (!this.props.userLocalPublicAddress){
+      interval = setInterval(()=>{
+        if (this.props.userLocalPublicAddress) {
+          this.props.fetchUserFormStates(this.props.userLocalPublicAddress);
+          clearInterval(interval)
+        }
+      }, 1000)
+    }else{
       this.props.fetchUserFormStates(this.props.userLocalPublicAddress);
-    } else {
-      this.props.fetchUserFormStates("0xb758c38326Df3D75F1cf0DA14Bb8220Ca4231e74");
+      clearInterval(interval)
     }
   }
 
@@ -61,7 +69,8 @@ class WhiteList extends Component {
       dateOfBirth,
       passportUrl,
       selfieUrl,
-      addressUrl
+      addressUrl,
+      passportFileName, selfieFileName, addressFileName
     } = this.props || {};
     switch (getActiveStep) {
       case 2:
@@ -87,7 +96,9 @@ class WhiteList extends Component {
           !dateOfBirth
         );
       case 5:
-        return passportUrl === "" || selfieUrl === "" || addressUrl === "";
+        return (passportUrl === "" || selfieUrl === "" || addressUrl === "") || (passportFileName==="" || selfieFileName==="" || addressFileName==="");
+      case 6: 
+          return true;
       default:
         return false;
     }
@@ -96,6 +107,8 @@ class WhiteList extends Component {
   getBackDisabledStatus = () => {
     const { activeStep: getActiveStep } = this.props || {};
     switch (getActiveStep) {
+      case 0:
+        return true;
       case 4:
         return true;
       default:
@@ -185,9 +198,16 @@ class WhiteList extends Component {
   };
 
   render() {
-    const { otpFromServer, otpFromUser } = this.props || {};
+    const { otpFromServer, otpFromUser, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag } = this.props || {};
     return (
-      <Grid>
+      <div>
+      {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? 
+      (
+        <div>
+        {signinStatusFlag===3? (
+          <div>
+            {this.props.userLocalPublicAddress? (
+              <Grid>
         <CUICard style={{ padding: "40px 40px", marginBottom: "40px" }}>
           <CustomizedStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={this.props.activeStep} />
           <div className="push-top--50">
@@ -210,13 +230,31 @@ class WhiteList extends Component {
           </div>
         </CUICard>
       </Grid>
+            ):(
+              <ContentLoader/>
+            )}
+          </div>
+          ):(this.props.history.push("/")) }
+        </div>
+      ):(
+        <ContentLoader/>
+      )
+      }
+      </div>
+      
     );
   }
 }
 
 const mapStateToProps = state => {
   const { userRegistrationData } = state || {};
-  const { userLocalPublicAddress } = state.signinManagerData || {};
+  const { userLocalPublicAddress,
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked,
+    signinStatusFlag } = state.signinManagerData || {};
   const {
     activeStep,
     conditionOneAccepted,
@@ -243,7 +281,8 @@ const mapStateToProps = state => {
     dateOfBirth,
     passportUrl,
     selfieUrl,
-    addressUrl
+    addressUrl,
+    passportFileName, selfieFileName, addressFileName
   } = state.userRegistrationData || {};
   return {
     userLocalPublicAddress,
@@ -273,7 +312,14 @@ const mapStateToProps = state => {
     dateOfBirth,
     passportUrl,
     selfieUrl,
-    addressUrl
+    addressUrl,
+    passportFileName, selfieFileName, addressFileName,
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked,
+    signinStatusFlag
   };
 };
 

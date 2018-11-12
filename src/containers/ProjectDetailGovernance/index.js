@@ -42,7 +42,8 @@ import {
   significantDigits,
   pollState,
   daysTookForTapPoll,
-  xfrResult
+  xfrResult,
+  xfrWithdrawStatus
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
@@ -507,7 +508,7 @@ class ProjectDetailGovernance extends Component {
         address,
         pollState(this.getKillPollStartDate(endTime), new Date(endTime * 1000)),
         formatDate(new Date(endTime * 1000)),
-        significantDigits(parseFloat(consensus) / formatFromWei(parseFloat(tokensUnderGovernance), 0))
+        consensus
       ];
       return dataArray;
     });
@@ -517,14 +518,14 @@ class ProjectDetailGovernance extends Component {
       return dataArray;
     });
     const xfrHistoryData = xfrPollsHistoryData.map(item => {
-      const { address, startTime, consensus } = item || {};
+      const { address, startTime, consensus, amount, endTime } = item || {};
       const xfrStartTime = new Date(startTime * 1000);
-      const xfrConsensus = significantDigits(parseFloat(consensus) / formatFromWei(parseFloat(tokensUnderGovernance), 0));
       const dataArray = [
         address,
         formatDate(xfrStartTime),
-        xfrResult(xfrStartTime, this.getXfrEndDate(startTime), xfrConsensus, xfrRejectionPercent),
-        xfrConsensus
+        xfrResult(xfrStartTime, this.getXfrEndDate(startTime), consensus, xfrRejectionPercent),
+        consensus,
+        xfrWithdrawStatus(amount, startTime, endTime)
       ];
       return dataArray;
     });
@@ -703,7 +704,7 @@ class ProjectDetailGovernance extends Component {
               rowClickPollHistory
               tableData={xfrHistoryData}
               filter={false}
-              columns={["Poll Address", "Deployed On", "Result", "Consensus"]}
+              columns={["Poll Address", "Deployed On", "Result", "Consensus", "Withdraw Status"]}
             />
           </div>
         </AlertModal>

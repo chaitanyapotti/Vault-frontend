@@ -41,7 +41,7 @@ class UpcomingDaicos extends Component {
     const data = upcomingDaicosTable.map(item => {
       const { projectName, rounds, startDateTime, r1EndTime, _id, thumbnailUrl } = item || {};
       const dataArray = [
-        {projectName, thumbnailUrl},
+        { projectName, thumbnailUrl },
         rounds.length,
         this.calculateRoundGoal(rounds[0], ETH),
         this.calculateFinalGoal(rounds, ETH),
@@ -58,31 +58,33 @@ class UpcomingDaicos extends Component {
         <GridData
           history={history}
           tableData={data}
-          columns={
-            [
-              {
-                name: "Name",
-                options:{
-                  customBodyRender: (value) => {
-                    const {projectName, thumbnailUrl} = value || {};
-                    return(
-                      <div style={{width:'130px'}} className="hl">
-                        <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                        <div className="hli pos-rel txt push--left" style={{top: '10px'}}>{projectName}</div>
+          filter={false}
+          columns={[
+            {
+              name: "Name",
+              options: {
+                customBodyRender: value => {
+                  const { projectName, thumbnailUrl } = value || {};
+                  return (
+                    <div style={{ width: "130px" }} className="hl">
+                      <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                      <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
+                        {projectName}
                       </div>
-                    )
-                  }
-                }
-              }, 
-              "Rounds", 
-              "R1 Goal", 
-              "Final Goal", 
-              "Price*", 
-              "Starts at (UTC)", 
-              "R1 Ends on (UTC)", 
-              { name: "Id", options: { display: false } }
-            ]
-          }
+                    </div>
+                  );
+                },
+                filter: false
+              }
+            },
+            { name: "Rounds", options: { filter: true } },
+            { name: "R1 Goal", options: { filter: false } },
+            { name: "Final Goal", options: { filter: false } },
+            { name: "Price*", options: { filter: false } },
+            { name: "Starts at (UTC)", options: { filter: false } },
+            { name: "R1 Ends on (UTC)", options: { filter: false } },
+            { name: "Id", options: { display: false, filter: false } }
+          ]}
         />
       </div>
     );

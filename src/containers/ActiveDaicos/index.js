@@ -42,7 +42,7 @@ class ActiveDaicos extends Component {
     const data = activeDaicosTable.map(item => {
       const { projectName, rounds, currentRound, startDateTime, r1EndTime, raisedAmount, tokenPrice, _id, thumbnailUrl } = item || {};
       const dataArray = [
-        {projectName, thumbnailUrl},
+        { projectName, thumbnailUrl },
         `${currentRound} of 3`,
         this.calculateRoundGoal(rounds[0], ETH),
         this.calculateFinalGoal(rounds, ETH),
@@ -59,29 +59,33 @@ class ActiveDaicos extends Component {
         <GridData
           history={history}
           tableData={data}
+          filter
           columns={[
             {
               name: "Name",
-              options:{
-                customBodyRender: (value) => {
-                  const {projectName, thumbnailUrl} = value || {};
-                  return(
-                    <div style={{width:'130px'}} className="hl">
+              options: {
+                customBodyRender: value => {
+                  const { projectName, thumbnailUrl } = value || {};
+                  return (
+                    <div style={{ width: "130px" }} className="hl">
                       <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                      <div className="hli pos-rel txt push--left" style={{top: '10px'}}>{projectName}</div>
+                      <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
+                        {projectName}
+                      </div>
                     </div>
-                  )
-                }
+                  );
+                },
+                filter: false
               }
             },
-            "Current Round",
-            "R1 Goal",
-            "Final Goal",
-            "Raised*",
-            "Price*",
-            "Started at (UTC)",
-            "R1 Ends in",
-            { name: "Id", options: { display: false } }
+            { name: "Current Round", options: { filter: true } },
+            { name: "R1 Goal", options: { filter: false } },
+            { name: "Final Goal", options: { filter: false } },
+            { name: "Raised", options: { filter: false } },
+            { name: "Price*", options: { filter: false } },
+            { name: "Started at (UTC)", options: { filter: false } },
+            { name: "R1 Ends in", options: { filter: false } },
+            { name: "Id", options: { filter: false, display: false } }
           ]}
         />
       </div>

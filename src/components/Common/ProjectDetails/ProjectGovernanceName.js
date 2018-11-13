@@ -25,9 +25,12 @@ const ProjectGovernanceName = props => {
     buyButtonText,
     signinStatusFlag,
     tradeButtonVisibility,
-    tradeUrl
+    tradeUrl,
+    whitelistButtonTransactionHash
   } = props || {};
   const { website } = urls;
+  const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
+  console.log(whitelistButtonTransactionHash, "yyyy");
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
@@ -35,7 +38,7 @@ const ProjectGovernanceName = props => {
           <div className="hl">
             <span className="prjct-logo hli" />
             <div className="hli push--left text--primary push-half--top">
-              <div className="txt-xxxl">
+              <div className="txt-xl">
                 {projectName} ({tokenTag})
               </div>
               <div className="txt opacity-75">
@@ -60,7 +63,9 @@ const ProjectGovernanceName = props => {
         </Col>
       </Row>
       <Row className="push-half--top txt">
-        <Col lg={12} xs={12} className="fnt-ps">{description}</Col>
+        <Col lg={12} xs={12} className="fnt-ps">
+          {description}
+        </Col>
       </Row>
       <Row className="push--top">
         <Col lg={5} className="text--secondary txt">
@@ -86,6 +91,12 @@ const ProjectGovernanceName = props => {
                 </div>
               </Tooltip>
             </div>
+          ) : whitelistButtonTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
           ) : buttonVisibility ? (
             <span className="hli">
               <LoadingButton onClick={onClick} loading={buttonSpinning}>

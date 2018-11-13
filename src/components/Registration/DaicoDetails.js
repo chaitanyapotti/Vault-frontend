@@ -113,148 +113,148 @@ class DaicoDetails extends React.Component {
     // console.log("daico start date: ", daicoStartDate)
     return (
       <div>
-        <CUICard style={{ padding: "40px 50px" }}>
-          <div className="txt-xl">DAICO Details</div>
+        <CUICard className="card-brdr" >
+          <div className="txt-xl" style={{ padding: "40px 50px" }}>DAICO Details</div>
           <hr />
-          <Row>
-            <Col xs={12} lg={6}>
-              {allowEditAll ? (
-                <DTPicker selectedDate={daicoStartDate} disablePast label="Round 1 Start Date" handleDateChange={this.onChangeDaicoStart} />
-              ) : (
-                <div>{daicoStartDate}</div>
-              )}
-            </Col>
-            <Col xs={12} lg={6}>
-              {allowEditAll ? (
-                <DTPicker
-                  selectedDate={daicoEndDate}
-                  minDate={this.getEndMinDate()}
-                  maxDate={this.getEndMaxDate()}
-                  label="Round 1 End Date"
-                  handleDateChange={this.onChangeDaicoEnd}
+          <div style={{ padding: "20px 50px" }}>
+            <Row>
+              <Col xs={12} lg={6}>
+                {allowEditAll ? (
+                  <DTPicker selectedDate={daicoStartDate} disablePast label="Round 1 Start Date" handleDateChange={this.onChangeDaicoStart} />
+                ) : (
+                  <div>{daicoStartDate}</div>
+                )}
+              </Col>
+              <Col xs={12} lg={6}>
+                {allowEditAll ? (
+                  <DTPicker
+                    selectedDate={daicoEndDate}
+                    minDate={this.getEndMinDate()}
+                    maxDate={this.getEndMaxDate()}
+                    label="Round 1 End Date"
+                    handleDateChange={this.onChangeDaicoEnd}
+                  />
+                ) : (
+                  <div>{daicoEndDate}</div>
+                )}
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} lg={6}>
+                <CUIFormInput
+                  required
+                  inputType={CUIInputType.TEXT}
+                  full
+                  forceNumDec
+                  inputName="Initial Fund Release"
+                  inputLabel="Initial Fund Release"
+                  inputPlaceholder="Eg. 100"
+                  inputValue={initialFundRelease}
+                  disabled={!allowEditAll}
+                  // onBlur={this.onBlurAge}
+                  // error={this.state.errorAgeText !== ''}
+                  // helperText={this.state.errorAgeText}
+                  // onKeyDownSelector="Admin"
+                  onChange={this.onChangeIniFundVal}
                 />
-              ) : (
-                <div>{daicoEndDate}</div>
-              )}
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12} lg={6}>
-              <CUIFormInput
-                required
-                inputType={CUIInputType.TEXT}
-                full
-                forceNumDec
-                inputName="Initial Fund Release"
-                inputLabel="Initial Fund Release"
-                inputPlaceholder="Eg. 100"
-                inputValue={initialFundRelease}
-                disabled={!allowEditAll}
-                // onBlur={this.onBlurAge}
-                // error={this.state.errorAgeText !== ''}
-                // helperText={this.state.errorAgeText}
-                // onKeyDownSelector="Admin"
-                onChange={this.onChangeIniFundVal}
-                error={!!this.getErrorMsg(actionTypes.INITIAL_FUND_RELEASE_CHANGED)}
-                helperText={this.getErrorMsg(actionTypes.INITIAL_FUND_RELEASE_CHANGED)}
-              />
-            </Col>
-            <Col xs={12} lg={6}>
-              <CUIFormInput
-                required
-                inputType={CUIInputType.TEXT}
-                full
-                forceNumDec
-                inputName="Max Ether Contribution"
-                inputLabel="Max Ether Cap (ETH)"
-                inputPlaceholder="Eg. 5"
-                inputValue={maxEtherContribution}
-                disabled={!allowEditAll}
-                // onBlur={this.onBlurAge}
-                // error={this.state.errorAgeText !== ''}
-                // helperText={this.state.errorAgeText}
-                // onKeyDownSelector="Admin"
-                onChange={this.onChangeMaxEtherContribution}
-                error={!!this.getErrorMsg(actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED)}
-                helperText={this.getErrorMsg(actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED)}
-              />
-            </Col>
-            {/* <Col xs={12} lg={6}>
-              <CUIFormInput
-                inputType={CUIInputType.SELECT}
-                iconColor={CS_COLORS.G_DIVIDER}
-                full
-                inputLabel="DAICO Rounds"
-                inputValue={this.props.daicoRounds}
-                items={[{ value: "3", primaryText: "3" }, { value: "2", primaryText: "2" }, { value: "1", primaryText: "1" }]}
-                onChange={this.onSelectDaicoRounds}
-              />
-            </Col> */}
-          </Row>
-          <Row>
-            <Col xs={12} lg={6}>
-              <CUIFormInput
-                inputType={CUIInputType.TEXT}
-                required
-                full
-                forceNumDec
-                inputName="Initial Tap Value"
-                inputLabel="Initial Tap (ETH/Mo)"
-                inputPlaceholder="Eg. 100"
-                inputValue={initialTapValue}
-                disabled={!allowEditAll}
-                // onBlur={this.onBlurAge}
-                // error={this.state.errorAgeText !== ''}
-                // helperText={this.state.errorAgeText}
-                // onKeyDownSelector="Admin"
-                onChange={this.onChangeInitialTapValue}
-                error={!!this.getErrorMsg(actionTypes.INITIAL_TAP_VALUE_CHANGED)}
-                helperText={this.getErrorMsg(actionTypes.INITIAL_TAP_VALUE_CHANGED)}
-              />
-            </Col>
-            <Col xs={12} lg={6}>
-              <CUIFormInput
-                inputType={CUIInputType.TEXT}
-                required
-                full
-                forceNumDec
-                inputName="Tap Increment Factor"
-                inputLabel="Tap Increment Factor"
-                inputPlaceholder="Eg. 1.5"
-                inputValue={tapIncrementFactor}
-                disabled={!allowEditAll}
-                // onBlur={this.onBlurAge}
-                // error={this.state.errorAgeText !== ''}
-                // helperText={this.state.errorAgeText}
-                // onKeyDownSelector="Admin"
-                onChange={this.onChangeTapIncrementFactor}
-                error={!!this.getErrorMsg(actionTypes.TAP_INCREMENT_FACTOR_CHANGED)}
-                helperText={this.getErrorMsg(actionTypes.TAP_INCREMENT_FACTOR_CHANGED)}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12} lg={6}>
-              <CUIFormInput
-                inputType={CUIInputType.TEXT}
-                required
-                full
-                forceNumDec
-                inputName="Vote Saturation Limit"
-                inputLabel="Vote Saturation Limit"
-                inputPlaceholder="Eg. 0.05%"
-                inputValue={voteSaturationLimit}
-                disabled={!allowEditAll}
-                // onBlur={this.onBlurAge}
-                // error={this.state.errorAgeText !== ''}
-                // helperText={this.state.errorAgeText}
-                // onKeyDownSelector="Admin"
-                onChange={this.onChangeVoteSaturationLimit}
-                error={!!this.getErrorMsg(actionTypes.VOTE_SATURATION_LIMIT_CHANGED)}
-                helperText={this.getErrorMsg(actionTypes.VOTE_SATURATION_LIMIT_CHANGED)}
-              />
-            </Col>
-          </Row>
+              </Col>
+              <Col xs={12} lg={6}>
+                <CUIFormInput
+                  required
+                  inputType={CUIInputType.TEXT}
+                  full
+                  forceNumDec
+                  inputName="Max Ether Contribution"
+                  inputLabel="Max Ether Cap (ETH)"
+                  inputPlaceholder="Eg. 5"
+                  inputValue={maxEtherContribution}
+                  disabled={!allowEditAll}
+                  // onBlur={this.onBlurAge}
+                  // error={this.state.errorAgeText !== ''}
+                  // helperText={this.state.errorAgeText}
+                  // onKeyDownSelector="Admin"
+                  onChange={this.onChangeMaxEtherContribution}
+                  error={!!this.getErrorMsg(actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED)}
+                  helperText={this.getErrorMsg(actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED)}
+                />
+              </Col>
+              {/* <Col xs={12} lg={6}>
+                <CUIFormInput
+                  inputType={CUIInputType.SELECT}
+                  iconColor={CS_COLORS.G_DIVIDER}
+                  full
+                  inputLabel="DAICO Rounds"
+                  inputValue={this.props.daicoRounds}
+                  items={[{ value: "3", primaryText: "3" }, { value: "2", primaryText: "2" }, { value: "1", primaryText: "1" }]}
+                  onChange={this.onSelectDaicoRounds}
+                />
+              </Col> */}
+            </Row>
+            <Row>
+              <Col xs={12} lg={6}>
+                <CUIFormInput
+                  inputType={CUIInputType.TEXT}
+                  required
+                  full
+                  forceNumDec
+                  inputName="Initial Tap Value"
+                  inputLabel="Initial Tap (ETH/Mo)"
+                  inputPlaceholder="Eg. 100"
+                  inputValue={initialTapValue}
+                  disabled={!allowEditAll}
+                  // onBlur={this.onBlurAge}
+                  // error={this.state.errorAgeText !== ''}
+                  // helperText={this.state.errorAgeText}
+                  // onKeyDownSelector="Admin"
+                  onChange={this.onChangeInitialTapValue}
+                  error={!!this.getErrorMsg(actionTypes.INITIAL_TAP_VALUE_CHANGED)}
+                  helperText={this.getErrorMsg(actionTypes.INITIAL_TAP_VALUE_CHANGED)}
+                />
+              </Col>
+              <Col xs={12} lg={6}>
+                <CUIFormInput
+                  inputType={CUIInputType.TEXT}
+                  required
+                  full
+                  forceNumDec
+                  inputName="Tap Increment Factor"
+                  inputLabel="Tap Increment Factor"
+                  inputPlaceholder="Eg. 1.5"
+                  inputValue={tapIncrementFactor}
+                  disabled={!allowEditAll}
+                  // onBlur={this.onBlurAge}
+                  // error={this.state.errorAgeText !== ''}
+                  // helperText={this.state.errorAgeText}
+                  // onKeyDownSelector="Admin"
+                  onChange={this.onChangeTapIncrementFactor}
+                  error={!!this.getErrorMsg(actionTypes.TAP_INCREMENT_FACTOR_CHANGED)}
+                  helperText={this.getErrorMsg(actionTypes.TAP_INCREMENT_FACTOR_CHANGED)}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} lg={6}>
+                <CUIFormInput
+                  inputType={CUIInputType.TEXT}
+                  required
+                  full
+                  forceNumDec
+                  inputName="Vote Saturation Limit"
+                  inputLabel="Vote Saturation Limit"
+                  inputPlaceholder="Eg. 0.05%"
+                  inputValue={voteSaturationLimit}
+                  disabled={!allowEditAll}
+                  // onBlur={this.onBlurAge}
+                  // error={this.state.errorAgeText !== ''}
+                  // helperText={this.state.errorAgeText}
+                  // onKeyDownSelector="Admin"
+                  onChange={this.onChangeVoteSaturationLimit}
+                  error={!!this.getErrorMsg(actionTypes.VOTE_SATURATION_LIMIT_CHANGED)}
+                  helperText={this.getErrorMsg(actionTypes.VOTE_SATURATION_LIMIT_CHANGED)}
+                />
+              </Col>
+            </Row>
+          </div>
         </CUICard>
       </div>
     );

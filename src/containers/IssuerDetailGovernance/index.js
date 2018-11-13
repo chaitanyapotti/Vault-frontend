@@ -33,6 +33,7 @@ import { formatFromWei, formatCurrencyNumber, formatDate, significantDigits } fr
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import XfrForm from "../../components/Common/ProjectDetails/XfrForm";
 import IssuerWithdrawCard from "../../components/Common/ProjectDetails/IssuerWithdrawCard";
+import MasonaryLayout from "../../components/Common/MasonaryLayout";
 
 class IssuerDetailGovernance extends Component {
   componentDidMount() {
@@ -84,9 +85,9 @@ class IssuerDetailGovernance extends Component {
     const { currentRoundNumber } = this.props || {};
     const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
     return (
-      <div>
-        <div>Round {roundNumber} price</div>
-        <div>{1 / tokenRate} ETH</div>
+      <div style={{ marginTop: "24px" }}>
+        <div className="text-right">Round {roundNumber} price</div>
+        <div className="text-right opacity-75">{1 / tokenRate} ETH</div>
       </div>
     );
   };
@@ -322,95 +323,109 @@ class IssuerDetailGovernance extends Component {
       xfrTitleText,
       xfrDescriptionText,
       xfrAmountText,
-      withdrawableAmount
+      withdrawableAmount,
+      startNewRoundButtonTransactionHash,
+      deployTapPollButtonTransactionHash,
+      incrementTapButtonTransactionHash,
+      deployXfrPollTransactionHash,
+      withdrawXfrButtonTransactionHash,
+      withdrawButtonTransactionHash
     } = this.props || {};
     return (
       <Grid>
-        <Row>
-          <Col xs={12} lg={6}>
-            <IssuerGovernanceName
-              projectName={projectName}
-              tokenTag={tokenTag}
-              price={this.getPrice()}
-              roundText={this.getRoundText()}
-              priceIncrement={this.getPriceIncrement()}
-              description={description}
-              urls={urls}
-              whitepaper={whitepaper}
-              lastRoundInfo={this.getLastRoundInfo()}
-              buttonText={this.getstartNewRoundText()}
-              startNewRoundButtonSpinning={startNewRoundButtonSpinning}
-              canStartNewRound={this.canStartNewRound()}
-              onClick={this.onStartNewRoundClick}
-              isPermissioned={this.isPermissioned()}
-              onEditClick={this.onEditClick}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <IssuerPDetailGovernance
-              voteSaturationLimit={capPercent / 100}
-              killFrequency="Quarterly"
-              killAttemptsLeft={7 - killPollIndex}
-              nextKillAttempt={formatDate(this.getNextKillPollStartDate())}
-              totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
-              killConsensus={this.getKillConsensus()}
-            />
-          </Col>
-        </Row>
+        <MasonaryLayout columns={2}>
+          {/* <Row>
+          <Col xs={12} lg={6}> */}
+          <IssuerGovernanceName
+            projectName={projectName}
+            tokenTag={tokenTag}
+            price={this.getPrice()}
+            roundText={this.getRoundText()}
+            priceIncrement={this.getPriceIncrement()}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            lastRoundInfo={this.getLastRoundInfo()}
+            buttonText={this.getstartNewRoundText()}
+            startNewRoundButtonSpinning={startNewRoundButtonSpinning}
+            canStartNewRound={this.canStartNewRound()}
+            onClick={this.onStartNewRoundClick}
+            isPermissioned={this.isPermissioned()}
+            onEditClick={this.onEditClick}
+            startNewRoundButtonTransactionHash={startNewRoundButtonTransactionHash}
+          />
+          {/* </Col>
+          <Col xs={12} lg={6}> */}
+          <IssuerPDetailGovernance
+            voteSaturationLimit={capPercent / 100}
+            killFrequency="Quarterly"
+            killAttemptsLeft={7 - killPollIndex}
+            nextKillAttempt={formatDate(this.getNextKillPollStartDate())}
+            totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
+            killConsensus={this.getKillConsensus()}
+          />
+          {/* </Col>
+        </Row> */}
 
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <IssuerTapCard
-              currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30))}
-              tapIncrementUnit={tapIncrementFactor / 100}
-              incrementApproval={this.getTapPollConsensus()}
+          {/* <Row className="push--top">
+          <Col xs={12} lg={6}> */}
+          <IssuerTapCard
+            currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30))}
+            tapIncrementUnit={tapIncrementFactor / 100}
+            incrementApproval={this.getTapPollConsensus()}
+            isPermissioned={this.isPermissioned()}
+            canIncreaseTap={this.canIncreaseTap()}
+            incrementTapButtonSpinning={incrementTapButtonSpinning}
+            deployTapPollButtonSpinning={deployTapPollButtonSpinning}
+            canDeployTapPoll={this.canDeployTapPoll()}
+            onIncrementTapClick={this.onIncrementTapClick}
+            onDeployTapPollClick={this.onDeployTapPollClick}
+            deployTapPollButtonTransactionHash={deployTapPollButtonTransactionHash}
+            incrementTapButtonTransactionHash={incrementTapButtonTransactionHash}
+          />
+          {/* </Col>
+          <Col xs={12} lg={6}> */}
+          <IssuerWithdrawCard
+            currentWithdrawableAmount={formatFromWei(currentWithdrawableAmount, 3)}
+            isPermissioned={this.isPermissioned()}
+            withdrawButtonSpinning={withdrawButtonSpinning}
+            onWithdrawAmountClick={this.onWithdrawAmountClick}
+            inputText={withdrawableAmount}
+            onChange={this.onChangeWithdrawAmount}
+            withdrawButtonTransactionHash={withdrawButtonTransactionHash}
+          />
+          {/* </Col>
+        </Row> */}
+          {this.canShowXfrPoll() ? (
+            // <Row className="push--top">
+            //   <Col xs={12} lg={6}>
+            <XfrForm
+              titleText={xfrTitleText}
+              onTitleTextChange={this.onChangeXfrTitle}
+              amountText={xfrAmountText}
+              onAmountTextChange={this.onChangeXfrAmount}
+              descriptionText={xfrDescriptionText}
+              onDescriptionTextChange={this.onChangeXfrDescription}
               isPermissioned={this.isPermissioned()}
-              canIncreaseTap={this.canIncreaseTap()}
-              incrementTapButtonSpinning={incrementTapButtonSpinning}
-              deployTapPollButtonSpinning={deployTapPollButtonSpinning}
-              canDeployTapPoll={this.canDeployTapPoll()}
-              onIncrementTapClick={this.onIncrementTapClick}
-              onDeployTapPollClick={this.onDeployTapPollClick}
+              canDeployXfrPoll={this.canDeployXfrPoll()}
+              deployXfrButtonSpinning={deployXfrButtonSpinning}
+              onDeployXfrClick={this.onDeployXfrClick}
+              canWithdrawXfrAmount={this.canWithdrawXfrAmount()}
+              withdrawXfrButtonSpinning={withdrawXfrButtonSpinning}
+              onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
+              getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
+              deployXfrPollTransactionHash={deployXfrPollTransactionHash}
+              withdrawXfrButtonTransactionHash={withdrawXfrButtonTransactionHash}
             />
-          </Col>
-          <Col xs={12} lg={6}>
-            <IssuerWithdrawCard
-              currentWithdrawableAmount={formatFromWei(currentWithdrawableAmount, 3)}
-              isPermissioned={this.isPermissioned()}
-              withdrawButtonSpinning={withdrawButtonSpinning}
-              onWithdrawAmountClick={this.onWithdrawAmountClick}
-              inputText={withdrawableAmount}
-              onChange={this.onChangeWithdrawAmount}
-            />
-          </Col>
-        </Row>
-        {this.canShowXfrPoll() ? (
-          <Row className="push--top">
-            <Col xs={12} lg={6}>
-              <XfrForm
-                titleText={xfrTitleText}
-                onTitleTextChange={this.onChangeXfrTitle}
-                amountText={xfrAmountText}
-                onAmountTextChange={this.onChangeXfrAmount}
-                descriptionText={xfrDescriptionText}
-                onDescriptionTextChange={this.onChangeXfrDescription}
-                isPermissioned={this.isPermissioned()}
-                canDeployXfrPoll={this.canDeployXfrPoll()}
-                deployXfrButtonSpinning={deployXfrButtonSpinning}
-                onDeployXfrClick={this.onDeployXfrClick}
-                canWithdrawXfrAmount={this.canWithdrawXfrAmount()}
-                withdrawXfrButtonSpinning={withdrawXfrButtonSpinning}
-                onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
-                getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
-              />
-            </Col>
-          </Row>
-        ) : null}
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <IssuerFundReq data={xfrData} details={xfrDetails} tokensUnderGovernance={tokensUnderGovernance} />
-          </Col>
-        </Row>
+          ) : //   </Col>
+          // </Row>
+          null}
+          {/* <Row className="push--top">
+          <Col xs={12} lg={6}> */}
+          <IssuerFundReq data={xfrData} details={xfrDetails} tokensUnderGovernance={tokensUnderGovernance} />
+          {/* </Col>
+        </Row> */}
+        </MasonaryLayout>
       </Grid>
     );
   }
@@ -437,7 +452,13 @@ const mapStateToProps = state => {
     xfrTitleText,
     xfrDescriptionText,
     xfrAmountText,
-    withdrawableAmount
+    withdrawableAmount,
+    startNewRoundButtonTransactionHash,
+    deployTapPollButtonTransactionHash,
+    incrementTapButtonTransactionHash,
+    deployXfrPollTransactionHash,
+    withdrawXfrButtonTransactionHash,
+    withdrawButtonTransactionHash
   } = issuerDetailGovernanceReducer || {};
   const {
     tokensUnderGovernance,
@@ -498,7 +519,13 @@ const mapStateToProps = state => {
     xfrTitleText,
     xfrDescriptionText,
     xfrAmountText,
-    withdrawableAmount
+    withdrawableAmount,
+    startNewRoundButtonTransactionHash,
+    deployTapPollButtonTransactionHash,
+    incrementTapButtonTransactionHash,
+    deployXfrPollTransactionHash,
+    withdrawXfrButtonTransactionHash,
+    withdrawButtonTransactionHash
   };
 };
 

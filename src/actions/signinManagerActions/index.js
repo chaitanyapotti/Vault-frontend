@@ -80,6 +80,38 @@ export function checkUserRegistration() {
   };
 }
 
+export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
+  return dispatch =>
+    axios
+      .get(`${config.api_base_url}/db/projects/deployment/indicator`, { params: { useraddress: userLocalPublicAddress } })
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message === constants.SUCCESS) {
+            dispatch({
+              type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS,
+              payload: response.data.data
+            });
+          } else {
+            dispatch({
+              type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
+              payload: response.data.reason
+            });
+          }
+        } else {
+          dispatch({
+            type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
+            payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
+          });
+        }
+      }).catch(error => {
+        console.log(error)
+        dispatch({
+          type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
+          payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
+        });
+      })
+}
+
 export const checkVaultMembership = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
   axios
@@ -93,7 +125,6 @@ export const checkVaultMembership = userLocalPublicAddress => async dispatch => 
           dispatch(isAlreadyVaultMember(true));
         } else {
           dispatch(isAlreadyVaultMember(false));
-          dispatch(checkPhoneVerification(userLocalPublicAddress));
         }
       }
     })
@@ -147,6 +178,7 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
                 });
                 dispatch(checkVaultMembership(accounts[0]));
                 dispatch(checkIssuer(accounts[0]));
+                dispatch(fetchProjectDeploymentIndicator(accounts[0]))
               }
             }else{
               if (accounts[0] !== userPreviousLocalPublicAddress) {

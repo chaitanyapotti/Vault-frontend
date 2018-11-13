@@ -66,12 +66,10 @@ class OtpVerification extends Component {
   };
 
   render() {
-    const { countryCode, phoneNumber, isPhoneNumberVerified, otpFromServer, otpFromUser } = this.props || {};
+    const { countryCode, phoneNumber, otpFromServer, otpFromUser } = this.props || {};
     return (
       <div>
-        {isPhoneNumberVerified ? (
-          <div>Go to next page.</div>
-        ) : (
+        
           <Grid>
             <CUICard style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}>
               <div>
@@ -140,7 +138,7 @@ class OtpVerification extends Component {
               </div>
             </CUICard>
           </Grid>
-        )}
+        
       </div>
     );
   }
@@ -155,7 +153,6 @@ const mapStateToProps = state => {
     otpFromServer,
     otpVerificationSuccessful,
     isVaultMember,
-    isPhoneNumberVerified,
     vaultPaymentPendingStatus,
     phoneOrAddressExists,
     errors
@@ -168,7 +165,6 @@ const mapStateToProps = state => {
     otpVerificationSuccessful,
     userLocalPublicAddress,
     isVaultMember,
-    isPhoneNumberVerified,
     vaultPaymentPendingStatus,
     phoneOrAddressExists,
     errors

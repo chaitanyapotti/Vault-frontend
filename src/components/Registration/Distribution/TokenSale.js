@@ -112,203 +112,174 @@ class TokenSale extends React.Component {
     const { modalOpen, modalMessage } = this.state || {};
     return (
       <div>
-        <div className="txt-xl">Token Sale Distribution</div>
+        <div className="txt-xl" style={{ padding: "40px 50px" }}>Token Sale Distribution</div>
         <hr />
-        <Row>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              forceNumeric
-              inputName="Round1 Target in USD"
-              inputLabel="Round1 Target in USD"
-              inputPlaceholder=""
-              inputValue={round1TargetUSD}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeRound1TargetUSD}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              forceNumeric
-              inputName="Round1 Target in Eth"
-              inputLabel="Round1 Target in Eth"
-              inputPlaceholder=""
-              inputValue={round1TargetEth}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeRound1TargetEth}
-            />
-          </Col>
-        </Row>
-        {round1Tokens > 0 ? (
+        <div style={{ padding: "20px 50px" }}>
           <Row>
-            <label>
-              Total round 1 tokens {round1Tokens} at {round1Rate} eth/token
-            </label>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                forceNumeric
+                inputName="Round1 Target in USD"
+                inputLabel="Round1 Target in USD"
+                inputPlaceholder=""
+                inputValue={round1TargetUSD}
+                disabled={!allowEditAll}
+                onChange={this.onChangeRound1TargetUSD}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                forceNumeric
+                inputName="Round1 Target in Eth"
+                inputLabel="Round1 Target in Eth"
+                inputPlaceholder=""
+                inputValue={round1TargetEth}
+                disabled={!allowEditAll}
+                onChange={this.onChangeRound1TargetEth}
+              />
+            </Col>
           </Row>
-        ) : null}
-        <Row>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              forceNumeric
-              inputName="Round2 Target in USD"
-              inputLabel="Round2 Target in USD"
-              inputPlaceholder=""
-              inputValue={round2TargetUSD}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeRound2TargetUSD}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              forceNumeric
-              inputName="Round2 Target in Eth"
-              inputLabel="Round2 Target in Eth"
-              inputPlaceholder=""
-              inputValue={round2TargetEth}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeRound2TargetEth}
-            />
-          </Col>
-        </Row>
-        {round2Tokens > 0 ? (
+          {round1Tokens > 0 ? (
+            <Row className="push--top">
+              <Col lg={12}>
+                Total round 1 tokens {round1Tokens} at {round1Rate} eth/token
+              </Col>
+            </Row>
+          ) : null}
           <Row>
-            <label>
-              Total round 2 tokens {round2Tokens} at {round2Rate} eth/token
-            </label>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                forceNumeric
+                inputName="Round2 Target in USD"
+                inputLabel="Round2 Target in USD"
+                inputPlaceholder=""
+                inputValue={round2TargetUSD}
+                disabled={!allowEditAll}
+                onChange={this.onChangeRound2TargetUSD}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                forceNumeric
+                inputName="Round2 Target in Eth"
+                inputLabel="Round2 Target in Eth"
+                inputPlaceholder=""
+                inputValue={round2TargetEth}
+                disabled={!allowEditAll}
+                onChange={this.onChangeRound2TargetEth}
+              />
+            </Col>
           </Row>
-        ) : null}
-        <Row>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              forceNumeric
-              inputName="Round3 Target in USD"
-              inputLabel="Round3 Target in USD"
-              inputPlaceholder=""
-              inputValue={round3TargetUSD}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeRound3TargetUSD}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              forceNumeric
-              inputName="Round3 Target in Eth"
-              inputLabel="Round3 Target in Eth"
-              inputPlaceholder=""
-              inputValue={round3TargetEth}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeRound3TargetEth}
-            />
-          </Col>
-        </Row>
-        {round3Tokens > 0 ? (
+          {round2Tokens > 0 ? (
+            <Row className="push--top">
+              <Col lg={12}>
+                Total round 2 tokens {round2Tokens} at {round2Rate} eth/token
+              </Col>
+            </Row>
+          ) : null}
           <Row>
-            <label>
-              Total round 3 tokens {round3Tokens} at {round3Rate} eth/token
-            </label>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                forceNumeric
+                inputName="Round3 Target in USD"
+                inputLabel="Round3 Target in USD"
+                inputPlaceholder=""
+                inputValue={round3TargetUSD}
+                disabled={!allowEditAll}
+                onChange={this.onChangeRound3TargetUSD}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                forceNumeric
+                inputName="Round3 Target in Eth"
+                inputLabel="Round3 Target in Eth"
+                inputPlaceholder=""
+                inputValue={round3TargetEth}
+                disabled={!allowEditAll}
+                onChange={this.onChangeRound3TargetEth}
+              />
+            </Col>
           </Row>
-        ) : null}
-        <Row>
-          <Col lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              forceNumeric
-              inputName="Round1 Bonus"
-              inputLabel="Round1 Bonus"
-              inputPlaceholder=""
-              inputValue={r1Bonus}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeR1Bonus}
-              // error={!!this.getErrorMsg(actionTypes.R1_BONUS_CHANGED)}
-              // helperText={this.getErrorMsg(actionTypes.R1_BONUS_CHANGED)}
-            />
-          </Col>
-          <Col lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              forceNumeric
-              inputName="Round2 Bonus"
-              inputLabel="Round2 Bonus"
-              inputPlaceholder=""
-              inputValue={r2Bonus}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeR2Bonus}
-              error={!!this.getErrorMsg(actionTypes.R2_BONUS_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.R2_BONUS_CHANGED)}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col lg={12}>
-            <ButtonComponent
-              label="Calculate"
-              onClick={this.onCalculateTokenClicked}
-              disabled={
-                errors[actionTypes.R2_BONUS_CHANGED] !== "" ||
-                !validateLength(round1TargetEth) ||
-                !validateLength(round1TargetUSD) ||
-                !validateLength(round2TargetEth) ||
-                !validateLength(round2TargetUSD) ||
-                !validateLength(round3TargetEth) ||
-                !validateLength(round3TargetUSD) ||
-                !validateLength(r1Bonus) ||
-                !validateLength(r2Bonus)
-              }
-            />
-          </Col>
-        </Row>
+          {round3Tokens > 0 ? (
+            <Row className="push--top">
+              <Col lg={12}>
+                Total round 3 tokens {round3Tokens} at {round3Rate} eth/token
+              </Col>
+            </Row>
+          ) : null}
+          <Row>
+            <Col lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                forceNumeric
+                inputName="Round1 Bonus"
+                inputLabel="Round1 Bonus"
+                inputPlaceholder=""
+                inputValue={r1Bonus}
+                disabled={!allowEditAll}
+                onChange={this.onChangeR1Bonus}
+                // error={!!this.getErrorMsg(actionTypes.R1_BONUS_CHANGED)}
+                // helperText={this.getErrorMsg(actionTypes.R1_BONUS_CHANGED)}
+              />
+            </Col>
+            <Col lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                forceNumeric
+                inputName="Round2 Bonus"
+                inputLabel="Round2 Bonus"
+                inputPlaceholder=""
+                inputValue={r2Bonus}
+                onChange={this.onChangeR2Bonus}
+                error={!!this.getErrorMsg(actionTypes.R2_BONUS_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.R2_BONUS_CHANGED)}
+              />
+            </Col>
+          </Row>
+          <Row className="push--top">
+            <Col lg={12}>
+              <ButtonComponent
+                label="Calculate"
+                style={{padding: '0 40px'}}
+                onClick={this.onCalculateTokenClicked}
+                disabled={
+                  errors[actionTypes.R2_BONUS_CHANGED] !== "" ||
+                  !validateLength(round1TargetEth) ||
+                  !validateLength(round1TargetUSD) ||
+                  !validateLength(round2TargetEth) ||
+                  !validateLength(round2TargetUSD) ||
+                  !validateLength(round3TargetEth) ||
+                  !validateLength(round3TargetUSD) ||
+                  !validateLength(r1Bonus) ||
+                  !validateLength(r2Bonus)
+                }
+              />
+            </Col>
+          </Row>
+        </div>
         <AlertModal open={modalOpen} handleClose={this.handleClose}>
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />

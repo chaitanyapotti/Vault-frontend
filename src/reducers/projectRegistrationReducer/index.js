@@ -83,6 +83,8 @@ export const initialState = {
   uploadingThumbnail: false,
   thumbnailUrl: "",
   allowEditAll: false,
+  manageDaico: false,
+  projectStatesReceived: false,
   errors: {
     [actionTypes.ADMIN_NAME_CHANGED]: "",
     [actionTypes.ADMIN_EMAIL_CHANGED]: ""
@@ -94,26 +96,33 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case actionTypes.PROJECT_STATES_SUCCESS: {
       const { allowEditAll } = state || false
+      const { manageDaico } = state || false
       if ('state' in action.payload){
         const { state: oldState } = action.payload
-        return { ...oldState, project_id: "", allowEditAll: allowEditAll}
+        return { ...oldState, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico}
       }else{
         return {
-          ...state, project_id: "", allowEditAll: allowEditAll
+          ...state, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico
         }
       }
     }
 
+    case actionTypes.PROJECT_STATES_FAILED: {
+      return {
+        ...state, projectStatesReceived: true
+      }
+    }
+
     case actionTypes.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS:{
-      const { currentDeploymentIndicator } = action.payload || 0 
       let allowEditAll = false
-      if (currentDeploymentIndicator>0){
-        allowEditAll = false
+      let manageDaico = false
+      if ('currentDeploymentIndicator' in action.payload){
+        manageDaico = true
       }else{
         allowEditAll = true
       }
       return {
-        ...state, allowEditAll: allowEditAll
+        ...state, allowEditAll: allowEditAll, manageDaico: manageDaico
       }
     }
 
@@ -351,8 +360,17 @@ export default function(state = initialState, action) {
     case actionTypes.PROJECT_REGISTRATION_SUCCESS: {
       return {
         ...state,
-        project_id: action.payload
+        project_id: action.payload,
+        manageDaico: true,
+        currentDeploymentIndicator: 0
       };
+    }
+
+    case actionTypes.PROJECT_METADATA_SUCCESS: {
+      return {
+        ...state, 
+        project_id: action.payload
+      }
     }
 
     case actionTypes.ADMIN_NAME_CHANGED: {

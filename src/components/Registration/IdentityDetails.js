@@ -136,271 +136,225 @@ class IdentityDetails extends React.Component {
       allowEditAll
     } = this.props || {};
     return (
-      <CUICard style={{ padding: "40px 67px" }}>
-        <div className="txt-xl">Identity Details</div>
+      <CUICard className="card-brdr">
+        <div className="txt-xl" style={{ padding: "40px 50px" }}>Identity Details</div>
         <hr />
-        <Row>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="Admin Name"
-              inputLabel="Admin Name"
-              inputPlaceholder="Eg. Adam Smith"
-              inputValue={adminName}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeName}
-              error={!!this.getErrorMsg(actionTypes.ADMIN_NAME_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.ADMIN_NAME_CHANGED)}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="Admin Email"
-              inputLabel="Admin Email"
-              inputPlaceholder="Eg. admin@electus.network"
-              inputValue={adminEmail}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeEmail}
-              error={!!this.getErrorMsg(actionTypes.ADMIN_EMAIL_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.ADMIN_EMAIL_CHANGED)}
-            />
-          </Col>
-        </Row>
+        <div style={{ padding: "20px 50px" }}>
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="Admin Name"
+                inputLabel="Admin Name"
+                inputPlaceholder="Eg. Adam Smith"
+                inputValue={adminName}
+                disabled={!allowEditAll}
+                onChange={this.onChangeName}
+                error={!!this.getErrorMsg(actionTypes.ADMIN_NAME_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.ADMIN_NAME_CHANGED)}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="Admin Email"
+                inputLabel="Admin Email"
+                inputPlaceholder="Eg. admin@electus.network"
+                inputValue={adminEmail}
+                disabled={!allowEditAll}
+                onChange={this.onChangeEmail}
+                error={!!this.getErrorMsg(actionTypes.ADMIN_EMAIL_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.ADMIN_EMAIL_CHANGED)}
+              />
+            </Col>
+          </Row>
 
-        <Row>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="Project Name"
-              inputLabel="Project Name"
-              inputPlaceholder="Eg. Electus"
-              inputValue={projectName}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeProject}
-              error={!!this.getErrorMsg(actionTypes.PROJECT_NAME_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.PROJECT_NAME_CHANGED)}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="ERC20 Ticker"
-              inputLabel="ERC20 Ticker"
-              inputPlaceholder="Eg. ELE"
-              inputValue={erc20TokenTag}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeErc20Tag}
-              error={!!this.getErrorMsg(actionTypes.ERC20_TAG_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.ERC20_TAG_CHANGED)}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              multiline={true}
-              inputName="Project Description"
-              inputLabel="Project Description"
-              inputPlaceholder="Eg. Protocol for Decentralized Organizations"
-              inputValue={projectDescription}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangePrjctDesc}
-            />
-          </Col>
-        </Row>
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="Project Name"
+                inputLabel="Project Name"
+                inputPlaceholder="Eg. Electus"
+                inputValue={projectName}
+                disabled={!allowEditAll}
+                onChange={this.onChangeProject}
+                error={!!this.getErrorMsg(actionTypes.PROJECT_NAME_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.PROJECT_NAME_CHANGED)}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="ERC20 Ticker"
+                inputLabel="ERC20 Ticker"
+                inputPlaceholder="Eg. ELE"
+                inputValue={erc20TokenTag}
+                disabled={!allowEditAll}
+                onChange={this.onChangeErc20Tag}
+                error={!!this.getErrorMsg(actionTypes.ERC20_TAG_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.ERC20_TAG_CHANGED)}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={12}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                multiline={true}
+                inputName="Project Description"
+                inputLabel="Project Description"
+                inputPlaceholder="Eg. Protocol for Decentralized Organizations"
+                inputValue={projectDescription}
+                onChange={this.onChangePrjctDesc}
+              />
+            </Col>
+          </Row>
 
-        <Row>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="Website Link"
-              inputLabel="Website Link"
-              inputPlaceholder="Eg. electus.network"
-              inputValue={websiteLink}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeWebLink}
-              error={!!this.getErrorMsg(actionTypes.WEBSITE_LINK_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.WEBSITE_LINK_CHANGED)}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="Telegram Link"
-              inputLabel="Telegram Link"
-              inputPlaceholder="Eg. https://t.me/joinchat/FwqASEdUSqFIPNBNwPZzfgz"
-              inputValue={telegramLink}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeTlgrmLink}
-              error={!!this.getErrorMsg(actionTypes.TELEGRAM_LINK_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.TELEGRAM_LINK_CHANGED)}
-            />
-          </Col>
-        </Row>
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="Website Link"
+                inputLabel="Website Link"
+                inputPlaceholder="Eg. electus.network"
+                inputValue={websiteLink}
+                onChange={this.onChangeWebLink}
+                error={!!this.getErrorMsg(actionTypes.WEBSITE_LINK_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.WEBSITE_LINK_CHANGED)}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="Telegram Link"
+                inputLabel="Telegram Link"
+                inputPlaceholder="Eg. https://t.me/joinchat/FwqASEdUSqFIPNBNwPZzfgz"
+                inputValue={telegramLink}
+                onChange={this.onChangeTlgrmLink}
+                error={!!this.getErrorMsg(actionTypes.TELEGRAM_LINK_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.TELEGRAM_LINK_CHANGED)}
+              />
+            </Col>
+          </Row>
 
-        <Row>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="Github Link"
-              inputLabel="Github Link"
-              inputPlaceholder="Eg. https://github.com/chaitanyapotti/"
-              inputValue={githubLink}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeGitLink}
-              error={!!this.getErrorMsg(actionTypes.GITHUB_LINK_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.GITHUB_LINK_CHANGED)}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="Medium Link"
-              inputLabel="Medium Link"
-              inputPlaceholder="Eg. https://medium.com/@ParthaB"
-              inputValue={mediumLink}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeMedLink}
-              error={!!this.getErrorMsg(actionTypes.MEDIUM_LINK_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.MEDIUM_LINK_CHANGED)}
-            />
-          </Col>
-        </Row>
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="Github Link"
+                inputLabel="Github Link"
+                inputPlaceholder="Eg. https://github.com/chaitanyapotti/"
+                inputValue={githubLink}
+                onChange={this.onChangeGitLink}
+                error={!!this.getErrorMsg(actionTypes.GITHUB_LINK_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.GITHUB_LINK_CHANGED)}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="Medium Link"
+                inputLabel="Medium Link"
+                inputPlaceholder="Eg. https://medium.com/@ParthaB"
+                inputValue={mediumLink}
+                onChange={this.onChangeMedLink}
+                error={!!this.getErrorMsg(actionTypes.MEDIUM_LINK_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.MEDIUM_LINK_CHANGED)}
+              />
+            </Col>
+          </Row>
 
-        <Row>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="Facebook Link"
-              inputLabel="Facebook Link"
-              inputPlaceholder="Eg. https://www.facebook.com/electusnetwork/"
-              inputValue={facebookLink}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeFbLink}
-              error={!!this.getErrorMsg(actionTypes.FACEBOOK_LINK_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.FACEBOOK_LINK_CHANGED)}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="Twitter Link"
-              inputLabel="Twitter Link"
-              inputPlaceholder="Eg. https://twitter.com/ElectusNetwork"
-              inputValue={twitterLink}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeTwtLink}
-              error={!!this.getErrorMsg(actionTypes.TWITTER_LINK_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.TWITTER_LINK_CHANGED)}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <CUIFormInput
-              inputType={CUIInputType.TEXT}
-              required
-              full
-              inputName="Team Address"
-              inputLabel="Team Address"
-              inputPlaceholder="Eg. 0xdbf6df7e94e3019e1705e699a8874ac5f6ed753e"
-              inputValue={teamAddress}
-              disabled={!allowEditAll}
-              // onBlur={this.onBlurAge}
-              // error={this.state.errorAgeText !== ''}
-              // helperText={this.state.errorAgeText}
-              // onKeyDownSelector="Admin"
-              onChange={this.onChangeTeamAddress}
-              error={!!this.getErrorMsg(actionTypes.TEAM_ADDRESS_CHANGED)}
-              helperText={this.getErrorMsg(actionTypes.TEAM_ADDRESS_CHANGED)}
-            />
-          </Col>
-        </Row>
+          <Row>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="Facebook Link"
+                inputLabel="Facebook Link"
+                inputPlaceholder="Eg. https://www.facebook.com/electusnetwork/"
+                inputValue={facebookLink}
+                onChange={this.onChangeFbLink}
+                error={!!this.getErrorMsg(actionTypes.FACEBOOK_LINK_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.FACEBOOK_LINK_CHANGED)}
+              />
+            </Col>
+            <Col xs={12} lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="Twitter Link"
+                inputLabel="Twitter Link"
+                inputPlaceholder="Eg. https://twitter.com/ElectusNetwork"
+                inputValue={twitterLink}
+                onChange={this.onChangeTwtLink}
+                error={!!this.getErrorMsg(actionTypes.TWITTER_LINK_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.TWITTER_LINK_CHANGED)}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={6}>
+              <CUIFormInput
+                inputType={CUIInputType.TEXT}
+                required
+                full
+                inputName="Team Address"
+                inputLabel="Team Address"
+                inputPlaceholder="Eg. 0xdbf6df7e94e3019e1705e699a8874ac5f6ed753e"
+                inputValue={teamAddress}
+                disabled={!allowEditAll}
+                onChange={this.onChangeTeamAddress}
+                error={!!this.getErrorMsg(actionTypes.TEAM_ADDRESS_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.TEAM_ADDRESS_CHANGED)}
+              />
+            </Col>
+          </Row>
 
-        <Row className="push--top">
-          <Col lg={6}>
-            <div className="upload-btn-wrapper">
-              <ButtonComponent onClick={() => console.log("clicked")}>Upload Whitepaper</ButtonComponent>
-              <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
-            </div>
-            <span className="push--left">{this.props.whitepaperPDF.name}</span>
-          </Col>
-          <Col lg={6}>
-            <div className="upload-btn-wrapper">
-              <ButtonComponent onClick={() => console.log("clicked")}>Upload Thumbnail</ButtonComponent>
-              <input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
-            </div>
-            <span>{this.props.thumbnailImage.name}</span>
-          </Col>
-        </Row>
-        <Row className="push--top">
-          <Col lg={12}>
-            <div className="text--center">
-              {this.state.thumbnailFile && <img alt="thumbnail" src={this.state.thumbnailFile} width="345" height="200" style={{ backgroundSize: "contain" }} />}
-            </div>
-          </Col>
-        </Row>
+          <Row className="push--top">
+            <Col lg={6}>
+              <div className="upload-btn-wrapper">
+                <ButtonComponent onClick={() => console.log("clicked")}>Upload Whitepaper</ButtonComponent>
+                <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
+              </div>
+              <span className="push--left">{this.props.whitepaperPDF.name}</span>
+            </Col>
+            <Col lg={6}>
+              <div className="upload-btn-wrapper">
+                <ButtonComponent onClick={() => console.log("clicked")}>Upload Thumbnail</ButtonComponent>
+                <input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
+              </div>
+              <span>{this.props.thumbnailImage.name}</span>
+            </Col>
+          </Row>
+          <Row className="push--top">
+            <Col lg={12}>
+              <div className="text--center">
+                {this.state.thumbnailFile && <img alt="thumbnail" src={this.state.thumbnailFile} width="200" height="200" style={{ backgroundSize: "contain" }} />}
+              </div>
+            </Col>
+          </Row>
+        </div>
       </CUICard>
     );
   }

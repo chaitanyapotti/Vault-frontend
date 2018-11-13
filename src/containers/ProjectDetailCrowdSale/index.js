@@ -149,7 +149,9 @@ class ProjectDetailCrowdSale extends Component {
       buyButtonSpinning,
       tokenBalance,
       r1FinalizeButtonSpinning,
-      roundInfo
+      roundInfo,
+      whitelistButtonTransactionHash,
+      buyButtonTransactionHash
     } = this.props || {};
     console.log(tokenBalance);
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
@@ -184,6 +186,7 @@ class ProjectDetailCrowdSale extends Component {
               r1Finish={this.r1Finish()}
               onR1FinalizeClick={this.onR1FinalizeClick}
               r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
+              whitelistButtonTransactionHash={whitelistButtonTransactionHash}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -205,7 +208,7 @@ class ProjectDetailCrowdSale extends Component {
 
         <Row className="push--top">
           <Col xs={12} lg={6}>
-            <CUICard style={{ padding: "40px 50px" }}>
+            <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
               <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
             </CUICard>
           </Col>
@@ -225,6 +228,7 @@ class ProjectDetailCrowdSale extends Component {
           buyTokensOnClick={this.buyTokensOnClick}
           inputText={buyAmount}
           onChange={this.onBuyAmountChange}
+          buyButtonTransactionHash={buyButtonTransactionHash}
         />
       </Grid>
     );
@@ -248,10 +252,11 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => {
   const { projectCrowdSaleReducer, signinManagerData, fetchPriceReducer, projectPreStartReducer } = state || {};
-  const { etherCollected, roundInfo, buyButtonSpinning, tokenBalance, r1FinalizeButtonSpinning } = projectCrowdSaleReducer || {};
+  const { etherCollected, roundInfo, buyButtonSpinning, tokenBalance, r1FinalizeButtonSpinning, buyButtonTransactionHash } =
+    projectCrowdSaleReducer || {};
   const { prices } = fetchPriceReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
-  const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
+  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
   return {
     isCurrentMember,
     buttonSpinning,
@@ -263,7 +268,9 @@ const mapStateToProps = state => {
     prices,
     buyButtonSpinning,
     tokenBalance,
-    r1FinalizeButtonSpinning
+    r1FinalizeButtonSpinning,
+    whitelistButtonTransactionHash,
+    buyButtonTransactionHash
   };
 };
 
@@ -271,3 +278,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(ProjectDetailCrowdSale);
+

@@ -32,12 +32,12 @@ export const initialState = {
   otpVerificationSuccessful: false,
   isIssuerFlag: false,
   isVaultMember: false,
-  isPhoneNumberVerified: false,
   otpFailed: false,
   otpFailedMessage: "",
   conditionOneAccepted: false,
   conditionTwoAccepted: false,
   vaultMembershipRequested: false,
+  vaultMembershipRequestChecked: false,
   errors: {}
 };
 
@@ -49,6 +49,22 @@ export default function(state = initialState, action) {
         ...state,
         passportFileName: action.payload
       };
+    }
+
+    case actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_SUCCESS: {
+      return {
+        ...state, 
+        vaultMembershipRequested: action.payload,
+        vaultMembershipRequestChecked: true
+      }
+    }
+
+    case actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_FAILED: {
+      return {
+        ...state, 
+        vaultMembershipRequested: action.payload,
+        vaultMembershipRequestChecked: true
+      }
     }
 
     case actionTypes.UPLOADING_SELFIE: {
@@ -182,7 +198,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         phoneOrAddressExists: true,
-        errors: localErrors
+        errors: localErrors,
+        otpFromServer: ""
       };
     }
 
@@ -194,19 +211,6 @@ export default function(state = initialState, action) {
       };
     }
 
-    case actionTypes.PHONE_NUMBER_IS_VERIFIED: {
-      return {
-        ...state,
-        isPhoneNumberVerified: true
-      };
-    }
-
-    case actionTypes.PHONE_NUMBER_IS_NOT_VERIFIED: {
-      return {
-        ...state,
-        isPhoneNumberVerified: false
-      };
-    }
 
     case actionTypes.BACK_BUTTON_PRESSED: {
       return { ...state, activeStep: action.payload };
@@ -220,7 +224,7 @@ export default function(state = initialState, action) {
       console.log("user form details: ", action.payload);
       if ("state" in action.payload) {
         const { state: oldState } = action.payload;
-        return { ...oldState, errors: {} };
+        return { ...oldState, errors: {}, vaultMembershipRequestChecked: false };
       }
       return { ...state };
     }

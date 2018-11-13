@@ -38,8 +38,8 @@ export const receivedTransactionHash = body => ({
   type: actionTypes.RECEIVED_TRANSACTION_HASH
 });
 
-export const fetchProjectDetails = projectid => dispatch =>
-{console.log("fetching details: ", projectid);
+export const fetchProjectDetails = projectid => dispatch => {
+  console.log("fetching details: ", projectid);
   axios
     .get(`${config.api_base_url}/db/projects`, { params: { projectid } })
     .then(async response => {
@@ -48,7 +48,7 @@ export const fetchProjectDetails = projectid => dispatch =>
         const { latestTxHash, currentDeploymentIndicator } = data || {};
         dispatch(projectDetailsFetched(data));
         if (latestTxHash !== "0x") {
-          pollTxHash(latestTxHash, projectid, currentDeploymentIndicator);
+          dispatch(pollTxHash(latestTxHash, projectid, currentDeploymentIndicator));
         }
       } else {
         dispatch(projectDetailsFetched({}));
@@ -58,8 +58,7 @@ export const fetchProjectDetails = projectid => dispatch =>
       console.error(err.message);
       dispatch(projectDetailsFetched({}));
     });
-  }
-
+};
 
 export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator) => dispatch => {
   let txHash = latestTxHash;

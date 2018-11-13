@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from 'react-router';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
@@ -21,6 +22,7 @@ import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
 import AlertModal from "../../Common/AlertModal";
 import Warning from "@material-ui/icons/Warning";
+import ContentLoader from "react-content-loader";
 
 // const images = {
 //   metamask: "/assets/Footer/metamask.png"
@@ -179,12 +181,17 @@ class HeaderPartial extends React.Component {
     });
   };
 
-  onHandlePublishDaicoClicked = () => {
-    this.props.searchTextChangeAction("")
-    // this.setState({ searchText: "" });
+  onHandleManageDaicoClicked = () => {
     this.props.history.push({
-      pathname: `/registration`
-    });
+      pathname: "/deploy",
+      search: `?projectid=${this.props.project_id}`
+    })
+  }
+
+  onHandlePublishDaicoClicked = () => {
+    this.props.searchTextChangeAction("");
+    // this.setState({ searchText: "" });
+    this.props.history.push( `/registration`);
   };
 
   searchProject = e => {
@@ -251,9 +258,20 @@ class HeaderPartial extends React.Component {
           </MenuItem>
         ) : null}
         {this.props.signinStatusFlag === 5 ? (
-          <MenuItem onClick={this.onHandlePublishDaicoClicked}>
-            <div>Publish DAICO</div>
+          <div>
+          {
+            this.props.manageDaico? (
+              <MenuItem onClick={this.onHandleManageDaicoClicked}>
+            <div>Manage DAICO</div>
           </MenuItem>
+            ):(
+              <MenuItem onClick={this.onHandlePublishDaicoClicked}>
+            <div>Publish DAICO</div>
+          </MenuItem>    
+            )
+          }
+          </div>
+          
         ) : null}
       </Menu>
     );
@@ -316,9 +334,18 @@ class HeaderPartial extends React.Component {
                         ) : null}
                         {this.props.signinStatusFlag === 5 ? (
                           <div className="hdr-itm-pad text--primary txt-m">
-                            <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">
-                              Publish DAICO
+                            {
+                              this.props.manageDaico ? (
+                                <div onClick={this.onHandleManageDaicoClicked} className="hvr-underline-from-left">
+                                  Manage DAICO
                             </div>
+                              ) : (
+                                  <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">
+                                    Publish DAICO
+                            </div>
+                                )
+                            }
+                            
                           </div>
                         ) : null}
 
@@ -346,7 +373,7 @@ class HeaderPartial extends React.Component {
                                 ),
                                 2: (
                                   <div>
-                                    <ButtonComponent>Wrong network</ButtonComponent>
+                                    <ButtonComponent onClick={()=>{}}>Wrong network</ButtonComponent>
                                     <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div>
@@ -366,13 +393,13 @@ class HeaderPartial extends React.Component {
                                 ),
                                 4: (
                                   <div>
-                                    <ButtonComponent style={{boxShadow: 'none' }}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
+                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={()=>{}}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 5: (
                                   <div>
-                                    <ButtonComponent style={{boxShadow: 'none' }}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
+                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={()=>{}}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
                                   </div>
                                 )
                               }[this.props.signinStatusFlag]
@@ -417,15 +444,24 @@ class HeaderPartial extends React.Component {
                 ) : null}
                 {this.props.signinStatusFlag === 5 ? (
                   <div className="hdr-itm-pad text--primary txt-m">
-                    <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">
+                  {
+                              this.props.manageDaico ? (
+                                <div onClick={this.onHandleManageDaicoClicked} className="hdr-itm-pad text--primary txt-m">
+                      Manage DAICO
+                    </div>
+                              ) : (
+                                <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">
                       Publish DAICO
                     </div>
-                  </div>
+                                )
+                            }
+                    
+                    </div>
                 ) : null}
               </div>
             </Drawer>
           </div>
-        ) : null}
+        ) : <ContentLoader style={scrnWdh < 768 ? { height: "60px" } : { height: "85px", padding: 0 }}/>}
         <AlertModal open={signInModalOpen} handleClose={this.handleSignInModalClose}>
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />
@@ -465,7 +501,10 @@ const mapStateToProps = state => {
     isMetamaskNetworkChecked,
     isMetamaskInstallationChecked,
     isUserDefaultAccountChecked,
-    isVaultMembershipChecked
+    isVaultMembershipChecked,
+    manageDaico,
+    deploymentIndicator,
+    project_id
   } = state.signinManagerData || {};
 
   const {
@@ -484,7 +523,10 @@ const mapStateToProps = state => {
     isMetamaskInstallationChecked,
     isUserDefaultAccountChecked,
     isVaultMembershipChecked,
-    searchText
+    searchText,
+    manageDaico,
+    deploymentIndicator,
+    project_id
   };
 };
 

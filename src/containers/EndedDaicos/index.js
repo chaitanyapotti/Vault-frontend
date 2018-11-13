@@ -41,7 +41,7 @@ class EndedDaicos extends Component {
     const data = endedDaicosTable.map(item => {
       const { projectName, startDateTime, endedAt, raisedAmount, tokenPrice, killConsensus, _id, thumbnailUrl } = item || {};
       const dataArray = [
-        {projectName, thumbnailUrl},
+        { projectName, thumbnailUrl },
         formatMoney(formatFromWei(parseFloat(raisedAmount)), 0),
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * parseFloat(ETH), 3))),
         `${killConsensus}%`,
@@ -56,30 +56,32 @@ class EndedDaicos extends Component {
         <GridData
           history={history}
           tableData={data}
-          columns={
-            [
-              {
-                name: "Name",
-                options:{
-                  customBodyRender: (value) => {
-                    const {projectName, thumbnailUrl} = value || {};
-                    return(
-                      <div style={{width:'130px'}} className="hl">
-                        <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                        <div className="hli pos-rel txt push--left" style={{top: '10px'}}>{projectName}</div>
+          filter={false}
+          columns={[
+            {
+              name: "Name",
+              options: {
+                customBodyRender: value => {
+                  const { projectName, thumbnailUrl } = value || {};
+                  return (
+                    <div style={{ width: "130px" }} className="hl">
+                      <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                      <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
+                        {projectName}
                       </div>
-                    )
-                  }
-                }
-              }, 
-              "Raised*", 
-              "Price*", 
-              "Kill Consensus", 
-              "Started at (UTC)", 
-              "Ended at (UTC)", 
-              { name: "Id", options: { display: false } }
-            ]
-          }
+                    </div>
+                  );
+                },
+                filter: false
+              }
+            },
+            { name: "Raised", options: { filter: false } },
+            { name: "Price*", options: { filter: false } },
+            { name: "Kill Consensus", options: { filter: false } },
+            { name: "Started at (UTC)", options: { filter: false } },
+            { name: "Ended at (UTC)", options: { filter: false } },
+            { name: "Id", options: { display: false, filter: false } }
+          ]}
         />
       </div>
     );

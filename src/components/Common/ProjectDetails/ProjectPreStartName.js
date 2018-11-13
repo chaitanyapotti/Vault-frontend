@@ -21,8 +21,10 @@ const ProjectPreStartName = props => {
     buttonVisibility,
     priceIncrementFlag,
     buttonSpinning,
-    signinStatusFlag
+    signinStatusFlag,
+    whitelistButtonTransactionHash
   } = props || {};
+  const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
   const { website } = urls;
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
@@ -31,7 +33,7 @@ const ProjectPreStartName = props => {
           <div className="hl">
             <span className="prjct-logo hli" />
             <div className="hli push--left text--primary push-half--top">
-              <div className="txt-xxxl">
+              <div className="txt-xl">
                 {projectName} ({tokenTag})
               </div>
               <div className="txt opacity-75">
@@ -56,7 +58,9 @@ const ProjectPreStartName = props => {
         </Col>
       </Row>
       <Row className="push-half--top txt">
-        <Col lg={12} xs={12} className="fnt-ps">{description}</Col>
+        <Col lg={12} xs={12} className="fnt-ps">
+          {description}
+        </Col>
       </Row>
       <Row className="push--top">
         <Col lg={6} className="text--secondary txt">
@@ -72,12 +76,20 @@ const ProjectPreStartName = props => {
           </div>
         </Col>
         <Col lg={6} className="text-right   ">
-          {signinStatusFlag <= 2 ? (
+          {signinStatusFlag < 3 ? (
             <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
               <div>
-                <LoadingButton style={{padding: '0 40px'}} disabled>{buttonText}</LoadingButton>
+                <LoadingButton style={{ padding: "0 40px" }} disabled>
+                  {buttonText}
+                </LoadingButton>
               </div>
             </Tooltip>
+          ) : whitelistButtonTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
           ) : buttonVisibility ? (
             <LoadingButton onClick={onClick} loading={buttonSpinning}>
               {buttonText}

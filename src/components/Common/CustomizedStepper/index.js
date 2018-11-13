@@ -5,6 +5,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepConnector from '@material-ui/core/StepConnector';
+import { CUICard } from '../../../helpers/material-ui';
 
 const styles = theme => ({
   root: {
@@ -40,6 +41,7 @@ const styles = theme => ({
 class CustomizedStepper extends React.Component {
   
   redirectToIssuerPage = () => {
+    console.log("redirecting to redirectToIssuerPage")
     const { projectid } = this.props || "";
     this.props.history.push({
       pathname: `/issuergovernance/details`,
@@ -62,26 +64,29 @@ class CustomizedStepper extends React.Component {
     );
 
     return (
-      <div className={classes.root}>
-        <Stepper alternativeLabel activeStep={activeStep} connector={connector}>
-          {steps.map(label => (
-            <Step key={label}>
-              <StepLabel><div className="txt">{label}</div></StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <div>
-          {activeStep === steps.length ? (
-            <div>
-              {this.redirectToIssuerPage()}
-            </div>
-          ) : (
-            <div>
-              <div className={classes.instructions}>{getStepContent(activeStep)}</div>
-            </div>
-          )}
+      <CUICard className="card-brdr" style={{padding: "40px 40px"}}>
+        <div className="txt-xl">Deployer</div>
+        <div className={classes.root}>
+          <Stepper alternativeLabel activeStep={activeStep} connector={connector}>
+            {steps.map(label => (
+              <Step key={label}>
+                <StepLabel><div className="txt">{label}</div></StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          <div>
+            {activeStep === steps.length ? (
+              <div>
+                {this.redirectToIssuerPage()}
+              </div>
+            ) : (
+              <div>
+                <div className={classes.instructions}>{getStepContent(activeStep)}</div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </CUICard>
     );
   }
 }

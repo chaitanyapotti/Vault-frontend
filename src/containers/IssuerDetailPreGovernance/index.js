@@ -77,7 +77,9 @@ class IssuerDetailPreGovernance extends Component {
       signinStatusFlag,
       startR1ButtonSpinning,
       r1FinalizeButtonSpinning,
-      currentRoundNumber
+      currentRoundNumber,
+      startR1ButtonTransactionHash,
+      r1FinalizeButtonTransactionHash
     } = this.props || {};
     return (
       <Grid>
@@ -114,6 +116,8 @@ class IssuerDetailPreGovernance extends Component {
               onStartR1Click={this.onStartR1Click}
               isPermissioned={this.isPermissioned()}
               onEditClick={this.onEditClick}
+              startR1ButtonTransactionHash={startR1ButtonTransactionHash}
+              r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -156,8 +160,10 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, signinManagerData, fetchPriceReducer } = state || {};
-  const { etherCollected, roundInfo, r1FinalizeButtonSpinning, startR1ButtonSpinning } = projectCrowdSaleReducer || {};
+  const { projectCrowdSaleReducer, signinManagerData, fetchPriceReducer, issuerDetailGovernanceReducer } = state || {};
+  const { startR1ButtonTransactionHash } = issuerDetailGovernanceReducer;
+  const { etherCollected, roundInfo, r1FinalizeButtonSpinning, startR1ButtonSpinning, r1FinalizeButtonTransactionHash } =
+    projectCrowdSaleReducer || {};
   const { prices } = fetchPriceReducer || {};
   const { userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   return {
@@ -167,7 +173,9 @@ const mapStateToProps = state => {
     signinStatusFlag,
     prices,
     r1FinalizeButtonSpinning,
-    startR1ButtonSpinning
+    startR1ButtonSpinning,
+    startR1ButtonTransactionHash,
+    r1FinalizeButtonTransactionHash
   };
 };
 

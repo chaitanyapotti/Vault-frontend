@@ -80,6 +80,21 @@ export default function(state = initialState, action) {
       spentDots.push(spentArray[spentArray.length - 1]);
       return { ...state, spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray };
     }
+
+    case types.CLEAR_GOVERNANCE_STATES: {
+      return {
+        ...state,     
+        projectDetails: null
+      }
+    }
+
+    case types.CLEAR_PROJECT_DETAILS: {
+      return {
+        ...state,     
+        projectDetails: null
+      }
+    }
+
     case types.PROJECT_DETAILS_FETCHED: {
       const { data } = action.payload || {};
       currentProjDetails = data;

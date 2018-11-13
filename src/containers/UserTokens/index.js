@@ -38,14 +38,15 @@ class UserTokens extends Component {
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = userTokensTable.map(item => {
-      const { projectName, tokenPrice, balance, projectHealth, tapIncrement, killConsensus, killPollStartDate, xfrCount, _id, thumbnailUrl } = item || {};
+      const { projectName, tokenPrice, balance, projectHealth, tapIncrement, killConsensus, killPollStartDate, xfrCount, _id, thumbnailUrl } =
+        item || {};
       const dataArray = [
-        {projectName, thumbnailUrl},
+        { projectName, thumbnailUrl },
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
         `${formatCurrencyNumber(balance, 0)}(${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
         projectHealth,
-        `${tapIncrement}(Yes)`,
-        `${killConsensus}(No)`,
+        `${significantDigits(tapIncrement)}(Yes)`,
+        `${significantDigits(killConsensus)}(No)`,
         r1EndsIn(this.calculateKillDuration(killPollStartDate)),
         xfrCount,
         _id
@@ -57,29 +58,44 @@ class UserTokens extends Component {
         <GridData
           history={history}
           tableData={data}
+          filterList={[[], [], [], [], [], [], [], [], []]}
+          filter={false}
           columns={[
             {
               name: "Name",
-              options:{
-                customBodyRender: (value) => {
-                  const {projectName, thumbnailUrl} = value || {};
-                  return(
-                    <div style={{width:'130px'}} className="hl">
+              options: {
+                customBodyRender: value => {
+                  const { projectName, thumbnailUrl } = value || {};
+                  return (
+                    <div style={{ width: "130px" }} className="hl">
                       <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                      <div className="hli pos-rel txt push--left" style={{top: '10px'}}>{projectName}</div>
+                      <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
+                        {projectName}
+                      </div>
                     </div>
-                  )
-                }
+                  );
+                },
+                filter: false
               }
             },
-            "Price(USD)*",
-            "Tokens",
-            "Health",
-            "Tap Increment*",
-            "Kill Consensus",
-            "Next Kill In",
-            "XFRs",
-            { name: "Id", options: { display: false } }
+            {
+              name: "Price(USD)*",
+              options: {
+                filter: false
+              }
+            },
+            {
+              name: "Tokens",
+              options: {
+                filter: false
+              }
+            },
+            { name: "Health", options: { filter: false } },
+            { name: "Tap Increment*", options: { filter: false } },
+            { name: "Kill Consensus", options: { filter: false } },
+            { name: "Next Kill In", options: { filter: false } },
+            { name: "XFRs", options: { filter: false } },
+            { name: "Id", options: { display: false, filter: false } }
           ]}
         />
       </div>

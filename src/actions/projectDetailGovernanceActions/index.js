@@ -191,12 +191,12 @@ export const xfrPollsHistoryFetchFailed = () => ({
   type: actionTypes.XFR_POLLS_HISTORY_FAILED
 });
 
-export const getKillPollsHistory = projectid => async dispatch => {
+export const getKillPollsHistory = pollFactoryAddress => async dispatch => {
   const network = "rinkeby";
   // await web3.eth.net.getNetworkType();
   axios
-    .get(`${config.api_base_url}/projects/history/killPoll`, {
-      params: { projectid, network }
+    .get(`${config.api_base_url}/db/projects/history/killPoll`, {
+      params: { pollFactoryAddress, network }
     })
     .then(response => {
       const { status, data: killPollsHistorytData } = response || {};
@@ -216,12 +216,12 @@ export const getKillPollsHistory = projectid => async dispatch => {
     });
 };
 
-export const getTapPollsHistory = projectid => async dispatch => {
+export const getTapPollsHistory = pollFactoryAddress => async dispatch => {
   const network = "rinkeby";
   // await web3.eth.net.getNetworkType();
   axios
-    .get(`${config.api_base_url}/projects/history/tapPoll`, {
-      params: { projectid, network }
+    .get(`${config.api_base_url}/db/projects/history/tapPoll`, {
+      params: { pollFactoryAddress, network }
     })
     .then(response => {
       const { status, data: tapPollsHistorytData } = response || {};
@@ -241,12 +241,12 @@ export const getTapPollsHistory = projectid => async dispatch => {
     });
 };
 
-export const getXfrPollsHistory = projectid => async dispatch => {
+export const getXfrPollsHistory = pollFactoryAddress => async dispatch => {
   const network = "rinkeby";
   // await web3.eth.net.getNetworkType();
   axios
-    .get(`${config.api_base_url}/projects/history/xfrPoll`, {
-      params: { projectid, network }
+    .get(`${config.api_base_url}/db/projects/history/xfrPoll`, {
+      params: { pollFactoryAddress, network }
     })
     .then(response => {
       const { status, data: xfrPollsHistorytData } = response || {};
@@ -504,6 +504,10 @@ export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress,
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isKillButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -564,6 +568,10 @@ export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAd
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isKillButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -641,6 +649,10 @@ export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress, 
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isTapButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -697,6 +709,10 @@ export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAdd
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isTapButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -774,6 +790,10 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isXfr1ButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -835,6 +855,10 @@ export const voteInXfr2Poll = (version, contractAddress, userLocalPublicAddress,
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isXfr2ButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -891,6 +915,10 @@ export const revokeVoteInXfr1Poll = (version, contractAddress, userLocalPublicAd
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isXfr1ButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -946,6 +974,10 @@ export const revokeVoteInXfr2Poll = (version, contractAddress, userLocalPublicAd
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isXfr2ButtonSpinning(false));
         });
     })
     .catch(err => {
@@ -999,6 +1031,10 @@ export const finalizeKill = (version, pollFactoryAddress, userLocalPublicAddress
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isKillFinalizeButtonSpinning(false));
         });
     })
     .catch(err => {

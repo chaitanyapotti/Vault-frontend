@@ -11,6 +11,7 @@ class DTPicker extends PureComponent {
         <DateTimePicker
           value={selectedDate}
           ampm={false}
+          fullWidth
           onChange={handleDateChange}
           label={label}
           style={{ margin: "16px 0 8px" }}

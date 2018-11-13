@@ -22,11 +22,34 @@ export const initialState = {
   isMetamaskNetworkChecked: false,
   isMetamaskInstallationChecked: false,
   isUserDefaultAccountChecked: false,
-  isVaultMembershipChecked: false
+  isVaultMembershipChecked: false,
+  isDeploymentIndicatorChecked: false,
+  deploymentIndicator: null, 
+  manageDaico: false,
+  project_id: ""
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
+
+    case types.PROJECT_REGISTRATION_SUCCESS: {
+      return {
+        ...state, manageDaico: true, project_id: action.payload
+      }
+    }
+
+    case types.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS: {
+      let manageDaico = false
+      let project_id = state.project_id || ""
+      const { _id } = action.payload || ""
+      if ('currentDeploymentIndicator' in action.payload){
+        manageDaico = true
+      }
+      return {
+        ...state, manageDaico: manageDaico, project_id: _id
+      }
+    }
+
     case types.ISISSUER_CHECK: {
       const isIssuer = action.payload;
       const signinStatusFlag = state.signinStatusFlag;

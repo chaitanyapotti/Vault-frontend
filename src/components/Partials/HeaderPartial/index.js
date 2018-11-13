@@ -181,6 +181,13 @@ class HeaderPartial extends React.Component {
     });
   };
 
+  onHandleManageDaicoClicked = () => {
+    this.props.history.push({
+      pathname: "/deploy",
+      search: `?projectid=${this.props.project_id}`
+    })
+  }
+
   onHandlePublishDaicoClicked = () => {
     this.props.searchTextChangeAction("");
     // this.setState({ searchText: "" });
@@ -251,9 +258,20 @@ class HeaderPartial extends React.Component {
           </MenuItem>
         ) : null}
         {this.props.signinStatusFlag === 5 ? (
-          <MenuItem onClick={this.onHandlePublishDaicoClicked}>
-            <div>Publish DAICO</div>
+          <div>
+          {
+            this.props.manageDaico? (
+              <MenuItem onClick={this.onHandleManageDaicoClicked}>
+            <div>Manage DAICO</div>
           </MenuItem>
+            ):(
+              <MenuItem onClick={this.onHandlePublishDaicoClicked}>
+            <div>Publish DAICO</div>
+          </MenuItem>    
+            )
+          }
+          </div>
+          
         ) : null}
       </Menu>
     );
@@ -316,9 +334,18 @@ class HeaderPartial extends React.Component {
                         ) : null}
                         {this.props.signinStatusFlag === 5 ? (
                           <div className="hdr-itm-pad text--primary txt-m">
-                            <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">
-                              Publish DAICO
+                            {
+                              this.props.manageDaico ? (
+                                <div onClick={this.onHandleManageDaicoClicked} className="hvr-underline-from-left">
+                                  Manage DAICO
                             </div>
+                              ) : (
+                                  <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">
+                                    Publish DAICO
+                            </div>
+                                )
+                            }
+                            
                           </div>
                         ) : null}
 
@@ -417,9 +444,18 @@ class HeaderPartial extends React.Component {
                 ) : null}
                 {this.props.signinStatusFlag === 5 ? (
                   <div className="hdr-itm-pad text--primary txt-m">
-                    <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">
+                  {
+                              this.props.manageDaico ? (
+                                <div onClick={this.onHandleManageDaicoClicked} className="hdr-itm-pad text--primary txt-m">
+                      Manage DAICO
+                    </div>
+                              ) : (
+                                <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">
                       Publish DAICO
                     </div>
+                                )
+                            }
+                    
                     </div>
                 ) : null}
               </div>
@@ -465,7 +501,10 @@ const mapStateToProps = state => {
     isMetamaskNetworkChecked,
     isMetamaskInstallationChecked,
     isUserDefaultAccountChecked,
-    isVaultMembershipChecked
+    isVaultMembershipChecked,
+    manageDaico,
+    deploymentIndicator,
+    project_id
   } = state.signinManagerData || {};
 
   const {
@@ -484,7 +523,10 @@ const mapStateToProps = state => {
     isMetamaskInstallationChecked,
     isUserDefaultAccountChecked,
     isVaultMembershipChecked,
-    searchText
+    searchText,
+    manageDaico,
+    deploymentIndicator,
+    project_id
   };
 };
 

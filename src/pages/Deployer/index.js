@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {withRouter} from "react-router-dom";
 import qs from "qs";
+import ContentLoader from "react-content-loader";
 import { fetchProjectDetails, deployContractAction, performContractAction } from "../../actions/deployerActions/index";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import web3 from "../../helpers/web3";
@@ -25,16 +26,16 @@ class Deployer extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const { projectDetails, userLocalPublicAddress: currentLocalAddress, history } = this.props || {};
-    const { ownerAddress } = projectDetails || {};
-    const { userLocalPublicAddress: prevLocalAddress } = prevProps || {};
-    if (prevLocalAddress !== currentLocalAddress) {
-      if (ownerAddress !== currentLocalAddress) {
-        history.push("/");
-      }
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   const { projectDetails, userLocalPublicAddress: currentLocalAddress, history } = this.props || {};
+  //   const { ownerAddress } = projectDetails || {};
+  //   const { userLocalPublicAddress: prevLocalAddress } = prevProps || {};
+  //   if (prevLocalAddress !== currentLocalAddress) {
+  //     if (ownerAddress !== currentLocalAddress) {
+  //       history.push("/");
+  //     }
+  //   }
+  // }
 
   deployMembership = () => {
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
@@ -336,10 +337,13 @@ class Deployer extends Component {
   ];
 
   render() {
-    const { projectDetails } = this.props || {};
+    const { projectDetails, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag } = this.props || {};
     const { currentDeploymentIndicator, _id } = projectDetails || {};
     return (
-      <Grid>
+      <div>
+      {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked? 
+      (<div>
+        {signinStatusFlag===5? (<Grid>
         <CustomizedStepper
           history={this.props.history}
           getStepContent={this.getStepContent}
@@ -347,19 +351,27 @@ class Deployer extends Component {
           activeStep={currentDeploymentIndicator}
           projectid={_id}
         />
-      </Grid>
+      </Grid>):(this.props.history.push("/"))
+      }
+      </div>
+        ):(
+        <ContentLoader/>
+      )}
+      </div>
+      
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { userLocalPublicAddress } = state.signinManagerData || {};
+  const { userLocalPublicAddress, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag } = state.signinManagerData || {};
   const { projectDetails, deployContractButtonSpinning, deployContractStartButtonSpinning } = state.deployerReducer || {};
   return {
     projectDetails,
     userLocalPublicAddress,
     deployContractButtonSpinning,
-    deployContractStartButtonSpinning
+    deployContractStartButtonSpinning,
+    isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag
   };
 };
 

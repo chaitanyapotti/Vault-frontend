@@ -37,10 +37,10 @@ const ProjectCrowdSaleName = props => {
           <div className="hl">
             <span className="prjct-logo hli" />
             <div className="hli push--left text--primary push-half--top">
-              <div className="txt-xxxl">
+              <div className="txt-xl">
                 {projectName} ({tokenTag})
               </div>
-              <div className="txt">
+              <div className="txt opacity-75">
                 {price} ETH
                 {priceIncrementFlag ? <span className="txt-inc">{` ${priceIncrement}`}</span> : <div />}
               </div>
@@ -62,17 +62,17 @@ const ProjectCrowdSaleName = props => {
         </Col>
       </Row>
       <Row className="push-half--top txt">
-        <Col>{description}</Col>
+        <Col lg={12} className="fnt-ps">{description}</Col>
       </Row>
       <Row className="push--top">
         <Col lg={6} className="text--secondary txt">
           <div>
-            <a href={whitepaper} target="_blank" rel="noopener noreferrer">
+            <a className="text--secondary" href={whitepaper} target="_blank" rel="noopener noreferrer">
               Read our whitepaper
             </a>
           </div>
           <div>
-            <a href={website} target="_blank" rel="noopener noreferrer">
+            <a className="text--secondary" href={website} target="_blank" rel="noopener noreferrer">
               Learn more on our website
             </a>
           </div>
@@ -82,7 +82,7 @@ const ProjectCrowdSaleName = props => {
             <div className="hli">
               <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
                 <div>
-                  <LoadingButton tooltip="This feature is only for Vault Members" disabled>
+                  <LoadingButton style={{ padding: '0 40px'}} tooltip="This feature is only for Vault Members" disabled>
                     {buttonText}
                   </LoadingButton>
                 </div>
@@ -90,17 +90,17 @@ const ProjectCrowdSaleName = props => {
             </div>
           ) : buttonVisibility ? (
             <span className="hli">
-              <LoadingButton onClick={onClick} loading={buttonSpinning}>
+              <LoadingButton style={{ padding: '0 40px'}} onClick={onClick} loading={buttonSpinning}>
                 {buttonText}
               </LoadingButton>
             </span>
           ) : buyButtonVisibility ? (
             <span className="hli push-left--13">
-              <LoadingButton onClick={onBuyClick}>{buyButtonText}</LoadingButton>
+              <LoadingButton style={{ padding: '0 40px'}} onClick={onBuyClick}>{buyButtonText}</LoadingButton>
             </span>
           ) : r1Finish ? (
             <span className="hli">
-              <LoadingButton onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
+              <LoadingButton style={{ padding: '0 40px'}} onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
                 Initialise Refund
               </LoadingButton>
             </span>

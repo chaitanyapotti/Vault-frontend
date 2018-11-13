@@ -35,7 +35,7 @@ const ProjectGovernanceName = props => {
           <div className="hl">
             <span className="prjct-logo hli" />
             <div className="hli push--left text--primary push-half--top">
-              <div className="txt-xxxl">
+              <div className="txt-xl">
                 {projectName} ({tokenTag})
               </div>
               <div className="txt opacity-75">

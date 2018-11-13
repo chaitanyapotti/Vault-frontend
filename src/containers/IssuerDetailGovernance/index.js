@@ -33,7 +33,7 @@ import { formatFromWei, formatCurrencyNumber, formatDate, significantDigits } fr
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import XfrForm from "../../components/Common/ProjectDetails/XfrForm";
 import IssuerWithdrawCard from "../../components/Common/ProjectDetails/IssuerWithdrawCard";
-
+import MasonaryLayout from "../../components/Common/MasonaryLayout";
 class IssuerDetailGovernance extends Component {
   componentDidMount() {
     const {
@@ -84,9 +84,9 @@ class IssuerDetailGovernance extends Component {
     const { currentRoundNumber } = this.props || {};
     const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
     return (
-      <div>
-        <div>Round {roundNumber} price</div>
-        <div>{1 / tokenRate} ETH</div>
+      <div style={{marginTop: '24px'}}>
+        <div className="text-right">Round {roundNumber} price</div>
+        <div className="text-right opacity-75">{1 / tokenRate} ETH</div>
       </div>
     );
   };
@@ -323,11 +323,12 @@ class IssuerDetailGovernance extends Component {
       xfrDescriptionText,
       xfrAmountText,
       withdrawableAmount
-    } = this.props || {};
+    } = this.props || {}; 
     return (
       <Grid>
-        <Row>
-          <Col xs={12} lg={6}>
+        <MasonaryLayout columns={2}>
+        {/* <Row>
+          <Col xs={12} lg={6}> */}
             <IssuerGovernanceName
               projectName={projectName}
               tokenTag={tokenTag}
@@ -345,8 +346,8 @@ class IssuerDetailGovernance extends Component {
               isPermissioned={this.isPermissioned()}
               onEditClick={this.onEditClick}
             />
-          </Col>
-          <Col xs={12} lg={6}>
+          {/* </Col>
+          <Col xs={12} lg={6}> */}
             <IssuerPDetailGovernance
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
@@ -355,11 +356,11 @@ class IssuerDetailGovernance extends Component {
               totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
               killConsensus={this.getKillConsensus()}
             />
-          </Col>
-        </Row>
+          {/* </Col>
+        </Row> */}
 
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
+        {/* <Row className="push--top">
+          <Col xs={12} lg={6}> */}
             <IssuerTapCard
               currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30))}
               tapIncrementUnit={tapIncrementFactor / 100}
@@ -372,8 +373,8 @@ class IssuerDetailGovernance extends Component {
               onIncrementTapClick={this.onIncrementTapClick}
               onDeployTapPollClick={this.onDeployTapPollClick}
             />
-          </Col>
-          <Col xs={12} lg={6}>
+          {/* </Col>
+          <Col xs={12} lg={6}> */}
             <IssuerWithdrawCard
               currentWithdrawableAmount={formatFromWei(currentWithdrawableAmount, 3)}
               isPermissioned={this.isPermissioned()}
@@ -382,11 +383,11 @@ class IssuerDetailGovernance extends Component {
               inputText={withdrawableAmount}
               onChange={this.onChangeWithdrawAmount}
             />
-          </Col>
-        </Row>
+          {/* </Col>
+        </Row> */}
         {this.canShowXfrPoll() ? (
-          <Row className="push--top">
-            <Col xs={12} lg={6}>
+          // <Row className="push--top">
+          //   <Col xs={12} lg={6}>
               <XfrForm
                 titleText={xfrTitleText}
                 onTitleTextChange={this.onChangeXfrTitle}
@@ -403,14 +404,15 @@ class IssuerDetailGovernance extends Component {
                 onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
                 getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
               />
-            </Col>
-          </Row>
+          //   </Col>
+          // </Row>
         ) : null}
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
+        {/* <Row className="push--top">
+          <Col xs={12} lg={6}> */}
             <IssuerFundReq data={xfrData} details={xfrDetails} tokensUnderGovernance={tokensUnderGovernance} />
-          </Col>
-        </Row>
+          {/* </Col>
+        </Row> */}
+        </MasonaryLayout>
       </Grid>
     );
   }

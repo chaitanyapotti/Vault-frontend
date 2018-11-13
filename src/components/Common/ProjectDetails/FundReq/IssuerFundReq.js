@@ -48,8 +48,8 @@ class IssuerFundReq extends Component {
     const xfr2 = this.getObject2();
     return xfr1 !== null || xfr2 !== null ? (
       <div>
-        <CUICard style={{ padding: "40px 50px" }}>
-          <div className="txt-xxxl text--primary">Exceptional Fund Requests</div>
+        <CUICard className="card-brdr">
+          <div  style={{ padding: "40px 50px" }} className="txt-xxxl text--primary">Exceptional Fund Requests</div>
           <Divider />
           <Row className="push-top--35">
             <Col lg={12} className="txt">

@@ -18,10 +18,8 @@ export const initialState = {
   incrementTapButtonTransactionHash: "",
   deployXfrPollTransactionHash: "",
   withdrawXfrButtonTransactionHash: "",
-
+  withdrawButtonTransactionHash: ""
 };
-
-
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -37,6 +35,22 @@ export default (state = initialState, action) => {
       return {
         ...state,
         withdrawXfrButtonTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.START_NEW_ROUND_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        startNewRoundButtonTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.START_R1_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        startR1ButtonTransactionHash: transactionHash
       };
     }
 
@@ -62,22 +76,13 @@ export default (state = initialState, action) => {
         ...state,
         incrementTapButtonTransactionHash: transactionHash
       };
-    }  
-
+    }
 
     case actionTypes.DEPLOY_TAP_POLL_BUTTON_TRANSACTION_HASH_RECEIVED: {
       const { transactionHash } = action.payload;
       return {
         ...state,
         deployTapPollButtonTransactionHash: transactionHash
-      };
-    }    
-
-    case actionTypes.START_R1_BUTTON_TRANSACTION_HASH_RECEIVED: {
-      const { transactionHash } = action.payload;
-      return {
-        ...state,
-        startR1ButtonTransactionHash: transactionHash
       };
     }
 

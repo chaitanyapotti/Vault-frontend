@@ -19,8 +19,13 @@ const ReqType = props => {
     xfrButtonSpinning,
     tokensUnderGovernance,
     onXfrPollHistoryClick,
-    canXfrClick
+    canXfrClick,
+    xfr1ButtonTransactionHash,
+    xfr2ButtonTransactionHash,
+    xfr2Link,
+    link
   } = props || {};
+  console.log(xfr1ButtonTransactionHash, xfr2ButtonTransactionHash, "4");
   return (
     <div style={{ padding: "40px 50px" }}>
       <Row className="txt-g-secondary txt-m">
@@ -52,17 +57,29 @@ const ReqType = props => {
           {signinStatusFlag <= 3 ? (
             <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
               <div>
-                <LoadingButton style={{padding: '0 40px'}}  disabled type="danger">
+                <LoadingButton style={{ padding: "0 40px" }} disabled type="danger">
                   Deny
                 </LoadingButton>
               </div>
             </Tooltip>
+          ) : xfr1ButtonTransactionHash && xfr1ButtonTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
+          ) : xfr2ButtonTransactionHash && xfr2ButtonTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
           ) : voted ? (
-            <LoadingButton style={{padding: '0 40px'}}  onClick={onRevokeXfrClick} loading={xfrButtonSpinning} disabled={!canXfrClick}>
+            <LoadingButton style={{ padding: "0 40px" }} onClick={onRevokeXfrClick} loading={xfrButtonSpinning} disabled={!canXfrClick}>
               Allow
             </LoadingButton>
           ) : (
-            <LoadingButton style={{padding: '0 40px'}}  onClick={onXfrClick} type="danger" loading={xfrButtonSpinning} disabled={!canXfrClick}>
+            <LoadingButton style={{ padding: "0 40px" }} onClick={onXfrClick} type="danger" loading={xfrButtonSpinning} disabled={!canXfrClick}>
               Deny
             </LoadingButton>
           )}

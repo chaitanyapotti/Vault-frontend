@@ -20,8 +20,12 @@ const XfrForm = props => {
     onWithdrawXfrAmountClick,
     canWithdrawXfrAmount,
     withdrawXfrAmountButtonSpinning,
-    getWithdrawableXfrAmount
+    getWithdrawableXfrAmount,
+    deployXfrPollTransactionHash,
+    withdrawXfrButtonTransactionHash
   } = props || {};
+  const link = `https://rinkeby.etherscan.io/tx/${deployXfrPollTransactionHash}`;
+  const withdrawXfrLink = `https://rinkeby.etherscan.io/tx/${withdrawXfrButtonTransactionHash}`;
   return (
     <Grid>
       <CUICard style={{ padding: "40px 50px" }}>
@@ -87,6 +91,12 @@ const XfrForm = props => {
                   </div>
                 </Tooltip>
               </div>
+            ) : deployXfrPollTransactionHash !== " " ? (
+              <a href={link} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
             ) : (
               <span className="hli">
                 <LoadingButton onClick={onDeployXfrClick} loading={deployXfrButtonSpinning} disabled={!canDeployXfrPoll}>
@@ -109,6 +119,12 @@ const XfrForm = props => {
                   </div>
                 </Tooltip>
               </div>
+            ) : withdrawXfrButtonTransactionHash !== "" ? (
+              <a href={withdrawXfrLink} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
             ) : (
               <span className="hli">
                 <LoadingButton onClick={onWithdrawXfrAmountClick} loading={withdrawXfrAmountButtonSpinning} disabled={!canWithdrawXfrAmount}>

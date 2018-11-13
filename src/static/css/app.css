@@ -14,25 +14,25 @@
 }
 
 @font-face {
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   font-style: normal;
   font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(https://fonts.gstatic.com/s/productsans/v5/HYvgU2fE2nRJvZ5JFAumwegdm0LZdjqr5-oayXSOefg.woff2) format("woff2");
+  src: local("Open Sans"), local("OpenSans"),
+    url(https://fonts.gstatic.com/s/productsans/v5/HYvgU2fE2nRJvZ5JFAumwegdm0LZdjqr5-oayXSOefg.woff2) format("woff2");
 }
 
- *:before,
- *:after {
+*:before,
+*:after {
   box-sizing: border-box;
- }
+}
 
 /* -------------------------------------------------- */
 /* Font Families */
 /* -------------------------------------------------- */
 
 .fnt-ps {
-  font-family: 'Product Sans'
+  font-family: "Product Sans";
 }
-
 
 /* End */
 
@@ -57,7 +57,7 @@ body {
   box-sizing: border-box;
 }
 
-.main-container{
+.main-container {
   min-height: 100vh; /* will cover the 100% of viewport */
   overflow: hidden;
   display: block;
@@ -72,26 +72,26 @@ a {
   cursor: pointer;
 }
 
-a:hover{
+a:hover {
   text-decoration: none;
 }
 
-button{
+button {
   transition: 250ms;
 }
-  
-button:hover{
+
+button:hover {
   box-shadow: 0px 10px 20px 0px hsla(208, 97%, 64%, 0.5) !important;
   transform: translate(0px, -5px) !important;
-  transition: 250ms; 
+  transition: 250ms;
 }
 
-button:active{
+button:active {
   background: #198bd1 !important;
   transition-timing-function: ease-in;
 }
 
-text{
+text {
   font-size: 16px !important;
 }
 
@@ -285,6 +285,10 @@ button:focus {
   background: #f23333 !important;
 }
 
+.bg--pending {
+  background: yellow !important;
+}
+
 .bg--g-default {
   background: #f1f1f2;
 }
@@ -309,8 +313,8 @@ button:focus {
   background: #95959d;
 }
 
-.bg-yellow{
-  background-color:  #f7c34f !important;
+.bg-yellow {
+  background-color: #f7c34f !important;
 }
 
 /* -------------------------------------------------- */
@@ -398,8 +402,8 @@ button:focus {
 /* Text ellipsis */
 /* -------------------------------------------------- */
 
-.txt-ellipsis{
-  white-space: nowrap; 
+.txt-ellipsis {
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -560,24 +564,22 @@ button:focus {
   }
 }
 
-
 /* -------------------------------------------------- */
 /* Extra */
 /* -------------------------------------------------- */
 
-.opacity-75{
+.opacity-75 {
   opacity: 0.75;
 }
 
-.card-brdr{
-  border: 1.75px solid #EAEAEA !important;
+.card-brdr {
+  border: 1.75px solid #eaeaea !important;
   box-shadow: none !important;
 }
 
-.txt-no-wrp{
+.txt-no-wrp {
   white-space: nowrap;
 }
-
 
 /* -------------------------------------------------- */
 /* somesh css edits*/

@@ -27,9 +27,11 @@ const ProjectCrowdSaleName = props => {
     signinStatusFlag,
     r1Finish,
     onR1FinalizeClick,
-    r1FinalizeButtonSpinning
+    r1FinalizeButtonSpinning,
+    whitelistButtonTransactionHash
   } = props || {};
   const { website } = urls;
+  const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
@@ -88,6 +90,12 @@ const ProjectCrowdSaleName = props => {
                 </div>
               </Tooltip>
             </div>
+          ) : whitelistButtonTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
           ) : buttonVisibility ? (
             <span className="hli">
               <LoadingButton onClick={onClick} loading={buttonSpinning}>

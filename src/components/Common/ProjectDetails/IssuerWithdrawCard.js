@@ -6,8 +6,17 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
 
 const IssuerWithdrawCard = props => {
-  const { currentWithdrawableAmount, isPermissioned, withdrawButtonSpinning, onWithdrawAmountClick, inputText, onChange } = props || {};
+  const {
+    currentWithdrawableAmount,
+    isPermissioned,
+    withdrawButtonSpinning,
+    onWithdrawAmountClick,
+    inputText,
+    onChange,
+    withdrawButtonTransactionHash
+  } = props || {};
   const canWithdraw = parseFloat(currentWithdrawableAmount) >= parseFloat(inputText);
+  const link = `https://rinkeby.etherscan.io/tx/${withdrawButtonTransactionHash}`;
   return (
     <div>
       <CUICard style={{ padding: "40px 50px" }}>
@@ -44,6 +53,12 @@ const IssuerWithdrawCard = props => {
                 </div>
               </Tooltip>
             </div>
+          ) : withdrawButtonTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
           ) : (
             <span className="hli">
               <LoadingButton onClick={onWithdrawAmountClick} loading={withdrawButtonSpinning} disabled={!canWithdraw}>

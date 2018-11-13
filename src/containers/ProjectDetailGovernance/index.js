@@ -398,7 +398,8 @@ class ProjectDetailGovernance extends Component {
     const { voted: tapVoted } = tapVoteData || {};
     const { voted: xfr1Voted } = xfrVoteData[0] || {};
     const { voted: xfr2Voted } = xfrVoteData[1] || {};
-    return killVoted || tapVoted || xfr1Voted || xfr2Voted;
+    console.log(typeof killVoted, typeof tapVoted, typeof xfr1Voted, typeof xfr2Voted, "voted")
+    return killVoted === "true" || tapVoted === "true" || xfr1Voted === true || xfr2Voted === true;
   };
 
   unlockTokensClick = () => {
@@ -407,16 +408,16 @@ class ProjectDetailGovernance extends Component {
     const { voted: tapVoted } = tapVoteData || {};
     const { voted: xfr1Voted } = xfrVoteData[0] || {};
     const { voted: xfr2Voted } = xfrVoteData[1] || {};
-    if (killVoted) {
+    if (killVoted === "true") {
       this.onRevokeKillClick();
     }
-    if (tapVoted) {
+    if (tapVoted === "true") {
       this.onRevokeTapClick();
     }
-    if (xfr1Voted) {
+    if (xfr1Voted === true) {
       this.onRevokeXfr1Click();
     }
-    if (xfr2Voted) {
+    if (xfr2Voted === true) {
       this.onRevokeXfr2Click();
     }
   };
@@ -428,16 +429,16 @@ class ProjectDetailGovernance extends Component {
     const { voted: tapVoted } = tapVoteData || {};
     const { voted: xfr1Voted } = xfrVoteData[0] || {};
     const { voted: xfr2Voted } = xfrVoteData[1] || {};
-    if (killVoted) {
+    if (killVoted === "true") {
       pollCount += 1;
     }
-    if (tapVoted) {
+    if (tapVoted === "true") {
       pollCount += 1;
     }
-    if (xfr1Voted) {
+    if (xfr1Voted === true) {
       pollCount += 1;
     }
-    if (xfr2Voted) {
+    if (xfr2Voted === true) {
       pollCount += 1;
     }
     return pollCount;
@@ -490,7 +491,15 @@ class ProjectDetailGovernance extends Component {
       dateArray,
       history,
       killAcceptancePercent,
-      tapPollConsensus
+      tapPollConsensus,
+      buyButtonTransactionHash,
+      whitelistButtonTransactionHash,
+      xfr1ButtonTransactionHash,
+      xfr2ButtonTransactionHash,
+      killButtonTransactionHash,
+      tapButtonTransactionHash,
+      r1EndTime,
+      killFinalizeTransactionHash
     } = this.props || {};
     const {
       modalOpen,
@@ -530,6 +539,7 @@ class ProjectDetailGovernance extends Component {
       return dataArray;
     });
     const killOnsensus = parseFloat(this.getKillConsensus()) > parseFloat(killAcceptancePercent);
+    const link = `https://rinkeby.etherscan.io/tx/${killFinalizeTransactionHash}`;
     return (
       <Grid>
         {this.killFinish() ? (
@@ -547,9 +557,17 @@ class ProjectDetailGovernance extends Component {
                   <div> Click on the button to initiate “KILL” execution</div>
                 </Col>
                 <Col lg={6}>
+                {
+                  killFinalizeTransactionHash !== "" ? (
+                  <a href={link} target="_blank" rel="noreferrer noopener">
+                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                  </a>):
                   <LoadingButton onClick={this.onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!this.killFinish()}>
                     Kill Execute
                   </LoadingButton>
+                }
                 </Col>
               </Row>
             </Grid>
@@ -576,6 +594,7 @@ class ProjectDetailGovernance extends Component {
                 buyButtonVisibility={isCurrentMember && currentRoundNumber !== "4"}
                 onBuyClick={this.buyTokens}
                 buyButtonText="Buy"
+                whitelistButtonTransactionHash={whitelistButtonTransactionHash}
                 tradeButtonVisibility
                 tradeUrl={this.getTradeUrl()}
               />
@@ -603,6 +622,8 @@ class ProjectDetailGovernance extends Component {
                 killFinish={this.killFinish()}
                 onUnlockTokensClick={this.handleUnlockTokensOpen}
                 onKillPollsHistoryClick={this.handleKillPollsHistoryOpen}
+                killButtonTransactionHash={killButtonTransactionHash}
+                r1EndTime={r1EndTime}
               />
             {/* </Col>
           </Row> */}
@@ -622,6 +643,7 @@ class ProjectDetailGovernance extends Component {
                 onUnlockTokensClick={this.handleUnlockTokensOpen}
                 onTapPollsHistoryClick={this.handleTapPollsHistoryOpen}
                 tapPollConsensus={tapPollConsensus}
+                tapButtonTransactionHash={tapButtonTransactionHash}
               />
             {/* </Col>
             <Col xs={12} lg={6}> */}
@@ -645,6 +667,8 @@ class ProjectDetailGovernance extends Component {
                 tokensUnderGovernance={tokensUnderGovernance}
                 onXfrPollHistoryClick={this.handleXfrPollsHistoryOpen}
                 canXfrClick={this.canXfrClick()}
+                xfr1ButtonTransactionHash = {xfr1ButtonTransactionHash}
+                xfr2ButtonTransactionHash = {xfr2ButtonTransactionHash}
               />
             {/* </Col>
             <Col xs={12} lg={6}> */}
@@ -717,6 +741,7 @@ class ProjectDetailGovernance extends Component {
           buyTokensOnClick={this.buyTokensOnClick}
           inputText={buyAmount}
           onChange={this.onBuyAmountChange}
+          buyButtonTransactionHash={buyButtonTransactionHash}
         />
       </Grid>
     );
@@ -724,7 +749,7 @@ class ProjectDetailGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, projectDetailGovernanceReducer, projectPreStartReducer, signinManagerData, fetchPriceReducer } = state || {};
+  const { projectDetailGovernanceReducer, projectPreStartReducer, signinManagerData, fetchPriceReducer, projectCrowdSaleReducer } = state || {};
   const { etherCollected, roundInfo, tokenBalance, buyButtonSpinning } = projectCrowdSaleReducer || {};
   const {
     tokensUnderGovernance,
@@ -749,13 +774,18 @@ const mapStateToProps = state => {
     voteHistogramData,
     totalVotes,
     collectiveVoteWeight,
-    xfr1ButtonTransactionHash
+    xfr1ButtonTransactionHash,
+    xfr2ButtonTransactionHash,
+    killButtonTransactionHash,
+    tapButtonTransactionHash,
+    killFinalizeTransactionHash
   } = projectDetailGovernanceReducer || {};
-  const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
+  console.log(xfr1ButtonTransactionHash, xfr2ButtonTransactionHash, "1")
+  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { prices } = fetchPriceReducer || {};
   const { spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray } = state.deployerReducer || {}
-
+  const { buyButtonTransactionHash } = projectCrowdSaleReducer;
   return {
     etherCollected,
     roundInfo,
@@ -790,7 +820,13 @@ const mapStateToProps = state => {
     totalVotes,
     collectiveVoteWeight,
     spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray,
-    xfr1ButtonTransactionHash
+    buyButtonTransactionHash,
+    whitelistButtonTransactionHash,
+    xfr1ButtonTransactionHash,
+    xfr2ButtonTransactionHash,
+    killButtonTransactionHash,
+    tapButtonTransactionHash,
+    killFinalizeTransactionHash
   };
 };
 

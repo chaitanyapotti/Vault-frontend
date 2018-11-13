@@ -23,13 +23,22 @@ const PDetailGovernance = props => {
     signinStatusFlag,
     canUnlockTokens,
     onUnlockTokensClick,
-    onKillPollsHistoryClick
+    onKillPollsHistoryClick,
+    killButtonTransactionHash,
+    r1EndTime
   } = props || {};
+  const link = `https://rinkeby.etherscan.io/tx/${killButtonTransactionHash}`;
   return (
     <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
       <Row>
-        <Col className="txt-xxxl text--primary" lg={6}>Project Details</Col>
-        <Col className="push-half--top text-right" lg={6}><a rel="noopener" onClick={onKillPollsHistoryClick}>Kill Polls History</a></Col>
+        <Col className="txt-xxxl text--primary" lg={6}>
+          Project Details
+        </Col>
+        <Col className="push-half--top text-right" lg={6}>
+          <a rel="noopener" onClick={onKillPollsHistoryClick}>
+            Kill Polls History
+          </a>
+        </Col>
       </Row>
       <Row className="push-top--35">
         <Col lg={6} className="txt">
@@ -48,7 +57,7 @@ const PDetailGovernance = props => {
           <div className="text--secondary">{voteSaturationLimit}%</div>
         </Col>
         <Col lg={6} className="txt">
-          <div className="txt-bold">Kill Attempts Left:</div> 
+          <div className="txt-bold">Kill Attempts Left:</div>
           <div className="text--secondary">{killAttemptsLeft}</div>
         </Col>
       </Row>
@@ -69,7 +78,7 @@ const PDetailGovernance = props => {
           <div className="text--secondary">{yourTokenValue}</div>
         </Col>
         <Col lg={6} className="txt">
-          <div className="txt-bold">Your Refund Value:</div> 
+          <div className="txt-bold">Your Refund Value:</div>
           <div className="text--secondary">{yourRefundValue}</div>
         </Col>
       </Row>
@@ -84,10 +93,10 @@ const PDetailGovernance = props => {
           <div className="text--secondary">{killConsensus}%</div>
         </Col>
       </Row>
-      
+
       <Row>
         <Col lg={6} className="push--top">
-          <LoadingButton style={{padding: '0 40px'}} onClick={onUnlockTokensClick} disabled={canUnlockTokens}>
+          <LoadingButton style={{ padding: "0 40px" }} onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
             Unlock All Tokens
           </LoadingButton>
         </Col>
@@ -95,18 +104,37 @@ const PDetailGovernance = props => {
           {signinStatusFlag <= 3 ? (
             <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
               <div>
-                <LoadingButton style={{padding: '0 40px'}} type="danger" disabled>Kill Project</LoadingButton>
+                <LoadingButton style={{ padding: "0 40px" }} type="danger" disabled>
+                  Kill Project
+                </LoadingButton>
               </div>
             </Tooltip>
-          ) : killVoteStatus === "false" ? (
-            <LoadingButton style={{padding: '0 40px'}} onClick={onKillClick} type="danger" loading={killButtonSpinning} disabled={parseFloat(yourTokens) <= 0}>
+          ) : killButtonTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
+          ) : killVoteStatus === "false" && new Date() >= new Date(r1EndTime) ? (
+            <LoadingButton
+              style={{ padding: "0 40px" }}
+              onClick={onKillClick}
+              type="danger"
+              loading={killButtonSpinning}
+              disabled={parseFloat(yourTokens) <= 0}
+            >
               Vote in Kill Poll
             </LoadingButton>
-          ) : (
-            <LoadingButton style={{padding: '0 40px'}} onClick={onRevokeKillClick} loading={killButtonSpinning} disabled={parseFloat(yourTokens) <= 0}>
+          ) : new Date() >= new Date(r1EndTime) ? (
+            <LoadingButton
+              style={{ padding: "0 40px" }}
+              onClick={onRevokeKillClick}
+              loading={killButtonSpinning}
+              disabled={parseFloat(yourTokens) <= 0}
+            >
               UnVote in Kill Poll
             </LoadingButton>
-          )}
+          ) : null}
         </Col>
       </Row>
       {/* <Row>

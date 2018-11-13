@@ -63,6 +63,10 @@ export const refundByKill = (version, contractAddress, userLocalPublicAddress, d
               }
             )
           );
+        })
+        .catch(err => {
+          console.log(err.message);
+          dispatch(refundByKillButtonSpinning(false));
         });
     })
     .catch(err => {

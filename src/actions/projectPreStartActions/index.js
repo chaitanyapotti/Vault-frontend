@@ -62,6 +62,11 @@ export const onWhiteListClick = (version, contractName, contractAddress, userLoc
               }
             )
           );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isButtonSpinning(false));
+          dispatch(isAlreadyWhiteListed(false));
         });
     })
     .catch(err => {

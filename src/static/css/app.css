@@ -286,7 +286,7 @@ button:focus {
 }
 
 .bg--pending {
-  background: yellow !important;
+  background: #f7c34f !important;
 }
 
 .bg--g-default {

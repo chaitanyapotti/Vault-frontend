@@ -24,17 +24,17 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
   const projectObject = {
     projectName: projectData.projectName,
     description: projectData.projectDescription,
-    startDateTime:new Date(Math.round(new Date(projectData.daicoStartDate).getTime()/1000)*1000),
+    startDateTime: new Date(Math.round(new Date(projectData.daicoStartDate).getTime() / 1000) * 1000),
     ownerAddress: userLocalPublicAddress,
-    r1EndTime: new Date(Math.round(new Date(projectData.daicoEndDate).getTime()/1000)*1000),
+    r1EndTime: new Date(Math.round(new Date(projectData.daicoEndDate).getTime() / 1000) * 1000),
     rounds: [
       {
-        tokenCount:  web3.utils.toWei(projectData.round1Tokens.toString()),
-        tokenRate: parseInt(projectData.round1Rate,10).toString()
+        tokenCount: web3.utils.toWei(projectData.round1Tokens.toString()),
+        tokenRate: parseInt(projectData.round1Rate, 10).toString()
       },
       {
         tokenCount: web3.utils.toWei(projectData.round2Tokens.toString()),
-        tokenRate: parseInt(projectData.round2Rate,10).toString()
+        tokenRate: parseInt(projectData.round2Rate, 10).toString()
       },
       {
         tokenCount: web3.utils.toWei(projectData.round3Tokens.toString()),
@@ -43,12 +43,12 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     ],
     minimumEtherContribution: "100000000000000000",
     maximumEtherContribution: web3.utils.toWei(Math.round((projectData.maxEtherContribution)).toString()),
-    "vaultAddress" : config.vault_contract_address,
+    "vaultAddress": config.vault_contract_address,
     foundationDetails,
     initialFundRelease: web3.utils.toWei(Math.round(parseFloat(projectData.initialFundRelease)).toString()),
     teamAddress: projectData.teamAddress,
-    killPollStartDate: new Date(Math.round(new Date(projectData.daicoEndDate).getTime()/1000)*1000),
-    initialTapAmount:web3.utils.toWei(Math.round((parseFloat(projectData.initialTapValue)) / (30 * 86400)).toString()),
+    killPollStartDate: new Date(Math.round(new Date(projectData.daicoEndDate).getTime() / 1000) * 1000),
+    initialTapAmount: web3.utils.toWei(Math.round((parseFloat(projectData.initialTapValue)) / (30 * 86400)).toString()),
     tapIncrementFactor: (parseInt(parseFloat(projectData.tapIncrementFactor) * 100)).toString(),
     tokenTag: projectData.erc20TokenTag,
     adminName: projectData.adminName,
@@ -67,7 +67,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     tapAcceptancePercent: "65",
     network: "rinkeby",
     version: "1",
-    totalMintableSupply: web3.utils.toWei(parseInt(projectData.totalSaleTokens + totalNonSaleTokens,10).toString()),
+    totalMintableSupply: web3.utils.toWei(parseInt(projectData.totalSaleTokens + totalNonSaleTokens, 10).toString()),
     currentDeploymentIndicator: 0,
     latestTxHash: "0x",
     isFeatured: false,
@@ -107,7 +107,54 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       });
 }
 
-export function saveProjectStates(projectData, userLocalPublicAddress){
+export function projectMetadata(projectData, userLocalPublicAddress) {
+  
+  
+  const projectObject = {
+    description: projectData.projectDescription,
+    urls: {
+      website: projectData.websiteLink,
+      github: projectData.githubLink,
+      facebook: projectData.facebookLink,
+      telegram: projectData.telegramLink,
+      twitter: projectData.twitterLink,
+      medium: projectData.mediumLink
+    }
+  };
+
+  return dispatch =>
+    axios
+      .post(`${config.api_base_url}/db/projects/`, projectObject)
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message === constants.SUCCESS) {
+            dispatch({
+              type: actionTypes.PROJECT_METADATA_SUCCESS,
+              payload: response.data.data
+            });
+          } else {
+            dispatch({
+              type: actionTypes.PROJECT_METADATA_FAILED,
+              payload: response.data.reason
+            });
+          }
+        } else {
+          dispatch({
+            type: actionTypes.PROJECT_METADATA_FAILED,
+            payload: constants.PROJECT_METADATA_FAILED_MESSAGE
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch({
+          type: actionTypes.PROJECT_METADATA_FAILED,
+          payload: constants.PROJECT_METADATA_FAILED_MESSAGE
+        });
+      });
+}
+
+export function saveProjectStates(projectData, userLocalPublicAddress) {
   return dispatch =>
     axios
       .post(`${config.api_base_url}/db/projects/formstates?useraddress=${userLocalPublicAddress}`, projectData)
@@ -140,68 +187,77 @@ export function saveProjectStates(projectData, userLocalPublicAddress){
       });
 }
 
-export function fetchProjectStates(userLocalPublicAddress){
-  return dispatch => 
-  axios
-    .get(`${config.api_base_url}/db/projects/formstates`, { params: { useraddress: userLocalPublicAddress } })
-    .then( response => {
-      if (response.status === 200) {
-        if (response.data.message === constants.SUCCESS) {
-          dispatch({
-            type: actionTypes.PROJECT_STATES_SUCCESS,
-            payload: response.data.data
-          });
+export function clearProjectDetails() {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.CLEAR_PROJECT_DETAILS,
+      payload: null
+    })
+  }
+}
+
+export function fetchProjectStates(userLocalPublicAddress) {
+  return dispatch =>
+    axios
+      .get(`${config.api_base_url}/db/projects/formstates`, { params: { useraddress: userLocalPublicAddress } })
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message === constants.SUCCESS) {
+            dispatch({
+              type: actionTypes.PROJECT_STATES_SUCCESS,
+              payload: response.data.data
+            });
+          } else {
+            dispatch({
+              type: actionTypes.PROJECT_STATES_FAILED,
+              payload: response.data.reason
+            });
+          }
         } else {
           dispatch({
             type: actionTypes.PROJECT_STATES_FAILED,
-            payload: response.data.reason
+            payload: constants.PROJECT_STATES_FAILED_MESSAGE
           });
         }
-      } else {
+      }).catch(error => {
+        console.log(error)
         dispatch({
           type: actionTypes.PROJECT_STATES_FAILED,
           payload: constants.PROJECT_STATES_FAILED_MESSAGE
         });
-      }
-    }).catch(error => {
-      console.log(error)
-      dispatch({
-        type: actionTypes.PROJECT_STATES_FAILED,
-        payload: constants.PROJECT_STATES_FAILED_MESSAGE
-      });
-    })
+      })
 }
 
-export function fetchProjectDeploymentIndicator(userLocalPublicAddress){
-  return dispatch => 
-  axios
-    .get(`${config.api_base_url}/db/projects/deployment/indicator`, { params: { useraddress: userLocalPublicAddress } })
-    .then( response => {
-      if (response.status === 200) {
-        if (response.data.message === constants.SUCCESS) {
-          dispatch({
-            type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS,
-            payload: response.data.data
-          });
+export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
+  return dispatch =>
+    axios
+      .get(`${config.api_base_url}/db/projects/deployment/indicator`, { params: { useraddress: userLocalPublicAddress } })
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message === constants.SUCCESS) {
+            dispatch({
+              type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS,
+              payload: response.data.data
+            });
+          } else {
+            dispatch({
+              type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
+              payload: response.data.reason
+            });
+          }
         } else {
           dispatch({
             type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
-            payload: response.data.reason
+            payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
           });
         }
-      } else {
+      }).catch(error => {
+        console.log(error)
         dispatch({
           type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
           payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
         });
-      }
-    }).catch(error => {
-      console.log(error)
-      dispatch({
-        type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
-        payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
-      });
-    })
+      })
 }
 
 export function uploadThumbnailAction(thumbnailImage, userLocalPublicAddress, doctype) {

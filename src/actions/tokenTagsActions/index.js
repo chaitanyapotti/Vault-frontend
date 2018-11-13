@@ -6,7 +6,7 @@ import constants from "../../constants";
 export function getTokenTags() {
   return dispatch =>
     axios
-      .get(`${config.api_base_url}/db/projects/uniquetokentags`)
+      .get(`${config.api_base_url}/db/projects/uniqueprojecttags`)
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {

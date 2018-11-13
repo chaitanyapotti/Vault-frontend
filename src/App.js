@@ -38,15 +38,15 @@ const App = props => {
             <Route exact path="/" component={FeaturedProjects} history={history} />
             <Route exact path="/mytokens" component={Governance} />
             <Route strict path="/governance/details" component={ProjectGovernance} history={history} />
-            <Route path="/issuergovernance/details" component={ProjectIssuerGovernance} history={history} />
+            <Route strict path="/issuergovernance/details" component={ProjectIssuerGovernance} history={history} />
             <Route exact path="/projects" component={AllProjects} />
             <Route exact path="/landing" component={LandingPage} />
             <Route exact path="/registration" component={Registration} history={history}/>
             <Route exact path="/dashboard" component={Dashboard} />
-            <Route path="/deploy" component={Deployer} history={history}/>
+            <Route strict path="/deploy" component={Deployer} history={history}/>
             <Route exact path="/register" component={WhiteList} />
             {/* <Route exact path="/register" component={Register} /> */}
-            <Route path="/search" component={Search} />
+            <Route strict path="/search" component={Search} />
             <Route
               path="/pollscan"
               component={() => {

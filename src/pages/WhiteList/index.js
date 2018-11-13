@@ -17,15 +17,15 @@ import {
 
 class WhiteList extends Component {
   componentDidMount() {
-    var interval 
-    if (!this.props.userLocalPublicAddress){
-      interval = setInterval(()=>{
+    var interval
+    if (!this.props.userLocalPublicAddress) {
+      interval = setInterval(() => {
         if (this.props.userLocalPublicAddress) {
           this.props.fetchUserFormStates(this.props.userLocalPublicAddress);
           clearInterval(interval)
         }
       }, 1000)
-    }else{
+    } else {
       this.props.fetchUserFormStates(this.props.userLocalPublicAddress);
       clearInterval(interval)
     }
@@ -96,9 +96,9 @@ class WhiteList extends Component {
           !dateOfBirth
         );
       case 5:
-        return (passportUrl === "" || selfieUrl === "" || addressUrl === "") || (passportFileName==="" || selfieFileName==="" || addressFileName==="");
-      case 6: 
-          return true;
+        return (passportUrl === "" || selfieUrl === "" || addressUrl === "") || (passportFileName === "" || selfieFileName === "" || addressFileName === "");
+      case 6:
+        return true;
       default:
         return false;
     }
@@ -201,47 +201,47 @@ class WhiteList extends Component {
     const { otpFromServer, otpFromUser, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag } = this.props || {};
     return (
       <div>
-      {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? 
-      (
-        <div>
-        {signinStatusFlag===3? (
-          <div>
-            {this.props.userLocalPublicAddress? (
-              <Grid>
-        <CUICard style={{ padding: "40px 40px", marginBottom: "40px" }}>
-          <CustomizedStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={this.props.activeStep} />
-          <div className="push-top--50">
-            <CUIDivider />
-          </div>
-          <div className="push--top text--center">
-            <ButtonComponent label="Back" onClick={this.handleBack} disabled={this.getBackDisabledStatus()} />
-            <span className="push--left">
-              <ButtonComponent label="Save" onClick={this.handleSave} />
-            </span>
-            {this.getVerifyTokenStatus() ? (
-              <span className="push--left">
-                <ButtonComponent label="Verify OTP" onClick={this.handleOtpVerification} disabled={otpFromServer === "" || otpFromUser === ""} />
-              </span>
-            ) : (
-              <span className="push--left">
-                <ButtonComponent label="Next" onClick={this.handleNext} disabled={this.getDisabledStatus()} />
-              </span>
-            )}
-          </div>
-        </CUICard>
-      </Grid>
-            ):(
-              <ContentLoader/>
-            )}
-          </div>
-          ):(this.props.history.push("/")) }
-        </div>
-      ):(
-        <ContentLoader/>
-      )
-      }
+        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ?
+          (
+            <div>
+              {signinStatusFlag === 3 ? (
+                <div>
+                  {this.props.userLocalPublicAddress ? (
+                    <Grid>
+                      <CUICard style={{ padding: "40px 40px", marginBottom: "40px" }}>
+                        <CustomizedStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={this.props.activeStep} />
+                        <div className="push-top--50">
+                          <CUIDivider />
+                        </div>
+                        <div className="push--top text--center">
+                          <ButtonComponent label="Back" onClick={this.handleBack} disabled={this.getBackDisabledStatus()} />
+                          <span className="push--left">
+                            <ButtonComponent label="Save" onClick={this.handleSave} />
+                          </span>
+                          {this.getVerifyTokenStatus() ? (
+                            <span className="push--left">
+                              <ButtonComponent label="Verify OTP" onClick={this.handleOtpVerification} disabled={otpFromServer === "" || otpFromUser === ""} />
+                            </span>
+                          ) : (
+                              <span className="push--left">
+                                <ButtonComponent label="Next" onClick={this.handleNext} disabled={this.getDisabledStatus()} />
+                              </span>
+                            )}
+                        </div>
+                      </CUICard>
+                    </Grid>
+                  ) : (
+                      <ContentLoader />
+                    )}
+                </div>
+              ) : (this.props.history.push("/"))}
+            </div>
+          ) : (
+            <ContentLoader />
+          )
+        }
       </div>
-      
+
     );
   }
 }

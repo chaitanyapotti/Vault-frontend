@@ -29,7 +29,6 @@ import { ButtonComponent } from "../../components/Common/FormComponents";
 import AlertModal from "../../components/Common/AlertModal";
 import actionTypes from "../../action_types";
 
-
 class Registration extends Component {
   state = {
     modalOpen: false,

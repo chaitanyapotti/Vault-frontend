@@ -28,23 +28,23 @@ const IssuerGovernanceName = props => {
   const link = `https://rinkeby.etherscan.io/tx/${startNewRoundButtonTransactionHash}`;
   const { website } = urls;
   return (
-    <CUICard style={{ padding: "40px 40px" }}>
+    <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
             <span className="prjct-logo hli" />
             <div className="hli push--left text--primary push-half--top">
-              <div className="txt-xxxl">
+              <div className="txt-xl">
                 {projectName} ({tokenTag})
               </div>
-              <div className="txt">
+              <div className="txt opacity-75">
                 {price} ETH
                 {<span className="txt-inc">{` ${priceIncrement}%`}</span>}
               </div>
             </div>
           </div>
         </Col>
-        <Col lg={4} className="txt-g-secondary txt">
+        <Col lg={4} className="txt-g-secondary txt txt-no-wrp">
           <span>{lastRoundInfo}</span>
         </Col>
       </Row>
@@ -59,17 +59,17 @@ const IssuerGovernanceName = props => {
         </Col>
       </Row>
       <Row className="push-half--top txt">
-        <Col>{description}</Col>
+        <Col lg={12} xs={12} className="fnt-ps">{description}</Col>
       </Row>
       <Row className="push--top">
         <Col lg={6} className="text--secondary txt">
           <div>
-            <a href={whitepaper} target="_blank" rel="noopener noreferrer">
+            <a className="text--secondary" href={whitepaper} target="_blank" rel="noopener noreferrer">
               Read our whitepaper
             </a>
           </div>
           <div>
-            <a href={website} target="_blank" rel="noopener noreferrer">
+            <a className="text--secondary" href={website} target="_blank" rel="noopener noreferrer">
               Learn more on our website
             </a>
           </div>
@@ -79,7 +79,7 @@ const IssuerGovernanceName = props => {
             <div className="hli">
               <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
                 <div>
-                  <LoadingButton disabled>{buttonText}</LoadingButton>
+                  <LoadingButton style={{padding: '0 40px'}} disabled>{buttonText}</LoadingButton>
                 </div>
               </Tooltip>
             </div>
@@ -91,7 +91,7 @@ const IssuerGovernanceName = props => {
             </a>
           ) : (
             <span className="hli">
-              <LoadingButton onClick={onClick} loading={startNewRoundButtonSpinning} disabled={!canStartNewRound}>
+              <LoadingButton style={{padding: '0 40px'}} onClick={onClick} loading={startNewRoundButtonSpinning} disabled={!canStartNewRound}>
                 {buttonText}
               </LoadingButton>
             </span>
@@ -99,12 +99,12 @@ const IssuerGovernanceName = props => {
           {!isPermissioned ? (
             <div className="hli">
               <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
-                <LoadingButton disabled>Edit</LoadingButton>
+                <LoadingButton style={{padding: '0 40px'}} disabled>Edit</LoadingButton>
               </Tooltip>
             </div>
           ) : (
             <span className="hli">
-              <ButtonComponent onClick={onEditClick} label="Edit" />
+              <ButtonComponent style={{padding: '0 40px'}} onClick={onEditClick} label="Edit" />
             </span>
           )}
         </Col>

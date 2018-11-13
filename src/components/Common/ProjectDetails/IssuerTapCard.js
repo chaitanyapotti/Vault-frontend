@@ -23,64 +23,90 @@ const IssuerTapCard = props => {
   const tapIncrementLink = `https://rinkeby.etherscan.io/tx/${incrementTapButtonTransactionHash}`;
   return (
     <div>
-      <CUICard style={{ padding: "40px 50px" }}>
+      <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
         <div className="txt-xxxl text--primary">Tap Increment</div>
         <Row className="push-top--35">
           <Col lg={6} className="txt">
-            Current Tap Amount: <span className="text--secondary">{currentTapAmount} ETH/month</span>{" "}
+            <div className="txt-bold">Current Tap Amount: </div>
+            <div className="text--secondary">{currentTapAmount} ETH/month</div>{" "}
           </Col>
           <Col lg={6} className="txt">
-            Tap increment Factor: <span className="text--secondary">{tapIncrementUnit}</span>{" "}
+            <div className="txt-bold">Tap increment Factor: </div>
+            <div className="text--secondary">{tapIncrementUnit}</div>{" "}
           </Col>
         </Row>
 
-        <Row>
+        <Row className="push-half--top">
           <Col lg={12} className="txt">
-            Increment Approval: <span className="text--secondary">{incrementApproval}%</span>{" "}
+            <div className="txt-bold">Increment Approval: </div>
+            <div className="text--secondary">{incrementApproval}%</div>{" "}
           </Col>
         </Row>
-        <div className="text-right">
-          {!isPermissioned || !canIncreaseTap ? (
-            <div className="hli">
-              <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
-                <div>
-                  <LoadingButton disabled>Increase Tap</LoadingButton>
-                </div>
-              </Tooltip>
-            </div>
-          ) : incrementTapButtonTransactionHash !== "" ? (
-            <a href={tapIncrementLink} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
-          ) : (
-            <span className="hli">
-              <LoadingButton onClick={onIncrementTapClick} loading={incrementTapButtonSpinning} disabled={!canIncreaseTap}>
-                Increase Tap
-              </LoadingButton>
-            </span>
-          )}
-          {!isPermissioned || !canDeployTapPoll ? (
-            <div className="hli">
-              <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
-                <LoadingButton disabled>Deploy Tap Poll</LoadingButton>
-              </Tooltip>
-            </div>
-          ) : deployTapPollButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
-          ) : (
-            <span className="hli">
-              <LoadingButton onClick={onDeployTapPollClick} loading={deployTapPollButtonSpinning} disabled={!canDeployTapPoll}>
-                Deploy Tap Poll
-              </LoadingButton>
-            </span>
-          )}
-        </div>
+
+        <Row className="push--top">
+          <Col lg={6}>
+            {!isPermissioned || !canIncreaseTap ? (
+              <div className="hli">
+                <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
+                  <div>
+                    <LoadingButton style={{ padding: "0 40px" }} disabled>
+                      Increase Tap
+                    </LoadingButton>
+                  </div>
+                </Tooltip>
+              </div>
+            ) : incrementTapButtonTransactionHash !== "" ? (
+              <a href={tapIncrementLink} target="_blank" rel="noreferrer noopener">
+                <span className="hli">
+                  <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                </span>
+              </a>
+            ) : (
+              <span className="hli">
+                <LoadingButton
+                  style={{ padding: "0 40px" }}
+                  onClick={onIncrementTapClick}
+                  loading={incrementTapButtonSpinning}
+                  disabled={!canIncreaseTap}
+                >
+                  Increase Tap
+                </LoadingButton>
+              </span>
+            )}
+          </Col>
+          <Col lg={6} className="text-right">
+            {!isPermissioned || !canDeployTapPoll ? (
+              <div className="hli">
+                <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
+                  <LoadingButton style={{ padding: "0 40px" }} disabled>
+                    Deploy Tap Poll
+                  </LoadingButton>
+                </Tooltip>
+              </div>
+            ) : deployTapPollButtonTransactionHash !== "" ? (
+              <a href={link} target="_blank" rel="noreferrer noopener">
+                <span className="hli">
+                  <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                </span>
+              </a>
+            ) : (
+              <span className="hli">
+                <LoadingButton
+                  style={{ padding: "0 40px" }}
+                  onClick={onDeployTapPollClick}
+                  loading={deployTapPollButtonSpinning}
+                  disabled={!canDeployTapPoll}
+                >
+                  Deploy Tap Poll
+                </LoadingButton>
+              </span>
+            )}
+          </Col>
+        </Row>
       </CUICard>
     </div>
   );

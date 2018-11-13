@@ -208,7 +208,7 @@ class ProjectDetailCrowdSale extends Component {
 
         <Row className="push--top">
           <Col xs={12} lg={6}>
-            <CUICard style={{ padding: "40px 50px" }}>
+            <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
               <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
             </CUICard>
           </Col>
@@ -278,3 +278,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(ProjectDetailCrowdSale);
+

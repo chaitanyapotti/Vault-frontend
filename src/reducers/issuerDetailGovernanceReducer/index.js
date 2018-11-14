@@ -18,11 +18,19 @@ export const initialState = {
   incrementTapButtonTransactionHash: "",
   deployXfrPollTransactionHash: "",
   withdrawXfrButtonTransactionHash: "",
-  withdrawButtonTransactionHash: ""
+  withdrawButtonTransactionHash: "",
+  isDescriptionEditable: false
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.EDIT_DESCRIPTION_CHANGED: {
+      return {
+        ...state,
+        isDescriptionEditable: action.payload
+      };
+    }
+
     case actionTypes.XFR_TITLE_CHANGED: {
       return {
         ...state,

@@ -52,14 +52,12 @@ export const getEtherCollected = (version, contractAddress) => async dispatch =>
     });
 };
 
-export function buyAmountChangedAction(value) {
-  return dispatch => {
-    dispatch({
-      type: actionTypes.BUY_AMOUNT_CHANGED,
-      payload: value
-    });
-  };
-}
+export const buyAmountChangedAction = value => dispatch => {
+  dispatch({
+    type: actionTypes.BUY_AMOUNT_CHANGED,
+    payload: value
+  });
+};
 
 export const getRoundTokensSold = (version, contractAddress, round) => async dispatch => {
   // doesn't call blockchain. await is non blocking

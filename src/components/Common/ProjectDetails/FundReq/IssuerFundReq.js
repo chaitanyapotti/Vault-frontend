@@ -6,7 +6,7 @@ import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 
 class IssuerFundReq extends Component {
   getObject1 = () => {
-    const { data, details, tokensUnderGovernance } = this.props || {};
+    const { data, details, tokensUnderGovernance, onEditDescriptionClick } = this.props || {};
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
     const requiredData = details && details.length > 0 && address ? details.filter(x => x.address.toUpperCase() === address.toUpperCase()) : [];
@@ -20,12 +20,13 @@ class IssuerFundReq extends Component {
         description={description}
         startDate={startDate}
         tokensUnderGovernance={tokensUnderGovernance}
+        onEditDescriptionClick={onEditDescriptionClick}
       />
     ) : null;
   };
 
   getObject2 = () => {
-    const { data, details, tokensUnderGovernance } = this.props || {};
+    const { data, details, tokensUnderGovernance, onEditDescriptionClick } = this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime, address } = poll2 || {};
     const requiredData = details && details.length > 0 && address ? details.filter(x => x.address.toUpperCase() === address.toUpperCase()) : [];
@@ -39,6 +40,7 @@ class IssuerFundReq extends Component {
         description={description}
         startDate={startDate}
         tokensUnderGovernance={tokensUnderGovernance}
+        onEditDescriptionClick={onEditDescriptionClick}
       />
     ) : null;
   };

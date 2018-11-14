@@ -53,18 +53,18 @@ export default function(state = initialState, action) {
 
     case actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_SUCCESS: {
       return {
-        ...state, 
+        ...state,
         vaultMembershipRequested: action.payload,
         vaultMembershipRequestChecked: true
-      }
+      };
     }
 
     case actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_FAILED: {
       return {
-        ...state, 
+        ...state,
         vaultMembershipRequested: action.payload,
         vaultMembershipRequestChecked: true
-      }
+      };
     }
 
     case actionTypes.UPLOADING_SELFIE: {
@@ -82,7 +82,6 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.USER_FORM_SUBMISSION_SUCCESS: {
-      console.log("user form submitted");
       return {
         ...state
       };
@@ -210,7 +209,6 @@ export default function(state = initialState, action) {
         isIssuerFlag: !isIssuerFlag
       };
     }
-
 
     case actionTypes.BACK_BUTTON_PRESSED: {
       return { ...state, activeStep: action.payload };

@@ -21,15 +21,10 @@ import store from "./store";
 import Search from "./pages/Search";
 import WhiteList from "./pages/WhiteList";
 
-window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true; 
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
 const App = props => {
   const { history } = props || {};
-  // console.log("logging store: ", store.getState())
-  // const { signinManagerData } = store.getState() || {}
-  // console.log("signin data: ", signinManagerData)
-  // const {isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked} = signinManagerData || {}
-  // console.log("required states: ", isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked)
   return (
     <Provider store={store}>
       <Router>
@@ -41,16 +36,15 @@ const App = props => {
             <Route strict path="/issuergovernance/details" component={ProjectIssuerGovernance} history={history} />
             <Route exact path="/projects" component={AllProjects} />
             <Route exact path="/landing" component={LandingPage} />
-            <Route exact path="/registration" component={Registration} history={history}/>
+            <Route exact path="/registration" component={Registration} history={history} />
             <Route exact path="/dashboard" component={Dashboard} />
-            <Route strict path="/deploy" component={Deployer} history={history}/>
+            <Route strict path="/deploy" component={Deployer} history={history} />
             <Route exact path="/register" component={WhiteList} />
             {/* <Route exact path="/register" component={Register} /> */}
             <Route strict path="/search" component={Search} />
             <Route
               path="/pollscan"
               component={() => {
-                console.log("address: ", window.location);
                 const searchPath = window.location.search;
                 window.location = `https://pollscan.io/contract${searchPath}`;
               }}

@@ -20,7 +20,6 @@ const validateUniqueName = (names, input) => {
 };
 const validateTwoDecimalPlaces = input => {
   if (parseFloat(input) < 10 && input.length < 5) {
-    console.log("s");
     return true;
   }
   return false;

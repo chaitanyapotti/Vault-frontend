@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import qs from "qs";
 import ContentLoader from "react-content-loader";
 import { fetchProjectDetails, deployContractAction, performContractAction } from "../../actions/deployerActions/index";
@@ -17,7 +17,6 @@ class Deployer extends Component {
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
     if ("projectid" in params) {
-      console.log("first mount: ", params.projectid, window.location.href);
       getProjectDetails(params.projectid);
     } else {
       history.push({
@@ -337,41 +336,64 @@ class Deployer extends Component {
   ];
 
   render() {
-    const { projectDetails, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag } = this.props || {};
+    const {
+      projectDetails,
+      isIssuerChecked,
+      isMetamaskNetworkChecked,
+      isMetamaskInstallationChecked,
+      isUserDefaultAccountChecked,
+      isVaultMembershipChecked,
+      signinStatusFlag
+    } = this.props || {};
     const { currentDeploymentIndicator, _id } = projectDetails || {};
     return (
       <div>
-      {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked? 
-      (<div>
-        {signinStatusFlag===5? (<Grid>
-        <CustomizedStepper
-          history={this.props.history}
-          getStepContent={this.getStepContent}
-          getSteps={this.getSteps}
-          activeStep={currentDeploymentIndicator}
-          projectid={_id}
-        />
-      </Grid>):(this.props.history.push("/"))
-      }
+        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
+          <div>
+            {signinStatusFlag === 5 ? (
+              <Grid>
+                <CustomizedStepper
+                  history={this.props.history}
+                  getStepContent={this.getStepContent}
+                  getSteps={this.getSteps}
+                  activeStep={currentDeploymentIndicator}
+                  projectid={_id}
+                />
+              </Grid>
+            ) : (
+              this.props.history.push("/")
+            )}
+          </div>
+        ) : (
+          <ContentLoader />
+        )}
       </div>
-        ):(
-        <ContentLoader/>
-      )}
-      </div>
-      
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { userLocalPublicAddress, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag } = state.signinManagerData || {};
+  const {
+    userLocalPublicAddress,
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked,
+    signinStatusFlag
+  } = state.signinManagerData || {};
   const { projectDetails, deployContractButtonSpinning, deployContractStartButtonSpinning } = state.deployerReducer || {};
   return {
     projectDetails,
     userLocalPublicAddress,
     deployContractButtonSpinning,
     deployContractStartButtonSpinning,
-    isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked,
+    signinStatusFlag
   };
 };
 
@@ -385,7 +407,9 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Deployer));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Deployer)
+);

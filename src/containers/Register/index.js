@@ -9,12 +9,13 @@ import {
   verifyPhoneNumber,
   isIssuerFlagToggled,
   checkVaultMembership,
-  requestVaultMembership,
+  requestVaultMembership
 } from "../../actions/signinManagerActions";
 import { CUICard, CUIFormInput, CUIFormInputLabel } from "../../helpers/material-ui";
 import { CUIInputType, CUIInputColor } from "../../static/js/variables";
-import {Grid, Row, Col} from "../../helpers/react-flexbox-grid";
-import {ButtonComponent} from "../../components/Common/FormComponents"
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { ButtonComponent } from "../../components/Common/FormComponents";
+
 class Register extends Component {
   componentDidMount() {
     if (this.props.userLocalPublicAddress) {
@@ -45,12 +46,11 @@ class Register extends Component {
       this.props.isIssuerFlag,
       this.props.userLocalPublicAddress,
       this.props.phoneNumber,
-      this.props.countryCode,
+      this.props.countryCode
     );
   };
 
   handleIssuerFlagToggled = (event, data) => {
-    console.log("click", data);
     this.props.isIssuerFlagToggled();
   };
 
@@ -73,7 +73,7 @@ class Register extends Component {
           )
         ) : (
           <Grid>
-            <CUICard style={{ padding: "40px 40px", width: "450px", margin: '0 auto' }}>
+            <CUICard style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}>
               <div>
                 <div className="sbhdr-txt push--bottom txt-xl">Phone Number Registration form</div>
                 <Row>
@@ -99,7 +99,9 @@ class Register extends Component {
                   </Col>
                 </Row>
                 <Row className="push--top">
-                  <Col><ButtonComponent label="Send OTP" onClick={this.handleSendOtp} /></Col>
+                  <Col>
+                    <ButtonComponent label="Send OTP" onClick={this.handleSendOtp} />
+                  </Col>
                 </Row>
 
                 <Row className="push--top">
@@ -133,7 +135,9 @@ class Register extends Component {
                   </Col>
                 </Row>
                 <Row className="push--top">
-                  <Col><ButtonComponent label="Verify OTP" onClick={this.handleOtpVerification} /></Col>
+                  <Col>
+                    <ButtonComponent label="Verify OTP" onClick={this.handleOtpVerification} />
+                  </Col>
                 </Row>
 
                 {this.props.otpVerificationSuccessful ? (
@@ -163,7 +167,7 @@ const mapStateToProps = state => {
     userLocalPublicAddress,
     isVaultMember,
     isPhoneNumberVerified,
-    vaultPaymentPendingStatus,
+    vaultPaymentPendingStatus
   } = state.signinManagerData || {};
   return {
     phoneNumber,
@@ -175,7 +179,7 @@ const mapStateToProps = state => {
     userLocalPublicAddress,
     isVaultMember,
     isPhoneNumberVerified,
-    vaultPaymentPendingStatus,
+    vaultPaymentPendingStatus
   };
 };
 
@@ -189,12 +193,12 @@ const mapDispatchToProps = dispatch =>
       verifyPhoneNumber,
       isIssuerFlagToggled,
       checkVaultMembership,
-      requestVaultMembership,
+      requestVaultMembership
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Register);

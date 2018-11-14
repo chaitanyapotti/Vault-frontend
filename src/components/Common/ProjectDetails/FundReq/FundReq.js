@@ -24,10 +24,8 @@ class FundReq extends Component {
     const { amount, consensus, endTime, address } = poll1 || {};
     const requiredData = details ? details.filter(x => x.address === address) : [];
     const { name, description, startDate } = requiredData[0] || {};
-    console.log(xfrVoteData);
     const requiredVote = Array.isArray(xfrVoteData) ? xfrVoteData.filter(x => x.address === address) : [];
     const { voted } = requiredVote[0] || false;
-    console.log(xfr1ButtonTransactionHash, "2");
     return endTime ? (
       <ReqType
         amount={amount}
@@ -70,7 +68,6 @@ class FundReq extends Component {
     const requiredVote = Array.isArray(xfrVoteData) ? xfrVoteData.filter(x => x.address === address) : [];
     const { voted } = requiredVote[0] || false;
     const xfr2Link = `https://rinkeby.etherscan.io/tx/${xfr2ButtonTransactionHash}`;
-    console.log(xfr2ButtonTransactionHash, "3");
     return endTime ? (
       <ReqType
         amount={amount}

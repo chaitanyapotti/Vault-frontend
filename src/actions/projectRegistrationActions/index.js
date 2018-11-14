@@ -109,6 +109,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
 
 export function projectMetadata(projectData, userLocalPublicAddress) {
   const projectObject = {
+    ownerAddress :userLocalPublicAddress,
     description: projectData.projectDescription,
     urls: {
       website: projectData.websiteLink,

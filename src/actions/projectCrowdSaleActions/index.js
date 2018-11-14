@@ -4,6 +4,7 @@ import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
 import { pollTxHash } from "../helperActions";
+import { currentRound } from "../projectGovernanceActions";
 
 export const etherCollected = receipt => ({
   payload: { receipt },
@@ -93,7 +94,15 @@ export const getTokenBalance = (version, contractAddress, userLocalPublicAddress
     });
 };
 
-export const buyTokens = (version, contractAddress, userLocalPublicAddress, amount, round, daicoTokenAddress) => async dispatch => {
+export const buyTokens = (
+  version,
+  contractAddress,
+  userLocalPublicAddress,
+  amount,
+  round,
+  daicoTokenAddress,
+  pollFactoryAddress
+) => async dispatch => {
   dispatch(isBuyButtonSpinning(true));
   const gasPrice = await web3.eth.getGasPrice();
   web3.eth
@@ -115,6 +124,7 @@ export const buyTokens = (version, contractAddress, userLocalPublicAddress, amou
           () => {
             dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
             dispatch(getRoundTokensSold(version, contractAddress, round));
+            dispatch(getEtherCollected(version, pollFactoryAddress));
             dispatch({
               payload: { transactionHash: "" },
               type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -144,7 +154,7 @@ export const buyTokens = (version, contractAddress, userLocalPublicAddress, amou
     });
 };
 
-export const finalizeR1 = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const finalizeR1 = (version, contractAddress, userLocalPublicAddress, projectid) => dispatch => {
   dispatch(isR1FinalizeButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })
@@ -167,6 +177,7 @@ export const finalizeR1 = (version, contractAddress, userLocalPublicAddress) => 
             pollTxHash(
               transactionHash,
               () => {
+                dispatch(currentRound(projectid));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.R1_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED

@@ -37,8 +37,8 @@ class IssuerDetailPreGovernance extends Component {
   };
 
   onR1FinalizeClick = () => {
-    const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress } = this.props || {};
-    r1Finalize(version, crowdSaleAddress, userLocalPublicAddress);
+    const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress, projectid } = this.props || {};
+    r1Finalize(version, crowdSaleAddress, userLocalPublicAddress, projectid);
   };
 
   onStartR1Click = () => {

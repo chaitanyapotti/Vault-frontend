@@ -63,10 +63,10 @@ export default function(state = initialState, action) {
     }
 
     case types.METAMASK_NETWORK: {
-      if (action.payload === "rinkeby") {
+      if (action.payload === "private") {
         return {
           ...state,
-          networkName: "rinkeby",
+          networkName: "private",
           metamaskPreviousNetworkName: action.payload,
           isMetamaskNetworkChecked: true
         };
@@ -125,7 +125,7 @@ export default function(state = initialState, action) {
 
     case types.USER_DEFAULT_ACCOUNT_CHANGED: {
       const networkName = state.networkName;
-      if (networkName === "rinkeby") {
+      if (networkName === "private") {
         if (action.payload) {
           return {
             ...state,

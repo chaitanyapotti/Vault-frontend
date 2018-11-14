@@ -97,10 +97,10 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   buyTokensOnClick = () => {
-    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, daicoTokenAddress } = this.props || {};
+    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, daicoTokenAddress, pollFactoryAddress } = this.props || {};
     const { buyAmount } = this.state || {};
     // // TODO: need to add how many tokens to buy
-    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, 0, daicoTokenAddress);
+    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, 0, daicoTokenAddress, pollFactoryAddress);
   };
 
   buyTokens = () => {
@@ -122,8 +122,8 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   onR1FinalizeClick = () => {
-    const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress } = this.props || {};
-    r1Finalize(version, crowdSaleAddress, userLocalPublicAddress);
+    const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress, projectid } = this.props || {};
+    r1Finalize(version, crowdSaleAddress, userLocalPublicAddress, projectid);
   };
 
   render() {
@@ -151,7 +151,8 @@ class ProjectDetailCrowdSale extends Component {
       r1FinalizeButtonSpinning,
       roundInfo,
       whitelistButtonTransactionHash,
-      buyButtonTransactionHash
+      buyButtonTransactionHash,
+      r1FinalizeButtonTransactionHash
     } = this.props || {};
     console.log(tokenBalance);
     const { modalOpen, buyModalOpen, buyAmount } = this.state;
@@ -187,6 +188,7 @@ class ProjectDetailCrowdSale extends Component {
               onR1FinalizeClick={this.onR1FinalizeClick}
               r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
               whitelistButtonTransactionHash={whitelistButtonTransactionHash}
+              r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -252,8 +254,15 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => {
   const { projectCrowdSaleReducer, signinManagerData, fetchPriceReducer, projectPreStartReducer } = state || {};
-  const { etherCollected, roundInfo, buyButtonSpinning, tokenBalance, r1FinalizeButtonSpinning, buyButtonTransactionHash } =
-    projectCrowdSaleReducer || {};
+  const {
+    etherCollected,
+    roundInfo,
+    buyButtonSpinning,
+    tokenBalance,
+    r1FinalizeButtonSpinning,
+    buyButtonTransactionHash,
+    r1FinalizeButtonTransactionHash
+  } = projectCrowdSaleReducer || {};
   const { prices } = fetchPriceReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
@@ -270,7 +279,8 @@ const mapStateToProps = state => {
     tokenBalance,
     r1FinalizeButtonSpinning,
     whitelistButtonTransactionHash,
-    buyButtonTransactionHash
+    buyButtonTransactionHash,
+    r1FinalizeButtonTransactionHash
   };
 };
 

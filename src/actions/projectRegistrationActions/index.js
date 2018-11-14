@@ -42,14 +42,14 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       }
     ],
     minimumEtherContribution: "100000000000000000",
-    maximumEtherContribution: web3.utils.toWei(Math.round((projectData.maxEtherContribution)).toString()),
-    "vaultAddress": config.vault_contract_address,
+    maximumEtherContribution: web3.utils.toWei(Math.round(projectData.maxEtherContribution).toString()),
+    vaultAddress: config.vault_contract_address,
     foundationDetails,
     initialFundRelease: web3.utils.toWei(Math.round(parseFloat(projectData.initialFundRelease)).toString()),
     teamAddress: projectData.teamAddress,
     killPollStartDate: new Date(Math.round(new Date(projectData.daicoEndDate).getTime() / 1000) * 1000),
-    initialTapAmount: web3.utils.toWei(Math.round((parseFloat(projectData.initialTapValue)) / (30 * 86400)).toString()),
-    tapIncrementFactor: (parseInt(parseFloat(projectData.tapIncrementFactor) * 100)).toString(),
+    initialTapAmount: web3.utils.toWei(Math.round(parseFloat(projectData.initialTapValue) / (30 * 86400)).toString()),
+    tapIncrementFactor: parseInt(parseFloat(projectData.tapIncrementFactor) * 100).toString(),
     tokenTag: projectData.erc20TokenTag,
     adminName: projectData.adminName,
     email: projectData.adminEmail,
@@ -65,7 +65,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     killAcceptancePercent: "80",
     xfrRejectionPercent: "20",
     tapAcceptancePercent: "65",
-    network: "rinkeby",
+    network: "private",
     version: "1",
     totalMintableSupply: web3.utils.toWei(parseInt(projectData.totalSaleTokens + totalNonSaleTokens, 10).toString()),
     currentDeploymentIndicator: 0,
@@ -107,53 +107,6 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       });
 }
 
-export function projectMetadata(projectData, userLocalPublicAddress) {
-  
-  
-  const projectObject = {
-    description: projectData.projectDescription,
-    urls: {
-      website: projectData.websiteLink,
-      github: projectData.githubLink,
-      facebook: projectData.facebookLink,
-      telegram: projectData.telegramLink,
-      twitter: projectData.twitterLink,
-      medium: projectData.mediumLink
-    }
-  };
-
-  return dispatch =>
-    axios
-      .post(`${config.api_base_url}/db/projects/`, projectObject)
-      .then(response => {
-        if (response.status === 200) {
-          if (response.data.message === constants.SUCCESS) {
-            dispatch({
-              type: actionTypes.PROJECT_METADATA_SUCCESS,
-              payload: response.data.data
-            });
-          } else {
-            dispatch({
-              type: actionTypes.PROJECT_METADATA_FAILED,
-              payload: response.data.reason
-            });
-          }
-        } else {
-          dispatch({
-            type: actionTypes.PROJECT_METADATA_FAILED,
-            payload: constants.PROJECT_METADATA_FAILED_MESSAGE
-          });
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        dispatch({
-          type: actionTypes.PROJECT_METADATA_FAILED,
-          payload: constants.PROJECT_METADATA_FAILED_MESSAGE
-        });
-      });
-}
-
 export function saveProjectStates(projectData, userLocalPublicAddress) {
   return dispatch =>
     axios
@@ -187,15 +140,6 @@ export function saveProjectStates(projectData, userLocalPublicAddress) {
       });
 }
 
-export function clearProjectDetails() {
-  return dispatch => {
-    dispatch({
-      type: actionTypes.CLEAR_PROJECT_DETAILS,
-      payload: null
-    })
-  }
-}
-
 export function fetchProjectStates(userLocalPublicAddress) {
   return dispatch =>
     axios
@@ -219,13 +163,14 @@ export function fetchProjectStates(userLocalPublicAddress) {
             payload: constants.PROJECT_STATES_FAILED_MESSAGE
           });
         }
-      }).catch(error => {
-        console.log(error)
+      })
+      .catch(error => {
+        console.log(error);
         dispatch({
           type: actionTypes.PROJECT_STATES_FAILED,
           payload: constants.PROJECT_STATES_FAILED_MESSAGE
         });
-      })
+      });
 }
 
 export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
@@ -251,13 +196,14 @@ export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
             payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
           });
         }
-      }).catch(error => {
-        console.log(error)
+      })
+      .catch(error => {
+        console.log(error);
         dispatch({
           type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
           payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
         });
-      })
+      });
 }
 
 export function uploadThumbnailAction(thumbnailImage, userLocalPublicAddress, doctype) {

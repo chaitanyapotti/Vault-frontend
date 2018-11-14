@@ -289,11 +289,11 @@ class ProjectDetailGovernance extends Component {
   };
 
   buyTokensOnClick = () => {
-    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, currentRoundNumber, daicoTokenAddress } = this.props || {};
+    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, currentRoundNumber, daicoTokenAddress, pollFactoryAddress } = this.props || {};
     const { buyAmount } = this.state || {};
     // // TODO: need to add how many tokens to buy
     const roundNumber = currentRoundNumber === "4" ? 2 : parseInt(currentRoundNumber, 10) - 1;
-    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, roundNumber, daicoTokenAddress);
+    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, roundNumber, daicoTokenAddress, pollFactoryAddress);
   };
 
   buyTokens = () => {

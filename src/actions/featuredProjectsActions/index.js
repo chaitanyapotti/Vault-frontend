@@ -2,8 +2,10 @@ import axios from "axios";
 import config from "../../config";
 import actionTypes from "../../action_types";
 import constants from "../../constants";
+import web3 from "../../helpers/web3";
 
 export function getFeaturedProjects() {
+  web3.eth.net.getNetworkType().then(resp => console.log(resp));
   return dispatch => {
     axios
       .get(`${config.api_base_url}/db/projects/featured`)

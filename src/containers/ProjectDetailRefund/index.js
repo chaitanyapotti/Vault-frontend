@@ -44,7 +44,6 @@ class ProjectDetailRefund extends Component {
       refundByKill: killRefund,
       refundBySoftCapFail: softCapRefund
     } = this.props || {};
-    console.log(treasuryStateNumber);
     if (treasuryStateNumber === "2") softCapRefund(version, pollFactoryAddress, userLocalPublicAddress, daicoTokenAddress);
     if (treasuryStateNumber === "4") killRefund(version, pollFactoryAddress, userLocalPublicAddress, daicoTokenAddress);
   };
@@ -81,6 +80,7 @@ class ProjectDetailRefund extends Component {
         </div>
       );
     }
+    return null;
   };
 
   render() {

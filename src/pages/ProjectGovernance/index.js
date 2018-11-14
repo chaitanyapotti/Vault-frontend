@@ -138,6 +138,7 @@ class ProjectGovernance extends Component {
             initialFundRelease={initialFundRelease}
             crowdSaleAddress={crowdSaleAddress}
             daicoTokenAddress={daicoTokenAddress}
+            projectid={_id}
           />
         );
       case "2":

@@ -122,6 +122,10 @@ export const refundBySoftCapFail = (version, contractAddress, userLocalPublicAdd
               }
             )
           );
+        })
+        .catch(err => {
+          console.log(err.message);
+          dispatch(refundBySoftCapFailButtonSpinning(false));
         });
     })
     .catch(err => {

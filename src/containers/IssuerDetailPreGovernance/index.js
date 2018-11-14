@@ -37,13 +37,13 @@ class IssuerDetailPreGovernance extends Component {
   };
 
   onR1FinalizeClick = () => {
-    const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress } = this.props || {};
-    r1Finalize(version, crowdSaleAddress, userLocalPublicAddress);
+    const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress, projectid } = this.props || {};
+    r1Finalize(version, crowdSaleAddress, userLocalPublicAddress, projectid);
   };
 
   onStartR1Click = () => {
     const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress, projectid, currentRoundNumber } = this.props || {};
-    const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10) - 1;
+    const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10);
     r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber);
   };
 
@@ -123,11 +123,11 @@ class IssuerDetailPreGovernance extends Component {
           <Col xs={12} lg={6}>
             <IPreGovernanceDetails
               startDateTime={formatDate(startDateTime)}
-              individualCap={formatFromWei(maximumEtherContribution)}
+              individualCap={formatFromWei(maximumEtherContribution, 3)}
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
-              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30)}
-              initialFundRelease={formatFromWei(initialFundRelease)}
+              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
+              initialFundRelease={formatFromWei(initialFundRelease, 3)}
               tapIncrementUnit={tapIncrementFactor / 100}
               hardCapCapitalisation={getSoftCap(this.props)}
               dilutedCapitalisation={getHardCap(this.props)}

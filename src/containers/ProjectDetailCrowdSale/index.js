@@ -3,7 +3,14 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Warning from "@material-ui/icons/Warning";
 import { PDetailCrowdSale, ProjectCrowdSaleName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
-import { getEtherCollected, getRoundTokensSold, buyTokens, getTokenBalance, finalizeR1 } from "../../actions/projectCrowdSaleActions/index";
+import {
+  getEtherCollected,
+  getRoundTokensSold,
+  buyTokens,
+  getTokenBalance,
+  finalizeR1,
+  buyAmountChangedAction
+} from "../../actions/projectCrowdSaleActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import {
   formatFromWei,
@@ -22,11 +29,14 @@ import BuyModal from "../../components/Common/BuyModal";
 class ProjectDetailCrowdSale extends Component {
   state = {
     modalOpen: false,
-    buyModalOpen: false,
-    buyAmount: ""
+    buyModalOpen: false
   };
 
-  handleBuyClose = () => this.setState({ buyModalOpen: false, buyAmount: "" });
+  handleBuyClose = () => {
+    const { buyAmountChangedAction: buyAmountChanged } = this.props || {};
+    buyAmountChanged("");
+    this.setState({ buyModalOpen: false });
+  };
 
   handleClose = () => {
     this.setState({ modalOpen: false });
@@ -97,10 +107,10 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   buyTokensOnClick = () => {
-    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, daicoTokenAddress } = this.props || {};
-    const { buyAmount } = this.state || {};
+    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, daicoTokenAddress, pollFactoryAddress, buyAmount } =
+      this.props || {};
     // // TODO: need to add how many tokens to buy
-    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, 0, daicoTokenAddress);
+    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, 0, daicoTokenAddress, pollFactoryAddress);
   };
 
   buyTokens = () => {
@@ -108,7 +118,8 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   onBuyAmountChange = e => {
-    this.setState({ buyAmount: e.target.value });
+    const { buyAmountChangedAction: buyAmountChanged } = this.props || {};
+    buyAmountChanged(e.target.value);
   };
 
   r1Finish = () => {
@@ -116,14 +127,24 @@ class ProjectDetailCrowdSale extends Component {
     const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (new Date(r1EndTime) < new Date() && totalTokensSold < tokenCount) return true;
+    if (new Date(r1EndTime) < new Date() && parseFloat(totalTokensSold) < parseFloat(tokenCount)) return true;
 
     return false;
   };
 
+  canBuy = () => {
+    const { r1EndTime, rounds, roundInfo } = this.props || {};
+    const [round1] = rounds || {};
+    const { tokenCount } = round1 || {}; // tokens/wei
+    const { totalTokensSold } = roundInfo || "";
+    if (new Date(r1EndTime) < new Date() || parseFloat(totalTokensSold) >= parseFloat(tokenCount)) return false;
+
+    return true;
+  };
+
   onR1FinalizeClick = () => {
-    const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress } = this.props || {};
-    r1Finalize(version, crowdSaleAddress, userLocalPublicAddress);
+    const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress, projectid } = this.props || {};
+    r1Finalize(version, crowdSaleAddress, userLocalPublicAddress, projectid);
   };
 
   render() {
@@ -151,10 +172,12 @@ class ProjectDetailCrowdSale extends Component {
       r1FinalizeButtonSpinning,
       roundInfo,
       whitelistButtonTransactionHash,
-      buyButtonTransactionHash
+      buyButtonTransactionHash,
+      r1FinalizeButtonTransactionHash,
+      buyAmount
     } = this.props || {};
     console.log(tokenBalance);
-    const { modalOpen, buyModalOpen, buyAmount } = this.state;
+    const { modalOpen, buyModalOpen } = this.state;
     return (
       <Grid>
         <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
@@ -180,22 +203,23 @@ class ProjectDetailCrowdSale extends Component {
               buttonSpinning={buttonSpinning}
               onClick={this.onWhiteListClickInternal}
               signinStatusFlag={signinStatusFlag}
-              buyButtonVisibility={isCurrentMember && !this.r1Finish()}
+              buyButtonVisibility={isCurrentMember && this.canBuy()}
               onBuyClick={this.buyTokens}
               buyButtonText="Buy"
               r1Finish={this.r1Finish()}
               onR1FinalizeClick={this.onR1FinalizeClick}
               r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
               whitelistButtonTransactionHash={whitelistButtonTransactionHash}
+              r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
             />
           </Col>
           <Col xs={12} lg={6}>
             <PDetailCrowdSale
-              individualCap={formatFromWei(maximumEtherContribution)}
+              individualCap={formatFromWei(maximumEtherContribution, 3)}
               voteSaturationLimit={capPercent / 100}
               killFrequency="Quarterly"
-              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30)}
-              initialFundRelease={formatFromWei(initialFundRelease)}
+              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
+              initialFundRelease={formatFromWei(initialFundRelease, 3)}
               tapIncrementUnit={tapIncrementFactor / 100}
               hardCapCapitalisation={getSoftCap(this.props)}
               dilutedCapitalisation={getHardCap(this.props)}
@@ -245,15 +269,24 @@ const mapDispatchToProps = dispatch =>
       onWhiteListClick,
       fetchPrice,
       checkWhiteList,
-      finalizeR1
+      finalizeR1,
+      buyAmountChangedAction
     },
     dispatch
   );
 
 const mapStateToProps = state => {
   const { projectCrowdSaleReducer, signinManagerData, fetchPriceReducer, projectPreStartReducer } = state || {};
-  const { etherCollected, roundInfo, buyButtonSpinning, tokenBalance, r1FinalizeButtonSpinning, buyButtonTransactionHash } =
-    projectCrowdSaleReducer || {};
+  const {
+    etherCollected,
+    roundInfo,
+    buyButtonSpinning,
+    tokenBalance,
+    r1FinalizeButtonSpinning,
+    buyButtonTransactionHash,
+    r1FinalizeButtonTransactionHash,
+    buyAmount
+  } = projectCrowdSaleReducer || {};
   const { prices } = fetchPriceReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
@@ -270,7 +303,9 @@ const mapStateToProps = state => {
     tokenBalance,
     r1FinalizeButtonSpinning,
     whitelistButtonTransactionHash,
-    buyButtonTransactionHash
+    buyButtonTransactionHash,
+    r1FinalizeButtonTransactionHash,
+    buyAmount
   };
 };
 
@@ -278,4 +313,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(ProjectDetailCrowdSale);
-

@@ -93,16 +93,21 @@ class Registration extends Component {
   }
 
   componentDidUpdate() {
-    const {
-      project_id
-    } = this.props || {};
-    if (project_id !== "") {
-      console.log("pushing to deploy")
-      this.props.history.push({
-        pathname: `/deploy`,
-        search: `?projectid=${project_id}`
-      });
-    }
+    setTimeout(
+      ()=>{
+        const {
+          project_id
+        } = this.props || {};
+        if (project_id !== "") {
+          console.log("pushing to deploy")
+          this.props.history.push({
+            pathname: `/deploy`,
+            search: `?projectid=${project_id}`
+          });
+        }
+      }, 1000  
+    )
+    
   }
 
   handleSubmitDaicoMetadata = e => {

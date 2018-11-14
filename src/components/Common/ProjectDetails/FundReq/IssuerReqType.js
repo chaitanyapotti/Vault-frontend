@@ -5,7 +5,7 @@ import { formatFromWei, formatDate, significantDigits } from "../../../../helper
 const IssuerReqType = props => {
   const { amount, consensus, endTime, description, startDate, name, tokensUnderGovernance } = props || {};
   return (
-    <div style={{padding: '20px 50px'}}>
+    <div style={{ padding: "20px 50px" }}>
       <div>Exceptional Fund Requests</div>
       <Row className="txt-g-secondary txt-m push-half--top">
         <Col lg={6}>
@@ -16,16 +16,14 @@ const IssuerReqType = props => {
         </Col>
       </Row>
 
-      <div className="txt-g-secondary txt-m">
-        {formatFromWei(amount, 3)} ETH
-      </div>
+      <div className="txt-g-secondary txt-m">{formatFromWei(amount, 3)} ETH</div>
 
       <div className="push--top txt fnt-ps">{description}</div>
 
       <Row className="push--top">
         <Col lg={6} className="txt">
-          <div className="txt-bold">Approval Rate:{" "}</div>
-          <div className="text--secondary"> {significantDigits(parseFloat(consensus) / parseFloat(tokensUnderGovernance) || 0)}%</div>
+          <div className="txt-bold">Approval Rate: </div>
+          <div className="text--secondary"> {100 - significantDigits(parseFloat(consensus) / parseFloat(tokensUnderGovernance) || 0)}%</div>
         </Col>
         <Col lg={6} className="txt">
           <div className="txt-bold">Ends in: </div>

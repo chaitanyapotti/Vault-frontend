@@ -65,7 +65,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     killAcceptancePercent: "80",
     xfrRejectionPercent: "20",
     tapAcceptancePercent: "65",
-    network: "private",
+    network: "rinkeby",
     version: "1",
     totalMintableSupply: web3.utils.toWei(parseInt(projectData.totalSaleTokens + totalNonSaleTokens, 10).toString()),
     currentDeploymentIndicator: 0,
@@ -107,6 +107,51 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
       });
 }
 
+export function projectMetadata(projectData, userLocalPublicAddress) {
+  const projectObject = {
+    description: projectData.projectDescription,
+    urls: {
+      website: projectData.websiteLink,
+      github: projectData.githubLink,
+      facebook: projectData.facebookLink,
+      telegram: projectData.telegramLink,
+      twitter: projectData.twitterLink,
+      medium: projectData.mediumLink
+    }
+  };
+
+  return dispatch =>
+    axios
+      .post(`${config.api_base_url}/db/projects/`, projectObject)
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message === constants.SUCCESS) {
+            dispatch({
+              type: actionTypes.PROJECT_METADATA_SUCCESS,
+              payload: response.data.data
+            });
+          } else {
+            dispatch({
+              type: actionTypes.PROJECT_METADATA_FAILED,
+              payload: response.data.reason
+            });
+          }
+        } else {
+          dispatch({
+            type: actionTypes.PROJECT_METADATA_FAILED,
+            payload: constants.PROJECT_METADATA_FAILED_MESSAGE
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch({
+          type: actionTypes.PROJECT_METADATA_FAILED,
+          payload: constants.PROJECT_METADATA_FAILED_MESSAGE
+        });
+      });
+}
+
 export function saveProjectStates(projectData, userLocalPublicAddress) {
   return dispatch =>
     axios
@@ -138,6 +183,15 @@ export function saveProjectStates(projectData, userLocalPublicAddress) {
           payload: constants.PROJECT_STATES_SAVED_FAILED_MESSAGE
         });
       });
+}
+
+export function clearProjectDetails() {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.CLEAR_PROJECT_DETAILS,
+      payload: null
+    });
+  };
 }
 
 export function fetchProjectStates(userLocalPublicAddress) {

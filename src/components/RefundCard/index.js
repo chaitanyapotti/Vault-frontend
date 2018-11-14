@@ -13,9 +13,11 @@ const RefundCard = props => {
     refundByKillButtonTransactionHash,
     refundBySoftCapFailSpinning,
     refundByKillButtonSpinning,
-    onRefundClick
+    onRefundClick,
+    refundBySoftcapfailButtonTransactionHash
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${refundByKillButtonTransactionHash}`;
+  const refundSoftLink = `https://rinkeby.etherscan.io/tx/${refundBySoftcapfailButtonTransactionHash}`;
   return (
     <div className="push-top--50">
       <Grid>
@@ -31,6 +33,12 @@ const RefundCard = props => {
                     <div className="text--center">
                       {refundByKillButtonTransactionHash !== "" ? (
                         <a href={link} target="_blank" rel="noreferrer noopener">
+                          <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                            Status
+                          </LoadingButton>
+                        </a>
+                      ) : refundBySoftcapfailButtonTransactionHash !== "" ? (
+                        <a href={refundSoftLink} target="_blank" rel="noreferrer noopener">
                           <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                             Status
                           </LoadingButton>

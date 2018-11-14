@@ -148,7 +148,7 @@ class IssuerDetailGovernance extends Component {
 
   onStartNewRoundClick = () => {
     const { startNewRound: startRound, version, crowdSaleAddress, userLocalPublicAddress, projectid, currentRoundNumber } = this.props || {};
-    const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10) - 1;
+    const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10);
     startRound(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber);
   };
 
@@ -228,10 +228,17 @@ class IssuerDetailGovernance extends Component {
   canDeployXfrPoll = () => {
     const { xfrData, xfrTitleText, xfrAmountText, xfrDescriptionText } = this.props || {};
     const { poll1, poll2 } = xfrData || {};
-    const { address: poll1Address } = poll1 || {};
-    const { address: poll2Address } = poll2 || {};
+    const { address: poll1Address, endTime: poll1EndTime } = poll1 || {};
+    const { address: poll2Address, endTime: poll2EndTime } = poll2 || {};
+    const newDate1 = new Date();
+    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
+    const newDate2 = new Date();
+    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
     return (
-      (poll1Address === "0x0000000000000000000000000000000000000000" || poll2Address === "0x0000000000000000000000000000000000000000") &&
+      (poll1Address === "0x0000000000000000000000000000000000000000" ||
+        poll2Address === "0x0000000000000000000000000000000000000000" ||
+        new Date() > newDate1 ||
+        new Date() > newDate2) &&
       xfrTitleText !== "" &&
       xfrAmountText !== "" &&
       xfrDescriptionText !== ""
@@ -241,9 +248,18 @@ class IssuerDetailGovernance extends Component {
   canShowXfrPoll = () => {
     const { xfrData } = this.props || {};
     const { poll1, poll2 } = xfrData || {};
-    const { address: poll1Address } = poll1 || {};
-    const { address: poll2Address } = poll2 || {};
-    return poll1Address === "0x0000000000000000000000000000000000000000" || poll2Address === "0x0000000000000000000000000000000000000000";
+    const { address: poll1Address, endTime: poll1EndTime } = poll1 || {};
+    const { address: poll2Address, endTime: poll2EndTime } = poll2 || {};
+    const newDate1 = new Date();
+    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
+    const newDate2 = new Date();
+    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
+    return (
+      poll1Address === "0x0000000000000000000000000000000000000000" ||
+      poll2Address === "0x0000000000000000000000000000000000000000" ||
+      this.canWithdrawXfrAmount() || new Date() > newDate1 ||
+      new Date() > newDate2
+    );
   };
 
   canWithdrawXfrAmount = () => {
@@ -251,10 +267,17 @@ class IssuerDetailGovernance extends Component {
     const { poll1, poll2 } = xfrData || {};
     const { consensus: poll1Consensus, endTime: poll1EndTime } = poll1 || {};
     const { consensus: poll2Consensus, endTime: poll2EndTime } = poll2 || {};
+    const newDate1 = new Date();
+    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
+    const newDate2 = new Date();
+    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
     return (
       (parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
-        new Date() > new Date(poll1EndTime * 1000)) ||
-      (parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) && new Date() > new Date(poll2EndTime * 1000))
+        new Date() > new Date(poll1EndTime * 1000) &&
+        new Date() < newDate1) ||
+      (parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) &&
+        new Date() > new Date(poll2EndTime * 1000) &&
+        new Date() < newDate2)
     );
   };
 
@@ -263,16 +286,20 @@ class IssuerDetailGovernance extends Component {
     const { poll1, poll2 } = xfrData || {};
     const { consensus: poll1Consensus, endTime: poll1EndTime, amount: poll1RequestedAmount } = poll1 || {};
     const { consensus: poll2Consensus, endTime: poll2EndTime, amount: poll2RequestedAmount } = poll2 || {};
+    const newDate1 = new Date();
+    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
+    const newDate2 = new Date();
+    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
     let totalAmount = 0;
     if (
       parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
-      new Date() > new Date(poll1EndTime * 1000)
+      new Date() > new Date(poll1EndTime * 1000 && new Date() < newDate1)
     ) {
       totalAmount += formatFromWei(poll1RequestedAmount, 3);
     }
     if (
       parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) &&
-      new Date() > new Date(poll2EndTime * 1000)
+      new Date() > new Date(poll2EndTime * 1000 && new Date() < newDate1)
     ) {
       totalAmount += formatFromWei(poll2RequestedAmount, 3);
     }

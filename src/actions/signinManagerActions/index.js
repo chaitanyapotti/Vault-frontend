@@ -170,7 +170,7 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
                 payload: networkName
               })
             }
-            if (networkName==='private'){
+            if (networkName==='rinkeby'){
               if (accounts[0] !== userPreviousLocalPublicAddress) {
                 dispatch({
                   type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,

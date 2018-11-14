@@ -24,30 +24,33 @@ export const initialState = {
   isUserDefaultAccountChecked: false,
   isVaultMembershipChecked: false,
   isDeploymentIndicatorChecked: false,
-  deploymentIndicator: null, 
+  deploymentIndicator: null,
   manageDaico: false,
   project_id: ""
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-
     case types.PROJECT_REGISTRATION_SUCCESS: {
       return {
-        ...state, manageDaico: true, project_id: action.payload
-      }
+        ...state,
+        manageDaico: true,
+        project_id: action.payload
+      };
     }
 
     case types.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS: {
-      let manageDaico = false
-      let project_id = state.project_id || ""
-      const { _id } = action.payload || ""
-      if ('currentDeploymentIndicator' in action.payload){
-        manageDaico = true
+      let manageDaico = false;
+      const project_id = state.project_id || "";
+      const { _id } = action.payload || "";
+      if ("currentDeploymentIndicator" in action.payload) {
+        manageDaico = true;
       }
       return {
-        ...state, manageDaico: manageDaico, project_id: _id
-      }
+        ...state,
+        manageDaico,
+        project_id: _id
+      };
     }
 
     case types.ISISSUER_CHECK: {
@@ -63,10 +66,10 @@ export default function(state = initialState, action) {
     }
 
     case types.METAMASK_NETWORK: {
-      if (action.payload === "private") {
+      if (action.payload === "rinkeby") {
         return {
           ...state,
-          networkName: "private",
+          networkName: "rinkeby",
           metamaskPreviousNetworkName: action.payload,
           isMetamaskNetworkChecked: true
         };
@@ -125,7 +128,7 @@ export default function(state = initialState, action) {
 
     case types.USER_DEFAULT_ACCOUNT_CHANGED: {
       const networkName = state.networkName;
-      if (networkName === "private") {
+      if (networkName === "rinkeby") {
         if (action.payload) {
           return {
             ...state,

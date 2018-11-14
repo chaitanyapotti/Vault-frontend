@@ -19,7 +19,7 @@ const XfrForm = props => {
     onDeployXfrClick,
     onWithdrawXfrAmountClick,
     canWithdrawXfrAmount,
-    withdrawXfrAmountButtonSpinning,
+    withdrawXfrButtonSpinning,
     getWithdrawableXfrAmount,
     deployXfrPollTransactionHash,
     withdrawXfrButtonTransactionHash
@@ -91,7 +91,7 @@ const XfrForm = props => {
                   </div>
                 </Tooltip>
               </div>
-            ) : deployXfrPollTransactionHash !== " " ? (
+            ) : deployXfrPollTransactionHash !== "" ? (
               <a href={link} target="_blank" rel="noreferrer noopener">
                 <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                   Status
@@ -127,7 +127,7 @@ const XfrForm = props => {
               </a>
             ) : (
               <span className="hli">
-                <LoadingButton onClick={onWithdrawXfrAmountClick} loading={withdrawXfrAmountButtonSpinning} disabled={!canWithdrawXfrAmount}>
+                <LoadingButton onClick={onWithdrawXfrAmountClick} loading={withdrawXfrButtonSpinning} disabled={!canWithdrawXfrAmount}>
                   Withdraw Xfr Amount
                 </LoadingButton>
               </span>

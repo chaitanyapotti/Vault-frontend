@@ -52,6 +52,15 @@ export const getEtherCollected = (version, contractAddress) => async dispatch =>
     });
 };
 
+export function buyAmountChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.BUY_AMOUNT_CHANGED,
+      payload: value
+    });
+  };
+}
+
 export const getRoundTokensSold = (version, contractAddress, round) => async dispatch => {
   // doesn't call blockchain. await is non blocking
   const network = "rinkeby";
@@ -128,6 +137,10 @@ export const buyTokens = (
             dispatch({
               payload: { transactionHash: "" },
               type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
+            dispatch({
+              payload: "",
+              type: actionTypes.BUY_AMOUNT_CHANGED
             });
           },
           () => {

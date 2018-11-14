@@ -82,7 +82,7 @@ class GridData extends React.Component {
       rowsPerPage: 15,
       viewColumns: false,
       filter,
-      pagination: false,
+      pagination: tableData.length > 15,
       filterList,
       print: false,
       onRowClick: (currentRowsSelected, allRowsSelected) => {

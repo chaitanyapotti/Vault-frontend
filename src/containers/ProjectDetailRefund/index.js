@@ -90,7 +90,8 @@ class ProjectDetailRefund extends Component {
       refundByKillButtonTransactionHash,
       refundByKillButtonSpinning,
       refundBySoftCapFailSpinning,
-      signinStatusFlag
+      signinStatusFlag,
+      refundBySoftcapfailButtonTransactionHash
     } = this.props || {};
     return (
       <div>
@@ -104,6 +105,7 @@ class ProjectDetailRefund extends Component {
           btnLabel="Refund"
           label={this.getLabel()}
           refundByKillButtonTransactionHash={refundByKillButtonTransactionHash}
+          refundBySoftcapfailButtonTransactionHash={refundBySoftcapfailButtonTransactionHash}
         />
       </div>
     );
@@ -127,7 +129,8 @@ const mapStateToProps = state => {
   const { tokenBalance } = projectCrowdSaleReducer || {};
   const { userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { remainingEtherBalance, totalSupply } = projectDetailGovernanceReducer || {};
-  const { refundByKillButtonSpinning, refundBySoftCapFailSpinning, refundByKillButtonTransactionHash } = projectRefundReducer || {};
+  const { refundByKillButtonSpinning, refundBySoftCapFailSpinning, refundByKillButtonTransactionHash, refundBySoftcapfailButtonTransactionHash } =
+    projectRefundReducer || {};
   return {
     tokenBalance,
     userLocalPublicAddress,
@@ -136,7 +139,8 @@ const mapStateToProps = state => {
     totalSupply,
     refundByKillButtonSpinning,
     refundBySoftCapFailSpinning,
-    refundByKillButtonTransactionHash
+    refundByKillButtonTransactionHash,
+    refundBySoftcapfailButtonTransactionHash
   };
 };
 

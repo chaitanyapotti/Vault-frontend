@@ -3,18 +3,16 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import qs from "qs";
 import { withRouter } from "react-router-dom";
+import ContentLoader from "react-content-loader";
 import { currentRound, clearGovernanceStates } from "../../actions/projectGovernanceActions/index";
 import IssuerDetailPreGovernance from "../../containers/IssuerDetailPreGovernance";
 import IssuerDetailGovernance from "../../containers/IssuerDetailGovernance";
-import ContentLoader from "react-content-loader";
 
-const MyLoader = () => <ContentLoader />
-
+const MyLoader = () => <ContentLoader />;
 
 class ProjectIssuerGovernance extends Component {
-
-  componentWillUnmount(){
-    this.props.clearGovernanceStates()
+  componentWillUnmount() {
+    this.props.clearGovernanceStates();
   }
 
   componentDidMount() {
@@ -60,13 +58,14 @@ class ProjectIssuerGovernance extends Component {
       xfrDetails,
       ownerAddress,
       tapAcceptancePercent,
+      xfrRejectionPercent,
       _id
     } = projectDetails || {};
     // currentRoundNumber = "2";
     // Redirect to form if cdi !== 12
 
-    if (treasuryStateNumber === "0"){
-      return (<ContentLoader />)
+    if (treasuryStateNumber === "0") {
+      return <ContentLoader />;
     }
 
     if (currentDeploymentIndicator !== 12)
@@ -106,6 +105,7 @@ class ProjectIssuerGovernance extends Component {
           xfrDetails={xfrDetails}
           ownerAddress={ownerAddress}
           tapAcceptancePercent={tapAcceptancePercent}
+          xfrRejectionPercent={xfrRejectionPercent}
           projectid={_id}
           history={history}
         />
@@ -139,6 +139,7 @@ class ProjectIssuerGovernance extends Component {
           ownerAddress={ownerAddress}
           history={history}
           crowdSaleAddress={crowdSaleAddress}
+          pollFactoryAddress={pollFactoryAddress}
         />
       );
     }

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Warning from "@material-ui/icons/Warning";
 import { ProjectGovernanceName, PDetailGovernance, TapCard, FundReq, SpendCurve, VoteHistogram } from "../../components/Common/ProjectDetails";
-import { getRoundTokensSold, buyTokens, getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
+import { getRoundTokensSold, buyTokens, getTokenBalance, buyAmountChangedAction } from "../../actions/projectCrowdSaleActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
@@ -51,11 +51,11 @@ import BuyModal from "../../components/Common/BuyModal";
 import LoadingButton from "../../components/Common/LoadingButton";
 import GridData from "../../components/GridData";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
+
 class ProjectDetailGovernance extends Component {
   state = {
     modalOpen: false,
     buyModalOpen: false,
-    buyAmount: "",
     unlockTokensModalOpen: false,
     killPollsHistoryModalOpen: false,
     tapPollsHistoryModalOpen: false,
@@ -78,7 +78,11 @@ class ProjectDetailGovernance extends Component {
 
   handleXfrPollsHistoryClose = () => this.setState({ xfrPollsHistoryModalOpen: false });
 
-  handleBuyClose = () => this.setState({ buyModalOpen: false, buyAmount: "" });
+  handleBuyClose = () => {
+    const { buyAmountChangedAction: buyAmountChanged } = this.props || {};
+    buyAmountChanged("");
+    this.setState({ buyModalOpen: false });
+  };
 
   handleClose = () => {
     this.setState({ modalOpen: false });
@@ -182,7 +186,7 @@ class ProjectDetailGovernance extends Component {
     const { currentRoundNumber } = this.props || {};
     const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
     return (
-      <div style={{marginTop: '24px'}}>
+      <div style={{ marginTop: "24px" }}>
         <div className="text-right">Round {roundNumber} price</div>
         <div className="text-right opacity-75">{1 / tokenRate} ETH</div>
       </div>
@@ -289,11 +293,10 @@ class ProjectDetailGovernance extends Component {
   };
 
   buyTokensOnClick = () => {
-    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, currentRoundNumber, daicoTokenAddress } = this.props || {};
-    const { buyAmount } = this.state || {};
+    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, currentRoundNumber, daicoTokenAddress, pollFactoryAddress, buyAmount } = this.props || {};
     // // TODO: need to add how many tokens to buy
     const roundNumber = currentRoundNumber === "4" ? 2 : parseInt(currentRoundNumber, 10) - 1;
-    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, roundNumber, daicoTokenAddress);
+    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, roundNumber, daicoTokenAddress, pollFactoryAddress);
   };
 
   buyTokens = () => {
@@ -301,7 +304,8 @@ class ProjectDetailGovernance extends Component {
   };
 
   onBuyAmountChange = e => {
-    this.setState({ buyAmount: e.target.value });
+    const { buyAmountChangedAction: buyAmountChanged } = this.props || {};
+    buyAmountChanged(e.target.value);
   };
 
   onKillClick = () => {
@@ -499,12 +503,12 @@ class ProjectDetailGovernance extends Component {
       killButtonTransactionHash,
       tapButtonTransactionHash,
       r1EndTime,
-      killFinalizeTransactionHash
+      killFinalizeTransactionHash,
+      buyAmount
     } = this.props || {};
     const {
       modalOpen,
       buyModalOpen,
-      buyAmount,
       unlockTokensModalOpen,
       killPollsHistoryModalOpen,
       tapPollsHistoryModalOpen,
@@ -785,7 +789,7 @@ const mapStateToProps = state => {
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { prices } = fetchPriceReducer || {};
   const { spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray } = state.deployerReducer || {}
-  const { buyButtonTransactionHash } = projectCrowdSaleReducer;
+  const { buyButtonTransactionHash, buyAmount } = projectCrowdSaleReducer;
   return {
     etherCollected,
     roundInfo,
@@ -819,14 +823,21 @@ const mapStateToProps = state => {
     voteHistogramData,
     totalVotes,
     collectiveVoteWeight,
-    spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray,
+    spendableArrays,
+    spentArray,
+    xfrDots,
+    tapDots,
+    spendableDots,
+    spentDots,
+    dateArray,
     buyButtonTransactionHash,
     whitelistButtonTransactionHash,
     xfr1ButtonTransactionHash,
     xfr2ButtonTransactionHash,
     killButtonTransactionHash,
     tapButtonTransactionHash,
-    killFinalizeTransactionHash
+    killFinalizeTransactionHash,
+    buyAmount
   };
 };
 
@@ -863,7 +874,8 @@ const mapDispatchToProps = dispatch =>
       getTapPollsHistory,
       getXfrPollsHistory,
       getSpendCurveData,
-      getVoteHistogramData
+      getVoteHistogramData,
+      buyAmountChangedAction
     },
     dispatch
   );

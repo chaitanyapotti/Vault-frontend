@@ -6,10 +6,10 @@ import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 
 class IssuerFundReq extends Component {
   getObject1 = () => {
-    const { data, details, tokensUnderGovernance } = this.props || {};
+    const { data, details, tokensUnderGovernance, onEditDescriptionClick } = this.props || {};
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
-    const requiredData = details ? details.filter(x => x.address === address) : [];
+    const requiredData = details && details.length > 0 && address ? details.filter(x => x.address.toUpperCase() === address.toUpperCase()) : [];
     const { name, description, startDate } = requiredData[0] || {};
     return endTime ? (
       <IssuerReqType
@@ -20,15 +20,16 @@ class IssuerFundReq extends Component {
         description={description}
         startDate={startDate}
         tokensUnderGovernance={tokensUnderGovernance}
+        onEditDescriptionClick={onEditDescriptionClick}
       />
     ) : null;
   };
 
   getObject2 = () => {
-    const { data, details, tokensUnderGovernance } = this.props || {};
+    const { data, details, tokensUnderGovernance, onEditDescriptionClick } = this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime, address } = poll2 || {};
-    const requiredData = details ? details.filter(x => x.address === address) : [];
+    const requiredData = details && details.length > 0 && address ? details.filter(x => x.address.toUpperCase() === address.toUpperCase()) : [];
     const { name, description, startDate } = requiredData[0] || {};
     return endTime ? (
       <IssuerReqType
@@ -39,6 +40,7 @@ class IssuerFundReq extends Component {
         description={description}
         startDate={startDate}
         tokensUnderGovernance={tokensUnderGovernance}
+        onEditDescriptionClick={onEditDescriptionClick}
       />
     ) : null;
   };
@@ -49,7 +51,9 @@ class IssuerFundReq extends Component {
     return xfr1 !== null || xfr2 !== null ? (
       <div>
         <CUICard className="card-brdr">
-          <div  style={{ padding: "40px 50px" }} className="txt-xxxl text--primary">Exceptional Fund Requests</div>
+          <div style={{ padding: "40px 50px" }} className="txt-xxxl text--primary">
+            Exceptional Fund Requests
+          </div>
           <Divider />
           <Row className="push-top--35">
             <Col lg={12} className="txt">

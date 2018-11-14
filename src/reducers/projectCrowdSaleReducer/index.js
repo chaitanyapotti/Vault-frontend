@@ -10,7 +10,8 @@ export const initialState = {
   startR1ButtonSpinning: false,
   tokenBalance: "",
   buyButtonTransactionHash: "",
-  r1FinalizeButtonTransactionHash: ""
+  r1FinalizeButtonTransactionHash: "",
+  buyAmount: ""
 };
 
 export default (state = initialState, action) => {
@@ -35,6 +36,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         r1FinalizeButtonTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.BUY_AMOUNT_CHANGED: {
+      return {
+        ...state,
+        buyAmount: action.payload
       };
     }
 

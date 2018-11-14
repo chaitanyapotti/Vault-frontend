@@ -5,7 +5,7 @@ import actionTypes from "../../action_types";
 import { getCurrentTap, getXfrData, getTapPollConsensus } from "../projectDetailGovernanceActions/index";
 import { currentRound } from "../projectGovernanceActions/index";
 import { getRoundTokensSold } from "../projectCrowdSaleActions/index";
-import { pollTxHash } from "../helperActions";
+import { pollTxHash, pollTxHashResult } from "../helperActions";
 
 export const isStartNewRoundButtonSpinning = receipt => ({
   payload: { receipt },
@@ -46,6 +46,25 @@ export const currentWithdrawableAmountReceived = receipt => ({
   payload: { receipt },
   type: actionTypes.CURRENT_WITHDRAWABLE_AMOUNT_RECEIVED
 });
+
+export const onEditDescriptionClick = value => dispatch => {
+  dispatch({
+    type: actionTypes.EDIT_DESCRIPTION_CHANGED,
+    payload: value
+  });
+};
+
+export const editDescription = (projectid, xfrAddress, description) => dispatch => {
+  axios
+    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}`, {
+      description
+    })
+    .then(response => dispatch(onEditDescriptionClick(false)))
+    .catch(err => {
+      console.log(err);
+      dispatch(onEditDescriptionClick(false));
+    });
+};
 
 export const startR1 = (version, contractAddress, userLocalPublicAddress, projectid, round) => dispatch => {
   dispatch(isStartR1ButtonSpinning(true));
@@ -302,45 +321,64 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
             payload: { transactionHash },
             type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
           });
-        })
-        .on("receipt", receipt => {
-          dispatch(getXfrData(version, contractAddress));
-          dispatch({
-            type: actionTypes.XFR_TITLE_CHANGED,
-            payload: ""
-          });
-          dispatch({
-            type: actionTypes.XFR_AMOUNT_CHANGED,
-            payload: ""
-          });
-          dispatch({
-            type: actionTypes.XFR_DESCRIPTION_CHANGED,
-            payload: ""
-          });
-          dispatch({
-            payload: { transactionHash: "" },
-            type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
-          });
-          axios
-            .patch(`${config.api_base_url}/db/projects/xfrs?projectid=${projectid}`, {
-              name: titleText,
-              description: descriptionText,
-              address: receipt.contractAddress,
-              startDate: new Date()
-            })
-            .then(resp => dispatch(currentRound(projectid)));
-        })
-        .on("error", error => {
-          console.error(error.message);
-          dispatch(isDeployXfrPollButtonSpinning(false));
-          dispatch({
-            payload: { transactionHash: "" },
-            type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
-          });
+          dispatch(
+            pollTxHashResult(
+              transactionHash,
+              result => {
+                const address = web3.utils.toHex(web3.utils.toBN(result.logs[0].data));
+                dispatch({
+                  type: actionTypes.XFR_TITLE_CHANGED,
+                  payload: ""
+                });
+                dispatch({
+                  type: actionTypes.XFR_AMOUNT_CHANGED,
+                  payload: ""
+                });
+                dispatch({
+                  type: actionTypes.XFR_DESCRIPTION_CHANGED,
+                  payload: ""
+                });
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
+                });
+                axios
+                  .patch(`${config.api_base_url}/db/projects/xfrs?projectid=${projectid}`, {
+                    name: titleText,
+                    description: descriptionText,
+                    address,
+                    startDate: new Date()
+                  })
+                  .then(resp => {
+                    dispatch(getXfrData(version, contractAddress));
+                    dispatch(currentRound(projectid));
+                  });
+              },
+              () => {
+                dispatch(isDeployXfrPollButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isDeployXfrPollButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
         })
         .catch(err => {
           console.error(err.message);
           dispatch(isDeployXfrPollButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash: "" },
+            type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
+          });
         });
     })
     .catch(err => {

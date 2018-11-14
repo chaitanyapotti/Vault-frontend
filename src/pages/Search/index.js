@@ -57,7 +57,9 @@ class Search extends Component {
         </div>
       </div>
     ) : (
-      <div>No projects found</div>
+      <Grid>
+        <div className="text-center">No projects found</div>
+      </Grid>
     );
   }
 }

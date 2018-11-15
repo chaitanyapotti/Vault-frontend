@@ -97,13 +97,28 @@ export default function(state = initialState, action) {
     case actionTypes.PROJECT_STATES_SUCCESS: {
       const { allowEditAll } = state || false
       const { manageDaico } = state || false
+      const { ethPrice } = state || 210
       if ('state' in action.payload){
         const { state: oldState } = action.payload
-        return { ...oldState, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico}
+        return { ...oldState, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico, ethPrice:ethPrice}
       }else{
         return {
           ...state, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico
         }
+      }
+    }
+
+    case actionTypes.PRICE_FETCHED: {
+      const { data } = action.payload || {};
+      const { price, tokenTag: ticker, change } = data || {};
+      if (ticker==='ETH'){
+        return { 
+          ...state, 
+          ethPrice: price
+        }
+      }
+      return {
+        ...state
       }
     }
 

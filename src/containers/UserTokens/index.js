@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getUserTokens, showUserTokensLoaderAction } from "../../actions/userTokensActions";
 import GridData from "../../components/GridData";
+import ContentLoader from "react-content-loader";
 import {
   formatCent,
   formatFromWei,
@@ -34,7 +35,7 @@ class UserTokens extends Component {
   calculateKillDuration = killPollStartDate => new Date(killPollStartDate) - new Date();
 
   render() {
-    const { userTokensTable, prices, history } = this.props || {};
+    const { userTokensTable, prices, history, showUserTokensLoader, signinStatusFlag, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked } = this.props || {};
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = userTokensTable.map(item => {
@@ -55,49 +56,67 @@ class UserTokens extends Component {
     });
     return (
       <div>
-        <GridData
-          history={history}
-          tableData={data}
-          filterList={[[], [], [], [], [], [], [], [], []]}
-          filter={false}
-          columns={[
-            {
-              name: "Name",
-              options: {
-                customBodyRender: value => {
-                  const { projectName, thumbnailUrl } = value || {};
-                  return (
-                    <div style={{ width: "130px" }} className="hl">
-                      <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                      <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
-                        {projectName}
-                      </div>
-                    </div>
-                  );
-                },
-                filter: false
-              }
-            },
-            {
-              name: "Price(USD)*",
-              options: {
-                filter: false
-              }
-            },
-            {
-              name: "Tokens",
-              options: {
-                filter: false
-              }
-            },
-            { name: "Health", options: { filter: false } },
-            { name: "Tap Increment*", options: { filter: false } },
-            { name: "Kill Consensus", options: { filter: false } },
-            { name: "Next Kill In", options: { filter: false } },
-            { name: "XFRs", options: { filter: false } },
-            { name: "Id", options: { display: false, filter: false } }
-          ]}
-        />
+        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ?
+          (
+            <div>
+              {signinStatusFlag >= 4 ? (
+                <div>
+                  {showUserTokensLoader ? (<ContentLoader />) : (
+                    <GridData
+                      history={history}
+                      tableData={data}
+                      filterList={[[], [], [], [], [], [], [], [], []]}
+                      filter={false}
+                      columns={[
+                        {
+                          name: "Name",
+                          options: {
+                            customBodyRender: value => {
+                              const { projectName, thumbnailUrl } = value || {};
+                              return (
+                                <div style={{ width: "130px" }} className="hl">
+                                  <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                                  <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
+                                    {projectName}
+                                  </div>
+                                </div>
+                              );
+                            },
+                            filter: false
+                          }
+                        },
+                        {
+                          name: "Price(USD)*",
+                          options: {
+                            filter: false
+                          }
+                        },
+                        {
+                          name: "Tokens",
+                          options: {
+                            filter: false
+                          }
+                        },
+                        { name: "Health", options: { filter: false } },
+                        { name: "Tap Increment*", options: { filter: false } },
+                        { name: "Kill Consensus", options: { filter: false } },
+                        { name: "Next Kill In", options: { filter: false } },
+                        { name: "XFRs", options: { filter: false } },
+                        { name: "Id", options: { display: false, filter: false } }
+                      ]}
+                    />
+                  )}
+                </div>
+              ) : (
+                  this.props.history.push('/')
+                )}
+            </div>
+
+
+          ) : (
+            <ContentLoader />
+          )
+        }
       </div>
     );
   }
@@ -106,8 +125,7 @@ class UserTokens extends Component {
 const mapStateToProps = state => {
   const { userTokensTable, showUserTokensLoader, userTokensRetrieveFailureMessage, userTokensRetrievedSuccessFully } = state.userTokensData || {};
   const { prices } = state.fetchPriceReducer || {};
-  const { userLocalPublicAddress } = state.signinManagerData || {};
-  const { signinStatusFlag } = state.signinManagerData || {};
+  const { userLocalPublicAddress, signinStatusFlag, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked } = state.signinManagerData || {};
   return {
     userTokensTable,
     showUserTokensLoader,
@@ -115,7 +133,12 @@ const mapStateToProps = state => {
     userTokensRetrievedSuccessFully,
     prices,
     userLocalPublicAddress,
-    signinStatusFlag
+    signinStatusFlag,
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked
   };
 };
 

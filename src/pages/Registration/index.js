@@ -24,6 +24,7 @@ import {
 } from "../../helpers/common/validationHelperFunctions";
 import { newProjectRegistration, saveProjectStates, fetchProjectStates, fetchProjectDeploymentIndicator, clearProjectDetails, projectMetadata } from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
+import { fetchPrice } from "../../actions/priceFetchActions";
 import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import AlertModal from "../../components/Common/AlertModal";
@@ -40,8 +41,8 @@ class Registration extends Component {
 
   componentDidMount() {
     this.props.clearProjectDetails()
-    const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags, userLocalPublicAddress, signinStatusFlag } = this.props || {};
-
+    const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags, userLocalPublicAddress, signinStatusFlag, fetchPrice: getPrice } = this.props || {};
+    getPrice("ETH")
     var interval
     if (!signinStatusFlag) {
       interval = setInterval(() => {
@@ -374,7 +375,8 @@ const mapDispatchToProps = dispatch =>
       fetchProjectStates,
       fetchProjectDeploymentIndicator,
       clearProjectDetails,
-      projectMetadata
+      projectMetadata,
+      fetchPrice
     },
     dispatch
   );

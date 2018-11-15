@@ -29,7 +29,8 @@ const ProjectCrowdSaleName = props => {
     onR1FinalizeClick,
     r1FinalizeButtonSpinning,
     whitelistButtonTransactionHash,
-    r1FinalizeButtonTransactionHash
+    r1FinalizeButtonTransactionHash,
+    buyButtonDisabled
   } = props || {};
   const { website } = urls;
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
@@ -66,7 +67,9 @@ const ProjectCrowdSaleName = props => {
         </Col>
       </Row>
       <Row className="push-half--top txt">
-        <Col lg={12} className="fnt-ps">{description}</Col>
+        <Col lg={12} className="fnt-ps">
+          {description}
+        </Col>
       </Row>
       <Row className="push--top">
         <Col lg={6} className="text--secondary txt">
@@ -86,7 +89,7 @@ const ProjectCrowdSaleName = props => {
             <div className="hli">
               <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
                 <div>
-                  <LoadingButton style={{ padding: '0 40px'}} tooltip="This feature is only for Vault Members" disabled>
+                  <LoadingButton style={{ padding: "0 40px" }} tooltip="This feature is only for Vault Members" disabled>
                     {buttonText}
                   </LoadingButton>
                 </div>
@@ -100,13 +103,15 @@ const ProjectCrowdSaleName = props => {
             </a>
           ) : buttonVisibility ? (
             <span className="hli">
-              <LoadingButton style={{ padding: '0 40px'}} onClick={onClick} loading={buttonSpinning}>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={buttonSpinning}>
                 {buttonText}
               </LoadingButton>
             </span>
           ) : buyButtonVisibility ? (
             <span className="hli push-left--13">
-              <LoadingButton style={{ padding: '0 40px'}} onClick={onBuyClick}>{buyButtonText}</LoadingButton>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onBuyClick} disabled={!buyButtonDisabled}>
+                {buyButtonText}
+              </LoadingButton>
             </span>
           ) : r1FinalizeButtonTransactionHash !== "" ? (
             <a href={r1FinalizeLink} target="_blank" rel="noreferrer noopener">
@@ -116,7 +121,7 @@ const ProjectCrowdSaleName = props => {
             </a>
           ) : r1Finish ? (
             <span className="hli">
-              <LoadingButton style={{ padding: '0 40px'}} onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
                 Initialise Refund
               </LoadingButton>
             </span>

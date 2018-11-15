@@ -26,7 +26,8 @@ const ProjectGovernanceName = props => {
     signinStatusFlag,
     tradeButtonVisibility,
     tradeUrl,
-    whitelistButtonTransactionHash
+    whitelistButtonTransactionHash,
+    buyButtonDisabled
   } = props || {};
   const { website } = urls;
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
@@ -105,7 +106,9 @@ const ProjectGovernanceName = props => {
             </span>
           ) : buyButtonVisibility ? (
             <span className="hli">
-              <LoadingButton onClick={onBuyClick}>{buyButtonText}</LoadingButton>
+              <LoadingButton onClick={onBuyClick} disabled={!buyButtonDisabled}>
+                {buyButtonText}
+              </LoadingButton>
             </span>
           ) : null}
           {tradeButtonVisibility ? (

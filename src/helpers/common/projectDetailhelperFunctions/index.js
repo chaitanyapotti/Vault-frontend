@@ -77,10 +77,10 @@ const pollState = (startTime, endTime) => {
   return null;
 };
 
-const significantDigits = number => {
+const significantDigits = (number, perc = false) => {
   let input = number;
   if (input === 0) return input;
-  if (input < 1) {
+  if (perc) {
     input *= 100;
   }
   let depth;

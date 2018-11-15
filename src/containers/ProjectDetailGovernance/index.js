@@ -123,12 +123,12 @@ class ProjectDetailGovernance extends Component {
     } = this.props || {};
     priceFetch("ETH");
     priceFetch(tokenTag);
-    fetchSpendCurveData(version, pollFactoryAddress)
+    fetchSpendCurveData(version, pollFactoryAddress);
     // fetchSpendCurveData(version, pollFactoryAddress);
     fetchVoteHistogramData(projectid);
-    fetchKillPollsHistory(projectid);
-    fetchTapPollsHistory(projectid);
-    fetchXfrPollsHistory(projectid);
+    fetchKillPollsHistory(pollFactoryAddress);
+    fetchTapPollsHistory(pollFactoryAddress);
+    fetchXfrPollsHistory(pollFactoryAddress);
     const roundNumber = currentRoundNumber === "4" ? 2 : parseInt(currentRoundNumber, 10) - 1;
     fetchRoundTokensSold(version, crowdSaleAddress, roundNumber);
     fetchTokensUnderGovernance(version, daicoTokenAddress);
@@ -212,6 +212,7 @@ class ProjectDetailGovernance extends Component {
     const { roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
     if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
+    if (parseFloat(tokenCount) === parseFloat(totalTokensSold)) return `Round ${currentRoundNumber} Ended`;
 
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
@@ -381,6 +382,16 @@ class ProjectDetailGovernance extends Component {
     return endDate < new Date();
   };
 
+  canBuy = () => {
+    const { rounds, roundInfo, currentRoundNumber } = this.props || {};
+    const roundNumber = currentRoundNumber === "4" ? 2 : parseInt(currentRoundNumber, 10) - 1;
+    const round3 = rounds[roundNumber] || {};
+    const { tokenCount } = round3 || {}; // tokens/wei
+    const { totalTokensSold } = roundInfo || "";
+    if (parseFloat(totalTokensSold) >= parseFloat(tokenCount)) return false;
+    return true;
+  };
+
   onKillFinalizeClick = () => {
     const { version, pollFactoryAddress, finalizeKill: killFinalize, userLocalPublicAddress } = this.props || {};
     killFinalize(version, pollFactoryAddress, userLocalPublicAddress);
@@ -514,14 +525,13 @@ class ProjectDetailGovernance extends Component {
       tapPollsHistoryModalOpen,
       xfrPollsHistoryModalOpen
     } = this.state;
-
     const killHistoryData = killPollsHistoryData.map(item => {
       const { address, endTime, consensus } = item || {};
       const dataArray = [
         address,
         pollState(this.getKillPollStartDate(endTime), new Date(endTime * 1000)),
         formatDate(new Date(endTime * 1000)),
-        consensus
+        significantDigits(consensus)
       ];
       return dataArray;
     });
@@ -537,7 +547,7 @@ class ProjectDetailGovernance extends Component {
         address,
         formatDate(xfrStartTime),
         xfrResult(xfrStartTime, this.getXfrEndDate(startTime), consensus, xfrRejectionPercent),
-        consensus,
+        significantDigits(consensus),
         xfrWithdrawStatus(amount, startTime, endTime)
       ];
       return dataArray;
@@ -598,6 +608,7 @@ class ProjectDetailGovernance extends Component {
                 buyButtonVisibility={isCurrentMember && currentRoundNumber !== "4"}
                 onBuyClick={this.buyTokens}
                 buyButtonText="Buy"
+                buyButtonDisabled={this.canBuy()}
                 whitelistButtonTransactionHash={whitelistButtonTransactionHash}
                 tradeButtonVisibility
                 tradeUrl={this.getTradeUrl()}

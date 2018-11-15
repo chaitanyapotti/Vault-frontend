@@ -20,7 +20,6 @@ const validateUniqueName = (names, input) => {
 };
 const validateTwoDecimalPlaces = input => {
   if (parseFloat(input) < 10 && input.length < 5) {
-    console.log("s");
     return true;
   }
   return false;
@@ -85,16 +84,40 @@ const validateEntityPercentage = input => {
 };
 
 const validateDecimal = input => {
-  if (input <= 10 && input.length < 4) {
+  if (input <= 10 && input.length < 5) {
     return true;
   }
-  if (input > 10 && input.length < 5) {
+  if (input > 10) {
+    const a = input.split(".");
+    if (a.length === 1) {
+      return true;
+    }
+    if (typeof a[1] === "string" && a[1].length < 3) {
+      return true;
+    }
+    return false;
+  }
+  return false;
+};
+
+const validateOneDecimal = input => {
+  if (input <= 10 && input.length < 5) {
     return true;
+  }
+  if (input > 10) {
+    const a = input.split(".");
+    if (a.length === 1) {
+      return true;
+    }
+    if (typeof a[1] === "string" && a[1].length < 2) {
+      return true;
+    }
+    return false;
   }
   return false;
 };
 const validateVoteSaturationLimit = input => {
-  if (input < 0.1 || input > 10) {
+  if (input < 0.01) {
     return true;
   }
   return false;
@@ -200,5 +223,6 @@ export {
   validateEntityPercentage,
   validateTwoDecimalPlaces,
   validateOneDecimalPlace,
-  validateZero
+  validateZero,
+  validateOneDecimal
 };

@@ -22,7 +22,8 @@ import {
   validateDecimal,
   validateEntityPercentage,
   validateTwoDecimalPlaces,
-  validateOneDecimalPlace
+  validateOneDecimalPlace,
+  validateOneDecimal
 } from "../../helpers/common/validationHelperFunctions";
 
 import {significantDigits} from "../../helpers/common/projectDetailhelperFunctions"
@@ -440,16 +441,9 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.WEBSITE_LINK_CHANGED: {
-      if (validateWebsiteUrl(action.payload)) {
-        localErrors[actionTypes.WEBSITE_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.WEBSITE_LINK_CHANGED] =
-          "Not a valid website url";
-      }
       return {
         ...state,
-        websiteLink: action.payload,
-        errors: localErrors
+        websiteLink: action.payload
       };
     }
 
@@ -532,9 +526,9 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.INITIAL_FUND_RELEASE_CHANGED: {
-      if (parseFloat(action.payload) < 10 && !validateTwoDecimalPlaces(action.payload)) {
+      if (parseFloat(action.payload) < 10 && !validateOneDecimal(action.payload)) {
         localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "Only 2 Decimals Allowed";
-      } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
+      } else if (parseFloat(action.payload)>=10 && !validateOneDecimal(action.payload)){
         localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "Only 1 Decimal Allowed";
       } else if (parseFloat(action.payload)===0){
         localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "should be greater than zero";
@@ -569,9 +563,9 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED: {
-      if (parseFloat(action.payload)<10 && !validateTwoDecimalPlaces(action.payload)) {
+      if (parseFloat(action.payload)<10 && !validateOneDecimal(action.payload)) {
         localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "Only 2 Decimals Allowed";
-      } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
+      } else if (parseFloat(action.payload)>=10 && !validateOneDecimal(action.payload)){
         localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "Only 1 Decimal Allowed";
       } else if (validateMaxEtherContribution(parseFloat(action.payload))) {
         localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "should be greater than 0.1";
@@ -586,9 +580,9 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.INITIAL_TAP_VALUE_CHANGED: {
-      if (parseFloat(action.payload)<10 && !validateTwoDecimalPlaces(action.payload)) {
+      if (parseFloat(action.payload)<10 && !validateOneDecimal(action.payload)) {
         localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "Only 2 Decimals Allowed";
-      } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
+      } else if (parseFloat(action.payload)>=10 && !validateOneDecimal(action.payload)){
         localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "Only 1 Decimal Allowed";
       } else if (parseFloat(action.payload)===0){
         localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "should be greater than zero";
@@ -604,8 +598,10 @@ export default function(state = initialState, action) {
 
 
     case actionTypes.TAP_INCREMENT_FACTOR_CHANGED: {
-      if (validateTapIncrementFactor(parseFloat(action.payload)) || !validateDecimal(action.payload)) {
-        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "should be in between 1 and 2, only one decimal allowed";
+      if (validateTapIncrementFactor(parseFloat(action.payload))) {
+        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "Should be in between 1 and 2";
+      } else if (!validateDecimal(action.payload)) {
+        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "Only two decimals allowed";
       } else {
         localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "";
       }
@@ -617,8 +613,10 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.VOTE_SATURATION_LIMIT_CHANGED: {
-      if (validateVoteSaturationLimit(parseFloat(action.payload)) || !validateDecimal(action.payload)) {
-        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "should be in between 0.1 and 10, only one decimal allowed";
+      if (validateVoteSaturationLimit(parseFloat(action.payload))) {
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "should be greater than 0.01";
+      } else if (!validateDecimal(action.payload)){
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "only two decimals allowed";
       } else {
         localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "";
       }

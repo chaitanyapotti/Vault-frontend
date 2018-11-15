@@ -283,12 +283,6 @@ class TokenSale extends React.Component {
                 style={{ padding: "0 40px" }}
                 onClick={this.onCalculateTokenClicked}
                 disabled={
-                  errors[actionTypes.ROUND1_TARGET_USD_CHANGED] !== "" ||
-                  errors[actionTypes.ROUND1_TARGET_ETH_CHANGED] !== "" ||
-                  errors[actionTypes.ROUND2_TARGET_USD_CHANGED] !== "" ||
-                  errors[actionTypes.ROUND2_TARGET_ETH_CHANGED] !== "" ||
-                  errors[actionTypes.ROUND3_TARGET_USD_CHANGED] !== "" ||
-                  errors[actionTypes.ROUND3_TARGET_ETH_CHANGED] !== "" ||
                   errors[actionTypes.R2_BONUS_CHANGED] !== "" ||
                   !validateLength(round1TargetEth) ||
                   !validateLength(round1TargetUSD) ||

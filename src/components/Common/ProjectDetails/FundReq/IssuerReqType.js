@@ -3,7 +3,7 @@ import { Tooltip } from "@material-ui/core";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 import { formatFromWei, formatDate, significantDigits } from "../../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../../LoadingButton";
-import { CUIFormInput, CUICard } from "../../../../helpers/material-ui";
+import { CUIFormInput } from "../../../../helpers/material-ui";
 import { CUIInputType } from "../../../../static/js/variables";
 
 const IssuerReqType = props => {
@@ -17,9 +17,10 @@ const IssuerReqType = props => {
     tokensUnderGovernance,
     isPermissioned,
     isDescriptionEditable,
-    xfrAddress,
     onDescriptionChange,
-    onEditDescriptionClick
+    onEditDescriptionClick,
+    onSaveClick,
+    address
   } = props || {};
   return (
     <div style={{ padding: "20px 50px" }}>
@@ -34,7 +35,7 @@ const IssuerReqType = props => {
       </Row>
 
       <div className="txt-g-secondary txt-m">{formatFromWei(amount, 3)} ETH</div>
-      {isDescriptionEditable ? (
+      {!isDescriptionEditable ? (
         <div className="push--top txt fnt-ps">{description}</div>
       ) : (
         <div className="push--top txt fnt-ps">
@@ -69,7 +70,7 @@ const IssuerReqType = props => {
             </div>
           ) : (
             <span className="hli">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={() => onEditDescriptionClick(xfrAddress)}>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onEditDescriptionClick}>
                 Edit
               </LoadingButton>
             </span>
@@ -78,7 +79,7 @@ const IssuerReqType = props => {
         <Col lg={6}>
           {isPermissioned && isDescriptionEditable ? (
             <span className="hli">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={() => console.log("here")}>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={() => onSaveClick(address)}>
                 Save
               </LoadingButton>
             </span>

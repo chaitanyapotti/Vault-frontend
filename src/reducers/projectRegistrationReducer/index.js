@@ -87,7 +87,8 @@ export const initialState = {
   projectStatesReceived: false,
   errors: {
     [actionTypes.ADMIN_NAME_CHANGED]: "",
-    [actionTypes.ADMIN_EMAIL_CHANGED]: ""
+    [actionTypes.ADMIN_EMAIL_CHANGED]: "",
+    [actionTypes.INITIAL_FUND_RELEASE_CHANGED]: ""
   }
 };
 
@@ -531,10 +532,12 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.INITIAL_FUND_RELEASE_CHANGED: {
-      if (parseFloat(action.payload)<10 && !validateTwoDecimalPlaces(action.payload)) {
+      if (parseFloat(action.payload) < 10 && !validateTwoDecimalPlaces(action.payload)) {
         localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "Only 2 Decimals Allowed";
       } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
         localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "Only 1 Decimal Allowed";
+      } else if (parseFloat(action.payload)===0){
+        localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "should be greater than zero";
       } else {
         localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "";
       }
@@ -587,6 +590,8 @@ export default function(state = initialState, action) {
         localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "Only 2 Decimals Allowed";
       } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
         localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "Only 1 Decimal Allowed";
+      } else if (parseFloat(action.payload)===0){
+        localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "should be greater than zero";
       } else {
         localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "";
       }
@@ -633,13 +638,12 @@ export default function(state = initialState, action) {
             parseFloat(action.payload) / parseFloat(state.ethPrice)
           ).toFixed(4)
         };
-      } else {
+      }
         return {
           ...state,
-          round1TargetUSD: 0,
-          round1TargetEth: 0
+          round1TargetUSD: "",
+          round1TargetEth: ""
         };
-      }
     }
 
     case actionTypes.ROUND1_TARGET_ETH_CHANGED: {
@@ -649,14 +653,12 @@ export default function(state = initialState, action) {
           round1TargetUSD:
             parseFloat(action.payload) * parseFloat(state.ethPrice).toFixed(2),
           round1TargetEth: parseFloat(action.payload)
-        };
-      } else {
-        return {
+         };
+        } return {
           ...state,
-          round1TargetUSD: 0,
-          round1TargetEth: 0
+          round1TargetUSD: "",
+          round1TargetEth: ""
         };
-      }
     }
 
     case actionTypes.ROUND2_TARGET_USD_CHANGED: {
@@ -666,15 +668,15 @@ export default function(state = initialState, action) {
           round2TargetUSD: parseFloat(action.payload),
           round2TargetEth: (
             parseFloat(action.payload) / parseFloat(state.ethPrice)
-          ).toFixed(4)
+          ).toFixed(4),
+          errors: localErrors
         };
-      } else {
+      } 
         return {
           ...state,
-          round2TargetUSD: 0,
-          round2TargetEth: 0
+          round2TargetUSD: "",
+          round2TargetEth: ""
         };
-      }
     }
 
     case actionTypes.ROUND2_TARGET_ETH_CHANGED: {
@@ -683,15 +685,15 @@ export default function(state = initialState, action) {
           ...state,
           round2TargetUSD:
             parseFloat(action.payload) * parseFloat(state.ethPrice).toFixed(2),
-          round2TargetEth: parseFloat(action.payload)
+          round2TargetEth: parseFloat(action.payload),
+          errors: localErrors
         };
-      } else {
+      } 
         return {
           ...state,
-          round2TargetUSD: 0,
-          round2TargetEth: 0
+          round2TargetUSD: "",
+          round2TargetEth: ""
         };
-      }
     }
 
     case actionTypes.ROUND3_TARGET_USD_CHANGED: {
@@ -701,15 +703,15 @@ export default function(state = initialState, action) {
           round3TargetUSD: parseFloat(action.payload),
           round3TargetEth: (
             parseFloat(action.payload) / parseFloat(state.ethPrice)
-          ).toFixed(4)
+          ).toFixed(4),
+          errors: localErrors
         };
-      } else {
+      } 
         return {
           ...state,
-          round3TargetUSD: 0,
-          round3TargetEth: 0
+          round3TargetUSD: "",
+          round3TargetEth: ""
         };
-      }
     }
 
     case actionTypes.ROUND3_TARGET_ETH_CHANGED: {
@@ -718,15 +720,16 @@ export default function(state = initialState, action) {
           ...state,
           round3TargetUSD:
             parseFloat(action.payload) * parseFloat(state.ethPrice).toFixed(2),
-          round3TargetEth: parseFloat(action.payload)
+          round3TargetEth: parseFloat(action.payload),
+          errors: localErrors
         };
-      } else {
+      } 
         return {
           ...state,
-          round3TargetUSD: 0,
-          round3TargetEth: 0
+          round3TargetUSD: "",
+          round3TargetEth: ""
         };
-      }
+      
     }
 
     default: {

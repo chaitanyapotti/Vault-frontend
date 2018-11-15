@@ -14,7 +14,13 @@ import {
   xfrAmountChanged,
   xfrTitleChanged,
   xfrDescriptionChanged,
-  withdrawAmountChanged
+  withdrawAmountChanged,
+  xfr1DescriptionChangedAction,
+  xfr2DescriptionChangedAction,
+  onEditXfr1DescriptionClick,
+  onEditXfr2DescriptionClick,
+  editXfr1Description,
+  editXfr2Description
 } from "../../actions/issuerDetailGovernanceActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -326,7 +332,35 @@ class IssuerDetailGovernance extends Component {
     withdrawXfrAmountClick(version, pollFactoryAddress, userLocalPublicAddress);
   };
 
-  onEditDescriptionClick = xfrAddress => {};
+  onEditXfr1DescriptionClick = () => {
+    const { onEditXfr1DescriptionClick: editXfr1DescriptionClick } = this.props || {};
+    editXfr1DescriptionClick(true);
+  };
+
+  onEditXfr2DescriptionClick = () => {
+    const { onEditXfr2DescriptionClick: editXfr2DescriptionClick } = this.props || {};
+    editXfr2DescriptionClick(true);
+  };
+
+  onXfr1DescriptionChange = e => {
+    const { xfr1DescriptionChangedAction: xfr1DescriptionChanged } = this.props || {};
+    xfr1DescriptionChanged(e.target.value);
+  };
+
+  onXfr2DescriptionChange = e => {
+    const { xfr2DescriptionChangedAction: xfr2DescriptionChanged } = this.props || {};
+    xfr2DescriptionChanged(e.target.value);
+  };
+
+  onSaveXfr1DescriptionClick = xfrAddress => {
+    const { editXfr1Description: editXfr1DescriptionClick, projectid, xfr1Description } = this.props || {};
+    editXfr1DescriptionClick(projectid, xfrAddress, xfr1Description);
+  };
+
+  onSaveXfr2DescriptionClick = xfrAddress => {
+    const { editXfr2Description: editXfr2DescriptionClick, projectid, xfr2Description } = this.props || {};
+    editXfr2DescriptionClick(projectid, xfrAddress, xfr2Description);
+  };
 
   render() {
     const {
@@ -359,7 +393,11 @@ class IssuerDetailGovernance extends Component {
       incrementTapButtonTransactionHash,
       deployXfrPollTransactionHash,
       withdrawXfrButtonTransactionHash,
-      withdrawButtonTransactionHash
+      withdrawButtonTransactionHash,
+      isXfr1DescriptionEditable,
+      isXfr2DescriptionEditable,
+      xfr1Description,
+      xfr2Description
     } = this.props || {};
     return (
       <Grid>
@@ -456,7 +494,17 @@ class IssuerDetailGovernance extends Component {
             data={xfrData}
             details={xfrDetails}
             tokensUnderGovernance={tokensUnderGovernance}
-            onEditDescriptionClick={this.onEditDescriptionClick}
+            onEditXfr1DescriptionClick={this.onEditXfr1DescriptionClick}
+            onEditXfr2DescriptionClick={this.onEditXfr2DescriptionClick}
+            isXfr1DescriptionEditable={isXfr1DescriptionEditable}
+            isXfr2DescriptionEditable={isXfr2DescriptionEditable}
+            onXfr1DescriptionChange={this.onXfr1DescriptionChange}
+            onXfr2DescriptionChange={this.onXfr2DescriptionChange}
+            xfr1Description={xfr1Description}
+            xfr2Description={xfr2Description}
+            isPermissioned={this.isPermissioned()}
+            onSaveXfr1DescriptionClick={this.onSaveXfr1DescriptionClick}
+            onSaveXfr2DescriptionClick={this.onSaveXfr2DescriptionClick}
           />
           {/* </Col>
         </Row> */}
@@ -493,7 +541,11 @@ const mapStateToProps = state => {
     incrementTapButtonTransactionHash,
     deployXfrPollTransactionHash,
     withdrawXfrButtonTransactionHash,
-    withdrawButtonTransactionHash
+    withdrawButtonTransactionHash,
+    isXfr1DescriptionEditable,
+    isXfr2DescriptionEditable,
+    xfr1Description,
+    xfr2Description
   } = issuerDetailGovernanceReducer || {};
   const {
     tokensUnderGovernance,
@@ -560,7 +612,11 @@ const mapStateToProps = state => {
     incrementTapButtonTransactionHash,
     deployXfrPollTransactionHash,
     withdrawXfrButtonTransactionHash,
-    withdrawButtonTransactionHash
+    withdrawButtonTransactionHash,
+    isXfr1DescriptionEditable,
+    isXfr2DescriptionEditable,
+    xfr1Description,
+    xfr2Description
   };
 };
 
@@ -592,7 +648,13 @@ const mapDispatchToProps = dispatch =>
       xfrAmountChanged,
       xfrDescriptionChanged,
       xfrTitleChanged,
-      withdrawAmountChanged
+      withdrawAmountChanged,
+      xfr1DescriptionChangedAction,
+      xfr2DescriptionChangedAction,
+      onEditXfr2DescriptionClick,
+      onEditXfr1DescriptionClick,
+      editXfr2Description,
+      editXfr1Description
     },
     dispatch
   );

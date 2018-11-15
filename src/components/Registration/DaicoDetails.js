@@ -113,8 +113,10 @@ class DaicoDetails extends React.Component {
     // console.log("daico start date: ", daicoStartDate)
     return (
       <div>
-        <CUICard className="card-brdr" >
-          <div className="txt-xl" style={{ padding: "40px 50px" }}>DAICO Details</div>
+        <CUICard className="card-brdr">
+          <div className="txt-xl" style={{ padding: "40px 50px" }}>
+            DAICO Details
+          </div>
           <hr />
           <div style={{ padding: "20px 50px" }}>
             <Row>
@@ -156,6 +158,8 @@ class DaicoDetails extends React.Component {
                   // helperText={this.state.errorAgeText}
                   // onKeyDownSelector="Admin"
                   onChange={this.onChangeIniFundVal}
+                  error={!!this.getErrorMsg(actionTypes.INITIAL_FUND_RELEASE_CHANGED)}
+                  helperText={this.getErrorMsg(actionTypes.INITIAL_FUND_RELEASE_CHANGED)}
                 />
               </Col>
               <Col xs={12} lg={6}>

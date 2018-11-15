@@ -6,8 +6,8 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import Warning from "@material-ui/icons/Warning";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import ContentLoader from "react-content-loader";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Registration";
 import {
   validateLength,
@@ -20,9 +20,17 @@ import {
   // validateVoteSaturationLimit,
   validateDate,
   validateUniqueName,
-  validateTotalSaleTokens
+  validateTotalSaleTokens,
+  validateZero
 } from "../../helpers/common/validationHelperFunctions";
-import { newProjectRegistration, saveProjectStates, fetchProjectStates, fetchProjectDeploymentIndicator, clearProjectDetails, projectMetadata } from "../../actions/projectRegistrationActions";
+import {
+  newProjectRegistration,
+  saveProjectStates,
+  fetchProjectStates,
+  fetchProjectDeploymentIndicator,
+  clearProjectDetails,
+  projectMetadata
+} from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
 import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
@@ -33,10 +41,10 @@ class Registration extends Component {
   state = {
     modalOpen: false,
     modalMessage: "",
-    calculateTokensModal: false
+    deployModal: false
   };
 
-  handleCalculateTokensOpen = () => this.setState({ calculateTokensModal: true });
+  handleDeployModalClose = () => this.setState({ deployModal: false });
 
   componentDidMount() {
     this.props.clearProjectDetails()
@@ -68,7 +76,7 @@ class Registration extends Component {
     }
     fetchProjectNames();
     fetchTokenTags();
-    window.addEventListener("scroll", this.checkOffset);
+    // window.addEventListener("scroll", this.checkOffset);
   }
 
   // Function to make the docked btn sticky
@@ -88,7 +96,7 @@ class Registration extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", this.checkOffset);
+    // window.removeEventListener("scroll", this.checkOffset);
   }
 
   componentDidUpdate() {
@@ -121,7 +129,7 @@ class Registration extends Component {
       newProjectRegistration: projectRegistration,
       projectRegistrationData: registrationData,
       userLocalPublicAddress: localAddress,
-      saveProjectStates
+      saveProjectStates: saveStates
     } = this.props || {};
     if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
       this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
@@ -129,8 +137,12 @@ class Registration extends Component {
       this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than Initial Fund Release" });
     } else {
       projectRegistration(registrationData, localAddress);
-      saveProjectStates(registrationData, localAddress);
+      saveStates(registrationData, localAddress);
     }
+  };
+
+  handleDeployModalopen = () => {
+    this.setState({ deployModal: true });
   };
 
   handleSaveButtonClicked = () => {
@@ -142,7 +154,10 @@ class Registration extends Component {
     saveProjectStates(registrationData, localAddress);
   }
 
-  handleClose = () => this.setState({ modalOpen: false });
+  handleClose = () => {
+    console.log("999");
+    this.setState({ modalOpen:false });
+  };
 
   render() {
     const {
@@ -161,15 +176,19 @@ class Registration extends Component {
       projectNames,
       tokenTags,
       errors,
-      project_id,
       totalSaleTokens,
       isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked,
-      signinStatusFlag
+      signinStatusFlag,
+      round1TargetUSD,
+      round2TargetUSD,
+      round3TargetUSD,
+      round1TargetEth,
+      round2TargetEth,
+      round3TargetEth,
+      r1Bonus,
+      r2Bonus
     } = this.props || {};
-    const { modalOpen, modalMessage } = this.state;
-
-
-
+    const { modalOpen, modalMessage, deployModal } = this.state || {};
     return (
       <div>
         {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ?
@@ -194,6 +213,13 @@ class Registration extends Component {
                     <Distribution />
                   </Col>
                 </Row>
+                <AlertModal open={deployModal} handleClose={this.handleDeployModalClose} onProceedClick={this.handlePublishDaico} metamask>
+                  <div className="text--center text--danger">
+                    <Warning style={{ width: "2em", height: "2em" }} />
+                  </div>
+                  <div className="text--center push--top">Cant change</div>
+                </AlertModal>
+                
                 <AlertModal open={modalOpen} handleClose={this.handleClose}>
                   <div className="text--center text--danger">
                     <Warning style={{ width: "2em", height: "2em" }} />
@@ -227,7 +253,7 @@ class Registration extends Component {
                         ):(
                           <ButtonComponent
                         label="Deploy"
-                        onClick={this.handlePublishDaico}
+                        onClick={this.handleDeployModalopen}
                         disabled={
                           errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
                           !validateLength(adminName) ||
@@ -242,6 +268,7 @@ class Registration extends Component {
                           errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
                           errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
                           errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
+                          errors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] !== "" ||
                           isUpperCase(erc20TokenTag) ||
                           !validateLength(erc20TokenTag) ||
                           !validateTokenTagLength(erc20TokenTag) ||
@@ -254,11 +281,25 @@ class Registration extends Component {
                           !validateLength(tapIncrementFactor) ||
                           !validateLength(initialTapValue) ||
                           !validateLength(initialFundRelease) ||
+                          !validateLength(round1TargetUSD) ||
+                          !validateLength(round1TargetEth) ||
+                          !validateLength(round2TargetEth) ||
+                          !validateLength(round2TargetUSD) ||
+                          !validateLength(round3TargetUSD) ||
+                          !validateLength(round3TargetEth) ||
+                          !validateLength(r1Bonus) ||
+                          !validateLength(r2Bonus) ||
                           !validateDate(daicoStartDate) ||
                           !validateDate(daicoEndDate) ||
                           validateUniqueName(projectNames, projectName) ||
                           validateUniqueName(tokenTags, erc20TokenTag) ||
-                          validateTotalSaleTokens(totalSaleTokens)
+                          validateTotalSaleTokens(totalSaleTokens) ||
+                          !validateZero(round1TargetUSD) ||
+                          !validateZero(round2TargetUSD) ||
+                          !validateZero(round3TargetUSD) ||
+                          !validateZero(round1TargetEth) ||
+                          !validateZero(round2TargetEth) ||
+                          !validateZero(round3TargetEth)
                         }
                       />
                         

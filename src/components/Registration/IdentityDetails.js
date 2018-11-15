@@ -194,6 +194,7 @@ class IdentityDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
+                forceAlpha
                 inputName="ERC20 Ticker"
                 inputLabel="ERC20 Ticker"
                 inputPlaceholder="Eg. ELE"
@@ -217,6 +218,8 @@ class IdentityDetails extends React.Component {
                 inputPlaceholder="Eg. Protocol for Decentralized Organizations"
                 inputValue={projectDescription}
                 onChange={this.onChangePrjctDesc}
+                error={!!this.getErrorMsg(actionTypes.PROJECT_DESCRIPTION_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.PROJECT_DESCRIPTION_CHANGED)}
               />
             </Col>
           </Row>
@@ -239,7 +242,6 @@ class IdentityDetails extends React.Component {
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
-                required
                 full
                 inputName="Telegram Link"
                 inputLabel="Telegram Link"
@@ -256,7 +258,6 @@ class IdentityDetails extends React.Component {
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
-                required
                 full
                 inputName="Github Link"
                 inputLabel="Github Link"
@@ -270,7 +271,6 @@ class IdentityDetails extends React.Component {
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
-                required
                 full
                 inputName="Medium Link"
                 inputLabel="Medium Link"
@@ -287,7 +287,6 @@ class IdentityDetails extends React.Component {
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
-                required
                 full
                 inputName="Facebook Link"
                 inputLabel="Facebook Link"
@@ -301,7 +300,6 @@ class IdentityDetails extends React.Component {
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
-                required
                 full
                 inputName="Twitter Link"
                 inputLabel="Twitter Link"

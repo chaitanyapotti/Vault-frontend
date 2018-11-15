@@ -62,6 +62,7 @@ export const onEditXfr2DescriptionClick = value => dispatch => {
 };
 
 export const editXfr1Description = (projectid, xfrAddress, description) => dispatch => {
+  console.log("edit save: ", projectid, xfrAddress, description)
   axios
     .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}`, {
       description
@@ -344,7 +345,7 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
             pollTxHashResult(
               transactionHash,
               result => {
-                const address = web3.utils.toHex(web3.utils.toBN(result.logs[0].data));
+                const address = web3.utils.toChecksumAddress(web3.utils.toHex(web3.utils.toBN(result.logs[0].data)));
                 dispatch({
                   type: actionTypes.XFR_TITLE_CHANGED,
                   payload: ""

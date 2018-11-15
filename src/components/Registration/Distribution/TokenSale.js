@@ -110,7 +110,8 @@ class TokenSale extends React.Component {
       r1Bonus,
       r2Bonus,
       allowEditAll,
-      errors
+      errors,
+      erc20TokenTag
     } = this.props || {};
     const { modalOpen, modalMessage } = this.state || {};
     return (
@@ -157,7 +158,8 @@ class TokenSale extends React.Component {
           {round1Tokens > 0 ? (
             <Row className="push--top">
               <Col lg={12}>
-                Total round 1 tokens {round1Tokens} at {round1Rate} eth/token
+                Total round 1 tokens {round1Tokens} at {round1Rate} {erc20TokenTag}
+                /ETH
               </Col>
             </Row>
           ) : null}
@@ -198,7 +200,8 @@ class TokenSale extends React.Component {
           {round2Tokens > 0 ? (
             <Row className="push--top">
               <Col lg={12}>
-                Total round 2 tokens {round2Tokens} at {round2Rate} eth/token
+                Total round 2 tokens {round2Tokens} at {round2Rate} {erc20TokenTag}
+                /ETH
               </Col>
             </Row>
           ) : null}
@@ -239,7 +242,8 @@ class TokenSale extends React.Component {
           {round3Tokens > 0 ? (
             <Row className="push--top">
               <Col lg={12}>
-                Total round 3 tokens {round3Tokens} at {round3Rate} eth/token
+                Total round 3 tokens {round3Tokens} at {round3Rate} {erc20TokenTag}
+                /ETH
               </Col>
             </Row>
           ) : null}
@@ -334,7 +338,8 @@ const mapStateToProps = state => {
     totalSaleTokens,
     allowEditAll,
     errors,
-    ethPrice
+    ethPrice,
+    erc20TokenTag
   } = state.projectRegistrationData || {};
   return {
     round1TargetUSD,
@@ -354,7 +359,8 @@ const mapStateToProps = state => {
     totalSaleTokens,
     allowEditAll,
     errors,
-    ethPrice
+    ethPrice,
+    erc20TokenTag
   };
 };
 

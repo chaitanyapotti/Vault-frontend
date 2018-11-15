@@ -74,7 +74,7 @@ class Registration extends Component {
     }
     fetchProjectNames();
     fetchTokenTags();
-    window.addEventListener("scroll", this.checkOffset);
+    // window.addEventListener("scroll", this.checkOffset);
   }
 
   // Function to make the docked btn sticky
@@ -93,7 +93,7 @@ class Registration extends Component {
   };
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", this.checkOffset);
+    // window.removeEventListener("scroll", this.checkOffset);
   }
 
   componentDidUpdate() {
@@ -124,8 +124,8 @@ class Registration extends Component {
     } = this.props || {};
     if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
       this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
-    } else if (parseFloat(initialTapValue) >= parseFloat(initialFundRelease)) {
-      this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than Initial Fund Release" });
+    } else if (parseFloat(initialTapValue) > 0.1 * parseFloat(round1TargetEth)) {
+      this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than 10 percent of Round1 Target(ETH)" });
     } else {
       projectRegistration(registrationData, localAddress);
       saveStates(registrationData, localAddress);
@@ -149,10 +149,12 @@ class Registration extends Component {
   render() {
     const {
       adminName,
-      // adminEmail,
+      adminEmail,
       projectName,
       projectDescription,
       erc20TokenTag,
+      websiteLink,
+      teamAddress,
       maxEtherContribution,
       tapIncrementFactor,
       voteSaturationLimit,
@@ -160,8 +162,6 @@ class Registration extends Component {
       initialTapValue,
       daicoStartDate,
       daicoEndDate,
-      projectNames,
-      tokenTags,
       errors,
       totalSaleTokens,
       isIssuerChecked,
@@ -248,26 +248,23 @@ class Registration extends Component {
                                   onClick={this.handleDeployModalopen}
                                   disabled={
                                     errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
-                                    !validateLength(adminName) ||
-                                    !validateLength(projectDescription) ||
-                                    !validateLength(projectName) ||
                                     errors[actionTypes.ADMIN_EMAIL_CHANGED] !== "" ||
-                                    errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
-                                    errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
-                                    errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
-                                    errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.PROJECT_NAME_CHANGED] !== "" ||
+                                    errors[actionTypes.ERC20_TAG_CHANGED] !== "" ||
+                                    errors[actionTypes.PROJECT_DESCRIPTION_CHANGED] !== "" ||
                                     errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
-                                    errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
                                     errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
                                     errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
                                     errors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] !== "" ||
-                                    isUpperCase(erc20TokenTag) ||
+                                    errors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] !== "" ||
                                     !validateLength(erc20TokenTag) ||
-                                    !validateTokenTagLength(erc20TokenTag) ||
-                                    errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
-                                    !validateProjectNameLength(projectName) ||
-                                    !alphaOnly(erc20TokenTag) ||
-                                    validateMaxEtherContribution(maxEtherContribution) ||
+                                    !validateLength(adminName) ||
+                                    !validateLength(adminEmail) ||
+                                    !validateLength(projectDescription) ||
+                                    !validateLength(projectName) ||
+                                    !validateLength(websiteLink) ||
+                                    !validateLength(teamAddress) ||
                                     !validateLength(maxEtherContribution) ||
                                     !validateLength(voteSaturationLimit) ||
                                     !validateLength(tapIncrementFactor) ||
@@ -283,8 +280,6 @@ class Registration extends Component {
                                     !validateLength(r2Bonus) ||
                                     !validateDate(daicoStartDate) ||
                                     !validateDate(daicoEndDate) ||
-                                    validateUniqueName(projectNames, projectName) ||
-                                    validateUniqueName(tokenTags, erc20TokenTag) ||
                                     validateTotalSaleTokens(totalSaleTokens) ||
                                     !validateZero(round1TargetUSD) ||
                                     !validateZero(round2TargetUSD) ||

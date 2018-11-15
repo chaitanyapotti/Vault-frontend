@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getActiveDaicos, showActiveDaicosLoaderAction } from "../../actions/activeDaicosActions";
 import GridData from "../../components/GridData";
+import ContentLoader from "react-content-loader";
 import {
   formatDate,
   formatCent,
@@ -36,7 +37,7 @@ class ActiveDaicos extends Component {
   };
 
   render() {
-    const { activeDaicosTable, prices, history } = this.props || {};
+    const { activeDaicosTable, prices, history, showActiveDaicosLoader } = this.props || {};
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = activeDaicosTable.map(item => {
@@ -56,6 +57,10 @@ class ActiveDaicos extends Component {
     });
     return (
       <div>
+        {showActiveDaicosLoader?(
+          <ContentLoader/>
+        ):(
+          <div>
         <GridData
           history={history}
           tableData={data}
@@ -89,6 +94,9 @@ class ActiveDaicos extends Component {
           ]}
         />
       </div>
+        )}
+      </div>
+      
     );
   }
 }

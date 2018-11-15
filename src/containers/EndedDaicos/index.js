@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getEndedDaicos, showEndedDaicosLoaderAction } from "../../actions/endedDaicosActions";
+import ContentLoader from "react-content-loader";
 import GridData from "../../components/GridData";
 import {
   formatDate,
@@ -35,7 +36,7 @@ class EndedDaicos extends Component {
   };
 
   render() {
-    const { endedDaicosTable, prices, history } = this.props || {};
+    const { endedDaicosTable, prices, history, showEndedDaicosLoader } = this.props || {};
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = endedDaicosTable.map(item => {
@@ -53,7 +54,10 @@ class EndedDaicos extends Component {
     });
     return (
       <div>
-        <GridData
+      {showEndedDaicosLoader?(
+          <ContentLoader/>
+        ):(
+          <GridData
           history={history}
           tableData={data}
           filter={false}
@@ -83,6 +87,8 @@ class EndedDaicos extends Component {
             { name: "Id", options: { display: false, filter: false } }
           ]}
         />
+        )}
+        
       </div>
     );
   }

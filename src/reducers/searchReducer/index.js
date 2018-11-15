@@ -2,7 +2,8 @@ import actionTypes from "../../action_types";
 
 const initialState = {
   searchResult: {},
-  searchText: ""
+  searchText: "",
+  showSearchResultLoader: true
 };
 
 export default function(state = initialState, action) {
@@ -21,7 +22,8 @@ export default function(state = initialState, action) {
       localSearchResult = data;
       return {
         ...state,
-        searchResult: localSearchResult
+        searchResult: localSearchResult,
+        showSearchResultLoader: false
       };
     }
     default:

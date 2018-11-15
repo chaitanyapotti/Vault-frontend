@@ -47,22 +47,41 @@ export const currentWithdrawableAmountReceived = receipt => ({
   type: actionTypes.CURRENT_WITHDRAWABLE_AMOUNT_RECEIVED
 });
 
-export const onEditDescriptionClick = value => dispatch => {
+export const onEditXfr1DescriptionClick = value => dispatch => {
   dispatch({
-    type: actionTypes.EDIT_DESCRIPTION_CHANGED,
+    type: actionTypes.EDIT_XFR1_DESCRIPTION_CHANGED,
     payload: value
   });
 };
 
-export const editDescription = (projectid, xfrAddress, description) => dispatch => {
+export const onEditXfr2DescriptionClick = value => dispatch => {
+  dispatch({
+    type: actionTypes.EDIT_XFR2_DESCRIPTION_CHANGED,
+    payload: value
+  });
+};
+
+export const editXfr1Description = (projectid, xfrAddress, description) => dispatch => {
   axios
     .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}`, {
       description
     })
-    .then(response => dispatch(onEditDescriptionClick(false)))
+    .then(response => dispatch(onEditXfr1DescriptionClick(false)))
     .catch(err => {
       console.log(err);
-      dispatch(onEditDescriptionClick(false));
+      dispatch(onEditXfr1DescriptionClick(false));
+    });
+};
+
+export const editXfr2Description = (projectid, xfrAddress, description) => dispatch => {
+  axios
+    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}`, {
+      description
+    })
+    .then(response => dispatch(onEditXfr2DescriptionClick(false)))
+    .catch(err => {
+      console.log(err);
+      dispatch(onEditXfr2DescriptionClick(false));
     });
 };
 
@@ -550,6 +569,24 @@ export function xfrDescriptionChanged(value) {
   return dispatch => {
     dispatch({
       type: actionTypes.XFR_DESCRIPTION_CHANGED,
+      payload: value
+    });
+  };
+}
+
+export function xfr1DescriptionChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.XFR1_DESCRIPTION_CHANGED,
+      payload: value
+    });
+  };
+}
+
+export function xfr2DescriptionChangedAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.XFR2_DESCRIPTION_CHANGED,
       payload: value
     });
   };

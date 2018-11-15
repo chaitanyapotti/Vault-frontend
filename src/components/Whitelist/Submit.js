@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import ContentLoader from "react-content-loader";
 import {
   saveUserFormStates,
   requestVaultMembership,
@@ -13,7 +12,7 @@ import { ButtonComponent } from "../Common/FormComponents";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard, CUIFormInput, CUIFormInputLabel, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType, CUIInputColor } from "../../static/js/variables";
-
+import Loader from "../Loaders/loader";
 class Submit extends Component {
   componentDidMount() {
     let interval;
@@ -104,7 +103,7 @@ class Submit extends Component {
             </div>
           </div>
         ) : (
-          <ContentLoader />
+          <Grid><Loader rows={6} /></Grid>
         )}
       </div>
     );

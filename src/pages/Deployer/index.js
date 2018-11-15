@@ -3,14 +3,13 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "react-router-dom";
 import qs from "qs";
-import ContentLoader from "react-content-loader";
 import { fetchProjectDetails, deployContractAction, performContractAction } from "../../actions/deployerActions/index";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import web3 from "../../helpers/web3";
 import CustomizedStepper from "../../components/Common/CustomizedStepper";
 import DeployerCard from "../../components/DeployerCard";
 import config from "../../config";
-
+import Loader from "../../components/Loaders/loader";
 class Deployer extends Component {
   componentDidMount() {
     const { fetchProjectDetails: getProjectDetails, history } = this.props || {};
@@ -366,7 +365,9 @@ class Deployer extends Component {
             )}
           </div>
         ) : (
-          <ContentLoader />
+          <Grid>
+            <Loader rows={5} />
+          </Grid>
         )}
       </div>
     );

@@ -26,7 +26,28 @@ const validateTwoDecimalPlaces = input => {
 };
 
 const validateOneDecimalPlace = input => {
-  if (parseFloat(input) >= 10 && input.length < 5) {
+  if (parseFloat(input) >= 10 && parseFloat(input) < 100 && input.length < 5) {
+    return true;
+  }
+  if (parseFloat(input) >= 100 && parseFloat(input) < 999 && input.length < 6) {
+    return true;
+  }
+  if (parseFloat(input) >= 1000 && parseFloat(input) < 9999 && input.length < 7) {
+    return true;
+  }
+  if (parseFloat(input) >= 10000 && parseFloat(input) < 99999 && input.length < 8) {
+    return true;
+  }
+  if (parseFloat(input) >= 100000 && parseFloat(input) < 999999 && input.length < 9) {
+    return true;
+  }
+  if (parseFloat(input) >= 1000000 && parseFloat(input) < 9999999 && input.length < 10) {
+    return true;
+  }
+  if (parseFloat(input) >= 10000000 && parseFloat(input) < 99999999 && input.length < 11) {
+    return true;
+  }
+  if (parseFloat(input) >= 100000000 && parseFloat(input) < 999999999 && input.length < 11) {
     return true;
   }
   return false;
@@ -87,6 +108,12 @@ const validateInitialTap = (input, fundRelease) => {
 };
 const validateLength = input => {
   if (input.length === 0) {
+    return false;
+  }
+  return true;
+};
+const validateZero = input => {
+  if (input === 0) {
     return false;
   }
   return true;
@@ -173,5 +200,6 @@ export {
   validateDecimal,
   validateEntityPercentage,
   validateTwoDecimalPlaces,
-  validateOneDecimalPlace
+  validateOneDecimalPlace,
+  validateZero
 };

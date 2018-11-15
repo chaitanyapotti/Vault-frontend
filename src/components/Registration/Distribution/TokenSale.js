@@ -19,7 +19,7 @@ import {
 } from "../../../actions/projectRegistrationActions";
 import actionTypes from "../../../action_types";
 import { ButtonComponent } from "../../Common/FormComponents";
-import { validateLength } from "../../../helpers/common/validationHelperFunctions";
+import { validateLength, validateZero } from "../../../helpers/common/validationHelperFunctions";
 
 class TokenSale extends React.Component {
   state = {
@@ -59,7 +59,10 @@ class TokenSale extends React.Component {
       this.setState({ modalOpen: true, modalMessage: `Round 1 bonus should be atleast as much as the round 2 bonus: ${r2Bonus}%` });
     }
     if (parseFloat(r1Bonus) > 100 + 2 * parseFloat(r2Bonus)) {
-      this.setState({ modalOpen: true, modalMessage: `Round 1 bonus should be less than ${100 + 2 * r2Bonus}% to prevent a price jump of more than doubling between Round 1 & 2.` });
+      this.setState({
+        modalOpen: true,
+        modalMessage: `Round 1 bonus should be less than ${100 + 2 * r2Bonus}% to prevent a price jump of more than doubling between Round 1 & 2.`
+      });
     }
     this.props.calculateTokens();
   };
@@ -112,7 +115,9 @@ class TokenSale extends React.Component {
     const { modalOpen, modalMessage } = this.state || {};
     return (
       <div>
-        <div className="txt-xl" style={{ padding: "40px 50px" }}>Token Sale Distribution</div>
+        <div className="txt-xl" style={{ padding: "40px 50px" }}>
+          Token Sale Distribution
+        </div>
         <hr />
         <div style={{ padding: "20px 50px" }}>
           <Row>
@@ -128,6 +133,8 @@ class TokenSale extends React.Component {
                 inputValue={round1TargetUSD}
                 disabled={!allowEditAll}
                 onChange={this.onChangeRound1TargetUSD}
+                error={!!this.getErrorMsg(actionTypes.ROUND1_TARGET_USD_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.ROUND1_TARGET_USD_CHANGED)}
               />
             </Col>
             <Col xs={12} lg={6}>
@@ -142,6 +149,8 @@ class TokenSale extends React.Component {
                 inputValue={round1TargetEth}
                 disabled={!allowEditAll}
                 onChange={this.onChangeRound1TargetEth}
+                error={!!this.getErrorMsg(actionTypes.ROUND1_TARGET_ETH_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.ROUND1_TARGET_ETH_CHANGED)}
               />
             </Col>
           </Row>
@@ -165,6 +174,8 @@ class TokenSale extends React.Component {
                 inputValue={round2TargetUSD}
                 disabled={!allowEditAll}
                 onChange={this.onChangeRound2TargetUSD}
+                error={!!this.getErrorMsg(actionTypes.ROUND2_TARGET_USD_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.ROUND2_TARGET_USD_CHANGED)}
               />
             </Col>
             <Col xs={12} lg={6}>
@@ -179,6 +190,8 @@ class TokenSale extends React.Component {
                 inputValue={round2TargetEth}
                 disabled={!allowEditAll}
                 onChange={this.onChangeRound2TargetEth}
+                error={!!this.getErrorMsg(actionTypes.ROUND2_TARGET_ETH_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.ROUND2_TARGET_ETH_CHANGED)}
               />
             </Col>
           </Row>
@@ -202,6 +215,8 @@ class TokenSale extends React.Component {
                 inputValue={round3TargetUSD}
                 disabled={!allowEditAll}
                 onChange={this.onChangeRound3TargetUSD}
+                error={!!this.getErrorMsg(actionTypes.ROUND3_TARGET_USD_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.ROUND3_TARGET_USD_CHANGED)}
               />
             </Col>
             <Col xs={12} lg={6}>
@@ -216,6 +231,8 @@ class TokenSale extends React.Component {
                 inputValue={round3TargetEth}
                 disabled={!allowEditAll}
                 onChange={this.onChangeRound3TargetEth}
+                error={!!this.getErrorMsg(actionTypes.ROUND3_TARGET_ETH_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.ROUND3_TARGET_ETH_CHANGED)}
               />
             </Col>
           </Row>
@@ -253,6 +270,7 @@ class TokenSale extends React.Component {
                 inputLabel="Round2 Bonus"
                 inputPlaceholder=""
                 inputValue={r2Bonus}
+                disabled={!allowEditAll}
                 onChange={this.onChangeR2Bonus}
                 error={!!this.getErrorMsg(actionTypes.R2_BONUS_CHANGED)}
                 helperText={this.getErrorMsg(actionTypes.R2_BONUS_CHANGED)}
@@ -263,9 +281,15 @@ class TokenSale extends React.Component {
             <Col lg={12}>
               <ButtonComponent
                 label="Calculate"
-                style={{padding: '0 40px'}}
+                style={{ padding: "0 40px" }}
                 onClick={this.onCalculateTokenClicked}
                 disabled={
+                  errors[actionTypes.ROUND1_TARGET_USD_CHANGED] !== "" ||
+                  errors[actionTypes.ROUND1_TARGET_ETH_CHANGED] !== "" ||
+                  errors[actionTypes.ROUND2_TARGET_USD_CHANGED] !== "" ||
+                  errors[actionTypes.ROUND2_TARGET_ETH_CHANGED] !== "" ||
+                  errors[actionTypes.ROUND3_TARGET_USD_CHANGED] !== "" ||
+                  errors[actionTypes.ROUND3_TARGET_ETH_CHANGED] !== "" ||
                   errors[actionTypes.R2_BONUS_CHANGED] !== "" ||
                   !validateLength(round1TargetEth) ||
                   !validateLength(round1TargetUSD) ||
@@ -274,7 +298,13 @@ class TokenSale extends React.Component {
                   !validateLength(round3TargetEth) ||
                   !validateLength(round3TargetUSD) ||
                   !validateLength(r1Bonus) ||
-                  !validateLength(r2Bonus)
+                  !validateLength(r2Bonus) ||
+                  !validateZero(round1TargetUSD) ||
+                  !validateZero(round2TargetUSD) ||
+                  !validateZero(round3TargetUSD) ||
+                  !validateZero(round1TargetEth) ||
+                  !validateZero(round2TargetEth) ||
+                  !validateZero(round3TargetEth)
                 }
               />
             </Col>
@@ -309,7 +339,8 @@ const mapStateToProps = state => {
     round3Rate,
     totalSaleTokens,
     allowEditAll,
-    errors
+    errors,
+    ethPrice
   } = state.projectRegistrationData || {};
   return {
     round1TargetUSD,
@@ -328,7 +359,8 @@ const mapStateToProps = state => {
     round3Rate,
     totalSaleTokens,
     allowEditAll,
-    errors
+    errors,
+    ethPrice
   };
 };
 

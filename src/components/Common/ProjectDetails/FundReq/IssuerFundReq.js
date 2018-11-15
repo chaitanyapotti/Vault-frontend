@@ -6,7 +6,17 @@ import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 
 class IssuerFundReq extends Component {
   getObject1 = () => {
-    const { data, details, tokensUnderGovernance, onEditDescriptionClick } = this.props || {};
+    const {
+      data,
+      details,
+      tokensUnderGovernance,
+      isXfr1DescriptionEditable,
+      onXfr1DescriptionChange,
+      xfr1Description,
+      isPermissioned,
+      onEditXfr1DescriptionClick,
+      onSaveXfr1DescriptionClick
+    } = this.props || {};
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
     const requiredData = details && details.length > 0 && address ? details.filter(x => x.address.toUpperCase() === address.toUpperCase()) : [];
@@ -17,16 +27,31 @@ class IssuerFundReq extends Component {
         consensus={consensus}
         endTime={endTime}
         name={name}
-        description={description}
+        description={xfr1Description !== null ? xfr1Description : description}
         startDate={startDate}
         tokensUnderGovernance={tokensUnderGovernance}
-        onEditDescriptionClick={onEditDescriptionClick}
+        onEditDescriptionClick={onEditXfr1DescriptionClick}
+        isDescriptionEditable={isXfr1DescriptionEditable}
+        onDescriptionChange={onXfr1DescriptionChange}
+        isPermissioned={isPermissioned}
+        onSaveClick={onSaveXfr1DescriptionClick}
+        address={address}
       />
     ) : null;
   };
 
   getObject2 = () => {
-    const { data, details, tokensUnderGovernance, onEditDescriptionClick } = this.props || {};
+    const {
+      data,
+      details,
+      tokensUnderGovernance,
+      isXfr2DescriptionEditable,
+      onXfr2DescriptionChange,
+      xfr2Description,
+      isPermissioned,
+      onEditXfr2DescriptionClick,
+      onSaveXfr2DescriptionClick
+    } = this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime, address } = poll2 || {};
     const requiredData = details && details.length > 0 && address ? details.filter(x => x.address.toUpperCase() === address.toUpperCase()) : [];
@@ -37,10 +62,15 @@ class IssuerFundReq extends Component {
         consensus={consensus}
         endTime={endTime}
         name={name}
-        description={description}
+        description={xfr2Description !== null ? xfr2Description : description}
         startDate={startDate}
         tokensUnderGovernance={tokensUnderGovernance}
-        onEditDescriptionClick={onEditDescriptionClick}
+        onEditDescriptionClick={onEditXfr2DescriptionClick}
+        isDescriptionEditable={isXfr2DescriptionEditable}
+        onDescriptionChange={onXfr2DescriptionChange}
+        isPermissioned={isPermissioned}
+        onSaveClick={onSaveXfr2DescriptionClick}
+        address={address}
       />
     ) : null;
   };

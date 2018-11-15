@@ -5,6 +5,7 @@ import { CUIFormInput, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import DTPicker from "../Common/DTPicker";
+
 import {
   addressLine1ChangedAction,
   addressLine2ChangedAction,
@@ -23,6 +24,7 @@ import {
   citizenshipChangedAction,
   saveUserFormStates
 } from "../../actions/userRegistrationActions";
+const countryList = require('country-list');
 
 class BuyersInformation extends Component {
   constructor(props) {
@@ -118,6 +120,12 @@ class BuyersInformation extends Component {
 
   render() {
     const { selectedDate } = this.state || {};
+    console.log("country list: ",countryList.getNames())
+    let countryChoices = []
+    const allCountries = countryList.getNames()
+    for (let i=0; i< allCountries.length; i++){
+      countryChoices.push({value: allCountries[i], primaryText: allCountries[i]})
+    }
     const {
       addressLine1,
       addressLine2,
@@ -226,7 +234,8 @@ class BuyersInformation extends Component {
               inputPlaceholder="Metamask"
               onChange={this.onChangeCountry}
               inputValue={country}
-              items={[{ value: "USA", primaryText: "USA" }, { value: "INDIA", primaryText: "INDIA" }, { value: "CHINA", primaryText: "CHINA" }]}
+              items={countryChoices}
+              //items={[{ value: "USA", primaryText: "USA" }, { value: "INDIA", primaryText: "INDIA" }, { value: "CHINA", primaryText: "CHINA" }]}
             />
           </Col>
         </Row>

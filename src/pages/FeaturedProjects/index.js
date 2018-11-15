@@ -6,6 +6,7 @@ import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions
 import { Grid } from "../../helpers/react-flexbox-grid";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
 import { CUICircularProgress } from "../../helpers/material-ui";
+import  ContentLoader from "react-content-loader";
 
 class FeaturedProjects extends Component {
   componentDidMount() {
@@ -21,7 +22,8 @@ class FeaturedProjects extends Component {
       <div>
         <div className="text--center sbhdr-txt txt-xl txt-bold">FEATURED PROJECTS</div>
         {showFeaturedProjectsLoader ? (
-          <CUICircularProgress color="secondary" />
+          <ContentLoader/>
+          //<CUICircularProgress color="secondary" />
         ) : featuredProjectsRetrievedSuccessfully ? (
           <div className="push-top--35">
             <Grid>

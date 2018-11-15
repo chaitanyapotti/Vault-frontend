@@ -84,10 +84,11 @@ class ProjectDetailCrowdSale extends Component {
   }
 
   getRoundText = () => {
-    const { rounds, roundInfo } = this.props || {};
+    const { rounds, roundInfo, currentRoundNumber } = this.props || {};
     const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
+    if (parseFloat(tokenCount) === parseFloat(totalTokensSold)) return `Round ${currentRoundNumber} Ended`;
     // based on tokens sold
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
@@ -202,7 +203,8 @@ class ProjectDetailCrowdSale extends Component {
               buttonSpinning={buttonSpinning}
               onClick={this.onWhiteListClickInternal}
               signinStatusFlag={signinStatusFlag}
-              buyButtonVisibility={isCurrentMember && this.canBuy()}
+              buyButtonVisibility={isCurrentMember}
+              buyButtonDisabled={this.canBuy()}
               onBuyClick={this.buyTokens}
               buyButtonText="Buy"
               r1Finish={this.r1Finish()}

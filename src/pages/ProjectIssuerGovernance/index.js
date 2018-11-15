@@ -68,12 +68,14 @@ class ProjectIssuerGovernance extends Component {
 
     if (currentDeploymentIndicator !== 12)
       return (
-        <div>
-          <p>The project has not been deployed yet</p>
-        </div>
+        <Grid>
+          <div className="text-center">The project has not been deployed yet</div>
+        </Grid>
       );
     if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
-      return <div>The project has ended</div>;
+      return  <Grid>
+                <div className="text-center">The project has ended</div>
+              </Grid>;
     }
     if (treasuryStateNumber === "3" && currentRoundNumber !== "0") {
       return (

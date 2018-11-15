@@ -45,8 +45,9 @@ class Deployer extends Component {
 
   deployDaicoToken = () => {
     const { userLocalPublicAddress, deployContractAction: deployAction, projectDetails } = this.props || {};
-    const { version, _id, currentDeploymentIndicator, projectName, tokenTag, membershipAddress, totalMintableSupply } = projectDetails || {};
-    const args = [projectName, tokenTag, membershipAddress, totalMintableSupply];
+    const { version, _id, currentDeploymentIndicator, projectName, tokenTag, membershipAddress, totalMintableSupply, capPercent } =
+      projectDetails || {};
+    const args = [projectName, tokenTag, membershipAddress, totalMintableSupply, capPercent];
     deployAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", userLocalPublicAddress);
   };
 
@@ -78,9 +79,9 @@ class Deployer extends Component {
     const args = [
       daicoTokenAddress,
       teamAddress,
-      initialFundRelease.toString(),
+      initialFundRelease,
       initialTapAmount,
-      new Date(killPollStartDate).getTime() / 1000, // In Unix Time
+      (new Date(killPollStartDate).getTime() / 1000).toString(), // In Unix Time
       config.vault_contract_address,
       capPercent,
       killAcceptancePercent,

@@ -46,7 +46,6 @@ export const fetchProjectDetails = projectid => dispatch => {
       if (response.status === 200) {
         const { data } = response.data || {};
         const { latestTxHash, currentDeploymentIndicator } = data || {};
-        console.log("latestTxHash: ", response.data )
         dispatch(projectDetailsFetched(data));
         if (latestTxHash !== "0x") {
           dispatch(pollTxHash(latestTxHash, projectid, currentDeploymentIndicator));
@@ -64,7 +63,6 @@ export const fetchProjectDetails = projectid => dispatch => {
 export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator) => dispatch => {
   let txHash = latestTxHash;
   const myTimer = setInterval(() => {
-    console.log(txHash)
     if (txHash === "0x" || !latestTxHash) clearInterval(myTimer);
     web3.eth
       .getTransactionReceipt(latestTxHash)

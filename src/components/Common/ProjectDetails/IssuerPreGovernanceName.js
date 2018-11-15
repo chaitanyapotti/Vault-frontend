@@ -28,7 +28,6 @@ const IssuerPreGovernanceName = props => {
     startR1ButtonTransactionHash,
     r1FinalizeButtonTransactionHash
   } = props || {};
-  console.log(isPermissioned);
   const link = `https://rinkeby.etherscan.io/tx/${startR1ButtonTransactionHash}`;
   const refundLink = `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`;
   const { website } = urls;

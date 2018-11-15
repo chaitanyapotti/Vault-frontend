@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Grid } from "../../helpers/react-flexbox-grid";
-import ContentLoader from "react-content-loader";
 import CustomizedStepper from "../../components/Common/CustomizedStepper";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import { CUICard, CUIDivider } from "../../helpers/material-ui";
@@ -14,7 +13,7 @@ import {
   saveUserFormStates,
   verifyPhoneNumber
 } from "../../actions/userRegistrationActions";
-
+import Loader from "../../components/Loaders/loader";
 class WhiteList extends Component {
   componentDidMount() {
     var interval
@@ -231,13 +230,13 @@ class WhiteList extends Component {
                       </CUICard>
                     </Grid>
                   ) : (
-                      <ContentLoader />
+                    <Grid><Loader rows={6} /></Grid>
                     )}
                 </div>
               ) : (this.props.history.push("/"))}
             </div>
           ) : (
-            <ContentLoader />
+            <Grid><Loader rows={6} /></Grid>
           )
         }
       </div>

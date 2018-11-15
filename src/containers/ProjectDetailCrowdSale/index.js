@@ -176,7 +176,6 @@ class ProjectDetailCrowdSale extends Component {
       r1FinalizeButtonTransactionHash,
       buyAmount
     } = this.props || {};
-    console.log(tokenBalance);
     const { modalOpen, buyModalOpen } = this.state;
     return (
       <Grid>

@@ -3,13 +3,11 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import qs from "qs";
 import { withRouter } from "react-router-dom";
-import ContentLoader from "react-content-loader";
 import { currentRound, clearGovernanceStates } from "../../actions/projectGovernanceActions/index";
 import IssuerDetailPreGovernance from "../../containers/IssuerDetailPreGovernance";
 import IssuerDetailGovernance from "../../containers/IssuerDetailGovernance";
-
-const MyLoader = () => <ContentLoader />;
-
+import Loader from "../../components/Loaders/loader";
+import {Grid} from "../../helpers/react-flexbox-grid";
 class ProjectIssuerGovernance extends Component {
   componentWillUnmount() {
     this.props.clearGovernanceStates();
@@ -65,7 +63,7 @@ class ProjectIssuerGovernance extends Component {
     // Redirect to form if cdi !== 12
 
     if (treasuryStateNumber === "0") {
-      return <ContentLoader />;
+      return <Grid><Loader rows={6} /></Grid>;
     }
 
     if (currentDeploymentIndicator !== 12)

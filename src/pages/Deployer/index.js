@@ -1,23 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import qs from "qs";
-import ContentLoader from "react-content-loader";
 import { fetchProjectDetails, deployContractAction, performContractAction } from "../../actions/deployerActions/index";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import web3 from "../../helpers/web3";
 import CustomizedStepper from "../../components/Common/CustomizedStepper";
 import DeployerCard from "../../components/DeployerCard";
 import config from "../../config";
-
+import Loader from "../../components/Loaders/loader";
 class Deployer extends Component {
   componentDidMount() {
     const { fetchProjectDetails: getProjectDetails, history } = this.props || {};
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
     if ("projectid" in params) {
-      console.log("first mount: ", params.projectid, window.location.href);
       getProjectDetails(params.projectid);
     } else {
       history.push({
@@ -46,8 +44,9 @@ class Deployer extends Component {
 
   deployDaicoToken = () => {
     const { userLocalPublicAddress, deployContractAction: deployAction, projectDetails } = this.props || {};
-    const { version, _id, currentDeploymentIndicator, projectName, tokenTag, membershipAddress, totalMintableSupply } = projectDetails || {};
-    const args = [projectName, tokenTag, membershipAddress, totalMintableSupply];
+    const { version, _id, currentDeploymentIndicator, projectName, tokenTag, membershipAddress, totalMintableSupply, capPercent } =
+      projectDetails || {};
+    const args = [projectName, tokenTag, membershipAddress, totalMintableSupply, capPercent];
     deployAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", userLocalPublicAddress);
   };
 
@@ -79,9 +78,9 @@ class Deployer extends Component {
     const args = [
       daicoTokenAddress,
       teamAddress,
-      initialFundRelease.toString(),
+      initialFundRelease,
       initialTapAmount,
-      new Date(killPollStartDate).getTime() / 1000, // In Unix Time
+      (new Date(killPollStartDate).getTime() / 1000).toString(), // In Unix Time
       config.vault_contract_address,
       capPercent,
       killAcceptancePercent,
@@ -337,41 +336,66 @@ class Deployer extends Component {
   ];
 
   render() {
-    const { projectDetails, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag } = this.props || {};
+    const {
+      projectDetails,
+      isIssuerChecked,
+      isMetamaskNetworkChecked,
+      isMetamaskInstallationChecked,
+      isUserDefaultAccountChecked,
+      isVaultMembershipChecked,
+      signinStatusFlag
+    } = this.props || {};
     const { currentDeploymentIndicator, _id } = projectDetails || {};
     return (
       <div>
-      {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked? 
-      (<div>
-        {signinStatusFlag===5? (<Grid>
-        <CustomizedStepper
-          history={this.props.history}
-          getStepContent={this.getStepContent}
-          getSteps={this.getSteps}
-          activeStep={currentDeploymentIndicator}
-          projectid={_id}
-        />
-      </Grid>):(this.props.history.push("/"))
-      }
+        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
+          <div>
+            {signinStatusFlag === 5 ? (
+              <Grid>
+                <CustomizedStepper
+                  history={this.props.history}
+                  getStepContent={this.getStepContent}
+                  getSteps={this.getSteps}
+                  activeStep={currentDeploymentIndicator}
+                  projectid={_id}
+                />
+              </Grid>
+            ) : (
+              this.props.history.push("/")
+            )}
+          </div>
+        ) : (
+          <Grid>
+            <Loader rows={5} />
+          </Grid>
+        )}
       </div>
-        ):(
-        <ContentLoader/>
-      )}
-      </div>
-      
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { userLocalPublicAddress, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag } = state.signinManagerData || {};
+  const {
+    userLocalPublicAddress,
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked,
+    signinStatusFlag
+  } = state.signinManagerData || {};
   const { projectDetails, deployContractButtonSpinning, deployContractStartButtonSpinning } = state.deployerReducer || {};
   return {
     projectDetails,
     userLocalPublicAddress,
     deployContractButtonSpinning,
     deployContractStartButtonSpinning,
-    isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked,
+    signinStatusFlag
   };
 };
 
@@ -385,7 +409,9 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Deployer));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Deployer)
+);

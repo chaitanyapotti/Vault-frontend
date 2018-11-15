@@ -7,11 +7,11 @@ import { ButtonComponent } from "../Common/FormComponents";
 const styles = {
   card: {
     "&:hover": {
-      transform: 'translate(0px, -5px) scale(1.02)',
-      transition: '250ms'
+      transform: "translate(0px, -5px) scale(1.02)",
+      transition: "250ms"
     },
     maxWidth: 345,
-    boxShadow: '0px 10px 20px 0px rgba(76, 169, 252, 0.5)'
+    boxShadow: "0px 10px 20px 0px rgba(76, 169, 252, 0.5)"
   },
   media: {
     // ⚠️ object-fit is not supported by IE 11.
@@ -55,9 +55,7 @@ class Featuredproject extends Component {
           <div className="push--top fnt-ps dscrptn-lins">{description}</div>
           <div className="push--top text--right">
             <a href={website} target="_blank" rel="noopener noreferrer">
-              <ButtonComponent onClick={()=>{}}>
-                Know More
-              </ButtonComponent>
+              <ButtonComponent onClick={() => {}}>Know More</ButtonComponent>
             </a>
           </div>
         </CUICardText>

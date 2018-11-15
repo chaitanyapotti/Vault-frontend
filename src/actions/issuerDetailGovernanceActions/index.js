@@ -47,6 +47,25 @@ export const currentWithdrawableAmountReceived = receipt => ({
   type: actionTypes.CURRENT_WITHDRAWABLE_AMOUNT_RECEIVED
 });
 
+export const onEditDescriptionClick = value => dispatch => {
+  dispatch({
+    type: actionTypes.EDIT_DESCRIPTION_CHANGED,
+    payload: value
+  });
+};
+
+export const editDescription = (projectid, xfrAddress, description) => dispatch => {
+  axios
+    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}`, {
+      description
+    })
+    .then(response => dispatch(onEditDescriptionClick(false)))
+    .catch(err => {
+      console.log(err);
+      dispatch(onEditDescriptionClick(false));
+    });
+};
+
 export const startR1 = (version, contractAddress, userLocalPublicAddress, projectid, round) => dispatch => {
   dispatch(isStartR1ButtonSpinning(true));
   axios

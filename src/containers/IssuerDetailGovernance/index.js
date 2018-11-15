@@ -220,7 +220,6 @@ class IssuerDetailGovernance extends Component {
   };
 
   onChangeWithdrawAmount = e => {
-    console.log("yes");
     const { withdrawAmountChanged: withdrawChange } = this.props || {};
     withdrawChange(e.target.value);
   };
@@ -257,7 +256,8 @@ class IssuerDetailGovernance extends Component {
     return (
       poll1Address === "0x0000000000000000000000000000000000000000" ||
       poll2Address === "0x0000000000000000000000000000000000000000" ||
-      this.canWithdrawXfrAmount() || new Date() > newDate1 ||
+      this.canWithdrawXfrAmount() ||
+      new Date() > newDate1 ||
       new Date() > newDate2
     );
   };
@@ -324,6 +324,8 @@ class IssuerDetailGovernance extends Component {
     const { version, withdrawXfrAmount: withdrawXfrAmountClick, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
     withdrawXfrAmountClick(version, pollFactoryAddress, userLocalPublicAddress);
   };
+
+  onEditDescriptionClick = xfrAddress => {};
 
   render() {
     const {
@@ -449,7 +451,12 @@ class IssuerDetailGovernance extends Component {
           null}
           {/* <Row className="push--top">
           <Col xs={12} lg={6}> */}
-          <IssuerFundReq data={xfrData} details={xfrDetails} tokensUnderGovernance={tokensUnderGovernance} />
+          <IssuerFundReq
+            data={xfrData}
+            details={xfrDetails}
+            tokensUnderGovernance={tokensUnderGovernance}
+            onEditDescriptionClick={this.onEditDescriptionClick}
+          />
           {/* </Col>
         </Row> */}
         </MasonaryLayout>

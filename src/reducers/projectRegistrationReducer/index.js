@@ -199,11 +199,8 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.NON_SALE_ENTITY_EDIT: {
-      console.log("table index: ", action.payload)
       let nonSaleEntities = state.nonSaleEntities;
       let editEntity = nonSaleEntities.splice(action.payload[3], 1);
-      console.log("non sale entities: ", nonSaleEntities)
-      console.log("index of unallocated: ",nonSaleEntities.indexOf({ entityName: "Unallocated" }))
       var unallocIndex = 100
       for (let obj in nonSaleEntities){
         if (nonSaleEntities[obj].entityName==="Unallocated"){
@@ -216,7 +213,6 @@ export default function(state = initialState, action) {
       // if (nonSaleEntities.indexOf({ entityName: "Unallocated" }) != -1){
       //   nonSaleEntities.splice(nonSaleEntities.indexOf({ entityName: "Unallocated" }), 1);
       // }
-      
       const { entityName, entityAddress, entityPercentage } = editEntity[0] || "";
       let unallocatedTokensPer = state.unallocatedTokensPer
       unallocatedTokensPer = unallocatedTokensPer + entityPercentage
@@ -316,7 +312,6 @@ export default function(state = initialState, action) {
 
     case actionTypes.ENTITY_ADDRESS_CHANGED: {
       const { isValid, value } = action.payload;
-      console.log(isValid, value);
       localErrors[actionTypes.ENTITY_ADDRESS_CHANGED] = isValid ? "" : "Not a Valid Address";
       return {
         ...state,

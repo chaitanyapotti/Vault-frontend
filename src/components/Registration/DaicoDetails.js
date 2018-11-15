@@ -143,6 +143,8 @@ class DaicoDetails extends React.Component {
                   // helperText={this.state.errorAgeText}
                   // onKeyDownSelector="Admin"
                   onChange={this.onChangeIniFundVal}
+                  error={!!this.getErrorMsg(actionTypes.INITIAL_FUND_RELEASE_CHANGED)}
+                  helperText={this.getErrorMsg(actionTypes.INITIAL_FUND_RELEASE_CHANGED)}
                 />
               </Col>
               <Col xs={12} lg={6}>

@@ -19,15 +19,39 @@ export const initialState = {
   deployXfrPollTransactionHash: "",
   withdrawXfrButtonTransactionHash: "",
   withdrawButtonTransactionHash: "",
-  isDescriptionEditable: false
+  isXfr1DescriptionEditable: false,
+  isXfr2DescriptionEditable: false,
+  xfr1Description: null,
+  xfr2Description: null
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.EDIT_DESCRIPTION_CHANGED: {
+    case actionTypes.EDIT_XFR1_DESCRIPTION_CHANGED: {
       return {
         ...state,
-        isDescriptionEditable: action.payload
+        isXfr1DescriptionEditable: action.payload
+      };
+    }
+
+    case actionTypes.EDIT_XFR2_DESCRIPTION_CHANGED: {
+      return {
+        ...state,
+        isXfr2DescriptionEditable: action.payload
+      };
+    }
+
+    case actionTypes.XFR1_DESCRIPTION_CHANGED: {
+      return {
+        ...state,
+        xfr1Description: action.payload
+      };
+    }
+
+    case actionTypes.XFR2_DESCRIPTION_CHANGED: {
+      return {
+        ...state,
+        xfr2Description: action.payload
       };
     }
 

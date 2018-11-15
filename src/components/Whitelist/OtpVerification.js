@@ -77,7 +77,7 @@ class OtpVerification extends Component {
                 <Row>
                   <Col xs={12} lg={4}>
                     <CUIFormInput
-                      inputType={CUIInputType.SELECT}
+                      inputType={CUIInputType.TEXT}
                       full
                       inputName="Country Code"
                       inputLabel="Country Code"
@@ -85,7 +85,7 @@ class OtpVerification extends Component {
                       inputValue={countryCode}
                       onChange={this.handleCountryCodeChanged}
                       disabled={otpFromServer !== ""}
-                      items={[{ value: "+91", primaryText: "+91" }]}
+                      //items={[{ value: "+91", primaryText: "+91" }]}
                     />
                   </Col>
                   <Col xs={12} lg={8}>

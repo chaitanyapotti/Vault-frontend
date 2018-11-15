@@ -18,21 +18,6 @@ import actionTypes from "../../action_types";
 import DTPicker from "../Common/DTPicker";
 
 class DaicoDetails extends React.Component {
-  // state = {
-  //   selectedRound1StartDate: null,
-  //   selectedRound1EndDate: null
-  // };
-
-  // handleStartDateChange = date => {
-  //   console.log("date", date);
-  //   this.setState({ selectedRound1StartDate: date });
-  // };
-
-  // handleEndDateChange = date => {
-  //   console.log("date", date);
-  //   this.setState({ selectedRound1EndDate: date });
-  // };
-
   onChangeIniFundVal = e => {
     this.props.initialFundReleaseChangedAction(e.target.value);
   };

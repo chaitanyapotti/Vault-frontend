@@ -46,7 +46,6 @@ export const fetchProjectDetails = projectid => dispatch => {
       if (response.status === 200) {
         const { data } = response.data || {};
         const { latestTxHash, currentDeploymentIndicator } = data || {};
-        console.log("latestTxHash: ", response.data )
         dispatch(projectDetailsFetched(data));
         if (latestTxHash !== "0x") {
           dispatch(pollTxHash(latestTxHash, projectid, currentDeploymentIndicator));
@@ -61,10 +60,9 @@ export const fetchProjectDetails = projectid => dispatch => {
     });
 };
 
-export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator) => dispatch => {
+export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator, userLocalPublicAddress) => dispatch => {
   let txHash = latestTxHash;
   const myTimer = setInterval(() => {
-    console.log(txHash)
     if (txHash === "0x" || !latestTxHash) clearInterval(myTimer);
     web3.eth
       .getTransactionReceipt(latestTxHash)
@@ -75,6 +73,30 @@ export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator) 
             setContractAddress(projectid, currentDeploymentIndicator, result.contractAddress).then(body => {
               dispatch(deployedContract(body));
               dispatch(isDeployContractButtonSpinning(false));
+              if (currentDeploymentIndicator === 11) {
+                const projectObject = {
+                  ownerAddress: userLocalPublicAddress,
+                  tokenPrice: 0,
+                  projectHealth: 0,
+                  killConsensus: 0,
+                  projectEndedAt: "",
+                  tapIncrement: 0,
+                  xfrCount: 0,
+                  r1EndedAt: "",
+                  currentRound: 0,
+                  raisedAmount: 0
+                };
+                axios
+                  .post(`${config.api_base_url}/db/projects/`, projectObject)
+                  .then(response => {
+                    if (response.status === 200) {
+                      console.log("patch success");
+                    }
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+              }
             });
             txHash = "0x";
           }
@@ -170,7 +192,7 @@ export const performContractAction = (version, projectid, cdi, args, contractNam
               dispatch(receivedTransactionHash(body));
               dispatch(isDeployContractButtonSpinning(true));
               dispatch(isDeployContractStartButtonSpinning(false));
-              dispatch(pollTxHash(transactionHash, projectid, cdi));
+              dispatch(pollTxHash(transactionHash, projectid, cdi, userLocalPublicAddress));
             })
           )
           .on("receipt", receipt =>

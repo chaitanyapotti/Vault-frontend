@@ -22,8 +22,7 @@ import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
 import AlertModal from "../../Common/AlertModal";
 import Warning from "@material-ui/icons/Warning";
-import ContentLoader from "react-content-loader";
-
+import Loader from '../../Loaders/loader';
 // const images = {
 //   metamask: "/assets/Footer/metamask.png"
 // };
@@ -275,10 +274,10 @@ class HeaderPartial extends React.Component {
         ) : null}
       </Menu>
     );
-
+    const random = Math.random() * (1 - 0.7) + 0.7;
     return (
       <div>
-        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
+        {(isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked) ? (
           <div className={classes.root}>
             <CUIAppBar
               position="static"
@@ -461,7 +460,11 @@ class HeaderPartial extends React.Component {
               </div>
             </Drawer>
           </div>
-        ) : <ContentLoader style={scrnWdh < 768 ? { height: "60px" } : { height: "85px", padding: 0 }}/>}
+        ) :
+          <Grid>
+            <Loader rows={1} />
+          </Grid>
+      }
         <AlertModal open={signInModalOpen} handleClose={this.handleSignInModalClose}>
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />

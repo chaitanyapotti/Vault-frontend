@@ -1,6 +1,3 @@
-/* eslint react/require-default-props: 0 */
-/* eslint camelcase: 0 */
-
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -32,11 +29,12 @@ import {
   projectMetadata
 } from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
+import { fetchPrice } from "../../actions/priceFetchActions";
 import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import AlertModal from "../../components/Common/AlertModal";
 import actionTypes from "../../action_types";
-
+import Loader from "../../components/Loaders/loader";
 class Registration extends Component {
   state = {
     modalOpen: false,
@@ -48,8 +46,8 @@ class Registration extends Component {
 
   componentDidMount() {
     this.props.clearProjectDetails()
-    const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags, userLocalPublicAddress, signinStatusFlag } = this.props || {};
-
+    const { getProjectNames: fetchProjectNames, getTokenTags: fetchTokenTags, userLocalPublicAddress, signinStatusFlag, fetchPrice: getPrice } = this.props || {};
+    getPrice("ETH")
     var interval
     if (!signinStatusFlag) {
       interval = setInterval(() => {
@@ -59,67 +57,60 @@ class Registration extends Component {
           if (this.props.signinStatusFlag !== 5) {
             this.props.history.push({
               pathname: `/`
-            })
+            });
           }
-          clearInterval(interval)
+          clearInterval(interval);
         }
-      }, 1000)
+      }, 1000);
     } else {
       this.props.fetchProjectStates(this.props.userLocalPublicAddress);
       this.props.fetchProjectDeploymentIndicator(this.props.userLocalPublicAddress);
       if (this.props.signinStatusFlag !== 5) {
         this.props.history.push({
           pathname: `/`
-        })
+        });
       }
-      clearInterval(interval)
+      clearInterval(interval);
     }
     fetchProjectNames();
     fetchTokenTags();
-    // window.addEventListener("scroll", this.checkOffset);
+    window.addEventListener("scroll", this.checkOffset);
   }
 
   // Function to make the docked btn sticky
   checkOffset = () => {
-    const dckdBtnCnt = document.querySelector('#dckd-btn');
-    const footer = document.querySelector('#footer');
+    const dckdBtnCnt = document.querySelector("#dckd-btn");
+    const footer = document.querySelector("#footer");
 
     function getRectTop(el) {
-      var rect = el && el.getBoundingClientRect();
+      const rect = el && el.getBoundingClientRect();
       return rect && rect.top;
     }
 
-    if (dckdBtnCnt && (getRectTop(dckdBtnCnt) + document.body.scrollTop) + dckdBtnCnt.offsetHeight >= (getRectTop(footer) + document.body.scrollTop) - 10)
-      dckdBtnCnt.style.position = 'relative';
-    if (document.body.scrollTop + window.innerHeight < (getRectTop(footer) + document.body.scrollTop))
-      dckdBtnCnt.style.position = 'fixed'; // restore when you scroll up
-  }
+    if (dckdBtnCnt && getRectTop(dckdBtnCnt) + document.body.scrollTop + dckdBtnCnt.offsetHeight >= getRectTop(footer) + document.body.scrollTop - 10)
+      dckdBtnCnt.style.position = "relative";
+    if (document.body.scrollTop + window.innerHeight < getRectTop(footer) + document.body.scrollTop) dckdBtnCnt.style.position = "fixed"; // restore when you scroll up
+  };
 
   componentWillUnmount() {
-    // window.removeEventListener("scroll", this.checkOffset);
+    window.removeEventListener("scroll", this.checkOffset);
   }
 
   componentDidUpdate() {
-    setTimeout(
-      ()=>{
-        const {
-          project_id
-        } = this.props || {};
-        if (project_id !== "") {
-          console.log("pushing to deploy")
-          this.props.history.push({
-            pathname: `/deploy`,
-            search: `?projectid=${project_id}`
-          });
-        }
-      }, 1000  
-    )
-    
+    setTimeout(() => {
+      const { project_id } = this.props || {};
+      if (project_id !== "") {
+        this.props.history.push({
+          pathname: `/deploy`,
+          search: `?projectid=${project_id}`
+        });
+      }
+    }, 1000);
   }
 
   handleSubmitDaicoMetadata = e => {
-    this.props.projectMetadata(this.props.projectRegistrationData, this.props.userLocalPublicAddress)
-  }
+    this.props.projectMetadata(this.props.projectRegistrationData, this.props.userLocalPublicAddress);
+  };
 
   handlePublishDaico = e => {
     const {
@@ -146,17 +137,13 @@ class Registration extends Component {
   };
 
   handleSaveButtonClicked = () => {
-    const {
-      projectRegistrationData: registrationData,
-      userLocalPublicAddress: localAddress,
-      saveProjectStates
-    } = this.props || {};
+    const { projectRegistrationData: registrationData, userLocalPublicAddress: localAddress, saveProjectStates } = this.props || {};
     saveProjectStates(registrationData, localAddress);
-  }
+  };
 
   handleClose = () => {
     console.log("999");
-    this.setState({ modalOpen:false });
+    this.setState({ modalOpen: false });
   };
 
   render() {
@@ -177,7 +164,11 @@ class Registration extends Component {
       tokenTags,
       errors,
       totalSaleTokens,
-      isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked,
+      isIssuerChecked,
+      isMetamaskNetworkChecked,
+      isMetamaskInstallationChecked,
+      isUserDefaultAccountChecked,
+      isVaultMembershipChecked,
       signinStatusFlag,
       round1TargetUSD,
       round2TargetUSD,
@@ -190,145 +181,159 @@ class Registration extends Component {
     } = this.props || {};
     const { modalOpen, modalMessage, deployModal } = this.state || {};
     return (
-      <div>
-        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ?
-          (<div>
+    <div>
+      {
+        isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ?
+        (
+          <div>
             {
-            signinStatusFlag===5? (
-              <div>
-              <Grid>
-                <Row className="push--top">
-                  <Col xs={12} lg={7}>
-                    <IdentityDetails />
-                  </Col>
-                  <Col xs={12} lg={5}>
-                    <div>
-                      <DaicoDetails />
+              signinStatusFlag === 5 ? 
+                (
+                  <div>
+                    <Grid>
+                      <Row className="push--top">
+                        <Col xs={12} lg={7}>
+                          <IdentityDetails />
+                        </Col>
+                        <Col xs={12} lg={5}>
+                          <div>
+                            <DaicoDetails />
+                          </div>
+                        </Col>
+                      </Row>
+
+                      <Row className="push--top push--bottom">
+                        <Col xs={12} lg={7}>
+                          <Distribution />
+                        </Col>
+                      </Row>
+
+                      <AlertModal open={deployModal} handleClose={this.handleDeployModalClose} onProceedClick={this.handlePublishDaico} metamask>
+                        <div className="text--center text--danger">
+                          <Warning style={{ width: "2em", height: "2em" }} />
+                        </div>
+                        <div className="text--center push--top">Cant change</div>
+                      </AlertModal>
+
+                      <AlertModal open={modalOpen} handleClose={this.handleClose}>
+                        <div className="text--center text--danger">
+                          <Warning style={{ width: "2em", height: "2em" }} />
+                        </div>
+                        <div className="text--center push--top">{modalMessage}</div>
+                      </AlertModal>
+
+                    </Grid>            
+                    <div id="dckd-btn" className="soft dckd-btn-cnt">
+                      <Grid>
+                        <div className="float--right">
+                          <ButtonComponent onClick={this.handleSaveButtonClicked} label="Save" />
+                          <span className="push--left">
+                            {this.props.manageDaico ? (
+                              <ButtonComponent
+                                label="Submit"
+                                onClick={this.handleSubmitDaicoMetadata}
+                                disabled={
+                                  !validateLength(projectDescription) ||
+                                  errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
+                                  errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
+                                  errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
+                                  errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
+                                  errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
+                                  errors[actionTypes.TELEGRAM_LINK_CHANGED] !== ""
+                                }
+                              />
+                            ) : (
+                                <ButtonComponent
+                                  label="Deploy"
+                                  onClick={this.handleDeployModalopen}
+                                  disabled={
+                                    errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
+                                    !validateLength(adminName) ||
+                                    !validateLength(projectDescription) ||
+                                    !validateLength(projectName) ||
+                                    errors[actionTypes.ADMIN_EMAIL_CHANGED] !== "" ||
+                                    errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
+                                    errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
+                                    errors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] !== "" ||
+                                    isUpperCase(erc20TokenTag) ||
+                                    !validateLength(erc20TokenTag) ||
+                                    !validateTokenTagLength(erc20TokenTag) ||
+                                    errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
+                                    !validateProjectNameLength(projectName) ||
+                                    !alphaOnly(erc20TokenTag) ||
+                                    validateMaxEtherContribution(maxEtherContribution) ||
+                                    !validateLength(maxEtherContribution) ||
+                                    !validateLength(voteSaturationLimit) ||
+                                    !validateLength(tapIncrementFactor) ||
+                                    !validateLength(initialTapValue) ||
+                                    !validateLength(initialFundRelease) ||
+                                    !validateLength(round1TargetUSD) ||
+                                    !validateLength(round1TargetEth) ||
+                                    !validateLength(round2TargetEth) ||
+                                    !validateLength(round2TargetUSD) ||
+                                    !validateLength(round3TargetUSD) ||
+                                    !validateLength(round3TargetEth) ||
+                                    !validateLength(r1Bonus) ||
+                                    !validateLength(r2Bonus) ||
+                                    !validateDate(daicoStartDate) ||
+                                    !validateDate(daicoEndDate) ||
+                                    validateUniqueName(projectNames, projectName) ||
+                                    validateUniqueName(tokenTags, erc20TokenTag) ||
+                                    validateTotalSaleTokens(totalSaleTokens) ||
+                                    !validateZero(round1TargetUSD) ||
+                                    !validateZero(round2TargetUSD) ||
+                                    !validateZero(round3TargetUSD) ||
+                                    !validateZero(round1TargetEth) ||
+                                    !validateZero(round2TargetEth) ||
+                                    !validateZero(round3TargetEth)
+                                  }
+                                />
+                              )
+                            }
+                          </span>
+                        </div>
+                      </Grid>
                     </div>
-                  </Col>
-                </Row>
-
-                <Row className="push--top push--bottom">
-                  <Col xs={12} lg={7}>
-                    <Distribution />
-                  </Col>
-                </Row>
-                <AlertModal open={deployModal} handleClose={this.handleDeployModalClose} onProceedClick={this.handlePublishDaico} metamask>
-                  <div className="text--center text--danger">
-                    <Warning style={{ width: "2em", height: "2em" }} />
                   </div>
-                  <div className="text--center push--top">Cant change</div>
-                </AlertModal>
-                
-                <AlertModal open={modalOpen} handleClose={this.handleClose}>
-                  <div className="text--center text--danger">
-                    <Warning style={{ width: "2em", height: "2em" }} />
-                  </div>
-                  <div className="text--center push--top">{modalMessage}</div>
-                </AlertModal>
-              </Grid>
-              <div id="dckd-btn" className="soft dckd-btn-cnt">
+                )
+            :
+              (
                 <Grid>
-                  <div className="float--right">
-                    <ButtonComponent onClick={this.handleSaveButtonClicked}
-                      label="Save"
-                    />
-                    <span className="push--left">
-                      {
-                        this.props.manageDaico? (
-                          <ButtonComponent
-                        label="Submit"
-                        onClick={this.handleSubmitDaicoMetadata}
-                        disabled={
-                          !validateLength(projectDescription) ||
-                          errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.TELEGRAM_LINK_CHANGED] !== ""
-                        }
-                      />  
-
-                        ):(
-                          <ButtonComponent
-                        label="Deploy"
-                        onClick={this.handleDeployModalopen}
-                        disabled={
-                          errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
-                          !validateLength(adminName) ||
-                          !validateLength(projectDescription) ||
-                          !validateLength(projectName) ||
-                          errors[actionTypes.ADMIN_EMAIL_CHANGED] !== "" ||
-                          errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
-                          errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
-                          errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
-                          errors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] !== "" ||
-                          isUpperCase(erc20TokenTag) ||
-                          !validateLength(erc20TokenTag) ||
-                          !validateTokenTagLength(erc20TokenTag) ||
-                          errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
-                          !validateProjectNameLength(projectName) ||
-                          !alphaOnly(erc20TokenTag) ||
-                          validateMaxEtherContribution(maxEtherContribution) ||
-                          !validateLength(maxEtherContribution) ||
-                          !validateLength(voteSaturationLimit) ||
-                          !validateLength(tapIncrementFactor) ||
-                          !validateLength(initialTapValue) ||
-                          !validateLength(initialFundRelease) ||
-                          !validateLength(round1TargetUSD) ||
-                          !validateLength(round1TargetEth) ||
-                          !validateLength(round2TargetEth) ||
-                          !validateLength(round2TargetUSD) ||
-                          !validateLength(round3TargetUSD) ||
-                          !validateLength(round3TargetEth) ||
-                          !validateLength(r1Bonus) ||
-                          !validateLength(r2Bonus) ||
-                          !validateDate(daicoStartDate) ||
-                          !validateDate(daicoEndDate) ||
-                          validateUniqueName(projectNames, projectName) ||
-                          validateUniqueName(tokenTags, erc20TokenTag) ||
-                          validateTotalSaleTokens(totalSaleTokens) ||
-                          !validateZero(round1TargetUSD) ||
-                          !validateZero(round2TargetUSD) ||
-                          !validateZero(round3TargetUSD) ||
-                          !validateZero(round1TargetEth) ||
-                          !validateZero(round2TargetEth) ||
-                          !validateZero(round3TargetEth)
-                        }
-                      />
-                        
-                        )
-                      }
-                      
-                    </span>
-                  </div>
+                  <Loader rows={6} />
                 </Grid>
-              </div>
-            </div>
-            ):(
-              this.props.history.push("/")              
-            )
-          }
+              )
+            }
           </div>
-            
-            
-          ) : (
-            <ContentLoader />
-          )}
-      </div>
-    );
+        ) 
+        : 
+        (
+          <Grid>
+            <Loader rows={6} />
+          </Grid>
+        )
+      }
+    </div>
+    )
   }
 }
 
 const mapStateToProps = state => {
   const { projectRegistrationData } = state || {};
-  const { userLocalPublicAddress, signinStatusFlag, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked } = state.signinManagerData || {};
+  const {
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked
+  } = state.signinManagerData || {};
   const {
     adminName,
     adminEmail,
@@ -400,7 +405,11 @@ const mapStateToProps = state => {
     tokenTags,
     project_id,
     signinStatusFlag,
-    isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked,
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked,
     manageDaico
   };
 };
@@ -415,12 +424,15 @@ const mapDispatchToProps = dispatch =>
       fetchProjectStates,
       fetchProjectDeploymentIndicator,
       clearProjectDetails,
-      projectMetadata
+      projectMetadata,
+      fetchPrice
     },
     dispatch
   );
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Registration));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Registration)
+);

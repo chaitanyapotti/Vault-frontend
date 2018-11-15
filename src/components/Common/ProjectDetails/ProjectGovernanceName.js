@@ -31,7 +31,6 @@ const ProjectGovernanceName = props => {
   } = props || {};
   const { website } = urls;
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
-  console.log(whitelistButtonTransactionHash, "yyyy");
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>

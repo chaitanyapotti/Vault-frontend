@@ -25,7 +25,6 @@ const ReqType = props => {
     xfr2Link,
     link
   } = props || {};
-  console.log(xfr1ButtonTransactionHash, xfr2ButtonTransactionHash, "4");
   return (
     <div style={{ padding: "40px 50px" }}>
       <Row className="txt-g-secondary txt-m">

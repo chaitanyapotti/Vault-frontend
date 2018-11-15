@@ -226,7 +226,6 @@ class IssuerDetailGovernance extends Component {
   };
 
   onChangeWithdrawAmount = e => {
-    console.log("yes");
     const { withdrawAmountChanged: withdrawChange } = this.props || {};
     withdrawChange(e.target.value);
   };

@@ -413,7 +413,6 @@ class ProjectDetailGovernance extends Component {
     const { voted: tapVoted } = tapVoteData || {};
     const { voted: xfr1Voted } = xfrVoteData[0] || {};
     const { voted: xfr2Voted } = xfrVoteData[1] || {};
-    console.log(typeof killVoted, typeof tapVoted, typeof xfr1Voted, typeof xfr2Voted, "voted")
     return killVoted === "true" || tapVoted === "true" || xfr1Voted === true || xfr2Voted === true;
   };
 
@@ -795,7 +794,6 @@ const mapStateToProps = state => {
     tapButtonTransactionHash,
     killFinalizeTransactionHash
   } = projectDetailGovernanceReducer || {};
-  console.log(xfr1ButtonTransactionHash, xfr2ButtonTransactionHash, "1")
   const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { prices } = fetchPriceReducer || {};

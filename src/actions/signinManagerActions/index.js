@@ -5,6 +5,14 @@ import actionTypes from "../../action_types";
 import constants from "../../constants";
 
 
+export function pageReloadingSignal(){
+  return dispatch => {
+    dispatch({
+      type: actionTypes.PAGE_RELOADING,
+      payload: true
+    })
+  }
+}
 
 export function closeRegistrationFormAction() {
   return dispatch => {

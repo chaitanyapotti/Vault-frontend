@@ -270,6 +270,7 @@ class TokenSale extends React.Component {
                 inputLabel="Round2 Bonus"
                 inputPlaceholder=""
                 inputValue={r2Bonus}
+                disabled={!allowEditAll}
                 onChange={this.onChangeR2Bonus}
                 error={!!this.getErrorMsg(actionTypes.R2_BONUS_CHANGED)}
                 helperText={this.getErrorMsg(actionTypes.R2_BONUS_CHANGED)}

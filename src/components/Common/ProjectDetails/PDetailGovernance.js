@@ -137,11 +137,6 @@ const PDetailGovernance = props => {
           ) : null}
         </Col>
       </Row>
-      {/* <Row>
-        <Col lg={12} className="push--top text-right">
-          <LoadingButton onClick={onKillPollsHistoryClick}>Kill Polls History</LoadingButton>
-        </Col>
-      </Row> */}
     </CUICard>
   );
 };

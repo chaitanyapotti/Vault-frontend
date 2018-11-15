@@ -136,6 +136,7 @@ class ProjectGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
             daicoTokenAddress={daicoTokenAddress}
             projectid={_id}
+            currentRoundNumber={currentRoundNumber}
           />
         );
       case "2":

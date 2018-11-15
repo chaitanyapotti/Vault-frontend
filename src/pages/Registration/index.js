@@ -1,6 +1,3 @@
-/* eslint react/require-default-props: 0 */
-/* eslint camelcase: 0 */
-
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -184,167 +181,144 @@ class Registration extends Component {
     } = this.props || {};
     const { modalOpen, modalMessage, deployModal } = this.state || {};
     return (
-      <div>
-        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
+    <div>
+      {
+        isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ?
+        (
           <div>
-            {signinStatusFlag === 5 ? (
-              <div>
-                <Grid>
-                  <Row className="push--top">
-                    <Col xs={12} lg={7}>
-                      <IdentityDetails />
-                    </Col>
-                    <Col xs={12} lg={5}>
-                      <div>
-                        <DaicoDetails />
-                      </div>
-                    </Col>
-                  </Row>
-
-                  <Row className="push--top push--bottom">
-                    <Col xs={12} lg={7}>
-                      <Distribution />
-                    </Col>
-                  </Row>
-                  <AlertModal open={deployModal} handleClose={this.handleDeployModalClose} onProceedClick={this.handlePublishDaico} metamask>
-                    <div className="text--center text--danger">
-                      <Warning style={{ width: "2em", height: "2em" }} />
-                    </div>
-                    <div className="text--center push--top">Cant change</div>
-                  </AlertModal>
-
-                  <AlertModal open={modalOpen} handleClose={this.handleClose}>
-                    <div className="text--center text--danger">
-                      <Warning style={{ width: "2em", height: "2em" }} />
-                    </div>
-                    <div className="text--center push--top">{modalMessage}</div>
-                  </AlertModal>
-                </Grid>
-                <div id="dckd-btn" className="soft dckd-btn-cnt">
-                  <Grid>
-                    <Row className="push--top">
-                      <Col xs={12} lg={7}>
-                        <IdentityDetails />
-                      </Col>
-                      <Col xs={12} lg={5}>
-                        <div>
-                          <DaicoDetails />
-                        </div>
-                      </Col>
-                    </Row>
-
-                    <Row className="push--top push--bottom">
-                      <Col xs={12} lg={7}>
-                        <Distribution />
-                      </Col>
-                    </Row>
-                    <AlertModal open={modalOpen} handleClose={this.handleClose}>
-                      <div className="text--center text--danger">
-                        <Warning style={{ width: "2em", height: "2em" }} />
-                      </div>
-                      <div className="text--center push--top">{modalMessage}</div>
-                    </AlertModal>
-                  </Grid>
-                  <div id="dckd-btn" className="soft dckd-btn-cnt">
+            {
+              signinStatusFlag === 5 ? 
+                (
+                  <div>
                     <Grid>
-                      <div className="float--right">
-                        <ButtonComponent onClick={this.handleSaveButtonClicked} label="Save" />
-                        <span className="push--left">
-                          {this.props.manageDaico ? (
-                            <ButtonComponent
-                              label="Submit"
-                              onClick={this.handleSubmitDaicoMetadata}
-                              disabled={
-                                !validateLength(projectDescription) ||
-                                errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
-                                errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
-                                errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
-                                errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
-                                errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
-                                errors[actionTypes.TELEGRAM_LINK_CHANGED] !== ""
-                              }
-                            />
-                          ) : (
+                      <Row className="push--top">
+                        <Col xs={12} lg={7}>
+                          <IdentityDetails />
+                        </Col>
+                        <Col xs={12} lg={5}>
+                          <div>
+                            <DaicoDetails />
+                          </div>
+                        </Col>
+                      </Row>
+
+                      <Row className="push--top push--bottom">
+                        <Col xs={12} lg={7}>
+                          <Distribution />
+                        </Col>
+                      </Row>
+
+                      <AlertModal open={deployModal} handleClose={this.handleDeployModalClose} onProceedClick={this.handlePublishDaico} metamask>
+                        <div className="text--center text--danger">
+                          <Warning style={{ width: "2em", height: "2em" }} />
+                        </div>
+                        <div className="text--center push--top">Cant change</div>
+                      </AlertModal>
+
+                      <AlertModal open={modalOpen} handleClose={this.handleClose}>
+                        <div className="text--center text--danger">
+                          <Warning style={{ width: "2em", height: "2em" }} />
+                        </div>
+                        <div className="text--center push--top">{modalMessage}</div>
+                      </AlertModal>
+
+                    </Grid>            
+                    <div id="dckd-btn" className="soft dckd-btn-cnt">
+                      <Grid>
+                        <div className="float--right">
+                          <ButtonComponent onClick={this.handleSaveButtonClicked} label="Save" />
+                          <span className="push--left">
+                            {this.props.manageDaico ? (
                               <ButtonComponent
-                                label="Deploy"
-                                onClick={this.handleDeployModalopen}
+                                label="Submit"
+                                onClick={this.handleSubmitDaicoMetadata}
                                 disabled={
-                                  errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
-                                  !validateLength(adminName) ||
                                   !validateLength(projectDescription) ||
-                                  !validateLength(projectName) ||
-                                  errors[actionTypes.ADMIN_EMAIL_CHANGED] !== "" ||
                                   errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
                                   errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
                                   errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
                                   errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
                                   errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
-                                  errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
-                                  errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
-                                  errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
-                                  errors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] !== "" ||
-                                  isUpperCase(erc20TokenTag) ||
-                                  !validateLength(erc20TokenTag) ||
-                                  !validateTokenTagLength(erc20TokenTag) ||
-                                  errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
-                                  !validateProjectNameLength(projectName) ||
-                                  !alphaOnly(erc20TokenTag) ||
-                                  validateMaxEtherContribution(maxEtherContribution) ||
-                                  !validateLength(maxEtherContribution) ||
-                                  !validateLength(voteSaturationLimit) ||
-                                  !validateLength(tapIncrementFactor) ||
-                                  !validateLength(initialTapValue) ||
-                                  !validateLength(initialFundRelease) ||
-                                  !validateLength(round1TargetUSD) ||
-                                  !validateLength(round1TargetEth) ||
-                                  !validateLength(round2TargetEth) ||
-                                  !validateLength(round2TargetUSD) ||
-                                  !validateLength(round3TargetUSD) ||
-                                  !validateLength(round3TargetEth) ||
-                                  !validateLength(r1Bonus) ||
-                                  !validateLength(r2Bonus) ||
-                                  !validateDate(daicoStartDate) ||
-                                  !validateDate(daicoEndDate) ||
-                                  validateUniqueName(projectNames, projectName) ||
-                                  validateUniqueName(tokenTags, erc20TokenTag) ||
-                                  validateTotalSaleTokens(totalSaleTokens) ||
-                                  !validateZero(round1TargetUSD) ||
-                                  !validateZero(round2TargetUSD) ||
-                                  !validateZero(round3TargetUSD) ||
-                                  !validateZero(round1TargetEth) ||
-                                  !validateZero(round2TargetEth) ||
-                                  !validateZero(round3TargetEth)
+                                  errors[actionTypes.TELEGRAM_LINK_CHANGED] !== ""
                                 }
                               />
-
-                            )
-                          }
-
-                        </span>
-                      </div>
-                    </Grid>
+                            ) : (
+                                <ButtonComponent
+                                  label="Deploy"
+                                  onClick={this.handleDeployModalopen}
+                                  disabled={
+                                    errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
+                                    !validateLength(adminName) ||
+                                    !validateLength(projectDescription) ||
+                                    !validateLength(projectName) ||
+                                    errors[actionTypes.ADMIN_EMAIL_CHANGED] !== "" ||
+                                    errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
+                                    errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
+                                    errors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] !== "" ||
+                                    isUpperCase(erc20TokenTag) ||
+                                    !validateLength(erc20TokenTag) ||
+                                    !validateTokenTagLength(erc20TokenTag) ||
+                                    errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
+                                    !validateProjectNameLength(projectName) ||
+                                    !alphaOnly(erc20TokenTag) ||
+                                    validateMaxEtherContribution(maxEtherContribution) ||
+                                    !validateLength(maxEtherContribution) ||
+                                    !validateLength(voteSaturationLimit) ||
+                                    !validateLength(tapIncrementFactor) ||
+                                    !validateLength(initialTapValue) ||
+                                    !validateLength(initialFundRelease) ||
+                                    !validateLength(round1TargetUSD) ||
+                                    !validateLength(round1TargetEth) ||
+                                    !validateLength(round2TargetEth) ||
+                                    !validateLength(round2TargetUSD) ||
+                                    !validateLength(round3TargetUSD) ||
+                                    !validateLength(round3TargetEth) ||
+                                    !validateLength(r1Bonus) ||
+                                    !validateLength(r2Bonus) ||
+                                    !validateDate(daicoStartDate) ||
+                                    !validateDate(daicoEndDate) ||
+                                    validateUniqueName(projectNames, projectName) ||
+                                    validateUniqueName(tokenTags, erc20TokenTag) ||
+                                    validateTotalSaleTokens(totalSaleTokens) ||
+                                    !validateZero(round1TargetUSD) ||
+                                    !validateZero(round2TargetUSD) ||
+                                    !validateZero(round3TargetUSD) ||
+                                    !validateZero(round1TargetEth) ||
+                                    !validateZero(round2TargetEth) ||
+                                    !validateZero(round3TargetEth)
+                                  }
+                                />
+                              )
+                            }
+                          </span>
+                        </div>
+                      </Grid>
+                    </div>
                   </div>
-                </div>
-                ) : (
-                  this.props.history.push("/")
-                )}
-          </div>
-            ) :
+                )
+            :
               (
                 <Grid>
                   <Loader rows={6} />
                 </Grid>
-
               )
             }
           </div>
-        ) : (
-            <Grid>
-              <Loader rows={6} />
-            </Grid>
-          )
-        }
-      </div>
+        ) 
+        : 
+        (
+          <Grid>
+            <Loader rows={6} />
+          </Grid>
+        )
+      }
+    </div>
     )
   }
 }

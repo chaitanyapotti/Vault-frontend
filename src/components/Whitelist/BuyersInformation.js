@@ -372,7 +372,7 @@ class BuyersInformation extends Component {
               inputPlaceholder=""
               onChange={this.onChangeCitizenship}
               inputValue={citizenship}
-              items={[{ value: "USA", primaryText: "USA" }, { value: "INDIA", primaryText: "INDIA" }, { value: "CHINA", primaryText: "CHINA" }]}
+              items={countryChoices}
             />
           </Col>
         </Row>

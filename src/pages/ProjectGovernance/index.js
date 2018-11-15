@@ -8,11 +8,8 @@ import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
-import ContentLoader from "react-content-loader";
 import {Grid} from "../../helpers/react-flexbox-grid";
-
-const MyLoader = () => <ContentLoader />
-
+import Loader from "../../components/Loaders/loader";
 
 
 class ProjectGovernance extends Component {
@@ -70,7 +67,7 @@ class ProjectGovernance extends Component {
     // currentRoundNumber = "2";
 
     if (treasuryStateNumber === "0"){
-      return (<ContentLoader />)
+      return (<Grid><Loader rows={6} /></Grid>)
     }
 
     if (currentDeploymentIndicator !== 12)

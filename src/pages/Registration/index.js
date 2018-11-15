@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import Warning from "@material-ui/icons/Warning";
-import ContentLoader from "react-content-loader";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Registration";
 import {
@@ -35,7 +34,7 @@ import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import AlertModal from "../../components/Common/AlertModal";
 import actionTypes from "../../action_types";
-
+import Loader from "../../components/Loaders/loader";
 class Registration extends Component {
   state = {
     modalOpen: false,
@@ -265,7 +264,10 @@ class Registration extends Component {
             )}
           </div>
         ) : (
-          <ContentLoader />
+          <Grid>
+            <Loader rows={6} />
+          </Grid>
+          
         )}
       </div>
     );

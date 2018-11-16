@@ -10,7 +10,18 @@ import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelpe
 import LoadingButton from "../LoadingButton";
 
 const BuyModal = props => {
-  const { open, onClose, roundInfo, tokenTag, buyTokensOnClick, onChange, inputText, buyButtonSpinning, buyButtonTransactionHash } = props || {};
+  const {
+    open,
+    onClose,
+    roundInfo,
+    tokenTag,
+    buyTokensOnClick,
+    onChange,
+    inputText,
+    buyButtonSpinning,
+    buyButtonTransactionHash,
+    remainingAllocation
+  } = props || {};
   const { tokenRate } = roundInfo || {};
   const labelValue = formatCurrencyNumber(parseFloat(inputText) * parseFloat(tokenRate), 0);
   const link = `https://rinkeby.etherscan.io/tx/${buyButtonTransactionHash}`;
@@ -46,7 +57,11 @@ const BuyModal = props => {
               </LoadingButton>
             </a>
           ) : (
-            <LoadingButton onClick={buyTokensOnClick} loading={buyButtonSpinning}>
+            <LoadingButton
+              onClick={buyTokensOnClick}
+              loading={buyButtonSpinning}
+              disabled={parseFloat(inputText) * parseFloat(tokenRate) > remainingAllocation || inputText === ""}
+            >
               Buy
             </LoadingButton>
           )}

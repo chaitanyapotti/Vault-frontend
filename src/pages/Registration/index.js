@@ -8,15 +8,7 @@ import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Registration";
 import {
   validateLength,
-  isUpperCase,
-  validateProjectNameLength,
-  validateTokenTagLength,
-  alphaOnly,
-  validateMaxEtherContribution,
-  // validateTapIncrementFactor,
-  // validateVoteSaturationLimit,
   validateDate,
-  validateUniqueName,
   validateTotalSaleTokens,
   validateZero
 } from "../../helpers/common/validationHelperFunctions";

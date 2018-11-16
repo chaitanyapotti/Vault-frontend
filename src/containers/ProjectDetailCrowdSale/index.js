@@ -18,7 +18,8 @@ import {
   getR1Goal,
   getHardCap,
   getSoftCap,
-  formatCurrencyNumber
+  formatCurrencyNumber,
+  getR1Rate
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -212,6 +213,7 @@ class ProjectDetailCrowdSale extends Component {
               r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
               whitelistButtonTransactionHash={whitelistButtonTransactionHash}
               r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
+              remainingAllocation={getR1Rate(this.props) * formatFromWei(maximumEtherContribution) - formatFromWei(tokenBalance)}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -226,7 +228,8 @@ class ProjectDetailCrowdSale extends Component {
               dilutedCapitalisation={getHardCap(this.props)}
               tokenDataVisibitlity={isCurrentMember}
               tokenBalance={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
-              buyableTokens={formatCurrencyNumber((1 / getR1Price(this.props)) * formatFromWei(maximumEtherContribution), 0)}
+              remainingAllocation={getR1Rate(this.props) * formatFromWei(maximumEtherContribution) - formatFromWei(tokenBalance)}
+              buyableTokens={formatCurrencyNumber(getR1Rate(this.props) * formatFromWei(maximumEtherContribution), 0)}
             />
           </Col>
         </Row>
@@ -254,6 +257,7 @@ class ProjectDetailCrowdSale extends Component {
           inputText={buyAmount}
           onChange={this.onBuyAmountChange}
           buyButtonTransactionHash={buyButtonTransactionHash}
+          remainingAllocation={getR1Rate(this.props) * formatFromWei(maximumEtherContribution) - formatFromWei(tokenBalance)}
         />
       </Grid>
     );

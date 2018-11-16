@@ -222,6 +222,13 @@ const getR1Price = props => {
   return formatRateToPrice(tokenRate);
 };
 
+const getR1Rate = props => {
+  const { rounds } = props || {};
+  const [round1] = rounds || {};
+  const { tokenRate } = round1 || {}; // tokens/wei
+  return tokenRate;
+};
+
 const getRoundPrice = props => {
   const { rounds, currentRoundNumber } = props || {};
   const roundInfo = rounds[parseInt(currentRoundNumber, 10) - 1] || {};
@@ -287,5 +294,6 @@ export {
   tapDataConverted,
   withdrawDataConverted,
   withdrawXfrDataConverted,
-  xfrWithdrawStatus
+  xfrWithdrawStatus,
+  getR1Rate
 };

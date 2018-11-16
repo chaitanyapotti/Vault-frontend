@@ -3,6 +3,7 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const ProjectName = props => {
   const {
@@ -61,12 +62,12 @@ const ProjectName = props => {
       <Row className="push--top">
         <Col lg={6} className="text--secondary txt">
           <div>
-            <a href={whitepaper} target="_blank" rel="noopener noreferrer">
+            <a href={ensureHttpUrl(whitepaper)} target="_blank" rel="noopener noreferrer">
               Read our whitepaper
             </a>
           </div>
           <div>
-            <a href={website} target="_blank" rel="noopener noreferrer">
+            <a href={ensureHttpUrl(website)} target="_blank" rel="noopener noreferrer">
               Learn more on our website
             </a>
           </div>

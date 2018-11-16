@@ -4,6 +4,7 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const ProjectCrowdSaleName = props => {
   const {
@@ -96,7 +97,7 @@ const ProjectCrowdSaleName = props => {
               </Tooltip>
             </div>
           ) : whitelistButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>
@@ -114,7 +115,7 @@ const ProjectCrowdSaleName = props => {
               </LoadingButton>
             </span>
           ) : r1FinalizeButtonTransactionHash !== "" ? (
-            <a href={r1FinalizeLink} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(r1FinalizeLink)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>

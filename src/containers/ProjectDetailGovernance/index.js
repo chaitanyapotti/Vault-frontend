@@ -7,6 +7,7 @@ import { getRoundTokensSold, buyTokens, getTokenBalance, buyAmountChangedAction 
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
+import { ensureHttpUrl } from "../../helpers/common/urlFixerInHref";
 import {
   getTokensUnderGovernance,
   getCurrentKillPollIndex,
@@ -572,7 +573,7 @@ class ProjectDetailGovernance extends Component {
                 <Col lg={6}>
                 {
                   killFinalizeTransactionHash !== "" ? (
-                  <a href={link} target="_blank" rel="noreferrer noopener">
+                  <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
                   <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                     Status
                   </LoadingButton>

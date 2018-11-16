@@ -5,6 +5,7 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ButtonComponent } from "../FormComponents";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const IssuerGovernanceName = props => {
   const {
@@ -84,7 +85,7 @@ const IssuerGovernanceName = props => {
               </Tooltip>
             </div>
           ) : startNewRoundButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>

@@ -8,6 +8,7 @@ import { CUIFormInput } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
 import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../LoadingButton";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const BuyModal = props => {
   const { open, onClose, roundInfo, tokenTag, buyTokensOnClick, onChange, inputText, buyButtonSpinning, buyButtonTransactionHash } = props || {};
@@ -40,7 +41,7 @@ const BuyModal = props => {
         </DialogContent>
         <DialogActions>
           {buyButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>

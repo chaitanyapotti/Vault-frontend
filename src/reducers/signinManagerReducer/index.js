@@ -34,9 +34,9 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case types.PAGE_RELOADING: {
       return {
-        ...state, 
+        ...state,
         reloadPage: false
-      }
+      };
     }
     case types.PROJECT_REGISTRATION_SUCCESS: {
       return {
@@ -135,9 +135,9 @@ export default function(state = initialState, action) {
 
     case types.USER_DEFAULT_ACCOUNT_CHANGED: {
       const networkName = state.networkName;
-      let { reloadPage, userPreviousLocalPublicAddress }  = state || {}
-      if (userPreviousLocalPublicAddress && userPreviousLocalPublicAddress!==action.payload && action.payload!==""){
-        reloadPage = true
+      let { reloadPage, userPreviousLocalPublicAddress } = state || {};
+      if (userPreviousLocalPublicAddress && userPreviousLocalPublicAddress !== action.payload && action.payload !== "") {
+        reloadPage = true;
       }
       if (networkName === "rinkeby") {
         if (action.payload) {
@@ -149,8 +149,8 @@ export default function(state = initialState, action) {
             userServerPublicAddress: "",
             userLocalPublicAddress: action.payload,
             userPreviousLocalPublicAddress: action.payload,
-            isUserDefaultAccountChecked: true, 
-            reloadPage: reloadPage
+            isUserDefaultAccountChecked: true,
+            reloadPage
           };
         }
         return {
@@ -166,7 +166,7 @@ export default function(state = initialState, action) {
           isIssuerChecked: true,
           isMetamaskNetworkChecked: true,
           isVaultMembershipChecked: true,
-          reloadPage: reloadPage
+          reloadPage
         };
       }
       if (action.payload !== "") {
@@ -180,7 +180,7 @@ export default function(state = initialState, action) {
           userPreviousLocalPublicAddress: action.payload,
           isUserDefaultAccountChecked: true,
           signinStatusFlag: 2,
-          reloadPage: reloadPage
+          reloadPage
         };
       }
       return {
@@ -196,7 +196,7 @@ export default function(state = initialState, action) {
         isIssuerChecked: true,
         isMetamaskNetworkChecked: true,
         isVaultMembershipChecked: true,
-        reloadPage: reloadPage
+        reloadPage
       };
     }
 

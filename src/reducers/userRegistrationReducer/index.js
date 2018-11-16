@@ -38,12 +38,28 @@ export const initialState = {
   conditionTwoAccepted: false,
   vaultMembershipRequested: false,
   vaultMembershipRequestChecked: false,
+  isVaultMembershipButtonSpinning: false,
+  vaultMembershipRequestTransactionHash: "",
   errors: {}
 };
 
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
+    case actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        isVaultMembershipButtonSpinning: receipt
+      };
+    }
+    case actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        vaultMembershipRequestTransactionHash: transactionHash
+      };
+    }
     case actionTypes.UPLOADING_PASSPORT_DOC: {
       return {
         ...state,

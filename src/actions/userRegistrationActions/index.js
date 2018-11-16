@@ -92,7 +92,7 @@ export const requestVaultMembership = (userLocalPublicAddress, isIssuer) => asyn
                 .requestMembership([0, param2])
                 .send({
                   from: userLocalPublicAddress,
-                  value: web3.utils.toWei("0.6", "ether"),
+                  value: web3.utils.toWei(ethers, "ether"),
                   gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
                 })
                 .on("transactionHash", transactionHash => {

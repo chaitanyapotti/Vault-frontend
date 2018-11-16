@@ -8,14 +8,12 @@ import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
-import {Grid} from "../../helpers/react-flexbox-grid";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import Loader from "../../components/Loaders/loader";
 
-
 class ProjectGovernance extends Component {
-  
-  componentWillUnmount(){
-    this.props.clearGovernanceStates()
+  componentWillUnmount() {
+    this.props.clearGovernanceStates();
   }
 
   componentDidMount() {
@@ -66,8 +64,12 @@ class ProjectGovernance extends Component {
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
-    if (treasuryStateNumber === "0"){
-      return (<Grid><Loader rows={6} /></Grid>)
+    if (treasuryStateNumber === "0") {
+      return (
+        <Grid>
+          <Loader rows={6} />
+        </Grid>
+      );
     }
 
     if (currentDeploymentIndicator !== 12)

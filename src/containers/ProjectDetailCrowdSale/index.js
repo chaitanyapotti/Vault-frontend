@@ -226,7 +226,7 @@ class ProjectDetailCrowdSale extends Component {
               dilutedCapitalisation={getHardCap(this.props)}
               tokenDataVisibitlity={isCurrentMember}
               tokenBalance={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
-              buyableTokens={formatCurrencyNumber(getR1Price(this.props) * parseFloat(maximumEtherContribution), 0)}
+              buyableTokens={formatCurrencyNumber((1 / getR1Price(this.props)) * formatFromWei(maximumEtherContribution), 0)}
             />
           </Col>
         </Row>

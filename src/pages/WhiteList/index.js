@@ -14,19 +14,20 @@ import {
   verifyPhoneNumber
 } from "../../actions/userRegistrationActions";
 import Loader from "../../components/Loaders/loader";
+
 class WhiteList extends Component {
   componentDidMount() {
-    var interval
+    let interval;
     if (!this.props.userLocalPublicAddress) {
       interval = setInterval(() => {
         if (this.props.userLocalPublicAddress) {
           this.props.fetchUserFormStates(this.props.userLocalPublicAddress);
-          clearInterval(interval)
+          clearInterval(interval);
         }
-      }, 1000)
+      }, 1000);
     } else {
       this.props.fetchUserFormStates(this.props.userLocalPublicAddress);
-      clearInterval(interval)
+      clearInterval(interval);
     }
   }
 
@@ -69,7 +70,9 @@ class WhiteList extends Component {
       passportUrl,
       selfieUrl,
       addressUrl,
-      passportFileName, selfieFileName, addressFileName
+      passportFileName,
+      selfieFileName,
+      addressFileName
     } = this.props || {};
     switch (getActiveStep) {
       case 2:
@@ -95,7 +98,9 @@ class WhiteList extends Component {
           !dateOfBirth
         );
       case 5:
-        return (passportUrl === "" || selfieUrl === "" || addressUrl === "") || (passportFileName === "" || selfieFileName === "" || addressFileName === "");
+        return (
+          passportUrl === "" || selfieUrl === "" || addressUrl === "" || (passportFileName === "" || selfieFileName === "" || addressFileName === "")
+        );
       case 6:
         return true;
       default:
@@ -197,63 +202,81 @@ class WhiteList extends Component {
   };
 
   render() {
-    const { otpFromServer, otpFromUser, isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked, signinStatusFlag } = this.props || {};
+    const {
+      otpFromServer,
+      otpFromUser,
+      isIssuerChecked,
+      isMetamaskNetworkChecked,
+      isMetamaskInstallationChecked,
+      isUserDefaultAccountChecked,
+      isVaultMembershipChecked,
+      signinStatusFlag
+    } = this.props || {};
     return (
       <div>
-        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ?
-          (
-            <div>
-              {signinStatusFlag === 3 ? (
-                <div>
-                  {this.props.userLocalPublicAddress ? (
-                    <Grid>
-                      <CUICard style={{ padding: "40px 40px", marginBottom: "40px" }}>
-                        <CustomizedStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={this.props.activeStep} />
-                        <div className="push-top--50">
-                          <CUIDivider />
-                        </div>
-                        <div className="push--top text--center">
-                          <ButtonComponent label="Back" onClick={this.handleBack} disabled={this.getBackDisabledStatus()} />
+        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
+          <div>
+            {signinStatusFlag === 3 ? (
+              <div>
+                {this.props.userLocalPublicAddress ? (
+                  <Grid>
+                    <CUICard style={{ padding: "40px 40px", marginBottom: "40px" }}>
+                      <CustomizedStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={this.props.activeStep} />
+                      <div className="push-top--50">
+                        <CUIDivider />
+                      </div>
+                      <div className="push--top text--center">
+                        <ButtonComponent label="Back" onClick={this.handleBack} disabled={this.getBackDisabledStatus()} />
+                        <span className="push--left">
+                          <ButtonComponent label="Save" onClick={this.handleSave} />
+                        </span>
+                        {this.getVerifyTokenStatus() ? (
                           <span className="push--left">
-                            <ButtonComponent label="Save" onClick={this.handleSave} />
+                            <ButtonComponent
+                              label="Verify OTP"
+                              onClick={this.handleOtpVerification}
+                              disabled={otpFromServer === "" || otpFromUser === ""}
+                            />
                           </span>
-                          {this.getVerifyTokenStatus() ? (
-                            <span className="push--left">
-                              <ButtonComponent label="Verify OTP" onClick={this.handleOtpVerification} disabled={otpFromServer === "" || otpFromUser === ""} />
-                            </span>
-                          ) : (
-                              <span className="push--left">
-                                <ButtonComponent label="Next" onClick={this.handleNext} disabled={this.getDisabledStatus()} />
-                              </span>
-                            )}
-                        </div>
-                      </CUICard>
-                    </Grid>
-                  ) : (
-                    <Grid><Loader rows={6} /></Grid>
-                    )}
-                </div>
-              ) : (this.props.history.push("/"))}
-            </div>
-          ) : (
-            <Grid><Loader rows={6} /></Grid>
-          )
-        }
+                        ) : (
+                          <span className="push--left">
+                            <ButtonComponent label="Next" onClick={this.handleNext} disabled={this.getDisabledStatus()} />
+                          </span>
+                        )}
+                      </div>
+                    </CUICard>
+                  </Grid>
+                ) : (
+                  <Grid>
+                    <Loader rows={6} />
+                  </Grid>
+                )}
+              </div>
+            ) : (
+              this.props.history.push("/")
+            )}
+          </div>
+        ) : (
+          <Grid>
+            <Loader rows={6} />
+          </Grid>
+        )}
       </div>
-
     );
   }
 }
 
 const mapStateToProps = state => {
   const { userRegistrationData } = state || {};
-  const { userLocalPublicAddress,
+  const {
+    userLocalPublicAddress,
     isIssuerChecked,
     isMetamaskNetworkChecked,
     isMetamaskInstallationChecked,
     isUserDefaultAccountChecked,
     isVaultMembershipChecked,
-    signinStatusFlag } = state.signinManagerData || {};
+    signinStatusFlag
+  } = state.signinManagerData || {};
   const {
     activeStep,
     conditionOneAccepted,
@@ -281,7 +304,9 @@ const mapStateToProps = state => {
     passportUrl,
     selfieUrl,
     addressUrl,
-    passportFileName, selfieFileName, addressFileName
+    passportFileName,
+    selfieFileName,
+    addressFileName
   } = state.userRegistrationData || {};
   return {
     userLocalPublicAddress,
@@ -312,7 +337,9 @@ const mapStateToProps = state => {
     passportUrl,
     selfieUrl,
     addressUrl,
-    passportFileName, selfieFileName, addressFileName,
+    passportFileName,
+    selfieFileName,
+    addressFileName,
     isIssuerChecked,
     isMetamaskNetworkChecked,
     isMetamaskInstallationChecked,

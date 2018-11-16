@@ -4,6 +4,7 @@ import { CUICard, CUIFormInput } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const IssuerWithdrawCard = props => {
   const {
@@ -50,7 +51,7 @@ const IssuerWithdrawCard = props => {
               </Tooltip>
             </div>
           ) : withdrawButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>

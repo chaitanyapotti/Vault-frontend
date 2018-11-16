@@ -84,11 +84,12 @@ const validateEntityPercentage = input => {
 };
 
 const validateDecimal = input => {
-  if (input <= 10 && input.length < 5) {
+  if (parseFloat(input) <= 10 && input.toString().length < 5) {
     return true;
   }
-  if (input > 10) {
-    const a = input.split(".");
+  if (parseFloat(input) > 10) {
+    console.log(input, typeof input);
+    const a = input.toString().split(".");
     if (a.length === 1) {
       return true;
     }
@@ -119,7 +120,7 @@ const validateOneDecimal = input => {
 
 
 const validateVoteSaturationLimit = input => {
-  if (input < 0.01) {
+  if (input < 0.01 || input > 5) {
     return true;
   }
   return false;
@@ -148,8 +149,15 @@ const validateProjectNameLength = input => {
   }
   return true;
 };
+
+const validateProjectDescription = input => {
+  if (input.length > 140) {
+    return false;
+  }
+  return true;
+};
 const validateTokenTagLength = input => {
-  if (input.length < 3 || input.length > 9) {
+  if (input.length < 3 || input.length > 6) {
     return false;
   }
   return true;
@@ -226,5 +234,6 @@ export {
   validateTwoDecimalPlaces,
   validateOneDecimalPlace,
   validateZero,
-  validateOneDecimal
+  validateOneDecimal,
+  validateProjectDescription
 };

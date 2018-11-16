@@ -4,7 +4,6 @@ import actionTypes from "../../action_types";
 import {
   validateAdminName,
   validateEmail,
-  isUpperCase,
   validateTwitterLink,
   validateFacebookLink,
   validateWebsiteUrl,
@@ -13,7 +12,6 @@ import {
   validateTelegramLink,
   validateProjectNameLength,
   validateTokenTagLength,
-  alphaOnly,
   validateMaxEtherContribution,
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
@@ -21,9 +19,8 @@ import {
   validateUniqueName,
   validateDecimal,
   validateEntityPercentage,
-  validateTwoDecimalPlaces,
-  validateOneDecimalPlace,
-  validateOneDecimal
+  validateOneDecimal,
+  validateProjectDescription
 } from "../../helpers/common/validationHelperFunctions";
 
 import {significantDigits} from "../../helpers/common/projectDetailhelperFunctions"
@@ -429,24 +426,30 @@ export default function(state = initialState, action) {
 
     case actionTypes.ERC20_TAG_CHANGED: {
       const { tokenTags } = state || {};
-      if (!validateTokenTagLength(action.payload) || isUpperCase(action.payload) || !alphaOnly(action.payload)) {
-        localErrors[actionTypes.ERC20_TAG_CHANGED] = "Should have 3-9 characters in upper case";
-      } else if (validateUniqueName(tokenTags, action.payload)) {
+      if (!validateTokenTagLength(action.payload)) {
+        localErrors[actionTypes.ERC20_TAG_CHANGED] = "Should have 3-6 characters";
+      } else if (validateUniqueName(tokenTags, action.payload.toUpperCase())) {
         localErrors[actionTypes.ERC20_TAG_CHANGED] = "token tag is not unique";
       } else {
         localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
       }
       return {
         ...state,
-        erc20TokenTag: action.payload,
+        erc20TokenTag: action.payload.toUpperCase(),
         errors: localErrors
       };
     }
 
     case actionTypes.PROJECT_DESCRIPTION_CHANGED: {
+      if (!validateProjectDescription(action.payload)) {
+        localErrors[actionTypes.PROJECT_DESCRIPTION_CHANGED] = "Length should be less than 140 ";
+      } else {
+        localErrors[actionTypes.PROJECT_DESCRIPTION_CHANGED] = "";
+      }
       return {
         ...state,
-        projectDescription: action.payload
+        projectDescription: action.payload,
+        errors: localErrors
       };
     }
 
@@ -454,8 +457,7 @@ export default function(state = initialState, action) {
       if (validateWebsiteUrl(action.payload)) {
         localErrors[actionTypes.WEBSITE_LINK_CHANGED] = "";
       } else {
-        localErrors[actionTypes.WEBSITE_LINK_CHANGED] =
-          "Not a valid telegram url";
+        localErrors[actionTypes.WEBSITE_LINK_CHANGED] = "Not a valid website link";
       }
       return {
         ...state,
@@ -465,70 +467,37 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.TELEGRAM_LINK_CHANGED: {
-      if (validateTelegramLink(action.payload)) {
-        localErrors[actionTypes.TELEGRAM_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.TELEGRAM_LINK_CHANGED] =
-          "Not a valid telegram url";
-      }
       return {
         ...state,
-        telegramLink: action.payload,
-        errors: localErrors
+        telegramLink: action.payload
       };
     }
 
     case actionTypes.GITHUB_LINK_CHANGED: {
-      if (validateGitLink(action.payload)) {
-        localErrors[actionTypes.GITHUB_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.GITHUB_LINK_CHANGED] = "Not a valid github url";
-      }
       return {
         ...state,
-        githubLink: action.payload,
-        errors: localErrors
+        githubLink: action.payload
       };
     }
 
     case actionTypes.MEDIUM_LINK_CHANGED: {
-      if (validateMediumLink(action.payload)) {
-        localErrors[actionTypes.MEDIUM_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.MEDIUM_LINK_CHANGED] =
-          "Not a valid medium link";
-      }
       return {
         ...state,
-        mediumLink: action.payload,
-        errors: localErrors
+        mediumLink: action.payload
       };
     }
 
     case actionTypes.FACEBOOK_LINK_CHANGED: {
-      if (validateFacebookLink(action.payload)) {
-        localErrors[actionTypes.FACEBOOK_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.FACEBOOK_LINK_CHANGED] =
-          "Not a valid facebook link";
-      }
       return {
         ...state,
-        facebookLink: action.payload,
-        errors: localErrors
+        facebookLink: action.payload
       };
     }
 
     case actionTypes.TWITTER_LINK_CHANGED: {
-      if (validateTwitterLink(action.payload)) {
-        localErrors[actionTypes.TWITTER_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.TWITTER_LINK_CHANGED] = "Not a valid twitter link";
-      }
       return {
         ...state,
-        twitterLink: action.payload,
-        errors: localErrors
+        twitterLink: action.payload
       };
     }
 
@@ -631,7 +600,7 @@ export default function(state = initialState, action) {
 
     case actionTypes.VOTE_SATURATION_LIMIT_CHANGED: {
       if (validateVoteSaturationLimit(parseFloat(action.payload))) {
-        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "should be greater than 0.01";
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "Should be in between 0.01 & 5";
       } else if (!validateDecimal(action.payload)){
         localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "only two decimals allowed";
       } else {

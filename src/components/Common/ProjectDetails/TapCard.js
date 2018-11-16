@@ -3,6 +3,7 @@ import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const TapCard = props => {
   const {
@@ -64,7 +65,7 @@ const TapCard = props => {
               ) : tapPollConsensus === "No Poll" ? (
                 <div className="text--secondary txt"> Tap Poll Not Deployed </div>
               ) : tapButtonTransactionHash !== "" ? (
-                <a href={link} target="_blank" rel="noreferrer noopener">
+                <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
                   <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                     Status
                   </LoadingButton>

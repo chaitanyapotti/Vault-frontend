@@ -3,6 +3,7 @@ import { Tooltip } from "@material-ui/core";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 import { formatFromWei, formatDate, significantDigits } from "../../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../../LoadingButton";
+import { ensureHttpUrl } from "../../../../helpers/common/urlFixerInHref";
 
 const ReqType = props => {
   const {
@@ -62,13 +63,13 @@ const ReqType = props => {
               </div>
             </Tooltip>
           ) : xfr1ButtonTransactionHash && xfr1ButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>
             </a>
           ) : xfr2ButtonTransactionHash && xfr2ButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>

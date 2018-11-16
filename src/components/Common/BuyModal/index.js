@@ -21,11 +21,14 @@ const BuyModal = props => {
     inputText,
     buyButtonSpinning,
     buyButtonTransactionHash,
-    remainingAllocation
+    remainingAllocation,
+    fundsCollected,
+    roundGoal
   } = props || {};
   const { tokenRate } = roundInfo || {};
   const labelValue = formatCurrencyNumber(parseFloat(inputText) * parseFloat(tokenRate), 0);
   const link = `https://rinkeby.etherscan.io/tx/${buyButtonTransactionHash}`;
+  const round1Residue = roundGoal - fundsCollected;
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
@@ -49,6 +52,11 @@ const BuyModal = props => {
           <p>
             {labelValue} {tokenTag}
           </p>
+          {inputText > round1Residue ? (
+            <div className="txt-m text-right text--danger">
+              Your order is overflowing out of Round 1, and part of your order will go to round 2. You may recieve lesser tokens than expected.
+            </div>
+          ) : null}
         </DialogContent>
         <DialogActions>
           {buyButtonTransactionHash !== "" ? (

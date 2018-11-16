@@ -263,6 +263,8 @@ class ProjectDetailCrowdSale extends Component {
           onChange={this.onBuyAmountChange}
           buyButtonTransactionHash={buyButtonTransactionHash}
           remainingAllocation={getR1Rate(this.props) * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution))}
+          fundsCollected={formatFromWei(etherCollected, 3)}
+          roundGoal={getR1Goal(this.props)}
         />
       </Grid>
     );

@@ -12,15 +12,16 @@ const TimeLine = props => {
   const totalDays = Math.round((endDate > startDate ? endDate - startDate : 0) / 86400 / 1000);
   const leftDays = Math.round((endDate > new Date() ? endDate - new Date() : 0) / 86400 / 1000);
   const timeProgress = Math.round((parseFloat(totalDays - leftDays) / parseFloat(totalDays)) * 100);
-
+  const text = progressValue > 100 ? `Round 1 overflow by ${(progressValue - 100)}%` : `${progressValue} % Goal reached`;
+  const className = progressValue <= 100 ? "txt-m text-right text--secondary":"txt-m text-right text--danger";
   return (
     <Grid>
       <Row>
         <Col lg={6}>
           <div className="txt-xxxl text--primary">DAICO Timeline</div>
         </Col>
-        <Col lg={6} className="txt-m text-right text--secondary">
-          {progressValue} % Goal reached
+        <Col lg={6} className={className}>
+          {text}
         </Col>
       </Row>
 

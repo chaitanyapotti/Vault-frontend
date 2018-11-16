@@ -202,9 +202,9 @@ class Registration extends Component {
 
                       <AlertModal open={deployModal} handleClose={this.handleDeployModalClose} onProceedClick={this.handlePublishDaico} metamask>
                         <div className="text--center text--danger">
-                          <Warning style={{ width: "2em", height: "2em" }} />
+                          <Warning style={{ width: "2em", height: "2em" }} /> WARNING
                         </div>
-                        <div className="text--center push--top">Cant change</div>
+                        <div className="text--center push--top">Once this DAICO is published, you will not be able to edit the on-chain details of the project. However the off-chain details will remain editable.</div>
                       </AlertModal>
 
                       <AlertModal open={modalOpen} handleClose={this.handleClose}>
@@ -220,7 +220,7 @@ class Registration extends Component {
                         <div className="float--right">
                           <ButtonComponent onClick={this.handleSaveButtonClicked} label="Save" />
                           <span className="push--left">
-                            {this.props.manageDaico ? (
+                            {this.props.manageDaico ? (  
                               <ButtonComponent
                                 label="Submit"
                                 onClick={this.handleSubmitDaicoMetadata}

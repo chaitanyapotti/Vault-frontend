@@ -2,6 +2,7 @@ import React from "react";
 import { CUICard } from "../../helpers/material-ui";
 import LoadingButton from "../Common/LoadingButton";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
+import { ensureHttpUrl } from "../../helpers/common/urlFixerInHref";
 
 const DeployerCard = props => {
   const { btnLabel, onClick, label, latestTxHash, deployContractStartButtonSpinning } = props || {};
@@ -12,7 +13,7 @@ const DeployerCard = props => {
         <CUICard style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}>
           <div className="text-center sbhdr-txt push--bottom txt-xl">{label}</div>
           <div className="text--center">
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>

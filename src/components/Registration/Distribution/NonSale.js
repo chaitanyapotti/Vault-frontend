@@ -159,7 +159,6 @@ class NonSale extends React.Component {
                   !validateLength(entityName) ||
                   !validateLength(entityAddress) ||
                   !validateLength(entityPercentage) ||
-                  !validateDecimal(entityPercentage) ||
                   errors[actionTypes.ENTITY_PERCENTAGE_CHANGED] !== "" ||
                   errors[actionTypes.ENTITY_ADDRESS_CHANGED] !== ""
                 }

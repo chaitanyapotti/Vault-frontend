@@ -451,9 +451,16 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.WEBSITE_LINK_CHANGED: {
+      if (validateWebsiteUrl(action.payload)) {
+        localErrors[actionTypes.WEBSITE_LINK_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.WEBSITE_LINK_CHANGED] =
+          "Not a valid telegram url";
+      }
       return {
         ...state,
-        websiteLink: action.payload
+        websiteLink: action.payload,
+        errors: localErrors
       };
     }
 

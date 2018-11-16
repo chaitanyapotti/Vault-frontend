@@ -74,7 +74,7 @@ class Registration extends Component {
     }
     fetchProjectNames();
     fetchTokenTags();
-    window.addEventListener("scroll", this.checkOffset);
+    // window.addEventListener("scroll", this.checkOffset);
   }
 
   // Function to make the docked btn sticky
@@ -93,7 +93,7 @@ class Registration extends Component {
   };
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", this.checkOffset);
+    // window.removeEventListener("scroll", this.checkOffset);
   }
 
   componentDidUpdate() {
@@ -256,7 +256,7 @@ class Registration extends Component {
                                     errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
                                     errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
                                     errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
-                                    errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
+                                    // errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
                                     errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
                                     errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
                                     errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||

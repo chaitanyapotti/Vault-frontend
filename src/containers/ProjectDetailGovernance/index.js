@@ -525,7 +525,8 @@ class ProjectDetailGovernance extends Component {
       tapButtonTransactionHash,
       r1EndTime,
       killFinalizeTransactionHash,
-      buyAmount
+      buyAmount,
+      thumbnailUrl
     } = this.props || {};
     const {
       modalOpen,
@@ -585,17 +586,17 @@ class ProjectDetailGovernance extends Component {
                   <div> Click on the button to initiate “KILL” execution</div>
                 </Col>
                 <Col lg={6}>
-                {
-                  killFinalizeTransactionHash !== "" ? (
-                  <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                    Status
-                  </LoadingButton>
-                  </a>):
-                  <LoadingButton onClick={this.onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!this.killFinish()}>
-                    Kill Execute
-                  </LoadingButton>
-                }
+                  {killFinalizeTransactionHash !== "" ? (
+                    <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                      <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                        Status
+                      </LoadingButton>
+                    </a>
+                  ) : (
+                    <LoadingButton onClick={this.onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!this.killFinish()}>
+                      Kill Execute
+                    </LoadingButton>
+                  )}
                 </Col>
               </Row>
             </Grid>
@@ -626,6 +627,7 @@ class ProjectDetailGovernance extends Component {
             whitelistButtonTransactionHash={whitelistButtonTransactionHash}
             tradeButtonVisibility
             tradeUrl={this.getTradeUrl()}
+            thumbnailUrl={thumbnailUrl}
           />
           {/* </Col>
             <Col xs={12} lg={6}> */}

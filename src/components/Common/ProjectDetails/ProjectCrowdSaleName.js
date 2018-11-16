@@ -32,7 +32,8 @@ const ProjectCrowdSaleName = props => {
     whitelistButtonTransactionHash,
     r1FinalizeButtonTransactionHash,
     buyButtonDisabled,
-    thumbnailUrl
+    thumbnailUrl,
+    remainingAllocation
   } = props || {};
   const { website } = urls;
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
@@ -113,7 +114,7 @@ const ProjectCrowdSaleName = props => {
             </span>
           ) : buyButtonVisibility ? (
             <span className="hli push-left--13">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onBuyClick} disabled={!buyButtonDisabled}>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onBuyClick} disabled={!buyButtonDisabled || remainingAllocation === 0}>
                 {buyButtonText}
               </LoadingButton>
             </span>

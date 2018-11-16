@@ -11,7 +11,8 @@ export const initialState = {
   tokenBalance: "",
   buyButtonTransactionHash: "",
   r1FinalizeButtonTransactionHash: "",
-  buyAmount: ""
+  buyAmount: "",
+  userContribution: 0
 };
 
 export default (state = initialState, action) => {
@@ -21,6 +22,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         etherCollected: receipt
+      };
+    }
+    case actionTypes.USER_TOKENS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        userContribution: receipt
       };
     }
     case actionTypes.ROUND_INFO_RECEIVED: {

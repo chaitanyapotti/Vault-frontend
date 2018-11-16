@@ -237,6 +237,8 @@ class HeaderPartial extends React.Component {
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const { isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked } =
       this.props || {};
+    const { userDetails } = this.props || {}
+    const { firstName, lastName } = userDetails || ""
     const { signInModalOpen } = this.state || {};
 
     const renderMenu = (
@@ -406,16 +408,20 @@ class HeaderPartial extends React.Component {
                                 ),
                                 4: (
                                   <div>
+                                    
                                     <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
-                                      {this.props.userLocalPublicAddress.slice(0, 6)}
+                                    <span>{firstName} {lastName}</span>
+                                      {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
                                     </ButtonComponent>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 5: (
                                   <div>
+                                  
                                     <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
-                                      {this.props.userLocalPublicAddress.slice(0, 6)}
+                                    <span>{firstName} {lastName}</span>
+                                      {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
                                     </ButtonComponent>
                                   </div>
                                 )
@@ -522,7 +528,8 @@ const mapStateToProps = state => {
     isVaultMembershipChecked,
     manageDaico,
     deploymentIndicator,
-    project_id
+    project_id,
+    userDetails
   } = state.signinManagerData || {};
 
   const { searchText } = state.searchReducer || {};
@@ -542,7 +549,8 @@ const mapStateToProps = state => {
     searchText,
     manageDaico,
     deploymentIndicator,
-    project_id
+    project_id,
+    userDetails
   };
 };
 

@@ -9,7 +9,8 @@ import {
   buyTokens,
   getTokenBalance,
   finalizeR1,
-  buyAmountChangedAction
+  buyAmountChangedAction,
+  getUserTokens
 } from "../../actions/projectCrowdSaleActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import {
@@ -56,11 +57,14 @@ class ProjectDetailCrowdSale extends Component {
       fetchPrice: etherPriceFetch,
       checkWhiteList: checkWhiteListStatus,
       getTokenBalance: tokenBalance,
-      daicoTokenAddress
+      daicoTokenAddress,
+      getUserTokens: fetchUserTokens,
+      currentRoundNumber
     } = this.props || {};
     etherPriceFetch("ETH");
     fetchEtherCollected(version, pollFactoryAddress);
     fetchRoundTokensSold(version, crowdSaleAddress, 0);
+    fetchUserTokens(crowdSaleAddress, version, currentRoundNumber, userLocalPublicAddress);
     if (signinStatusFlag > 2) {
       checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
       tokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
@@ -176,7 +180,8 @@ class ProjectDetailCrowdSale extends Component {
       whitelistButtonTransactionHash,
       buyButtonTransactionHash,
       r1FinalizeButtonTransactionHash,
-      buyAmount
+      buyAmount,
+      userContribution
     } = this.props || {};
     const { modalOpen, buyModalOpen } = this.state;
     return (
@@ -228,7 +233,7 @@ class ProjectDetailCrowdSale extends Component {
               dilutedCapitalisation={getHardCap(this.props)}
               tokenDataVisibitlity={isCurrentMember}
               tokenBalance={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
-              remainingAllocation={getR1Rate(this.props) * formatFromWei(maximumEtherContribution) - formatFromWei(tokenBalance)}
+              remainingAllocation={getR1Rate(this.props) * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution))}
               buyableTokens={formatCurrencyNumber(getR1Rate(this.props) * formatFromWei(maximumEtherContribution), 0)}
             />
           </Col>
@@ -275,7 +280,8 @@ const mapDispatchToProps = dispatch =>
       fetchPrice,
       checkWhiteList,
       finalizeR1,
-      buyAmountChangedAction
+      buyAmountChangedAction,
+      getUserTokens
     },
     dispatch
   );
@@ -290,7 +296,8 @@ const mapStateToProps = state => {
     r1FinalizeButtonSpinning,
     buyButtonTransactionHash,
     r1FinalizeButtonTransactionHash,
-    buyAmount
+    buyAmount,
+    userContribution
   } = projectCrowdSaleReducer || {};
   const { prices } = fetchPriceReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
@@ -310,7 +317,8 @@ const mapStateToProps = state => {
     whitelistButtonTransactionHash,
     buyButtonTransactionHash,
     r1FinalizeButtonTransactionHash,
-    buyAmount
+    buyAmount,
+    userContribution
   };
 };
 

@@ -106,26 +106,24 @@ class Registration extends Component {
 
   handlePublishDaico = e => {
     const {
-      initialFundRelease,
-      round1TargetEth,
-      initialTapValue,
       newProjectRegistration: projectRegistration,
       projectRegistrationData: registrationData,
       userLocalPublicAddress: localAddress,
       saveProjectStates: saveStates
     } = this.props || {};
-    if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
-      this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
-    } else if (parseFloat(initialTapValue) > 0.1 * parseFloat(round1TargetEth)) {
-      this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than 10 percent of Round1 Target(ETH)" });
-    } else {
       projectRegistration(registrationData, localAddress);
       saveStates(registrationData, localAddress);
-    }
   };
 
   handleDeployModalopen = () => {
-    this.setState({ deployModal: true });
+    const {initialFundRelease,
+      round1TargetEth,
+      initialTapValue} = this.props || {};
+      if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
+        this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
+      } else if (parseFloat(initialTapValue) > 0.1 * parseFloat(round1TargetEth)) {
+      this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than 10 percent of Round1 Target(ETH)" });
+      } else this.setState({ deployModal: true });
   };
 
   handleSaveButtonClicked = () => {

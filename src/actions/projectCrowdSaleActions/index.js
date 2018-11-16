@@ -11,6 +11,11 @@ export const etherCollected = receipt => ({
   type: actionTypes.ETHER_COLLECTED
 });
 
+export const userTokens = receipt => ({
+  payload: { receipt },
+  type: actionTypes.USER_TOKENS
+});
+
 export const roundInfoReceived = data => ({
   payload: { rec: data },
   type: actionTypes.ROUND_INFO_RECEIVED
@@ -49,6 +54,30 @@ export const getEtherCollected = (version, contractAddress) => async dispatch =>
     .catch(err => {
       console.error(err.message);
       dispatch(etherCollected("0"));
+    });
+};
+
+export const getUserTokens = (crowdsaleAddress, version, roundNumber, address) => async dispatch => {
+  // doesn't call blockchain. await is non blocking
+  const network = "rinkeby";
+  axios
+    .get(`${config.api_base_url}/web3/crowdsale/round/userdetails`, {
+      params: { address: crowdsaleAddress, network, version: version.toString(), round: roundNumber - 1, useraddress: address }
+    })
+    .then(async response => {
+      console.log("200", response.data);
+      if (response.status === 200) {
+        const { data } = response.data;
+        dispatch(userTokens(data));
+      } else {
+        console.log("400");
+        dispatch(userTokens("0"));
+      }
+    })
+    .catch(err => {
+      console.log("500");
+      console.error(err.message);
+      dispatch(userTokens("0"));
     });
 };
 

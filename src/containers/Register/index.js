@@ -14,6 +14,7 @@ import {
 import { CUICard, CUIFormInput, CUIFormInputLabel } from "../../helpers/material-ui";
 import { CUIInputType, CUIInputColor } from "../../static/js/variables";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import LoadingButton from "../../components/Common/LoadingButton";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 
 class Register extends Component {
@@ -64,11 +65,19 @@ class Register extends Component {
         {this.props.isVaultMember ? (
           <div>You are already a vault member.</div>
         ) : this.props.isPhoneNumberVerified ? (
-          this.props.vaultPaymentPendingStatus ? (
+          vaultPaymentPendingStatus ? (
             <div>Your approval is pending at our end. Our team shall process it at the earliest possible.</div>
+          ) : vaultMembershipRequestTransactionHash !== "" ? (
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
+                Status
+              </LoadingButton>
+            </a>
           ) : (
             <div>
-              <ButtonComponent label="Request Vault Membership" onClick={this.handleVaultMembershipTransaction} />
+              <LoadingButton style={{ padding: "0 40px" }} onClick={this.handleVaultMembershipTransaction} loading={isVaultMembershipButtonSpinning}>
+                Request Vault Membership
+              </LoadingButton>
             </div>
           )
         ) : (

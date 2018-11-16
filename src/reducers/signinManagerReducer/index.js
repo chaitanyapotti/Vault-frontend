@@ -27,7 +27,8 @@ export const initialState = {
   deploymentIndicator: null,
   manageDaico: false,
   project_id: "",
-  reloadPage: false
+  reloadPage: false,
+  userDetails: {}
 };
 
 export default function(state = initialState, action) {
@@ -58,6 +59,13 @@ export default function(state = initialState, action) {
         manageDaico,
         project_id: _id
       };
+    }
+
+    case types.USER_DETAILS: {
+      return {
+        ...state, 
+        userDetails: action.payload
+      }
     }
 
     case types.ISISSUER_CHECK: {

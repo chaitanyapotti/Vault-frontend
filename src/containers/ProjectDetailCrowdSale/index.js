@@ -218,7 +218,7 @@ class ProjectDetailCrowdSale extends Component {
               r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
               whitelistButtonTransactionHash={whitelistButtonTransactionHash}
               r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
-              remainingAllocation={getR1Rate(this.props) * formatFromWei(maximumEtherContribution) - formatFromWei(tokenBalance)}
+              remainingAllocation={getR1Rate(this.props) * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution))}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -262,7 +262,7 @@ class ProjectDetailCrowdSale extends Component {
           inputText={buyAmount}
           onChange={this.onBuyAmountChange}
           buyButtonTransactionHash={buyButtonTransactionHash}
-          remainingAllocation={getR1Rate(this.props) * formatFromWei(maximumEtherContribution) - formatFromWei(tokenBalance)}
+          remainingAllocation={getR1Rate(this.props) * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution))}
         />
       </Grid>
     );

@@ -60,7 +60,8 @@ class ProjectGovernance extends Component {
       _id,
       xfrRejectionPercent,
       projectHealth,
-      killAcceptancePercent
+      killAcceptancePercent,
+      thumbnailUrl
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
@@ -109,6 +110,7 @@ class ProjectGovernance extends Component {
           totalMintableSupply={totalMintableSupply}
           foundationDetails={foundationDetails}
           initialFundRelease={initialFundRelease}
+          thumbnailUrl={thumbnailUrl}
         />
       );
     }
@@ -139,6 +141,7 @@ class ProjectGovernance extends Component {
           daicoTokenAddress={daicoTokenAddress}
           projectid={_id}
           currentRoundNumber={currentRoundNumber}
+          thumbnailUrl={thumbnailUrl}
         />
       );
     }
@@ -174,6 +177,7 @@ class ProjectGovernance extends Component {
           xfrRejectionPercent={xfrRejectionPercent}
           history={history}
           killAcceptancePercent={killAcceptancePercent}
+          thumbnailUrl={thumbnailUrl}
         />
       );
     }

@@ -175,7 +175,8 @@ class ProjectDetailCrowdSale extends Component {
       whitelistButtonTransactionHash,
       buyButtonTransactionHash,
       r1FinalizeButtonTransactionHash,
-      buyAmount
+      buyAmount,
+      thumbnailUrl
     } = this.props || {};
     const { modalOpen, buyModalOpen } = this.state;
     return (
@@ -212,6 +213,7 @@ class ProjectDetailCrowdSale extends Component {
               r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
               whitelistButtonTransactionHash={whitelistButtonTransactionHash}
               r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
+              thumbnailUrl={thumbnailUrl}
             />
           </Col>
           <Col xs={12} lg={6}>

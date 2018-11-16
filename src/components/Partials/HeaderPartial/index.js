@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from 'react-router';
+import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
@@ -22,7 +22,7 @@ import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
 import AlertModal from "../../Common/AlertModal";
 import Warning from "@material-ui/icons/Warning";
-import Loader from '../../Loaders/loader';
+import Loader from "../../Loaders/loader";
 // const images = {
 //   metamask: "/assets/Footer/metamask.png"
 // };
@@ -74,8 +74,8 @@ const styles = theme => ({
     alignItems: "center",
     justifyContent: "center"
   },
-  srchlogo:{
-    fill: 'rgba(61, 61, 61, 0.25)'
+  srchlogo: {
+    fill: "rgba(61, 61, 61, 0.25)"
   },
   inputRoot: {
     color: "inherit",
@@ -83,7 +83,7 @@ const styles = theme => ({
     height: "inherit",
     backgroundColor: "rgba(0,0,0,0.05)",
     borderRadius: "30px",
-    fontSize: '16px'
+    fontSize: "16px"
   },
   inputInput: {
     paddingTop: theme.spacing.unit,
@@ -157,7 +157,7 @@ class HeaderPartial extends React.Component {
   };
 
   onHandleLogoClicked = () => {
-    this.props.searchTextChangeAction("")
+    this.props.searchTextChangeAction("");
     // this.setState({ searchText: "" });
     this.props.history.push({
       pathname: `/`
@@ -166,7 +166,7 @@ class HeaderPartial extends React.Component {
 
   onHandleProjectsClicked = () => {
     // this.setState({ searchText: "" });
-    this.props.searchTextChangeAction("")
+    this.props.searchTextChangeAction("");
     this.props.history.push({
       pathname: `/projects`
     });
@@ -174,7 +174,7 @@ class HeaderPartial extends React.Component {
 
   onHandleGovernanceClicked = () => {
     // this.setState({ searchText: "" });
-    this.props.searchTextChangeAction("")
+    this.props.searchTextChangeAction("");
     this.props.history.push({
       pathname: `/mytokens`
     });
@@ -184,17 +184,17 @@ class HeaderPartial extends React.Component {
     this.props.history.push({
       pathname: "/deploy",
       search: `?projectid=${this.props.project_id}`
-    })
-  }
+    });
+  };
 
   onHandlePublishDaicoClicked = () => {
     this.props.searchTextChangeAction("");
     // this.setState({ searchText: "" });
-    this.props.history.push( `/registration`);
+    this.props.history.push(`/registration`);
   };
 
   searchProject = e => {
-    this.props.searchTextChangeAction(e.target.value)
+    this.props.searchTextChangeAction(e.target.value);
     // this.setState({
     //   searchText: e.target.value
     // });
@@ -204,19 +204,31 @@ class HeaderPartial extends React.Component {
     if (e.keyCode === 13) {
       const { history, getSearchResults: fetchSearchResults } = this.props || {};
       const { searchText } = this.props;
-      if (searchText===""){
+      if (searchText === "") {
         history.push({
           pathname: `/`
-        });   
-      }else{
+        });
+      } else {
         fetchSearchResults(searchText);
         history.push(`/search?q=${searchText}`);
       }
-      
     }
   };
 
-  signinButtonClicked = e => { };
+  onCopyClickAddress = () => {
+    const { userLocalPublicAddress } = this.props || {};
+    const textField = document.createElement("textarea");
+    textField.contentEditable = true;
+    textField.readOnly = false;
+    textField.setSelectionRange(0, 9999999);
+    textField.innerText = userLocalPublicAddress;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand("copy");
+    textField.remove();
+  };
+
+  signinButtonClicked = e => {};
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
@@ -258,26 +270,23 @@ class HeaderPartial extends React.Component {
         ) : null}
         {this.props.signinStatusFlag === 5 ? (
           <div>
-          {
-            this.props.manageDaico? (
+            {this.props.manageDaico ? (
               <MenuItem onClick={this.onHandleManageDaicoClicked}>
-            <div>Manage DAICO</div>
-          </MenuItem>
-            ):(
+                <div>Manage DAICO</div>
+              </MenuItem>
+            ) : (
               <MenuItem onClick={this.onHandlePublishDaicoClicked}>
-            <div>Publish DAICO</div>
-          </MenuItem>    
-            )
-          }
+                <div>Publish DAICO</div>
+              </MenuItem>
+            )}
           </div>
-          
         ) : null}
       </Menu>
     );
     const random = Math.random() * (1 - 0.7) + 0.7;
     return (
       <div>
-        {(isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked) ? (
+        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
           <div className={classes.root}>
             <CUIAppBar
               position="static"
@@ -296,8 +305,8 @@ class HeaderPartial extends React.Component {
                           <MenuIcon />
                         </CUIButtonIcon>
                       ) : (
-                          <div />
-                        )}
+                        <div />
+                      )}
 
                       <div className={classes.title}>
                         <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
@@ -333,18 +342,15 @@ class HeaderPartial extends React.Component {
                         ) : null}
                         {this.props.signinStatusFlag === 5 ? (
                           <div className="hdr-itm-pad text--primary txt-m">
-                            {
-                              this.props.manageDaico ? (
-                                <div onClick={this.onHandleManageDaicoClicked} className="hvr-underline-from-left">
-                                  Manage DAICO
-                            </div>
-                              ) : (
-                                  <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">
-                                    Publish DAICO
-                            </div>
-                                )
-                            }
-                            
+                            {this.props.manageDaico ? (
+                              <div onClick={this.onHandleManageDaicoClicked} className="hvr-underline-from-left">
+                                Manage DAICO
+                              </div>
+                            ) : (
+                              <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">
+                                Publish DAICO
+                              </div>
+                            )}
                           </div>
                         ) : null}
 
@@ -354,25 +360,29 @@ class HeaderPartial extends React.Component {
                               {
                                 0: (
                                   <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={()=>{}}>
+                                    <ButtonComponent style={{ boxShadow: "none" }} onClick={() => {}}>
                                       <div className="soft-half--sides">
-                                        <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> 
-                                        <span style={{top: '3px'}} className="push-half--left pos-rel">Install</span>
+                                        <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
+                                        <span style={{ top: "3px" }} className="push-half--left pos-rel">
+                                          Install
+                                        </span>
                                       </div>
                                     </ButtonComponent>
                                   </a>
                                 ),
                                 1: (
-                                  <ButtonComponent style={{boxShadow: 'none' }} onClick={this.handleSignInModalOpen}>
+                                  <ButtonComponent style={{ boxShadow: "none" }} onClick={this.handleSignInModalOpen}>
                                     <div className="soft-half--sides">
-                                      <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" /> 
-                                      <span style={{top: '3px'}} className="push-half--left pos-rel">Sign in</span>
+                                      <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
+                                      <span style={{ top: "3px" }} className="push-half--left pos-rel">
+                                        Sign in
+                                      </span>
                                     </div>
                                   </ButtonComponent>
                                 ),
                                 2: (
                                   <div>
-                                    <ButtonComponent onClick={()=>{}}>Wrong network</ButtonComponent>
+                                    <ButtonComponent onClick={() => {}}>Wrong network</ButtonComponent>
                                     <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div>
@@ -385,20 +395,28 @@ class HeaderPartial extends React.Component {
                                     <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div>
-                                    <ButtonComponent style={{boxShadow: 'none' }} className="register" onClick={this.handleRegistrationButtonClicked}>
+                                    <ButtonComponent
+                                      style={{ boxShadow: "none" }}
+                                      className="register"
+                                      onClick={this.handleRegistrationButtonClicked}
+                                    >
                                       Become a Vault Member
                                     </ButtonComponent>
                                   </div>
                                 ),
                                 4: (
                                   <div>
-                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={()=>{}}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
+                                    <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
+                                      {this.props.userLocalPublicAddress.slice(0, 6)}
+                                    </ButtonComponent>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                   </div>
                                 ),
                                 5: (
                                   <div>
-                                    <ButtonComponent style={{boxShadow: 'none' }} onClick={()=>{}}>{this.props.userLocalPublicAddress.slice(0, 6)}</ButtonComponent>
+                                    <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
+                                      {this.props.userLocalPublicAddress.slice(0, 6)}
+                                    </ButtonComponent>
                                   </div>
                                 )
                               }[this.props.signinStatusFlag]
@@ -443,28 +461,25 @@ class HeaderPartial extends React.Component {
                 ) : null}
                 {this.props.signinStatusFlag === 5 ? (
                   <div className="hdr-itm-pad text--primary txt-m">
-                  {
-                              this.props.manageDaico ? (
-                                <div onClick={this.onHandleManageDaicoClicked} className="hdr-itm-pad text--primary txt-m">
-                      Manage DAICO
-                    </div>
-                              ) : (
-                                <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">
-                      Publish DAICO
-                    </div>
-                                )
-                            }
-                    
-                    </div>
+                    {this.props.manageDaico ? (
+                      <div onClick={this.onHandleManageDaicoClicked} className="hdr-itm-pad text--primary txt-m">
+                        Manage DAICO
+                      </div>
+                    ) : (
+                      <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">
+                        Publish DAICO
+                      </div>
+                    )}
+                  </div>
                 ) : null}
               </div>
             </Drawer>
           </div>
-        ) :
+        ) : (
           <Grid>
             <Loader rows={1} />
           </Grid>
-      }
+        )}
         <AlertModal open={signInModalOpen} handleClose={this.handleSignInModalClose}>
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />
@@ -510,9 +525,7 @@ const mapStateToProps = state => {
     project_id
   } = state.signinManagerData || {};
 
-  const {
-    searchText
-  } = state.searchReducer || {}
+  const { searchText } = state.searchReducer || {};
   return {
     userRegistered,
     userServerPublicAddress,

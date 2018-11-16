@@ -97,7 +97,7 @@ class Registration extends Component {
           search: `?projectid=${project_id}`
         });
       }
-    }, 1000);
+    }, 2000);
   }
 
   handleSubmitDaicoMetadata = e => {

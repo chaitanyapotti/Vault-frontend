@@ -18,6 +18,8 @@ import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
 import { CUIAppBar, CUIButtonIcon, CUIButton } from "../../../helpers/material-ui";
 import { getSearchResults, searchTextChangeAction } from "../../../actions/searchActions/index";
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
+import { fetchProjectDetails } from "../../../actions/deployerActions";
+import { clearProjectDetails } from "../../../actions/projectRegistrationActions"
 import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
 import AlertModal from "../../Common/AlertModal";
@@ -181,10 +183,15 @@ class HeaderPartial extends React.Component {
   };
 
   onHandleManageDaicoClicked = () => {
-    this.props.history.push({
-      pathname: "/deploy",
-      search: `?projectid=${this.props.project_id}`
-    });
+    this.props.searchTextChangeAction("");
+    this.props.clearProjectDetails()
+      this.props.fetchProjectDetails(this.props.userLocalPublicAddress)
+    setTimeout(()=>{
+      this.props.history.push({
+        pathname: "/deploy",
+        search: `?projectid=${this.props.project_id}`
+      });
+    }, 1000)
   };
 
   onHandlePublishDaicoClicked = () => {
@@ -410,7 +417,7 @@ class HeaderPartial extends React.Component {
                                   <div>
                                     
                                     <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
-                                    <span>{firstName} {lastName}</span>
+                                    <span>{firstName}</span>
                                       {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
                                     </ButtonComponent>
                                     {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
@@ -420,7 +427,7 @@ class HeaderPartial extends React.Component {
                                   <div>
                                   
                                     <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
-                                    <span>{firstName} {lastName}</span>
+                                    <span>{firstName}</span>
                                       {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
                                     </ButtonComponent>
                                   </div>
@@ -507,7 +514,9 @@ const mapDispatchToProps = dispatch =>
       openRegistrationFormAction,
       closeRegistrationFormAction,
       getSearchResults,
-      searchTextChangeAction
+      searchTextChangeAction,
+      clearProjectDetails,
+      fetchProjectDetails
     },
     dispatch
   );

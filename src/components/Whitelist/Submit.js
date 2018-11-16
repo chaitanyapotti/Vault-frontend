@@ -13,6 +13,8 @@ import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard, CUIFormInput, CUIFormInputLabel, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType, CUIInputColor } from "../../static/js/variables";
 import Loader from "../Loaders/loader";
+import LoadingButton from "../Common/LoadingButton";
+
 class Submit extends Component {
   componentDidMount() {
     let interval;
@@ -41,6 +43,8 @@ class Submit extends Component {
   };
 
   render() {
+    const { isVaultMembershipButtonSpinning, vaultMembershipRequestTransactionHash, vaultPaymentPendingStatus } = this.props || {};
+    const link = `https://rinkeby.etherscan.io/tx/${vaultMembershipRequestTransactionHash}`;
     return (
       <div>
         {this.props.vaultMembershipRequestChecked ? (
@@ -56,12 +60,24 @@ class Submit extends Component {
                     <div>Your request is pending with us. We shall approve it ASAP.</div>
                   )}
                 </div>
+              ) : vaultMembershipRequestTransactionHash !== "" ? (
+                <a href={link} target="_blank" rel="noreferrer noopener">
+                  <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                </a>
               ) : (
                 <div>
                   <Grid>
                     <Row className="push--top">
                       <Col>
-                        <ButtonComponent label="Become a Vault Member" onClick={this.handleRequestVaultMembership} />
+                        <LoadingButton
+                          style={{ padding: "0 40px" }}
+                          onClick={this.handleRequestVaultMembership}
+                          loading={isVaultMembershipButtonSpinning}
+                        >
+                          Become a Vault Member
+                        </LoadingButton>
                       </Col>
                       <Col>
                         <CUIFormInputLabel
@@ -103,7 +119,9 @@ class Submit extends Component {
             </div>
           </div>
         ) : (
-          <Grid><Loader rows={6} /></Grid>
+          <Grid>
+            <Loader rows={6} />
+          </Grid>
         )}
       </div>
     );
@@ -113,14 +131,24 @@ class Submit extends Component {
 const mapStateToProps = state => {
   const { userLocalPublicAddress, isVaultMember } = state.signinManagerData || {};
   const { userRegistrationData } = state || {};
-  const { vaultMembershipRequested, isIssuerFlag, vaultMembershipRequestChecked } = state.userRegistrationData || {};
+  const {
+    vaultMembershipRequested,
+    isIssuerFlag,
+    vaultMembershipRequestChecked,
+    isVaultMembershipButtonSpinning,
+    vaultMembershipRequestTransactionHash,
+    vaultPaymentPendingStatus
+  } = state.userRegistrationData || {};
   return {
     userLocalPublicAddress,
     userRegistrationData,
     vaultMembershipRequested,
     isVaultMember,
     isIssuerFlag,
-    vaultMembershipRequestChecked
+    vaultMembershipRequestChecked,
+    isVaultMembershipButtonSpinning,
+    vaultMembershipRequestTransactionHash,
+    vaultPaymentPendingStatus
   };
 };
 

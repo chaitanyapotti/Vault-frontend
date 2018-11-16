@@ -355,11 +355,11 @@ export const requestVaultMembership = userLocalPublicAddress => async dispatch =
         if (data === "true") {
           dispatch(isAlreadyVaultMember(true));
         } else {
+          dispatch({
+            type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING,
+            payload: true
+          });
           axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: config.vault_Version, name: "Vault" } }).then(async res => {
-            dispatch({
-              payload: { receipt: true },
-              type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING
-            });
             const { data: byteData } = res.data || {};
             const { abi } = byteData || {};
             const gasPrice = await web3.eth.getGasPrice();

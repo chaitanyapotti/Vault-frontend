@@ -43,7 +43,7 @@ const ProjectCrowdSaleName = props => {
         <Col xs={12} lg={8}>
           <div className="hl">
             <span className="prjct-logo hli">
-              <img alt="logo" src={thumbnailUrl} />
+              <img className="prjct-logo hli" alt="logo" src={thumbnailUrl} />
             </span>
             <div className="hli push--left text--primary push-half--top">
               <div className="txt-xl">

@@ -404,7 +404,8 @@ class IssuerDetailGovernance extends Component {
       isXfr1DescriptionEditable,
       isXfr2DescriptionEditable,
       xfr1Description,
-      xfr2Description
+      xfr2Description,
+      thumbnailUrl
     } = this.props || {};
     return (
       <Grid>
@@ -428,6 +429,7 @@ class IssuerDetailGovernance extends Component {
             isPermissioned={this.isPermissioned()}
             onEditClick={this.onEditClick}
             startNewRoundButtonTransactionHash={startNewRoundButtonTransactionHash}
+            thumbnailUrl={thumbnailUrl}
           />
           {/* </Col>
           <Col xs={12} lg={6}> */}

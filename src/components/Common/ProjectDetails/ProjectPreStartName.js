@@ -23,7 +23,8 @@ const ProjectPreStartName = props => {
     priceIncrementFlag,
     buttonSpinning,
     signinStatusFlag,
-    whitelistButtonTransactionHash
+    whitelistButtonTransactionHash,
+    thumbnailUrl
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
   const { website } = urls;
@@ -32,7 +33,9 @@ const ProjectPreStartName = props => {
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
-            <span className="prjct-logo hli" />
+            <span className="prjct-logo hli">
+              <img alt="logo" src={thumbnailUrl} />
+            </span>
             <div className="hli push--left text--primary push-half--top">
               <div className="txt-xl">
                 {projectName} ({tokenTag})

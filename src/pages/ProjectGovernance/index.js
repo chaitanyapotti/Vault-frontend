@@ -10,7 +10,7 @@ import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import Loader from "../../components/Loaders/loader";
-
+import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
 class ProjectGovernance extends Component {
   componentWillUnmount() {
     this.props.clearGovernanceStates();
@@ -68,7 +68,7 @@ class ProjectGovernance extends Component {
     if (treasuryStateNumber === "0") {
       return (
         <Grid>
-          <Loader rows={6} />
+          <GvrncCardLoader />
         </Grid>
       );
     }

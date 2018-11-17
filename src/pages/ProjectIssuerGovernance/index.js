@@ -6,8 +6,9 @@ import { withRouter } from "react-router-dom";
 import { currentRound, clearGovernanceStates } from "../../actions/projectGovernanceActions/index";
 import IssuerDetailPreGovernance from "../../containers/IssuerDetailPreGovernance";
 import IssuerDetailGovernance from "../../containers/IssuerDetailGovernance";
-import Loader from "../../components/Loaders/loader";
-import {Grid} from "../../helpers/react-flexbox-grid";
+import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
+import { Grid } from "../../helpers/react-flexbox-grid";
+
 class ProjectIssuerGovernance extends Component {
   componentWillUnmount() {
     this.props.clearGovernanceStates();
@@ -64,7 +65,11 @@ class ProjectIssuerGovernance extends Component {
     // Redirect to form if cdi !== 12
 
     if (treasuryStateNumber === "0") {
-      return <Grid><Loader rows={6} /></Grid>;
+      return (
+        <Grid>
+          <GvrncCardLoader />
+        </Grid>
+      );
     }
 
     if (currentDeploymentIndicator !== 12)
@@ -74,9 +79,11 @@ class ProjectIssuerGovernance extends Component {
         </Grid>
       );
     if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
-      return  <Grid>
-                <div className="text-center">The project has ended</div>
-              </Grid>;
+      return (
+        <Grid>
+          <div className="text-center">The project has ended</div>
+        </Grid>
+      );
     }
     if (treasuryStateNumber === "3" && currentRoundNumber !== "0") {
       return (

@@ -26,7 +26,8 @@ import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import AlertModal from "../../components/Common/AlertModal";
 import actionTypes from "../../action_types";
-import Loader from "../../components/Loaders/loader";
+import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
+
 class Registration extends Component {
   state = {
     modalOpen: false,
@@ -290,7 +291,7 @@ class Registration extends Component {
             :
               (
                 <Grid>
-                  <Loader rows={6} />
+                  <GvrncCardLoader/>
                 </Grid>
               )
             }
@@ -299,7 +300,7 @@ class Registration extends Component {
         : 
         (
           <Grid>
-            <Loader rows={6} />
+            <GvrncCardLoader/>
           </Grid>
         )
       }

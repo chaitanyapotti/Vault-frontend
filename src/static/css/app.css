@@ -90,9 +90,12 @@ button:hover {
 button:active {
   background: #198bd1 !important;
   transition-timing-function: ease-in;
+  transition: 250ms;
+  transform: translate(0px, 5px) !important;
+  box-shadow: none !important;
 }
 
-.btn:disabled{
+.btn:disabled {
   background: #d3d3d3 !important;
 }
 /* End btn css */
@@ -587,7 +590,7 @@ button:focus {
   white-space: nowrap;
 }
 
-.dsbld-btn-bg{
+.dsbld-btn-bg {
   background: #d3d3d3 !important;
 }
 

@@ -38,10 +38,16 @@ export const receivedTransactionHash = body => ({
   type: actionTypes.RECEIVED_TRANSACTION_HASH
 });
 
-export const fetchProjectDetails = projectid => dispatch => {
+export const fetchProjectDetails = (projectid, useraddress) => dispatch => {
   console.log("fetching details: ", projectid);
+  var paramObject = {}
+  if (projectid!==""){
+    paramObject = { params: { projectid } }
+  }else{
+    paramObject ={ params: { useraddress } }
+  }
   axios
-    .get(`${config.api_base_url}/db/projects`, { params: { projectid } })
+    .get(`${config.api_base_url}/db/projects`,paramObject )
     .then(async response => {
       if (response.status === 200) {
         const { data } = response.data || {};
@@ -79,7 +85,7 @@ export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator, 
                   tokenPrice: 0,
                   projectHealth: 0,
                   killConsensus: 0,
-                  projectEndedAt: "",
+                  projectEndedAt: null,
                   tapIncrement: 0,
                   xfrCount: 0,
                   r1EndedAt: "",

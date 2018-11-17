@@ -4,7 +4,6 @@ import actionTypes from "../../action_types";
 import {
   validateAdminName,
   validateEmail,
-  isUpperCase,
   validateTwitterLink,
   validateFacebookLink,
   validateWebsiteUrl,
@@ -13,7 +12,6 @@ import {
   validateTelegramLink,
   validateProjectNameLength,
   validateTokenTagLength,
-  alphaOnly,
   validateMaxEtherContribution,
   validateTapIncrementFactor,
   validateVoteSaturationLimit,
@@ -21,8 +19,8 @@ import {
   validateUniqueName,
   validateDecimal,
   validateEntityPercentage,
-  validateTwoDecimalPlaces,
-  validateOneDecimalPlace
+  validateOneDecimal,
+  validateProjectDescription
 } from "../../helpers/common/validationHelperFunctions";
 
 import {significantDigits} from "../../helpers/common/projectDetailhelperFunctions"
@@ -95,16 +93,25 @@ export const initialState = {
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
+
+    case actionTypes.USER_DETAILS: {
+      const { firstName, lastName }  = action.payload || {}
+      return { 
+        ...state, adminName: firstName + " " +  lastName 
+      }
+    }
+
     case actionTypes.PROJECT_STATES_SUCCESS: {
       const { allowEditAll } = state || false
       const { manageDaico } = state || false
       const { ethPrice } = state || 210
+      const { adminName } = state || ""
       if ('state' in action.payload){
         const { state: oldState } = action.payload
-        return { ...oldState, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico, ethPrice:ethPrice}
+        return { ...oldState, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico, ethPrice:ethPrice, adminName: adminName}
       }else{
         return {
-          ...state, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico
+          ...state, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico, adminName: adminName
         }
       }
     }
@@ -428,24 +435,30 @@ export default function(state = initialState, action) {
 
     case actionTypes.ERC20_TAG_CHANGED: {
       const { tokenTags } = state || {};
-      if (!validateTokenTagLength(action.payload) || isUpperCase(action.payload) || !alphaOnly(action.payload)) {
-        localErrors[actionTypes.ERC20_TAG_CHANGED] = "Should have 3-9 characters in upper case";
-      } else if (validateUniqueName(tokenTags, action.payload)) {
+      if (!validateTokenTagLength(action.payload)) {
+        localErrors[actionTypes.ERC20_TAG_CHANGED] = "Should have 3-6 characters";
+      } else if (validateUniqueName(tokenTags, action.payload.toUpperCase())) {
         localErrors[actionTypes.ERC20_TAG_CHANGED] = "token tag is not unique";
       } else {
         localErrors[actionTypes.ERC20_TAG_CHANGED] = "";
       }
       return {
         ...state,
-        erc20TokenTag: action.payload,
+        erc20TokenTag: action.payload.toUpperCase(),
         errors: localErrors
       };
     }
 
     case actionTypes.PROJECT_DESCRIPTION_CHANGED: {
+      if (!validateProjectDescription(action.payload)) {
+        localErrors[actionTypes.PROJECT_DESCRIPTION_CHANGED] = "Length should be less than 140 ";
+      } else {
+        localErrors[actionTypes.PROJECT_DESCRIPTION_CHANGED] = "";
+      }
       return {
         ...state,
-        projectDescription: action.payload
+        projectDescription: action.payload,
+        errors: localErrors
       };
     }
 
@@ -453,8 +466,7 @@ export default function(state = initialState, action) {
       if (validateWebsiteUrl(action.payload)) {
         localErrors[actionTypes.WEBSITE_LINK_CHANGED] = "";
       } else {
-        localErrors[actionTypes.WEBSITE_LINK_CHANGED] =
-          "Not a valid website url";
+        localErrors[actionTypes.WEBSITE_LINK_CHANGED] = "Not a valid website link";
       }
       return {
         ...state,
@@ -464,70 +476,37 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.TELEGRAM_LINK_CHANGED: {
-      if (validateTelegramLink(action.payload)) {
-        localErrors[actionTypes.TELEGRAM_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.TELEGRAM_LINK_CHANGED] =
-          "Not a valid telegram url";
-      }
       return {
         ...state,
-        telegramLink: action.payload,
-        errors: localErrors
+        telegramLink: action.payload
       };
     }
 
     case actionTypes.GITHUB_LINK_CHANGED: {
-      if (validateGitLink(action.payload)) {
-        localErrors[actionTypes.GITHUB_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.GITHUB_LINK_CHANGED] = "Not a valid github url";
-      }
       return {
         ...state,
-        githubLink: action.payload,
-        errors: localErrors
+        githubLink: action.payload
       };
     }
 
     case actionTypes.MEDIUM_LINK_CHANGED: {
-      if (validateMediumLink(action.payload)) {
-        localErrors[actionTypes.MEDIUM_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.MEDIUM_LINK_CHANGED] =
-          "Not a valid medium link";
-      }
       return {
         ...state,
-        mediumLink: action.payload,
-        errors: localErrors
+        mediumLink: action.payload
       };
     }
 
     case actionTypes.FACEBOOK_LINK_CHANGED: {
-      if (validateFacebookLink(action.payload)) {
-        localErrors[actionTypes.FACEBOOK_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.FACEBOOK_LINK_CHANGED] =
-          "Not a valid facebook link";
-      }
       return {
         ...state,
-        facebookLink: action.payload,
-        errors: localErrors
+        facebookLink: action.payload
       };
     }
 
     case actionTypes.TWITTER_LINK_CHANGED: {
-      if (validateTwitterLink(action.payload)) {
-        localErrors[actionTypes.TWITTER_LINK_CHANGED] = "";
-      } else {
-        localErrors[actionTypes.TWITTER_LINK_CHANGED] = "Not a valid twitter link";
-      }
       return {
         ...state,
-        twitterLink: action.payload,
-        errors: localErrors
+        twitterLink: action.payload
       };
     }
 
@@ -542,9 +521,9 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.INITIAL_FUND_RELEASE_CHANGED: {
-      if (parseFloat(action.payload) < 10 && !validateTwoDecimalPlaces(action.payload)) {
+      if (parseFloat(action.payload) < 10 && !validateOneDecimal(action.payload)) {
         localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "Only 2 Decimals Allowed";
-      } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
+      } else if (parseFloat(action.payload)>=10 && !validateOneDecimal(action.payload)){
         localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "Only 1 Decimal Allowed";
       } else if (parseFloat(action.payload)===0){
         localErrors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] = "should be greater than zero";
@@ -579,9 +558,9 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED: {
-      if (parseFloat(action.payload)<10 && !validateTwoDecimalPlaces(action.payload)) {
+      if (parseFloat(action.payload)<10 && !validateOneDecimal(action.payload)) {
         localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "Only 2 Decimals Allowed";
-      } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
+      } else if (parseFloat(action.payload)>=10 && !validateOneDecimal(action.payload)){
         localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "Only 1 Decimal Allowed";
       } else if (validateMaxEtherContribution(parseFloat(action.payload))) {
         localErrors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] = "should be greater than 0.1";
@@ -596,9 +575,9 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.INITIAL_TAP_VALUE_CHANGED: {
-      if (parseFloat(action.payload)<10 && !validateTwoDecimalPlaces(action.payload)) {
+      if (parseFloat(action.payload)<10 && !validateOneDecimal(action.payload)) {
         localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "Only 2 Decimals Allowed";
-      } else if (parseFloat(action.payload)>=10 && !validateOneDecimalPlace(action.payload)){
+      } else if (parseFloat(action.payload)>=10 && !validateOneDecimal(action.payload)){
         localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "Only 1 Decimal Allowed";
       } else if (parseFloat(action.payload)===0){
         localErrors[actionTypes.INITIAL_TAP_VALUE_CHANGED] = "should be greater than zero";
@@ -614,8 +593,10 @@ export default function(state = initialState, action) {
 
 
     case actionTypes.TAP_INCREMENT_FACTOR_CHANGED: {
-      if (validateTapIncrementFactor(parseFloat(action.payload)) || !validateDecimal(action.payload)) {
-        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "should be in between 1 and 2, only one decimal allowed";
+      if (validateTapIncrementFactor(parseFloat(action.payload))) {
+        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "Should be in between 1 and 2";
+      } else if (!validateDecimal(action.payload)) {
+        localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "Only two decimals allowed";
       } else {
         localErrors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] = "";
       }
@@ -627,8 +608,10 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.VOTE_SATURATION_LIMIT_CHANGED: {
-      if (validateVoteSaturationLimit(parseFloat(action.payload)) || !validateDecimal(action.payload)) {
-        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "should be in between 0.1 and 10, only one decimal allowed";
+      if (validateVoteSaturationLimit(parseFloat(action.payload))) {
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "Should be in between 0.01 & 5";
+      } else if (!validateDecimal(action.payload)){
+        localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "only two decimals allowed";
       } else {
         localErrors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] = "";
       }

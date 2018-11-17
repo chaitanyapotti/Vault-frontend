@@ -35,7 +35,13 @@ import {
   getXfrData,
   finalizeKill
 } from "../../actions/projectDetailGovernanceActions/index";
-import { formatFromWei, formatCurrencyNumber, formatDate, significantDigits } from "../../helpers/common/projectDetailhelperFunctions";
+import {
+  formatFromWei,
+  formatCurrencyNumber,
+  formatDate,
+  significantDigits,
+  formatRateToPrice
+} from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import XfrForm from "../../components/Common/ProjectDetails/XfrForm";
 import IssuerWithdrawCard from "../../components/Common/ProjectDetails/IssuerWithdrawCard";
@@ -81,7 +87,7 @@ class IssuerDetailGovernance extends Component {
     const { tokenTag, prices } = this.props || {};
     const { [tokenTag]: tokenPrice } = prices || {};
     const { change } = tokenPrice || {};
-    return change;
+    return change || 0;
   };
 
   getLastRoundInfo = () => {
@@ -93,21 +99,23 @@ class IssuerDetailGovernance extends Component {
     return (
       <div style={{ marginTop: "24px" }}>
         <div className="text-right">Round {roundNumber} price</div>
-        <div className="text-right opacity-75">{1 / tokenRate} ETH</div>
+        <div className="text-right opacity-75">{formatRateToPrice(tokenRate)} ETH</div>
       </div>
     );
   };
 
   getPrice = () => {
+    // TODO: to use external API
     const { tokenTag, prices } = this.props || {};
     const { [tokenTag]: tokenPrice } = prices || {};
     const { price } = tokenPrice || {};
     if (!price) {
       const { roundInfo } = this.props || {};
       const { tokenRate } = roundInfo || {};
-      return 1 / tokenRate;
+      return formatRateToPrice(tokenRate);
     }
     return price;
+    // return 0.009861;
   };
 
   getRoundText = () => {
@@ -396,7 +404,8 @@ class IssuerDetailGovernance extends Component {
       isXfr1DescriptionEditable,
       isXfr2DescriptionEditable,
       xfr1Description,
-      xfr2Description
+      xfr2Description,
+      thumbnailUrl
     } = this.props || {};
     return (
       <Grid>
@@ -420,6 +429,7 @@ class IssuerDetailGovernance extends Component {
             isPermissioned={this.isPermissioned()}
             onEditClick={this.onEditClick}
             startNewRoundButtonTransactionHash={startNewRoundButtonTransactionHash}
+            thumbnailUrl={thumbnailUrl}
           />
           {/* </Col>
           <Col xs={12} lg={6}> */}

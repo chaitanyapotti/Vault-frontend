@@ -4,6 +4,7 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const ProjectGovernanceName = props => {
   const {
@@ -26,7 +27,9 @@ const ProjectGovernanceName = props => {
     signinStatusFlag,
     tradeButtonVisibility,
     tradeUrl,
-    whitelistButtonTransactionHash
+    whitelistButtonTransactionHash,
+    buyButtonDisabled,
+    thumbnailUrl
   } = props || {};
   const { website } = urls;
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
@@ -35,7 +38,9 @@ const ProjectGovernanceName = props => {
       <Row>
         <Col xs={12} lg={9}>
           <div className="hl">
-            <span className="prjct-logo hli" />
+            <span className="prjct-logo hli">
+              <img alt="logo" className="prjct-logo hli" src={thumbnailUrl} />
+            </span>
             <div className="hli push--left text--primary push-half--top">
               <div className="txt-xl">
                 {projectName} ({tokenTag})
@@ -91,7 +96,7 @@ const ProjectGovernanceName = props => {
               </Tooltip>
             </div>
           ) : whitelistButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>
@@ -104,7 +109,9 @@ const ProjectGovernanceName = props => {
             </span>
           ) : buyButtonVisibility ? (
             <span className="hli">
-              <LoadingButton onClick={onBuyClick}>{buyButtonText}</LoadingButton>
+              <LoadingButton onClick={onBuyClick} disabled={!buyButtonDisabled}>
+                {buyButtonText}
+              </LoadingButton>
             </span>
           ) : null}
           {tradeButtonVisibility ? (

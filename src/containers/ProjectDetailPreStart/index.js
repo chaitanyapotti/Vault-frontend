@@ -79,7 +79,8 @@ class ProjectDetailPreStart extends Component {
       foundationDetails,
       buttonSpinning,
       signinStatusFlag,
-      whitelistButtonTransactionHash
+      whitelistButtonTransactionHash,
+      thumbnailUrl
     } = this.props || {};
     const { modalOpen } = this.state;
     return (
@@ -101,6 +102,7 @@ class ProjectDetailPreStart extends Component {
               onClick={this.onWhiteListClickInternal}
               signinStatusFlag={signinStatusFlag}
               whitelistButtonTransactionHash={whitelistButtonTransactionHash}
+              thumbnailUrl={thumbnailUrl}
             />
           </Col>
           <Col xs={12} lg={6}>

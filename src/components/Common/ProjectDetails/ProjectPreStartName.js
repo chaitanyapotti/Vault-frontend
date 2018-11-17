@@ -4,6 +4,7 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const ProjectPreStartName = props => {
   const {
@@ -22,7 +23,8 @@ const ProjectPreStartName = props => {
     priceIncrementFlag,
     buttonSpinning,
     signinStatusFlag,
-    whitelistButtonTransactionHash
+    whitelistButtonTransactionHash,
+    thumbnailUrl
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
   const { website } = urls;
@@ -31,7 +33,9 @@ const ProjectPreStartName = props => {
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
-            <span className="prjct-logo hli" />
+            <span className="prjct-logo hli">
+              <img alt="logo" className="prjct-logo hli" src={thumbnailUrl} />
+            </span>
             <div className="hli push--left text--primary push-half--top">
               <div className="txt-xl">
                 {projectName} ({tokenTag})
@@ -85,7 +89,7 @@ const ProjectPreStartName = props => {
               </div>
             </Tooltip>
           ) : whitelistButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>

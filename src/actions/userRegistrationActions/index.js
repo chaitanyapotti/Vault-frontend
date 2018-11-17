@@ -4,6 +4,7 @@ import actionTypes from "../../action_types";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 import constants from "../../constants";
+import { pollTxHash } from "../helperActions";
 
 const httpClient = axios.create();
 
@@ -67,6 +68,7 @@ export const requestVaultMembership = (userLocalPublicAddress, isIssuer) => asyn
         param2 = 0;
         ethers = "0.5016"
     }
+    
     axios
       .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
         params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
@@ -77,29 +79,87 @@ export const requestVaultMembership = (userLocalPublicAddress, isIssuer) => asyn
           if (data === "true") {
             dispatch(isAlreadyVaultMember(true));
           } else {
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: config.vault_Version, name: "Vault" } }).then(res => {
-              const { data } = res.data || {};
-              const { abi } = data || {};
+            dispatch({
+              type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING,
+              payload: {receipt: true}
+            });
+            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: config.vault_Version, name: "Vault" } }).then(async res => {
+              const { data: byteData } = res.data || {};
+              const { abi } = byteData || {};
+              const gasPrice = await web3.eth.getGasPrice();
               const instance = new web3.eth.Contract(abi, config.vault_contract_address, { from: userLocalPublicAddress });
               instance.methods
                 .requestMembership([0, param2])
-                .send({ from: userLocalPublicAddress, value: web3.utils.toWei(ethers, "ether") })
-                .on("error", error => {
-                    console.error(error.message)
-                    dispatch({
-                        type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_FAILED,
-                        payload: false
-                    })
+                .send({
+                  from: userLocalPublicAddress,
+                  value: web3.utils.toWei(ethers, "ether"),
+                  gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
                 })
-                .then(receipt =>{
-                    if (receipt.status === "0x1") {
+                .on("transactionHash", transactionHash => {
+                  dispatch({
+                    payload: { receipt: false },
+                    type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING
+                  });
+                  dispatch({
+                    payload: { transactionHash },
+                    type: actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED
+                  });
+                  dispatch(
+                    pollTxHash(
+                      transactionHash,
+                      () => {
+                          dispatch({
+                              type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_SUCCESS,
+                              payload: true
+                          });
                         dispatch({
-                            type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_SUCCESS,
-                            payload: true
-                        })
-                    }
-                }                     
-                );
+                          payload: { transactionHash: "" },
+                          type: actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED
+                        });
+                      },
+                      () => {
+                        dispatch({
+                          payload: { receipt: false },
+                          type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING
+                        });
+                        dispatch({
+                            type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_FAILED,
+                            payload: false
+                        });
+                        dispatch({
+                          payload: { transactionHash: "" },
+                          type: actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED
+                        });
+                      },
+                      () => {},
+                      () => {
+                        dispatch({
+                            type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_FAILED,
+                            payload: false
+                        });
+                        dispatch({
+                          payload: { transactionHash: "" },
+                          type: actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED
+                        });
+                      }
+                    )
+                  );
+                })
+                .catch(err => {
+                  console.error(err.message);
+                  dispatch({
+                    type: actionTypes.VAULT_MEMBERSHIP_PAYMENT_CHECK_SUCCESS,
+                    payload: false
+                });
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED
+                  });
+                  dispatch({
+                    payload: { receipt: false },
+                    type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING
+                  });
+                });
             });
           }
         }

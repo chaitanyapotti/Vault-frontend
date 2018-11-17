@@ -2,12 +2,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { checkUserRegistration, fetchCurrentAccount, checkVaultMembership } from "../../actions/signinManagerActions";
+import { checkUserRegistration, fetchCurrentAccount, checkVaultMembership, pageReloadingSignal } from "../../actions/signinManagerActions";
 
 class SigninManager extends Component {
   constructor(props) {
     super(props);
     this.interval = null;
+  }
+
+  reloadPage = () => {
+    window.location.reload();
+    this.props.pageReloadingSignal()
   }
 
   initAddressPoll() {
@@ -27,6 +32,9 @@ class SigninManager extends Component {
   }
 
   render() {
+    if (this.props.reloadPage){
+      this.reloadPage()
+    }
     return (
       <div>
         {/* <p>User is registered: {this.props.userRegistered.toString()}</p>
@@ -45,7 +53,8 @@ const mapStateToProps = state => {
     userLocalPublicAddress,
     userPreviousLocalPublicAddress,
     metamaskPreviousNetworkName,
-    metamaskPreviousInstallationState
+    metamaskPreviousInstallationState,
+    reloadPage
   } = state.signinManagerData || {};
   return {
     userRegistered,
@@ -54,7 +63,8 @@ const mapStateToProps = state => {
     userLocalPublicAddress,
     userPreviousLocalPublicAddress,
     metamaskPreviousNetworkName,
-    metamaskPreviousInstallationState
+    metamaskPreviousInstallationState,
+    reloadPage
   };
 };
 
@@ -63,7 +73,8 @@ const mapDispatchToProps = dispatch =>
     {
       checkUserRegistration,
       fetchCurrentAccount,
-      checkVaultMembership
+      checkVaultMembership,
+      pageReloadingSignal
     },
     dispatch
   );

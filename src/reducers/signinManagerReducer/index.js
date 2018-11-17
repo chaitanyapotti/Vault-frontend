@@ -26,11 +26,19 @@ export const initialState = {
   isDeploymentIndicatorChecked: false,
   deploymentIndicator: null,
   manageDaico: false,
-  project_id: ""
+  project_id: "",
+  reloadPage: false,
+  userDetails: {}
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case types.PAGE_RELOADING: {
+      return {
+        ...state,
+        reloadPage: false
+      };
+    }
     case types.PROJECT_REGISTRATION_SUCCESS: {
       return {
         ...state,
@@ -51,6 +59,13 @@ export default function(state = initialState, action) {
         manageDaico,
         project_id: _id
       };
+    }
+
+    case types.USER_DETAILS: {
+      return {
+        ...state, 
+        userDetails: action.payload
+      }
     }
 
     case types.ISISSUER_CHECK: {
@@ -128,6 +143,10 @@ export default function(state = initialState, action) {
 
     case types.USER_DEFAULT_ACCOUNT_CHANGED: {
       const networkName = state.networkName;
+      let { reloadPage, userPreviousLocalPublicAddress } = state || {};
+      if (userPreviousLocalPublicAddress && userPreviousLocalPublicAddress !== action.payload && action.payload !== "") {
+        reloadPage = true;
+      }
       if (networkName === "rinkeby") {
         if (action.payload) {
           return {
@@ -138,7 +157,8 @@ export default function(state = initialState, action) {
             userServerPublicAddress: "",
             userLocalPublicAddress: action.payload,
             userPreviousLocalPublicAddress: action.payload,
-            isUserDefaultAccountChecked: true
+            isUserDefaultAccountChecked: true,
+            reloadPage
           };
         }
         return {
@@ -153,7 +173,8 @@ export default function(state = initialState, action) {
           isUserDefaultAccountChecked: true,
           isIssuerChecked: true,
           isMetamaskNetworkChecked: true,
-          isVaultMembershipChecked: true
+          isVaultMembershipChecked: true,
+          reloadPage
         };
       }
       if (action.payload !== "") {
@@ -166,7 +187,8 @@ export default function(state = initialState, action) {
           userLocalPublicAddress: action.payload,
           userPreviousLocalPublicAddress: action.payload,
           isUserDefaultAccountChecked: true,
-          signinStatusFlag: 2
+          signinStatusFlag: 2,
+          reloadPage
         };
       }
       return {
@@ -181,7 +203,8 @@ export default function(state = initialState, action) {
         isUserDefaultAccountChecked: true,
         isIssuerChecked: true,
         isMetamaskNetworkChecked: true,
-        isVaultMembershipChecked: true
+        isVaultMembershipChecked: true,
+        reloadPage
       };
     }
 

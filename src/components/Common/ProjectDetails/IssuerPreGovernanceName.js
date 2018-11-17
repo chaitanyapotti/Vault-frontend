@@ -3,6 +3,7 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const IssuerPreGovernanceName = props => {
   const {
@@ -26,7 +27,8 @@ const IssuerPreGovernanceName = props => {
     isPermissioned,
     onEditClick,
     startR1ButtonTransactionHash,
-    r1FinalizeButtonTransactionHash
+    r1FinalizeButtonTransactionHash,
+    thumbnailUrl
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${startR1ButtonTransactionHash}`;
   const refundLink = `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`;
@@ -36,7 +38,9 @@ const IssuerPreGovernanceName = props => {
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
-            <span className="prjct-logo hli" />
+            <span className="prjct-logo hli">
+              <img alt="logo" className="prjct-logo hli" src={thumbnailUrl} />
+            </span>
             <div className="hli push--left text--primary push-half--top">
               <div className="txt-xxxl">
                 {projectName} ({tokenTag})
@@ -68,12 +72,12 @@ const IssuerPreGovernanceName = props => {
       <Row className="push--top">
         <Col lg={6} className="text--secondary txt">
           <div>
-            <a href={whitepaper} target="_blank" rel="noopener noreferrer">
+            <a href={ensureHttpUrl(whitepaper)} target="_blank" rel="noopener noreferrer">
               Read our whitepaper
             </a>
           </div>
           <div>
-            <a href={website} target="_blank" rel="noopener noreferrer">
+            <a href={ensureHttpUrl(website)} target="_blank" rel="noopener noreferrer">
               Learn more on our website
             </a>
           </div>
@@ -81,13 +85,13 @@ const IssuerPreGovernanceName = props => {
         <Col lg={6} className="text-right hl  ">
           {isPermissioned ? (
             startR1ButtonTransactionHash !== "" ? (
-              <a href={link} target="_blank" rel="noreferrer noopener">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
                 <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                   Status
                 </LoadingButton>
               </a>
             ) : r1FinalizeButtonTransactionHash !== "" ? (
-              <a href={refundLink} target="_blank" rel="noreferrer noopener">
+              <a href={ensureHttpUrl(refundLink)} target="_blank" rel="noreferrer noopener">
                 <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                   Status
                 </LoadingButton>

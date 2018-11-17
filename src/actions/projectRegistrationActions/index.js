@@ -29,26 +29,26 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     r1EndTime: new Date(Math.round(new Date(projectData.daicoEndDate).getTime() / 1000) * 1000),
     rounds: [
       {
-        tokenCount: web3.utils.toWei(projectData.round1Tokens.toString()),
+        tokenCount: web3.utils.toWei(Math.round(projectData.round1Tokens).toString()),
         tokenRate: parseInt(projectData.round1Rate, 10).toString()
       },
       {
-        tokenCount: web3.utils.toWei(projectData.round2Tokens.toString()),
+        tokenCount: web3.utils.toWei(Math.round(projectData.round2Tokens).toString()),
         tokenRate: parseInt(projectData.round2Rate, 10).toString()
       },
       {
-        tokenCount: web3.utils.toWei(projectData.round3Tokens.toString()),
+        tokenCount: web3.utils.toWei(Math.round(projectData.round3Tokens).toString()),
         tokenRate: parseInt(projectData.round3Rate, 10).toString()
       }
     ],
     minimumEtherContribution: "100000000000000000",
-    maximumEtherContribution: web3.utils.toWei(projectData.maxEtherContribution.toString()),
+    maximumEtherContribution: web3.utils.toWei(projectData.maxEtherContribution),
     vaultAddress: config.vault_contract_address,
     foundationDetails,
-    initialFundRelease: web3.utils.toWei(parseFloat(projectData.initialFundRelease).toString()),
+    initialFundRelease: web3.utils.toWei(projectData.initialFundRelease, "ether"),
     teamAddress: projectData.teamAddress,
     killPollStartDate: new Date(Math.round(new Date(projectData.daicoEndDate).getTime() / 1000) * 1000),
-    initialTapAmount: web3.utils.toWei((parseFloat(projectData.initialTapValue) / (30 * 86400)).toString()),
+    initialTapAmount: Math.round(parseFloat(projectData.initialTapValue) * Math.pow(10, 18) / (30 * 86400)).toFixed(0),
     tapIncrementFactor: parseInt(parseFloat(projectData.tapIncrementFactor) * 100).toString(),
     tokenTag: projectData.erc20TokenTag,
     adminName: projectData.adminName,
@@ -109,7 +109,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
 
 export function projectMetadata(projectData, userLocalPublicAddress) {
   const projectObject = {
-    ownerAddress :userLocalPublicAddress,
+    ownerAddress: userLocalPublicAddress,
     description: projectData.projectDescription,
     urls: {
       website: projectData.websiteLink,

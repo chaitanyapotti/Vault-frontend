@@ -57,7 +57,8 @@ class ProjectIssuerGovernance extends Component {
       ownerAddress,
       tapAcceptancePercent,
       xfrRejectionPercent,
-      _id
+      _id,
+      thumbnailUrl
     } = projectDetails || {};
     // currentRoundNumber = "2";
     // Redirect to form if cdi !== 12
@@ -108,6 +109,7 @@ class ProjectIssuerGovernance extends Component {
           xfrRejectionPercent={xfrRejectionPercent}
           projectid={_id}
           history={history}
+          thumbnailUrl={thumbnailUrl}
         />
       );
     }
@@ -140,6 +142,7 @@ class ProjectIssuerGovernance extends Component {
           history={history}
           crowdSaleAddress={crowdSaleAddress}
           pollFactoryAddress={pollFactoryAddress}
+          thumbnailUrl={thumbnailUrl}
         />
       );
     }

@@ -8,14 +8,12 @@ import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
-import {Grid} from "../../helpers/react-flexbox-grid";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import Loader from "../../components/Loaders/loader";
 
-
 class ProjectGovernance extends Component {
-  
-  componentWillUnmount(){
-    this.props.clearGovernanceStates()
+  componentWillUnmount() {
+    this.props.clearGovernanceStates();
   }
 
   componentDidMount() {
@@ -62,12 +60,17 @@ class ProjectGovernance extends Component {
       _id,
       xfrRejectionPercent,
       projectHealth,
-      killAcceptancePercent
+      killAcceptancePercent,
+      thumbnailUrl
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
-    if (treasuryStateNumber === "0"){
-      return (<Grid><Loader rows={6} /></Grid>)
+    if (treasuryStateNumber === "0") {
+      return (
+        <Grid>
+          <Loader rows={6} />
+        </Grid>
+      );
     }
 
     if (currentDeploymentIndicator !== 12)
@@ -87,95 +90,99 @@ class ProjectGovernance extends Component {
         />
       );
     }
-
-    switch (currentRoundNumber) {
-      case "0":
-        return (
-          <ProjectDetailPreStart
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            initialFundRelease={initialFundRelease}
-          />
-        );
-      case "1":
-        return (
-          <ProjectDetailCrowdSale
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            daicoTokenAddress={daicoTokenAddress}
-            projectid={_id}
-          />
-        );
-      case "2":
-      case "3":
-      case "4":
-        return (
-          <ProjectDetailGovernance
-            projectHealth={projectHealth}
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            currentRoundNumber={currentRoundNumber}
-            daicoTokenAddress={daicoTokenAddress}
-            xfrDetails={xfrDetails}
-            projectid={_id}
-            xfrRejectionPercent={xfrRejectionPercent}
-            history={history}
-            killAcceptancePercent={killAcceptancePercent}
-          />
-        );
-      default:
-        return null;
+    if (treasuryStateNumber === "1" && currentRoundNumber === "0") {
+      return (
+        <ProjectDetailPreStart
+          version={version}
+          membershipAddress={membershipAddress}
+          projectName={projectName}
+          tokenTag={tokenTag}
+          description={description}
+          urls={urls}
+          whitepaper={whitepaper}
+          startDateTime={startDateTime}
+          maximumEtherContribution={maximumEtherContribution}
+          capPercent={capPercent}
+          initialTapAmount={initialTapAmount}
+          tapIncrementFactor={tapIncrementFactor}
+          isCurrentMember={isCurrentMember}
+          rounds={rounds}
+          totalMintableSupply={totalMintableSupply}
+          foundationDetails={foundationDetails}
+          initialFundRelease={initialFundRelease}
+          thumbnailUrl={thumbnailUrl}
+        />
+      );
     }
+
+    if (treasuryStateNumber === "1" && currentRoundNumber === "1") {
+      return (
+        <ProjectDetailCrowdSale
+          version={version}
+          membershipAddress={membershipAddress}
+          projectName={projectName}
+          tokenTag={tokenTag}
+          description={description}
+          urls={urls}
+          whitepaper={whitepaper}
+          startDateTime={startDateTime}
+          maximumEtherContribution={maximumEtherContribution}
+          capPercent={capPercent}
+          initialTapAmount={initialTapAmount}
+          tapIncrementFactor={tapIncrementFactor}
+          isCurrentMember={isCurrentMember}
+          rounds={rounds}
+          totalMintableSupply={totalMintableSupply}
+          foundationDetails={foundationDetails}
+          r1EndTime={r1EndTime}
+          pollFactoryAddress={pollFactoryAddress}
+          initialFundRelease={initialFundRelease}
+          crowdSaleAddress={crowdSaleAddress}
+          daicoTokenAddress={daicoTokenAddress}
+          projectid={_id}
+          currentRoundNumber={currentRoundNumber}
+          thumbnailUrl={thumbnailUrl}
+        />
+      );
+    }
+
+    if (treasuryStateNumber === "3" || currentRoundNumber === "2" || currentRoundNumber === "3" || currentRoundNumber === "4") {
+      return (
+        <ProjectDetailGovernance
+          projectHealth={projectHealth}
+          version={version}
+          membershipAddress={membershipAddress}
+          projectName={projectName}
+          tokenTag={tokenTag}
+          description={description}
+          urls={urls}
+          whitepaper={whitepaper}
+          startDateTime={startDateTime}
+          maximumEtherContribution={maximumEtherContribution}
+          capPercent={capPercent}
+          initialTapAmount={initialTapAmount}
+          tapIncrementFactor={tapIncrementFactor}
+          isCurrentMember={isCurrentMember}
+          rounds={rounds}
+          totalMintableSupply={totalMintableSupply}
+          foundationDetails={foundationDetails}
+          r1EndTime={r1EndTime}
+          pollFactoryAddress={pollFactoryAddress}
+          initialFundRelease={initialFundRelease}
+          crowdSaleAddress={crowdSaleAddress}
+          currentRoundNumber={currentRoundNumber}
+          daicoTokenAddress={daicoTokenAddress}
+          xfrDetails={xfrDetails}
+          projectid={_id}
+          xfrRejectionPercent={xfrRejectionPercent}
+          history={history}
+          killAcceptancePercent={killAcceptancePercent}
+          thumbnailUrl={thumbnailUrl}
+        />
+      );
+    }
+
+    return null;
   }
 }
 

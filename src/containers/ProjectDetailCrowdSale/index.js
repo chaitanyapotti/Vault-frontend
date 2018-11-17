@@ -9,7 +9,8 @@ import {
   buyTokens,
   getTokenBalance,
   finalizeR1,
-  buyAmountChangedAction
+  buyAmountChangedAction,
+  getUserTokens
 } from "../../actions/projectCrowdSaleActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import {
@@ -18,7 +19,8 @@ import {
   getR1Goal,
   getHardCap,
   getSoftCap,
-  formatCurrencyNumber
+  formatCurrencyNumber,
+  getR1Rate
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -55,11 +57,14 @@ class ProjectDetailCrowdSale extends Component {
       fetchPrice: etherPriceFetch,
       checkWhiteList: checkWhiteListStatus,
       getTokenBalance: tokenBalance,
-      daicoTokenAddress
+      daicoTokenAddress,
+      getUserTokens: fetchUserTokens,
+      currentRoundNumber
     } = this.props || {};
     etherPriceFetch("ETH");
     fetchEtherCollected(version, pollFactoryAddress);
     fetchRoundTokensSold(version, crowdSaleAddress, 0);
+    fetchUserTokens(crowdSaleAddress, version, currentRoundNumber, userLocalPublicAddress);
     if (signinStatusFlag > 2) {
       checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
       tokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
@@ -84,10 +89,11 @@ class ProjectDetailCrowdSale extends Component {
   }
 
   getRoundText = () => {
-    const { rounds, roundInfo } = this.props || {};
+    const { rounds, roundInfo, currentRoundNumber } = this.props || {};
     const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
+    if (parseFloat(tokenCount) === parseFloat(totalTokensSold)) return `Round ${currentRoundNumber} Ended`;
     // based on tokens sold
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
@@ -174,7 +180,9 @@ class ProjectDetailCrowdSale extends Component {
       whitelistButtonTransactionHash,
       buyButtonTransactionHash,
       r1FinalizeButtonTransactionHash,
-      buyAmount
+      buyAmount,
+      thumbnailUrl,
+      userContribution
     } = this.props || {};
     const { modalOpen, buyModalOpen } = this.state;
     return (
@@ -202,7 +210,8 @@ class ProjectDetailCrowdSale extends Component {
               buttonSpinning={buttonSpinning}
               onClick={this.onWhiteListClickInternal}
               signinStatusFlag={signinStatusFlag}
-              buyButtonVisibility={isCurrentMember && this.canBuy()}
+              buyButtonVisibility={isCurrentMember}
+              buyButtonDisabled={this.canBuy()}
               onBuyClick={this.buyTokens}
               buyButtonText="Buy"
               r1Finish={this.r1Finish()}
@@ -210,6 +219,8 @@ class ProjectDetailCrowdSale extends Component {
               r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
               whitelistButtonTransactionHash={whitelistButtonTransactionHash}
               r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
+              thumbnailUrl={thumbnailUrl}
+              remainingAllocation={getR1Rate(this.props) * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution))}
             />
           </Col>
           <Col xs={12} lg={6}>
@@ -224,7 +235,8 @@ class ProjectDetailCrowdSale extends Component {
               dilutedCapitalisation={getHardCap(this.props)}
               tokenDataVisibitlity={isCurrentMember}
               tokenBalance={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
-              buyableTokens={formatCurrencyNumber(getR1Price(this.props) * parseFloat(maximumEtherContribution), 0)}
+              remainingAllocation={getR1Rate(this.props) * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution))}
+              buyableTokens={formatCurrencyNumber(getR1Rate(this.props) * formatFromWei(maximumEtherContribution), 0)}
             />
           </Col>
         </Row>
@@ -252,6 +264,9 @@ class ProjectDetailCrowdSale extends Component {
           inputText={buyAmount}
           onChange={this.onBuyAmountChange}
           buyButtonTransactionHash={buyButtonTransactionHash}
+          remainingAllocation={getR1Rate(this.props) * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution))}
+          fundsCollected={formatFromWei(etherCollected, 3)}
+          roundGoal={getR1Goal(this.props)}
         />
       </Grid>
     );
@@ -269,7 +284,8 @@ const mapDispatchToProps = dispatch =>
       fetchPrice,
       checkWhiteList,
       finalizeR1,
-      buyAmountChangedAction
+      buyAmountChangedAction,
+      getUserTokens
     },
     dispatch
   );
@@ -284,7 +300,8 @@ const mapStateToProps = state => {
     r1FinalizeButtonSpinning,
     buyButtonTransactionHash,
     r1FinalizeButtonTransactionHash,
-    buyAmount
+    buyAmount,
+    userContribution
   } = projectCrowdSaleReducer || {};
   const { prices } = fetchPriceReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
@@ -304,7 +321,8 @@ const mapStateToProps = state => {
     whitelistButtonTransactionHash,
     buyButtonTransactionHash,
     r1FinalizeButtonTransactionHash,
-    buyAmount
+    buyAmount,
+    userContribution
   };
 };
 

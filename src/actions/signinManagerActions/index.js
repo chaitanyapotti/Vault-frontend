@@ -3,9 +3,9 @@ import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
 import constants from "../../constants";
+import { pollTxHash } from "../helperActions";
 
-
-export function pageReloadingSignal(){
+export function pageReloadingSignal() {
   return dispatch => {
     dispatch({
       type: actionTypes.PAGE_RELOADING,
@@ -32,6 +32,7 @@ export function openRegistrationFormAction(userRegistered) {
       });
     };
   }
+  return null;
 }
 
 export function checkUserRegistration() {
@@ -112,7 +113,7 @@ export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
           });
         }
       }).catch(error => {
-        console.log(error)
+        console.log(error);
         dispatch({
           type: actionTypes.PROJECT_DEPLOYMENT_INDICATOR_FAILED,
           payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
@@ -354,23 +355,81 @@ export const requestVaultMembership = userLocalPublicAddress => async dispatch =
         if (data === "true") {
           dispatch(isAlreadyVaultMember(true));
         } else {
-          axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: config.vault_Version, name: "Vault" } }).then(res => {
-            const { data } = res.data || {};
-            const { abi } = data || {};
+          dispatch({
+            type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING,
+            payload: true
+          });
+          axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: config.vault_Version, name: "Vault" } }).then(async res => {
+            const { data: byteData } = res.data || {};
+            const { abi } = byteData || {};
+            const gasPrice = await web3.eth.getGasPrice();
             const instance = new web3.eth.Contract(abi, config.vault_contract_address, { from: userLocalPublicAddress });
             instance.methods
               .requestMembership([0, 0])
-              .send({ from: userLocalPublicAddress, value: web3.utils.toWei("0.6", "ether") })
-              .on("error", error => console.error(error.message))
-              .then(receipt => dispatch(isAlreadyVaultMember(receipt.status === "0x1")));
+              .send({
+                from: userLocalPublicAddress,
+                value: web3.utils.toWei("0.6", "ether"),
+                gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
+              })
+              .on("transactionHash", transactionHash => {
+                dispatch({
+                  payload: { receipt: false },
+                  type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING
+                });
+                dispatch({
+                  payload: { transactionHash },
+                  type: actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED
+                });
+                dispatch(
+                  pollTxHash(
+                    transactionHash,
+                    () => {
+                      dispatch(isAlreadyVaultMember(false));
+                      dispatch({
+                        payload: { transactionHash: "" },
+                        type: actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED
+                      });
+                    },
+                    () => {
+                      dispatch({
+                        payload: { receipt: false },
+                        type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING
+                      });
+                      dispatch(isAlreadyVaultMember(false));
+                      dispatch({
+                        payload: { transactionHash: "" },
+                        type: actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED
+                      });
+                    },
+                    () => {},
+                    () => {
+                      dispatch(isAlreadyVaultMember(false));
+                      dispatch({
+                        payload: { transactionHash: "" },
+                        type: actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED
+                      });
+                    }
+                  )
+                );
+              })
+              .catch(err => {
+                console.error(err.message);
+                dispatch(isAlreadyVaultMember(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED
+                });
+                dispatch({
+                  payload: { receipt: false },
+                  type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING
+                });
+              });
           });
         }
       }
     })
     .catch(err => console.error(err.message));
 };
-
-
 
 export const checkIssuer = userLocalPublicAddress => dispatch => {
   axios
@@ -380,6 +439,11 @@ export const checkIssuer = userLocalPublicAddress => dispatch => {
     .then(response => {
       if (response.status === 200) {
         const { data } = response.data;
+        const {details } = response.data
+        dispatch({
+          type: actionTypes.USER_DETAILS,
+          payload: details
+        })
         if (data) {
           dispatch({
             type: actionTypes.ISISSUER_CHECK,

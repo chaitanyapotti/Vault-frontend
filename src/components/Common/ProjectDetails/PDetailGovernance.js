@@ -3,6 +3,7 @@ import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const PDetailGovernance = props => {
   const {
@@ -25,9 +26,11 @@ const PDetailGovernance = props => {
     onUnlockTokensClick,
     onKillPollsHistoryClick,
     killButtonTransactionHash,
-    r1EndTime
+    r1EndTime,
+    pollFactoryAddress
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${killButtonTransactionHash}`;
+  const etherscanLink = `https://etherscan.io/address/${pollFactoryAddress}`;
   return (
     <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
       <Row>
@@ -35,6 +38,13 @@ const PDetailGovernance = props => {
           Project Details
         </Col>
         <Col className="push-half--top text-right" lg={6}>
+          <a href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="push-half--top text-right" lg={12}>
           <a rel="noopener" onClick={onKillPollsHistoryClick}>
             Kill Polls History
           </a>
@@ -110,7 +120,7 @@ const PDetailGovernance = props => {
               </div>
             </Tooltip>
           ) : killButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>

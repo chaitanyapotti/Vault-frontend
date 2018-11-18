@@ -3,6 +3,7 @@ import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../helpers/material-ui";
 import LoadingButton from "../Common/LoadingButton";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { ensureHttpUrl } from "../../helpers/common/urlFixerInHref";
 
 const RefundCard = props => {
   const {
@@ -27,18 +28,18 @@ const RefundCard = props => {
               <Grid>
                 <Row>
                   <Col lg={8}>
-                    <div className="text-center sbhdr-txt push--bottom txt-xl">{label}</div>
+                    <div className="text-left text--primary sbhdr-txt push--bottom txt-xl">{label}</div>
                   </Col>
                   <Col lg={4}>
                     <div className="text--center">
                       {refundByKillButtonTransactionHash !== "" ? (
-                        <a href={link} target="_blank" rel="noreferrer noopener">
+                        <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
                           <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                             Status
                           </LoadingButton>
                         </a>
                       ) : refundBySoftcapfailButtonTransactionHash !== "" ? (
-                        <a href={refundSoftLink} target="_blank" rel="noreferrer noopener">
+                        <a href={ensureHttpUrl(refundSoftLink)} target="_blank" rel="noreferrer noopener">
                           <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                             Status
                           </LoadingButton>

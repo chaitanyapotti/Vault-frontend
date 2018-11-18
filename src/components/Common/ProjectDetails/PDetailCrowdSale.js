@@ -1,12 +1,12 @@
 import React from "react";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
 
 const PDetailCrowdSale = props => {
   const {
     individualCap,
     voteSaturationLimit,
-    killFrequency,
     initialTapAmount,
     initialFundRelease,
     tapIncrementUnit,
@@ -14,8 +14,10 @@ const PDetailCrowdSale = props => {
     dilutedCapitalisation,
     tokenDataVisibitlity,
     tokenBalance,
-    buyableTokens
+    buyableTokens,
+    remainingAllocation
   } = props || {};
+  console.log(remainingAllocation, "xxx");
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
       <div className="txt-xxxl text--primary">Project Details</div>
@@ -25,8 +27,8 @@ const PDetailCrowdSale = props => {
           <div className="text--secondary">{individualCap} ETH/person</div>
         </Col>
         <Col lg={6} className="txt">
-          <div className="txt-bold">Kill Frequency: </div>
-          <div className="text--secondary">{killFrequency}</div>
+          <div className="txt-bold">User Token Balance: </div>
+          <div className="text--secondary">{tokenBalance}</div>
         </Col>
       </Row>
 
@@ -65,8 +67,8 @@ const PDetailCrowdSale = props => {
       {tokenDataVisibitlity ? (
         <Row className="push-half--top">
           <Col lg={6} className="txt">
-            <div className="txt-bold">User Token Balance:</div>
-            <div className="text--secondary">{tokenBalance}</div>
+            <div className="txt-bold">Remaining Allocation:</div>
+            <div className="text--secondary">{formatCurrencyNumber(remainingAllocation, 0)}</div>
           </Col>
           <Col lg={6} className="txt">
             <div className="txt-bold">Total Buyable Tokens: </div>

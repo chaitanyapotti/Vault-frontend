@@ -7,8 +7,6 @@ import { Provider } from "react-redux";
 import "./static/css/app.css";
 import VaultApp from "./VaultApp";
 import Registration from "./pages/Registration";
-import Dashboard from "./pages/Dashboard";
-import LandingPage from "./pages/LandingPage";
 import AllProjects from "./pages/AllProjects";
 import Governance from "./pages/Governance";
 import FeaturedProjects from "./pages/FeaturedProjects";
@@ -35,9 +33,7 @@ const App = props => {
             <Route strict path="/governance/details" component={ProjectGovernance} history={history} />
             <Route strict path="/issuergovernance/details" component={ProjectIssuerGovernance} history={history} />
             <Route exact path="/projects" component={AllProjects} />
-            <Route exact path="/landing" component={LandingPage} />
             <Route exact path="/registration" component={Registration} history={history} />
-            <Route exact path="/dashboard" component={Dashboard} />
             <Route strict path="/deploy" component={Deployer} history={history} />
             <Route exact path="/register" component={WhiteList} />
             {/* <Route exact path="/register" component={Register} /> */}

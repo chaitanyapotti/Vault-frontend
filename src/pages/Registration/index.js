@@ -8,15 +8,7 @@ import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Registration";
 import {
   validateLength,
-  isUpperCase,
-  validateProjectNameLength,
-  validateTokenTagLength,
-  alphaOnly,
-  validateMaxEtherContribution,
-  // validateTapIncrementFactor,
-  // validateVoteSaturationLimit,
   validateDate,
-  validateUniqueName,
   validateTotalSaleTokens,
   validateZero
 } from "../../helpers/common/validationHelperFunctions";
@@ -26,7 +18,8 @@ import {
   fetchProjectStates,
   fetchProjectDeploymentIndicator,
   clearProjectDetails,
-  projectMetadata
+  projectMetadata,
+  calculateTokens
 } from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
 import { fetchPrice } from "../../actions/priceFetchActions";
@@ -34,7 +27,8 @@ import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import AlertModal from "../../components/Common/AlertModal";
 import actionTypes from "../../action_types";
-import Loader from "../../components/Loaders/loader";
+import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
+
 class Registration extends Component {
   state = {
     modalOpen: false,
@@ -89,7 +83,7 @@ class Registration extends Component {
 
     if (dckdBtnCnt && getRectTop(dckdBtnCnt) + document.body.scrollTop + dckdBtnCnt.offsetHeight >= getRectTop(footer) + document.body.scrollTop - 10)
       dckdBtnCnt.style.position = "relative";
-    if (document.body.scrollTop + window.innerHeight < getRectTop(footer) + document.body.scrollTop) dckdBtnCnt.style.position = "fixed"; // restore when you scroll up
+    if ((document.body.scrollTop + window.innerHeight < getRectTop(footer) + document.body.scrollTop) && dckdBtnCnt) dckdBtnCnt.style.position = "fixed"; // restore when you scroll up
   };
 
   componentWillUnmount() {
@@ -105,7 +99,7 @@ class Registration extends Component {
           search: `?projectid=${project_id}`
         });
       }
-    }, 1000);
+    }, 2000);
   }
 
   handleSubmitDaicoMetadata = e => {
@@ -114,26 +108,34 @@ class Registration extends Component {
 
   handlePublishDaico = e => {
     const {
-      initialFundRelease,
-      round1TargetEth,
-      initialTapValue,
       newProjectRegistration: projectRegistration,
       projectRegistrationData: registrationData,
       userLocalPublicAddress: localAddress,
       saveProjectStates: saveStates
     } = this.props || {};
-    if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
-      this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
-    } else if (parseFloat(initialTapValue) >= parseFloat(initialFundRelease)) {
-      this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than Initial Fund Release" });
-    } else {
       projectRegistration(registrationData, localAddress);
       saveStates(registrationData, localAddress);
-    }
   };
 
   handleDeployModalopen = () => {
-    this.setState({ deployModal: true });
+    const {initialFundRelease,
+      round1TargetEth,
+      initialTapValue,
+      calculateTokens: calTokens, r1Bonus, r2Bonus} = this.props || {};
+      if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
+        this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
+      } else if (parseFloat(initialTapValue) > 0.1 * parseFloat(round1TargetEth)) {
+      this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than 10 percent of Round1 Target(ETH)" });
+      } else if (parseFloat(r1Bonus) < parseFloat(r2Bonus)) {
+        this.setState({ modalOpen: true, modalMessage: `Round 1 bonus should be atleast as much as the round 2 bonus: ${r2Bonus}%` });
+      } else if (parseFloat(r1Bonus) > 100 + 2 * parseFloat(r2Bonus)){
+        this.setState({
+          modalOpen: true,
+          modalMessage: `Round 1 bonus should be less than ${100 + 2 * r2Bonus}% to prevent a price jump of more than doubling between Round 1 & 2.`
+        });
+      } else {
+        calTokens();
+        this.setState({ deployModal: true })};
   };
 
   handleSaveButtonClicked = () => {
@@ -149,10 +151,12 @@ class Registration extends Component {
   render() {
     const {
       adminName,
-      // adminEmail,
+      adminEmail,
       projectName,
       projectDescription,
       erc20TokenTag,
+      websiteLink,
+      teamAddress,
       maxEtherContribution,
       tapIncrementFactor,
       voteSaturationLimit,
@@ -160,8 +164,6 @@ class Registration extends Component {
       initialTapValue,
       daicoStartDate,
       daicoEndDate,
-      projectNames,
-      tokenTags,
       errors,
       totalSaleTokens,
       isIssuerChecked,
@@ -210,9 +212,9 @@ class Registration extends Component {
 
                       <AlertModal open={deployModal} handleClose={this.handleDeployModalClose} onProceedClick={this.handlePublishDaico} metamask>
                         <div className="text--center text--danger">
-                          <Warning style={{ width: "2em", height: "2em" }} />
+                          <Warning style={{ width: "2em", height: "2em" }} /> WARNING
                         </div>
-                        <div className="text--center push--top">Cant change</div>
+                        <div className="text--center push--top">Once this DAICO is published, you will not be able to edit the on-chain details of the project. However the off-chain details will remain editable.</div>
                       </AlertModal>
 
                       <AlertModal open={modalOpen} handleClose={this.handleClose}>
@@ -228,7 +230,7 @@ class Registration extends Component {
                         <div className="float--right">
                           <ButtonComponent onClick={this.handleSaveButtonClicked} label="Save" />
                           <span className="push--left">
-                            {this.props.manageDaico ? (
+                            {this.props.manageDaico ? (  
                               <ButtonComponent
                                 label="Submit"
                                 onClick={this.handleSubmitDaicoMetadata}
@@ -248,26 +250,23 @@ class Registration extends Component {
                                   onClick={this.handleDeployModalopen}
                                   disabled={
                                     errors[actionTypes.ADMIN_NAME_CHANGED] !== "" ||
-                                    !validateLength(adminName) ||
-                                    !validateLength(projectDescription) ||
-                                    !validateLength(projectName) ||
                                     errors[actionTypes.ADMIN_EMAIL_CHANGED] !== "" ||
-                                    errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
-                                    errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
-                                    errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
-                                    errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.PROJECT_NAME_CHANGED] !== "" ||
+                                    errors[actionTypes.ERC20_TAG_CHANGED] !== "" ||
+                                    errors[actionTypes.PROJECT_DESCRIPTION_CHANGED] !== "" ||
                                     errors[actionTypes.WEBSITE_LINK_CHANGED] !== "" ||
-                                    errors[actionTypes.TELEGRAM_LINK_CHANGED] !== "" ||
+                                    errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
                                     errors[actionTypes.VOTE_SATURATION_LIMIT_CHANGED] !== "" ||
                                     errors[actionTypes.TAP_INCREMENT_FACTOR_CHANGED] !== "" ||
                                     errors[actionTypes.INITIAL_FUND_RELEASE_CHANGED] !== "" ||
-                                    isUpperCase(erc20TokenTag) ||
+                                    errors[actionTypes.MAX_ETHER_CONTRIBUTION_CHANGED] !== "" ||
                                     !validateLength(erc20TokenTag) ||
-                                    !validateTokenTagLength(erc20TokenTag) ||
-                                    errors[actionTypes.TEAM_ADDRESS_CHANGED] !== "" ||
-                                    !validateProjectNameLength(projectName) ||
-                                    !alphaOnly(erc20TokenTag) ||
-                                    validateMaxEtherContribution(maxEtherContribution) ||
+                                    !validateLength(adminName) ||
+                                    !validateLength(adminEmail) ||
+                                    !validateLength(projectDescription) ||
+                                    !validateLength(projectName) ||
+                                    !validateLength(websiteLink) ||
+                                    !validateLength(teamAddress) ||
                                     !validateLength(maxEtherContribution) ||
                                     !validateLength(voteSaturationLimit) ||
                                     !validateLength(tapIncrementFactor) ||
@@ -283,8 +282,6 @@ class Registration extends Component {
                                     !validateLength(r2Bonus) ||
                                     !validateDate(daicoStartDate) ||
                                     !validateDate(daicoEndDate) ||
-                                    validateUniqueName(projectNames, projectName) ||
-                                    validateUniqueName(tokenTags, erc20TokenTag) ||
                                     validateTotalSaleTokens(totalSaleTokens) ||
                                     !validateZero(round1TargetUSD) ||
                                     !validateZero(round2TargetUSD) ||
@@ -305,7 +302,7 @@ class Registration extends Component {
             :
               (
                 <Grid>
-                  <Loader rows={6} />
+                  <GvrncCardLoader/>
                 </Grid>
               )
             }
@@ -314,7 +311,7 @@ class Registration extends Component {
         : 
         (
           <Grid>
-            <Loader rows={6} />
+            <GvrncCardLoader/>
           </Grid>
         )
       }
@@ -425,7 +422,8 @@ const mapDispatchToProps = dispatch =>
       fetchProjectDeploymentIndicator,
       clearProjectDetails,
       projectMetadata,
-      fetchPrice
+      fetchPrice,
+      calculateTokens
     },
     dispatch
   );

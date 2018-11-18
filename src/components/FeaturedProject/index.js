@@ -3,11 +3,12 @@ import { withStyles } from "@material-ui/core/styles";
 
 import { CUICard, CUICardActions, CUICardMedia, CUICardText } from "../../helpers/material-ui";
 import { ButtonComponent } from "../Common/FormComponents";
+import { ensureHttpUrl } from "../../helpers/common/urlFixerInHref";
 
 const styles = {
   card: {
     "&:hover": {
-      transform: "translate(0px, -5px) scale(1.02)",
+      transform: "translate(0px, -5px) scale(1.001)",
       transition: "250ms"
     },
     maxWidth: 345,
@@ -54,7 +55,7 @@ class Featuredproject extends Component {
           <div className="txt-xxl txt-dbld">{`${projectName} (${tokenTag})`}</div>
           <div className="push--top fnt-ps dscrptn-lins">{description}</div>
           <div className="push--top text--right">
-            <a href={website} target="_blank" rel="noopener noreferrer">
+            <a href={ensureHttpUrl(website)} target="_blank" rel="noopener noreferrer">
               <ButtonComponent onClick={() => {}}>Know More</ButtonComponent>
             </a>
           </div>

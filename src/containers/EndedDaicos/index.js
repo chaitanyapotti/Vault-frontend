@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import ContentLoader from "react-content-loader";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getEndedDaicos, showEndedDaicosLoaderAction } from "../../actions/endedDaicosActions";
-import ContentLoader from "react-content-loader";
 import GridData from "../../components/GridData";
 import {
   formatDate,
@@ -13,6 +13,7 @@ import {
   formatTokenPrice,
   significantDigits
 } from "../../helpers/common/projectDetailhelperFunctions";
+import TableLoader from "../../components/Loaders/TableLoader";
 
 class EndedDaicos extends Component {
   componentDidMount() {
@@ -54,41 +55,40 @@ class EndedDaicos extends Component {
     });
     return (
       <div>
-      {showEndedDaicosLoader?(
-          <ContentLoader/>
-        ):(
+        {showEndedDaicosLoader ? (
+          <TableLoader />
+        ) : (
           <GridData
-          history={history}
-          tableData={data}
-          filter={false}
-          columns={[
-            {
-              name: "Name",
-              options: {
-                customBodyRender: value => {
-                  const { projectName, thumbnailUrl } = value || {};
-                  return (
-                    <div style={{ width: "130px" }} className="hl">
-                      <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                      <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
-                        {projectName}
+            history={history}
+            tableData={data}
+            filter={false}
+            columns={[
+              {
+                name: "Name",
+                options: {
+                  customBodyRender: value => {
+                    const { projectName, thumbnailUrl } = value || {};
+                    return (
+                      <div style={{ width: "130px" }} className="hl">
+                        <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                        <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
+                          {projectName}
+                        </div>
                       </div>
-                    </div>
-                  );
-                },
-                filter: false
-              }
-            },
-            { name: "Raised", options: { filter: false } },
-            { name: "Price*", options: { filter: false } },
-            { name: "Kill Consensus", options: { filter: false } },
-            { name: "Started at (UTC)", options: { filter: false } },
-            { name: "Ended at (UTC)", options: { filter: false } },
-            { name: "Id", options: { display: false, filter: false } }
-          ]}
-        />
+                    );
+                  },
+                  filter: false
+                }
+              },
+              { name: "Raised", options: { filter: false } },
+              { name: "Price*", options: { filter: false } },
+              { name: "Kill Consensus", options: { filter: false } },
+              { name: "Started at (UTC)", options: { filter: false } },
+              { name: "Ended at (UTC)", options: { filter: false } },
+              { name: "Id", options: { display: false, filter: false } }
+            ]}
+          />
         )}
-        
       </div>
     );
   }

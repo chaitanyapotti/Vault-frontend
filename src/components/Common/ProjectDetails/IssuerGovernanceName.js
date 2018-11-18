@@ -5,6 +5,7 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ButtonComponent } from "../FormComponents";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const IssuerGovernanceName = props => {
   const {
@@ -23,7 +24,8 @@ const IssuerGovernanceName = props => {
     isPermissioned,
     onEditClick,
     canStartNewRound,
-    startNewRoundButtonTransactionHash
+    startNewRoundButtonTransactionHash,
+    thumbnailUrl
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${startNewRoundButtonTransactionHash}`;
   const { website } = urls;
@@ -32,7 +34,9 @@ const IssuerGovernanceName = props => {
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
-            <span className="prjct-logo hli" />
+            <span className="prjct-logo hli">
+              <img alt="logo" className="prjct-logo hli" src={thumbnailUrl} />
+            </span>
             <div className="hli push--left text--primary push-half--top">
               <div className="txt-xl">
                 {projectName} ({tokenTag})
@@ -59,7 +63,9 @@ const IssuerGovernanceName = props => {
         </Col>
       </Row>
       <Row className="push-half--top txt">
-        <Col lg={12} xs={12} className="fnt-ps">{description}</Col>
+        <Col lg={12} xs={12} className="fnt-ps">
+          {description}
+        </Col>
       </Row>
       <Row className="push--top">
         <Col lg={6} className="text--secondary txt">
@@ -79,19 +85,21 @@ const IssuerGovernanceName = props => {
             <div className="hli">
               <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
                 <div>
-                  <LoadingButton style={{padding: '0 40px'}} disabled>{buttonText}</LoadingButton>
+                  <LoadingButton style={{ padding: "0 40px" }} disabled>
+                    {buttonText}
+                  </LoadingButton>
                 </div>
               </Tooltip>
             </div>
           ) : startNewRoundButtonTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
+            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
               <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>
             </a>
           ) : (
             <span className="hli">
-              <LoadingButton style={{padding: '0 40px'}} onClick={onClick} loading={startNewRoundButtonSpinning} disabled={!canStartNewRound}>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={startNewRoundButtonSpinning} disabled={!canStartNewRound}>
                 {buttonText}
               </LoadingButton>
             </span>
@@ -99,12 +107,14 @@ const IssuerGovernanceName = props => {
           {!isPermissioned ? (
             <div className="hli">
               <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
-                <LoadingButton style={{padding: '0 40px'}} disabled>Edit</LoadingButton>
+                <LoadingButton style={{ padding: "0 40px" }} disabled>
+                  Edit
+                </LoadingButton>
               </Tooltip>
             </div>
           ) : (
             <span className="hli">
-              <ButtonComponent style={{padding: '0 40px'}} onClick={onEditClick} label="Edit" />
+              <ButtonComponent style={{ padding: "0 40px" }} onClick={onEditClick} label="Edit" />
             </span>
           )}
         </Col>

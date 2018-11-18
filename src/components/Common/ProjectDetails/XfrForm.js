@@ -4,6 +4,7 @@ import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
 import { CUIFormInput, CUICard } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
 import LoadingButton from "../LoadingButton";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const XfrForm = props => {
   const {
@@ -92,7 +93,7 @@ const XfrForm = props => {
                 </Tooltip>
               </div>
             ) : deployXfrPollTransactionHash !== "" ? (
-              <a href={link} target="_blank" rel="noreferrer noopener">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
                 <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                   Status
                 </LoadingButton>
@@ -120,7 +121,7 @@ const XfrForm = props => {
                 </Tooltip>
               </div>
             ) : withdrawXfrButtonTransactionHash !== "" ? (
-              <a href={withdrawXfrLink} target="_blank" rel="noreferrer noopener">
+              <a href={ensureHttpUrl(withdrawXfrLink)} target="_blank" rel="noreferrer noopener">
                 <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                   Status
                 </LoadingButton>

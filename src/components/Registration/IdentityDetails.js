@@ -80,7 +80,7 @@ class IdentityDetails extends React.Component {
 
   whitepaperChanged = e => {
     this.props.whitepaperChangedAction(e.target.files[0]);
-    this.uploadWhitepaper();
+    this.props.uploadWhitepaperAction(e.target.files[0],  this.props.userLocalPublicAddress, "whitepaper");
   };
 
   uploadWhitepaper = () => {
@@ -90,7 +90,7 @@ class IdentityDetails extends React.Component {
   thumbnailChanged = e => {
     this.props.thumbnailChangedAction(e.target.files[0]);
     this.setState({ thumbnailFile: URL.createObjectURL(e.target.files[0]) });
-    this.uploadThumbnail();
+    this.props.uploadThumbnailAction(e.target.files[0], this.props.userLocalPublicAddress, "thumbnail");
   };
 
   uploadThumbnail = () => {
@@ -130,9 +130,9 @@ class IdentityDetails extends React.Component {
       teamAddress,
       websiteLink,
       // uploadingWhitepaper,
-      // whitepaperUrl,
+      whitepaperUrl,
       // uploadingThumbnail,
-      // thumbnailUrl,
+      thumbnailUrl,
       allowEditAll
     } = this.props || {};
     return (
@@ -194,6 +194,7 @@ class IdentityDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
+                forceAlpha
                 inputName="ERC20 Ticker"
                 inputLabel="ERC20 Ticker"
                 inputPlaceholder="Eg. ELE"
@@ -217,6 +218,8 @@ class IdentityDetails extends React.Component {
                 inputPlaceholder="Eg. Protocol for Decentralized Organizations"
                 inputValue={projectDescription}
                 onChange={this.onChangePrjctDesc}
+                error={!!this.getErrorMsg(actionTypes.PROJECT_DESCRIPTION_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.PROJECT_DESCRIPTION_CHANGED)}
               />
             </Col>
           </Row>
@@ -239,7 +242,6 @@ class IdentityDetails extends React.Component {
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
-                required
                 full
                 inputName="Telegram Link"
                 inputLabel="Telegram Link"
@@ -256,7 +258,6 @@ class IdentityDetails extends React.Component {
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
-                required
                 full
                 inputName="Github Link"
                 inputLabel="Github Link"
@@ -270,7 +271,6 @@ class IdentityDetails extends React.Component {
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
-                required
                 full
                 inputName="Medium Link"
                 inputLabel="Medium Link"
@@ -287,7 +287,6 @@ class IdentityDetails extends React.Component {
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
-                required
                 full
                 inputName="Facebook Link"
                 inputLabel="Facebook Link"
@@ -301,7 +300,6 @@ class IdentityDetails extends React.Component {
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
-                required
                 full
                 inputName="Twitter Link"
                 inputLabel="Twitter Link"
@@ -338,6 +336,7 @@ class IdentityDetails extends React.Component {
                 <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
               </div>
               <span className="push--left">{this.props.whitepaperPDF.name}</span>
+              <span className="push--left"><a href={this.props.whitepaperUrl} target="_blank" rel="noreferrer noopener">Whitepaper</a></span>
             </Col>
             <Col lg={6}>
               <div className="upload-btn-wrapper">
@@ -345,6 +344,7 @@ class IdentityDetails extends React.Component {
                 <input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
               </div>
               <span>{this.props.thumbnailImage.name}</span>
+              <span> <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">Thumbnail</a> </span>
             </Col>
           </Row>
           <Row className="push--top">

@@ -8,14 +8,12 @@ import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
-import {Grid} from "../../helpers/react-flexbox-grid";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import Loader from "../../components/Loaders/loader";
-
-
+import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
 class ProjectGovernance extends Component {
-  
-  componentWillUnmount(){
-    this.props.clearGovernanceStates()
+  componentWillUnmount() {
+    this.props.clearGovernanceStates();
   }
 
   componentDidMount() {
@@ -62,35 +60,41 @@ class ProjectGovernance extends Component {
       _id,
       xfrRejectionPercent,
       projectHealth,
-      killAcceptancePercent
+      killAcceptancePercent,
+      thumbnailUrl
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
-    if (treasuryStateNumber === "0"){
-      return (<Grid><Loader rows={6} /></Grid>)
+    if (treasuryStateNumber === "0") {
+      return (
+        <Grid>
+          <GvrncCardLoader />
+        </Grid>
+      );
     }
 
     if (currentDeploymentIndicator !== 12)
       return (
-        <Grid>
+        <Grid style={{ marginBottom: "50px" }}>
           <div className="text-center txt">The project has not been deployed yet</div>
         </Grid>
       );
     if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
       return (
-        <ProjectDetailRefund
-          version={version}
-          tokenTag={tokenTag}
-          pollFactoryAddress={pollFactoryAddress}
-          daicoTokenAddress={daicoTokenAddress}
-          treasuryStateNumber={treasuryStateNumber}
-        />
+        <div style={{ marginBottom: "50px" }}>
+          <ProjectDetailRefund
+            version={version}
+            tokenTag={tokenTag}
+            pollFactoryAddress={pollFactoryAddress}
+            daicoTokenAddress={daicoTokenAddress}
+            treasuryStateNumber={treasuryStateNumber}
+          />
+        </div>
       );
     }
-
-    switch (currentRoundNumber) {
-      case "0":
-        return (
+    if (treasuryStateNumber === "1" && currentRoundNumber === "0") {
+      return (
+        <div style={{ marginBottom: "50px" }}>
           <ProjectDetailPreStart
             version={version}
             membershipAddress={membershipAddress}
@@ -109,10 +113,15 @@ class ProjectGovernance extends Component {
             totalMintableSupply={totalMintableSupply}
             foundationDetails={foundationDetails}
             initialFundRelease={initialFundRelease}
+            thumbnailUrl={thumbnailUrl}
           />
-        );
-      case "1":
-        return (
+        </div>
+      );
+    }
+
+    if (treasuryStateNumber === "1" && currentRoundNumber === "1") {
+      return (
+        <div style={{ marginBottom: "50px" }}>
           <ProjectDetailCrowdSale
             version={version}
             membershipAddress={membershipAddress}
@@ -137,12 +146,15 @@ class ProjectGovernance extends Component {
             daicoTokenAddress={daicoTokenAddress}
             projectid={_id}
             currentRoundNumber={currentRoundNumber}
+            thumbnailUrl={thumbnailUrl}
           />
-        );
-      case "2":
-      case "3":
-      case "4":
-        return (
+        </div>
+      );
+    }
+
+    if (treasuryStateNumber === "3" || currentRoundNumber === "2" || currentRoundNumber === "3" || currentRoundNumber === "4") {
+      return (
+        <div style={{ marginBottom: "50px" }}>
           <ProjectDetailGovernance
             projectHealth={projectHealth}
             version={version}
@@ -172,11 +184,13 @@ class ProjectGovernance extends Component {
             xfrRejectionPercent={xfrRejectionPercent}
             history={history}
             killAcceptancePercent={killAcceptancePercent}
+            thumbnailUrl={thumbnailUrl}
           />
-        );
-      default:
-        return null;
+        </div>
+      );
     }
+
+    return null;
   }
 }
 

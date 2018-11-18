@@ -21,6 +21,7 @@ export const initialState = {
   dateOfExpiration: null,
   firstName: "",
   lastName: "",
+  email: "",
   gender: "",
   dateOfBirth: null,
   citizenship: "",
@@ -38,12 +39,28 @@ export const initialState = {
   conditionTwoAccepted: false,
   vaultMembershipRequested: false,
   vaultMembershipRequestChecked: false,
+  isVaultMembershipButtonSpinning: false,
+  vaultMembershipRequestTransactionHash: "",
   errors: {}
 };
 
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
+    case actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        isVaultMembershipButtonSpinning: receipt
+      };
+    }
+    case actionTypes.VAULT_MEMBERSHIP_REQUEST_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        vaultMembershipRequestTransactionHash: transactionHash
+      };
+    }
     case actionTypes.UPLOADING_PASSPORT_DOC: {
       return {
         ...state,
@@ -55,7 +72,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         vaultMembershipRequested: action.payload,
-        vaultMembershipRequestChecked: true
+        vaultMembershipRequestChecked: true, 
+        activeStep: 7
       };
     }
 
@@ -85,6 +103,13 @@ export default function(state = initialState, action) {
       return {
         ...state
       };
+    }
+
+    case actionTypes.USER_EMAIL_CHANGED: {
+      return {
+        ...state,
+        email: action.payload
+      }
     }
 
     case actionTypes.VAULT_MEMBERSHIP_CHECK: {

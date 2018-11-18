@@ -5,7 +5,7 @@ import { Grid } from "../../helpers/react-flexbox-grid";
 import CustomizedStepper from "../../components/Common/CustomizedStepper";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import { CUICard, CUIDivider } from "../../helpers/material-ui";
-import { Introduction, EthWallet, TC, BuyersInformation, UploadDocuments, Submit, OtpVerification } from "../../components/Whitelist";
+import { Introduction, EthWallet, TC, BuyersInformation, UploadDocuments, Submit, OtpVerification, Done } from "../../components/Whitelist";
 import {
   fetchUserFormStates,
   backButtonAction,
@@ -38,7 +38,8 @@ class WhiteList extends Component {
     "Mobile Number Verification",
     "Buyers Information",
     "Upload Documents",
-    "Submit"
+    "Submit",
+    "Done"
   ];
 
   handleOtpVerification = () => {
@@ -102,6 +103,8 @@ class WhiteList extends Component {
           passportUrl === "" || selfieUrl === "" || addressUrl === "" || (passportFileName === "" || selfieFileName === "" || addressFileName === "")
         );
       case 6:
+        return true;
+      case 7:
         return true;
       default:
         return false;
@@ -175,6 +178,13 @@ class WhiteList extends Component {
             <Submit />{" "}
           </div>
         );
+      case 7: 
+        return (
+          <div className="wht-lst-info-cnt">
+            {" "}
+            <Done />{" "}
+          </div>
+        )
       default:
         return <div>Default ka kuch karo</div>;
     }

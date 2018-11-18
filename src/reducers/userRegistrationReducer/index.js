@@ -21,6 +21,7 @@ export const initialState = {
   dateOfExpiration: null,
   firstName: "",
   lastName: "",
+  email: "",
   gender: "",
   dateOfBirth: null,
   citizenship: "",
@@ -71,7 +72,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         vaultMembershipRequested: action.payload,
-        vaultMembershipRequestChecked: true
+        vaultMembershipRequestChecked: true, 
+        activeStep: 7
       };
     }
 
@@ -101,6 +103,13 @@ export default function(state = initialState, action) {
       return {
         ...state
       };
+    }
+
+    case actionTypes.USER_EMAIL_CHANGED: {
+      return {
+        ...state,
+        email: action.payload
+      }
     }
 
     case actionTypes.VAULT_MEMBERSHIP_CHECK: {

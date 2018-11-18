@@ -5,6 +5,7 @@ import BuyersInformation from "./BuyersInformation";
 import UploadDocuments from "./UploadDocuments";
 import Submit from "./Submit";
 import OtpVerification from "./OtpVerification";
+import Done from "./Done";
 
 export {
     Introduction,
@@ -13,5 +14,6 @@ export {
     BuyersInformation,
     UploadDocuments,
     Submit,
-    OtpVerification
+    OtpVerification,
+    Done
 }

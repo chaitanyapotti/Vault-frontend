@@ -95,11 +95,12 @@ export default function(state = initialState, action) {
   switch (action.type) {
 
     case actionTypes.USER_DETAILS: {
-      const { firstName, lastName }  = action.payload || {}
+      const { firstName, lastName, email }  = action.payload || {}
       return { 
-        ...state, adminName: firstName + " " +  lastName 
+        ...state, adminName: firstName + " " +  lastName, adminEmail: email 
       }
     }
+
 
     case actionTypes.PROJECT_STATES_SUCCESS: {
       const { allowEditAll } = state || false

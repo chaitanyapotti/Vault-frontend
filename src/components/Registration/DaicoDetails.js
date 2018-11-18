@@ -116,8 +116,8 @@ class DaicoDetails extends React.Component {
                 {allowEditAll ? (
                   <DTPicker
                     selectedDate={daicoEndDate}
-                    minDate={this.getEndMinDate()}
-                    maxDate={this.getEndMaxDate()}
+                    // minDate={this.getEndMinDate()}
+                    // maxDate={this.getEndMaxDate()}
                     label="Round 1 End Date"
                     handleDateChange={this.onChangeDaicoEnd}
                   />

@@ -47,6 +47,8 @@ import XfrForm from "../../components/Common/ProjectDetails/XfrForm";
 import IssuerWithdrawCard from "../../components/Common/ProjectDetails/IssuerWithdrawCard";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
 
+const bigInt = require("big-integer");
+
 class IssuerDetailGovernance extends Component {
   componentDidMount() {
     const {
@@ -123,7 +125,7 @@ class IssuerDetailGovernance extends Component {
     const { roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
     if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
-    if (totalTokensSold === tokenCount) return `Round ${currentRoundNumber} Completed`;
+    if (bigInt(totalTokensSold).equals(bigInt(tokenCount))) return `Round ${currentRoundNumber} Completed`;
 
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
@@ -157,7 +159,7 @@ class IssuerDetailGovernance extends Component {
   canStartNewRound = () => {
     const { roundInfo, currentRoundNumber } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
-    return totalTokensSold === tokenCount && currentRoundNumber <= "3";
+    return bigInt(totalTokensSold).equals(bigInt(tokenCount)) && currentRoundNumber <= "3";
   };
 
   onStartNewRoundClick = () => {

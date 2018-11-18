@@ -29,14 +29,16 @@ const ProjectGovernanceName = props => {
     tradeUrl,
     whitelistButtonTransactionHash,
     buyButtonDisabled,
-    thumbnailUrl
+    thumbnailUrl,
+    daicoTokenAddress
   } = props || {};
   const { website } = urls;
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
+  const etherscanLink = `https://etherscan.io/address/${daicoTokenAddress}`;
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
-        <Col xs={12} lg={9}>
+        <Col xs={12} lg={8}>
           <div className="hl">
             <span className="prjct-logo hli">
               <img alt="logo" className="prjct-logo hli" src={thumbnailUrl} />
@@ -52,7 +54,10 @@ const ProjectGovernanceName = props => {
             </div>
           </div>
         </Col>
-        <Col lg={3} className="txt-g-secondary txt txt-no-wrp">
+        <Col lg={4} className="txt-g-secondary txt txt-no-wrp">
+          <a href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
           <span>{lastRoundInfo}</span>
         </Col>
       </Row>

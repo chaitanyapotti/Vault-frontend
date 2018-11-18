@@ -54,17 +54,15 @@ class TokenSale extends React.Component {
   };
 
   onCalculateTokenClicked = e => {
-    const { r1Bonus, r2Bonus } = this.props || {};
+    const { r1Bonus, r2Bonus, calculateTokens: calTokens } = this.props || {};
     if (parseFloat(r1Bonus) < parseFloat(r2Bonus)) {
       this.setState({ modalOpen: true, modalMessage: `Round 1 bonus should be atleast as much as the round 2 bonus: ${r2Bonus}%` });
-    }
-    if (parseFloat(r1Bonus) > 100 + 2 * parseFloat(r2Bonus)) {
+    } else if (parseFloat(r1Bonus) > 100 + 2 * parseFloat(r2Bonus)) {
       this.setState({
         modalOpen: true,
         modalMessage: `Round 1 bonus should be less than ${100 + 2 * r2Bonus}% to prevent a price jump of more than doubling between Round 1 & 2.`
       });
-    }
-    this.props.calculateTokens();
+    } else calTokens();
   };
 
   componentDidUpdate(prevProps) {

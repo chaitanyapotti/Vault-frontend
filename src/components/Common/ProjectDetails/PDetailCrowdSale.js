@@ -17,6 +17,7 @@ const PDetailCrowdSale = props => {
     buyableTokens,
     remainingAllocation
   } = props || {};
+  console.log(remainingAllocation, "xxx");
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
       <div className="txt-xxxl text--primary">Project Details</div>

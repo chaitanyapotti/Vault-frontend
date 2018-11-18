@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import ContentLoader from "react-content-loader";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getUpcomingDaicos, showUpcomingDaicosLoaderAction } from "../../actions/upcomingDaicosActions";
-import ContentLoader from "react-content-loader";
 import GridData from "../../components/GridData";
 import {
   formatDate,
@@ -13,6 +13,7 @@ import {
   formatRateToPrice,
   significantDigits
 } from "../../helpers/common/projectDetailhelperFunctions";
+import TableLoader from "../../components/Loaders/TableLoader";
 
 class UpcomingDaicos extends Component {
   componentDidMount() {
@@ -56,42 +57,41 @@ class UpcomingDaicos extends Component {
     });
     return (
       <div>
-      {showUpcomingDaicosLoader?(
-          <ContentLoader/>
-        ):(
+        {showUpcomingDaicosLoader ? (
+          <TableLoader />
+        ) : (
           <GridData
-          history={history}
-          tableData={data}
-          filter={false}
-          columns={[
-            {
-              name: "Name",
-              options: {
-                customBodyRender: value => {
-                  const { projectName, thumbnailUrl } = value || {};
-                  return (
-                    <div style={{ width: "130px" }} className="hl">
-                      <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                      <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
-                        {projectName}
+            history={history}
+            tableData={data}
+            filter={false}
+            columns={[
+              {
+                name: "Name",
+                options: {
+                  customBodyRender: value => {
+                    const { projectName, thumbnailUrl } = value || {};
+                    return (
+                      <div style={{ width: "130px" }} className="hl">
+                        <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                        <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
+                          {projectName}
+                        </div>
                       </div>
-                    </div>
-                  );
-                },
-                filter: false
-              }
-            },
-            { name: "Rounds", options: { filter: true } },
-            { name: "R1 Goal", options: { filter: false } },
-            { name: "Final Goal", options: { filter: false } },
-            { name: "Price*", options: { filter: false } },
-            { name: "Starts at (UTC)", options: { filter: false } },
-            { name: "R1 Ends on (UTC)", options: { filter: false } },
-            { name: "Id", options: { display: false, filter: false } }
-          ]}
-        />
+                    );
+                  },
+                  filter: false
+                }
+              },
+              { name: "Rounds", options: { filter: true } },
+              { name: "R1 Goal", options: { filter: false } },
+              { name: "Final Goal", options: { filter: false } },
+              { name: "Price*", options: { filter: false } },
+              { name: "Starts at (UTC)", options: { filter: false } },
+              { name: "R1 Ends on (UTC)", options: { filter: false } },
+              { name: "Id", options: { display: false, filter: false } }
+            ]}
+          />
         )}
-        
       </div>
     );
   }

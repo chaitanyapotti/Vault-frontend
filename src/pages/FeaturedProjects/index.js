@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import ContentLoader from "react-content-loader";
 import FeaturedProject from "../../components/FeaturedProject";
 import { getFeaturedProjects, featuredProjectsLoaderAction } from "../../actions/featuredProjectsActions/index";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
-import { CUICircularProgress } from "../../helpers/material-ui";
+import FtrPrjctLoader from "../../components/Loaders/FtrPrjctLoader";
 
 class FeaturedProjects extends Component {
   componentDidMount() {
@@ -22,11 +21,11 @@ class FeaturedProjects extends Component {
       <div>
         <div className="text--center sbhdr-txt txt-xl txt-bold">FEATURED PROJECTS</div>
         {showFeaturedProjectsLoader ? (
-          <ContentLoader />
+          <FtrPrjctLoader />
         ) : // <CUICircularProgress color="secondary" />
         featuredProjectsRetrievedSuccessfully ? (
           <div className="push-top--35">
-            <Grid>
+            <Grid style={{ marginBottom: "50px" }}>
               <MasonaryLayout columns={3}>
                 {featuredProjects.map((item, index) => {
                   const { projectName, description, _id, thumbnailUrl, urls, tokenTag } = item;
@@ -48,7 +47,7 @@ class FeaturedProjects extends Component {
             </Grid>
           </div>
         ) : (
-          <Grid>
+          <Grid style={{ marginBottom: "50px" }}>
             <h1 className="text--center push-top--50">{featuredProjectsRetrieveFailureMessage}</h1>
           </Grid>
         )}

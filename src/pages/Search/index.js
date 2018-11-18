@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import qs from "qs";
+import ContentLoader from "react-content-loader";
 import SearchCard from "../../components/Common/SearchCard";
 import { getSearchResults } from "../../actions/searchActions/index";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
-import ContentLoader from "react-content-loader";
 
 class Search extends Component {
   componentDidMount() {
@@ -25,9 +25,11 @@ class Search extends Component {
 
   render() {
     const { searchResult } = this.props || {};
-    return <div>
-      {this.props.showSearchResultLoader ? (<ContentLoader />) : (
-        searchResult.length > 0 ? (
+    return (
+      <div style={{ marginBottom: "50px" }}>
+        {this.props.showSearchResultLoader ? (
+          <ContentLoader />
+        ) : searchResult.length > 0 ? (
           <div>
             <div className="text--center sbhdr-txt txt-xl txt-bold">SEARCH RESULTS</div>
             <div className="push-top--35">
@@ -60,13 +62,12 @@ class Search extends Component {
             </div>
           </div>
         ) : (
-            <Grid>
-              <div className="text-center">No projects found</div>
-            </Grid>
-          )
-      )}
-    </div>
-
+          <Grid style={{ marginBottom: "50px" }}>
+            <div className="text-center">No projects found</div>
+          </Grid>
+        )}
+      </div>
+    );
   }
 }
 

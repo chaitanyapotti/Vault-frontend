@@ -28,6 +28,14 @@ class GridData extends React.Component {
             whiteSpace: "nowrap"
           }
         },
+        MUIDataTableHeadRow: {
+          root: {
+            "&:hover": {
+              backgroundColor: "#ffffff !important",
+              cursor: "initial !important"
+            }
+          }
+        },
         MUIDataTableHeadCell: {
           root: {
             fontSize: "16px",
@@ -65,7 +73,7 @@ class GridData extends React.Component {
           root: {
             "&:hover": {
               cursor: "pointer",
-              boxShadow: "0px 10px 20px 0px rgba(76, 169, 252, 0.5)",
+              // boxShadow: "0px 10px 20px 0px rgba(76, 169, 252, 0.5)",
               backgroundColor: "rgba(76, 169, 252, 0.2) !important"
             }
           }

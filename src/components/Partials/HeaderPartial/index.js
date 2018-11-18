@@ -325,7 +325,7 @@ class HeaderPartial extends React.Component {
                           <SearchIcon className={classes.srchlogo} />
                         </div>
                         <InputBase
-                          placeholder="Search…"
+                          placeholder="Search"
                           classes={{
                             root: classes.inputRoot,
                             input: classes.inputInput

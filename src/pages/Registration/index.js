@@ -18,7 +18,8 @@ import {
   fetchProjectStates,
   fetchProjectDeploymentIndicator,
   clearProjectDetails,
-  projectMetadata
+  projectMetadata,
+  calculateTokens
 } from "../../actions/projectRegistrationActions";
 import { getProjectNames } from "../../actions/projectNamesActions";
 import { fetchPrice } from "../../actions/priceFetchActions";
@@ -26,7 +27,8 @@ import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import AlertModal from "../../components/Common/AlertModal";
 import actionTypes from "../../action_types";
-import Loader from "../../components/Loaders/loader";
+import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
+
 class Registration extends Component {
   state = {
     modalOpen: false,
@@ -66,7 +68,7 @@ class Registration extends Component {
     }
     fetchProjectNames();
     fetchTokenTags();
-    // window.addEventListener("scroll", this.checkOffset);
+    window.addEventListener("scroll", this.checkOffset);
   }
 
   // Function to make the docked btn sticky
@@ -81,11 +83,11 @@ class Registration extends Component {
 
     if (dckdBtnCnt && getRectTop(dckdBtnCnt) + document.body.scrollTop + dckdBtnCnt.offsetHeight >= getRectTop(footer) + document.body.scrollTop - 10)
       dckdBtnCnt.style.position = "relative";
-    if (document.body.scrollTop + window.innerHeight < getRectTop(footer) + document.body.scrollTop) dckdBtnCnt.style.position = "fixed"; // restore when you scroll up
+    if ((document.body.scrollTop + window.innerHeight < getRectTop(footer) + document.body.scrollTop) && dckdBtnCnt) dckdBtnCnt.style.position = "fixed"; // restore when you scroll up
   };
 
   componentWillUnmount() {
-    // window.removeEventListener("scroll", this.checkOffset);
+    window.removeEventListener("scroll", this.checkOffset);
   }
 
   componentDidUpdate() {
@@ -118,12 +120,22 @@ class Registration extends Component {
   handleDeployModalopen = () => {
     const {initialFundRelease,
       round1TargetEth,
-      initialTapValue} = this.props || {};
+      initialTapValue,
+      calculateTokens: calTokens, r1Bonus, r2Bonus} = this.props || {};
       if (parseFloat(initialFundRelease) > 0.1 * parseFloat(round1TargetEth)) {
         this.setState({ modalOpen: true, modalMessage: "Initial  Fund Release Should be less than 10 percent of Round1 Target(ETH)" });
       } else if (parseFloat(initialTapValue) > 0.1 * parseFloat(round1TargetEth)) {
       this.setState({ modalOpen: true, modalMessage: "Initial Tap Value Should be less than 10 percent of Round1 Target(ETH)" });
-      } else this.setState({ deployModal: true });
+      } else if (parseFloat(r1Bonus) < parseFloat(r2Bonus)) {
+        this.setState({ modalOpen: true, modalMessage: `Round 1 bonus should be atleast as much as the round 2 bonus: ${r2Bonus}%` });
+      } else if (parseFloat(r1Bonus) > 100 + 2 * parseFloat(r2Bonus)){
+        this.setState({
+          modalOpen: true,
+          modalMessage: `Round 1 bonus should be less than ${100 + 2 * r2Bonus}% to prevent a price jump of more than doubling between Round 1 & 2.`
+        });
+      } else {
+        calTokens();
+        this.setState({ deployModal: true })};
   };
 
   handleSaveButtonClicked = () => {
@@ -290,7 +302,7 @@ class Registration extends Component {
             :
               (
                 <Grid>
-                  <Loader rows={6} />
+                  <GvrncCardLoader/>
                 </Grid>
               )
             }
@@ -299,7 +311,7 @@ class Registration extends Component {
         : 
         (
           <Grid>
-            <Loader rows={6} />
+            <GvrncCardLoader/>
           </Grid>
         )
       }
@@ -410,7 +422,8 @@ const mapDispatchToProps = dispatch =>
       fetchProjectDeploymentIndicator,
       clearProjectDetails,
       projectMetadata,
-      fetchPrice
+      fetchPrice,
+      calculateTokens
     },
     dispatch
   );

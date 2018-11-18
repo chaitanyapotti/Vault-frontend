@@ -6,7 +6,7 @@ import { CUIInputType } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../../Common/FormComponents";
 import actionTypes from "../../../action_types";
-import PieChartComponent from "../../../components/Common/PieChartComponent";
+import PieChartComponent from "../../Common/PieChartComponent";
 
 import GridData from "../../GridData";
 import {
@@ -21,9 +21,7 @@ import { validateLength, validateDecimal } from "../../../helpers/common/validat
 
 // const CHARTCOLORS = ['#e1f4ff', '#b0ddff', '#7ec3fe', '#65b6fd', '#4ca9fc', '#3d8dd4', '#2e71ac', '#1e5583', '#0f395b', '#001d33']
 
-
 class NonSale extends React.Component {
-
   componentDidUpdate(prevProps) {
     const { errors } = this.props || {};
     if (prevProps.errors !== errors) {
@@ -60,12 +58,10 @@ class NonSale extends React.Component {
 
   handleNonSaleEntityEdit = entityTableIndex => {
     const { allowEditAll } = this.props || false;
-    if (allowEditAll){
+    if (allowEditAll) {
       this.props.nonSaleEntityEditAction(entityTableIndex);
     }
   };
-
-
 
   render() {
     const { nonSaleEntities, history, entityName, entityPercentage, entityAddress, allowEditAll, errors } = this.props || {};
@@ -79,7 +75,7 @@ class NonSale extends React.Component {
       });
     return (
       <div className="push-top--50">
-        <hr/>
+        <hr />
         <div className="txt-xl" style={{ padding: "40px 50px" }}>
           Non Sale Distribution <span>(50% of Supply)</span>
         </div>
@@ -99,17 +95,18 @@ class NonSale extends React.Component {
           ) : null}
         </div>
         {this.props.unallocatedTokensPer > 0 ? (
-          <Row>
+          <Row style={{ padding: "20px 50px" }}>
             <Col xs={12} lg={6}>
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
                 required
+                full
                 inputName="Name of the Entity"
                 inputLabel="Name of the Entity"
                 inputPlaceholder=""
                 inputValue={this.props.entityName}
                 onChange={this.onChangeEntityName}
-                disabled = {!allowEditAll}
+                disabled={!allowEditAll}
               />
             </Col>
             <Col xs={12} lg={6}>
@@ -117,12 +114,12 @@ class NonSale extends React.Component {
                 inputType={CUIInputType.TEXT}
                 full
                 forceNumDec
-                inputName="Percentage of Total Tokens Supply"
-                inputLabel="Percentage of Total Tokens Supply"
+                inputName="Total Tokens Supply (%)"
+                inputLabel="Total Tokens Supply (%)"
                 inputPlaceholder=""
                 inputValue={this.props.entityPercentage}
                 onChange={this.onChangeEntityPercentage}
-                disabled = {!allowEditAll}
+                disabled={!allowEditAll}
                 error={!!this.getErrorMsg(actionTypes.ENTITY_PERCENTAGE_CHANGED)}
                 helperText={this.getErrorMsg(actionTypes.ENTITY_PERCENTAGE_CHANGED)}
               />
@@ -134,7 +131,7 @@ class NonSale extends React.Component {
                 inputName="Entity Address"
                 inputLabel="Entity Addres"
                 inputPlaceholder=""
-                disabled = {!allowEditAll}
+                disabled={!allowEditAll}
                 inputValue={this.props.entityAddress}
                 onChange={this.onChangeEntityAddress}
                 error={!!this.getErrorMsg(actionTypes.ENTITY_ADDRESS_CHANGED)}
@@ -144,7 +141,7 @@ class NonSale extends React.Component {
           </Row>
         ) : null}
         {this.props.unallocatedTokensPer > 0 ? (
-          <Row>
+          <Row style={{ padding: "20px 50px" }}>
             <Col>Currently unallocated: {this.props.unallocatedTokensPer}%</Col>
           </Row>
         ) : null}
@@ -167,14 +164,18 @@ class NonSale extends React.Component {
             </div>
           </Col>
         </Row>
-        <hr/>
+        <hr />
         <div className="txt-xl" style={{ padding: "40px 50px" }}>
           Token Distribution Chart
         </div>
         <hr />
         {this.props.totalSaleTokens > 0 ? (
           <Row style={{ padding: "20px 50px" }}>
-            <PieChartComponent nonSaleEntities={this.props.nonSaleEntities} saleEntities={this.props.saleEntities} totalSaleTokens={this.props.totalSaleTokens}/>
+            <PieChartComponent
+              nonSaleEntities={this.props.nonSaleEntities}
+              saleEntities={this.props.saleEntities}
+              totalSaleTokens={this.props.totalSaleTokens}
+            />
           </Row>
         ) : null}
       </div>

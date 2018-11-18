@@ -9,6 +9,8 @@ import { fetchPrice } from "../../actions/priceFetchActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
 
+const bigInt = require("big-integer");
+
 class IssuerDetailPreGovernance extends Component {
   componentDidMount() {
     const {
@@ -31,7 +33,7 @@ class IssuerDetailPreGovernance extends Component {
     const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (new Date(r1EndTime) < new Date() && totalTokensSold < tokenCount) return true;
+    if (new Date(r1EndTime) < new Date() && bigInt(totalTokensSold).lesser(bigInt(tokenCount))) return true;
 
     return false;
   };

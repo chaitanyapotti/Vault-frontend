@@ -28,7 +28,7 @@ const RefundCard = props => {
               <Grid>
                 <Row>
                   <Col lg={8}>
-                    <div className="text-center sbhdr-txt push--bottom txt-xl">{label}</div>
+                    <div className="text-left text--primary sbhdr-txt push--bottom txt-xl">{label}</div>
                   </Col>
                   <Col lg={4}>
                     <div className="text--center">

@@ -8,7 +8,7 @@ import { ensureHttpUrl } from "../../helpers/common/urlFixerInHref";
 const styles = {
   card: {
     "&:hover": {
-      transform: "translate(0px, -5px) scale(1.02)",
+      transform: "translate(0px, -5px) scale(1.001)",
       transition: "250ms"
     },
     maxWidth: 345,

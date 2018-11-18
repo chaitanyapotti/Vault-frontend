@@ -98,11 +98,13 @@ const ProjectGovernanceName = props => {
               </Tooltip>
             </div>
           ) : whitelistButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <span className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </span>
           ) : buttonVisibility ? (
             <span className="hli">
               <LoadingButton onClick={onClick} loading={buttonSpinning}>

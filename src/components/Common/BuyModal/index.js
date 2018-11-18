@@ -9,6 +9,7 @@ import { CUIInputType } from "../../../static/js/variables";
 import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
 
 const BuyModal = props => {
   const {
@@ -34,8 +35,8 @@ const BuyModal = props => {
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Buy Tokens</DialogTitle>
-        <DialogContentText>Enter the amount of ether for which you want to purchase the token</DialogContentText>
         <DialogContent>
+          <DialogContentText>Enter the amount of ether for which you want to purchase the token</DialogContentText>
           <CUIFormInput
             inputType={CUIInputType.TEXT}
             full
@@ -61,19 +62,23 @@ const BuyModal = props => {
         </DialogContent>
         <DialogActions>
           {buyButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : (
-            <LoadingButton
-              onClick={buyTokensOnClick}
-              loading={buyButtonSpinning}
-              disabled={parseFloat(inputText) * parseFloat(tokenRate) > remainingAllocation || inputText === ""}
-            >
-              Buy
-            </LoadingButton>
+            <div className="hli">
+              <LoadingButton
+                onClick={buyTokensOnClick}
+                loading={buyButtonSpinning}
+                disabled={parseFloat(inputText) * parseFloat(tokenRate) > remainingAllocation || inputText === ""}
+              >
+                Buy
+              </LoadingButton>
+            </div>
           )}
         </DialogActions>
       </Dialog>

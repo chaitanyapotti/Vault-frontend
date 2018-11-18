@@ -23,9 +23,13 @@ const AlertModal = props => {
         <CUIModal open={open}>
           <CUIModalContent>{children}</CUIModalContent>
           <CUIModalActions>
-            <ButtonComponent onClick={handleClose} label="Close" />
+            <div className="hli">
+              <LoadingButton onClick={handleClose}>Close</LoadingButton>
+            </div>
             <Link to={link}>
-              <ButtonComponent label="Ok" onClick="return false;" />
+              <div className="hli">
+                <ButtonComponent label="Proceed" onClick="return false;" />
+              </div>
             </Link>
           </CUIModalActions>
         </CUIModal>
@@ -33,17 +37,23 @@ const AlertModal = props => {
         <CUIModal open={open}>
           <CUIModalContent>{children}</CUIModalContent>
           <CUIModalActions>
-            <ButtonComponent onClick={handleClose} label="Close" />
-            <LoadingButton onClick={onProceedClick} loading={killButtonSpinning || tapButtonSpinning || xfr1ButtonSpinning || xfr2ButtonSpinning}>
-              Proceed
-            </LoadingButton>
+            <div className="hli">
+              <LoadingButton onClick={handleClose}>Close</LoadingButton>
+            </div>
+            <div className="hli">
+              <LoadingButton onClick={onProceedClick} loading={killButtonSpinning || tapButtonSpinning || xfr1ButtonSpinning || xfr2ButtonSpinning}>
+                Proceed
+              </LoadingButton>
+            </div>
           </CUIModalActions>
         </CUIModal>
       ) : (
         <CUIModal open={open}>
           <CUIModalContent>{children}</CUIModalContent>
           <CUIModalActions>
-            <ButtonComponent onClick={handleClose} label="Close" />
+            <div className="hli">
+              <LoadingButton onClick={handleClose}>Close</LoadingButton>
+            </div>
           </CUIModalActions>
         </CUIModal>
       )}

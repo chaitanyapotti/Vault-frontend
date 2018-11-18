@@ -93,11 +93,13 @@ const XfrForm = props => {
                 </Tooltip>
               </div>
             ) : deployXfrPollTransactionHash !== "" ? (
-              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                  Status
-                </LoadingButton>
-              </a>
+              <div className="hli">
+                <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                </a>
+              </div>
             ) : (
               <span className="hli">
                 <LoadingButton onClick={onDeployXfrClick} loading={deployXfrButtonSpinning} disabled={!canDeployXfrPoll}>
@@ -121,11 +123,13 @@ const XfrForm = props => {
                 </Tooltip>
               </div>
             ) : withdrawXfrButtonTransactionHash !== "" ? (
-              <a href={ensureHttpUrl(withdrawXfrLink)} target="_blank" rel="noreferrer noopener">
-                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                  Status
-                </LoadingButton>
-              </a>
+              <div className="hli">
+                <a href={ensureHttpUrl(withdrawXfrLink)} target="_blank" rel="noreferrer noopener">
+                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                </a>
+              </div>
             ) : (
               <span className="hli">
                 <LoadingButton onClick={onWithdrawXfrAmountClick} loading={withdrawXfrButtonSpinning} disabled={!canWithdrawXfrAmount}>

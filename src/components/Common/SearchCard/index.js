@@ -19,25 +19,21 @@ class SearchCard extends React.Component {
   render() {
     const { projectName, tokenTag, description, onClick, classes, website } = this.props || {};
     return (
-      <CUICard className={classes.card}>
+      <CUICard className={classes.card} onClick={onClick}>
         <CUICardMedia
           component="img"
           alt="daico"
           className={classes.media}
           height="200"
-          onClick={onClick}
           image="https://cryptocanucks.com/wp-content/uploads/2018/03/daico-explained-what-is-cryptocanucks-ethereum-ico-initial-coin-offering-dao-decentralized-autonomous-organization.jpg"
-          title="Contemplative Reptile"
         />
         <CUICardText>
           <div className="txt-xxl txt-dbld">{`${projectName} (${tokenTag})`}</div>
           <div className="push--top fnt-ps dscrptn-lins">{description}</div>
           <div className="push--top text--right">
-          <a href={ensureHttpUrl(website)} target="_blank" rel="noopener noreferrer">
-            <ButtonComponent onClick={()=>{}}>
-              Know More
-            </ButtonComponent>
-          </a>
+            <a href={ensureHttpUrl(website)} target="_blank" rel="noopener noreferrer">
+              <ButtonComponent onClick={() => {}}>Know More</ButtonComponent>
+            </a>
           </div>
         </CUICardText>
         <CUICardActions />

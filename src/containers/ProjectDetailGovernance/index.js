@@ -591,13 +591,14 @@ class ProjectDetailGovernance extends Component {
                   <div> Click on the button to initiate “KILL” execution</div>
                 </Col>
                 <Col lg={6}>
-                {
-                  killFinalizeTransactionHash !== "" ? (
+                  {killFinalizeTransactionHash !== "" ? (
+                    <div className="hli">
                   <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
                   <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                     Status
                   </LoadingButton>
-                  </a>):
+                  </a>
+                  </div>):
                   <LoadingButton onClick={this.onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!this.killFinish()}>
                     Kill Execute
                   </LoadingButton>

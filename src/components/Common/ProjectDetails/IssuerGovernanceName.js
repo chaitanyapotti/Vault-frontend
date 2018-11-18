@@ -4,7 +4,6 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
-import { ButtonComponent } from "../FormComponents";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const IssuerGovernanceName = props => {
@@ -60,7 +59,9 @@ const IssuerGovernanceName = props => {
         </Col>
       </Row>
       <Row className="push-half--top txt">
-        <Col lg={12} xs={12} className="fnt-ps">{description}</Col>
+        <Col lg={12} xs={12} className="fnt-ps">
+          {description}
+        </Col>
       </Row>
       <Row className="push--top">
         <Col lg={6} className="text--secondary txt">
@@ -80,19 +81,23 @@ const IssuerGovernanceName = props => {
             <div className="hli">
               <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
                 <div>
-                  <LoadingButton style={{padding: '0 40px'}} disabled>{buttonText}</LoadingButton>
+                  <LoadingButton style={{ padding: "0 40px" }} disabled>
+                    {buttonText}
+                  </LoadingButton>
                 </div>
               </Tooltip>
             </div>
           ) : startNewRoundButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : (
             <span className="hli">
-              <LoadingButton style={{padding: '0 40px'}} onClick={onClick} loading={startNewRoundButtonSpinning} disabled={!canStartNewRound}>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={startNewRoundButtonSpinning} disabled={!canStartNewRound}>
                 {buttonText}
               </LoadingButton>
             </span>
@@ -100,12 +105,16 @@ const IssuerGovernanceName = props => {
           {!isPermissioned ? (
             <div className="hli">
               <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
-                <LoadingButton style={{padding: '0 40px'}} disabled>Edit</LoadingButton>
+                <LoadingButton style={{ padding: "0 40px" }} disabled>
+                  Edit
+                </LoadingButton>
               </Tooltip>
             </div>
           ) : (
             <span className="hli">
-              <ButtonComponent style={{padding: '0 40px'}} onClick={onEditClick} label="Edit" />
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onEditClick}>
+                Edit
+              </LoadingButton>
             </span>
           )}
         </Col>

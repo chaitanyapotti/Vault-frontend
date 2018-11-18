@@ -55,21 +55,25 @@ const TapCard = props => {
           <Col lg={12} className="text-right hl">
             <div className="text-right">
               {signinStatusFlag <= 3 ? (
-                <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-                  <div>
-                    <LoadingButton style={{ padding: "0 40px" }} disabled>
-                      Approve
-                    </LoadingButton>
-                  </div>
-                </Tooltip>
+                <div className="hli">
+                  <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+                    <div>
+                      <LoadingButton style={{ padding: "0 40px" }} disabled>
+                        Approve
+                      </LoadingButton>
+                    </div>
+                  </Tooltip>
+                </div>
               ) : tapPollConsensus === "No Poll" ? (
                 <div className="text--secondary txt"> Tap Poll Not Deployed </div>
               ) : tapButtonTransactionHash !== "" ? (
-                <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                    Status
-                  </LoadingButton>
-                </a>
+                <div className="hli">
+                  <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                    <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                      Status
+                    </LoadingButton>
+                  </a>
+                </div>
               ) : tapVoteStatus === "true" ? (
                 <LoadingButton
                   style={{ padding: "0 40px" }}

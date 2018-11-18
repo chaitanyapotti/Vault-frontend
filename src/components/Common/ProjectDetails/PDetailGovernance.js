@@ -106,44 +106,54 @@ const PDetailGovernance = props => {
 
       <Row>
         <Col lg={6} className="push--top">
-          <LoadingButton style={{ padding: "0 40px" }} onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
-            Unlock All Tokens
-          </LoadingButton>
+          <div className="hli">
+            <LoadingButton style={{ padding: "0 40px" }} onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
+              Unlock All Tokens
+            </LoadingButton>
+          </div>
         </Col>
         <Col lg={6} className="push--top text-right">
           {signinStatusFlag <= 3 ? (
-            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-              <div>
-                <LoadingButton style={{ padding: "0 40px" }} type="danger" disabled>
-                  Kill Project
-                </LoadingButton>
-              </div>
-            </Tooltip>
+            <div className="hli">
+              <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+                <div>
+                  <LoadingButton style={{ padding: "0 40px" }} type="danger" disabled>
+                    Kill Project
+                  </LoadingButton>
+                </div>
+              </Tooltip>
+            </div>
           ) : killButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : killVoteStatus === "false" && new Date() >= new Date(r1EndTime) ? (
-            <LoadingButton
-              style={{ padding: "0 40px" }}
-              onClick={onKillClick}
-              type="danger"
-              loading={killButtonSpinning}
-              disabled={parseFloat(yourTokens) <= 0}
-            >
-              Vote in Kill Poll
-            </LoadingButton>
+            <div className="hli">
+              <LoadingButton
+                style={{ padding: "0 40px" }}
+                onClick={onKillClick}
+                type="danger"
+                loading={killButtonSpinning}
+                disabled={parseFloat(yourTokens) <= 0}
+              >
+                Vote in Kill Poll
+              </LoadingButton>
+            </div>
           ) : new Date() >= new Date(r1EndTime) ? (
-            <LoadingButton
-              style={{ padding: "0 40px" }}
-              onClick={onRevokeKillClick}
-              loading={killButtonSpinning}
-              disabled={parseFloat(yourTokens) <= 0}
-            >
-              UnVote in Kill Poll
-            </LoadingButton>
+            <div className="hli">
+              <LoadingButton
+                style={{ padding: "0 40px" }}
+                onClick={onRevokeKillClick}
+                loading={killButtonSpinning}
+                disabled={parseFloat(yourTokens) <= 0}
+              >
+                UnVote in Kill Poll
+              </LoadingButton>
+            </div>
           ) : null}
         </Col>
       </Row>

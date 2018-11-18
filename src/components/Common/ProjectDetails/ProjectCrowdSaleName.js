@@ -98,11 +98,13 @@ const ProjectCrowdSaleName = props => {
               </Tooltip>
             </div>
           ) : whitelistButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" style={{ padding: "0 40px" }} onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : buttonVisibility ? (
             <span className="hli">
               <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={buttonSpinning}>
@@ -116,11 +118,13 @@ const ProjectCrowdSaleName = props => {
               </LoadingButton>
             </span>
           ) : r1FinalizeButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(r1FinalizeLink)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={ensureHttpUrl(r1FinalizeLink)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : r1Finish ? (
             <span className="hli">
               <LoadingButton style={{ padding: "0 40px" }} onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>

@@ -68,11 +68,13 @@ class Register extends Component {
           vaultPaymentPendingStatus ? (
             <div>Your approval is pending at our end. Our team shall process it at the earliest possible.</div>
           ) : vaultMembershipRequestTransactionHash !== "" ? (
-            <a href={link} target="_blank" rel="noreferrer noopener">
-              <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={link} target="_blank" rel="noreferrer noopener">
+                <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : (
             <div>
               <LoadingButton style={{ padding: "0 40px" }} onClick={this.handleVaultMembershipTransaction} loading={isVaultMembershipButtonSpinning}>

@@ -81,7 +81,8 @@ class IssuerDetailPreGovernance extends Component {
       r1FinalizeButtonSpinning,
       currentRoundNumber,
       startR1ButtonTransactionHash,
-      r1FinalizeButtonTransactionHash
+      r1FinalizeButtonTransactionHash,
+      thumbnailUrl
     } = this.props || {};
     return (
       <Grid>
@@ -120,6 +121,7 @@ class IssuerDetailPreGovernance extends Component {
               onEditClick={this.onEditClick}
               startR1ButtonTransactionHash={startR1ButtonTransactionHash}
               r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
+              thumbnailUrl={thumbnailUrl}
             />
           </Col>
           <Col xs={12} lg={6}>

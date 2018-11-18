@@ -439,6 +439,11 @@ export const checkIssuer = userLocalPublicAddress => dispatch => {
     .then(response => {
       if (response.status === 200) {
         const { data } = response.data;
+        const {details } = response.data
+        dispatch({
+          type: actionTypes.USER_DETAILS,
+          payload: details
+        })
         if (data) {
           dispatch({
             type: actionTypes.ISISSUER_CHECK,

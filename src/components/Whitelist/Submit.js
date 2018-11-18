@@ -49,7 +49,7 @@ class Submit extends Component {
       <div>
         {this.props.vaultMembershipRequestChecked ? (
           <div>
-            <div className="txt-m txt-dbld text--center">STEP: 2 ETH Wallet</div>
+            <div className="txt-m txt-dbld text--center">STEP: 7 Request Vault Membership</div>
             <div className="txt push--top">I hereby declare that all the data submitted is factually correct to the best of my knowledge.</div>
             <div>
               {this.props.vaultMembershipRequested ? (
@@ -57,7 +57,7 @@ class Submit extends Component {
                   {this.props.isVaultMember ? (
                     <div>{this.props.history.push("/registration")}</div>
                   ) : (
-                    <div>Your request is pending with us. We shall approve it ASAP.</div>
+                    <div>We will approve your membership request automatically in some time.</div>
                   )}
                 </div>
               ) : vaultMembershipRequestTransactionHash !== "" ? (

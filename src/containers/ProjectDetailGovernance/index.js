@@ -530,6 +530,7 @@ class ProjectDetailGovernance extends Component {
       r1EndTime,
       killFinalizeTransactionHash,
       buyAmount,
+      thumbnailUrl,
       daicoTokenAddress,
       pollFactoryAddress
     } = this.props || {};
@@ -634,6 +635,7 @@ class ProjectDetailGovernance extends Component {
             whitelistButtonTransactionHash={whitelistButtonTransactionHash}
             tradeButtonVisibility
             tradeUrl={this.getTradeUrl()}
+            thumbnailUrl={thumbnailUrl}
           />
           {/* </Col>
             <Col xs={12} lg={6}> */}

@@ -61,8 +61,7 @@ class ProjectDetailRefund extends Component {
         <div>
           <div>The DAICO that you are looking for could not successfully reach its Round 1 goal.</div>
           <div>
-            You are eligible for a refund of {this.getMyRefundValue()} ETH against your balance of
-            {formatCurrencyNumber(formatFromWei(tokenBalance, 0), 0)} {tokenTag} . Click the refund button and sign the transaction to start the
+            You are eligible for a refund of {this.getMyRefundValue()} ETH against your balance of {" "}{formatCurrencyNumber(formatFromWei(tokenBalance, 0), 0)} {tokenTag} . Click the refund button and sign the transaction to start the
             refund process
           </div>
         </div>

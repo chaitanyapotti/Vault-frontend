@@ -29,6 +29,7 @@ const ProjectGovernanceName = props => {
     tradeUrl,
     whitelistButtonTransactionHash,
     buyButtonDisabled,
+    thumbnailUrl,
     daicoTokenAddress
   } = props || {};
   const { website } = urls;
@@ -39,7 +40,9 @@ const ProjectGovernanceName = props => {
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
-            <span className="prjct-logo hli" />
+            <span className="prjct-logo hli">
+              <img alt="logo" className="prjct-logo hli" src={thumbnailUrl} />
+            </span>
             <div className="hli push--left text--primary push-half--top">
               <div className="txt-xl">
                 {projectName} ({tokenTag})

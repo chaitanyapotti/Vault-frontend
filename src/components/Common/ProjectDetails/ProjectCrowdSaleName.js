@@ -32,6 +32,7 @@ const ProjectCrowdSaleName = props => {
     whitelistButtonTransactionHash,
     r1FinalizeButtonTransactionHash,
     buyButtonDisabled,
+    thumbnailUrl,
     remainingAllocation
   } = props || {};
   const { website } = urls;
@@ -42,7 +43,9 @@ const ProjectCrowdSaleName = props => {
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
-            <span className="prjct-logo hli" />
+            <span className="prjct-logo hli">
+              <img className="prjct-logo hli" alt="logo" src={thumbnailUrl} />
+            </span>
             <div className="hli push--left text--primary push-half--top">
               <div className="txt-xl">
                 {projectName} ({tokenTag})

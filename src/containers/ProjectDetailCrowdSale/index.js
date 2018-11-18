@@ -186,6 +186,7 @@ class ProjectDetailCrowdSale extends Component {
       buyButtonTransactionHash,
       r1FinalizeButtonTransactionHash,
       buyAmount,
+      thumbnailUrl,
       userContribution
     } = this.props || {};
     const { modalOpen, buyModalOpen } = this.state;
@@ -224,6 +225,7 @@ class ProjectDetailCrowdSale extends Component {
               r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
               whitelistButtonTransactionHash={whitelistButtonTransactionHash}
               r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
+              thumbnailUrl={thumbnailUrl}
               remainingAllocation={getR1Rate(this.props) * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution, 18))}
             />
           </Col>

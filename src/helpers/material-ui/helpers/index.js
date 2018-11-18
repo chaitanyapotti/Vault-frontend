@@ -73,6 +73,7 @@ const handleInputKeydown = (event, onKeyDownSelector, forceNumeric, forceNumDec,
       event.keyCode === 27 ||
       event.keyCode === 190 ||
       event.keyCode === 20 ||
+      event.keyCode === 32 || //space
       // Allow: Ctrl+A
       (event.keyCode === 65 && event.ctrlKey === true) ||
       // Allow: home, end, left, right

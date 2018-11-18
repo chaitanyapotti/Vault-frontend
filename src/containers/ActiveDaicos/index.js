@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getActiveDaicos, showActiveDaicosLoaderAction } from "../../actions/activeDaicosActions";
 import GridData from "../../components/GridData";
-import ContentLoader from "react-content-loader";
+import TableLoader from "../../components/Loaders/TableLoader";
 import {
   formatDate,
   formatCent,
@@ -57,46 +57,45 @@ class ActiveDaicos extends Component {
     });
     return (
       <div>
-        {showActiveDaicosLoader?(
-          <ContentLoader/>
-        ):(
+        {showActiveDaicosLoader ? (
+          <TableLoader />
+        ) : (
           <div>
-        <GridData
-          history={history}
-          tableData={data}
-          filter
-          columns={[
-            {
-              name: "Name",
-              options: {
-                customBodyRender: value => {
-                  const { projectName, thumbnailUrl } = value || {};
-                  return (
-                    <div style={{ width: "130px" }} className="hl">
-                      <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                      <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
-                        {projectName}
-                      </div>
-                    </div>
-                  );
+            <GridData
+              history={history}
+              tableData={data}
+              filter
+              columns={[
+                {
+                  name: "Name",
+                  options: {
+                    customBodyRender: value => {
+                      const { projectName, thumbnailUrl } = value || {};
+                      return (
+                        <div style={{ width: "130px" }} className="hl">
+                          <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                          <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
+                            {projectName}
+                          </div>
+                        </div>
+                      );
+                    },
+                    filter: false
+                  }
                 },
-                filter: false
-              }
-            },
-            { name: "Current Round", options: { filter: true } },
-            { name: "R1 Goal", options: { filter: false } },
-            { name: "Final Goal", options: { filter: false } },
-            { name: "Raised", options: { filter: false } },
-            { name: "Price*", options: { filter: false } },
-            { name: "Started at (UTC)", options: { filter: false } },
-            { name: "R1 Ends in", options: { filter: false } },
-            { name: "Id", options: { filter: false, display: false } }
-          ]}
-        />
-      </div>
+                { name: "Current Round", options: { filter: true } },
+                { name: "R1 Goal", options: { filter: false } },
+                { name: "Final Goal", options: { filter: false } },
+                { name: "Raised", options: { filter: false } },
+                { name: "Price*", options: { filter: false } },
+                { name: "Started at (UTC)", options: { filter: false } },
+                { name: "R1 Ends in", options: { filter: false } },
+                { name: "Id", options: { filter: false, display: false } }
+              ]}
+            />
+          </div>
         )}
       </div>
-      
     );
   }
 }

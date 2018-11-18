@@ -27,7 +27,8 @@ import { getTokenTags } from "../../actions/tokenTagsActions";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import AlertModal from "../../components/Common/AlertModal";
 import actionTypes from "../../action_types";
-import Loader from "../../components/Loaders/loader";
+import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
+
 class Registration extends Component {
   state = {
     modalOpen: false,
@@ -67,7 +68,7 @@ class Registration extends Component {
     }
     fetchProjectNames();
     fetchTokenTags();
-    // window.addEventListener("scroll", this.checkOffset);
+    window.addEventListener("scroll", this.checkOffset);
   }
 
   // Function to make the docked btn sticky
@@ -82,11 +83,11 @@ class Registration extends Component {
 
     if (dckdBtnCnt && getRectTop(dckdBtnCnt) + document.body.scrollTop + dckdBtnCnt.offsetHeight >= getRectTop(footer) + document.body.scrollTop - 10)
       dckdBtnCnt.style.position = "relative";
-    if (document.body.scrollTop + window.innerHeight < getRectTop(footer) + document.body.scrollTop) dckdBtnCnt.style.position = "fixed"; // restore when you scroll up
+    if ((document.body.scrollTop + window.innerHeight < getRectTop(footer) + document.body.scrollTop) && dckdBtnCnt) dckdBtnCnt.style.position = "fixed"; // restore when you scroll up
   };
 
   componentWillUnmount() {
-    // window.removeEventListener("scroll", this.checkOffset);
+    window.removeEventListener("scroll", this.checkOffset);
   }
 
   componentDidUpdate() {
@@ -98,7 +99,7 @@ class Registration extends Component {
           search: `?projectid=${project_id}`
         });
       }
-    }, 1000);
+    }, 2000);
   }
 
   handleSubmitDaicoMetadata = e => {
@@ -301,7 +302,7 @@ class Registration extends Component {
             :
               (
                 <Grid>
-                  <Loader rows={6} />
+                  <GvrncCardLoader/>
                 </Grid>
               )
             }
@@ -310,7 +311,7 @@ class Registration extends Component {
         : 
         (
           <Grid>
-            <Loader rows={6} />
+            <GvrncCardLoader/>
           </Grid>
         )
       }

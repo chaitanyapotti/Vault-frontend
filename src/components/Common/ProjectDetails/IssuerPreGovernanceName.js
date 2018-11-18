@@ -27,7 +27,8 @@ const IssuerPreGovernanceName = props => {
     isPermissioned,
     onEditClick,
     startR1ButtonTransactionHash,
-    r1FinalizeButtonTransactionHash
+    r1FinalizeButtonTransactionHash,
+    thumbnailUrl
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${startR1ButtonTransactionHash}`;
   const refundLink = `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`;
@@ -37,7 +38,9 @@ const IssuerPreGovernanceName = props => {
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
-            <span className="prjct-logo hli" />
+            <span className="prjct-logo hli">
+              <img alt="logo" className="prjct-logo hli" src={thumbnailUrl} />
+            </span>
             <div className="hli push--left text--primary push-half--top">
               <div className="txt-xxxl">
                 {projectName} ({tokenTag})

@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { CUIFormInput, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
-import DTPicker from "../Common/DTPicker";
+import DPicker from "../Common/DPicker";
 
 import {
   addressLine1ChangedAction,
@@ -22,7 +22,8 @@ import {
   genderChangedAction,
   dateOfBirthChangedAction,
   citizenshipChangedAction,
-  saveUserFormStates
+  saveUserFormStates,
+  emailChangedAction
 } from "../../actions/userRegistrationActions";
 const countryList = require('country-list');
 
@@ -86,6 +87,10 @@ class BuyersInformation extends Component {
     this.props.lastNameChangedAction(e.target.value);
   };
 
+  onChangeEmail = e => {
+    this.props.emailChangedAction(e.target.value); 
+  }
+
   onChangeGender = e => {
     this.props.genderChangedAction(e.target.value);
   };
@@ -141,6 +146,7 @@ class BuyersInformation extends Component {
       dateOfExpiration,
       firstName,
       lastName,
+      email,
       gender
     } = this.props || {};
     return (
@@ -163,7 +169,7 @@ class BuyersInformation extends Component {
           full
           inputName="Address Line 1"
           inputLabel="Address Line 1"
-          inputPlaceholder="Street No. 3"
+          inputPlaceholder="Room no. 1041"
           onChange={this.onChangeAddressLine1}
           inputValue={addressLine1}
         />
@@ -174,7 +180,7 @@ class BuyersInformation extends Component {
           full
           inputName="Address Line 2"
           inputLabel="Address Line 2"
-          inputPlaceholder="Pune"
+          inputPlaceholder="200 West"
           onChange={this.onChangeAddressLine2}
           inputValue={addressLine2}
         />
@@ -188,7 +194,7 @@ class BuyersInformation extends Component {
               forceAlpha
               inputName="City"
               inputLabel="City"
-              inputPlaceholder="Metamask"
+              inputPlaceholder="New York"
               onChange={this.onChangeCity}
               inputValue={city}
             />
@@ -202,7 +208,7 @@ class BuyersInformation extends Component {
               forceAlpha
               inputName="State / Province / Region"
               inputLabel="State / Province / Region"
-              inputPlaceholder="Metamask"
+              inputPlaceholder="New York"
               onChange={this.onChangeState}
               inputValue={userState}
             />
@@ -218,7 +224,7 @@ class BuyersInformation extends Component {
               forceNumeric
               inputName="ZIP / Postal Code"
               inputLabel="ZIP / Postal Code"
-              inputPlaceholder="Metamask"
+              inputPlaceholder="10282"
               onChange={this.onChangePostalCode}
               inputValue={postalCode}
             />
@@ -231,7 +237,7 @@ class BuyersInformation extends Component {
               full
               inputName="Country"
               inputLabel="Country"
-              inputPlaceholder="Metamask"
+              inputPlaceholder="USA"
               onChange={this.onChangeCountry}
               inputValue={country}
               items={countryChoices}
@@ -249,10 +255,10 @@ class BuyersInformation extends Component {
               full
               inputName="Type of Document"
               inputLabel="Type of Document"
-              inputPlaceholder="Metamask"
+              inputPlaceholder="PASSPORT"
               onChange={this.onChangeTypeOfDocument}
               inputValue={typeOfDocument}
-              items={[{ value: "DRIVER LICENSE", primaryText: "DRIVER LICENSE" }, { value: "PASSPORT", primaryText: "PASSPORT" }]}
+              items={[{ value: "DRIVER'S LICENSE", primaryText: "DRIVER'S LICENSE" }, { value: "PASSPORT", primaryText: "PASSPORT" }]}
             />
           </Col>
 
@@ -263,7 +269,7 @@ class BuyersInformation extends Component {
               full
               inputName="Document Number"
               inputLabel="Document Number"
-              inputPlaceholder="Metamask"
+              inputPlaceholder="GB543A32H9"
               onChange={this.onChangeDocumentNumber}
               inputValue={documentNumber}
             />
@@ -273,7 +279,7 @@ class BuyersInformation extends Component {
         <Row className="push--top">
           {dateOfExpiration ? (
             <Col lg={6}>
-              <DTPicker
+              <DPicker
                 maxDate={this.getStartDate()}
                 selectedDate={selectedDate}
                 label="Date Of Issuance"
@@ -283,7 +289,7 @@ class BuyersInformation extends Component {
             </Col>
           ) : (
             <Col lg={6}>
-              <DTPicker
+              <DPicker
                 selectedDate={selectedDate}
                 label="Date Of Issuance"
                 handleDateChange={this.onChangeDateOfIssuance}
@@ -293,7 +299,7 @@ class BuyersInformation extends Component {
           )}
 
           <Col lg={6}>
-            <DTPicker
+            <DPicker
               selectedDate={selectedDate}
               label="Expiration Date"
               minDate={this.getEndMinDate()}
@@ -314,7 +320,7 @@ class BuyersInformation extends Component {
               forceAlpha
               inputName="First Name"
               inputLabel="First Name"
-              inputPlaceholder=""
+              inputPlaceholder="Mohandas"
               onChange={this.onChangeFirstName}
               inputValue={firstName}
             />
@@ -328,7 +334,7 @@ class BuyersInformation extends Component {
               forceAlpha
               inputName="Last Name"
               inputLabel="Last Name"
-              inputPlaceholder=""
+              inputPlaceholder="Gandhi"
               onChange={this.onChangeLastName}
               inputValue={lastName}
             />
@@ -345,23 +351,37 @@ class BuyersInformation extends Component {
               inputLabel="Gender"
               inputPlaceholder=""
               onChange={this.onChangeGender}
-              items={[{ value: "MALE", primaryText: "M" }, { value: "FEMALE", primaryText: "F" }]}
+              items={[{ value: "MALE", primaryText: "M" }, { value: "FEMALE", primaryText: "F" }, { value: "OTHER", primaryText: "O" }]}
               inputValue={gender}
             />
           </Col>
 
           <Col lg={6}>
-            <DTPicker
-              selectedDate={selectedDate}
+          <DPicker
+          SelectField = {true}
+          selectedDate={selectedDate}
               disableFuture
               label="Date of Birth"
               handleDateChange={this.onChangeDateOfBirth}
               selectedDate={dateOfBirth}
-            />
+          />
           </Col>
         </Row>
 
         <Row className="push--top">
+        <Col lg={6}>
+            <CUIFormInput
+              required
+              inputType={CUIInputType.TEXT}
+              full
+              forceAlpha
+              inputName="Email"
+              inputLabel="Email"
+              inputPlaceholder="mohan@peace.org"
+              onChange={this.onChangeEmail}
+              inputValue={email}
+            />
+          </Col>
           <Col lg={6}>
             <CUIFormInput
               required
@@ -369,10 +389,10 @@ class BuyersInformation extends Component {
               full
               inputName="Country of Citizenship"
               inputLabel="Country of Citizenship"
-              inputPlaceholder=""
+              inputPlaceholder="USA"
               onChange={this.onChangeCitizenship}
               inputValue={citizenship}
-              items={[{ value: "USA", primaryText: "USA" }, { value: "INDIA", primaryText: "INDIA" }, { value: "CHINA", primaryText: "CHINA" }]}
+              items={countryChoices}
             />
           </Col>
         </Row>
@@ -397,6 +417,7 @@ const mapStateToProps = state => {
     dateOfExpiration,
     firstName,
     lastName,
+    email,
     gender,
     dateOfBirth,
     citizenship
@@ -415,6 +436,7 @@ const mapStateToProps = state => {
     dateOfExpiration,
     firstName,
     lastName,
+    email,
     gender,
     dateOfBirth,
     citizenship,
@@ -440,7 +462,8 @@ const mapDispatchToProps = dispatch =>
       genderChangedAction,
       dateOfBirthChangedAction,
       citizenshipChangedAction,
-      saveUserFormStates
+      saveUserFormStates,
+      emailChangedAction
     },
     dispatch
   );

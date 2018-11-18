@@ -93,16 +93,26 @@ export const initialState = {
 export default function(state = initialState, action) {
   const localErrors = JSON.parse(JSON.stringify(state.errors));
   switch (action.type) {
+
+    case actionTypes.USER_DETAILS: {
+      const { firstName, lastName, email }  = action.payload || {}
+      return { 
+        ...state, adminName: firstName + " " +  lastName, adminEmail: email 
+      }
+    }
+
+
     case actionTypes.PROJECT_STATES_SUCCESS: {
       const { allowEditAll } = state || false
       const { manageDaico } = state || false
       const { ethPrice } = state || 210
+      const { adminName } = state || ""
       if ('state' in action.payload){
         const { state: oldState } = action.payload
-        return { ...oldState, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico, ethPrice:ethPrice}
+        return { ...oldState, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico, ethPrice:ethPrice, adminName: adminName}
       }else{
         return {
-          ...state, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico
+          ...state, project_id: "", allowEditAll: allowEditAll, projectStatesReceived: true, manageDaico: manageDaico, adminName: adminName
         }
       }
     }

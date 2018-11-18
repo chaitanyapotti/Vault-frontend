@@ -3,6 +3,8 @@ import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
 
+const timers = [];
+
 export const txPending = () => ({
   payload: {},
   type: actionTypes.BUTTON_SPINNING
@@ -40,14 +42,14 @@ export const receivedTransactionHash = body => ({
 
 export const fetchProjectDetails = (projectid, useraddress) => dispatch => {
   console.log("fetching details: ", projectid);
-  var paramObject = {}
-  if (projectid!==""){
-    paramObject = { params: { projectid } }
-  }else{
-    paramObject ={ params: { useraddress } }
+  let paramObject = {};
+  if (projectid !== "") {
+    paramObject = { params: { projectid } };
+  } else {
+    paramObject = { params: { useraddress } };
   }
   axios
-    .get(`${config.api_base_url}/db/projects`,paramObject )
+    .get(`${config.api_base_url}/db/projects`, paramObject)
     .then(async response => {
       if (response.status === 200) {
         const { data } = response.data || {};
@@ -66,8 +68,9 @@ export const fetchProjectDetails = (projectid, useraddress) => dispatch => {
     });
 };
 
-export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator, userLocalPublicAddress) => dispatch => {
+export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator, userLocalPublicAddress, nonce) => dispatch => {
   let txHash = latestTxHash;
+  timers.forEach(x => clearInterval(x));
   const myTimer = setInterval(() => {
     if (txHash === "0x" || !latestTxHash) clearInterval(myTimer);
     web3.eth
@@ -76,7 +79,7 @@ export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator, 
         if (result !== null) {
           // update ctr address in db and update txhash to "0x"
           if (result.status) {
-            setContractAddress(projectid, currentDeploymentIndicator, result.contractAddress).then(body => {
+            setContractAddress(projectid, currentDeploymentIndicator, result.contractAddress, nonce).then(body => {
               dispatch(deployedContract(body));
               dispatch(isDeployContractButtonSpinning(false));
               if (currentDeploymentIndicator === 11) {
@@ -121,9 +124,32 @@ export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator, 
         dispatch(deployedContract({}));
       });
   }, 2000);
+  timers.push(myTimer);
 };
 
-export const deployContractAction = (version, projectid, cdi, args, contractName, userLocalPublicAddress) => dispatch => {
+export const resetDeployment = userLocalPublicAddress => dispatch => {
+  const projectObject = {
+    ownerAddress: userLocalPublicAddress,
+    currentDeploymentIndicator: 0,
+    latestTxHash: "0x"
+  };
+  axios
+    .post(`${config.api_base_url}/db/projects/`, projectObject)
+    .then(response => {
+      if (response.status === 200) {
+        dispatch(fetchProjectDetails("", userLocalPublicAddress));
+        dispatch({
+          type: actionTypes.PAGE_RELOADING,
+          payload: true
+        });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const deployContractAction = (version, projectid, cdi, args, contractName, userLocalPublicAddress, userNonce = "") => dispatch => {
   dispatch(isDeployContractStartButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
@@ -132,23 +158,27 @@ export const deployContractAction = (version, projectid, cdi, args, contractName
         const { data } = response.data || {};
         const { abi, bytecode } = data || {};
         const gasPrice = await web3.eth.getGasPrice();
+        const fetchedNonce = await web3.eth.getTransactionCount(userLocalPublicAddress, "pending");
+        console.log(fetchedNonce, userNonce, "herer");
+        const nonceAdj = userNonce !== "" ? userNonce : fetchedNonce;
+        const gasPriceAdj = userNonce !== "" ? (parseFloat(gasPrice) + 5000000000).toString() : (parseFloat(gasPrice) + 2000000000).toString();
         new web3.eth.Contract(abi)
           .deploy({ data: bytecode, arguments: args })
-          .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+          .send({ from: userLocalPublicAddress, gasPrice: gasPriceAdj, nonce: nonceAdj })
           .on("error", error => {
             console.error(error.message);
             dispatch(isDeployContractStartButtonSpinning(false));
           })
           .on("transactionHash", transactionHash => {
-            setTxHash(projectid, transactionHash, cdi).then(body => {
+            setTxHash(projectid, transactionHash, cdi, nonceAdj).then(body => {
               dispatch(receivedTransactionHash(body));
               dispatch(isDeployContractButtonSpinning(true));
               dispatch(isDeployContractStartButtonSpinning(false));
-              dispatch(pollTxHash(transactionHash, projectid, cdi));
+              dispatch(pollTxHash(transactionHash, projectid, cdi, userLocalPublicAddress, nonceAdj));
             });
           })
           .on("receipt", receipt =>
-            setContractAddress(projectid, cdi, receipt.contractAddress)
+            setContractAddress(projectid, cdi, receipt.contractAddress, nonceAdj)
               .then(body => {
                 dispatch(deployedContract(body));
                 dispatch(isDeployContractButtonSpinning(false));
@@ -178,7 +208,16 @@ export const deployContractAction = (version, projectid, cdi, args, contractName
     });
 };
 
-export const performContractAction = (version, projectid, cdi, args, contractName, contractAddress, userLocalPublicAddress) => dispatch => {
+export const performContractAction = (
+  version,
+  projectid,
+  cdi,
+  args,
+  contractName,
+  contractAddress,
+  userLocalPublicAddress,
+  userNonce = ""
+) => dispatch => {
   dispatch(isDeployContractStartButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
@@ -188,21 +227,25 @@ export const performContractAction = (version, projectid, cdi, args, contractNam
         const { abi } = data || {};
         const instance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
         const gasPrice = await web3.eth.getGasPrice();
-        peformSpecificAction(cdi, instance, args, userLocalPublicAddress, gasPrice)
+        const fetchedNonce = await web3.eth.getTransactionCount(userLocalPublicAddress, "pending");
+        const nonceAdj = userNonce !== "" ? userNonce : fetchedNonce;
+        const gasPriceAdj = userNonce !== "" ? (parseFloat(gasPrice) + 5000000000).toString() : (parseFloat(gasPrice) + 2000000000).toString();
+        console.log(nonceAdj, "nonce");
+        peformSpecificAction(cdi, instance, args, userLocalPublicAddress, gasPriceAdj, nonceAdj)
           .on("error", error => {
             console.error(error.message);
             dispatch(isDeployContractStartButtonSpinning(false));
           })
           .on("transactionHash", transactionHash =>
-            setTxHash(projectid, transactionHash, cdi).then(body => {
+            setTxHash(projectid, transactionHash, cdi, nonceAdj).then(body => {
               dispatch(receivedTransactionHash(body));
               dispatch(isDeployContractButtonSpinning(true));
               dispatch(isDeployContractStartButtonSpinning(false));
-              dispatch(pollTxHash(transactionHash, projectid, cdi, userLocalPublicAddress));
+              dispatch(pollTxHash(transactionHash, projectid, cdi, userLocalPublicAddress, nonceAdj));
             })
           )
           .on("receipt", receipt =>
-            setContractAddress(projectid, cdi, null)
+            setContractAddress(projectid, cdi, null, nonceAdj)
               .then(body => {
                 dispatch(deployedContract(body));
                 dispatch(isDeployContractButtonSpinning(false));
@@ -232,40 +275,34 @@ export const performContractAction = (version, projectid, cdi, args, contractNam
     });
 };
 
-const peformSpecificAction = (cdi, instance, args, userLocalPublicAddress, gasPrice) => {
+const peformSpecificAction = (cdi, instance, args, userLocalPublicAddress, gasPriceAdj, nonceAdj) => {
   switch (cdi) {
     case 5:
-      return instance.methods
-        .setTreasuryAddress(args)
-        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() });
+      return instance.methods.setTreasuryAddress(args).send({ from: userLocalPublicAddress, gasPrice: gasPriceAdj, nonce: nonceAdj });
     case 6:
     case 7:
     case 8:
-      return instance.methods
-        .setCrowdSaleAddress(args)
-        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() });
+      return instance.methods.setCrowdSaleAddress(args).send({ from: userLocalPublicAddress, gasPrice: gasPriceAdj, nonce: nonceAdj });
     case 9:
-      return instance.methods.createKillPolls().send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 20000000000).toString() });
+      return instance.methods.createKillPolls().send({ from: userLocalPublicAddress, gasPrice: gasPriceAdj, nonce: nonceAdj });
     case 10:
-      return instance.methods
-        .createRemainingKillPolls()
-        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() });
+      return instance.methods.createRemainingKillPolls().send({ from: userLocalPublicAddress, gasPrice: gasPriceAdj, nonce: nonceAdj });
     case 11:
-      return instance.methods.mintFoundationTokens().send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() });
+      return instance.methods.mintFoundationTokens().send({ from: userLocalPublicAddress, gasPrice: gasPriceAdj, nonce: nonceAdj });
     default:
       return null;
   }
 };
 
-const setTxHash = (projectid, transactionHash, cdi) =>
+const setTxHash = (projectid, transactionHash, cdi, nonce) =>
   new Promise((resolve, reject) => {
-    const body = { latestTxHash: transactionHash, currentDeploymentIndicator: cdi };
+    const body = { latestTxHash: transactionHash, currentDeploymentIndicator: cdi, nonce };
     patchContractApi(projectid, body, resolve, reject);
   });
 
-const setContractAddress = (projectid, cdi, address) =>
+const setContractAddress = (projectid, cdi, address, nonce) =>
   new Promise((resolve, reject) => {
-    const body = { latestTxHash: "0x", currentDeploymentIndicator: cdi + 1 };
+    const body = { latestTxHash: "0x", currentDeploymentIndicator: cdi + 1, nonce };
     switch (cdi) {
       case 0:
         body.membershipAddress = address;

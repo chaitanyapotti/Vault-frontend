@@ -3,14 +3,26 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "react-router-dom";
 import qs from "qs";
-import { fetchProjectDetails, deployContractAction, performContractAction } from "../../actions/deployerActions/index";
-import { Grid } from "../../helpers/react-flexbox-grid";
+import Warning from "@material-ui/icons/Warning";
+import { fetchProjectDetails, deployContractAction, performContractAction, resetDeployment } from "../../actions/deployerActions/index";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { CUIModal, CUIModalActions, CUIModalContent } from "../../helpers/material-ui";
 import web3 from "../../helpers/web3";
 import CustomizedStepper from "../../components/Common/CustomizedStepper";
 import DeployerCard from "../../components/DeployerCard";
 import config from "../../config";
 import TableLoader from "../../components/Loaders/TableLoader";
+import LoadingButton from "../../components/Common/LoadingButton";
+
 class Deployer extends Component {
+  state = {
+    modalOpen: false
+  };
+
+  handleClose = () => {
+    this.setState({ modalOpen: false });
+  };
+
   componentDidMount() {
     const { fetchProjectDetails: getProjectDetails, history } = this.props || {};
     const currentUrl = new URL(window.location.href);
@@ -24,40 +36,40 @@ class Deployer extends Component {
     }
   }
 
-  // componentDidUpdate(prevProps) {
-  //   const { projectDetails, userLocalPublicAddress: currentLocalAddress, history } = this.props || {};
-  //   const { ownerAddress } = projectDetails || {};
-  //   const { userLocalPublicAddress: prevLocalAddress } = prevProps || {};
-  //   if (prevLocalAddress !== currentLocalAddress) {
-  //     if (ownerAddress !== currentLocalAddress) {
-  //       history.push("/");
-  //     }
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    const { pageReloading } = this.props || {};
+    const { pageReloading: oldReload } = prevProps || {};
+    if (oldReload !== pageReloading) {
+      console.log("reloading in props");
+      if (pageReloading) {
+        window.location.reload();
+      }
+    }
+  }
 
-  deployMembership = () => {
+  deployMembership = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
     const { version, _id, currentDeploymentIndicator, projectName, tokenTag } = projectDetails || {};
     const args = [web3.utils.fromAscii(projectName), web3.utils.fromAscii(tokenTag), config.vault_contract_address];
-    deployAction(version, _id, currentDeploymentIndicator, args, "Protocol", userLocalPublicAddress);
+    deployAction(version, _id, currentDeploymentIndicator, args, "Protocol", userLocalPublicAddress, nonce);
   };
 
-  deployDaicoToken = () => {
+  deployDaicoToken = (nonce = "") => {
     const { userLocalPublicAddress, deployContractAction: deployAction, projectDetails } = this.props || {};
     const { version, _id, currentDeploymentIndicator, projectName, tokenTag, membershipAddress, totalMintableSupply, capPercent } =
       projectDetails || {};
     const args = [projectName, tokenTag, membershipAddress, totalMintableSupply, capPercent];
-    deployAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", userLocalPublicAddress);
+    deployAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", userLocalPublicAddress, nonce);
   };
 
-  deployLockedTokens = () => {
+  deployLockedTokens = (nonce = "") => {
     const { userLocalPublicAddress, deployContractAction: deployAction, projectDetails } = this.props || {};
     const { version, _id, currentDeploymentIndicator, daicoTokenAddress } = projectDetails || {};
     const args = [daicoTokenAddress];
-    deployAction(version, _id, currentDeploymentIndicator, args, "LockedTokens", userLocalPublicAddress);
+    deployAction(version, _id, currentDeploymentIndicator, args, "LockedTokens", userLocalPublicAddress, nonce);
   };
 
-  deployPollFactory = () => {
+  deployPollFactory = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
     const {
       version,
@@ -89,10 +101,10 @@ class Deployer extends Component {
       lockedTokensAddress,
       tapIncrementFactor
     ];
-    deployAction(version, _id, currentDeploymentIndicator, args, "PollFactory", userLocalPublicAddress);
+    deployAction(version, _id, currentDeploymentIndicator, args, "PollFactory", userLocalPublicAddress, nonce);
   };
 
-  deployCrowdSale = () => {
+  deployCrowdSale = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
     const {
       version,
@@ -124,47 +136,47 @@ class Deployer extends Component {
       foundationDetails.map(a => a.address),
       foundationDetails.map(a => a.amount.toString())
     ];
-    deployAction(version, _id, currentDeploymentIndicator, args, "CrowdSale", userLocalPublicAddress);
+    deployAction(version, _id, currentDeploymentIndicator, args, "CrowdSale", userLocalPublicAddress, nonce);
   };
 
-  setTreasuryInDaicoToken = () => {
+  setTreasuryInDaicoToken = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, performContractAction: contractAction } = this.props || {};
     const { version, _id, currentDeploymentIndicator, pollFactoryAddress, daicoTokenAddress } = projectDetails || {};
     const args = pollFactoryAddress;
-    contractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", daicoTokenAddress, userLocalPublicAddress);
+    contractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", daicoTokenAddress, userLocalPublicAddress, nonce);
   };
 
-  setCrowdsaleInDaicoToken = () => {
+  setCrowdsaleInDaicoToken = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, performContractAction: contractAction } = this.props || {};
     const { version, _id, currentDeploymentIndicator, crowdSaleAddress, daicoTokenAddress } = projectDetails || {};
     const args = crowdSaleAddress;
-    contractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", daicoTokenAddress, userLocalPublicAddress);
+    contractAction(version, _id, currentDeploymentIndicator, args, "DaicoToken", daicoTokenAddress, userLocalPublicAddress, nonce);
   };
 
-  setCrowdsaleInLockedTokens = () => {
+  setCrowdsaleInLockedTokens = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, performContractAction: contractAction } = this.props || {};
     const { version, _id, currentDeploymentIndicator, crowdSaleAddress, lockedTokensAddress } = projectDetails || {};
     const args = crowdSaleAddress;
-    contractAction(version, _id, currentDeploymentIndicator, args, "LockedTokens", lockedTokensAddress, userLocalPublicAddress);
+    contractAction(version, _id, currentDeploymentIndicator, args, "LockedTokens", lockedTokensAddress, userLocalPublicAddress, nonce);
   };
 
-  setCrowdSaleInPollFactory = () => {
+  setCrowdSaleInPollFactory = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, performContractAction: contractAction } = this.props || {};
     const { version, _id, currentDeploymentIndicator, crowdSaleAddress, pollFactoryAddress } = projectDetails || {};
     const args = crowdSaleAddress;
-    contractAction(version, _id, currentDeploymentIndicator, args, "PollFactory", pollFactoryAddress, userLocalPublicAddress);
+    contractAction(version, _id, currentDeploymentIndicator, args, "PollFactory", pollFactoryAddress, userLocalPublicAddress, nonce);
   };
 
-  createKillPolls = () => {
+  createKillPolls = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, performContractAction: contractAction } = this.props || {};
     const { version, _id, currentDeploymentIndicator, pollFactoryAddress } = projectDetails || {};
-    contractAction(version, _id, currentDeploymentIndicator, null, "PollFactory", pollFactoryAddress, userLocalPublicAddress);
+    contractAction(version, _id, currentDeploymentIndicator, "", "PollFactory", pollFactoryAddress, userLocalPublicAddress, nonce);
   };
 
-  mintFoundationTokens = () => {
+  mintFoundationTokens = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, performContractAction: contractAction } = this.props || {};
     const { version, _id, currentDeploymentIndicator, crowdSaleAddress } = projectDetails || {};
-    contractAction(version, _id, currentDeploymentIndicator, null, "CrowdSale", crowdSaleAddress, userLocalPublicAddress);
+    contractAction(version, _id, currentDeploymentIndicator, "", "CrowdSale", crowdSaleAddress, userLocalPublicAddress, nonce);
   };
 
   redirectHome = () => {
@@ -177,6 +189,65 @@ class Deployer extends Component {
     });
   };
 
+  onResetClick = () => {
+    const { resetDeployment: onResetDeployment, userLocalPublicAddress } = this.props || {};
+    onResetDeployment(userLocalPublicAddress);
+    this.setState({
+      modalOpen: false
+    });
+  };
+
+  onSpeedUpClick = () => {
+    const { projectDetails } = this.props || {};
+    const { nonce, currentDeploymentIndicator } = projectDetails || {};
+    switch (currentDeploymentIndicator) {
+      case 0:
+        this.deployMembership(nonce);
+        break;
+      case 1:
+        this.deployDaicoToken(nonce);
+        break;
+      case 2:
+        this.deployLockedTokens(nonce);
+        break;
+      case 3:
+        this.deployPollFactory(nonce);
+        break;
+      case 4:
+        this.deployCrowdSale(nonce);
+        break;
+      case 5:
+        this.setTreasuryInDaicoToken(nonce);
+        break;
+      case 6:
+        this.setCrowdsaleInDaicoToken(nonce);
+        break;
+      case 7:
+        this.setCrowdsaleInLockedTokens(nonce);
+        break;
+      case 8:
+        this.setCrowdSaleInPollFactory(nonce);
+        break;
+      case 9:
+        this.createKillPolls(nonce);
+        break;
+      case 10:
+        this.createKillPolls(nonce);
+        break;
+      case 11:
+        this.mintFoundationTokens(nonce);
+        break;
+      default:
+        break;
+    }
+  };
+
+  onResetModalOpenClick = () => {
+    this.setState({
+      modalOpen: true
+    });
+  };
+
   getStepContent = () => {
     const { projectDetails, deployContractButtonSpinning, deployContractStartButtonSpinning } = this.props || {};
     const { currentDeploymentIndicator, latestTxHash } = projectDetails || {};
@@ -186,10 +257,11 @@ class Deployer extends Component {
           <DeployerCard
             label="Let's start deployment and deploy Membership Contract"
             btnLabel="Deploy Membership Contract"
-            onClick={this.deployMembership}
+            onClick={() => this.deployMembership("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 1:
@@ -197,10 +269,11 @@ class Deployer extends Component {
           <DeployerCard
             label="Let's deploy Daico Token Contract"
             btnLabel="Deploy Daico Token"
-            onClick={this.deployDaicoToken}
+            onClick={() => this.deployDaicoToken("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 2:
@@ -211,7 +284,8 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             btnLabel="Deploy Locked Tokens"
-            onClick={this.deployLockedTokens}
+            onClick={() => this.deployLockedTokens("")}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 3:
@@ -222,7 +296,8 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             btnLabel="Deploy Poll Factory"
-            onClick={this.deployPollFactory}
+            onClick={() => this.deployPollFactory("")}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 4:
@@ -233,7 +308,8 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             btnLabel="Deploy Crowd Sale"
-            onClick={this.deployCrowdSale}
+            onClick={() => this.deployCrowdSale("")}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 5:
@@ -241,10 +317,11 @@ class Deployer extends Component {
           <DeployerCard
             label="Let's set treasury address in Daico Token Contract"
             btnLabel="Set Treasury Address"
-            onClick={this.setTreasuryInDaicoToken}
+            onClick={() => this.setTreasuryInDaicoToken("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 6:
@@ -252,10 +329,11 @@ class Deployer extends Component {
           <DeployerCard
             label="Let's set crowdsale address in Daico Token Contract"
             btnLabel="Set crowdsale address"
-            onClick={this.setCrowdsaleInDaicoToken}
+            onClick={() => this.setCrowdsaleInDaicoToken("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 7:
@@ -263,10 +341,11 @@ class Deployer extends Component {
           <DeployerCard
             label="Let's set crowdsale address in Locked Tokens Contract"
             btnLabel="Set crowdsale Address"
-            onClick={this.setCrowdsaleInLockedTokens}
+            onClick={() => this.setCrowdsaleInLockedTokens("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 8:
@@ -274,10 +353,11 @@ class Deployer extends Component {
           <DeployerCard
             label="Let's set crowdsale address in Poll factory Contract"
             btnLabel="Set crowdsale Address"
-            onClick={this.setCrowdSaleInPollFactory}
+            onClick={() => this.setCrowdSaleInPollFactory("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 9:
@@ -285,10 +365,11 @@ class Deployer extends Component {
           <DeployerCard
             label="Let's Create Kill Polls"
             btnLabel="Create Kill Polls"
-            onClick={this.createKillPolls}
+            onClick={() => this.createKillPolls("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 10:
@@ -296,10 +377,11 @@ class Deployer extends Component {
           <DeployerCard
             label="Let's Create Kill Polls part 2"
             btnLabel="Create Kill Polls part 2"
-            onClick={this.createKillPolls}
+            onClick={() => this.createKillPolls("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
+            speedup={this.onSpeedUpClick}
           />
         );
       case 11:
@@ -307,10 +389,11 @@ class Deployer extends Component {
           <DeployerCard
             label="Let's Mint foundation tokens"
             btnLabel="Mint foundation tokens"
-            onClick={this.mintFoundationTokens}
+            onClick={() => this.mintFoundationTokens("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
+            speedup={this.onSpeedUpClick}
           />
         );
       default:
@@ -345,6 +428,7 @@ class Deployer extends Component {
       isVaultMembershipChecked,
       signinStatusFlag
     } = this.props || {};
+    const { modalOpen } = this.state;
     const { currentDeploymentIndicator, _id } = projectDetails || {};
     return (
       <div style={{ marginBottom: "50px" }}>
@@ -352,13 +436,25 @@ class Deployer extends Component {
           <div>
             {signinStatusFlag === 5 ? (
               <Grid>
-                <CustomizedStepper
-                  history={this.props.history}
-                  getStepContent={this.getStepContent}
-                  getSteps={this.getSteps}
-                  activeStep={currentDeploymentIndicator}
-                  projectid={_id}
-                />
+                <Row>
+                  <Col lg={10} />
+                  <Col lg={2}>
+                    <LoadingButton style={{ padding: "0 40px" }} onClick={this.onResetModalOpenClick}>
+                      Start Over
+                    </LoadingButton>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <CustomizedStepper
+                      history={this.props.history}
+                      getStepContent={this.getStepContent}
+                      getSteps={this.getSteps}
+                      activeStep={currentDeploymentIndicator}
+                      projectid={_id}
+                    />
+                  </Col>
+                </Row>
               </Grid>
             ) : (
               this.props.history.push("/")
@@ -369,6 +465,28 @@ class Deployer extends Component {
             <TableLoader />
           </Grid>
         )}
+        {
+          <CUIModal open={modalOpen}>
+            <CUIModalContent>
+              <div className="text--center text--danger">
+                <Warning style={{ width: "2em", height: "2em" }} />
+              </div>
+              <div className="text--center push--top">
+                Please do this, only if you have externally interrupted your deployment, and are not able to fix it. The gas spent on your current
+                deployment will be lost and you will have to start from step 1. Before using this option, you may check the Electus subreddit for
+                solutions or post on the subreddit asking for help.
+              </div>
+            </CUIModalContent>
+            <CUIModalActions>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={this.onResetClick}>
+                Proceed
+              </LoadingButton>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={this.handleClose}>
+                Close
+              </LoadingButton>
+            </CUIModalActions>
+          </CUIModal>
+        }
       </div>
     );
   }
@@ -384,7 +502,7 @@ const mapStateToProps = state => {
     isVaultMembershipChecked,
     signinStatusFlag
   } = state.signinManagerData || {};
-  const { projectDetails, deployContractButtonSpinning, deployContractStartButtonSpinning } = state.deployerReducer || {};
+  const { projectDetails, deployContractButtonSpinning, deployContractStartButtonSpinning, pageReloading } = state.deployerReducer || {};
   return {
     projectDetails,
     userLocalPublicAddress,
@@ -395,7 +513,8 @@ const mapStateToProps = state => {
     isMetamaskInstallationChecked,
     isUserDefaultAccountChecked,
     isVaultMembershipChecked,
-    signinStatusFlag
+    signinStatusFlag,
+    pageReloading
   };
 };
 
@@ -404,7 +523,8 @@ const mapDispatchToProps = dispatch =>
     {
       fetchProjectDetails,
       deployContractAction,
-      performContractAction
+      performContractAction,
+      resetDeployment
     },
     dispatch
   );

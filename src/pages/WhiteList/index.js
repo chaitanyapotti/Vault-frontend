@@ -213,7 +213,7 @@ class WhiteList extends Component {
       signinStatusFlag
     } = this.props || {};
     return (
-      <div>
+      <div style={{ marginBottom: "50px" }}>
         {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
           <div>
             {signinStatusFlag === 3 ? (

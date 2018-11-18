@@ -67,7 +67,7 @@ class Registration extends Component {
     }
     fetchProjectNames();
     fetchTokenTags();
-    // window.addEventListener("scroll", this.checkOffset);
+    window.addEventListener("scroll", this.checkOffset);
   }
 
   // Function to make the docked btn sticky
@@ -82,11 +82,11 @@ class Registration extends Component {
 
     if (dckdBtnCnt && getRectTop(dckdBtnCnt) + document.body.scrollTop + dckdBtnCnt.offsetHeight >= getRectTop(footer) + document.body.scrollTop - 10)
       dckdBtnCnt.style.position = "relative";
-    if (document.body.scrollTop + window.innerHeight < getRectTop(footer) + document.body.scrollTop) dckdBtnCnt.style.position = "fixed"; // restore when you scroll up
+    if ((document.body.scrollTop + window.innerHeight < getRectTop(footer) + document.body.scrollTop) && dckdBtnCnt) dckdBtnCnt.style.position = "fixed"; // restore when you scroll up
   };
 
   componentWillUnmount() {
-    // window.removeEventListener("scroll", this.checkOffset);
+    window.removeEventListener("scroll", this.checkOffset);
   }
 
   componentDidUpdate() {

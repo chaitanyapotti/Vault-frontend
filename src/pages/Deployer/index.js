@@ -347,7 +347,7 @@ class Deployer extends Component {
     } = this.props || {};
     const { currentDeploymentIndicator, _id } = projectDetails || {};
     return (
-      <div>
+      <div style={{ marginBottom: "50px" }}>
         {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
           <div>
             {signinStatusFlag === 5 ? (

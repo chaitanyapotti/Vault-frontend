@@ -43,10 +43,6 @@ const BuyModal = props => {
             inputPlaceholder="amount in ETH"
             inputValue={inputText}
             textFocus
-            // onBlur={this.onBlurAge}
-            // error={this.state.errorAgeText !== ''}
-            // helperText={this.state.errorAgeText}
-            // onKeyDownSelector="Admin"
             onChange={onChange}
           />
           <p>

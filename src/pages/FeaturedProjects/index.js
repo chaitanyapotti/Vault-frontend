@@ -25,7 +25,7 @@ class FeaturedProjects extends Component {
         ) : // <CUICircularProgress color="secondary" />
         featuredProjectsRetrievedSuccessfully ? (
           <div className="push-top--35">
-            <Grid>
+            <Grid style={{ marginBottom: "50px" }}>
               <MasonaryLayout columns={3}>
                 {featuredProjects.map((item, index) => {
                   const { projectName, description, _id, thumbnailUrl, urls, tokenTag } = item;
@@ -47,7 +47,7 @@ class FeaturedProjects extends Component {
             </Grid>
           </div>
         ) : (
-          <Grid>
+          <Grid style={{ marginBottom: "50px" }}>
             <h1 className="text--center push-top--50">{featuredProjectsRetrieveFailureMessage}</h1>
           </Grid>
         )}

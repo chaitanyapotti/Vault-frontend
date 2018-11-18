@@ -75,110 +75,118 @@ class ProjectGovernance extends Component {
 
     if (currentDeploymentIndicator !== 12)
       return (
-        <Grid>
+        <Grid style={{ marginBottom: "50px" }}>
           <div className="text-center txt">The project has not been deployed yet</div>
         </Grid>
       );
     if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
       return (
-        <ProjectDetailRefund
-          version={version}
-          tokenTag={tokenTag}
-          pollFactoryAddress={pollFactoryAddress}
-          daicoTokenAddress={daicoTokenAddress}
-          treasuryStateNumber={treasuryStateNumber}
-        />
+        <div style={{ marginBottom: "50px" }}>
+          <ProjectDetailRefund
+            version={version}
+            tokenTag={tokenTag}
+            pollFactoryAddress={pollFactoryAddress}
+            daicoTokenAddress={daicoTokenAddress}
+            treasuryStateNumber={treasuryStateNumber}
+          />
+        </div>
       );
     }
     if (treasuryStateNumber === "1" && currentRoundNumber === "0") {
       return (
-        <ProjectDetailPreStart
-          version={version}
-          membershipAddress={membershipAddress}
-          projectName={projectName}
-          tokenTag={tokenTag}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          startDateTime={startDateTime}
-          maximumEtherContribution={maximumEtherContribution}
-          capPercent={capPercent}
-          initialTapAmount={initialTapAmount}
-          tapIncrementFactor={tapIncrementFactor}
-          isCurrentMember={isCurrentMember}
-          rounds={rounds}
-          totalMintableSupply={totalMintableSupply}
-          foundationDetails={foundationDetails}
-          initialFundRelease={initialFundRelease}
-          thumbnailUrl={thumbnailUrl}
-        />
+        <div style={{ marginBottom: "50px" }}>
+          <ProjectDetailPreStart
+            version={version}
+            membershipAddress={membershipAddress}
+            projectName={projectName}
+            tokenTag={tokenTag}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            startDateTime={startDateTime}
+            maximumEtherContribution={maximumEtherContribution}
+            capPercent={capPercent}
+            initialTapAmount={initialTapAmount}
+            tapIncrementFactor={tapIncrementFactor}
+            isCurrentMember={isCurrentMember}
+            rounds={rounds}
+            totalMintableSupply={totalMintableSupply}
+            foundationDetails={foundationDetails}
+            initialFundRelease={initialFundRelease}
+            thumbnailUrl={thumbnailUrl}
+          />
+        </div>
       );
     }
 
     if (treasuryStateNumber === "1" && currentRoundNumber === "1") {
       return (
-        <ProjectDetailCrowdSale
-          version={version}
-          membershipAddress={membershipAddress}
-          projectName={projectName}
-          tokenTag={tokenTag}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          startDateTime={startDateTime}
-          maximumEtherContribution={maximumEtherContribution}
-          capPercent={capPercent}
-          initialTapAmount={initialTapAmount}
-          tapIncrementFactor={tapIncrementFactor}
-          isCurrentMember={isCurrentMember}
-          rounds={rounds}
-          totalMintableSupply={totalMintableSupply}
-          foundationDetails={foundationDetails}
-          r1EndTime={r1EndTime}
-          pollFactoryAddress={pollFactoryAddress}
-          initialFundRelease={initialFundRelease}
-          crowdSaleAddress={crowdSaleAddress}
-          daicoTokenAddress={daicoTokenAddress}
-          projectid={_id}
-          currentRoundNumber={currentRoundNumber}
-          thumbnailUrl={thumbnailUrl}
-        />
+        <div style={{ marginBottom: "50px" }}>
+          <ProjectDetailCrowdSale
+            version={version}
+            membershipAddress={membershipAddress}
+            projectName={projectName}
+            tokenTag={tokenTag}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            startDateTime={startDateTime}
+            maximumEtherContribution={maximumEtherContribution}
+            capPercent={capPercent}
+            initialTapAmount={initialTapAmount}
+            tapIncrementFactor={tapIncrementFactor}
+            isCurrentMember={isCurrentMember}
+            rounds={rounds}
+            totalMintableSupply={totalMintableSupply}
+            foundationDetails={foundationDetails}
+            r1EndTime={r1EndTime}
+            pollFactoryAddress={pollFactoryAddress}
+            initialFundRelease={initialFundRelease}
+            crowdSaleAddress={crowdSaleAddress}
+            daicoTokenAddress={daicoTokenAddress}
+            projectid={_id}
+            currentRoundNumber={currentRoundNumber}
+            thumbnailUrl={thumbnailUrl}
+          />
+        </div>
       );
     }
 
     if (treasuryStateNumber === "3" || currentRoundNumber === "2" || currentRoundNumber === "3" || currentRoundNumber === "4") {
       return (
-        <ProjectDetailGovernance
-          projectHealth={projectHealth}
-          version={version}
-          membershipAddress={membershipAddress}
-          projectName={projectName}
-          tokenTag={tokenTag}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          startDateTime={startDateTime}
-          maximumEtherContribution={maximumEtherContribution}
-          capPercent={capPercent}
-          initialTapAmount={initialTapAmount}
-          tapIncrementFactor={tapIncrementFactor}
-          isCurrentMember={isCurrentMember}
-          rounds={rounds}
-          totalMintableSupply={totalMintableSupply}
-          foundationDetails={foundationDetails}
-          r1EndTime={r1EndTime}
-          pollFactoryAddress={pollFactoryAddress}
-          initialFundRelease={initialFundRelease}
-          crowdSaleAddress={crowdSaleAddress}
-          currentRoundNumber={currentRoundNumber}
-          daicoTokenAddress={daicoTokenAddress}
-          xfrDetails={xfrDetails}
-          projectid={_id}
-          xfrRejectionPercent={xfrRejectionPercent}
-          history={history}
-          killAcceptancePercent={killAcceptancePercent}
-          thumbnailUrl={thumbnailUrl}
-        />
+        <div style={{ marginBottom: "50px" }}>
+          <ProjectDetailGovernance
+            projectHealth={projectHealth}
+            version={version}
+            membershipAddress={membershipAddress}
+            projectName={projectName}
+            tokenTag={tokenTag}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            startDateTime={startDateTime}
+            maximumEtherContribution={maximumEtherContribution}
+            capPercent={capPercent}
+            initialTapAmount={initialTapAmount}
+            tapIncrementFactor={tapIncrementFactor}
+            isCurrentMember={isCurrentMember}
+            rounds={rounds}
+            totalMintableSupply={totalMintableSupply}
+            foundationDetails={foundationDetails}
+            r1EndTime={r1EndTime}
+            pollFactoryAddress={pollFactoryAddress}
+            initialFundRelease={initialFundRelease}
+            crowdSaleAddress={crowdSaleAddress}
+            currentRoundNumber={currentRoundNumber}
+            daicoTokenAddress={daicoTokenAddress}
+            xfrDetails={xfrDetails}
+            projectid={_id}
+            xfrRejectionPercent={xfrRejectionPercent}
+            history={history}
+            killAcceptancePercent={killAcceptancePercent}
+            thumbnailUrl={thumbnailUrl}
+          />
+        </div>
       );
     }
 

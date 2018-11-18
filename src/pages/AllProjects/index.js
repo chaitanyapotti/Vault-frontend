@@ -37,7 +37,7 @@ class AllProjects extends Component {
       }
     ];
     return (
-      <Grid>
+      <Grid style={{ marginBottom: "50px" }}>
         <CUITabs style={{ color: "black !important" }} onChange={this.handleChange} value={this.state.value} iconList={list} />
         {value === "active" && (
           <TabContainer>

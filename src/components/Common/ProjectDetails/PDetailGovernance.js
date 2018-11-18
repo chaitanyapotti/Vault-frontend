@@ -26,9 +26,11 @@ const PDetailGovernance = props => {
     onUnlockTokensClick,
     onKillPollsHistoryClick,
     killButtonTransactionHash,
-    r1EndTime
+    r1EndTime,
+    pollFactoryAddress
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${killButtonTransactionHash}`;
+  const etherscanLink = `https://etherscan.io/address/${pollFactoryAddress}`;
   return (
     <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
       <Row>
@@ -36,6 +38,13 @@ const PDetailGovernance = props => {
           Project Details
         </Col>
         <Col className="push-half--top text-right" lg={6}>
+          <a href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="push-half--top text-right" lg={12}>
           <a rel="noopener" onClick={onKillPollsHistoryClick}>
             Kill Polls History
           </a>

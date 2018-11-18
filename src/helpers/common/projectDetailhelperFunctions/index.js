@@ -77,7 +77,7 @@ const pollState = (startTime, endTime) => {
   return null;
 };
 
-const significantDigits = (number, perc = false) => {
+const significantDigits = (number, perc = false, len = 2) => {
   let input = number;
   if (input === 0) return input;
   if (perc) {
@@ -87,7 +87,7 @@ const significantDigits = (number, perc = false) => {
   if (input >= 1) {
     depth = 2;
   } else {
-    depth = 1 + Math.ceil(Math.log10(1 / input));
+    depth = len - 1 + Math.ceil(Math.log10(1 / input));
   }
   const shift = Math.pow(10, depth);
   const roundedNum = Math.round(shift * input) / shift;
@@ -262,6 +262,19 @@ const getSoftCap = props => {
   return formatMoney(formatFromWei(softCap * getR3Price(props) * parseFloat(etherPrice), 2), 0);
 };
 
+const r1TokenCount = props => {
+  const { rounds } = props || {};
+  const [round1] = rounds || {};
+  const { tokenCount } = round1 || {};
+  return tokenCount;
+};
+
+const r1TokensSold = props => {
+  const { roundInfo } = props || {};
+  const { totalTokensSold } = roundInfo || "";
+  return totalTokensSold;
+};
+
 const getHardCap = props => {
   const { totalMintableSupply, prices } = props || {};
   const { ETH } = prices || {};
@@ -295,5 +308,7 @@ export {
   withdrawDataConverted,
   withdrawXfrDataConverted,
   xfrWithdrawStatus,
-  getR1Rate
+  getR1Rate,
+  r1TokenCount,
+  r1TokensSold
 };

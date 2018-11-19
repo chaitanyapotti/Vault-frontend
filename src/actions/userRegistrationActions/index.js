@@ -14,19 +14,22 @@ export function postUserFormData(userRegistrationData, userLocalPublicAddress) {
     addressLine1: userRegistrationData.addressLine1,
     addressLine2: userRegistrationData.addressLine2
   };
-  (userFormObject.isIssuer = userRegistrationData.isIssuerFlag), (userFormObject.city = userRegistrationData.city);
+  userFormObject.isIssuer = userRegistrationData.isIssuerFlag;
+  userFormObject.city = userRegistrationData.city;
   userFormObject.userState = userRegistrationData.userState;
   userFormObject.postalCode = userRegistrationData.postalCode;
   userFormObject.country = userRegistrationData.country;
-  (userFormObject.typeOfDocument = userRegistrationData.typeOfDocument),
-    (userFormObject.documentNumber = userRegistrationData.documentNumber),
-    (userFormObject.dateOfIssuance = userRegistrationData.dateOfIssuance),
-    (userFormObject.dateOfExpiration = userRegistrationData.dateOfExpiration),
-    (userFormObject.firstName = userRegistrationData.firstName),
-    (userFormObject.lastName = userRegistrationData.lastName),
-    (userFormObject.gender = userRegistrationData.gender),
-    (userFormObject.dateOfBirth = userRegistrationData.dateOfBirth);
+  userFormObject.typeOfDocument = userRegistrationData.typeOfDocument;
+  userFormObject.documentNumber = userRegistrationData.documentNumber;
+  userFormObject.dateOfIssuance = userRegistrationData.dateOfIssuance;
+  userFormObject.dateOfExpiration = userRegistrationData.dateOfExpiration;
+  userFormObject.firstName = userRegistrationData.firstName;
+  userFormObject.lastName = userRegistrationData.lastName;
+  userFormObject.gender = userRegistrationData.gender;
+  userFormObject.dateOfBirth = userRegistrationData.dateOfBirth;
   userFormObject.citizenship = userRegistrationData.citizenship;
+  userFormObject.isVaultMember = false;
+  userFormObject.network = "rinkeby";
   return dispatch =>
     axios
       .post(`${config.api_base_url}/db/users?useraddress=${userLocalPublicAddress}`, userFormObject)

@@ -114,6 +114,7 @@ class ProjectGovernance extends Component {
             foundationDetails={foundationDetails}
             initialFundRelease={initialFundRelease}
             thumbnailUrl={thumbnailUrl}
+            currentRoundNumber={currentRoundNumber}
           />
         </div>
       );

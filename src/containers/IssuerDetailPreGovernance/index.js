@@ -8,8 +8,7 @@ import { formatFromWei, getR1Price, getR1Goal, getHardCap, getSoftCap, formatDat
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
-
-const bigInt = require("big-integer");
+import web3 from "../../helpers/web3";
 
 class IssuerDetailPreGovernance extends Component {
   componentDidMount() {
@@ -33,7 +32,8 @@ class IssuerDetailPreGovernance extends Component {
     const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (new Date(r1EndTime) < new Date() && bigInt(totalTokensSold).lesser(bigInt(tokenCount))) return true;
+    if (new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) < web3.utils.toBN(tokenCount))
+      return true;
 
     return false;
   };
@@ -82,7 +82,8 @@ class IssuerDetailPreGovernance extends Component {
       currentRoundNumber,
       startR1ButtonTransactionHash,
       r1FinalizeButtonTransactionHash,
-      thumbnailUrl
+      thumbnailUrl,
+      prices
     } = this.props || {};
     return (
       <Grid>
@@ -142,7 +143,7 @@ class IssuerDetailPreGovernance extends Component {
         <Row className="push--top">
           <Col xs={12} lg={6}>
             <CUICard style={{ padding: "40px 50px" }}>
-              <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
+              <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
             </CUICard>
           </Col>
         </Row>

@@ -43,12 +43,12 @@ export const getVoteHistogramData = projectid => async dispatch => {
     });
 };
 
-export const getSpendCurveData = (version, address) => async dispatch => {
+export const getSpendCurveData = (version, address, crowdsaleaddress) => async dispatch => {
   const network = "rinkeby";
   // await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/spendcurve`, {
-      params: { address, network, version }
+      params: { address, network, version, crowdsaleaddress }
     })
     .then(response => {
       const { status, data: spendCurveData } = response || {};

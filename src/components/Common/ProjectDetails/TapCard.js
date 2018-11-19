@@ -29,7 +29,7 @@ const TapCard = props => {
             Tap Increment
           </Col>
           <Col className="push-half--top text-right" lg={4}>
-            <a rel="noopener" onClick={onTapPollsHistoryClick}>
+            <a rel="noreferrer noopener" onClick={onTapPollsHistoryClick}>
               View Tap History
             </a>
           </Col>

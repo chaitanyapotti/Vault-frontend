@@ -29,8 +29,7 @@ import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
 import AlertModal from "../../components/Common/AlertModal";
 import BuyModal from "../../components/Common/BuyModal";
-
-const bigInt = require("big-integer");
+import web3 from "../../helpers/web3";
 
 class ProjectDetailCrowdSale extends Component {
   state = {
@@ -97,7 +96,7 @@ class ProjectDetailCrowdSale extends Component {
     const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (bigInt(totalTokensSold).equals(bigInt(tokenCount))) return `Round ${currentRoundNumber} Ended`;
+    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) === web3.utils.toBN(tokenCount)) return `Round ${currentRoundNumber} Ended`;
     // based on tokens sold
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
@@ -138,7 +137,8 @@ class ProjectDetailCrowdSale extends Component {
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
 
-    if (new Date(r1EndTime) < new Date() && bigInt(totalTokensSold).lesser(bigInt(tokenCount))) return true;
+    if (new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) < web3.utils.toBN(tokenCount))
+      return true;
 
     return false;
   };
@@ -148,7 +148,8 @@ class ProjectDetailCrowdSale extends Component {
     const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (new Date(r1EndTime) < new Date() || bigInt(totalTokensSold).greaterOrEquals(bigInt(tokenCount))) return false;
+    if (new Date(r1EndTime) < new Date() || (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) >= web3.utils.toBN(tokenCount)))
+      return false;
 
     return true;
   };
@@ -187,7 +188,9 @@ class ProjectDetailCrowdSale extends Component {
       r1FinalizeButtonTransactionHash,
       buyAmount,
       thumbnailUrl,
-      userContribution
+      userContribution,
+      prices,
+      currentRoundNumber
     } = this.props || {};
     const { modalOpen, buyModalOpen } = this.state;
     console.log(userContribution, tokenBalance, "xxx");
@@ -250,7 +253,7 @@ class ProjectDetailCrowdSale extends Component {
         <Row className="push--top">
           <Col xs={12} lg={6}>
             <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
-              <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
+              <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
             </CUICard>
           </Col>
         </Row>

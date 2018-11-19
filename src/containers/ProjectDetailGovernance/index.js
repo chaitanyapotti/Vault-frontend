@@ -45,7 +45,9 @@ import {
   daysTookForTapPoll,
   xfrResult,
   xfrWithdrawStatus,
-  formatRateToPrice
+  formatRateToPrice,
+  r1TokenCount,
+  r1TokensSold
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
@@ -53,6 +55,8 @@ import BuyModal from "../../components/Common/BuyModal";
 import LoadingButton from "../../components/Common/LoadingButton";
 import GridData from "../../components/GridData";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
+
+const bigInt = require("big-integer");
 
 class ProjectDetailGovernance extends Component {
   state = {
@@ -210,11 +214,10 @@ class ProjectDetailGovernance extends Component {
   };
 
   getRoundText = () => {
-    const { currentRoundNumber } = this.props || {};
-    const { roundInfo } = this.props || {};
+    const { currentRoundNumber, roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
     if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
-    if (parseFloat(tokenCount) === parseFloat(totalTokensSold)) return `Round ${currentRoundNumber} Ended`;
+    if (bigInt(totalTokensSold).equals(bigInt(tokenCount))) return `Round ${currentRoundNumber} Ended`;
 
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
@@ -224,7 +227,7 @@ class ProjectDetailGovernance extends Component {
 
   getVoteShare = () => {
     const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
-    const userShare = (parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * 100 || 0;
+    const userShare = significantDigits((parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * 100, false, 3) || 0;
     return userShare > capPercent / 100 ? capPercent / 100 : userShare;
   };
 
@@ -399,7 +402,8 @@ class ProjectDetailGovernance extends Component {
     const round3 = rounds[roundNumber] || {};
     const { tokenCount } = round3 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (parseFloat(totalTokensSold) >= parseFloat(tokenCount)) return false;
+    if (bigInt(totalTokensSold).greaterOrEquals(bigInt(tokenCount))) return false;
+    // if (bigInt(totalTokensSold).greaterOrEquals(tokenCount)) return false;
     return true;
   };
 
@@ -526,7 +530,9 @@ class ProjectDetailGovernance extends Component {
       r1EndTime,
       killFinalizeTransactionHash,
       buyAmount,
-      thumbnailUrl
+      thumbnailUrl,
+      daicoTokenAddress,
+      pollFactoryAddress
     } = this.props || {};
     const {
       modalOpen,
@@ -610,6 +616,7 @@ class ProjectDetailGovernance extends Component {
             tokenTag={tokenTag}
             price={this.getPrice()}
             roundText={this.getRoundText()}
+            daicoTokenAddress={daicoTokenAddress}
             priceIncrement={this.getPriceIncrement()}
             description={description}
             urls={urls}
@@ -655,6 +662,7 @@ class ProjectDetailGovernance extends Component {
             onKillPollsHistoryClick={this.handleKillPollsHistoryOpen}
             killButtonTransactionHash={killButtonTransactionHash}
             r1EndTime={r1EndTime}
+            pollFactoryAddress={pollFactoryAddress}
           />
           {/* </Col>
           </Row> */}

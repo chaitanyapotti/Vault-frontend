@@ -1,47 +1,46 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepConnector from '@material-ui/core/StepConnector';
-import { CUICard } from '../../../helpers/material-ui';
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import StepConnector from "@material-ui/core/StepConnector";
+import { CUICard } from "../../../helpers/material-ui";
 
 const styles = theme => ({
   root: {
-    width: '100%',
+    width: "100%"
   },
   button: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   },
   instructions: {
     marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
+    marginBottom: theme.spacing.unit
   },
   connectorActive: {
-    '& $connectorLine': {
-      borderColor: theme.palette.secondary.main,
-    },
+    "& $connectorLine": {
+      borderColor: theme.palette.secondary.main
+    }
   },
   connectorCompleted: {
-    '& $connectorLine': {
-      borderColor: theme.palette.primary.main,
-    },
+    "& $connectorLine": {
+      borderColor: theme.palette.primary.main
+    }
   },
   connectorDisabled: {
-    '& $connectorLine': {
-      borderColor: theme.palette.grey[100],
-    },
+    "& $connectorLine": {
+      borderColor: theme.palette.grey[100]
+    }
   },
   connectorLine: {
-    transition: theme.transitions.create('border-color'),
-  },
+    transition: theme.transitions.create("border-color")
+  }
 });
 
 class CustomizedStepper extends React.Component {
-  
   redirectToIssuerPage = () => {
-    console.log("redirecting to redirectToIssuerPage")
+    console.log("redirecting to redirectToIssuerPage");
     const { projectid } = this.props || "";
     this.props.history.push({
       pathname: `/issuergovernance/details`,
@@ -58,27 +57,27 @@ class CustomizedStepper extends React.Component {
           active: classes.connectorActive,
           completed: classes.connectorCompleted,
           disabled: classes.connectorDisabled,
-          line: classes.connectorLine,
+          line: classes.connectorLine
         }}
       />
     );
 
     return (
-      <CUICard className="card-brdr" style={{padding: "40px 40px"}}>
+      <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
         <div className="txt-xl">Deployer</div>
         <div className={classes.root}>
           <Stepper alternativeLabel activeStep={activeStep} connector={connector}>
             {steps.map(label => (
               <Step key={label}>
-                <StepLabel><div className="txt">{label}</div></StepLabel>
+                <StepLabel>
+                  <div className="txt">{label}</div>
+                </StepLabel>
               </Step>
             ))}
           </Stepper>
           <div>
             {activeStep === steps.length ? (
-              <div>
-                {this.redirectToIssuerPage()}
-              </div>
+              <div>{this.redirectToIssuerPage()}</div>
             ) : (
               <div>
                 <div className={classes.instructions}>{getStepContent(activeStep)}</div>
@@ -92,7 +91,7 @@ class CustomizedStepper extends React.Component {
 }
 
 CustomizedStepper.propTypes = {
-  classes: PropTypes.object,
+  classes: PropTypes.object
 };
 
 export default withStyles(styles)(CustomizedStepper);

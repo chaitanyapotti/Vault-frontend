@@ -12,7 +12,8 @@ const initialState = {
   spentDots: [],
   dateArray: [],
   deployContractButtonSpinning: false,
-  deployContractStartButtonSpinning: false
+  deployContractStartButtonSpinning: false,
+  pageReloading: false
 };
 
 export default function(state = initialState, action) {
@@ -83,16 +84,23 @@ export default function(state = initialState, action) {
 
     case types.CLEAR_GOVERNANCE_STATES: {
       return {
-        ...state,     
+        ...state,
         projectDetails: null
-      }
+      };
     }
 
     case types.CLEAR_PROJECT_DETAILS: {
       return {
-        ...state,     
+        ...state,
         projectDetails: null
-      }
+      };
+    }
+
+    case types.PAGE_RELOADING: {
+      return {
+        ...state,
+        pageReloading: action.payload
+      };
     }
 
     case types.PROJECT_DETAILS_FETCHED: {
@@ -119,9 +127,10 @@ export default function(state = initialState, action) {
     }
     case types.TRANSACTION_REDO:
     case types.RECEIVED_TRANSACTION_HASH: {
-      const { latestTxHash, currentDeploymentIndicator } = action.payload.body || {};
+      const { latestTxHash, currentDeploymentIndicator, nonce } = action.payload.body || {};
       currentProjDetails.latestTxHash = latestTxHash;
       currentProjDetails.currentDeploymentIndicator = currentDeploymentIndicator;
+      currentProjDetails.nonce = nonce;
       return {
         ...state,
         projectDetails: currentProjDetails
@@ -135,9 +144,11 @@ export default function(state = initialState, action) {
         daicoTokenAddress,
         lockedTokensAddress,
         pollFactoryAddress,
-        crowdSaleAddress
+        crowdSaleAddress,
+        nonce
       } = action.payload.body || {};
       currentProjDetails.currentDeploymentIndicator = currentDeploymentIndicator;
+      currentProjDetails.nonce = nonce;
       currentProjDetails.latestTxHash = latestTxHash;
       switch (currentDeploymentIndicator - 1) {
         case 0:

@@ -1,5 +1,4 @@
 import React from "react";
-import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
@@ -26,6 +25,8 @@ import AlertModal from "../../Common/AlertModal";
 import Warning from "@material-ui/icons/Warning";
 import Loader from "../../Loaders/loader";
 import SubHeader from "../../Common/Subheader";
+import { formatAddress } from "../../../helpers/common/addressDisplayFormatter";
+
 // const images = {
 //   metamask: "/assets/Footer/metamask.png"
 // };
@@ -403,8 +404,11 @@ class HeaderPartial extends React.Component {
                                 ),
                                 3: (
                                   <div>
-                                    <div style={{ width: "150px" }} className="txt-ellipsis">
+                                    {/* <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
+                                    </div> */}
+                                    <div style={{ width: "150px" }}>
+                                      {formatAddress(this.props.userLocalPublicAddress)}
                                     </div>
                                     <ButtonComponent
                                       style={{ boxShadow: "none" }}

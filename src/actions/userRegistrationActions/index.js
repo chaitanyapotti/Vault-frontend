@@ -340,6 +340,15 @@ export function userOtpChanged(otp) {
     };
 }
 
+export function emailChangedAction(email) {
+    return dispatch => {
+        dispatch({
+            type: actionTypes.USER_EMAIL_CHANGED,
+            payload: email
+        });
+    };
+}
+
 export function isIssuerFlagToggled() {
     return dispatch => {
         dispatch({

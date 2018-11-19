@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { HeaderPartial, FooterPartial } from "./components/Partials";
-import SubHeader from "./components/Common/Subheader";
 import { CUIWrapper } from "./helpers/material-ui";
 
 class VaultApp extends React.PureComponent {
@@ -11,7 +10,6 @@ class VaultApp extends React.PureComponent {
       <div className="main-container">
         <CUIWrapper>
           <HeaderPartial history={this.props.history} />
-          <SubHeader />
           <div className="main-content push-top--35">{this.props.children}</div>
           <FooterPartial />
         </CUIWrapper>

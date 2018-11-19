@@ -25,6 +25,7 @@ import "../../../static/css/app.css";
 import AlertModal from "../../Common/AlertModal";
 import Warning from "@material-ui/icons/Warning";
 import Loader from "../../Loaders/loader";
+import SubHeader from "../../Common/Subheader";
 // const images = {
 //   metamask: "/assets/Footer/metamask.png"
 // };
@@ -296,7 +297,8 @@ class HeaderPartial extends React.Component {
     return (
       <div>
         {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
-          <div className={classes.root}>
+          <div>
+            <div className={classes.root}>
             <CUIAppBar
               position="static"
               style={
@@ -487,6 +489,8 @@ class HeaderPartial extends React.Component {
                 ) : null}
               </div>
             </Drawer>
+          </div>
+          <SubHeader/>
           </div>
         ) : (
           <Grid>

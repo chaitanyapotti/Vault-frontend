@@ -21,8 +21,8 @@ const AlertModal = props => {
     <div>
       {link ? (
         <CUIModal open={open}>
-          <CUIModalContent>{children}</CUIModalContent>
-          <CUIModalActions>
+          <CUIModalContent className="ModalContent">{children}</CUIModalContent>
+          <CUIModalActions className="ModalActions">
             <div className="hli">
               <LoadingButton onClick={handleClose}>Close</LoadingButton>
             </div>
@@ -35,8 +35,8 @@ const AlertModal = props => {
         </CUIModal>
       ) : metamask ? (
         <CUIModal open={open}>
-          <CUIModalContent>{children}</CUIModalContent>
-          <CUIModalActions>
+          <CUIModalContent className="ModalContent">{children}</CUIModalContent>
+          <CUIModalActions className="ModalActions">
             <div className="hli">
               <LoadingButton onClick={handleClose}>Close</LoadingButton>
             </div>
@@ -49,8 +49,8 @@ const AlertModal = props => {
         </CUIModal>
       ) : (
         <CUIModal open={open}>
-          <CUIModalContent>{children}</CUIModalContent>
-          <CUIModalActions>
+          <CUIModalContent className="ModalContent">{children}</CUIModalContent>
+          <CUIModalActions className="ModalActions">
             <div className="hli">
               <LoadingButton onClick={handleClose}>Close</LoadingButton>
             </div>

@@ -214,14 +214,14 @@ class Registration extends Component {
                         <div className="text--center text--danger">
                           <Warning style={{ width: "2em", height: "2em" }} /> WARNING
                         </div>
-                        <div className="text--center push--top">Once this DAICO is published, you will not be able to edit the on-chain details of the project. However the off-chain details will remain editable.</div>
+                        <div className="text--left push--top">Once this DAICO is published, you will not be able to edit the on-chain details of the project. However the off-chain details will remain editable.</div>
                       </AlertModal>
 
                       <AlertModal open={modalOpen} handleClose={this.handleClose}>
                         <div className="text--center text--danger">
                           <Warning style={{ width: "2em", height: "2em" }} />
                         </div>
-                        <div className="text--center push--top">{modalMessage}</div>
+                        <div className="text--left push--top">{modalMessage}</div>
                       </AlertModal>
 
                     </Grid>            

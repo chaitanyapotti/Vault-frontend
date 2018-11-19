@@ -274,6 +274,31 @@ button:focus {
   border: none;
 }
 
+.test {
+  margin-right: 25px !important;
+}
+/* .cuiModalClose {
+  text-align: left !important;
+} */
+
+.ModalContent:first-child {
+  padding-top: 35px !important;
+}
+
+.ModalActions {
+  margin-right: 35px !important;
+  margin-bottom: 35px !important;
+  margin-left: 0px !important;
+  margin-top: 0px !important;
+}
+
+.ModalContent {
+  text-align: left !important;
+  padding-right: 35px !important;
+  padding-left: 35px !important;
+  padding-bottom: 5px !important;
+}
+
 /* -------------------------------------------------- */
 /* Background */
 /* -------------------------------------------------- */

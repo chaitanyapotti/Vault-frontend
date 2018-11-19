@@ -310,7 +310,7 @@ class TokenSale extends React.Component {
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />
           </div>
-          <div className="text--center push--top">{modalMessage}</div>
+          <div className="text--left push--top">{modalMessage}</div>
         </AlertModal>
       </div>
     );

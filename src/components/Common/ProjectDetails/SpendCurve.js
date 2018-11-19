@@ -61,7 +61,7 @@ const SpendCurve = props => {
   // };
 
   const getOption = () => {
-    const colors = ["#5793f3", "#d14a61", "#675bba", "#184b4a"];
+    const colors = ["#4ca9fc", "#ff89a0", "#f7c34f", "#8d8d8d"];
     const dates = dateArray.map(item => {
       const date = new Date(item.date);
       return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
@@ -97,15 +97,15 @@ const SpendCurve = props => {
     return {
       color: colors,
       legend: {
-        data: ["Spendable Ether", "Spent Ether", "Withdrawable Amount", "Collected Ether"],
+        data: ["Spendable Ether", "Spent Ether", "Withdrawable", "Collected Ether"],
         selected: {
           "Spendable Ether": true,
           "Spent Ether": true,
-          "Withdrawable Amount": false,
+          Withdrawable: false,
           "Collected Ether": false
         },
         padding: [5, 20, 0, 20],
-        itemGap: 40
+        itemGap: 60
       },
       grid: {
         top: 120,
@@ -196,7 +196,7 @@ const SpendCurve = props => {
           data: contributedAmounts
         },
         {
-          name: "Withdrawable Amount",
+          name: "Withdrawable",
           type: "line",
           smooth: true,
           lineStyle: {

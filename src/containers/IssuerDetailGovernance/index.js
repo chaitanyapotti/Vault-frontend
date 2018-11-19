@@ -125,7 +125,7 @@ class IssuerDetailGovernance extends Component {
     const { roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
     if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
-    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) === web3.utils.toBN(tokenCount))
+    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).eq(web3.utils.toBN(tokenCount)))
       return `Round ${currentRoundNumber} Completed`;
 
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
@@ -160,7 +160,7 @@ class IssuerDetailGovernance extends Component {
   canStartNewRound = () => {
     const { roundInfo, currentRoundNumber } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
-    return totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) === web3.utils.toBN(tokenCount) && currentRoundNumber <= "3";
+    return totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).eq(web3.utils.toBN(tokenCount)) && currentRoundNumber <= "3";
   };
 
   onStartNewRoundClick = () => {

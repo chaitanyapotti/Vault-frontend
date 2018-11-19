@@ -63,6 +63,45 @@ const withdrawXfrDataConverted = withdrawXfrData => {
   return data;
 };
 
+const Colors = i => {
+  const Palette = [
+    "#ffb6c7",
+    "#ff839b",
+    "#e85b7d",
+    "#94d1ff",
+    "#4ca9fc",
+    "#0968af",
+    "#ffed85",
+    "#ffe655",
+    "#efcc00",
+    "#d1b300",
+    "#ad9400",
+    "#af7000",
+    "#d38200",
+    "#f28f00",
+    "#ffb052",
+    "#ffc483",
+    "#d585ff",
+    "#c455ff",
+    "#9d00ef",
+    "#8900d1",
+    "#7100ad"
+  ];
+  let greyHex;
+  let greyInt;
+  if (i > 15) {
+    var hex;
+    const excess = i - 15;
+    for (let j = 0; j < excess; j += 1) {
+      greyInt = Math.round((j + 1) * (256 / (excess + 1)));
+      greyInt < 16 ? hex = "0" + greyInt.toString(16) : hex = greyInt.toString(16);
+      greyHex = `#${hex}${hex}${hex}`;
+      Palette.push(greyHex);
+    }
+  }
+  return Palette.splice(0, 6 + i);
+};
+
 const contributionDataConverted = contributionData => {
   const data = {};
   for (let i = 0; i < contributionData.length; i += 1) {
@@ -322,5 +361,6 @@ export {
   getR1Rate,
   r1TokenCount,
   r1TokensSold,
-  contributionDataConverted
+  contributionDataConverted,
+  Colors
 };

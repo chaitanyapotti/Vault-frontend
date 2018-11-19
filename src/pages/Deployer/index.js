@@ -439,9 +439,9 @@ class Deployer extends Component {
                 <Row>
                   <Col lg={10} />
                   <Col lg={2}>
-                    <LoadingButton style={{ padding: "0 40px" }} onClick={this.onResetModalOpenClick}>
+                    <a rel="noopener" onClick={this.onResetModalOpenClick}>
                       Start Over
-                    </LoadingButton>
+                    </a>
                   </Col>
                 </Row>
                 <Row>
@@ -478,12 +478,16 @@ class Deployer extends Component {
               </div>
             </CUIModalContent>
             <CUIModalActions>
-              <LoadingButton style={{ padding: "0 40px" }} onClick={this.onResetClick}>
-                Proceed
-              </LoadingButton>
-              <LoadingButton style={{ padding: "0 40px" }} onClick={this.handleClose}>
-                Close
-              </LoadingButton>
+              <div className="hli">
+                <LoadingButton style={{ padding: "0 40px" }} onClick={this.onResetClick} type="danger">
+                  Proceed
+                </LoadingButton>
+              </div>
+              <div className="hli">
+                <LoadingButton style={{ padding: "0 40px" }} onClick={this.handleClose}>
+                  Close
+                </LoadingButton>
+              </div>
             </CUIModalActions>
           </CUIModal>
         }

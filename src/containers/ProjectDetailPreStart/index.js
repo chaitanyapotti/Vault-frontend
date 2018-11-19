@@ -80,7 +80,9 @@ class ProjectDetailPreStart extends Component {
       buttonSpinning,
       signinStatusFlag,
       whitelistButtonTransactionHash,
-      thumbnailUrl
+      thumbnailUrl,
+      prices,
+      currentRoundNumber
     } = this.props || {};
     const { modalOpen } = this.state;
     return (
@@ -123,7 +125,7 @@ class ProjectDetailPreStart extends Component {
         <Row className="push--top">
           <Col xs={12} lg={6}>
             <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
-              <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
+              <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
             </CUICard>
           </Col>
         </Row>

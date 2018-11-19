@@ -63,6 +63,17 @@ const withdrawXfrDataConverted = withdrawXfrData => {
   return data;
 };
 
+const contributionDataConverted = contributionData => {
+  const data = {};
+  for (let i = 0; i < contributionData.length; i += 1) {
+    const ts = new Date(contributionData[i].timestamp * 1000);
+    const tap = parseFloat(contributionData[i].amount);
+    const newDate = new Date(ts.getFullYear(), ts.getMonth(), ts.getDate());
+    data[newDate.getTime()] = data[newDate.getTime()] ? tap + data[newDate.getTime()] : tap;
+  }
+  return data;
+};
+
 const pollState = (startTime, endTime) => {
   const presentDate = new Date();
   if (presentDate < startTime) {
@@ -310,5 +321,6 @@ export {
   xfrWithdrawStatus,
   getR1Rate,
   r1TokenCount,
-  r1TokensSold
+  r1TokensSold,
+  contributionDataConverted
 };

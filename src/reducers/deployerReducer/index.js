@@ -1,6 +1,11 @@
 import types from "../../action_types";
 
-import { tapDataConverted, withdrawDataConverted, withdrawXfrDataConverted } from "../../helpers/common/projectDetailhelperFunctions";
+import {
+  tapDataConverted,
+  withdrawDataConverted,
+  withdrawXfrDataConverted,
+  contributionDataConverted
+} from "../../helpers/common/projectDetailhelperFunctions";
 
 const initialState = {
   projectDetails: null,
@@ -11,9 +16,11 @@ const initialState = {
   spendableDots: [],
   spentDots: [],
   dateArray: [],
+  contributionArray: [],
   deployContractButtonSpinning: false,
   deployContractStartButtonSpinning: false,
-  pageReloading: false
+  pageReloading: false,
+  contriArrayReceived: false
 };
 
 export default function(state = initialState, action) {
@@ -22,21 +29,28 @@ export default function(state = initialState, action) {
     case types.SPEND_CURVE_DATA_SUCCESS: {
       const today = new Date();
       const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-      const { spendableArrays, xfrDots, tapDots, spentArray, spendableDots, spentDots, dateArray, projectDetails } = state || {};
+      const { spendableArrays, xfrDots, tapDots, spentArray, spendableDots, spentDots, dateArray, projectDetails, contributionArray } = state || {};
       const { startDateTime, initialFundRelease, initialTapAmount } = projectDetails;
       const daicoStartDate = new Date(startDateTime);
       const daicoStartDateConverted = new Date(daicoStartDate.getFullYear(), daicoStartDate.getMonth(), daicoStartDate.getDate());
-      const { tapData, withdrawXfrData, withdrawData } = action.payload || {};
+      const { tapData, withdrawXfrData, withdrawData, contributionData } = action.payload || {};
       const tapDataDict = tapDataConverted(tapData);
       const withdrawDataDict = withdrawDataConverted(withdrawData);
       const withdrawXfrDataDict = withdrawXfrDataConverted(withdrawXfrData);
+      const contributionDataDict = contributionDataConverted(contributionData);
       let currentArray = [];
       let spentValue = 0;
+      let contributionValue = 0;
       const keyx = daicoStartDateConverted.getTime().toString();
       if (withdrawDataDict[keyx]) {
         spentValue += withdrawDataDict[keyx];
       }
+      if (contributionDataDict[keyx]) {
+        contributionValue += contributionDataDict[keyx];
+      }
+      console.log(contributionDataDict);
       spentArray.push({ date: daicoStartDateConverted.getTime(), ether: spentValue });
+      contributionArray.push({ date: daicoStartDateConverted.getTime(), ether: contributionValue });
       let tapValue = parseFloat(initialTapAmount) * 86400 * Math.pow(10, -18);
       currentArray.push({ date: daicoStartDateConverted.getTime(), ether: initialFundRelease * Math.pow(10, -18) });
       spendableDots.push({ date: daicoStartDateConverted.getTime(), ether: initialFundRelease * Math.pow(10, -18) });
@@ -50,6 +64,13 @@ export default function(state = initialState, action) {
           spentValue += withdrawDataDict[key];
         }
         spentArray.push({ date: new Date(d).getTime(), ether: spentValue });
+
+        contributionValue = contributionArray[contributionArray.length - 1].ether;
+        if (contributionDataDict[key]) {
+          contributionValue += contributionDataDict[key];
+        }
+        contributionArray.push({ date: new Date(d).getTime(), ether: contributionValue });
+
         let previousEther = 0;
         let currentEther = 0;
         previousEther = currentArray[currentArray.length - 1].ether;
@@ -79,7 +100,18 @@ export default function(state = initialState, action) {
         ether: endOfSpendable.ether || 0
       });
       spentDots.push(spentArray[spentArray.length - 1]);
-      return { ...state, spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray };
+      return {
+        ...state,
+        spendableArrays,
+        spentArray,
+        xfrDots,
+        tapDots,
+        spendableDots,
+        spentDots,
+        dateArray,
+        contributionArray,
+        contriArrayReceived: true
+      };
     }
 
     case types.CLEAR_GOVERNANCE_STATES: {

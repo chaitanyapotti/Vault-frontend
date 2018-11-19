@@ -23,7 +23,7 @@ import {
   validateProjectDescription
 } from "../../helpers/common/validationHelperFunctions";
 
-import {significantDigits} from "../../helpers/common/projectDetailhelperFunctions"
+import { significantDigits } from "../../helpers/common/projectDetailhelperFunctions";
 
 export const initialState = {
   adminName: "",
@@ -269,7 +269,7 @@ export default function(state = initialState, action) {
               entityAddress: "",
               unallocatedTokensPer: unallocatedTokensPer - action.payload.entityPercentage
             }
-          } else {
+          } 
             return {
               ...state,
               nonSaleEntities: nonSaleEntities,
@@ -278,7 +278,7 @@ export default function(state = initialState, action) {
               entityAddress: "",
               unallocatedTokensPer: unallocatedTokensPer- action.payload.entityPercentage
             }
-          }
+          
         }
       } else {
         return {

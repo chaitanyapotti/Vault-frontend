@@ -2,7 +2,15 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Warning from "@material-ui/icons/Warning";
-import { ProjectGovernanceName, PDetailGovernance, TapCard, FundReq, SpendCurve, VoteHistogram } from "../../components/Common/ProjectDetails";
+import {
+  ProjectGovernanceName,
+  PDetailGovernance,
+  TapCard,
+  FundReq,
+  SpendCurve,
+  VoteHistogram,
+  TokenChart
+} from "../../components/Common/ProjectDetails";
 import { getRoundTokensSold, buyTokens, getTokenBalance, buyAmountChangedAction } from "../../actions/projectCrowdSaleActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -45,9 +53,7 @@ import {
   daysTookForTapPoll,
   xfrResult,
   xfrWithdrawStatus,
-  formatRateToPrice,
-  r1TokenCount,
-  r1TokensSold
+  formatRateToPrice
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
@@ -55,8 +61,7 @@ import BuyModal from "../../components/Common/BuyModal";
 import LoadingButton from "../../components/Common/LoadingButton";
 import GridData from "../../components/GridData";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
-
-const bigInt = require("big-integer");
+import web3 from "../../helpers/web3";
 
 class ProjectDetailGovernance extends Component {
   state = {
@@ -129,7 +134,7 @@ class ProjectDetailGovernance extends Component {
     } = this.props || {};
     priceFetch("ETH");
     priceFetch(tokenTag);
-    fetchSpendCurveData(version, pollFactoryAddress);
+    fetchSpendCurveData(version, pollFactoryAddress, crowdSaleAddress);
     // fetchSpendCurveData(version, pollFactoryAddress);
     fetchVoteHistogramData(projectid);
     fetchKillPollsHistory(pollFactoryAddress);
@@ -217,7 +222,7 @@ class ProjectDetailGovernance extends Component {
     const { currentRoundNumber, roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
     if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
-    if (bigInt(totalTokensSold).equals(bigInt(tokenCount))) return `Round ${currentRoundNumber} Ended`;
+    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) === web3.utils.toBN(tokenCount)) return `Round ${currentRoundNumber} Ended`;
 
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
@@ -402,8 +407,7 @@ class ProjectDetailGovernance extends Component {
     const round3 = rounds[roundNumber] || {};
     const { tokenCount } = round3 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (bigInt(totalTokensSold).greaterOrEquals(bigInt(tokenCount))) return false;
-    // if (bigInt(totalTokensSold).greaterOrEquals(tokenCount)) return false;
+    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) >= web3.utils.toBN(tokenCount)) return false;
     return true;
   };
 
@@ -532,7 +536,12 @@ class ProjectDetailGovernance extends Component {
       buyAmount,
       thumbnailUrl,
       daicoTokenAddress,
-      pollFactoryAddress
+      pollFactoryAddress,
+      rounds,
+      foundationDetails,
+      prices,
+      contributionArray,
+      contriArrayReceived
     } = this.props || {};
     const {
       modalOpen,
@@ -696,6 +705,8 @@ class ProjectDetailGovernance extends Component {
             dateArray={dateArray}
             initialFundRelease={initialFundRelease}
             startDateTime={startDateTime}
+            contributionArray={contributionArray}
+            contriArrayReceived={contriArrayReceived}
           />
           {/* </Col>
           </Row> */}
@@ -727,6 +738,10 @@ class ProjectDetailGovernance extends Component {
             collectiveVoteWeight={collectiveVoteWeight}
             projectHealth={projectHealth}
           />
+          <CUICard style={{ padding: "40px 50px" }}>
+            <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
+          </CUICard>
+
           {/* </Col>
           </Row> */}
         </MasonaryLayout>
@@ -832,7 +847,7 @@ const mapStateToProps = state => {
   const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { prices } = fetchPriceReducer || {};
-  const { spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray } = state.deployerReducer || {};
+  const { spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray, contributionArray, contriArrayReceived } = state.deployerReducer || {};
   const { buyButtonTransactionHash, buyAmount } = projectCrowdSaleReducer;
   return {
     etherCollected,
@@ -881,7 +896,9 @@ const mapStateToProps = state => {
     killButtonTransactionHash,
     tapButtonTransactionHash,
     killFinalizeTransactionHash,
-    buyAmount
+    buyAmount,
+    contributionArray,
+    contriArrayReceived
   };
 };
 

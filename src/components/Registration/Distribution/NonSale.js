@@ -7,7 +7,6 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../../Common/FormComponents";
 import actionTypes from "../../../action_types";
 import PieChartComponent from "../../Common/PieChartComponent";
-
 import GridData from "../../GridData";
 import {
   addNonSaleEntityAction,
@@ -18,6 +17,7 @@ import {
 } from "../../../actions/projectRegistrationActions";
 
 import { validateLength, validateDecimal } from "../../../helpers/common/validationHelperFunctions";
+import TokenChart from "../../Common/ProjectDetails/TokenChart";
 
 // const CHARTCOLORS = ['#e1f4ff', '#b0ddff', '#7ec3fe', '#65b6fd', '#4ca9fc', '#3d8dd4', '#2e71ac', '#1e5583', '#0f395b', '#001d33']
 
@@ -63,8 +63,31 @@ class NonSale extends React.Component {
     }
   };
 
+  getRoundData = () => {
+    const { round1Tokens, round2Tokens, round3Tokens, round1Rate, round2Rate, round3Rate } = this.props || {};
+    const rounds = [];
+    rounds.push({ tokenCount: round1Tokens * Math.pow(10, 18), tokenRate: round1Rate });
+    rounds.push({ tokenCount: round2Tokens * Math.pow(10, 18), tokenRate: round2Rate });
+    rounds.push({ tokenCount: round3Tokens * Math.pow(10, 18), tokenRate: round3Rate });
+    return rounds;
+  };
+
+  getFoundationData = () => {
+    const { nonSaleEntities, totalSaleTokens } = this.props || {};
+    const totalTokens = 2 * totalSaleTokens;
+    const foundationDetails = [];
+    for (let index = 0; index < nonSaleEntities.length; index += 1) {
+      const element = nonSaleEntities[index];
+      foundationDetails.push({
+        amount: (element.entityPercentage / 100) * parseFloat(totalTokens) * Math.pow(10, 18),
+        description: element.entityName
+      });
+    }
+    return foundationDetails;
+  };
+
   render() {
-    const { nonSaleEntities, history, entityName, entityPercentage, entityAddress, allowEditAll, errors } = this.props || {};
+    const { nonSaleEntities, history, entityName, entityPercentage, entityAddress, allowEditAll, errors, ethPrice } = this.props || {};
     const nonSaleEntitiesTable = nonSaleEntities;
     const data =
       nonSaleEntitiesTable.length > 0 &&
@@ -73,6 +96,7 @@ class NonSale extends React.Component {
         const dataArray = [entityName, entityPercentage, entityAddress, index];
         return dataArray;
       });
+    const prices = { ETH: { price: ethPrice } };
     return (
       <div className="push-top--50">
         <hr />
@@ -171,11 +195,12 @@ class NonSale extends React.Component {
         <hr />
         {this.props.totalSaleTokens > 0 ? (
           <Row style={{ padding: "20px 50px" }}>
-            <PieChartComponent
+            {/* <PieChartComponent
               nonSaleEntities={this.props.nonSaleEntities}
               saleEntities={this.props.saleEntities}
               totalSaleTokens={this.props.totalSaleTokens}
-            />
+            /> */}
+            <TokenChart currentRoundNumber="0" prices={prices} rounds={this.getRoundData()} foundationDetails={this.getFoundationData()} />
           </Row>
         ) : null}
       </div>
@@ -184,8 +209,25 @@ class NonSale extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { nonSaleEntities, totalSaleTokens, entityName, entityPercentage, entityAddress, saleEntities, unallocatedTokensPer, allowEditAll, errors } =
-    state.projectRegistrationData || {};
+  const {
+    nonSaleEntities,
+    totalSaleTokens,
+    entityName,
+    entityPercentage,
+    entityAddress,
+    saleEntities,
+    unallocatedTokensPer,
+    allowEditAll,
+    errors,
+    round1Tokens,
+    round2Tokens,
+    round3Tokens,
+    round1Rate,
+    round2Rate,
+    round3Rate,
+    ethPrice
+  } = state.projectRegistrationData || {};
+
   return {
     nonSaleEntities,
     totalSaleTokens,
@@ -195,7 +237,14 @@ const mapStateToProps = state => {
     saleEntities,
     unallocatedTokensPer,
     allowEditAll,
-    errors
+    errors,
+    round1Tokens,
+    round2Tokens,
+    round3Tokens,
+    round1Rate,
+    round2Rate,
+    round3Rate,
+    ethPrice
   };
 };
 

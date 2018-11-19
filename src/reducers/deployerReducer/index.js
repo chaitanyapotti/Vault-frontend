@@ -48,7 +48,6 @@ export default function(state = initialState, action) {
       if (contributionDataDict[keyx]) {
         contributionValue += contributionDataDict[keyx];
       }
-      console.log(contributionDataDict);
       spentArray.push({ date: daicoStartDateConverted.getTime(), ether: spentValue });
       contributionArray.push({ date: daicoStartDateConverted.getTime(), ether: contributionValue });
       let tapValue = parseFloat(initialTapAmount) * 86400 * Math.pow(10, -18);

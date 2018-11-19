@@ -133,6 +133,7 @@ const SpendCurve = props => {
               }
             }
           },
+          boundaryGap: false,
           data: dates
         },
         {
@@ -156,6 +157,7 @@ const SpendCurve = props => {
               }
             }
           },
+          boundaryGap: false,
           data: dates
         }
       ],

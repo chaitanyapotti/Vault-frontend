@@ -55,33 +55,43 @@ const ReqType = props => {
       <Row>
         <Col lg={12} className="push--top text-right">
           {signinStatusFlag <= 3 ? (
-            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-              <div>
-                <LoadingButton style={{ padding: "0 40px" }} disabled type="danger">
-                  Deny
-                </LoadingButton>
-              </div>
-            </Tooltip>
+            <div className="hli">
+              <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+                <div>
+                  <LoadingButton style={{ padding: "0 40px" }} disabled type="danger">
+                    Deny
+                  </LoadingButton>
+                </div>
+              </Tooltip>
+            </div>
           ) : xfr1ButtonTransactionHash && xfr1ButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : xfr2ButtonTransactionHash && xfr2ButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : voted ? (
-            <LoadingButton style={{ padding: "0 40px" }} onClick={onRevokeXfrClick} loading={xfrButtonSpinning} disabled={!canXfrClick}>
-              Allow
-            </LoadingButton>
+            <div className="hli">
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onRevokeXfrClick} loading={xfrButtonSpinning} disabled={!canXfrClick}>
+                Allow
+              </LoadingButton>
+            </div>
           ) : (
-            <LoadingButton style={{ padding: "0 40px" }} onClick={onXfrClick} type="danger" loading={xfrButtonSpinning} disabled={!canXfrClick}>
-              Deny
-            </LoadingButton>
+            <div className="hli">
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onXfrClick} type="danger" loading={xfrButtonSpinning} disabled={!canXfrClick}>
+                Deny
+              </LoadingButton>
+            </div>
           )}
         </Col>
       </Row>

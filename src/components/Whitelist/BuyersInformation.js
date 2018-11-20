@@ -5,6 +5,7 @@ import { CUIFormInput, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import DPicker from "../Common/DPicker";
+import actionTypes from "../../action_types";
 
 import {
   addressLine1ChangedAction,
@@ -121,6 +122,27 @@ class BuyersInformation extends Component {
     const date = dateOfExpiration && dateOfExpiration.getDate();
     const newDate = new Date(year, month, date);
     return new Date(newDate.setDate(newDate.getDate() - 1));
+  };
+
+  getErrorMsg = propName => {
+    const { errors } = this.props || {};
+    if (errors) {
+      if (errors.hasOwnProperty(propName)) {
+        return errors[propName];
+      }
+      return "";
+    }
+    return "";
+  };
+
+  getEndMaxDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const date = today.getDate();
+    const newDate = new Date(year - 18, month, date);
+    console.log(newDate);
+    return newDate;
   };
 
   render() {
@@ -364,6 +386,7 @@ class BuyersInformation extends Component {
               label="Date of Birth"
               handleDateChange={this.onChangeDateOfBirth}
               selectedDate={dateOfBirth}
+              maxDate={this.getEndMaxDate()}
           />
           </Col>
         </Row>
@@ -420,7 +443,8 @@ const mapStateToProps = state => {
     email,
     gender,
     dateOfBirth,
-    citizenship
+    citizenship,
+    errors
   } = state.userRegistrationData || {};
   return {
     userLocalPublicAddress,
@@ -440,7 +464,8 @@ const mapStateToProps = state => {
     gender,
     dateOfBirth,
     citizenship,
-    userRegistrationData
+    userRegistrationData,
+    errors
   };
 };
 

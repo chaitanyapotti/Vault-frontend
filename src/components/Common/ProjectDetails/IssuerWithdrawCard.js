@@ -46,19 +46,23 @@ const IssuerWithdrawCard = props => {
             <div className="hli">
               <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
                 <div>
-                  <LoadingButton style={{padding: '0 40px'}} disabled>Withdraw</LoadingButton>
+                  <LoadingButton style={{ padding: "0 40px" }} disabled>
+                    Withdraw
+                  </LoadingButton>
                 </div>
               </Tooltip>
             </div>
           ) : withdrawButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : (
             <span className="hli">
-              <LoadingButton style={{padding: '0 40px'}} onClick={onWithdrawAmountClick} loading={withdrawButtonSpinning} disabled={!canWithdraw}>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onWithdrawAmountClick} loading={withdrawButtonSpinning} disabled={!canWithdraw}>
                 Withdraw
               </LoadingButton>
             </span>

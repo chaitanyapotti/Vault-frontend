@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
-import { formatFromWei } from "../../../helpers/common/projectDetailhelperFunctions";
+import { formatFromWei, Colors } from "../../../helpers/common/projectDetailhelperFunctions";
 
 class TokenChart extends Component {
   getOption = () => {
@@ -43,7 +43,27 @@ class TokenChart extends Component {
       tokenData.push({ value: formatFromWei(element.amount), name: element.description, selected: false });
     }
 
+    // /////// TO DEMONSTRATE COLOR POLICY ON LEFT SIDE OF DONUT
+    // for (let index = 0; index < rounds.length; index += 1) {
+    //   const element = rounds[index];
+    //   const price = formatFromWei(parseFloat(element.tokenCount) / parseFloat(element.tokenRate), 10) * etherPrice;
+    //   roundDollarData.push({ value: Math.round(price), name: `Round ${index + 1} Cap`, selected: index + 1 === roundNumber });
+    //   tokenData.push({ value: formatFromWei(element.tokenCount), name: `Round ${index + 1} Tokens`, selected: index + 1 === roundNumber });
+    // }
+    // let sumofwei = 0;
+    // for (let index = 0; index < foundationDetails.length; index += 1) {
+    //   const element = foundationDetails[index];
+    //   sumofwei += formatFromWei(element.amount);
+    // }
+    // for (let index = 0; index < 80; index += 1) {
+    //   const rndstrng = Math.random()
+    //     .toString(36)
+    //     .substr(2, 5);
+    //   legendData.push(rndstrng);
+    //   tokenData.push({ value: Math.round(sumofwei / 80), name: rndstrng, selected: false });
+    // }
     return {
+      color: Colors(tokenData.length - 3),
       tooltip: {
         trigger: "item",
         formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -59,7 +79,7 @@ class TokenChart extends Component {
           name: "Round Cap ($)",
           type: "pie",
           selectedMode: "single",
-          radius: ["0%", "50%"],
+          radius: ["0%", "35%"],
           label: {
             show: false
           },
@@ -68,7 +88,7 @@ class TokenChart extends Component {
         {
           name: "Token Count",
           type: "pie",
-          radius: ["60%", "80%"],
+          radius: ["55%", "80%"],
           label: {
             show: false
           },

@@ -4,7 +4,6 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
-import { ButtonComponent } from "../FormComponents";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const IssuerGovernanceName = props => {
@@ -92,11 +91,13 @@ const IssuerGovernanceName = props => {
               </Tooltip>
             </div>
           ) : startNewRoundButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : (
             <span className="hli">
               <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={startNewRoundButtonSpinning} disabled={!canStartNewRound}>
@@ -114,7 +115,9 @@ const IssuerGovernanceName = props => {
             </div>
           ) : (
             <span className="hli">
-              <ButtonComponent style={{ padding: "0 40px" }} onClick={onEditClick} label="Edit" />
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onEditClick}>
+                Edit
+              </LoadingButton>
             </span>
           )}
         </Col>

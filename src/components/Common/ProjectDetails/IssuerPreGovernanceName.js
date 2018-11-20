@@ -85,17 +85,21 @@ const IssuerPreGovernanceName = props => {
         <Col lg={6} className="text-right hl  ">
           {isPermissioned ? (
             startR1ButtonTransactionHash !== "" ? (
-              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                  Status
-                </LoadingButton>
-              </a>
+              <div className="hli">
+                <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                </a>
+              </div>
             ) : r1FinalizeButtonTransactionHash !== "" ? (
-              <a href={ensureHttpUrl(refundLink)} target="_blank" rel="noreferrer noopener">
-                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                  Status
-                </LoadingButton>
-              </a>
+              <div className="hli">
+                <a href={ensureHttpUrl(refundLink)} target="_blank" rel="noreferrer noopener">
+                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                </a>
+              </div>
             ) : StartRound1Visibility ? (
               <div className="hli">
                 <LoadingButton onClick={onStartR1Click} disabled={!StartRound1Enabled} loading={startR1ButtonSpinning}>

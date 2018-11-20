@@ -81,23 +81,29 @@ const ProjectPreStartName = props => {
         </Col>
         <Col lg={6} className="text-right   ">
           {signinStatusFlag < 3 ? (
-            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-              <div>
-                <LoadingButton style={{ padding: "0 40px" }} disabled>
-                  {buttonText}
-                </LoadingButton>
-              </div>
-            </Tooltip>
+            <div className="hli">
+              <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+                <div>
+                  <LoadingButton style={{ padding: "0 40px" }} disabled>
+                    {buttonText}
+                  </LoadingButton>
+                </div>
+              </Tooltip>
+            </div>
           ) : whitelistButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : buttonVisibility ? (
-            <LoadingButton onClick={onClick} loading={buttonSpinning}>
-              {buttonText}
-            </LoadingButton>
+            <div className="hli">
+              <LoadingButton onClick={onClick} loading={buttonSpinning}>
+                {buttonText}
+              </LoadingButton>
+            </div>
           ) : (
             <span>
               You are whitelisted <img src="/assets/Vault/whitelist.svg" alt="whitelist checked" width="20" height="20" />

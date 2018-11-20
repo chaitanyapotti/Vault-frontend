@@ -41,16 +41,8 @@ class Featuredproject extends Component {
       //   extra={extra}
       //   style={{ margin: "0 auto" }}
       // />
-      <CUICard className={classes.card}>
-        <CUICardMedia
-          component="img"
-          alt="daico"
-          onClick={() => this.onClick(projectId)}
-          className={classes.media}
-          height="200"
-          image={thumbnailUrl}
-          title="Contemplative Reptile"
-        />
+      <CUICard className={classes.card} onClick={() => this.onClick(projectId)}>
+        <CUICardMedia component="img" alt="daico" className={classes.media} height="200" image={thumbnailUrl} />
         <CUICardText>
           <div className="txt-xxl txt-dbld">{`${projectName} (${tokenTag})`}</div>
           <div className="push--top fnt-ps dscrptn-lins">{description}</div>

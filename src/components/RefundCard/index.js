@@ -33,17 +33,21 @@ const RefundCard = props => {
                   <Col lg={4}>
                     <div className="text--center">
                       {refundByKillButtonTransactionHash !== "" ? (
-                        <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-                          <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                            Status
-                          </LoadingButton>
-                        </a>
+                        <div className="hli">
+                          <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                            <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                              Status
+                            </LoadingButton>
+                          </a>
+                        </div>
                       ) : refundBySoftcapfailButtonTransactionHash !== "" ? (
-                        <a href={ensureHttpUrl(refundSoftLink)} target="_blank" rel="noreferrer noopener">
-                          <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                            Status
-                          </LoadingButton>
-                        </a>
+                        <div className="hli">
+                          <a href={ensureHttpUrl(refundSoftLink)} target="_blank" rel="noreferrer noopener">
+                            <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                              Status
+                            </LoadingButton>
+                          </a>
+                        </div>
                       ) : signinStatusFlag <= 3 ? (
                         <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
                           <div>

@@ -96,7 +96,7 @@ class ProjectDetailCrowdSale extends Component {
     const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) === web3.utils.toBN(tokenCount)) return `Round ${currentRoundNumber} Ended`;
+    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).eq(web3.utils.toBN(tokenCount))) return `Round ${currentRoundNumber} Ended`;
     // based on tokens sold
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
@@ -137,7 +137,7 @@ class ProjectDetailCrowdSale extends Component {
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
 
-    if (new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) < web3.utils.toBN(tokenCount))
+    if (new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).lt(web3.utils.toBN(tokenCount)))
       return true;
 
     return false;
@@ -148,7 +148,8 @@ class ProjectDetailCrowdSale extends Component {
     const [round1] = rounds || {};
     const { tokenCount } = round1 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (new Date(r1EndTime) < new Date() || (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) >= web3.utils.toBN(tokenCount)))
+    console.log(totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).gte(web3.utils.toBN(tokenCount)), "xxx");
+    if (new Date(r1EndTime) < new Date() || (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).gte(web3.utils.toBN(tokenCount))))
       return false;
 
     return true;

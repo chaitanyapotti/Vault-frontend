@@ -228,7 +228,7 @@ class ProjectDetailGovernance extends Component {
     const { currentRoundNumber, roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
     if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
-    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) === web3.utils.toBN(tokenCount)) return `Round ${currentRoundNumber} Ended`;
+    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).eq(web3.utils.toBN(tokenCount))) return `Round ${currentRoundNumber} Ended`;
 
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
@@ -413,7 +413,7 @@ class ProjectDetailGovernance extends Component {
     const round3 = rounds[roundNumber] || {};
     const { tokenCount } = round3 || {}; // tokens/wei
     const { totalTokensSold } = roundInfo || "";
-    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) >= web3.utils.toBN(tokenCount)) return false;
+    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).gte(web3.utils.toBN(tokenCount))) return false;
     return true;
   };
 
@@ -574,16 +574,17 @@ class ProjectDetailGovernance extends Component {
                 </Col>
                 <Col lg={6}>
                   {killFinalizeTransactionHash !== "" ? (
-                    <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-                      <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                        Status
-                      </LoadingButton>
-                    </a>
-                  ) : (
-                    <LoadingButton onClick={this.onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!this.killFinish()}>
-                      Kill Execute
-                    </LoadingButton>
-                  )}
+                    <div className="hli">
+                  <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                  </a>
+                  </div>):
+                  <LoadingButton onClick={this.onKillFinalizeClick} loading={killFinalizeButtonSpinning} disabled={!this.killFinish()}>
+                    Kill Execute
+                  </LoadingButton>
+                }
                 </Col>
               </Row>
             </Grid>

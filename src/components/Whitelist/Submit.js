@@ -61,11 +61,13 @@ class Submit extends Component {
                   )}
                 </div>
               ) : vaultMembershipRequestTransactionHash !== "" ? (
-                <a href={link} target="_blank" rel="noreferrer noopener">
-                  <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
-                    Status
-                  </LoadingButton>
-                </a>
+                <div className="hli">
+                  <a href={link} target="_blank" rel="noreferrer noopener">
+                    <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
+                      Status
+                    </LoadingButton>
+                  </a>
+                </div>
               ) : (
                 <div>
                   <Grid>

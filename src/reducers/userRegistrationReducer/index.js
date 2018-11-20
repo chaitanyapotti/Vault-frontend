@@ -72,7 +72,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         vaultMembershipRequested: action.payload,
-        vaultMembershipRequestChecked: true, 
+        vaultMembershipRequestChecked: true,
         activeStep: 7
       };
     }
@@ -109,7 +109,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         email: action.payload
-      }
+      };
     }
 
     case actionTypes.VAULT_MEMBERSHIP_CHECK: {
@@ -365,6 +365,22 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.DATE_OF_BIRTH_CHANGED: {
+      // today = new Date();
+      // currentYear = today.getFullYear();
+      // currentMonth = today.getMonth();
+      // currentDay = today.getDate();
+      // birth = new Date(action.payload);
+      // birthYear = birth.getFullYear();
+      // birthMonth = birth.getMonth();
+      // birthday = birth.getDate();
+      // age = currentYear - birthYear;
+      // ageMonth = currentMonth - birthMonth;
+      // ageDay = currentDay - birthday;
+      // if ((age === 18 && ageMonth <= 0 && ageDay <= 0) || age < 18) {
+      //   localErrors[actionTypes.DATE_OF_BIRTH_CHANGED] = "Age should be greater than 18";
+      // } else {
+      //   localErrors[actionTypes.DATE_OF_BIRTH_CHANGED] = "";
+      // }
       return {
         ...state,
         dateOfBirth: action.payload

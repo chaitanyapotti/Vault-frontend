@@ -92,10 +92,8 @@ class ProjectDetailCrowdSale extends Component {
   }
 
   getRoundText = () => {
-    const { rounds, roundInfo, currentRoundNumber } = this.props || {};
-    const [round1] = rounds || {};
-    const { tokenCount } = round1 || {}; // tokens/wei
-    const { totalTokensSold } = roundInfo || "";
+    const { roundInfo, currentRoundNumber } = this.props || {};
+    const { tokenCount, totalTokensSold } = roundInfo || "";
     if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).eq(web3.utils.toBN(tokenCount))) return `Round ${currentRoundNumber} Ended`;
     // based on tokens sold
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
@@ -132,11 +130,8 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   r1Finish = () => {
-    const { r1EndTime, rounds, roundInfo } = this.props || {};
-    const [round1] = rounds || {};
-    const { tokenCount } = round1 || {}; // tokens/wei
-    const { totalTokensSold } = roundInfo || "";
-
+    const { r1EndTime, roundInfo } = this.props || {};
+    const { tokenCount, totalTokensSold } = roundInfo || "";
     if (new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).lt(web3.utils.toBN(tokenCount)))
       return true;
 
@@ -144,11 +139,8 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   canBuy = () => {
-    const { r1EndTime, rounds, roundInfo } = this.props || {};
-    const [round1] = rounds || {};
-    const { tokenCount } = round1 || {}; // tokens/wei
-    const { totalTokensSold } = roundInfo || "";
-    console.log(totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).gte(web3.utils.toBN(tokenCount)), "xxx");
+    const { r1EndTime, roundInfo } = this.props || {};
+    const { tokenCount, totalTokensSold } = roundInfo || "";
     if (new Date(r1EndTime) < new Date() || (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).gte(web3.utils.toBN(tokenCount))))
       return false;
 

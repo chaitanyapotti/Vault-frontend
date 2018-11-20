@@ -211,12 +211,12 @@ export default function(state = initialState, action) {
       let nonSaleEntities = state.nonSaleEntities;
       let editEntity = nonSaleEntities.splice(action.payload[3], 1);
       var unallocIndex = 100
-      for (let obj in nonSaleEntities){
-        if (nonSaleEntities[obj].entityName==="Unallocated"){
-          unallocIndex = obj
+      for (const obj in nonSaleEntities) {
+        if (nonSaleEntities[obj].entityName === "Unallocated") {
+          unallocIndex = obj;
         }
       }
-      if (unallocIndex!==100){
+      if (unallocIndex !== 100) {
         nonSaleEntities.splice(unallocIndex, 1);
       }
       // if (nonSaleEntities.indexOf({ entityName: "Unallocated" }) != -1){
@@ -253,7 +253,7 @@ export default function(state = initialState, action) {
         if (unallocatedTokensPer - action.payload.entityPercentage < 0) {
           nonSaleEntities.push(slicedUnallocated[0])
           return { ...state, nonSaleEntities: nonSaleEntities}
-        } else {
+        } 
           nonSaleEntities.push(action.payload);
           if (unallocatedTokensPer - action.payload.entityPercentage> 0) {
             nonSaleEntities.push({
@@ -279,7 +279,7 @@ export default function(state = initialState, action) {
               unallocatedTokensPer: unallocatedTokensPer- action.payload.entityPercentage
             }
           
-        }
+        
       } else {
         return {
           ...state
@@ -549,7 +549,6 @@ export default function(state = initialState, action) {
         daicoStartDate: action.payload
       };
     }
-
 
     case actionTypes.DAICO_END_DATE_CHANGED: {
       return {

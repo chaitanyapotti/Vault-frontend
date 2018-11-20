@@ -408,12 +408,9 @@ class ProjectDetailGovernance extends Component {
   };
 
   canBuy = () => {
-    const { rounds, roundInfo, currentRoundNumber } = this.props || {};
-    const roundNumber = currentRoundNumber === "4" ? 2 : parseInt(currentRoundNumber, 10) - 1;
-    const round3 = rounds[roundNumber] || {};
-    const { tokenCount } = round3 || {}; // tokens/wei
-    const { totalTokensSold } = roundInfo || "";
-    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).gte(web3.utils.toBN(tokenCount))) return false;
+    const { roundInfo } = this.props || {};
+    const { tokenCount, totalTokensSold } = roundInfo || "";
+    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).eq(web3.utils.toBN(tokenCount))) return false;
     return true;
   };
 

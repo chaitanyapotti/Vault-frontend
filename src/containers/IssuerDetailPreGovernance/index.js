@@ -28,10 +28,8 @@ class IssuerDetailPreGovernance extends Component {
   componentDidUpdate(prevProps) {}
 
   r1Finish = () => {
-    const { r1EndTime, rounds, roundInfo } = this.props || {};
-    const [round1] = rounds || {};
-    const { tokenCount } = round1 || {}; // tokens/wei
-    const { totalTokensSold } = roundInfo || "";
+    const { r1EndTime, roundInfo } = this.props || {};
+    const { tokenCount, totalTokensSold } = roundInfo || "";
     if (new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).lt(web3.utils.toBN(tokenCount)))
       return true;
 

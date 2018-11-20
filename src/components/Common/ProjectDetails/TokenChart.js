@@ -1,38 +1,104 @@
 import React, { Component } from "react";
+import ReactEcharts from "echarts-for-react";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { formatFromWei } from "../../../helpers/common/projectDetailhelperFunctions";
-import PieChartComponent from "../PieChartComponent";
 
 class TokenChart extends Component {
-  render() {
-    const { rounds, foundationDetails } = this.props || {};
-    let i = 0;
-    let totalTokens = 0;
+  getOption = () => {
+    const { rounds, foundationDetails, prices, currentRoundNumber } = this.props || {};
+    const { ETH } = prices || {};
+    const { price: etherPrice } = ETH || {};
+    // let i = 0;
+    // let totalTokens = 0;
+    // for (let index = 0; index < rounds.length; index += 1) {
+    //   const element = rounds[index];
+    //   totalTokens += formatFromWei(element.tokenCount, 0);
+    // }
+    // for (let index = 0; index < foundationDetails.length; index += 1) {
+    //   const element = foundationDetails[index];
+    //   totalTokens += formatFromWei(element.amount, 0);
+    // }
+    // const interDetails = rounds.map(round => {
+    //   const { tokenCount } = round || 0;
+    //   i += 1;
+    //   return { entityPercentage: (formatFromWei(tokenCount) / totalTokens) * 100, entityName: `Round ${i}` };
+    // });
+    // const foundDetails = foundationDetails.map(foundationRequest => {
+    //   const { amount = 0, description = "team" } = foundationRequest;
+    //   return { entityPercentage: (formatFromWei(amount) / totalTokens) * 100, entityName: description };
+    // });
+    const roundNumber = currentRoundNumber === "4" ? 3 : parseInt(currentRoundNumber, 10);
+    const tokenData = [];
+    const legendData = ["Round 1 Cap", "Round 2 Cap", "Round 3 Cap", "Round 1 Tokens", "Round 2 Tokens", "Round 3 Tokens"];
+    const roundDollarData = [];
     for (let index = 0; index < rounds.length; index += 1) {
       const element = rounds[index];
-      totalTokens += formatFromWei(element.tokenCount, 0);
+      const price = formatFromWei(parseFloat(element.tokenCount) / parseFloat(element.tokenRate), 10) * etherPrice;
+      roundDollarData.push({ value: Math.round(price), name: `Round ${index + 1} Cap`, selected: index + 1 === roundNumber });
+      tokenData.push({ value: formatFromWei(element.tokenCount), name: `Round ${index + 1} Tokens`, selected: index + 1 === roundNumber });
     }
     for (let index = 0; index < foundationDetails.length; index += 1) {
       const element = foundationDetails[index];
-      totalTokens += formatFromWei(element.amount, 0);
+      legendData.push(element.description);
+      tokenData.push({ value: formatFromWei(element.amount), name: element.description, selected: false });
     }
-    const interDetails = rounds.map(round => {
-      const { tokenCount } = round || 0;
-      i += 1;
-      return { entityPercentage: (formatFromWei(tokenCount) / totalTokens) * 100, entityName: `Round ${i}` };
-    });
-    const foundDetails = foundationDetails.map(foundationRequest => {
-      const { amount = 0, description = "team" } = foundationRequest;
-      return { entityPercentage: (formatFromWei(amount) / totalTokens) * 100, entityName: description };
-    });
 
+    return {
+      tooltip: {
+        trigger: "item",
+        formatter: "{a} <br/>{b}: {c} ({d}%)"
+      },
+      legend: {
+        show: false,
+        orient: "vertical",
+        x: "left",
+        data: legendData
+      },
+      series: [
+        {
+          name: "Round Cap ($)",
+          type: "pie",
+          selectedMode: "single",
+          radius: ["0%", "50%"],
+          label: {
+            show: false
+          },
+          data: roundDollarData
+        },
+        {
+          name: "Token Count",
+          type: "pie",
+          radius: ["60%", "80%"],
+          label: {
+            show: false
+          },
+          data: tokenData
+        }
+      ]
+    };
+  };
+
+  render() {
     return (
       <div>
-        <div className="txt-xl text--primary">Token Distribution Chart</div>
+        <div className="txt-xxxl text--primary">Token Distribution Chart</div>
+        <Row />
         <Row>
           <Col xs={12} lg={6}>
             <div>
-              <PieChartComponent nonSaleEntities={foundDetails} saleEntities={interDetails} totalTokens={totalTokens} totalSaleTokens={parseInt(totalTokens/2)}/>
+              <ReactEcharts
+                option={this.getOption()}
+                notMerge
+                lazyUpdate
+                style={{ height: "30em", width: "30em", padding: "0px" }}
+                opts={{ renderer: "svg" }}
+              />
+              {/* <PieChartComponent
+                nonSaleEntities={foundDetails}
+                saleEntities={interDetails}
+                totalTokens={totalTokens}
+                totalSaleTokens={parseInt(totalTokens / 2, 10)}
+              /> */}
               {/* <PieChart width={400} height={500}>
                 <Legend />
                 <Tooltip />

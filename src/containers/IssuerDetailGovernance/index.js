@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { IssuerGovernanceName, IssuerPDetailGovernance, IssuerTapCard, IssuerFundReq } from "../../components/Common/ProjectDetails";
+import { CUICard } from "../../helpers/material-ui";
+import { IssuerGovernanceName, IssuerPDetailGovernance, IssuerTapCard, IssuerFundReq, TokenChart } from "../../components/Common/ProjectDetails";
 import { getRoundTokensSold, buyTokens, getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
 import {
   startNewRound,
@@ -46,8 +47,7 @@ import { fetchPrice } from "../../actions/priceFetchActions/index";
 import XfrForm from "../../components/Common/ProjectDetails/XfrForm";
 import IssuerWithdrawCard from "../../components/Common/ProjectDetails/IssuerWithdrawCard";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
-
-const bigInt = require("big-integer");
+import web3 from "../../helpers/web3";
 
 class IssuerDetailGovernance extends Component {
   componentDidMount() {
@@ -125,7 +125,8 @@ class IssuerDetailGovernance extends Component {
     const { roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
     if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
-    if (bigInt(totalTokensSold).equals(bigInt(tokenCount))) return `Round ${currentRoundNumber} Completed`;
+    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) === web3.utils.toBN(tokenCount))
+      return `Round ${currentRoundNumber} Completed`;
 
     return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
       formatFromWei(tokenCount),
@@ -159,7 +160,7 @@ class IssuerDetailGovernance extends Component {
   canStartNewRound = () => {
     const { roundInfo, currentRoundNumber } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
-    return bigInt(totalTokensSold).equals(bigInt(tokenCount)) && currentRoundNumber <= "3";
+    return totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold) === web3.utils.toBN(tokenCount) && currentRoundNumber <= "3";
   };
 
   onStartNewRoundClick = () => {
@@ -407,7 +408,11 @@ class IssuerDetailGovernance extends Component {
       isXfr2DescriptionEditable,
       xfr1Description,
       xfr2Description,
-      thumbnailUrl
+      thumbnailUrl,
+      rounds,
+      foundationDetails,
+      currentRoundNumber,
+      prices
     } = this.props || {};
     return (
       <Grid>
@@ -517,6 +522,10 @@ class IssuerDetailGovernance extends Component {
             onSaveXfr1DescriptionClick={this.onSaveXfr1DescriptionClick}
             onSaveXfr2DescriptionClick={this.onSaveXfr2DescriptionClick}
           />
+
+          <CUICard style={{ padding: "40px 50px" }}>
+            <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
+          </CUICard>
           {/* </Col>
         </Row> */}
         </MasonaryLayout>

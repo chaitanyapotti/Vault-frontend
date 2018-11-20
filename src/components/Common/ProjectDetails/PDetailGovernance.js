@@ -27,7 +27,8 @@ const PDetailGovernance = props => {
     onKillPollsHistoryClick,
     killButtonTransactionHash,
     r1EndTime,
-    pollFactoryAddress
+    pollFactoryAddress,
+    unlockTokensLoading
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${killButtonTransactionHash}`;
   const etherscanLink = `https://etherscan.io/address/${pollFactoryAddress}`;
@@ -106,9 +107,15 @@ const PDetailGovernance = props => {
 
       <Row>
         <Col lg={6} className="push--top">
-          <LoadingButton style={{ padding: "0 40px" }} onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
-            Unlock All Tokens
-          </LoadingButton>
+          {!unlockTokensLoading ? (
+            <LoadingButton style={{ padding: "0 40px" }} onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
+              Unlock All Tokens
+            </LoadingButton>
+          ) : (
+            <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("pending")}>
+              Pending
+            </LoadingButton>
+          )}
         </Col>
         <Col lg={6} className="push--top text-right">
           {signinStatusFlag <= 3 ? (

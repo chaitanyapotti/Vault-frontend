@@ -53,7 +53,9 @@ export const initialState = {
   killButtonTransactionHash: "",
   killFinalizeTransactionHash: "",
   xfr2ButtonTransactionHash: "",
-  tapButtonTransactionHash: ""
+  tapButtonTransactionHash: "",
+  unlockTokensData: {},
+  unlockTokensLoading: false
 };
 
 export default (state = initialState, action) => {
@@ -78,6 +80,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         killFinalizeTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.UNLOCK_TOKENS_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        unlockTokensLoading: receipt
       };
     }
 
@@ -264,6 +274,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         killFinalizeButtonSpinning: receipt
+      };
+    }
+    case actionTypes.UNLOCK_TOKENS_DATA_FETCHED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        unlockTokensData: receipt
       };
     }
     default:

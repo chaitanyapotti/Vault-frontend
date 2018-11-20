@@ -191,6 +191,75 @@ export const xfrPollsHistoryFetchFailed = () => ({
   type: actionTypes.XFR_POLLS_HISTORY_FAILED
 });
 
+export const unlockTokensDataFetch = data => ({
+  payload: { receipt: data },
+  type: actionTypes.UNLOCK_TOKENS_DATA_FETCHED
+});
+
+export const isUnlockTokensButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.UNLOCK_TOKENS_BUTTON_SPINNING
+});
+
+export const unlockTokens = (data, version, userLocalPublicAddress, pollFactoryAddress) => async dispatch => {
+  dispatch(isUnlockTokensButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(async ipollData => {
+      const { data: pollData } = ipollData.data || {};
+      const { abi } = pollData || {};
+      const gasPrice = await web3.eth.getGasPrice();
+      const promiseArray = [];
+      for (let index = 0; index < data.length; index += 1) {
+        const element = data[index];
+        const ipollInstance = new web3.eth.Contract(abi, element.address, { from: userLocalPublicAddress });
+        promiseArray.push(
+          ipollInstance.methods.revokeVote().send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        );
+      }
+      Promise.all(promiseArray)
+        .then(response => {
+          console.log(response);
+          dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getKillConsensus(version, pollFactoryAddress));
+          dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getTapPollConsensus(version, pollFactoryAddress));
+          dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+          dispatch(getXfrData(version, pollFactoryAddress));
+          dispatch(isUnlockTokensButtonSpinning(false));
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isUnlockTokensButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isKillButtonSpinning(false));
+    });
+};
+
+export const getUnlockTokensData = (pollFactoryAddress, userLocalPublicAddress) => dispatch => {
+  axios
+    .get(`${config.api_base_url}/projectweb3/lockedtokens`, {
+      params: { pollfactoryaddress: pollFactoryAddress, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      const { status, data: pollHistory } = response || {};
+      const { data } = pollHistory || {};
+      if (status === 200) {
+        dispatch(unlockTokensDataFetch(data));
+      } else {
+        dispatch(unlockTokensDataFetch({}));
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch(unlockTokensDataFetch({}));
+    });
+};
+
 export const getKillPollsHistory = pollFactoryAddress => async dispatch => {
   // await web3.eth.net.getNetworkType();
   axios
@@ -476,6 +545,7 @@ export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress,
               transactionHash,
               () => {
                 dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
                 dispatch(getKillConsensus(version, pollFactoryAddress));
                 dispatch({
                   payload: { transactionHash: "" },
@@ -540,6 +610,7 @@ export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAd
               transactionHash,
               () => {
                 dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
                 dispatch(getKillConsensus(version, pollFactoryAddress));
                 dispatch({
                   payload: { transactionHash: "" },
@@ -621,6 +692,7 @@ export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress, 
               transactionHash,
               () => {
                 dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
                 dispatch(getTapPollConsensus(version, pollFactoryAddress));
                 dispatch({
                   payload: { transactionHash: "" },
@@ -681,6 +753,7 @@ export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAdd
               transactionHash,
               () => {
                 dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
                 dispatch(getTapPollConsensus(version, pollFactoryAddress));
                 dispatch({
                   payload: { transactionHash: "" },
@@ -762,6 +835,7 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
               transactionHash,
               () => {
                 dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
                 dispatch(getXfrData(version, pollFactoryAddress));
                 dispatch({
                   payload: { transactionHash: "" },
@@ -827,6 +901,7 @@ export const voteInXfr2Poll = (version, contractAddress, userLocalPublicAddress,
               transactionHash,
               () => {
                 dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
                 dispatch(getXfrData(version, pollFactoryAddress));
                 dispatch({
                   payload: { transactionHash: "" },
@@ -887,6 +962,7 @@ export const revokeVoteInXfr1Poll = (version, contractAddress, userLocalPublicAd
               transactionHash,
               () => {
                 dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
                 dispatch(getXfrData(version, pollFactoryAddress));
                 dispatch({
                   payload: { transactionHash: "" },
@@ -946,6 +1022,7 @@ export const revokeVoteInXfr2Poll = (version, contractAddress, userLocalPublicAd
               transactionHash,
               () => {
                 dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
                 dispatch(getXfrData(version, pollFactoryAddress));
                 dispatch({
                   payload: { transactionHash: "" },

@@ -41,7 +41,9 @@ import {
   getTapPollsHistory,
   getXfrPollsHistory,
   getSpendCurveData,
-  getVoteHistogramData
+  getVoteHistogramData,
+  getUnlockTokensData,
+  unlockTokens
 } from "../../actions/projectDetailGovernanceActions/index";
 import {
   formatFromWei,
@@ -130,7 +132,8 @@ class ProjectDetailGovernance extends Component {
       getTapPollsHistory: fetchTapPollsHistory,
       getXfrPollsHistory: fetchXfrPollsHistory,
       getSpendCurveData: fetchSpendCurveData,
-      getVoteHistogramData: fetchVoteHistogramData
+      getVoteHistogramData: fetchVoteHistogramData,
+      getUnlockTokensData: fetchUnlockTokensData
     } = this.props || {};
     priceFetch("ETH");
     priceFetch(tokenTag);
@@ -156,6 +159,7 @@ class ProjectDetailGovernance extends Component {
       fetchKillPollVote(version, pollFactoryAddress, userLocalPublicAddress);
       fetchTapPollVote(version, pollFactoryAddress, userLocalPublicAddress);
       fetchXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress);
+      fetchUnlockTokensData(pollFactoryAddress, userLocalPublicAddress);
     }
   }
 
@@ -172,7 +176,8 @@ class ProjectDetailGovernance extends Component {
       getTokenBalance: fetchTokenBalance,
       getKillPollVote: fetchKillPollVote,
       getTapPollVote: fetchTapPollVote,
-      getXfrPollVote: fetchXfrPollVote
+      getXfrPollVote: fetchXfrPollVote,
+      getUnlockTokensData: fetchUnlockTokensData
     } = this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
       checkWhiteListStatus(version, membershipAddress, localAddress);
@@ -180,6 +185,7 @@ class ProjectDetailGovernance extends Component {
       fetchKillPollVote(version, pollFactoryAddress, localAddress);
       fetchTapPollVote(version, pollFactoryAddress, localAddress);
       fetchXfrPollVote(version, pollFactoryAddress, localAddress);
+      fetchUnlockTokensData(pollFactoryAddress, localAddress);
     }
   }
 
@@ -427,54 +433,19 @@ class ProjectDetailGovernance extends Component {
   };
 
   canUnlockTokens = () => {
-    const { xfrVoteData, tapVoteData, killVoteData } = this.props || {};
-    const { voted: killVoted } = killVoteData || {};
-    const { voted: tapVoted } = tapVoteData || {};
-    const { voted: xfr1Voted } = xfrVoteData[0] || {};
-    const { voted: xfr2Voted } = xfrVoteData[1] || {};
-    return killVoted === "true" || tapVoted === "true" || xfr1Voted === true || xfr2Voted === true;
+    const { unlockTokensData } = this.props || {};
+    return unlockTokensData && unlockTokensData.length > 0;
   };
 
   unlockTokensClick = () => {
-    const { xfrVoteData, tapVoteData, killVoteData } = this.props || {};
-    const { voted: killVoted } = killVoteData || {};
-    const { voted: tapVoted } = tapVoteData || {};
-    const { voted: xfr1Voted } = xfrVoteData[0] || {};
-    const { voted: xfr2Voted } = xfrVoteData[1] || {};
-    if (killVoted === "true") {
-      this.onRevokeKillClick();
-    }
-    if (tapVoted === "true") {
-      this.onRevokeTapClick();
-    }
-    if (xfr1Voted === true) {
-      this.onRevokeXfr1Click();
-    }
-    if (xfr2Voted === true) {
-      this.onRevokeXfr2Click();
-    }
+    const { unlockTokensData, unlockTokens: unlockTokensAction, version, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
+    unlockTokensAction(unlockTokensData, version, userLocalPublicAddress, pollFactoryAddress);
+    this.handleUnlockTokensClose();
   };
 
   unlockPollsCount = () => {
-    const { xfrVoteData, tapVoteData, killVoteData } = this.props || {};
-    let pollCount = 0;
-    const { voted: killVoted } = killVoteData || {};
-    const { voted: tapVoted } = tapVoteData || {};
-    const { voted: xfr1Voted } = xfrVoteData[0] || {};
-    const { voted: xfr2Voted } = xfrVoteData[1] || {};
-    if (killVoted === "true") {
-      pollCount += 1;
-    }
-    if (tapVoted === "true") {
-      pollCount += 1;
-    }
-    if (xfr1Voted === true) {
-      pollCount += 1;
-    }
-    if (xfr2Voted === true) {
-      pollCount += 1;
-    }
-    return pollCount;
+    const { unlockTokensData } = this.props || {};
+    return unlockTokensData ? unlockTokensData.length : 0;
   };
 
   render() {
@@ -541,7 +512,8 @@ class ProjectDetailGovernance extends Component {
       foundationDetails,
       prices,
       contributionArray,
-      contriArrayReceived
+      contriArrayReceived,
+      unlockTokensLoading
     } = this.props || {};
     const {
       modalOpen,
@@ -672,6 +644,7 @@ class ProjectDetailGovernance extends Component {
             killButtonTransactionHash={killButtonTransactionHash}
             r1EndTime={r1EndTime}
             pollFactoryAddress={pollFactoryAddress}
+            unlockTokensLoading={unlockTokensLoading}
           />
           {/* </Col>
           </Row> */}
@@ -842,12 +815,15 @@ const mapStateToProps = state => {
     xfr2ButtonTransactionHash,
     killButtonTransactionHash,
     tapButtonTransactionHash,
-    killFinalizeTransactionHash
+    killFinalizeTransactionHash,
+    unlockTokensData,
+    unlockTokensLoading
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { prices } = fetchPriceReducer || {};
-  const { spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray, contributionArray, contriArrayReceived } = state.deployerReducer || {};
+  const { spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray, contributionArray, contriArrayReceived } =
+    state.deployerReducer || {};
   const { buyButtonTransactionHash, buyAmount } = projectCrowdSaleReducer;
   return {
     etherCollected,
@@ -898,7 +874,9 @@ const mapStateToProps = state => {
     killFinalizeTransactionHash,
     buyAmount,
     contributionArray,
-    contriArrayReceived
+    contriArrayReceived,
+    unlockTokensData,
+    unlockTokensLoading
   };
 };
 
@@ -936,7 +914,9 @@ const mapDispatchToProps = dispatch =>
       getXfrPollsHistory,
       getSpendCurveData,
       getVoteHistogramData,
-      buyAmountChangedAction
+      buyAmountChangedAction,
+      getUnlockTokensData,
+      unlockTokens
     },
     dispatch
   );

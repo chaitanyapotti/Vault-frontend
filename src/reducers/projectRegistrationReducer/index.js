@@ -4,12 +4,7 @@ import actionTypes from "../../action_types";
 import {
   validateAdminName,
   validateEmail,
-  validateTwitterLink,
-  validateFacebookLink,
   validateWebsiteUrl,
-  validateGitLink,
-  validateMediumLink,
-  validateTelegramLink,
   validateProjectNameLength,
   validateTokenTagLength,
   validateMaxEtherContribution,
@@ -35,7 +30,7 @@ export const initialState = {
   telegramLink: "",
   githubLink: "",
   mediumLink: "",
-  facebookLink: "",
+  redditLink: "",
   twitterLink: "",
   initialFundRelease: "",
   daicoRounds: "",
@@ -497,10 +492,10 @@ export default function(state = initialState, action) {
       };
     }
 
-    case actionTypes.FACEBOOK_LINK_CHANGED: {
+    case actionTypes.REDDIT_LINK_CHANGED: {
       return {
         ...state,
-        facebookLink: action.payload
+        redditLink: action.payload
       };
     }
 

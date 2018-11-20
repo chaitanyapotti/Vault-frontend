@@ -14,7 +14,7 @@ import {
   telegramLinkChangedAction,
   githubLinkChangedAction,
   mediumLinkChangedAction,
-  facebookLinkChangedAction,
+  redditLinkChangedAction,
   twitterLinkChangedAction,
   teamAddressChangedAction,
   whitepaperChangedAction,
@@ -67,7 +67,7 @@ class IdentityDetails extends React.Component {
   };
 
   onChangeFbLink = e => {
-    this.props.facebookLinkChangedAction(e.target.value);
+    this.props.redditLinkChangedAction(e.target.value);
   };
 
   onChangeTwtLink = e => {
@@ -124,7 +124,7 @@ class IdentityDetails extends React.Component {
       projectDescription,
       twitterLink,
       githubLink,
-      facebookLink,
+      redditLink,
       telegramLink,
       mediumLink,
       teamAddress,
@@ -288,13 +288,13 @@ class IdentityDetails extends React.Component {
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
                 full
-                inputName="Facebook Link"
-                inputLabel="Facebook Link"
-                inputPlaceholder="Eg. https://www.facebook.com/electusnetwork/"
-                inputValue={facebookLink}
+                inputName="Reddit Link"
+                inputLabel="Reddit Link"
+                inputPlaceholder="Eg. https://www.reddit.com/r/ElectusNetwork/"
+                inputValue={redditLink}
                 onChange={this.onChangeFbLink}
-                error={!!this.getErrorMsg(actionTypes.FACEBOOK_LINK_CHANGED)}
-                helperText={this.getErrorMsg(actionTypes.FACEBOOK_LINK_CHANGED)}
+                error={!!this.getErrorMsg(actionTypes.REDDIT_LINK_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.REDDIT_LINK_CHANGED)}
               />
             </Col>
             <Col xs={12} lg={6}>
@@ -371,7 +371,7 @@ const mapStateToProps = state => {
     telegramLink,
     githubLink,
     mediumLink,
-    facebookLink,
+    redditLink,
     twitterLink,
     teamAddress,
     whitepaperPDF,
@@ -394,7 +394,7 @@ const mapStateToProps = state => {
     telegramLink,
     githubLink,
     mediumLink,
-    facebookLink,
+    redditLink,
     twitterLink,
     teamAddress,
     whitepaperPDF,
@@ -421,7 +421,7 @@ const mapDispatchToProps = dispatch =>
       telegramLinkChangedAction,
       githubLinkChangedAction,
       mediumLinkChangedAction,
-      facebookLinkChangedAction,
+      redditLinkChangedAction,
       twitterLinkChangedAction,
       teamAddressChangedAction,
       whitepaperChangedAction,

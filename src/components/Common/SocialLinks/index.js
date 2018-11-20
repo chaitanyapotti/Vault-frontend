@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref"
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const images = {
   github: "/assets/Footer/github.png",
   telegram: "/assets/Footer/telegram.png",
   medium: "/assets/Footer/medium.png",
-  facebook: "/assets/Footer/fb.png",
+  reddit: "/assets/Footer/reddit.png",
   twitter: "/assets/Footer/twitter.png"
 };
 
@@ -32,8 +32,8 @@ class SocialLinks extends Component {
               </a>
             </td>
             <td>
-              <a target="_blank" href={ensureHttpUrl(urls.facebook)} rel="noopener noreferrer">
-                <img id="fb" className="push--left" src={images.facebook} width="20" height="20" alt="facebook" />
+              <a target="_blank" href={ensureHttpUrl(urls.reddit)} rel="noopener noreferrer">
+                <img id="reddit" className="push--left" src={images.reddit} width="20" height="20" alt="reddit" />
               </a>
             </td>
             <td>

@@ -31,7 +31,7 @@ const PDetailGovernance = props => {
     unlockTokensLoading
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${killButtonTransactionHash}`;
-  const etherscanLink = `https://etherscan.io/address/${pollFactoryAddress}`;
+  const etherscanLink = `https://rinkeby.etherscan.io/address/${pollFactoryAddress}`;
   return (
     <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
       <Row>

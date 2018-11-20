@@ -34,7 +34,7 @@ const ProjectGovernanceName = props => {
   } = props || {};
   const { website } = urls;
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
-  const etherscanLink = `https://etherscan.io/address/${daicoTokenAddress}`;
+  const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>

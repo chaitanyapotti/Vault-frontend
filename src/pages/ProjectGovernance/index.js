@@ -153,7 +153,7 @@ class ProjectGovernance extends Component {
       );
     }
 
-    if (treasuryStateNumber === "3" || currentRoundNumber === "2" || currentRoundNumber === "3" || currentRoundNumber === "4") {
+    if (treasuryStateNumber === "3" && (currentRoundNumber === "2" || currentRoundNumber === "3" || currentRoundNumber === "4")) {
       return (
         <div style={{ marginBottom: "50px" }}>
           <ProjectDetailGovernance

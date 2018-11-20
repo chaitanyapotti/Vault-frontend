@@ -412,7 +412,8 @@ class IssuerDetailGovernance extends Component {
       rounds,
       foundationDetails,
       currentRoundNumber,
-      prices
+      prices,
+      roundInfo
     } = this.props || {};
     return (
       <Grid>
@@ -524,7 +525,13 @@ class IssuerDetailGovernance extends Component {
           />
 
           <CUICard style={{ padding: "40px 50px" }}>
-            <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
+            <TokenChart
+              rounds={rounds}
+              foundationDetails={foundationDetails}
+              prices={prices}
+              currentRoundNumber={currentRoundNumber}
+              roundInfo={roundInfo}
+            />
           </CUICard>
           {/* </Col>
         </Row> */}

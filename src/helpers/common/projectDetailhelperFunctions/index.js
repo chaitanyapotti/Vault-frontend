@@ -90,7 +90,7 @@ const Colors = i => {
   let greyHex;
   let greyInt;
   if (i > 15) {
-    var hex;
+    let hex;
     const excess = i - 15;
     for (let j = 0; j < excess; j += 1) {
       greyInt = Math.round((j + 1) * (256 / (excess + 1)));
@@ -99,7 +99,8 @@ const Colors = i => {
       Palette.push(greyHex);
     }
   }
-  return Palette.splice(0, 6 + i);
+  const colorArray = ["#3d3d3d", "#ffffff", "#3d3d3d", "#ffffff"].concat(Palette.splice(0, 6 + i));
+  return colorArray;
 };
 
 const contributionDataConverted = contributionData => {

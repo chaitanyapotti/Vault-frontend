@@ -11,7 +11,13 @@ import {
   VoteHistogram,
   TokenChart
 } from "../../components/Common/ProjectDetails";
-import { getRoundTokensSold, buyTokens, getTokenBalance, buyAmountChangedAction } from "../../actions/projectCrowdSaleActions/index";
+import {
+  getRoundTokensSold,
+  buyTokens,
+  getTokenBalance,
+  buyAmountChangedAction,
+  getEtherCollected
+} from "../../actions/projectCrowdSaleActions/index";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
@@ -133,7 +139,8 @@ class ProjectDetailGovernance extends Component {
       getXfrPollsHistory: fetchXfrPollsHistory,
       getSpendCurveData: fetchSpendCurveData,
       getVoteHistogramData: fetchVoteHistogramData,
-      getUnlockTokensData: fetchUnlockTokensData
+      getUnlockTokensData: fetchUnlockTokensData,
+      getEtherCollected: fetchEtherCollected
     } = this.props || {};
     priceFetch("ETH");
     priceFetch(tokenTag);
@@ -153,6 +160,7 @@ class ProjectDetailGovernance extends Component {
     fetchTapPollConsensus(version, pollFactoryAddress);
     fetchCurrentTap(version, pollFactoryAddress);
     fetchXfrData(version, pollFactoryAddress);
+    fetchEtherCollected(version, pollFactoryAddress);
     if (signinStatusFlag > 2) {
       checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
       fetchTokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
@@ -711,7 +719,13 @@ class ProjectDetailGovernance extends Component {
             projectHealth={projectHealth}
           />
           <CUICard style={{ padding: "40px 50px" }}>
-            <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
+            <TokenChart
+              rounds={rounds}
+              foundationDetails={foundationDetails}
+              prices={prices}
+              currentRoundNumber={currentRoundNumber}
+              roundInfo={roundInfo}
+            />
           </CUICard>
 
           {/* </Col>
@@ -915,7 +929,8 @@ const mapDispatchToProps = dispatch =>
       getVoteHistogramData,
       buyAmountChangedAction,
       getUnlockTokensData,
-      unlockTokens
+      unlockTokens,
+      getEtherCollected
     },
     dispatch
   );

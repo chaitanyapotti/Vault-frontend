@@ -246,7 +246,13 @@ class ProjectDetailCrowdSale extends Component {
         <Row className="push--top">
           <Col xs={12} lg={6}>
             <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
-              <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
+              <TokenChart
+                rounds={rounds}
+                foundationDetails={foundationDetails}
+                prices={prices}
+                currentRoundNumber={currentRoundNumber}
+                roundInfo={roundInfo}
+              />
             </CUICard>
           </Col>
         </Row>

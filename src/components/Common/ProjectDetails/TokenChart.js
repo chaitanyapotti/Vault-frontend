@@ -5,7 +5,7 @@ import { formatFromWei, Colors } from "../../../helpers/common/projectDetailhelp
 
 class TokenChart extends Component {
   getOption = () => {
-    const { rounds, foundationDetails, prices, currentRoundNumber } = this.props || {};
+    const { rounds, foundationDetails, prices, currentRoundNumber, roundInfo } = this.props || {};
     const { ETH } = prices || {};
     const { price: etherPrice } = ETH || {};
     // let i = 0;
@@ -27,22 +27,40 @@ class TokenChart extends Component {
     //   const { amount = 0, description = "team" } = foundationRequest;
     //   return { entityPercentage: (formatFromWei(amount) / totalTokens) * 100, entityName: description };
     // });
-    const roundNumber = currentRoundNumber === "4" ? 3 : parseInt(currentRoundNumber, 10);
+    const roundNumber = currentRoundNumber === "4" ? 3 : currentRoundNumber === "0" ? 1 : parseInt(currentRoundNumber, 10);
     const tokenData = [];
     const legendData = ["Round 1 Cap", "Round 2 Cap", "Round 3 Cap", "Round 1 Tokens", "Round 2 Tokens", "Round 3 Tokens"];
     const roundDollarData = [];
+    let tokenSold = 0;
+    let totalTokens = 0;
+    let totalCollectableEther = 0;
+    let etherCollected = 0;
+    for (let index = 0; index < roundNumber - 1; index += 1) {
+      const element = rounds[index];
+      tokenSold += formatFromWei(element.tokenCount);
+      etherCollected += (formatFromWei(parseFloat(element.tokenCount), 10) / parseFloat(element.tokenRate)) * etherPrice;
+    }
+    tokenSold += roundInfo ? formatFromWei(roundInfo.totalTokensSold) : 0;
+    etherCollected += roundInfo
+      ? (formatFromWei(parseFloat(roundInfo.totalTokensSold), 10) / parseFloat(rounds[roundNumber - 1].tokenRate)) * etherPrice
+      : 0;
     for (let index = 0; index < rounds.length; index += 1) {
       const element = rounds[index];
+      totalTokens += formatFromWei(element.tokenCount);
       const price = formatFromWei(parseFloat(element.tokenCount) / parseFloat(element.tokenRate), 10) * etherPrice;
+      totalCollectableEther += price;
       roundDollarData.push({ value: Math.round(price), name: `Round ${index + 1} Cap`, selected: index + 1 === roundNumber });
       tokenData.push({ value: formatFromWei(element.tokenCount), name: `Round ${index + 1} Tokens`, selected: index + 1 === roundNumber });
     }
     for (let index = 0; index < foundationDetails.length; index += 1) {
       const element = foundationDetails[index];
+      totalTokens += formatFromWei(element.amount);
       legendData.push(element.description);
       tokenData.push({ value: formatFromWei(element.amount), name: element.description, selected: false });
     }
-
+    const tokenUnsold = totalTokens - tokenSold;
+    etherCollected = Math.round(etherCollected);
+    const etherUnCollected = Math.round(totalCollectableEther) - etherCollected;
     // /////// TO DEMONSTRATE COLOR POLICY ON LEFT SIDE OF DONUT
     // for (let index = 0; index < rounds.length; index += 1) {
     //   const element = rounds[index];
@@ -75,6 +93,24 @@ class TokenChart extends Component {
         data: legendData
       },
       series: [
+        {
+          name: "Dollar Value",
+          type: "pie",
+          radius: ["45%", "47%"],
+          label: {
+            show: false
+          },
+          data: [{ value: etherCollected, name: "Collected" }, { value: etherUnCollected, name: "Uncollected" }]
+        },
+        {
+          name: "Token Count",
+          type: "pie",
+          radius: ["90%", "92%"],
+          label: {
+            show: false
+          },
+          data: [{ value: tokenSold, name: "Sold" }, { value: tokenUnsold, name: "Unsold" }]
+        },
         {
           name: "Round Cap ($)",
           type: "pie",

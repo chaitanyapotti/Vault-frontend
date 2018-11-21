@@ -178,13 +178,13 @@ class WhiteList extends Component {
             <Submit />{" "}
           </div>
         );
-      case 7: 
+      case 7:
         return (
           <div className="wht-lst-info-cnt">
             {" "}
             <Done />{" "}
           </div>
-        )
+        );
       default:
         return <div>Default ka kuch karo</div>;
     }
@@ -230,7 +230,7 @@ class WhiteList extends Component {
               <div>
                 {this.props.userLocalPublicAddress ? (
                   <Grid>
-                    <CUICard style={{ padding: "40px 40px", marginBottom: "40px" }}>
+                    <CUICard className="card-brdr" style={{ padding: "40px 40px", marginBottom: "40px" }}>
                       <CustomizedStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={this.props.activeStep} />
                       <div className="push-top--50">
                         <CUIDivider />

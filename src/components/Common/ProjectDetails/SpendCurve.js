@@ -97,15 +97,15 @@ const SpendCurve = props => {
     return {
       color: colors,
       legend: {
-        data: ["Spendable Ether", "Spent Ether", "Withdrawable", "Collected Ether"],
+        data: ["Spendable", "Spent", "Withdrawable", "Collected"],
         selected: {
-          "Spendable Ether": true,
-          "Spent Ether": true,
+          Spendable: true,
+          Spent: true,
           Withdrawable: false,
-          "Collected Ether": false
+          Collected: false
         },
-        padding: [5, 20, 0, 20],
-        itemGap: 60
+        padding: [5, 0, 0, 0],
+        itemGap: 25
       },
       grid: {
         top: 120,
@@ -168,28 +168,28 @@ const SpendCurve = props => {
       ],
       series: [
         {
-          name: "Spendable Ether",
+          name: "Spendable",
           type: "line",
           xAxisIndex: 1,
-          smooth: true,
+          smooth: false,
           data: spendableAmounts,
           lineStyle: {
             width: 3
           }
         },
         {
-          name: "Spent Ether",
+          name: "Spent",
           type: "line",
-          smooth: true,
+          smooth: false,
           lineStyle: {
             width: 3
           },
           data: spentAmounts
         },
         {
-          name: "Collected Ether",
+          name: "Collected",
           type: "line",
-          smooth: true,
+          smooth: false,
           lineStyle: {
             width: 3
           },
@@ -198,7 +198,7 @@ const SpendCurve = props => {
         {
           name: "Withdrawable",
           type: "line",
-          smooth: true,
+          smooth: false,
           lineStyle: {
             width: 3
           },

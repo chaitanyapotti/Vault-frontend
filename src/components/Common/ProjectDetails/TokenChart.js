@@ -49,8 +49,8 @@ class TokenChart extends Component {
       totalTokens += formatFromWei(element.tokenCount);
       const price = formatFromWei(parseFloat(element.tokenCount) / parseFloat(element.tokenRate), 10) * etherPrice;
       totalCollectableEther += price;
-      roundDollarData.push({ value: Math.round(price), name: `Round ${index + 1} Cap`, selected: index + 1 === roundNumber });
-      tokenData.push({ value: formatFromWei(element.tokenCount), name: `Round ${index + 1} Tokens`, selected: index + 1 === roundNumber });
+      roundDollarData.push({ value: Math.round(price), name: `Round ${index + 1} Cap`, selected: false });
+      tokenData.push({ value: formatFromWei(element.tokenCount), name: `Round ${index + 1} Tokens`, selected: false });
     }
     for (let index = 0; index < foundationDetails.length; index += 1) {
       const element = foundationDetails[index];

@@ -69,76 +69,74 @@ class OtpVerification extends Component {
     const { countryCode, phoneNumber, otpFromServer, otpFromUser } = this.props || {};
     return (
       <div>
-        
-          <Grid>
-            <CUICard style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}>
-              <div>
-                <div className="sbhdr-txt push--bottom txt-xl">Phone Number Registration form</div>
-                <Row>
-                  <Col xs={12} lg={4}>
-                    <CUIFormInput
-                      inputType={CUIInputType.TEXT}
-                      full
-                      inputName="Country Code"
-                      inputLabel="Country Code"
-                      inputPlaceholder="+91"
-                      inputValue={countryCode}
-                      onChange={this.handleCountryCodeChanged}
-                      disabled={otpFromServer !== ""}
-                      //items={[{ value: "+91", primaryText: "+91" }]}
-                    />
-                  </Col>
-                  <Col xs={12} lg={8}>
-                    <CUIFormInput
-                      inputType={CUIInputType.TEXT}
-                      full
-                      forceNumeric
-                      inputName="Phone Number"
-                      inputLabel="Phone Number"
-                      inputPlaceholder="9096xxxxxx"
-                      inputValue={phoneNumber}
-                      onChange={this.handlePhoneNumberChanged}
-                      error={!!this.getErrorMsg(actionTypes.PHONE_NUMBER_CHANGED)}
-                      helperText={this.getErrorMsg(actionTypes.PHONE_NUMBER_CHANGED)}
-                      disabled={otpFromServer !== ""}
-                    />
-                  </Col>
-                </Row>
-                <Row className="push--top">
-                  <Col>
-                    <ButtonComponent label="Send OTP" onClick={this.handleSendOtp} disabled={phoneNumber === "" || otpFromServer !== ""} />
-                  </Col>
-                </Row>
+        <Grid>
+          <CUICard className="card-brdr" style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}>
+            <div>
+              <div className="sbhdr-txt push--bottom txt-xl">Phone Number Registration form</div>
+              <Row>
+                <Col xs={12} lg={4}>
+                  <CUIFormInput
+                    inputType={CUIInputType.TEXT}
+                    full
+                    inputName="Country Code"
+                    inputLabel="Country Code"
+                    inputPlaceholder="+91"
+                    inputValue={countryCode}
+                    onChange={this.handleCountryCodeChanged}
+                    disabled={otpFromServer !== ""}
+                    // items={[{ value: "+91", primaryText: "+91" }]}
+                  />
+                </Col>
+                <Col xs={12} lg={8}>
+                  <CUIFormInput
+                    inputType={CUIInputType.TEXT}
+                    full
+                    forceNumeric
+                    inputName="Phone Number"
+                    inputLabel="Phone Number"
+                    inputPlaceholder="9096xxxxxx"
+                    inputValue={phoneNumber}
+                    onChange={this.handlePhoneNumberChanged}
+                    error={!!this.getErrorMsg(actionTypes.PHONE_NUMBER_CHANGED)}
+                    helperText={this.getErrorMsg(actionTypes.PHONE_NUMBER_CHANGED)}
+                    disabled={otpFromServer !== ""}
+                  />
+                </Col>
+              </Row>
+              <Row className="push--top">
+                <Col>
+                  <ButtonComponent label="Send OTP" onClick={this.handleSendOtp} disabled={phoneNumber === "" || otpFromServer !== ""} />
+                </Col>
+              </Row>
 
-                {/* <Row className="push--top"><Col><CUIDivider /></Col></Row> */}
+              {/* <Row className="push--top"><Col><CUIDivider /></Col></Row> */}
 
-                <Row>
-                  <Col xs={12} lg={4}>
-                    <CUIFormInput
-                      inputType={CUIInputType.TEXT}
-                      full
-                      inputValue={otpFromUser}
-                      inputName="OTP"
-                      inputLabel="OTP"
-                      inputPlaceholder="1234"
-                      onChange={this.handleOtpChanged}
-                      error={!!this.getErrorMsg(actionTypes.USER_OTP_INPUT_CHANGED)}
-                      helperText={this.getErrorMsg(actionTypes.USER_OTP_INPUT_CHANGED)}
-                    />
-                  </Col>
-                </Row>
+              <Row>
+                <Col xs={12} lg={4}>
+                  <CUIFormInput
+                    inputType={CUIInputType.TEXT}
+                    full
+                    inputValue={otpFromUser}
+                    inputName="OTP"
+                    inputLabel="OTP"
+                    inputPlaceholder="1234"
+                    onChange={this.handleOtpChanged}
+                    error={!!this.getErrorMsg(actionTypes.USER_OTP_INPUT_CHANGED)}
+                    helperText={this.getErrorMsg(actionTypes.USER_OTP_INPUT_CHANGED)}
+                  />
+                </Col>
+              </Row>
 
-                {this.props.otpVerificationSuccessful ? (
-                  <div className="push--top">OTP Verification Successful. Go to next step.</div>
-                ) : (
-                  <div>
-                    {this.props.phoneOrAddressExists ? <div>Your public address or Phone number already exists with another account.</div> : null}
-                  </div>
-                )}
-              </div>
-            </CUICard>
-          </Grid>
-        
+              {this.props.otpVerificationSuccessful ? (
+                <div className="push--top">OTP Verification Successful. Go to next step.</div>
+              ) : (
+                <div>
+                  {this.props.phoneOrAddressExists ? <div>Your public address or Phone number already exists with another account.</div> : null}
+                </div>
+              )}
+            </div>
+          </CUICard>
+        </Grid>
       </div>
     );
   }

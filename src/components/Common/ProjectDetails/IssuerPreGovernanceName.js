@@ -34,7 +34,7 @@ const IssuerPreGovernanceName = props => {
   const refundLink = `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`;
   const { website } = urls;
   return (
-    <CUICard style={{ padding: "40px 40px" }}>
+    <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">

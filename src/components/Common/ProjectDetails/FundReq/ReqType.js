@@ -1,7 +1,7 @@
 import React from "react";
 import { Tooltip } from "@material-ui/core";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
-import { formatFromWei, formatDate, significantDigits } from "../../../../helpers/common/projectDetailhelperFunctions";
+import { formatFromWei, formatDate, significantDigits, secondsToDhms } from "../../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../../LoadingButton";
 import { ensureHttpUrl } from "../../../../helpers/common/urlFixerInHref";
 
@@ -49,7 +49,7 @@ const ReqType = props => {
           <span className="text--secondary"> {100 - significantDigits(parseFloat(consensus) / parseFloat(tokensUnderGovernance) || 0)}%</span>
         </Col>
         <Col lg={7} className="txt txt-no-wrp">
-          Ends in: <span className="text--secondary">{formatDate(endTime * 1000)}</span>
+          Ends in: <span className="text--secondary">{secondsToDhms(new Date(endTime * 1000) - new Date())}</span>
         </Col>
       </Row>
       <Row>

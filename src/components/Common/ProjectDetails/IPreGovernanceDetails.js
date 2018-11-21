@@ -18,7 +18,7 @@ const IPreGovernanceDetails = props => {
     buyableTokens
   } = props || {};
   return (
-    <CUICard style={{ padding: "40px 50px" }}>
+    <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
       <div className="txt-xxxl text--primary">Project Details</div>
       <Row className="push-top--35">
         <Col lg={12} className="txt">

@@ -84,7 +84,7 @@ class Register extends Component {
           )
         ) : (
           <Grid>
-            <CUICard style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}>
+            <CUICard className="card-brdr" style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}>
               <div>
                 <div className="sbhdr-txt push--bottom txt-xl">Phone Number Registration form</div>
                 <Row>

@@ -29,7 +29,7 @@ const XfrForm = props => {
   const withdrawXfrLink = `https://rinkeby.etherscan.io/tx/${withdrawXfrButtonTransactionHash}`;
   return (
     <Grid>
-      <CUICard style={{ padding: "40px 50px" }}>
+      <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
         <Row>
           <Col lg={6}>
             <CUIFormInput

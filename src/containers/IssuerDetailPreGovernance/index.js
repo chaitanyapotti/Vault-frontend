@@ -87,7 +87,7 @@ class IssuerDetailPreGovernance extends Component {
     return (
       <Grid>
         {currentRoundNumber === "1" ? (
-          <CUICard style={{ padding: "40px 50px" }}>
+          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
             <TimeLine
               fundsCollected={formatFromWei(etherCollected, 3)}
               roundGoal={getR1Goal(this.props)}
@@ -141,7 +141,7 @@ class IssuerDetailPreGovernance extends Component {
 
         <Row className="push--top">
           <Col xs={12} lg={6}>
-            <CUICard style={{ padding: "40px 50px" }}>
+            <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
               <TokenChart
                 rounds={rounds}
                 foundationDetails={foundationDetails}

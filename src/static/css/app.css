@@ -116,7 +116,7 @@ button {
   transition: 250ms ease-in-out;
 }
 .bg--pending:hover {
-  box-shadow: 0px 10px 20px 0px hsla(208, 97%, 64%, 0.5) !important;
+  box-shadow: 0px 10px 20px 0px hsla(38, 79%, 47%, 0.5) !important;
   transform: translate(0px, -5px) !important;
   transition: 250ms ease-in-out;
 }

@@ -22,7 +22,7 @@ class FundReq extends Component {
     const link = `https://rinkeby.etherscan.io/tx/${xfr1ButtonTransactionHash}`;
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
-    const requiredData = details ? details.filter(x => x.address === address) : [];
+    const requiredData = details && details.length > 0 && address ? details.filter(x => x.address.toUpperCase() === address.toUpperCase()) : [];
     const { name, description, startDate } = requiredData[0] || {};
     const requiredVote = Array.isArray(xfrVoteData) ? xfrVoteData.filter(x => x.address === address) : [];
     const { voted } = requiredVote[0] || false;

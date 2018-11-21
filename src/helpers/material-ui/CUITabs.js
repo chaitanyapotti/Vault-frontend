@@ -31,7 +31,7 @@ import { CUIColor } from "../../static/js/variables";
  */
 
 const CUITabs = props => {
-  const { iconList, full, scroll, style, indicatorColor, textColor, value , onChange} = props || {};
+  const { iconList, full, scroll, style, indicatorColor, textColor, value, onChange } = props || {};
   const tabsProps = { indicatorColor, textColor, value, scrollable: scroll, fullWidth: full, onChange, style };
 
   return (
@@ -41,14 +41,10 @@ const CUITabs = props => {
           key: option.key,
           value: option.value,
           label: option.label,
-          style,
+          style
         };
 
-        return (
-          <Tab
-            {...tabProps}
-          />
-        );
+        return <Tab {...tabProps} />;
       })}
     </Tabs>
   );
@@ -62,7 +58,7 @@ CUITabs.defaultProps = {
   full: false,
   scroll: false,
   indicatorColor: CUIColor.SECONDARY,
-  textColor: CUIColor.INHERIT,
+  textColor: CUIColor.INHERIT
 };
 
 CUITabs.propTypes = {
@@ -72,7 +68,7 @@ CUITabs.propTypes = {
   full: PropTypes.bool,
   scroll: PropTypes.bool,
   textColor: PropTypes.cuiColor,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired
 };
 
 export default CUITabs;

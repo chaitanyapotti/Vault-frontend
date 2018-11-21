@@ -9,7 +9,7 @@ import { CUICard } from "../../helpers/material-ui";
 import { formatDate, formatFromWei, getR1Price, getSoftCap, getHardCap } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
-
+import MasonaryLayout from "../../components/Common/MasonaryLayout";
 class ProjectDetailPreStart extends Component {
   state = {
     modalOpen: false
@@ -87,8 +87,7 @@ class ProjectDetailPreStart extends Component {
     const { modalOpen } = this.state;
     return (
       <Grid>
-        <Row>
-          <Col xs={12} lg={6}>
+        <MasonaryLayout>
             <ProjectPreStartName
               projectName={projectName}
               priceIncrementFlag={false}
@@ -106,8 +105,6 @@ class ProjectDetailPreStart extends Component {
               whitelistButtonTransactionHash={whitelistButtonTransactionHash}
               thumbnailUrl={thumbnailUrl}
             />
-          </Col>
-          <Col xs={12} lg={6}>
             <PDetailPreStart
               icoStartDate={formatDate(startDateTime)}
               individualCap={formatFromWei(maximumEtherContribution, 3)}
@@ -119,17 +116,10 @@ class ProjectDetailPreStart extends Component {
               dilutedCapitalisation={getHardCap(this.props)}
               initialFundRelease={formatFromWei(initialFundRelease)}
             />
-          </Col>
-        </Row>
-
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
             <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
               <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
             </CUICard>
-          </Col>
-        </Row>
-
+        </MasonaryLayout>
         <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
           <div className="text--center text--danger">
             <Warning style={{ width: "2em", height: "2em" }} />

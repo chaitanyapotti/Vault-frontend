@@ -331,20 +331,20 @@ class IdentityDetails extends React.Component {
 
           <Row className="push--top">
             <Col lg={6}>
-              <div className="upload-btn-wrapper">
-                <ButtonComponent onClick={() => console.log("clicked")}>Upload Whitepaper</ButtonComponent>
-                <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
-              </div>
+              <label for="whitepaper-upload" class="btn bg--primary txt txt-dddbld text--white">
+                  <div className="btn-padding">Upload Whitepaper</div>
+              </label>
+              <input name="whitepaper" id="whitepaper-upload" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
               <span className="push--left">{this.props.whitepaperPDF.name}</span>
               <span className="push--left"><a href={this.props.whitepaperUrl} target="_blank" rel="noreferrer noopener">Whitepaper</a></span>
             </Col>
             <Col lg={6}>
-              <div className="upload-btn-wrapper">
-                <ButtonComponent onClick={() => console.log("clicked")}>Upload Thumbnail</ButtonComponent>
-                <input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
-              </div>
-              <span>{this.props.thumbnailImage.name}</span>
-              <span> <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">Thumbnail</a> </span>
+              <label for="thumbnail-upload" class="btn bg--primary txt txt-dddbld text--white">
+                  <div className="btn-padding">Upload Thumbnail</div>
+              </label>
+              <input id="thumbnail-upload" name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
+              <span className="push--left">{this.props.thumbnailImage.name}</span>
+              <span className="push--left"> <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">Thumbnail</a> </span>
             </Col>
           </Row>
           <Row className="push--top">

@@ -49,7 +49,7 @@ class CustomizedStepper extends React.Component {
   };
 
   render() {
-    const { classes, getSteps, activeStep, getStepContent } = this.props;
+    const { classes, getSteps, activeStep, getStepContent, onClick } = this.props;
     const steps = getSteps();
     const connector = (
       <StepConnector
@@ -64,6 +64,11 @@ class CustomizedStepper extends React.Component {
 
     return (
       <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
+        <div className="text--right">
+          <a rel="noopener" onClick={onClick}>
+            Start Over
+          </a>
+        </div>
         <div className="txt-xl">Deployer</div>
         <div className={classes.root}>
           <Stepper alternativeLabel activeStep={activeStep} connector={connector}>

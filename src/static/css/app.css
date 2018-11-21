@@ -635,6 +635,10 @@ button:focus {
   border-radius: 0px !important;
 }
 
+.buyModalText {
+  font-size: 16px !important;
+}
+
 .blue-button {
   width: 120px;
   height: 32px;

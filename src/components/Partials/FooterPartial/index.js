@@ -14,16 +14,16 @@ const FooterPartial = () => (
         <Col lg={2}>
           <div className="txt-l txt-ddbld flush fnt-mli">KNOW MORE</div>
           <div className="txt txt-bld push-half--top opacity-70 fnt-italic">
-          <div>
-          <a href="https://storage.googleapis.com/electus/whitepaper.pdf" target="_blank" rel="noopener noreferrer" alt="whitepaper">
-              White Paper
-            </a>
-          </div>
-          <div>
-          <a href="https://medium.com/@ParthaB/" target="_blank" rel="noopener noreferrer" alt="blog">
-              Blog
-            </a>
-          </div>
+            <div>
+              <a href="https://storage.googleapis.com/electus/whitepaper.pdf" target="_blank" rel="noopener noreferrer" alt="whitepaper">
+                White Paper
+              </a>
+            </div>
+            <div>
+              <a href="https://medium.com/@ParthaB/" target="_blank" rel="noopener noreferrer" alt="blog">
+                Blog
+              </a>
+            </div>
           </div>
         </Col>
 
@@ -75,7 +75,7 @@ const FooterPartial = () => (
                   <td>
                     <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://medium.com/@ParthaB/">
                       <img id="medium" src="/assets/Footer/medium.png" alt="medium-logo" />
-                    </a> 
+                    </a>
                   </td>
                   {/* <td>
                   <a
@@ -89,8 +89,8 @@ const FooterPartial = () => (
                   </a>
                 </td> */}
                   <td>
-                    <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://www.facebook.com/electusnetwork/">
-                      <img id="fb" src="/assets/Footer/fb.png" alt="fb-logo" />
+                    <a target="_blank" id="footer" className="opacity-70" rel="noopener noreferrer" href="https://www.reddit.com/r/ElectusNetwork/">
+                      <img id="reddit" src="/assets/Footer/reddit.png" alt="reddit-logo" />
                     </a>
                   </td>
                   <td>

@@ -228,7 +228,7 @@ class Registration extends Component {
                             onClick={this.handleSubmitDaicoMetadata}
                             disabled={
                               !validateLength(projectDescription) ||
-                              errors[actionTypes.FACEBOOK_LINK_CHANGED] !== "" ||
+                              errors[actionTypes.REDDIT_LINK_CHANGED] !== "" ||
                               errors[actionTypes.MEDIUM_LINK_CHANGED] !== "" ||
                               errors[actionTypes.GITHUB_LINK_CHANGED] !== "" ||
                               errors[actionTypes.TWITTER_LINK_CHANGED] !== "" ||
@@ -326,7 +326,7 @@ const mapStateToProps = state => {
     telegramLink,
     githubLink,
     mediumLink,
-    facebookLink,
+    redditLink,
     twitterLink,
     teamAddress,
     initialFundRelease,
@@ -363,7 +363,7 @@ const mapStateToProps = state => {
     telegramLink,
     githubLink,
     mediumLink,
-    facebookLink,
+    redditLink,
     twitterLink,
     teamAddress,
     errors,

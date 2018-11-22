@@ -1,5 +1,5 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
+import { CustomToolTip } from "../FormComponents";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
@@ -120,13 +120,13 @@ const PDetailGovernance = props => {
         <Col lg={6} className="push--top text-right">
           {signinStatusFlag <= 3 ? (
             <div className="hli">
-              <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+              <CustomToolTip title="This feature is only for Vault Members" id="btn-disabled" placement="bottom">
                 <div>
                   <LoadingButton style={{ padding: "0 40px" }} type="danger" disabled>
                     Kill Project
                   </LoadingButton>
                 </div>
-              </Tooltip>
+              </CustomToolTip>
             </div>
           ) : killButtonTransactionHash !== "" ? (
             <div className="hli">

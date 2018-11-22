@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Divider } from "@material-ui/core";
+import { Divider, Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../../helpers/material-ui";
 import IssuerReqType from "./IssuerReqType";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
+import LoadingButton from "../../LoadingButton";
+import { ensureHttpUrl } from "../../../../helpers/common/urlFixerInHref";
 
 class IssuerFundReq extends Component {
   getObject1 = () => {
@@ -78,27 +80,76 @@ class IssuerFundReq extends Component {
   render() {
     const xfr1 = this.getObject1();
     const xfr2 = this.getObject2();
-    return xfr1 !== null || xfr2 !== null ? (
+    const {
+      onWithdrawXfrAmountClick,
+      canWithdrawXfrAmount,
+      withdrawXfrButtonSpinning,
+      getWithdrawableXfrAmount,
+      withdrawXfrButtonTransactionHash,
+      isPermissioned
+    } = this.props || {};
+    const { totalAmount, amount1, amount2, text } = getWithdrawableXfrAmount;
+    const withdrawXfrLink = `https://rinkeby.etherscan.io/tx/${withdrawXfrButtonTransactionHash}`;
+    return (
       <div>
-        <CUICard className="card-brdr">
-          <div style={{ padding: "40px 50px" }} className="txt-xxxl text--primary">
-            Exceptional Fund Requests
+        {totalAmount > 0 ? (
+          <div>
+            <Row className="push--top">
+              <Col lg={4}>
+                {!isPermissioned || !canWithdrawXfrAmount ? (
+                  <div className="hli">
+                    <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
+                      <div>
+                        <LoadingButton disabled>Withdraw Xfr Amount</LoadingButton>
+                      </div>
+                    </Tooltip>
+                  </div>
+                ) : withdrawXfrButtonTransactionHash !== "" ? (
+                  <div className="hli">
+                    <a href={ensureHttpUrl(withdrawXfrLink)} target="_blank" rel="noreferrer noopener">
+                      <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                        Status
+                      </LoadingButton>
+                    </a>
+                  </div>
+                ) : (
+                  <span className="hli">
+                    <LoadingButton onClick={onWithdrawXfrAmountClick} loading={withdrawXfrButtonSpinning} disabled={!canWithdrawXfrAmount}>
+                      Withdraw Xfr Amount
+                    </LoadingButton>
+                  </span>
+                )}
+              </Col>
+              <Col lg={8}>
+                <div className="text--right">{text}</div>
+              </Col>
+            </Row>
+            <Divider />
           </div>
-          <Divider />
-          <Row className="push-top--35">
-            <Col lg={12} className="txt">
-              {xfr1}
-            </Col>
-          </Row>
-          {xfr2 ? <Divider /> : null}
-          <Row className="push-top--35">
-            <Col lg={12} className="txt">
-              {xfr2}
-            </Col>
-          </Row>
-        </CUICard>
+        ) : null}
+        {xfr1 !== null || xfr2 !== null ? (
+          <div>
+            <CUICard className="card-brdr">
+              <div style={{ padding: "40px 50px" }} className="txt-xxxl text--primary">
+                Exceptional Fund Requests
+              </div>
+              <Divider />
+              <Row className="push-top--35">
+                <Col lg={12} className="txt">
+                  {xfr1}
+                </Col>
+              </Row>
+              {xfr2 ? <Divider /> : null}
+              <Row className="push-top--35">
+                <Col lg={12} className="txt">
+                  {xfr2}
+                </Col>
+              </Row>
+            </CUICard>
+          </div>
+        ) : null}
       </div>
-    ) : null;
+    );
   }
 }
 

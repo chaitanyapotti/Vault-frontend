@@ -59,7 +59,8 @@ class ProjectIssuerGovernance extends Component {
       tapAcceptancePercent,
       xfrRejectionPercent,
       _id,
-      thumbnailUrl
+      thumbnailUrl,
+      killAcceptancePercent
     } = projectDetails || {};
     // currentRoundNumber = "2";
     // Redirect to form if cdi !== 12
@@ -118,6 +119,7 @@ class ProjectIssuerGovernance extends Component {
             projectid={_id}
             history={history}
             thumbnailUrl={thumbnailUrl}
+            killAcceptancePercent={killAcceptancePercent}
           />
         </div>
       );

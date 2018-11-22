@@ -24,8 +24,10 @@ class GridData extends React.Component {
         MUIDataTableBodyCell: {
           root: {
             fontSize: "16px",
-            fontWeight: "600",
-            whiteSpace: "nowrap"
+            fontWeight: "400",
+            whiteSpace: "nowrap",
+            "text-overflow": "ellipsis",
+            overflow: "hidden"
           }
         },
         MUIDataTableHeadRow: {
@@ -45,13 +47,13 @@ class GridData extends React.Component {
         MUIDataTableFooterCell: {
           root: {
             fontSize: "16px",
-            fontFamily: "Product Sans"
+            fontFamily: "Montserrat"
           }
         },
         MuiTypography: {
           root: {
             fontSize: "16px",
-            fontFamily: "Product Sans"
+            fontFamily: "Montserrat"
           },
           caption: {
             fontSize: "1rem"
@@ -60,13 +62,15 @@ class GridData extends React.Component {
         MuiTableCell: {
           root: {
             padding: "10px 20px 10px 20px",
-            fontFamily: "Product Sans"
+            fontFamily: "Montserrat",
+            "text-overflow": "ellipsis",
+            overflow: "hidden"
           }
         },
         MuiTablePagination: {
           select: {
             fontSize: "14px",
-            fontFamily: "Product Sans"
+            fontFamily: "Montserrat"
           }
         },
         MuiTableRow: {

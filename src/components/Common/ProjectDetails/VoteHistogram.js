@@ -57,23 +57,84 @@ const getOption = voteHistogramData => {
     //     }
     // },
     color: ["#4ca9fc"],
-    xAxis: {
-      type: "category",
-      boundaryGap: false,
-      axisPointer: {
-        show: true,
-        label: {
-          width: "100%",
-          padding: [5, 60, 5, 60],
-          formatter(params) {
-            return `Number of voters with vote share in ${params.value}${params.seriesData.length ? `：${params.seriesData[0].data}` : ""}`;
+    xAxis: [
+      {
+        type: "category",
+        boundaryGap: false,
+        axisPointer: {
+          show: true,
+          label: {
+            width: "100%",
+            padding: [5, 60, 5, 60],
+            formatter(params) {
+              return `Number of voters with vote share in ${params.value}${params.seriesData.length ? `：${params.seriesData[0].data}` : ""}`;
+            }
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        axisLine: {
+          onZero: false,
+          lineStyle: {
+            color: "#8d8d8d"
+          }
+        },
+        axisLabel: {
+          show: false
+        },
+        data: binRanges
+      },
+      {
+        type: "category",
+        boundaryGap: false,
+        axisPointer: {
+          show: false
+        },
+        axisLine: {
+          onZero: false,
+          lineStyle: {
+            color: "#8d8d8d"
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel: {
+          show: false
+        },
+        data: binRanges
+      }
+    ],
+    yAxis: [
+      {
+        type: "value",
+        axisLabel: {
+          show: false
+        },
+        axisTick: {
+          show: false
+        },
+        axisLine: {
+          lineStyle: {
+            color: "#8d8d8d"
           }
         }
       },
-      data: binRanges
-    },
-    yAxis: {
-      type: "value"
+      {
+        type: "value",
+        axisLine: {
+          lineStyle: {
+            color: "#8d8d8d"
+          }
+        }
+      }
+    ],
+    grid: {
+      top: 80,
+      bottom: 40,
+      left: 0,
+      right: 5
     },
     series: [
       {
@@ -84,7 +145,7 @@ const getOption = voteHistogramData => {
           width: 3
         },
         areaStyle: {
-          shadowBlur: 75,
+          shadowBlur: 0,
           opacity: 0.3
         }
       }
@@ -96,74 +157,46 @@ const VoteHistogram = props => {
   const { voteHistogramData, totalVotes, collectiveVoteWeight, projectHealth } = props || {};
   return (
     <div>
-      <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
-        <div className="txt-xxxl text--primary">Vote Histogram</div>
-
-        <Row className="push--top">
-          <Col lg={6} className="txt">
-            <div>
-              <div className="txt-bold">Total Voters:</div>
-              <div className="text--secondary"> {totalVotes}</div>
-            </div>
-          </Col>
-          <Col lg={6}>
-            <div>
-              <div className="txt-bold">Collective Vote Weight:</div>
-              <div className="text--secondary"> {collectiveVoteWeight}%</div>
-            </div>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col lg={6}>
-            <div>
-              <div className="txt-bold">Health:</div>
-              <div className="text--secondary"> {projectHealth}</div>
-            </div>
-          </Col>
-        </Row>
-        {/* <Row className="push--top">
-        <Col lg={6} className="txt">
-          Collective Vote Weight:{" "}
-          <span className="text--secondary"> {collectiveVoteWeight}%</span>
+      <Row>
+        <Col lg={12}>
+          <div className="txt-xxxl text--primary">Vote Histogram</div>
         </Col>
       </Row>
-      <Row className="push--top">
-        <Col lg={6} className="txt">
-          Health:{" "}
-          <span className="text--secondary"> {projectHealth}</span>
-        </Col>
-      </Row> */}
-        <ReactEcharts
-          option={getOption(voteHistogramData)}
-          notMerge
-          lazyUpdate
-          style={{ height: "30em", width: "30em", padding: "0px" }}
-          opts={{ renderer: "svg" }}
-        />
 
-        {/* <LineChart width={500} height={200} data={voteHistogramData} margin={{ top: 10, right: 30, left: 30, bottom: 10 }}>
-          <XAxis dataKey="max" tick={false} strokeWidth={3} stroke="#3d3d3d" />
-          <YAxis yAxisId="left" tick={false} strokeWidth={3} stroke="#3d3d3d" />
-          <Tooltip cursor={false} />
-          <Line
-            yAxisId="left"
-            type="monotone"
-            dataKey="voters"
-            stroke="#4ca9fc"
-            strokeWidth={2}
-            activeDot={{ r: 5, fill: "white", stroke: "#4ca9fc", strokeWidth: 2 }}
-            dot={false}
+      <Row className="push--top">
+        <Col lg={6}>
+          <div>
+            <div className="txt-bold">Total Voters:</div>
+            <div className="text--secondary"> {totalVotes}</div>
+          </div>
+        </Col>
+        <Col lg={6}>
+          <div>
+            <div className="txt-bold">Collective Vote Weight:</div>
+            <div className="text--secondary"> {collectiveVoteWeight}%</div>
+          </div>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col lg={6}>
+          <div>
+            <div className="txt-bold">Health:</div>
+            <div className="text--secondary"> {projectHealth}</div>
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col lg={6}>
+          <ReactEcharts
+            option={getOption(voteHistogramData)}
+            notMerge
+            lazyUpdate
+            style={{ height: "25em", width: "30em", padding: "0px" }}
+            opts={{ renderer: "svg" }}
           />
-        </LineChart> */}
-        {/* <BarChart width={500} height={250} data={voteHistogramData}
-            margin={{top: 10, right: 30, left: 30, bottom: 10}}>
-       <XAxis dataKey="max" tick={false}/>
-       <YAxis tick={false}/>
-       <Tooltip />
-       <Bar dataKey="voters" fill="#8884d8" />
-      </BarChart> */}
-      </CUICard>
+        </Col>
+      </Row>
     </div>
   );
 };

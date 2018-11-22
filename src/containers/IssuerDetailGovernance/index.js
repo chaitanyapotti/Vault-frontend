@@ -34,14 +34,16 @@ import {
   getTapPollConsensus,
   getCurrentTap,
   getXfrData,
-  finalizeKill
+  finalizeKill,
+  getKillVoterCount
 } from "../../actions/projectDetailGovernanceActions/index";
 import {
   formatFromWei,
   formatCurrencyNumber,
   formatDate,
   significantDigits,
-  formatRateToPrice
+  formatRateToPrice,
+  secondsToDhms
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import XfrForm from "../../components/Common/ProjectDetails/XfrForm";
@@ -68,7 +70,8 @@ class IssuerDetailGovernance extends Component {
       getTapPollConsensus: fetchTapPollConsensus,
       getCurrentTap: fetchCurrentTap,
       getXfrData: fetchXfrData,
-      getCurrentWithdrawableAmount: fetchCurrentWithdrawableAmount
+      getCurrentWithdrawableAmount: fetchCurrentWithdrawableAmount,
+      getKillVoterCount: fetchKillVoterCount
     } = this.props || {};
     priceFetch("ETH");
     priceFetch(tokenTag);
@@ -83,6 +86,7 @@ class IssuerDetailGovernance extends Component {
     fetchCurrentTap(version, pollFactoryAddress);
     fetchXfrData(version, pollFactoryAddress);
     fetchCurrentWithdrawableAmount(version, pollFactoryAddress);
+    fetchKillVoterCount(version, pollFactoryAddress);
   }
 
   getPriceIncrement = () => {
@@ -169,10 +173,15 @@ class IssuerDetailGovernance extends Component {
     startRound(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber);
   };
 
+  canKill = () => {
+    const { killAcceptancePercent, killVoterCount, etherCollected } = this.props || {};
+    return parseFloat(this.getKillConsensus()) > parseFloat(killAcceptancePercent) && killVoterCount > (5 * formatFromWei(etherCollected, 6)) / 100;
+  };
+
   canIncreaseTap = () => {
     const { tapAcceptancePercent, tapPollConsensus, tokensUnderGovernance } = this.props || {};
     const consensus = parseFloat(tapPollConsensus) / parseFloat(tokensUnderGovernance);
-    return consensus > parseFloat(tapAcceptancePercent);
+    return consensus > parseFloat(tapAcceptancePercent) && !this.canKill();
   };
 
   canDeployTapPoll = () => {
@@ -200,22 +209,6 @@ class IssuerDetailGovernance extends Component {
     return signinStatusFlag === 5 && ownerAddress === userLocalPublicAddress;
   };
 
-  // onWithdrawAmountChange = e => {
-  //   this.setState({ withdrawableAmount: e.target.value });
-  // };
-
-  // onTitleTextChange = e => {
-  //   this.setState({ titleText: e.target.value });
-  // };
-
-  // onAmountTextChange = e => {
-  //   this.setState({ amountText: e.target.value });
-  // };
-
-  // onDescriptionTextChange = e => {
-  //   this.setState({ descriptionText: e.target.value });
-  // };
-
   onWithdrawAmountClick = () => {
     const { version, withdrawAmount: withdrawAmountClick, userLocalPublicAddress, pollFactoryAddress, withdrawableAmount } = this.props || {};
     withdrawAmountClick(version, pollFactoryAddress, userLocalPublicAddress, withdrawableAmount);
@@ -242,23 +235,8 @@ class IssuerDetailGovernance extends Component {
   };
 
   canDeployXfrPoll = () => {
-    const { xfrData, xfrTitleText, xfrAmountText, xfrDescriptionText } = this.props || {};
-    const { poll1, poll2 } = xfrData || {};
-    const { address: poll1Address, endTime: poll1EndTime } = poll1 || {};
-    const { address: poll2Address, endTime: poll2EndTime } = poll2 || {};
-    const newDate1 = new Date(poll1EndTime * 1000);
-    newDate1.setDate(newDate1.getDate() + 3);
-    const newDate2 = new Date(poll2EndTime * 1000);
-    newDate2.setDate(newDate2.getDate() + 3);
-    return (
-      (poll1Address === "0x0000000000000000000000000000000000000000" ||
-        poll2Address === "0x0000000000000000000000000000000000000000" ||
-        new Date() > newDate1 ||
-        new Date() > newDate2) &&
-      xfrTitleText !== "" &&
-      xfrAmountText !== "" &&
-      xfrDescriptionText !== ""
-    );
+    const { xfrTitleText, xfrAmountText, xfrDescriptionText } = this.props || {};
+    return this.canShowXfrPoll() && xfrTitleText !== "" && xfrAmountText !== "" && xfrDescriptionText !== "";
   };
 
   canShowXfrPoll = () => {
@@ -273,7 +251,6 @@ class IssuerDetailGovernance extends Component {
     return (
       poll1Address === "0x0000000000000000000000000000000000000000" ||
       poll2Address === "0x0000000000000000000000000000000000000000" ||
-      this.canWithdrawXfrAmount() ||
       new Date() > newDate1 ||
       new Date() > newDate2
     );
@@ -289,12 +266,13 @@ class IssuerDetailGovernance extends Component {
     const newDate2 = new Date(poll2EndTime * 1000);
     newDate2.setDate(newDate2.getDate() + 3);
     return (
-      (parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
+      ((parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
         new Date() > new Date(poll1EndTime * 1000) &&
         new Date() < newDate1) ||
-      (parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) &&
-        new Date() > new Date(poll2EndTime * 1000) &&
-        new Date() < newDate2)
+        (parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) &&
+          new Date() > new Date(poll2EndTime * 1000) &&
+          new Date() < newDate2)) &&
+      !this.canKill()
     );
   };
 
@@ -308,21 +286,30 @@ class IssuerDetailGovernance extends Component {
     const newDate2 = new Date(poll2EndTime * 1000);
     newDate2.setDate(newDate2.getDate() + 3);
     let totalAmount = 0;
+    let amount1 = 0;
+    let amount2 = 0;
+    let xfrCount = 0;
     if (
       parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
       new Date() > new Date(poll1EndTime * 1000) &&
       new Date() < newDate1
     ) {
-      totalAmount += formatFromWei(poll1RequestedAmount, 3);
+      amount1 += formatFromWei(poll1RequestedAmount, 3);
+      xfrCount += 1;
     }
     if (
       parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) &&
       new Date() > new Date(poll2EndTime * 1000) &&
       new Date() < newDate1
     ) {
-      totalAmount += formatFromWei(poll2RequestedAmount, 3);
+      amount2 += formatFromWei(poll2RequestedAmount, 3);
+      xfrCount += 1;
     }
-    return totalAmount;
+    totalAmount = amount1 + amount2;
+    const partItem = new Date() <= newDate2 ? `and ${secondsToDhms(new Date() - newDate2)} respectively` : "";
+    const text = `You are currently entitled to withdraw ${totalAmount} ETH from 
+    ${xfrCount} XFRs. Your entitlement will expire in ${secondsToDhms(new Date() - newDate1)} ${partItem}`;
+    return { totalAmount, amount1, amount2, text };
   };
 
   onDeployXfrClick = () => {
@@ -415,10 +402,43 @@ class IssuerDetailGovernance extends Component {
       foundationDetails,
       currentRoundNumber,
       prices,
-      roundInfo
+      roundInfo,
+      killAcceptancePercent,
+      killVoterCount,
+      etherCollected
     } = this.props || {};
     return (
       <Grid>
+        {this.canKill() ? (
+          <CUICard className="card-brdr" style={{ padding: "40px 50px", "margin-bottom": "20px" }}>
+            <Row>
+              <Col lg={6}>
+                <div className="txt-xxxl text--primary">Notice</div>
+              </Col>
+            </Row>
+            <Row className="push-half--top">
+              <Col lg={12}>
+                <div>
+                  Current Kill Consensus{" "}
+                  <span className="text--secondary">
+                    ({this.getKillConsensus()}
+                    %)
+                  </span>{" "}
+                  is greater than kill threshold{" "}
+                  <span className="text--secondary">
+                    ({killAcceptancePercent}
+                    %)
+                  </span>{" "}
+                  and the number of voters voting for kill <span className="text--secondary">({killVoterCount})</span> is greater than the minimum
+                  required voters <span className="text--secondary">({Math.ceil((5 * formatFromWei(etherCollected, 6)) / 100)})</span>. Hence
+                  withdrawals and tap increment on this DAICO are temporarily frozen until until consensus drops below threshold. If the consensus
+                  stays above this value on <span className="text--secondary">{formatDate(this.getNextKillPollStartDate())}</span>, this DAICO will
+                  get killed.
+                </div>
+              </Col>
+            </Row>
+          </CUICard>
+        ) : null}
         <MasonryLayout columns={2}>
           <IssuerGovernanceName
             projectName={projectName}
@@ -482,15 +502,9 @@ class IssuerDetailGovernance extends Component {
               canDeployXfrPoll={this.canDeployXfrPoll()}
               deployXfrButtonSpinning={deployXfrButtonSpinning}
               onDeployXfrClick={this.onDeployXfrClick}
-              canWithdrawXfrAmount={this.canWithdrawXfrAmount()}
-              withdrawXfrButtonSpinning={withdrawXfrButtonSpinning}
-              onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
-              getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
               deployXfrPollTransactionHash={deployXfrPollTransactionHash}
-              withdrawXfrButtonTransactionHash={withdrawXfrButtonTransactionHash}
             />
-          ) : 
-          null }
+          ) : null}
           <IssuerFundReq
             data={xfrData}
             details={xfrDetails}
@@ -506,6 +520,11 @@ class IssuerDetailGovernance extends Component {
             isPermissioned={this.isPermissioned()}
             onSaveXfr1DescriptionClick={this.onSaveXfr1DescriptionClick}
             onSaveXfr2DescriptionClick={this.onSaveXfr2DescriptionClick}
+            canWithdrawXfrAmount={this.canWithdrawXfrAmount()}
+            withdrawXfrButtonSpinning={withdrawXfrButtonSpinning}
+            onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
+            getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
+            withdrawXfrButtonTransactionHash={withdrawXfrButtonTransactionHash}
           />
 
           <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
@@ -572,7 +591,8 @@ const mapStateToProps = state => {
     xfr1ButtonSpinning,
     xfr2ButtonSpinning,
     xfrVoteData,
-    killFinalizeButtonSpinning
+    killFinalizeButtonSpinning,
+    killVoterCount
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
@@ -625,7 +645,8 @@ const mapStateToProps = state => {
     isXfr1DescriptionEditable,
     isXfr2DescriptionEditable,
     xfr1Description,
-    xfr2Description
+    xfr2Description,
+    killVoterCount
   };
 };
 
@@ -663,7 +684,8 @@ const mapDispatchToProps = dispatch =>
       onEditXfr2DescriptionClick,
       onEditXfr1DescriptionClick,
       editXfr2Description,
-      editXfr1Description
+      editXfr1Description,
+      getKillVoterCount
     },
     dispatch
   );

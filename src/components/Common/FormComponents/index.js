@@ -1,4 +1,5 @@
 import ButtonComponent from "./ButtonComponent";
 import DualComponent from "./DualComponent";
+import CustomToolTip from "./CustomToolTip";
 
-export { ButtonComponent, DualComponent };
+export { ButtonComponent, DualComponent, CustomToolTip };

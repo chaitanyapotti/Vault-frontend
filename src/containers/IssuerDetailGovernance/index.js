@@ -46,7 +46,7 @@ import {
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import XfrForm from "../../components/Common/ProjectDetails/XfrForm";
 import IssuerWithdrawCard from "../../components/Common/ProjectDetails/IssuerWithdrawCard";
-import MasonaryLayout from "../../components/Common/MasonaryLayout";
+import MasonryLayout from "../../components/Common/MasonaryLayout";
 import web3 from "../../helpers/web3";
 
 class IssuerDetailGovernance extends Component {
@@ -417,9 +417,7 @@ class IssuerDetailGovernance extends Component {
     } = this.props || {};
     return (
       <Grid>
-        <MasonaryLayout columns={2}>
-          {/* <Row>
-          <Col xs={12} lg={6}> */}
+        <MasonryLayout columns={2}>
           <IssuerGovernanceName
             projectName={projectName}
             tokenTag={tokenTag}
@@ -439,8 +437,6 @@ class IssuerDetailGovernance extends Component {
             startNewRoundButtonTransactionHash={startNewRoundButtonTransactionHash}
             thumbnailUrl={thumbnailUrl}
           />
-          {/* </Col>
-          <Col xs={12} lg={6}> */}
           <IssuerPDetailGovernance
             voteSaturationLimit={capPercent / 100}
             killFrequency="Quarterly"
@@ -449,11 +445,6 @@ class IssuerDetailGovernance extends Component {
             totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
             killConsensus={this.getKillConsensus()}
           />
-          {/* </Col>
-        </Row> */}
-
-          {/* <Row className="push--top">
-          <Col xs={12} lg={6}> */}
           <IssuerTapCard
             currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30))}
             tapIncrementUnit={tapIncrementFactor / 100}
@@ -468,8 +459,6 @@ class IssuerDetailGovernance extends Component {
             deployTapPollButtonTransactionHash={deployTapPollButtonTransactionHash}
             incrementTapButtonTransactionHash={incrementTapButtonTransactionHash}
           />
-          {/* </Col>
-          <Col xs={12} lg={6}> */}
           <IssuerWithdrawCard
             currentWithdrawableAmount={formatFromWei(currentWithdrawableAmount, 3)}
             isPermissioned={this.isPermissioned()}
@@ -479,11 +468,7 @@ class IssuerDetailGovernance extends Component {
             onChange={this.onChangeWithdrawAmount}
             withdrawButtonTransactionHash={withdrawButtonTransactionHash}
           />
-          {/* </Col>
-        </Row> */}
           {this.canShowXfrPoll() ? (
-            // <Row className="push--top">
-            //   <Col xs={12} lg={6}>
             <XfrForm
               titleText={xfrTitleText}
               onTitleTextChange={this.onChangeXfrTitle}
@@ -502,11 +487,8 @@ class IssuerDetailGovernance extends Component {
               deployXfrPollTransactionHash={deployXfrPollTransactionHash}
               withdrawXfrButtonTransactionHash={withdrawXfrButtonTransactionHash}
             />
-          ) : //   </Col>
-          // </Row>
-          null}
-          {/* <Row className="push--top">
-          <Col xs={12} lg={6}> */}
+          ) : 
+          null }
           <IssuerFundReq
             data={xfrData}
             details={xfrDetails}
@@ -533,9 +515,7 @@ class IssuerDetailGovernance extends Component {
               roundInfo={roundInfo}
             />
           </CUICard>
-          {/* </Col>
-        </Row> */}
-        </MasonaryLayout>
+        </MasonryLayout>
       </Grid>
     );
   }

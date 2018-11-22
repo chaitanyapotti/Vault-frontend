@@ -22,11 +22,11 @@ const MasonryLayout = props => {
       <div
         style={{
           marginLeft: `${i > 0 ? props.gap : 0}px`,
-          flex: 1,
+          flex: 1
         }}
       >
         {columnWrapper[`column${i}`]}
-      </div>,
+      </div>
     );
   }
 
@@ -36,12 +36,12 @@ const MasonryLayout = props => {
 MasonryLayout.propTypes = {
   columns: PropTypes.number.isRequired,
   gap: PropTypes.number.isRequired,
-  children: PropTypes.arrayOf(PropTypes.element),
+  children: PropTypes.arrayOf(PropTypes.element)
 };
 
 MasonryLayout.defaultProps = {
   columns: 2,
-  gap: 20,
+  gap: 20
 };
 
 export default MasonryLayout;

@@ -438,11 +438,6 @@ class Deployer extends Component {
               <Grid>
                 <Row>
                   <Col lg={10} />
-                  <Col lg={2}>
-                    <a rel="noopener" onClick={this.onResetModalOpenClick}>
-                      Start Over
-                    </a>
-                  </Col>
                 </Row>
                 <Row>
                   <Col>
@@ -452,6 +447,7 @@ class Deployer extends Component {
                       getSteps={this.getSteps}
                       activeStep={currentDeploymentIndicator}
                       projectid={_id}
+                      onClick={this.onResetModalOpenClick}
                     />
                   </Col>
                 </Row>

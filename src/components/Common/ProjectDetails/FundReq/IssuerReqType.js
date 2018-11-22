@@ -1,7 +1,7 @@
 import React from "react";
 import { Tooltip } from "@material-ui/core";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
-import { formatFromWei, formatDate, significantDigits } from "../../../../helpers/common/projectDetailhelperFunctions";
+import { formatFromWei, formatDate, significantDigits, secondsToDhms } from "../../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../../LoadingButton";
 import { CUIFormInput } from "../../../../helpers/material-ui";
 import { CUIInputType } from "../../../../static/js/variables";
@@ -94,7 +94,7 @@ const IssuerReqType = props => {
         </Col>
         <Col lg={6} className="txt">
           <div className="txt-bold">Ends in: </div>
-          <div className="text--secondary">{formatDate(endTime * 1000)}</div>
+          <div className="text--secondary">{secondsToDhms(new Date(endTime * 1000) - new Date())}</div>
         </Col>
       </Row>
     </div>

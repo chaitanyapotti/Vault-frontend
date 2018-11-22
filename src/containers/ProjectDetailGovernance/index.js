@@ -244,10 +244,16 @@ class ProjectDetailGovernance extends Component {
     )} (Round ${currentRoundNumber} of 3)`;
   };
 
-  getVoteShare = () => {
+  getVoteWeight = () => {
     const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
     const userShare = significantDigits((parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * 100, false, 3) || 0;
     return userShare > capPercent / 100 ? capPercent / 100 : userShare;
+  };
+
+  getVoteShare = () => {
+    const voteWeight = this.getVoteWeight();
+    const { collectiveVoteWeight } = this.props || {};
+    return significantDigits((parseFloat(voteWeight) * 100) / parseFloat(collectiveVoteWeight)) || 0;
   };
 
   getNextKillPollStartDate = () => {
@@ -258,13 +264,13 @@ class ProjectDetailGovernance extends Component {
   };
 
   getKillPollStartDate = killPollEndDate => {
-    const endDate = new Date(killPollEndDate * 1000);
+    const endDate = new Date(killPollEndDate);
     const startDate = endDate.setDate(endDate.getDate() - 89);
     return new Date(startDate);
   };
 
   getXfrEndDate = xfrStartDate => {
-    const startDate = new Date(xfrStartDate * 1000);
+    const startDate = new Date(xfrStartDate);
     const endDate = startDate.setDate(startDate.getDate() + 29);
     return new Date(endDate);
   };
@@ -410,7 +416,7 @@ class ProjectDetailGovernance extends Component {
 
   killFinish = () => {
     const { killPollIndex, r1EndTime } = this.props || {};
-    const endDate = new Date(r1EndTime);
+    const endDate = new Date(r1EndTime * 1000);
     endDate.setDate(endDate.getDate() + (killPollIndex + 1) * 89);
     return endDate < new Date();
   };
@@ -560,7 +566,7 @@ class ProjectDetailGovernance extends Component {
     return (
       <Grid>
         {this.killFinish() ? (
-          <CUICard style={{ padding: "40px 50px" }}>
+          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
             <Grid>
               <Row>
                 <Col lg={12}>
@@ -628,10 +634,10 @@ class ProjectDetailGovernance extends Component {
             <Col xs={12} lg={6}> */}
           <PDetailGovernance
             voteSaturationLimit={capPercent / 100}
-            killFrequency="Quarterly"
             yourTokens={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
+            yourVoteWeight={this.getVoteWeight()}
             yourVoteShare={this.getVoteShare()}
-            killAttemptsLeft={7 - killPollIndex}
+            killAttemptsLeft={8 - killPollIndex}
             nextKillAttempt={formatDate(this.getNextKillPollStartDate())}
             yourTokenValue={this.getMyTokenValue()}
             yourRefundValue={this.getMyRefundValue()}
@@ -659,7 +665,7 @@ class ProjectDetailGovernance extends Component {
           {/* <Row className="push--top">
             <Col xs={12} lg={6}> */}
           <TapCard
-            currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30))}
+            currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30, 10))}
             tapIncrementUnit={tapIncrementFactor / 100}
             incrementApproval={this.getTapPollConsensus()}
             tapVoteStatus={this.getTapVoteStatus()}
@@ -718,7 +724,7 @@ class ProjectDetailGovernance extends Component {
             collectiveVoteWeight={collectiveVoteWeight}
             projectHealth={projectHealth}
           />
-          <CUICard style={{ padding: "40px 50px" }}>
+          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
             <TokenChart
               rounds={rounds}
               foundationDetails={foundationDetails}

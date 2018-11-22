@@ -24,7 +24,7 @@ const RefundCard = props => {
       <Grid>
         <Row>
           <Col lg={12}>
-            <CUICard style={{ padding: "40px 50px" }}>
+            <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
               <Grid>
                 <Row>
                   <Col lg={8}>

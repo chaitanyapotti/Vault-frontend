@@ -34,9 +34,11 @@ const BuyModal = props => {
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Buy Tokens</DialogTitle>
+        <DialogTitle>
+          <div className="buyModalText">Buy Tokens</div>
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText>Enter the amount of ether for which you want to purchase the token</DialogContentText>
+          <DialogContentText className="buyModalText">Enter the amount of ether for which you want to purchase the token</DialogContentText>
           <CUIFormInput
             inputType={CUIInputType.TEXT}
             full

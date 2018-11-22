@@ -10,6 +10,7 @@ import { formatDate, formatFromWei, getR1Price, getSoftCap, getHardCap } from ".
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
+
 class ProjectDetailPreStart extends Component {
   state = {
     modalOpen: false
@@ -88,37 +89,37 @@ class ProjectDetailPreStart extends Component {
     return (
       <Grid>
         <MasonaryLayout>
-            <ProjectPreStartName
-              projectName={projectName}
-              priceIncrementFlag={false}
-              tokenTag={tokenTag}
-              price={getR1Price(this.props)}
-              roundText={this.getRoundText()}
-              description={description}
-              urls={urls}
-              whitepaper={whitepaper}
-              buttonText="Get Whitelisted"
-              buttonVisibility={!isCurrentMember}
-              buttonSpinning={buttonSpinning}
-              onClick={this.onWhiteListClickInternal}
-              signinStatusFlag={signinStatusFlag}
-              whitelistButtonTransactionHash={whitelistButtonTransactionHash}
-              thumbnailUrl={thumbnailUrl}
-            />
-            <PDetailPreStart
-              icoStartDate={formatDate(startDateTime)}
-              individualCap={formatFromWei(maximumEtherContribution, 3)}
-              voteSaturationLimit={capPercent / 100}
-              killFrequency="Quarterly"
-              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
-              tapIncrementUnit={parseFloat(tapIncrementFactor) / 100}
-              hardCapCapitalisation={getSoftCap(this.props)}
-              dilutedCapitalisation={getHardCap(this.props)}
-              initialFundRelease={formatFromWei(initialFundRelease)}
-            />
-            <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
-              <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
-            </CUICard>
+          <ProjectPreStartName
+            projectName={projectName}
+            priceIncrementFlag={false}
+            tokenTag={tokenTag}
+            price={getR1Price(this.props)}
+            roundText={this.getRoundText()}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            buttonText="Get Whitelisted"
+            buttonVisibility={!isCurrentMember}
+            buttonSpinning={buttonSpinning}
+            onClick={this.onWhiteListClickInternal}
+            signinStatusFlag={signinStatusFlag}
+            whitelistButtonTransactionHash={whitelistButtonTransactionHash}
+            thumbnailUrl={thumbnailUrl}
+          />
+          <PDetailPreStart
+            icoStartDate={formatDate(startDateTime)}
+            individualCap={formatFromWei(maximumEtherContribution, 3)}
+            voteSaturationLimit={capPercent / 100}
+            killFrequency="Quarterly"
+            initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
+            tapIncrementUnit={parseFloat(tapIncrementFactor) / 100}
+            hardCapCapitalisation={getSoftCap(this.props)}
+            dilutedCapitalisation={getHardCap(this.props)}
+            initialFundRelease={formatFromWei(initialFundRelease)}
+          />
+          <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
+            <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
+          </CUICard>
         </MasonaryLayout>
         <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
           <div className="text--center text--danger">

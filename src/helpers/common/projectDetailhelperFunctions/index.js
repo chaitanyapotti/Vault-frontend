@@ -147,7 +147,7 @@ const significantDigits = (number, perc = false, len = 2) => {
 
 const daysTookForTapPoll = (startTime, endTime) => {
   if (endTime) {
-    secondsToDhms(endTime - startTime);
+    return secondsToDhms(endTime * 1000 - startTime * 1000);
   }
   return "Yet To Complete";
 };

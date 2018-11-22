@@ -246,10 +246,10 @@ class IssuerDetailGovernance extends Component {
     const { poll1, poll2 } = xfrData || {};
     const { address: poll1Address, endTime: poll1EndTime } = poll1 || {};
     const { address: poll2Address, endTime: poll2EndTime } = poll2 || {};
-    const newDate1 = new Date();
-    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
-    const newDate2 = new Date();
-    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
+    const newDate1 = new Date(poll1EndTime * 1000);
+    newDate1.setDate(newDate1.getDate() + 3);
+    const newDate2 = new Date(poll2EndTime * 1000);
+    newDate2.setDate(newDate2.getDate() + 3);
     return (
       (poll1Address === "0x0000000000000000000000000000000000000000" ||
         poll2Address === "0x0000000000000000000000000000000000000000" ||
@@ -266,10 +266,10 @@ class IssuerDetailGovernance extends Component {
     const { poll1, poll2 } = xfrData || {};
     const { address: poll1Address, endTime: poll1EndTime } = poll1 || {};
     const { address: poll2Address, endTime: poll2EndTime } = poll2 || {};
-    const newDate1 = new Date();
-    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
-    const newDate2 = new Date();
-    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
+    const newDate1 = new Date(poll1EndTime * 1000);
+    newDate1.setDate(newDate1.getDate() + 3);
+    const newDate2 = new Date(poll2EndTime * 1000);
+    newDate2.setDate(newDate2.getDate() + 3);
     return (
       poll1Address === "0x0000000000000000000000000000000000000000" ||
       poll2Address === "0x0000000000000000000000000000000000000000" ||
@@ -284,10 +284,10 @@ class IssuerDetailGovernance extends Component {
     const { poll1, poll2 } = xfrData || {};
     const { consensus: poll1Consensus, endTime: poll1EndTime } = poll1 || {};
     const { consensus: poll2Consensus, endTime: poll2EndTime } = poll2 || {};
-    const newDate1 = new Date();
-    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
-    const newDate2 = new Date();
-    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
+    const newDate1 = new Date(poll1EndTime * 1000);
+    newDate1.setDate(newDate1.getDate() + 3);
+    const newDate2 = new Date(poll2EndTime * 1000);
+    newDate2.setDate(newDate2.getDate() + 3);
     return (
       (parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
         new Date() > new Date(poll1EndTime * 1000) &&
@@ -303,20 +303,22 @@ class IssuerDetailGovernance extends Component {
     const { poll1, poll2 } = xfrData || {};
     const { consensus: poll1Consensus, endTime: poll1EndTime, amount: poll1RequestedAmount } = poll1 || {};
     const { consensus: poll2Consensus, endTime: poll2EndTime, amount: poll2RequestedAmount } = poll2 || {};
-    const newDate1 = new Date();
-    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
-    const newDate2 = new Date();
-    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
+    const newDate1 = new Date(poll1EndTime * 1000);
+    newDate1.setDate(newDate1.getDate() + 3);
+    const newDate2 = new Date(poll2EndTime * 1000);
+    newDate2.setDate(newDate2.getDate() + 3);
     let totalAmount = 0;
     if (
       parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
-      new Date() > new Date(poll1EndTime * 1000 && new Date() < newDate1)
+      new Date() > new Date(poll1EndTime * 1000) &&
+      new Date() < newDate1
     ) {
       totalAmount += formatFromWei(poll1RequestedAmount, 3);
     }
     if (
       parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) &&
-      new Date() > new Date(poll2EndTime * 1000 && new Date() < newDate1)
+      new Date() > new Date(poll2EndTime * 1000) &&
+      new Date() < newDate1
     ) {
       totalAmount += formatFromWei(poll2RequestedAmount, 3);
     }
@@ -440,13 +442,13 @@ class IssuerDetailGovernance extends Component {
           <IssuerPDetailGovernance
             voteSaturationLimit={capPercent / 100}
             killFrequency="Quarterly"
-            killAttemptsLeft={7 - killPollIndex}
+            killAttemptsLeft={8 - killPollIndex}
             nextKillAttempt={formatDate(this.getNextKillPollStartDate())}
             totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
             killConsensus={this.getKillConsensus()}
           />
           <IssuerTapCard
-            currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30))}
+            currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30, 10))}
             tapIncrementUnit={tapIncrementFactor / 100}
             incrementApproval={this.getTapPollConsensus()}
             isPermissioned={this.isPermissioned()}
@@ -506,7 +508,7 @@ class IssuerDetailGovernance extends Component {
             onSaveXfr2DescriptionClick={this.onSaveXfr2DescriptionClick}
           />
 
-          <CUICard style={{ padding: "40px 50px" }}>
+          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
             <TokenChart
               rounds={rounds}
               foundationDetails={foundationDetails}

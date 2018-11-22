@@ -8,10 +8,10 @@ import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 const PDetailGovernance = props => {
   const {
     yourTokens,
+    yourVoteWeight,
     yourVoteShare,
     voteSaturationLimit,
     killAttemptsLeft,
-    killFrequency,
     nextKillAttempt,
     yourTokenValue,
     yourRefundValue,
@@ -46,7 +46,7 @@ const PDetailGovernance = props => {
       </Row>
       <Row>
         <Col className="push-half--top text-right" lg={12}>
-          <a rel="noopener" onClick={onKillPollsHistoryClick}>
+          <a rel="noreferrer noopener" href={null} onClick={onKillPollsHistoryClick}>
             Kill Polls History
           </a>
         </Col>
@@ -57,26 +57,26 @@ const PDetailGovernance = props => {
           <div className="text--secondary">{yourTokens}</div>
         </Col>
         <Col lg={6} className="txt">
+          <div className="txt-bold">Vote Saturation Limit: </div>
+          <div className="text--secondary">{voteSaturationLimit}%</div>
+        </Col>
+      </Row>
+
+      <Row className="push-half--top">
+        <Col lg={6} className="txt">
           <div className="txt-bold">Your Vote Weight: </div>
+          <div className="text--secondary">{yourVoteWeight}%</div>
+        </Col>
+        <Col lg={6} className="txt">
+          <div className="txt-bold">Your Vote Share: </div>
           <div className="text--secondary">{yourVoteShare}%</div>
         </Col>
       </Row>
 
       <Row className="push-half--top">
         <Col lg={6} className="txt">
-          <div className="txt-bold">Vote Saturation Limit: </div>
-          <div className="text--secondary">{voteSaturationLimit}%</div>
-        </Col>
-        <Col lg={6} className="txt">
           <div className="txt-bold">Kill Attempts Left:</div>
           <div className="text--secondary">{killAttemptsLeft}</div>
-        </Col>
-      </Row>
-
-      <Row className="push-half--top">
-        <Col lg={6} className="txt">
-          <div className="txt-bold">Kill Frequency: </div>
-          <div className="text--secondary">{killFrequency}</div>
         </Col>
         <Col lg={6} className="txt">
           <div className="txt-bold">Next Kill Attempt: </div>

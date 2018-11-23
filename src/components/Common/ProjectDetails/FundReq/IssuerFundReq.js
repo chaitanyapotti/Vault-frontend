@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Divider, Tooltip } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 import { CUICard } from "../../../../helpers/material-ui";
 import IssuerReqType from "./IssuerReqType";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 import LoadingButton from "../../LoadingButton";
 import { ensureHttpUrl } from "../../../../helpers/common/urlFixerInHref";
+import { CustomToolTip } from "../../FormComponents";
 
 class IssuerFundReq extends Component {
   getObject1 = () => {
@@ -98,11 +99,11 @@ class IssuerFundReq extends Component {
               <Col lg={4}>
                 {!isPermissioned || !canWithdrawXfrAmount ? (
                   <div className="hli">
-                    <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
+                    <CustomToolTip title="This feature is only for Vault Issuer Members" id="btn-disabled" disabled>
                       <div>
                         <LoadingButton disabled>Withdraw Xfr Amount</LoadingButton>
                       </div>
-                    </Tooltip>
+                    </CustomToolTip>
                   </div>
                 ) : withdrawXfrButtonTransactionHash !== "" ? (
                   <div className="hli">

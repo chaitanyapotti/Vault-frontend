@@ -6,7 +6,6 @@ import { CUIInputType } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../../Common/FormComponents";
 import actionTypes from "../../../action_types";
-import PieChartComponent from "../../Common/PieChartComponent";
 import GridData from "../../GridData";
 import {
   addNonSaleEntityAction,
@@ -195,11 +194,6 @@ class NonSale extends React.Component {
         <hr />
         {this.props.totalSaleTokens > 0 ? (
           <Row style={{ padding: "20px 50px" }}>
-            {/* <PieChartComponent
-              nonSaleEntities={this.props.nonSaleEntities}
-              saleEntities={this.props.saleEntities}
-              totalSaleTokens={this.props.totalSaleTokens}
-            /> */}
             <TokenChart currentRoundNumber="0" prices={prices} rounds={this.getRoundData()} foundationDetails={this.getFoundationData()} />
           </Row>
         ) : null}

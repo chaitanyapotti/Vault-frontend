@@ -49,7 +49,8 @@ import {
   getSpendCurveData,
   getVoteHistogramData,
   getUnlockTokensData,
-  unlockTokens
+  unlockTokens,
+  getKillVoterCount
 } from "../../actions/projectDetailGovernanceActions/index";
 import {
   formatFromWei,
@@ -140,7 +141,8 @@ class ProjectDetailGovernance extends Component {
       getSpendCurveData: fetchSpendCurveData,
       getVoteHistogramData: fetchVoteHistogramData,
       getUnlockTokensData: fetchUnlockTokensData,
-      getEtherCollected: fetchEtherCollected
+      getEtherCollected: fetchEtherCollected,
+      getKillVoterCount: fetchKillVoterCount
     } = this.props || {};
     priceFetch("ETH");
     priceFetch(tokenTag);
@@ -161,6 +163,7 @@ class ProjectDetailGovernance extends Component {
     fetchCurrentTap(version, pollFactoryAddress);
     fetchXfrData(version, pollFactoryAddress);
     fetchEtherCollected(version, pollFactoryAddress);
+    fetchKillVoterCount(version, pollFactoryAddress);
     if (signinStatusFlag > 2) {
       checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
       fetchTokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
@@ -421,6 +424,11 @@ class ProjectDetailGovernance extends Component {
     return endDate < new Date();
   };
 
+  canKill = () => {
+    const { killAcceptancePercent, killVoterCount, etherCollected } = this.props || {};
+    return parseFloat(this.getKillConsensus()) > parseFloat(killAcceptancePercent) && killVoterCount > (5 * formatFromWei(etherCollected, 6)) / 100;
+  };
+
   canBuy = () => {
     const { roundInfo } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || "";
@@ -524,7 +532,9 @@ class ProjectDetailGovernance extends Component {
       prices,
       contributionArray,
       contriArrayReceived,
-      unlockTokensLoading
+      unlockTokensLoading,
+      killVoterCount,
+      etherCollected
     } = this.props || {};
     const {
       modalOpen,
@@ -565,6 +575,36 @@ class ProjectDetailGovernance extends Component {
     const link = `https://rinkeby.etherscan.io/tx/${killFinalizeTransactionHash}`;
     return (
       <Grid>
+        {this.canKill() ? (
+          <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px", "margin-bottom": "20px" }}>
+            <Row>
+              <Col lg={6}>
+                <div className="txt-xxxl text--primary">Notice</div>
+              </Col>
+            </Row>
+            <Row className="push-half--top">
+              <Col lg={12}>
+                <div>
+                  Current Kill Consensus{" "}
+                  <span className="text--secondary">
+                    ({this.getKillConsensus()}
+                    %)
+                  </span>{" "}
+                  is greater than kill threshold{" "}
+                  <span className="text--secondary">
+                    ({killAcceptancePercent}
+                    %)
+                  </span>{" "}
+                  and the number of voters voting for kill <span className="text--secondary">({killVoterCount})</span> is greater than the minimum
+                  required voters <span className="text--secondary">({Math.ceil((5 * formatFromWei(etherCollected, 6)) / 100)})</span>. Hence
+                  withdrawals and tap increment on this DAICO are temporarily frozen until until consensus drops below threshold. If the consensus
+                  stays above this value on <span className="text--secondary">{formatDate(this.getNextKillPollStartDate())}</span>, this DAICO will
+                  get killed.
+                </div>
+              </Col>
+            </Row>
+          </CUICard>
+        ) : null}
         {this.killFinish() ? (
           <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
             <Grid>
@@ -718,12 +758,14 @@ class ProjectDetailGovernance extends Component {
           />
           {/* </Col>
             <Col xs={12} lg={6}> */}
-          <VoteHistogram
-            voteHistogramData={voteHistogramData}
-            totalVotes={totalVotes}
-            collectiveVoteWeight={collectiveVoteWeight}
-            projectHealth={projectHealth}
-          />
+          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
+            <VoteHistogram
+              voteHistogramData={voteHistogramData}
+              totalVotes={totalVotes}
+              collectiveVoteWeight={collectiveVoteWeight}
+              projectHealth={projectHealth}
+            />
+          </CUICard>
           <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
             <TokenChart
               rounds={rounds}
@@ -836,7 +878,8 @@ const mapStateToProps = state => {
     tapButtonTransactionHash,
     killFinalizeTransactionHash,
     unlockTokensData,
-    unlockTokensLoading
+    unlockTokensLoading,
+    killVoterCount
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
   const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
@@ -895,7 +938,8 @@ const mapStateToProps = state => {
     contributionArray,
     contriArrayReceived,
     unlockTokensData,
-    unlockTokensLoading
+    unlockTokensLoading,
+    killVoterCount
   };
 };
 
@@ -936,7 +980,8 @@ const mapDispatchToProps = dispatch =>
       buyAmountChangedAction,
       getUnlockTokensData,
       unlockTokens,
-      getEtherCollected
+      getEtherCollected,
+      getKillVoterCount
     },
     dispatch
   );

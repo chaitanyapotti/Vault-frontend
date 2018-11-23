@@ -55,7 +55,8 @@ export const initialState = {
   xfr2ButtonTransactionHash: "",
   tapButtonTransactionHash: "",
   unlockTokensData: {},
-  unlockTokensLoading: false
+  unlockTokensLoading: false,
+  killVoterCount: "0"
 };
 
 export default (state = initialState, action) => {
@@ -73,6 +74,14 @@ export default (state = initialState, action) => {
         histArray.push(d);
       }
       return { ...state, voteHistogramData: histArray, totalVotes, collectiveVoteWeight };
+    }
+
+    case actionTypes.KILL_VOTER_COUNT_RECEIVED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        killVoterCount: receipt
+      };
     }
 
     case actionTypes.KILL_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED: {

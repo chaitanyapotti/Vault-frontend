@@ -106,6 +106,11 @@ export const killConsensusReceived = receipt => ({
   type: actionTypes.KILL_CONSENSUS_RECEIVED
 });
 
+export const killVoterCountReceived = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_VOTER_COUNT_RECEIVED
+});
+
 export const tapConsensusReceived = receipt => ({
   payload: { receipt },
   type: actionTypes.TAP_CONSENSUS_RECEIVED
@@ -432,6 +437,27 @@ export const getKillConsensus = (version, contractAddress) => dispatch => {
     .catch(err => {
       console.error(err.message);
       dispatch(killConsensusReceived("0"));
+    });
+};
+
+export const getKillVoterCount = (version, contractAddress) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  const network = "rinkeby";
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/killvotecount`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        dispatch(killVoterCountReceived(data));
+      } else {
+        dispatch(killVoterCountReceived("0"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(killVoterCountReceived("0"));
     });
 };
 

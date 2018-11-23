@@ -97,30 +97,59 @@ const SpendCurve = props => {
     return {
       color: colors,
       legend: {
-        data: ["Spendable", "Spent", "Withdrawable", "Collected"],
+        data: [
+          {
+            name: "Spendable",
+            textStyle: { fontFamily: "Montserrat", fontSize: "14" },
+            icon:
+              "path://M11.5,22.4c-6,0-10.9-4.9-10.9-10.9S5.5,0.6,11.5,0.6s10.9,4.9,10.9,10.9S17.5,22.4,11.5,22.4z M11.5,5.4c-3.3,0-6.1,2.7-6.1,6.1s2.7,6.1,6.1,6.1s6.1-2.7,6.1-6.1S14.8,5.4,11.5,5.4z"
+          },
+          {
+            name: "Spent",
+            textStyle: { fontFamily: "Montserrat", fontSize: "14" },
+            icon:
+              "path://M11.5,22.4c-6,0-10.9-4.9-10.9-10.9S5.5,0.6,11.5,0.6s10.9,4.9,10.9,10.9S17.5,22.4,11.5,22.4z M11.5,5.4c-3.3,0-6.1,2.7-6.1,6.1s2.7,6.1,6.1,6.1s6.1-2.7,6.1-6.1S14.8,5.4,11.5,5.4z"
+          },
+          {
+            name: "Withdrawable",
+            textStyle: { fontFamily: "Montserrat", fontSize: "14" },
+            icon:
+              "path://M11.5,22.4c-6,0-10.9-4.9-10.9-10.9S5.5,0.6,11.5,0.6s10.9,4.9,10.9,10.9S17.5,22.4,11.5,22.4z M11.5,5.4c-3.3,0-6.1,2.7-6.1,6.1s2.7,6.1,6.1,6.1s6.1-2.7,6.1-6.1S14.8,5.4,11.5,5.4z"
+          },
+          {
+            name: "Collected",
+            textStyle: { fontFamily: "Montserrat", fontSize: 14 },
+            icon:
+              "path://M11.5,22.4c-6,0-10.9-4.9-10.9-10.9S5.5,0.6,11.5,0.6s10.9,4.9,10.9,10.9S17.5,22.4,11.5,22.4z M11.5,5.4c-3.3,0-6.1,2.7-6.1,6.1s2.7,6.1,6.1,6.1s6.1-2.7,6.1-6.1S14.8,5.4,11.5,5.4z"
+          }
+        ],
         selected: {
           Spendable: true,
           Spent: true,
           Withdrawable: false,
           Collected: false
         },
+        type: "scroll",
         padding: [5, 0, 0, 0],
         itemGap: 25
       },
       grid: {
-        top: 120,
-        bottom: 50
+        top: 80,
+        bottom: 40,
+        left: 0,
+        right: 5
       },
       xAxis: [
         {
           type: "category",
           axisTick: {
-            alignWithLabel: true
+            alignWithLabel: true,
+            show: false
           },
           axisLine: {
             onZero: false,
             lineStyle: {
-              color: colors[1]
+              color: "#8d8d8d"
             }
           },
           axisPointer: {
@@ -133,18 +162,22 @@ const SpendCurve = props => {
               }
             }
           },
+          axisLabel: {
+            show: false
+          },
           boundaryGap: false,
           data: dates
         },
         {
           type: "category",
           axisTick: {
-            alignWithLabel: true
+            alignWithLabel: true,
+            show: false
           },
           axisLine: {
             onZero: false,
             lineStyle: {
-              color: colors[0]
+              color: "#8d8d8d"
             }
           },
           axisPointer: {
@@ -157,13 +190,35 @@ const SpendCurve = props => {
               }
             }
           },
+          axisLabel: {
+            show: false
+          },
           boundaryGap: false,
           data: dates
         }
       ],
       yAxis: [
         {
-          type: "value"
+          type: "value",
+          axisLabel: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#8d8d8d"
+            }
+          }
+        },
+        {
+          type: "value",
+          axisLine: {
+            lineStyle: {
+              color: "#8d8d8d"
+            }
+          }
         }
       ],
       series: [
@@ -217,7 +272,7 @@ const SpendCurve = props => {
       {contriArrayReceived}
       <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
         <div className="txt-xxxl text--primary">Spend Curve</div>
-        <ReactEcharts option={getOption()} notMerge lazyUpdate style={{ height: "30em", width: "30em", padding: "0px" }} opts={{ renderer: "svg" }} />
+        <ReactEcharts option={getOption()} notMerge lazyUpdate style={{ height: "25em", width: "30em", padding: "0px" }} opts={{ renderer: "svg" }} />
         {/* <LineChart width={500} height={200} data={dateArray} margin={{ top: 10, right: 30, left: 30, bottom: 10 }}>
           <XAxis dataKey="date" type="number" domain={["dataMin - 100", "dataMax + 100"]} tickFormatter={formatXAxis} tickCount={3} />
           <YAxis />

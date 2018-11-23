@@ -121,11 +121,11 @@ const PDetailGovernance = props => {
           {signinStatusFlag <= 3 ? (
             <div className="hli">
               <CustomToolTip title="This feature is only for Vault Members" id="btn-disabled" placement="bottom" disabled>
-                <div>
+                <span>
                   <LoadingButton style={{ padding: "0 40px" }} type="danger" disabled>
                     Kill Project
                   </LoadingButton>
-                </div>
+                </span>
               </CustomToolTip>
             </div>
           ) : killButtonTransactionHash !== "" ? (

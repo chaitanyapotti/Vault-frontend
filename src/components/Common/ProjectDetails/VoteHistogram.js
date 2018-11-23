@@ -1,6 +1,5 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
-import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 
 const getOption = voteHistogramData => {

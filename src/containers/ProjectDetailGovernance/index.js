@@ -555,8 +555,8 @@ class ProjectDetailGovernance extends Component {
       return dataArray;
     });
     const tapHistoryData = tapPollsHistoryData.map(item => {
-      const { address, startTime, endTime } = item || {};
-      const dataArray = [address, formatDate(new Date(startTime * 1000)), daysTookForTapPoll(startTime, endTime)];
+      const { address, startTime, endTime, consensus } = item || {};
+      const dataArray = [address, formatDate(new Date(startTime * 1000)), daysTookForTapPoll(startTime, endTime), significantDigits(consensus)];
       return dataArray;
     });
     const xfrHistoryData = xfrPollsHistoryData.map(item => {
@@ -566,7 +566,7 @@ class ProjectDetailGovernance extends Component {
         address,
         formatDate(xfrStartTime),
         xfrResult(xfrStartTime, this.getXfrEndDate(startTime), consensus, xfrRejectionPercent),
-        significantDigits(consensus),
+        100 - significantDigits(consensus),
         xfrWithdrawStatus(amount, startTime, endTime)
       ];
       return dataArray;
@@ -816,7 +816,7 @@ class ProjectDetailGovernance extends Component {
               rowClickPollHistory
               tableData={tapHistoryData}
               filter={false}
-              columns={["Poll Address", "Deployed On", "Took Time To Complete"]}
+              columns={["Poll Address", "Deployed On", "Took Time To Complete", "Consensus"]}
             />
           </div>
         </AlertModal>

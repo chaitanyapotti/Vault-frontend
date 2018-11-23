@@ -87,6 +87,10 @@ button {
   transition: 250ms ease-in-out;
 } */
 
+.labelAlignment {
+  /* text-align: left; */
+}
+
 .bg--primary:active {
   background: #198bd1 !important;
   transition-timing-function: ease-in;

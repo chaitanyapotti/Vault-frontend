@@ -255,7 +255,7 @@ class Deployer extends Component {
       case 0:
         return (
           <DeployerCard
-            label="Let's start deployment and deploy Membership Contract"
+            label="Deploy this contract to enable whitelisting in DAICO"
             btnLabel="Deploy Membership Contract"
             onClick={() => this.deployMembership("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
@@ -267,8 +267,8 @@ class Deployer extends Component {
       case 1:
         return (
           <DeployerCard
-            label="Let's deploy Daico Token Contract"
-            btnLabel="Deploy Daico Token"
+            label="Deploy this contract to enable creation of ERC-20 tokens"
+            btnLabel="Deploy ERC-20 Contract"
             onClick={() => this.deployDaicoToken("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
@@ -279,11 +279,11 @@ class Deployer extends Component {
       case 2:
         return (
           <DeployerCard
-            label="Let's deploy Locked Tokens Contract"
+            label="Deploy this contract to enable the locking of vested tokens for 1 year"
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
-            btnLabel="Deploy Locked Tokens"
+            btnLabel="Deploy Token Locker"
             onClick={() => this.deployLockedTokens("")}
             speedup={this.onSpeedUpClick}
           />
@@ -291,7 +291,7 @@ class Deployer extends Component {
       case 3:
         return (
           <DeployerCard
-            label="Let's deploy Poll Factory Contract"
+            label="Deploy this contract to enable Polls and Treasury on your DAICO"
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
@@ -303,11 +303,11 @@ class Deployer extends Component {
       case 4:
         return (
           <DeployerCard
-            label="Let's deploy Crowd Sale Contract"
+            label="Deploy this contract to accept ether in exchange of minted ERC-20 tokens"
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
-            btnLabel="Deploy Crowd Sale"
+            btnLabel="Deploy Crowdsale Contract"
             onClick={() => this.deployCrowdSale("")}
             speedup={this.onSpeedUpClick}
           />
@@ -315,7 +315,7 @@ class Deployer extends Component {
       case 5:
         return (
           <DeployerCard
-            label="Let's set treasury address in Daico Token Contract"
+            label="Sign this transaction to define the treasury address of your DAICO in ERC-20 Contract"
             btnLabel="Set Treasury Address"
             onClick={() => this.setTreasuryInDaicoToken("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
@@ -327,8 +327,8 @@ class Deployer extends Component {
       case 6:
         return (
           <DeployerCard
-            label="Let's set crowdsale address in Daico Token Contract"
-            btnLabel="Set crowdsale address"
+            label="Sign this transaction to define the crowdsale address of your DAICO in ERC-20 Contract"
+            btnLabel="Set Crowdsale Address"
             onClick={() => this.setCrowdsaleInDaicoToken("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
@@ -339,8 +339,8 @@ class Deployer extends Component {
       case 7:
         return (
           <DeployerCard
-            label="Let's set crowdsale address in Locked Tokens Contract"
-            btnLabel="Set crowdsale Address"
+            label="Sign this transaction to define the crowdsale address of your DAICO in Token Locker"
+            btnLabel="Set Crowdsale Address"
             onClick={() => this.setCrowdsaleInLockedTokens("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
@@ -351,8 +351,8 @@ class Deployer extends Component {
       case 8:
         return (
           <DeployerCard
-            label="Let's set crowdsale address in Poll factory Contract"
-            btnLabel="Set crowdsale Address"
+            label="Sign this transaction to define the crowdsale address of your DAICO in Poll Factory Contract"
+            btnLabel="Set Crowdsale Address"
             onClick={() => this.setCrowdSaleInPollFactory("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
@@ -363,8 +363,8 @@ class Deployer extends Component {
       case 9:
         return (
           <DeployerCard
-            label="Let's Create Kill Polls"
-            btnLabel="Create Kill Polls"
+            label="Sign this transaction to deploy the first 4 Kill Polls"
+            btnLabel="Create Kill Polls I"
             onClick={() => this.createKillPolls("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
@@ -375,8 +375,8 @@ class Deployer extends Component {
       case 10:
         return (
           <DeployerCard
-            label="Let's Create Kill Polls part 2"
-            btnLabel="Create Kill Polls part 2"
+            label="Sign this transaction to deploy the remaining 4 Kill Polls"
+            btnLabel="Create Kill Polls II"
             onClick={() => this.createKillPolls("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
@@ -387,8 +387,8 @@ class Deployer extends Component {
       case 11:
         return (
           <DeployerCard
-            label="Let's Mint foundation tokens"
-            btnLabel="Mint foundation tokens"
+            label="Sign this transaction to mint the vested tokens"
+            btnLabel="Mint vested tokens"
             onClick={() => this.mintFoundationTokens("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
@@ -404,18 +404,18 @@ class Deployer extends Component {
   };
 
   getSteps = () => [
-    "Deploy Membership",
-    "Deploy Daico Token",
-    "Deploy Locked Tokens",
-    "Deploy Poll Factory",
-    "Deploy Crowd Sale",
-    "Set Treasury in Daico, Token",
-    "Set Crowdsale in Daico Token",
-    "Set Crowdsale in Locked Tokens",
-    "Set Crowdsale in Poll Factory",
-    "Create Kill Polls",
-    "Create Kill Polls 2",
-    "Mint Foundation Tokens"
+    "Membership Contract",
+    "ERC-20 Contract",
+    "Token Locker",
+    "Poll Factory",
+    "Crowdsale Contract",
+    "Treasury Address",
+    "Crowdsale Address I",
+    "Crowdsale Address II",
+    "Crowdsale Address III",
+    "Kill Polls I",
+    "Kill Polls II",
+    "Mint Tokens"
   ];
 
   render() {

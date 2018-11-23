@@ -75,7 +75,7 @@ class CustomizedStepper extends React.Component {
             {steps.map(label => (
               <Step key={label}>
                 <StepLabel>
-                  <div className="txt">{label}</div>
+                  <div className="txt labelAlignment">{label}</div>
                 </StepLabel>
               </Step>
             ))}

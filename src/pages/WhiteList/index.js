@@ -52,6 +52,8 @@ class WhiteList extends Component {
     const {
       conditionOneAccepted,
       conditionTwoAccepted,
+      conditionThreeAccepted,
+      conditionFourAccepted,
       activeStep: getActiveStep,
       addressLine1,
       addressLine2,
@@ -77,7 +79,7 @@ class WhiteList extends Component {
     } = this.props || {};
     switch (getActiveStep) {
       case 2:
-        return !conditionOneAccepted || !conditionTwoAccepted;
+        return !conditionOneAccepted || !conditionTwoAccepted || !conditionThreeAccepted || !conditionFourAccepted;
       case 3:
         return false;
       case 4:
@@ -291,6 +293,8 @@ const mapStateToProps = state => {
     activeStep,
     conditionOneAccepted,
     conditionTwoAccepted,
+    conditionThreeAccepted,
+    conditionFourAccepted,
     phoneNumber,
     countryCode,
     otpFromUser,
@@ -324,6 +328,8 @@ const mapStateToProps = state => {
     userRegistrationData,
     conditionOneAccepted,
     conditionTwoAccepted,
+    conditionThreeAccepted,
+    conditionFourAccepted,
     phoneNumber,
     countryCode,
     otpFromUser,

@@ -22,7 +22,7 @@ class UploadDocuments extends Component {
     const { passportFileName, selfieFileName, addressFileName } = this.props || {};
     return (
       <div>
-        <div className="txt-m txt-dbld text--center">STEP: 5 Upload Documents</div>
+        <div className="txt-m txt-dbld text--center">STEP: 6 Upload Documents</div>
         <div className="txt push--top">Please upload copies of personal documents providing identity and residence</div>
         <div className="txt-m txt-dbld">ID Document Requiremnents</div>
         <ul className="txt push--top">

@@ -606,6 +606,24 @@ export function conditionTwoAction(value) {
   };
 }
 
+export function conditionThreeAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.CONDITION_THREE_CHANGED,
+      payload: value
+    });
+  };
+}
+
+export function conditionFourAction(value) {
+  return dispatch => {
+    dispatch({
+      type: actionTypes.CONDITION_FOUR_CHANGED,
+      payload: value
+    });
+  };
+}
+
 export function addressLine1ChangedAction(value) {
   return dispatch => {
     dispatch({

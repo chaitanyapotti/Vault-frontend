@@ -1,6 +1,7 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
+const callingCountries = require('country-data').callingCountries;
 
 export const initialState = {
   passportUrl: "",
@@ -37,6 +38,8 @@ export const initialState = {
   otpFailedMessage: "",
   conditionOneAccepted: false,
   conditionTwoAccepted: false,
+  conditionThreeAccepted: false,
+  conditionFourAccepted: false,
   vaultMembershipRequested: false,
   vaultMembershipRequestChecked: false,
   isVaultMembershipButtonSpinning: false,
@@ -125,11 +128,26 @@ export default function(state = initialState, action) {
         conditionOneAccepted: action.payload
       };
     }
+    
 
     case actionTypes.CONDITION_TWO_CHANGED: {
       return {
         ...state,
         conditionTwoAccepted: action.payload
+      };
+    }
+
+    case actionTypes.CONDITION_THREE_CHANGED: {
+      return {
+        ...state,
+        conditionThreeAccepted: action.payload
+      };
+    }
+
+    case actionTypes.CONDITION_FOUR_CHANGED: {
+      return {
+        ...state,
+        conditionFourAccepted: action.payload
       };
     }
 
@@ -175,9 +193,22 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.COUNTRY_CODE_CHANGED: {
+      let citizenship  = ""
+      for (let country in callingCountries){
+        // console.log(callingCountries[country])
+        if (callingCountries[country]["countryCallingCodes"]){
+          for (let i of callingCountries[country]["countryCallingCodes"]){
+            // console.log(i.trim())
+            if (action.payload === i.trim()){
+              citizenship = callingCountries[country]["name"]
+            }
+          }
+        }
+      }
       return {
         ...state,
-        countryCode: action.payload
+        countryCode: action.payload,
+        citizenship: citizenship
       };
     }
 

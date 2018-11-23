@@ -28,6 +28,7 @@ import {
 } from "../../actions/userRegistrationActions";
 const countryList = require('country-list');
 
+
 class BuyersInformation extends Component {
   constructor(props) {
     super(props);
@@ -147,7 +148,6 @@ class BuyersInformation extends Component {
 
   render() {
     const { selectedDate } = this.state || {};
-    console.log("country list: ",countryList.getNames())
     let countryChoices = []
     const allCountries = countryList.getNames()
     for (let i=0; i< allCountries.length; i++){
@@ -173,7 +173,7 @@ class BuyersInformation extends Component {
     } = this.props || {};
     return (
       <div>
-        <div className="txt-m txt-dbld text--center">STEP: 4 Buyers Information</div>
+        <div className="txt-m txt-dbld text--center">STEP: 5 Buyers Information</div>
         <div className="txt push--top">
           Due to Anti Money Laundering (AML) regulations. We are obliged to require the following information of every token sale participant.
         </div>
@@ -405,7 +405,7 @@ class BuyersInformation extends Component {
               inputValue={email}
             />
           </Col>
-          <Col lg={6}>
+          {/* <Col lg={6}>
             <CUIFormInput
               required
               inputType={CUIInputType.SELECT}
@@ -417,7 +417,7 @@ class BuyersInformation extends Component {
               inputValue={citizenship}
               items={countryChoices}
             />
-          </Col>
+          </Col> */}
         </Row>
       </div>
     );

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { CUIFormInput, CUIFormInputLabel } from "../../helpers/material-ui";
 import {CUIInputType, CUIInputColor} from "../../static/js/variables";
-import { saveUserFormStates, conditionOneAction, conditionTwoAction } from "../../actions/userRegistrationActions";
+import { saveUserFormStates, conditionOneAction, conditionTwoAction, conditionThreeAction, conditionFourAction } from "../../actions/userRegistrationActions";
 
 class TC extends Component {
     
@@ -15,12 +15,21 @@ class TC extends Component {
         this.props.conditionTwoAction(!this.props.conditionTwoAccepted)
     }
 
+    onCheck3 = () => {
+        this.props.conditionThreeAction(!this.props.conditionThreeAccepted)
+    }
+
+    onCheck4 = () => {
+        this.props.conditionFourAction(!this.props.conditionFourAccepted)
+    }
+
+
     render() { 
         return ( 
             <div>
                 <div className="txt-m txt-dbld text--center">STEP: 3 Terms And Conditions</div>
                 <div className="txt-m txt-dbld push--top">
-                    Please read all Electus legal documentation
+                    Please confirm the following:
                 </div>
                 <div className="push--top">
                     <CUIFormInputLabel
@@ -33,7 +42,8 @@ class TC extends Component {
                             onChange={this.onCheck1}
                         />
                         }
-                        label={<span className="txt">"I hereby confirm that I am not a citizen or resident of United States Of America, Singapore or China or any other jurisdiction in which it is not permissible to participate in token crowd contribution or acting on behalf of  any of them."</span>}
+                        label={<span className="txt">
+                            I hereby confirm that I am not a citizen or resident of any jurisdiction in which it is not permissible to participate in token crowd contribution or acting on behalf of  any of them.</span>}
                     />
 
                     <CUIFormInputLabel
@@ -46,7 +56,33 @@ class TC extends Component {
                             onChange={this.onCheck2}
                         />
                         }
-                        label={<span className="txt">"I hereby confirm that I have read and I accept Electus Terms of Use, Terms of Electus Token Sale and Privacy Policy"</span>}
+                        label={<span className="txt">I hereby confirm that I have read and I accept Vault Terms of Use, and will not attempt to participate in any crowdsale without reading and understanding the terms of the DAICO's token sale and their privacy policy.</span>}
+                    />
+
+                    <CUIFormInputLabel
+                        control={
+                        <CUIFormInput
+                            inputType={CUIInputType.CHECKBOX}
+                            inputColor={CUIInputColor.PRIMARY}
+                            style={{ fontSize: '14px' }}
+                            inputChecked={this.props.conditionThreeAccepted}
+                            onChange={this.onCheck3}
+                        />
+                        }
+                        label={<span className="txt">I understand that the data that I provide is not verified by Vault. Instead, Vault simply stores this information and relays it to the issuers of the DAICOs that I consent to participate in by clicking the ‘Get Whitelisted’ button and confirming the request transaction.</span>}
+                    />
+
+                    <CUIFormInputLabel
+                        control={
+                        <CUIFormInput
+                            inputType={CUIInputType.CHECKBOX}
+                            inputColor={CUIInputColor.PRIMARY}
+                            style={{ fontSize: '14px' }}
+                            inputChecked={this.props.conditionFourAccepted}
+                            onChange={this.onCheck4}
+                        />
+                        }
+                        label={<span className="txt">I understand that I may be rejected from the whitelist if the issuer finds the data to be incongruent, false, or if the issuer does not wish to permit individuals of my jurisdiction.</span>}
                     />
                 </div>
             </div> 
@@ -57,12 +93,14 @@ class TC extends Component {
 const mapStateToProps = state => {
     const { userLocalPublicAddress } = state.signinManagerData || {};
     const { userRegistrationData } = state || {}
-    const { conditionOneAccepted, conditionTwoAccepted } = state.userRegistrationData || {}
+    const { conditionOneAccepted, conditionTwoAccepted, conditionThreeAccepted, conditionFourAccepted } = state.userRegistrationData || {}
     return {
         userLocalPublicAddress,
         userRegistrationData,
         conditionOneAccepted,
-        conditionTwoAccepted
+        conditionTwoAccepted,
+        conditionThreeAccepted,
+        conditionFourAccepted
     };
 };
 
@@ -71,7 +109,9 @@ const mapDispatchToProps = dispatch =>
         {
             saveUserFormStates,
             conditionOneAction,
-            conditionTwoAction
+            conditionTwoAction,
+            conditionThreeAction, 
+            conditionFourAction
         },
         dispatch
     );

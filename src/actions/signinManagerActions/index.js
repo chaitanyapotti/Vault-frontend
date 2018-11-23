@@ -198,6 +198,9 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
               }
             }
           })
+          .catch(err => {
+            console.log("err: ", err) 
+          })
         } else {
           if (userPreviousLocalPublicAddress !== ""){
             dispatch({
@@ -213,7 +216,7 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
         }
       })
       .catch(err => {
-        console.log(err)
+        console.log("error occured: ", err)
       });
   };
 }

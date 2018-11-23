@@ -118,7 +118,8 @@ class HeaderPartial extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
-    signInModalOpen: false
+    signInModalOpen: false,
+    drawerIsOpen:false
   };
 
   handleSignInModalOpen = () => this.setState({ signInModalOpen: true });

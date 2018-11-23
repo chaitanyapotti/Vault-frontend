@@ -99,7 +99,7 @@ class FundReq extends Component {
               Exceptional Fund Requests
             </Col>
             <Col className="push-half--top text-right txt-no-wrp" lg={4}>
-              <a rel="noopener" onClick={onXfrPollHistoryClick}>
+              <a id="lnktag" className="text--black" rel="noopener" onClick={onXfrPollHistoryClick}>
                 View XFR History
               </a>
             </Col>

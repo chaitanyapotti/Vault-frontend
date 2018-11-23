@@ -504,7 +504,9 @@ class IssuerDetailGovernance extends Component {
               onDeployXfrClick={this.onDeployXfrClick}
               deployXfrPollTransactionHash={deployXfrPollTransactionHash}
             />
-          ) : null}
+          ) : 
+            <div /> 
+          }
           <IssuerFundReq
             data={xfrData}
             details={xfrDetails}

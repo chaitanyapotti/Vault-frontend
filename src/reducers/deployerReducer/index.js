@@ -29,7 +29,16 @@ export default function(state = initialState, action) {
     case types.SPEND_CURVE_DATA_SUCCESS: {
       const today = new Date();
       const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-      const { spendableArrays, xfrDots, tapDots, spentArray, spendableDots, spentDots, dateArray, projectDetails, contributionArray } = state || {};
+      const { projectDetails } = state || {};
+      let { spendableArrays, xfrDots, tapDots, spentArray, spendableDots, spentDots, dateArray, contributionArray } = state || {};
+      spendableArrays = [];
+      spentArray = [];
+      xfrDots = [];
+      tapDots = [];
+      spendableDots = [];
+      spentDots = [];
+      dateArray = [];
+      contributionArray = [];
       const { startDateTime, initialFundRelease, initialTapAmount } = projectDetails;
       const daicoStartDate = new Date(startDateTime);
       const daicoStartDateConverted = new Date(daicoStartDate.getFullYear(), daicoStartDate.getMonth(), daicoStartDate.getDate());

@@ -1,4 +1,5 @@
-import moment from "moment";
+import format from "date-fns/format";
+import constants from "../../../constants";
 
 const formatDate = dbDate =>
   // moment().locale("en-gb");
@@ -9,7 +10,7 @@ const formatDate = dbDate =>
   //     return number + output;
   //   }
   // });
-  `${moment(dbDate).format("Do MMM YYYY | h:mm A z")}`;
+  `${format(new Date(dbDate), "do LLL yyyy | hh:mm a")}`;
 
 const formatRateToPrice = rate => parseFloat(1 / parseFloat(rate)).toPrecision(2);
 
@@ -94,7 +95,7 @@ const Colors = i => {
     const excess = i - 15;
     for (let j = 0; j < excess; j += 1) {
       greyInt = Math.round((j + 1) * (256 / (excess + 1)));
-      greyInt < 16 ? hex = "0" + greyInt.toString(16) : hex = greyInt.toString(16);
+      greyInt < 16 ? (hex = `0${greyInt.toString(16)}`) : (hex = greyInt.toString(16));
       greyHex = `#${hex}${hex}${hex}`;
       Palette.push(greyHex);
     }
@@ -147,6 +148,7 @@ const significantDigits = (number, perc = false, len = 2) => {
 
 const daysTookForTapPoll = (startTime, endTime) => {
   if (endTime) {
+    if (parseFloat(endTime) === 0 || endTime - startTime === 1) return "Yet To Complete";
     return secondsToDhms(endTime * 1000 - startTime * 1000);
   }
   return "Yet To Complete";
@@ -333,6 +335,24 @@ const getHardCap = props => {
   return formatMoney(formatFromWei(parseFloat(totalMintableSupply) * getR3Price(props) * etherPrice), 0);
 };
 
+const getSignInStatusText = signInStatusFlag => {
+  switch (signInStatusFlag) {
+    case 0:
+      return constants.METAMASK_NOT_INSTALLED;
+    case 1:
+      return constants.METAMASK_NOT_SIGNED_IN;
+    case 2:
+      return constants.METAMASK_WRONG_NETWORK;
+    case 3:
+      return constants.NOT_VAULT_MEMBER;
+    case 4:
+      return constants.NOT_VAULT_ISSUER;
+    default:
+      break;
+  }
+  return constants.FAILED;
+};
+
 export {
   formatDate,
   formatRateToPrice,
@@ -363,5 +383,6 @@ export {
   r1TokenCount,
   r1TokensSold,
   contributionDataConverted,
-  Colors
+  Colors,
+  getSignInStatusText
 };

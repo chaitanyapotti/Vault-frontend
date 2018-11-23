@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import DateFnsUtils from "material-ui-pickers/utils/date-fns-utils";
+import DateFnsUtils from "@date-io/date-fns";
 import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider";
 import DateTimePicker from "material-ui-pickers/DateTimePicker";
 

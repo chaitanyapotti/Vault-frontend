@@ -49,7 +49,7 @@ const DeployerCard = props => {
 
           <Col lg={4} xs={12}>
             <div className="text--right">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={deployContractStartButtonSpinning}>
+              <LoadingButton style={{ padding: "0 40px", "margin-top": "-15px" }} onClick={onClick} loading={deployContractStartButtonSpinning}>
                 {btnLabel}
               </LoadingButton>
             </div>

@@ -1,41 +1,8 @@
 import React from "react";
-// import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 import ReactEcharts from "echarts-for-react";
-import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
-// import LoadingButton from "../LoadingButton";
-
-// const renderCustomizedLabel = (props) => {
-//   const { x } = props;
-//   // const radius = 5;
-
-//   return (
-//     <g>
-//       <circle cx={x} cy={230} r={10} fill="red" />
-//     </g>
-//   );
-// };
 
 const getOption = voteHistogramData => {
-  // let i = 0;
-  // let totalTokens = 0;
-  // for (let index = 0; index < rounds.length; index += 1) {
-  //   const element = rounds[index];
-  //   totalTokens += formatFromWei(element.tokenCount, 0);
-  // }
-  // for (let index = 0; index < foundationDetails.length; index += 1) {
-  //   const element = foundationDetails[index];
-  //   totalTokens += formatFromWei(element.amount, 0);
-  // }
-  // const interDetails = rounds.map(round => {
-  //   const { tokenCount } = round || 0;
-  //   i += 1;
-  //   return { entityPercentage: (formatFromWei(tokenCount) / totalTokens) * 100, entityName: `Round ${i}` };
-  // });
-  // const foundDetails = foundationDetails.map(foundationRequest => {
-  //   const { amount = 0, description = "team" } = foundationRequest;
-  //   return { entityPercentage: (formatFromWei(amount) / totalTokens) * 100, entityName: description };
-  // });
   const binRanges = [];
   const binValues = [];
   for (let index = 0; index < voteHistogramData.length; index += 1) {
@@ -43,12 +10,6 @@ const getOption = voteHistogramData => {
     binRanges.push(`${element.min}%-${element.max}%`);
     binValues.push(element.voters);
   }
-  // for (let index = 0; index < 100; index += 1) {
-  //   const item = Math.random();
-  //   binRanges.push(`${index}%-${index + 1}%`);
-  //   binValues.push(index === 0 ? parseFloat(item).toFixed(2) * 100 : (parseFloat(binValues[binValues.length - 1]) + 0.5 - item).toFixed(2));
-  // }
-  // console.log(binValues);
   return {
     // tooltip: {
     //     trigger: 'none',

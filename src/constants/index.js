@@ -24,6 +24,11 @@ const constants = {
   USER_FORM_STATES_FAILED_MESSAGE: "Failed to retrieve previously stored information.",
   USER_FORM_SUBMISSION_FAILED_MESSAGE: "Failed to submit the form. Please try again later.",
   PROJECT_METADATA_FAILED_MESSAGE: "Failed to submit the form. Please try again later.",
+  METAMASK_NOT_INSTALLED: "Metamask is not installed",
+  METAMASK_NOT_SIGNED_IN: "You are not signed into Metamask",
+  METAMASK_WRONG_NETWORK: "Wrong network selected. Switch to Rinkeby",
+  NOT_VAULT_MEMBER: "You are not a Vault Member",
+  NOT_VAULT_ISSUER: "Feature only for issuer of the DAICO"
 };
 
 export default constants;

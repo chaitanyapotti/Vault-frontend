@@ -55,7 +55,7 @@ const ProjectGovernanceName = props => {
           </div>
         </Col>
         <Col lg={4} className="push-half--top text-right">
-          <a href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
             View On Etherscan
           </a>
           <span>{lastRoundInfo}</span>

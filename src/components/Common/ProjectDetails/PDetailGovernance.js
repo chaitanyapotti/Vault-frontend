@@ -39,14 +39,14 @@ const PDetailGovernance = props => {
           Project Details
         </Col>
         <Col className="push-half--top text-right" lg={6}>
-          <a href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
             View On Etherscan
           </a>
         </Col>
       </Row>
       <Row>
         <Col className="push-half--top text-right" lg={12}>
-          <a rel="noreferrer noopener" href={null} onClick={onKillPollsHistoryClick}>
+          <a id="lnktag" className="text--black" rel="noreferrer noopener" href={null} onClick={onKillPollsHistoryClick}>
             Kill Polls History
           </a>
         </Col>

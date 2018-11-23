@@ -597,7 +597,7 @@ class ProjectDetailGovernance extends Component {
                   </span>{" "}
                   and the number of voters voting for kill <span className="text--secondary">({killVoterCount})</span> is greater than the minimum
                   required voters <span className="text--secondary">({Math.ceil((5 * formatFromWei(etherCollected, 6)) / 100)})</span>. Hence
-                  withdrawals and tap increment on this DAICO are temporarily frozen until until consensus drops below threshold. If the consensus
+                  withdrawals and tap increment on this DAICO are temporarily frozen until consensus drops below threshold. If the consensus
                   stays above this value on <span className="text--secondary">{formatDate(this.getNextKillPollStartDate())}</span>, this DAICO will
                   get killed.
                 </div>

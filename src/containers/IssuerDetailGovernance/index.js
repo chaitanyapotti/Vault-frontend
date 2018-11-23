@@ -490,7 +490,8 @@ class IssuerDetailGovernance extends Component {
               withdrawXfrButtonTransactionHash={withdrawXfrButtonTransactionHash}
             />
           ) : 
-          null }
+            <div /> 
+          }
           <IssuerFundReq
             data={xfrData}
             details={xfrDetails}

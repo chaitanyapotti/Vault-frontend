@@ -120,7 +120,7 @@ const PDetailGovernance = props => {
         <Col lg={6} className="push--top text-right">
           {signinStatusFlag <= 3 ? (
             <div className="hli">
-              <CustomToolTip title="This feature is only for Vault Members" id="btn-disabled" placement="bottom">
+              <CustomToolTip title="This feature is only for Vault Members" id="btn-disabled" placement="bottom" disabled>
                 <div>
                   <LoadingButton style={{ padding: "0 40px" }} type="danger" disabled>
                     Kill Project

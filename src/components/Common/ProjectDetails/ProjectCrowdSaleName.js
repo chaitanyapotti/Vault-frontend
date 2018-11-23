@@ -1,10 +1,10 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { CustomToolTip } from "../FormComponents";
 
 const ProjectCrowdSaleName = props => {
   const {
@@ -38,6 +38,7 @@ const ProjectCrowdSaleName = props => {
   const { website } = urls;
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
   const r1FinalizeLink = `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`;
+  const warningText = signinStatusFlag <= 2 ? "This feature is for vault members only" : "";
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
@@ -92,13 +93,13 @@ const ProjectCrowdSaleName = props => {
         <Col lg={6} className="text-right hl  ">
           {signinStatusFlag <= 2 ? (
             <div className="hli">
-              <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+              <CustomToolTip title={warningText} id="btn-disabled">
                 <div>
-                  <LoadingButton style={{ padding: "0 40px" }} tooltip="This feature is only for Vault Members" disabled>
+                  <LoadingButton style={{ padding: "0 40px" }} disabled>
                     {buttonText}
                   </LoadingButton>
                 </div>
-              </Tooltip>
+              </CustomToolTip>
             </div>
           ) : whitelistButtonTransactionHash !== "" ? (
             <div className="hli">
@@ -115,11 +116,13 @@ const ProjectCrowdSaleName = props => {
               </LoadingButton>
             </span>
           ) : buyButtonVisibility ? (
-            <span className="hli push-left--13">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onBuyClick} disabled={!buyButtonDisabled || remainingAllocation === 0}>
-                {buyButtonText}
-              </LoadingButton>
-            </span>
+            <CustomToolTip disabled={!buyButtonDisabled || remainingAllocation === 0} title="Can't Buy Now">
+              <span className="hli push-left--13">
+                <LoadingButton style={{ padding: "0 40px" }} onClick={onBuyClick} disabled={!buyButtonDisabled || remainingAllocation === 0}>
+                  {buyButtonText}
+                </LoadingButton>
+              </span>
+            </CustomToolTip>
           ) : r1FinalizeButtonTransactionHash !== "" ? (
             <div className="hli">
               <a href={ensureHttpUrl(r1FinalizeLink)} target="_blank" rel="noreferrer noopener">

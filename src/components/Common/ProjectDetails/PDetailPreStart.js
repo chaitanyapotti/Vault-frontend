@@ -56,7 +56,7 @@ const PDetailPreStart = props => {
           <div className="text--secondary">{hardCapCapitalisation}</div>
         </Col>
         <Col lg={6} className="txt">
-          <div className="txt-bold">Diluted Capitalisation:</div> 
+          <div className="txt-bold">Diluted Capitalisation:</div>
           <div className="text--secondary">{dilutedCapitalisation}</div>
         </Col>
       </Row>

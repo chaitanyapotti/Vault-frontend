@@ -1,10 +1,10 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { CustomToolTip } from "../FormComponents";
 
 const ProjectGovernanceName = props => {
   const {
@@ -92,13 +92,13 @@ const ProjectGovernanceName = props => {
         <Col lg={7} className="text-right hl">
           {signinStatusFlag <= 2 ? (
             <div className="hli">
-              <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
+              <CustomToolTip title="This feature is only for Vault Members" id="btn-disabled" disabled>
                 <div>
                   <LoadingButton tooltip="This feature is only for Vault Members" disabled>
                     {buttonText}
                   </LoadingButton>
                 </div>
-              </Tooltip>
+              </CustomToolTip>
             </div>
           ) : whitelistButtonTransactionHash !== "" ? (
             <span className="hli">

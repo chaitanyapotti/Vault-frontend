@@ -17,18 +17,22 @@ const styles = theme => ({
   }
 });
 
-class CustomToolTip extends React.Component {
-  render() {
-    const { classes, title, children, id, placement } = this.props || {};
-    return (
-      <div>
-        <Tooltip title={title} classes={{ tooltip: classes.fonts }} id={id} placement={placement}>
-          {children}
-        </Tooltip>
-      </div>
-    );
-  }
-}
+const CustomToolTip = props => {
+  const { classes, title, children, id, placement, disabled } = props || {};
+  return (
+    <div>
+      {disabled ? (
+        <div>
+          <Tooltip title={title} classes={{ tooltip: classes.fonts }} id={id} placement={placement}>
+            {children}
+          </Tooltip>
+        </div>
+      ) : (
+        children
+      )}
+    </div>
+  );
+};
 
 CustomToolTip.propTypes = {
   classes: PropTypes.object.isRequired

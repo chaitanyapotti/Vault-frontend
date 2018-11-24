@@ -173,18 +173,19 @@ class BuyersInformation extends Component {
     } = this.props || {};
     return (
       <div>
-        <div className="txt-m txt-dbld text--center">STEP: 5 Buyers Information</div>
+        <div className="txt-m txt-dbld text--left">Step 5: Buyers Information</div>
         <div className="txt push--top">
-          Due to Anti Money Laundering (AML) regulations. We are obliged to require the following information of every token sale participant.
+          Due to Anti Money Laundering (AML) regulations, we are obliged to require the following information of every token sale participant.
         </div>
-        <div className="txt-m txt-dbld push--top">Your Residential Address</div>
-        <div className="txt-m push-top--half">
-          Please share your residential address. In the next step you will be asked to provide the scan of a document proving the residency.
-        </div>
+        
+        
         <div className="push--top">
           <CUIDivider />
         </div>
-        <div className="txt-m txt-dbld push--top">Address</div>
+        <div className="txt-m txt-dbld push--top">Residential Address</div>
+        <div className="txt push-top--half">
+          Please share your residential address. In the next step you will be asked to provide the scan of a document proving your residency.
+        </div>
         <CUIFormInput
           required
           inputType={CUIInputType.TEXT}
@@ -267,7 +268,10 @@ class BuyersInformation extends Component {
             />
           </Col>
         </Row>
-        <div className="txt-m txt-dbld push--top">YOUR PASSPORT / ID INFORMATION</div>
+
+        <br/>
+        <br/>
+        <div className="txt-m txt-dbld push--top">Passport/ID information</div>
 
         <Row className="push--top">
           <Col lg={6}>
@@ -331,7 +335,10 @@ class BuyersInformation extends Component {
           </Col>
         </Row>
 
-        <div className="txt-m txt-dbld push--top">Full Name</div>
+        <br/>
+        <br/>
+
+        <div className="txt-m txt-dbld push--top">User Details</div>
 
         <Row className="push--top">
           <Col lg={6}>

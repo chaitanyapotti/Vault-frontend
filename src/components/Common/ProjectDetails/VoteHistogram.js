@@ -27,6 +27,7 @@ const getOption = voteHistogramData => {
           label: {
             width: "100%",
             padding: [5, 60, 5, 60],
+            textStyle: { fontFamily: "Montserrat", fontSize: "14" },
             formatter(params) {
               return `Number of voters with vote share in ${params.value}${params.seriesData.length ? `：${params.seriesData[0].data}` : ""}`;
             }

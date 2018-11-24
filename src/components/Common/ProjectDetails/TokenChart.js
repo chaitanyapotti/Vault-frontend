@@ -46,7 +46,8 @@ class TokenChart extends Component {
       color: Colors(tokenData.length - 3),
       tooltip: {
         trigger: "item",
-        formatter: "{a} <br/>{b}: {c} ({d}%)"
+        formatter: "{a} <br/>{b}: {c} ({d}%)",
+        textStyle: { fontFamily: "Montserrat", fontSize: "14" }
       },
       legend: {
         show: false,

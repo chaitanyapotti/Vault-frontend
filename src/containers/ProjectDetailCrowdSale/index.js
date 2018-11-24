@@ -27,6 +27,7 @@ import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
 import BuyModal from "../../components/Common/BuyModal";
 import web3 from "../../helpers/web3";
+import MasonryLayout from "../../components/Common/MasonaryLayout";
 
 class ProjectDetailCrowdSale extends Component {
   state = {
@@ -173,73 +174,65 @@ class ProjectDetailCrowdSale extends Component {
     const r1Rate = getR1Rate(rounds);
     return (
       <Grid>
-        <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
-          <TimeLine
-            fundsCollected={formatFromWei(etherCollected, 3)}
-            roundGoal={getR1Goal(rounds)}
-            startDate={new Date(startDateTime)}
-            endDate={new Date(r1EndTime)}
+        <MasonryLayout>
+          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
+            <TimeLine
+              fundsCollected={formatFromWei(etherCollected, 3)}
+              roundGoal={getR1Goal(rounds)}
+              startDate={new Date(startDateTime)}
+              endDate={new Date(r1EndTime)}
+            />
+          </CUICard>
+          <ProjectCrowdSaleName
+            projectName={projectName}
+            tokenTag={tokenTag}
+            price={getR1Price(rounds)}
+            roundText={this.getRoundText()}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            buttonText="Get Whitelisted"
+            buttonVisibility={!isCurrentMember}
+            buttonSpinning={buttonSpinning}
+            onClick={this.onWhiteListClickInternal}
+            signinStatusFlag={signinStatusFlag}
+            buyButtonVisibility={isCurrentMember}
+            buyButtonDisabled={this.canBuy()}
+            onBuyClick={this.buyTokens}
+            buyButtonText="Buy"
+            r1Finish={this.r1Finish()}
+            onR1FinalizeClick={this.onR1FinalizeClick}
+            r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
+            whitelistButtonTransactionHash={whitelistButtonTransactionHash}
+            r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
+            thumbnailUrl={thumbnailUrl}
+            remainingAllocation={r1Rate * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution, 18))}
           />
-        </CUICard>
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <ProjectCrowdSaleName
-              projectName={projectName}
-              tokenTag={tokenTag}
-              price={getR1Price(rounds)}
-              roundText={this.getRoundText()}
-              description={description}
-              urls={urls}
-              whitepaper={whitepaper}
-              buttonText="Get Whitelisted"
-              buttonVisibility={!isCurrentMember}
-              buttonSpinning={buttonSpinning}
-              onClick={this.onWhiteListClickInternal}
-              signinStatusFlag={signinStatusFlag}
-              buyButtonVisibility={isCurrentMember}
-              buyButtonDisabled={this.canBuy()}
-              onBuyClick={this.buyTokens}
-              buyButtonText="Buy"
-              r1Finish={this.r1Finish()}
-              onR1FinalizeClick={this.onR1FinalizeClick}
-              r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
-              whitelistButtonTransactionHash={whitelistButtonTransactionHash}
-              r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
-              thumbnailUrl={thumbnailUrl}
-              remainingAllocation={r1Rate * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution, 18))}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <PDetailCrowdSale
-              individualCap={formatFromWei(maximumEtherContribution, 3)}
-              voteSaturationLimit={capPercent / 100}
-              killFrequency="Quarterly"
-              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
-              initialFundRelease={formatFromWei(initialFundRelease, 3)}
-              tapIncrementUnit={tapIncrementFactor / 100}
-              hardCapCapitalisation={getSoftCap(rounds, prices)}
-              dilutedCapitalisation={getHardCap(totalMintableSupply, prices, rounds)}
-              tokenDataVisibitlity={isCurrentMember}
-              tokenBalance={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
-              remainingAllocation={r1Rate * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution, 18))}
-              buyableTokens={formatCurrencyNumber(r1Rate * formatFromWei(maximumEtherContribution), 0)}
-            />
-          </Col>
-        </Row>
+          <PDetailCrowdSale
+            individualCap={formatFromWei(maximumEtherContribution, 3)}
+            voteSaturationLimit={capPercent / 100}
+            killFrequency="Quarterly"
+            initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
+            initialFundRelease={formatFromWei(initialFundRelease, 3)}
+            tapIncrementUnit={tapIncrementFactor / 100}
+            hardCapCapitalisation={getSoftCap(rounds, prices)}
+            dilutedCapitalisation={getHardCap(totalMintableSupply, prices, rounds)}
+            tokenDataVisibitlity={isCurrentMember}
+            tokenBalance={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
+            remainingAllocation={r1Rate * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution, 18))}
+            buyableTokens={formatCurrencyNumber(r1Rate * formatFromWei(maximumEtherContribution), 0)}
+          />
 
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
-              <TokenChart
-                rounds={rounds}
-                foundationDetails={foundationDetails}
-                prices={prices}
-                currentRoundNumber={currentRoundNumber}
-                roundInfo={roundInfo}
-              />
-            </CUICard>
-          </Col>
-        </Row>
+          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
+            <TokenChart
+              rounds={rounds}
+              foundationDetails={foundationDetails}
+              prices={prices}
+              currentRoundNumber={currentRoundNumber}
+              roundInfo={roundInfo}
+            />
+          </CUICard>
+        </MasonryLayout>
         <BuyModal
           open={buyModalOpen}
           onClose={this.handleBuyClose}

@@ -739,3 +739,16 @@ input[type="file"] {
   color: #ffffff !important;
   text-decoration: none;
 }
+
+.lnktags {
+  background: none !important;
+  color: inherit !important;
+  border: none !important;
+  padding: 0 !important;
+  font: inherit !important;
+  cursor: pointer !important;
+}
+
+.lnktags:hover {
+  color: #4ca9fc !important;
+}

@@ -29,7 +29,7 @@ const TapCard = props => {
             Tap Increment
           </Col>
           <Col className="push-half--top text-right" lg={4}>
-            <LoadingButton id="lnktag" className="text--black" onClick={onTapPollsHistoryClick}>
+            <LoadingButton className="text--black lnktags btn-link" type="text" onClick={onTapPollsHistoryClick}>
               View Tap History
             </LoadingButton>
           </Col>

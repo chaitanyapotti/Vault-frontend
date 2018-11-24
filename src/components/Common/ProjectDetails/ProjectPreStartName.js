@@ -27,7 +27,8 @@ const ProjectPreStartName = props => {
     signinStatusFlag,
     whitelistButtonTransactionHash,
     thumbnailUrl,
-    isCurrentMember
+    isCurrentMember,
+    isVaultMembershipChecked
   } = props || {};
   const disabledMsg = getSignInStatusText(signinStatusFlag);
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
@@ -84,7 +85,7 @@ const ProjectPreStartName = props => {
           </div>
         </Col>
         <Col lg={6} className="text-right">
-          {signinStatusFlag < 4 ? (
+          {isVaultMembershipChecked && signinStatusFlag < 4 && typeof isCurrentMember === "undefined" ? (
             <div className="hli">
               <CustomToolTip title={disabledMsg} id="btn-disabled" disabled>
                 <span>

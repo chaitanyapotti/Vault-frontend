@@ -71,7 +71,8 @@ class ProjectDetailPreStart extends Component {
       whitelistButtonTransactionHash,
       thumbnailUrl,
       prices,
-      currentRoundNumber
+      currentRoundNumber,
+      isVaultMembershipChecked
     } = this.props || {};
     return (
       <Grid>
@@ -86,13 +87,14 @@ class ProjectDetailPreStart extends Component {
             urls={urls}
             whitepaper={whitepaper}
             buttonText="Get Whitelisted"
-            buttonVisibility={typeof isCurrentMember != "undefined" && !isCurrentMember}
+            buttonVisibility={typeof isCurrentMember != "undefined" && isVaultMembershipChecked && !isCurrentMember}
             buttonSpinning={buttonSpinning}
             onClick={this.onWhiteListClickInternal}
             signinStatusFlag={signinStatusFlag}
             whitelistButtonTransactionHash={whitelistButtonTransactionHash}
             thumbnailUrl={thumbnailUrl}
             isCurrentMember={isCurrentMember}
+            isVaultMembershipChecked={isVaultMembershipChecked}
           />
           <PDetailPreStart
             icoStartDate={formatDate(startDateTime)}
@@ -128,7 +130,7 @@ const mapStateToProps = state => {
   const { projectPreStartReducer, fetchPriceReducer, signinManagerData } = state || {};
   const { prices } = fetchPriceReducer || {};
   const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
-  const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag, isVaultMembershipChecked } = signinManagerData || {};
 
   return {
     isCurrentMember,
@@ -137,7 +139,8 @@ const mapStateToProps = state => {
     isVaultMember,
     userLocalPublicAddress,
     signinStatusFlag,
-    whitelistButtonTransactionHash
+    whitelistButtonTransactionHash,
+    isVaultMembershipChecked
   };
 };
 

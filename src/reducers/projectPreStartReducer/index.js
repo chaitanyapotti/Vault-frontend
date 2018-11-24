@@ -1,7 +1,7 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  isCurrentMember: false,
+  isCurrentMember: undefined,
   buttonSpinning: false,
   whitelistButtonTransactionHash: ""
 };

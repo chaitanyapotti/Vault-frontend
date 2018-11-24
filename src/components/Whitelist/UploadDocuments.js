@@ -36,7 +36,10 @@ class UploadDocuments extends Component {
           <Col lg={6}>
             <div className="txt-m txt-dbld push-top--50">Upload Passport Document</div>
             <div className="push-half">
-              <input name="passportDoc" type="file" accept="image/*, application/pdf" onChange={this.passportDocChanged} />
+              <label for="passport-upload" class="btn bg--primary txt txt-dddbld text--white">
+                  <div className="btn-padding">Upload Passport Document</div>
+              </label>
+              <input id="passport-upload" name="passportDoc" type="file" accept="image/*, application/pdf" onChange={this.passportDocChanged} />
             </div>
             <div>{passportFileName}</div>
             <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>
@@ -60,7 +63,10 @@ class UploadDocuments extends Component {
           <Col lg={6}>
             <div className="txt-m txt-dbld push-top--50">Upload Selfie</div>
             <div className="push-half">
-              <input name="selfie" type="file" accept="image/*" onChange={this.selfieChanged} />
+              <label for="selfie-upload" class="btn bg--primary txt txt-dddbld text--white">
+                  <div className="btn-padding">Upload Selfie</div>
+              </label>
+              <input name="selfie-upload" type="file" accept="image/*" onChange={this.selfieChanged} />
             </div>
             <div>{selfieFileName}</div>
             <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>
@@ -84,7 +90,10 @@ class UploadDocuments extends Component {
           <Col lg={6}>
             <div className="txt-m txt-dbld push-top--50">Upload Proof of Address</div>
             <div className="push-half">
-              <input name="addressDoc" type="file" accept="image/*, application/pdf" onChange={this.addressDocChanged} />
+              <label for="selfie-upload" class="btn bg--primary txt txt-dddbld text--white">
+                  <div className="btn-padding">Upload Proof of Address</div>
+              </label>
+              <input name="selfie-upload" type="file" accept="image/*, application/pdf" onChange={this.addressDocChanged} />
             </div>
             <div>{addressFileName}</div>
             <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>
@@ -121,3 +130,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(UploadDocuments);
+

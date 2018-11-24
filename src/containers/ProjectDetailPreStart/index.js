@@ -1,23 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import Warning from "@material-ui/icons/Warning";
 import { ProjectPreStartName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
 import { formatDate, formatFromWei, getR1Price, getSoftCap, getHardCap } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
-import AlertModal from "../../components/Common/AlertModal";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
 
 class ProjectDetailPreStart extends Component {
-  state = {
-    modalOpen: false
-  };
-
-  handleClose = () => this.setState({ modalOpen: false });
-
   componentDidMount() {
     const {
       fetchPrice: etherPriceFetch,
@@ -50,10 +42,6 @@ class ProjectDetailPreStart extends Component {
     const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
     if (isVaultMember) {
       whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
-    } else {
-      this.setState({
-        modalOpen: true
-      });
     }
   };
 
@@ -85,7 +73,6 @@ class ProjectDetailPreStart extends Component {
       prices,
       currentRoundNumber
     } = this.props || {};
-    const { modalOpen } = this.state;
     return (
       <Grid>
         <MasonaryLayout>
@@ -99,12 +86,13 @@ class ProjectDetailPreStart extends Component {
             urls={urls}
             whitepaper={whitepaper}
             buttonText="Get Whitelisted"
-            buttonVisibility={!isCurrentMember}
+            buttonVisibility={typeof isCurrentMember != "undefined" && !isCurrentMember}
             buttonSpinning={buttonSpinning}
             onClick={this.onWhiteListClickInternal}
             signinStatusFlag={signinStatusFlag}
             whitelistButtonTransactionHash={whitelistButtonTransactionHash}
             thumbnailUrl={thumbnailUrl}
+            isCurrentMember={isCurrentMember}
           />
           <PDetailPreStart
             icoStartDate={formatDate(startDateTime)}
@@ -121,12 +109,6 @@ class ProjectDetailPreStart extends Component {
             <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
           </CUICard>
         </MasonaryLayout>
-        <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
-          <div className="text--center text--danger">
-            <Warning style={{ width: "2em", height: "2em" }} />
-          </div>
-          <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
-        </AlertModal>
       </Grid>
     );
   }

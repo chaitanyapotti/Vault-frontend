@@ -1,4 +1,4 @@
-import format from "date-fns/format";
+import moment from "moment";
 import constants from "../../../constants";
 
 const formatDate = dbDate =>
@@ -10,7 +10,7 @@ const formatDate = dbDate =>
   //     return number + output;
   //   }
   // });
-  `${format(new Date(dbDate), "do LLL yyyy | hh:mm a")}`;
+  `${moment(dbDate).format("Do MMM YYYY | h:mm A z")}`;
 
 const formatRateToPrice = rate => parseFloat(1 / parseFloat(rate)).toPrecision(2);
 

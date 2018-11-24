@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import DateFnsUtils from "@date-io/date-fns";
+import MomentUtils from "@date-io/moment";
 import MuiPickersUtilsProvider from "material-ui-pickers/MuiPickersUtilsProvider";
 import DateTimePicker from "material-ui-pickers/DateTimePicker";
 
@@ -7,7 +7,7 @@ class DTPicker extends PureComponent {
   render() {
     const { selectedDate, handleDateChange, label, disablePast, minDate, maxDate, disableFuture } = this.props;
     return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
         <DateTimePicker
           value={selectedDate}
           ampm={false}
@@ -15,7 +15,7 @@ class DTPicker extends PureComponent {
           onChange={handleDateChange}
           label={label}
           style={{ margin: "16px 0 8px" }}
-          format="yyyy/MM/dd kk:mm"
+          format="Do MMM YYYY | h:mm A z"
           mask={[/\d/, /\d/, /\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, " ", /\d/, /\d/, ":", /\d/, /\d/, " ", /a|p/i, "M"]}
           disablePast={disablePast}
           disableFuture={disableFuture}

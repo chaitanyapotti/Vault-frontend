@@ -576,7 +576,7 @@ class ProjectDetailGovernance extends Component {
     return (
       <Grid>
         {this.canKill() ? (
-          <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px", "margin-bottom": "20px" }}>
+          <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px", "margin-bottom": "20px", width:'101.5%' }}>
             <Row>
               <Col lg={6}>
                 <div className="txt-xxxl text--primary">Notice</div>

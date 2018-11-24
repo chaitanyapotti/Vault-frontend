@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
-import { formatFromWei, Colors } from "../../../helpers/common/projectDetailhelperFunctions";
+import { formatFromWei, Colors, formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
 
 class TokenChart extends Component {
   getOption = () => {
@@ -42,11 +42,18 @@ class TokenChart extends Component {
     const tokenUnsold = totalTokens - tokenSold;
     etherCollected = Math.round(etherCollected);
     const etherUnCollected = Math.round(totalCollectableEther) - etherCollected;
+    // formatter: "{a} <br/>{b}: {c} ({d}%)",
     return {
       color: Colors(tokenData.length - 3),
       tooltip: {
         trigger: "item",
-        formatter: "{a} <br/>{b}: {c} ({d}%)",
+        formatter(params) {
+          const seriesI =
+            params.seriesIndex === 2 || params.seriesIndex === 0
+              ? `$${formatCurrencyNumber(params.value, 0)}`
+              : `${formatCurrencyNumber(params.value, 0)}`;
+          return `${params.seriesName} <br/>${params.name}: ${seriesI} (${params.percent}%)`;
+        },
         textStyle: { fontFamily: "Montserrat", fontSize: "14" }
       },
       legend: {

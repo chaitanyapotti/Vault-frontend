@@ -7,11 +7,15 @@ import { uploadPassportDocAction, uploadSelfieAction, uploadAddressDocAction } f
 
 class UploadDocuments extends Component {
   passportDocChanged = e => {
-    this.props.uploadPassportDocAction(e.target.files[0], this.props.userLocalPublicAddress, "passport");
+    if (e.target.files[0]){
+      this.props.uploadPassportDocAction(e.target.files[0], this.props.userLocalPublicAddress, "passport");
+    }
   };
 
   selfieChanged = e => {
-    this.props.uploadSelfieAction(e.target.files[0], this.props.userLocalPublicAddress, "selfie");
+    if (e.target.files[0]){
+      this.props.uploadSelfieAction(e.target.files[0], this.props.userLocalPublicAddress, "selfie");
+    }
   };
 
   addressDocChanged = e => {
@@ -22,35 +26,44 @@ class UploadDocuments extends Component {
     const { passportFileName, selfieFileName, addressFileName } = this.props || {};
     return (
       <div>
-        <div className="txt-m txt-dbld text--center">STEP: 6 Upload Documents</div>
+        <div className="txt-m txt-dbld text--left">Step 6: Upload Documents</div>
         <div className="txt push--top">Please upload copies of personal documents providing identity and residence</div>
-        <div className="txt-m txt-dbld">ID Document Requiremnents</div>
-        <ul className="txt push--top">
-          <li>It can be nationallly recognised passport, your identity card, or driver's license</li>
+        <br/>
+        <br/>
+        <div className="txt-m txt-dbld">ID Document Requirements</div>
+        <div className="txt push--top">
+        Uploaded document can be any of the following,
+        </div>
+        <ul className="txt">
+          <li>Passport</li>
+          <li>Driver's license</li>
+          <li>Any other national identity card</li>
         </ul>
+
+        {/* <div className="txt push--top">, your identity card, or driver's license</div> */}
 
         <Row className="push--top">
           {/* <Col lg={6} className="upld-img-plachldr">
                         <div>Space for Image display</div>
                     </Col> */}
           <Col lg={6}>
-            <div className="txt-m txt-dbld push-top--50">Upload Passport Document</div>
+            {/* <div className="txt-m txt-dbld push-top--50">Upload Passport Document</div> */}
             <div className="push-half">
               <label for="passport-upload" class="btn bg--primary txt txt-dddbld text--white">
-                  <div className="btn-padding">Upload Passport Document</div>
+                  <div className="btn-padding">Upload National ID</div>
               </label>
               <input id="passport-upload" name="passportDoc" type="file" accept="image/*, application/pdf" onChange={this.passportDocChanged} />
             </div>
             <div>{passportFileName}</div>
             <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>
-            <div className="txt push--top">2 MB maximum file size</div>
+            <div className="txt">2 MB maximum file size</div>
           </Col>
         </Row>
-        <div className="push--top">
+        {/* <div className="push--top">
           <CUIDivider />
-        </div>
+        </div> */}
 
-        <div className="txt-m txt-dbld push--top">Selfie Requirements</div>
+        <div className="txt-m txt-dbld push-top--50">Selfie Requirements</div>
         <ul className="txt push--top">
           <li>Passport size and colour photograph</li>
           <li>It should be clear headshot image</li>
@@ -61,23 +74,23 @@ class UploadDocuments extends Component {
                         <div>Space for Image display</div>
                     </Col> */}
           <Col lg={6}>
-            <div className="txt-m txt-dbld push-top--50">Upload Selfie</div>
+            {/* <div className="txt-m txt-dbld push-top--50">Upload Selfie</div> */}
             <div className="push-half">
               <label for="selfie-upload" class="btn bg--primary txt txt-dddbld text--white">
                   <div className="btn-padding">Upload Selfie</div>
               </label>
-              <input name="selfie-upload" type="file" accept="image/*" onChange={this.selfieChanged} />
+              <input id="selfie-upload" type="file" name="selfieDoc" accept="image/*" onChange={this.selfieChanged} />
             </div>
             <div>{selfieFileName}</div>
             <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>
-            <div className="txt push--top">2 MB maximum file size</div>
+            <div className="txt">2 MB maximum file size</div>
           </Col>
         </Row>
         <div className="push--top">
-          <CUIDivider />
+          {/* <CUIDivider /> */}
         </div>
 
-        <div className="txt-m txt-dbld push--top">Proof of Address Requirements</div>
+        <div className="txt-m txt-dbld push-top--50">Proof of Address Requirements</div>
         <ul className="txt push--top">
           <li>Utility bill with registered name, no older than 3 months</li>
           <li>eg. Gas Bill, Phone Bill, Water Bill, Bank Statement etc.</li>
@@ -88,16 +101,16 @@ class UploadDocuments extends Component {
                         <div className="txt-m txt-dbld">Upload Proof of Address</div>
                     </Col> */}
           <Col lg={6}>
-            <div className="txt-m txt-dbld push-top--50">Upload Proof of Address</div>
+            {/* <div className="txt-m txt-dbld push-top--50">Upload Proof of Address</div> */}
             <div className="push-half">
-              <label for="selfie-upload" class="btn bg--primary txt txt-dddbld text--white">
+              <label for="address-upload" class="btn bg--primary txt txt-dddbld text--white">
                   <div className="btn-padding">Upload Proof of Address</div>
               </label>
-              <input name="selfie-upload" type="file" accept="image/*, application/pdf" onChange={this.addressDocChanged} />
+              <input id="address-upload" type="file" accept="image/*, application/pdf" onChange={this.addressDocChanged} />
             </div>
             <div>{addressFileName}</div>
             <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>
-            <div className="txt push--top">2 MB maximum file size</div>
+            <div className="txt">2 MB maximum file size</div>
           </Col>
         </Row>
       </div>

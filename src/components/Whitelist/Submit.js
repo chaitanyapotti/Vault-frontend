@@ -48,7 +48,7 @@ class Submit extends Component {
       <div>
         {this.props.vaultMembershipRequestChecked ? (
           <div>
-            <div className="txt-m txt-dbld text--center">STEP: 7 Request Vault Membership</div>
+            <div className="txt-m txt-dbld text--left">Step 7: Request Vault Membership</div>
             <div className="txt push--top">I hereby declare that all the data submitted is factually correct to the best of my knowledge.</div>
             <div>
               {this.props.vaultMembershipRequested ? (
@@ -56,11 +56,11 @@ class Submit extends Component {
                   {this.props.isVaultMember ? (
                     <div>{this.props.history.push("/registration")}</div>
                   ) : (
-                    <div>We will approve your membership request automatically in some time.</div>
-                  )}
+                      <div>We will approve your membership request automatically in some time.</div>
+                    )}
                 </div>
               ) : vaultMembershipRequestTransactionHash !== "" ? (
-                <div className="hli">
+                <div className="hli push--top">
                   <a href={link} target="_blank" rel="noreferrer noopener">
                     <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
                       Status
@@ -68,62 +68,65 @@ class Submit extends Component {
                   </a>
                 </div>
               ) : (
-                <div>
-                  <Grid>
-                    <Row className="push--top">
-                      <Col>
-                        <LoadingButton
-                          style={{ padding: "0 40px" }}
-                          onClick={this.handleRequestVaultMembership}
-                          loading={isVaultMembershipButtonSpinning}
-                        >
-                          Become a Vault Member
-                        </LoadingButton>
-                      </Col>
-                      <Col>
-                        <CUIFormInputLabel
-                          control={
-                            <CUIFormInput
-                              inputType={CUIInputType.RADIO}
-                              inputColor={CUIInputColor.PRIMARY}
-                              inputChecked={this.props.isIssuerFlag}
-                              onChange={this.handleIssuerFlagToggled}
+                    <div>
+                      <Grid>
+                        <Row className="push--top">
+                        <Col>
+                            <CUIFormInputLabel
+                              control={
+                                <CUIFormInput
+                                  inputType={CUIInputType.RADIO}
+                                  inputColor={CUIInputColor.PRIMARY}
+                                  inputChecked={this.props.isIssuerFlag}
+                                  onChange={this.handleIssuerFlagToggled}
+                                />
+                              }
+                              label= {<div className="txt-m txt-dbld">Issuer</div>} 
                             />
-                          }
-                          label="Issuer"
-                        />
-                        <span>
-                          <CUIFormInputLabel
-                            control={
-                              <CUIFormInput
-                                inputType={CUIInputType.RADIO}
-                                inputColor={CUIInputColor.PRIMARY}
-                                inputChecked={!this.props.isIssuerFlag}
-                                onChange={this.handleIssuerFlagToggled}
+                            <span>
+                              <CUIFormInputLabel
+                                control={
+                                  <CUIFormInput
+                                    inputType={CUIInputType.RADIO}
+                                    inputColor={CUIInputColor.PRIMARY}
+                                    inputChecked={!this.props.isIssuerFlag}
+                                    onChange={this.handleIssuerFlagToggled}
+                                  />
+                                }
+                                label={<div className="txt-m txt-dbld">Investor</div>} 
                               />
-                            }
-                            label="Investor"
-                          />
-                        </span>
-                      </Col>
-                    </Row>
-                    <Row>
-                      {this.props.isIssuerFlag ? (
-                        <div>You will be able to publish a DAICO and you will be charged 0.5016 Ethers.</div>
-                      ) : (
-                        <div>You will be able to participate in DAICOs and you will be charged 0.0016 Ethers.</div>
-                      )}
-                    </Row>
-                  </Grid>
-                </div>
-              )}
+                            </span>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <LoadingButton
+                              style={{ padding: "0 40px" }}
+                              onClick={this.handleRequestVaultMembership}
+                              loading={isVaultMembershipButtonSpinning}
+                            >
+                              Become a Vault Member
+                        </LoadingButton>
+                          </Col>
+                          
+                        </Row>
+                        <Row className="push--top">
+                          {this.props.isIssuerFlag ? (
+                            <div>You will be able to publish a DAICO and you will be charged 0.5016 Ethers.</div>
+                          ) : (
+                              <div>You will be able to participate in DAICOs and you will be charged 0.0016 Ethers.</div>
+                            )}
+                        </Row>
+                      </Grid>
+                    </div>
+                  )}
             </div>
           </div>
         ) : (
-          <Grid>
-            <Loader rows={6} />
-          </Grid>
-        )}
+            <Grid>
+              <Loader rows={6} />
+            </Grid>
+          )}
       </div>
     );
   }

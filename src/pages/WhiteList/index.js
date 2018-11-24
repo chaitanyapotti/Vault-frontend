@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Grid } from "../../helpers/react-flexbox-grid";
-import CustomizedStepper from "../../components/Common/CustomizedStepper";
+import CustomizedStepper from "../../components/Common/CustomizedStepperUserRegistration";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import { CUICard, CUIDivider } from "../../helpers/material-ui";
 import { Introduction, EthWallet, TC, BuyersInformation, UploadDocuments, Submit, OtpVerification, Done } from "../../components/Whitelist";
@@ -35,7 +35,7 @@ class WhiteList extends Component {
     "Introducton",
     "ETH Wallet",
     "Term & Conditions",
-    "Mobile Number Verification",
+    "Mobile Verification",
     "Buyers Information",
     "Upload Documents",
     "Submit",
@@ -235,9 +235,9 @@ class WhiteList extends Component {
                     <CUICard className="card-brdr" style={{ padding: "40px 40px", marginBottom: "40px" }}>
                       <CustomizedStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={this.props.activeStep} />
                       <div className="push-top--50">
-                        <CUIDivider />
+                        {/* <CUIDivider /> */}
                       </div>
-                      <div className="push--top text--center">
+                      <div className="push--top text--right">
                         <ButtonComponent label="Back" onClick={this.handleBack} disabled={this.getBackDisabledStatus()} />
                         <span className="push--left">
                           <ButtonComponent label="Save" onClick={this.handleSave} />

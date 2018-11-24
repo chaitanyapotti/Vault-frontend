@@ -72,7 +72,7 @@ class OtpVerification extends Component {
         <Grid>
           {/* <CUICard className="card-brdr" style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}> */}
           <div>
-          <div className="txt-m txt-dbld text--center">STEP: 4 Phone Number Verification</div>
+          <div className="txt-m txt-dbld text--left">Step 4: Phone Number Verification</div>
             <Row>
               <Col xs={12} lg={4}>
                 <CUIFormInput

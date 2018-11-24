@@ -10,11 +10,11 @@ class Done extends Component {
     // const {wallet} = this.state || {};
     return (
       <div>
-        <div className="txt-m txt-dbld text--center">STEP: 8 Done</div>
+        <div className="txt-m txt-dbld text--left">Registration sent for approval</div>
         {/* <div className="txt push--top">
                     Please state a valid Ethereum wallet address from which you will be sending Ethers and to which you will receive respective tokens.
                 </div> */}
-        <div>
+        <div className="push--top">
           {this.props.isVaultMember ? (
             <div>{this.props.history.push("/registration")}</div>
           ) : (

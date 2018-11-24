@@ -6,6 +6,7 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import StepConnector from "@material-ui/core/StepConnector";
 import { CUICard } from "../../../helpers/material-ui";
+import LoadingButton from "../LoadingButton";
 
 const styles = theme => ({
   root: {
@@ -65,9 +66,9 @@ class CustomizedStepper extends React.Component {
     return (
       <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
         <div className="text--right">
-          <a rel="noopener" onClick={onClick}>
+          <LoadingButton id="lnktag" className="text--black" onClick={onClick}>
             Start Over
-          </a>
+          </LoadingButton>
         </div>
         <div className="txt-xl">Deployer</div>
         <div className={classes.root}>

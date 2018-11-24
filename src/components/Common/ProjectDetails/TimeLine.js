@@ -12,8 +12,8 @@ const TimeLine = props => {
   const totalDays = Math.round((endDate > startDate ? endDate - startDate : 0) / 86400 / 1000);
   const leftDays = Math.round((endDate > new Date() ? endDate - new Date() : 0) / 86400 / 1000);
   const timeProgress = Math.round((parseFloat(totalDays - leftDays) / parseFloat(totalDays)) * 100);
-  const text = progressValue > 100 ? `Round 1 overflow by ${(progressValue - 100)}%` : `${progressValue} % Goal reached`;
-  const className = progressValue <= 100 ? "txt-m text-right text--secondary":"txt-m text-right text--danger";
+  const text = progressValue > 100 ? `Round 1 overflow by ${progressValue - 100}%` : `${progressValue} % Goal reached`;
+  const className = progressValue <= 100 ? "txt-m text-right text--secondary" : "txt-m text-right text--danger";
   return (
     <Grid>
       <Row>
@@ -46,7 +46,7 @@ const TimeLine = props => {
           Started on: {startDate.toDateString()}
         </Col>
         <Col lg={4} className="txt-m push-half-h--bottom text-center">
-          Days Left: {Math.round((endDate > new Date() ? endDate - new Date() : 0) / 86400 / 1000)} days
+          Days Left: {leftDays} days
         </Col>
         <Col lg={4} className="txt-m push-half-h--bottom text-right">
           Ends on: {endDate.toDateString()}
@@ -61,4 +61,3 @@ const TimeLine = props => {
 };
 
 export default TimeLine;
-

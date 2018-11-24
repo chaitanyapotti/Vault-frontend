@@ -1,6 +1,6 @@
 import React from "react";
 import { Tooltip } from "@material-ui/core";
-import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
+import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { CUIFormInput, CUICard } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
 import LoadingButton from "../LoadingButton";

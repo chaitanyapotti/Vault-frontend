@@ -8,9 +8,8 @@ import {
   isIssuerFlagToggled,
   hasVaultMembershipRequested
 } from "../../actions/userRegistrationActions";
-import { ButtonComponent } from "../Common/FormComponents";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import { CUICard, CUIFormInput, CUIFormInputLabel, CUIDivider } from "../../helpers/material-ui";
+import { CUIFormInput, CUIFormInputLabel } from "../../helpers/material-ui";
 import { CUIInputType, CUIInputColor } from "../../static/js/variables";
 import Loader from "../Loaders/loader";
 import LoadingButton from "../Common/LoadingButton";

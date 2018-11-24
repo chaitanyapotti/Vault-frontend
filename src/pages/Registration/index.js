@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import Warning from "@material-ui/icons/Warning";
-import ContentLoader from "react-content-loader";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { IdentityDetails, DaicoDetails, Distribution } from "../../components/Registration";
 import { validateLength, validateDate, validateTotalSaleTokens, validateZero } from "../../helpers/common/validationHelperFunctions";

@@ -1,23 +1,9 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
-import { object } from "prop-types";
 import { CUICard } from "../../../helpers/material-ui";
-import { formatFromWei } from "../../../helpers/common/projectDetailhelperFunctions";
 
 const SpendCurve = props => {
-  const {
-    initialFundRelease,
-    startDateTime,
-    spendableArrays,
-    spentArray,
-    xfrDots,
-    tapDots,
-    spendableDots,
-    spentDots,
-    contributionArray,
-    dateArray,
-    contriArrayReceived
-  } = props || {};
+  const { spendableArrays, spentArray, contributionArray, dateArray, contriArrayReceived } = props || {};
 
   const getOption = () => {
     const colors = ["#4ca9fc", "#ff89a0", "#f7c34f", "#8d8d8d"];

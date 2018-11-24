@@ -5,7 +5,6 @@ import { CUIFormInput, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import DPicker from "../Common/DPicker";
-import actionTypes from "../../action_types";
 
 import {
   addressLine1ChangedAction,
@@ -26,8 +25,8 @@ import {
   saveUserFormStates,
   emailChangedAction
 } from "../../actions/userRegistrationActions";
-const countryList = require('country-list');
 
+const countryList = require("country-list");
 
 class BuyersInformation extends Component {
   constructor(props) {
@@ -37,7 +36,7 @@ class BuyersInformation extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.saveUserFormStates(this.props.userRegistrationData, this.props.userLocalPublicAddress);
   }
 
@@ -90,8 +89,8 @@ class BuyersInformation extends Component {
   };
 
   onChangeEmail = e => {
-    this.props.emailChangedAction(e.target.value); 
-  }
+    this.props.emailChangedAction(e.target.value);
+  };
 
   onChangeGender = e => {
     this.props.genderChangedAction(e.target.value);
@@ -148,10 +147,10 @@ class BuyersInformation extends Component {
 
   render() {
     const { selectedDate } = this.state || {};
-    let countryChoices = []
-    const allCountries = countryList.getNames()
-    for (let i=0; i< allCountries.length; i++){
-      countryChoices.push({value: allCountries[i], primaryText: allCountries[i]})
+    const countryChoices = [];
+    const allCountries = countryList.getNames();
+    for (let i = 0; i < allCountries.length; i++) {
+      countryChoices.push({ value: allCountries[i], primaryText: allCountries[i] });
     }
     const {
       addressLine1,
@@ -263,7 +262,7 @@ class BuyersInformation extends Component {
               onChange={this.onChangeCountry}
               inputValue={country}
               items={countryChoices}
-              //items={[{ value: "USA", primaryText: "USA" }, { value: "INDIA", primaryText: "INDIA" }, { value: "CHINA", primaryText: "CHINA" }]}
+              // items={[{ value: "USA", primaryText: "USA" }, { value: "INDIA", primaryText: "INDIA" }, { value: "CHINA", primaryText: "CHINA" }]}
             />
           </Col>
         </Row>
@@ -379,20 +378,20 @@ class BuyersInformation extends Component {
           </Col>
 
           <Col lg={6}>
-          <DPicker
-          SelectField = {true}
-          selectedDate={selectedDate}
+            <DPicker
+              SelectField
+              selectedDate={selectedDate}
               disableFuture
               label="Date of Birth"
               handleDateChange={this.onChangeDateOfBirth}
               selectedDate={dateOfBirth}
               maxDate={this.getEndMaxDate()}
-          />
+            />
           </Col>
         </Row>
 
         <Row className="push--top">
-        <Col lg={6}>
+          <Col lg={6}>
             <CUIFormInput
               required
               inputType={CUIInputType.TEXT}

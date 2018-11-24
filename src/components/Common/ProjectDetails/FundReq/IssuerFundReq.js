@@ -89,7 +89,7 @@ class IssuerFundReq extends Component {
       withdrawXfrButtonTransactionHash,
       isPermissioned
     } = this.props || {};
-    const { totalAmount, amount1, amount2, text } = getWithdrawableXfrAmount;
+    const { totalAmount, text } = getWithdrawableXfrAmount;
     const withdrawXfrLink = `https://rinkeby.etherscan.io/tx/${withdrawXfrButtonTransactionHash}`;
     return (
       <div>

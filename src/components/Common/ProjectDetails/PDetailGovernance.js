@@ -46,9 +46,9 @@ const PDetailGovernance = props => {
       </Row>
       <Row>
         <Col className="push-half--top text-right" lg={12}>
-          <a id="lnktag" className="text--black" rel="noreferrer noopener" href={null} onClick={onKillPollsHistoryClick}>
+          <LoadingButton id="lnktag" className="text--black" onClick={onKillPollsHistoryClick}>
             Kill Polls History
-          </a>
+          </LoadingButton>
         </Col>
       </Row>
       <Row className="push-top--35">

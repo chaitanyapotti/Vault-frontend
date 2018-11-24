@@ -9,11 +9,13 @@ import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
 import { Grid } from "../../helpers/react-flexbox-grid";
-import Loader from "../../components/Loaders/loader";
+import { fetchPrice } from "../../actions/priceFetchActions/index";
 import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
+
 class ProjectGovernance extends Component {
   componentWillUnmount() {
-    this.props.clearGovernanceStates();
+    const { clearGovernanceStates: clearingStates } = this.props || {};
+    clearingStates();
   }
 
   componentDidMount() {
@@ -21,8 +23,9 @@ class ProjectGovernance extends Component {
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
     if ("projectid" in params) {
-      const { currentRound: currentRoundDetailsFetch } = this.props || {};
+      const { currentRound: currentRoundDetailsFetch, fetchPrice: etherPriceFetch } = this.props || {};
       currentRoundDetailsFetch(params.projectid);
+      etherPriceFetch("ETH");
     } else {
       const { history } = this.props || {};
       history.push({
@@ -32,7 +35,17 @@ class ProjectGovernance extends Component {
   }
 
   render() {
-    const { currentRoundNumber, projectDetails, treasuryStateNumber, history } = this.props || {};
+    const {
+      currentRoundNumber,
+      projectDetails,
+      treasuryStateNumber,
+      history,
+      prices,
+      isVaultMember,
+      userLocalPublicAddress,
+      signinStatusFlag,
+      isVaultMembershipChecked
+    } = this.props || {};
     const {
       currentDeploymentIndicator,
       projectName,
@@ -65,7 +78,7 @@ class ProjectGovernance extends Component {
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
-    if (treasuryStateNumber === "0") {
+    if (treasuryStateNumber === "0" || !isVaultMembershipChecked) {
       return (
         <Grid>
           <GvrncCardLoader />
@@ -88,6 +101,7 @@ class ProjectGovernance extends Component {
             pollFactoryAddress={pollFactoryAddress}
             daicoTokenAddress={daicoTokenAddress}
             treasuryStateNumber={treasuryStateNumber}
+            prices={prices}
           />
         </div>
       );
@@ -115,6 +129,11 @@ class ProjectGovernance extends Component {
             initialFundRelease={initialFundRelease}
             thumbnailUrl={thumbnailUrl}
             currentRoundNumber={currentRoundNumber}
+            prices={prices}
+            isVaultMember={isVaultMember}
+            userLocalPublicAddress={userLocalPublicAddress}
+            signinStatusFlag={signinStatusFlag}
+            isVaultMembershipChecked={isVaultMembershipChecked}
           />
         </div>
       );
@@ -148,6 +167,11 @@ class ProjectGovernance extends Component {
             projectid={_id}
             currentRoundNumber={currentRoundNumber}
             thumbnailUrl={thumbnailUrl}
+            prices={prices}
+            isVaultMember={isVaultMember}
+            userLocalPublicAddress={userLocalPublicAddress}
+            signinStatusFlag={signinStatusFlag}
+            isVaultMembershipChecked={isVaultMembershipChecked}
           />
         </div>
       );
@@ -186,6 +210,7 @@ class ProjectGovernance extends Component {
             history={history}
             killAcceptancePercent={killAcceptancePercent}
             thumbnailUrl={thumbnailUrl}
+            prices={prices}
           />
         </div>
       );
@@ -196,15 +221,21 @@ class ProjectGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { deployerReducer, projectGovernanceReducer } = state || {};
+  const { deployerReducer, projectGovernanceReducer, fetchPriceReducer, signinManagerData } = state || {};
+  const { prices } = fetchPriceReducer || {};
   const { projectDetails, ts } = deployerReducer || {};
   const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
-
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag, isVaultMembershipChecked } = signinManagerData || {};
   return {
     projectDetails,
     currentRoundNumber,
     treasuryStateNumber,
-    ts
+    ts,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isVaultMembershipChecked
   };
 };
 
@@ -212,7 +243,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       currentRound,
-      clearGovernanceStates
+      clearGovernanceStates,
+      fetchPrice
     },
     dispatch
   );

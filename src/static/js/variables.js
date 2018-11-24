@@ -37,7 +37,9 @@ export const CUIButtonType = {
   FAB: "fab",
   OUTLINED: "outlined",
   DEFAULT: "default",
-  CONTAINED: "contained"
+  CONTAINED: "contained",
+  PENDING: "pending",
+  DANGER: "danger"
 };
 
 export const CUIButtonSize = {

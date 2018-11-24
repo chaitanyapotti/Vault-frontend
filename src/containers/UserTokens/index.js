@@ -87,7 +87,7 @@ class UserTokens extends Component {
                             const { projectName, thumbnailUrl } = value || {};
                             return (
                               <div style={{ width: "130px" }} className="hl">
-                                <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                                <img alt="" className="hli" src={thumbnailUrl} width="35" height="35" />
                                 <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
                                   {projectName}
                                 </div>

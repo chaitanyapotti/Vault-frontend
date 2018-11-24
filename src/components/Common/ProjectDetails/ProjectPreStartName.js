@@ -1,10 +1,12 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { CustomToolTip } from "../FormComponents";
+import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import BtnLoader from "../../Loaders/BtnLoader";
 
 const ProjectPreStartName = props => {
   const {
@@ -24,8 +26,11 @@ const ProjectPreStartName = props => {
     buttonSpinning,
     signinStatusFlag,
     whitelistButtonTransactionHash,
-    thumbnailUrl
+    thumbnailUrl,
+    isCurrentMember,
+    isVaultMembershipChecked
   } = props || {};
+  const disabledMsg = getSignInStatusText(signinStatusFlag);
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
   const { website } = urls;
   return (
@@ -79,16 +84,16 @@ const ProjectPreStartName = props => {
             </a>
           </div>
         </Col>
-        <Col lg={6} className="text-right   ">
-          {signinStatusFlag < 3 ? (
+        <Col lg={6} className="text-right">
+          {isVaultMembershipChecked && signinStatusFlag < 4 && typeof isCurrentMember === "undefined" ? (
             <div className="hli">
-              <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-                <div>
+              <CustomToolTip title={disabledMsg} id="btn-disabled" disabled>
+                <span>
                   <LoadingButton style={{ padding: "0 40px" }} disabled>
                     {buttonText}
                   </LoadingButton>
-                </div>
-              </Tooltip>
+                </span>
+              </CustomToolTip>
             </div>
           ) : whitelistButtonTransactionHash !== "" ? (
             <div className="hli">
@@ -104,9 +109,13 @@ const ProjectPreStartName = props => {
                 {buttonText}
               </LoadingButton>
             </div>
-          ) : (
+          ) : isCurrentMember ? (
             <span>
               You are whitelisted <img src="/assets/Vault/whitelist.svg" alt="whitelist checked" width="20" height="20" />
+            </span>
+          ) : (
+            <span width="20">
+              <BtnLoader width={45} height={19} />
             </span>
           )}
         </Col>

@@ -94,7 +94,7 @@ const SpendCurve = props => {
           axisLine: {
             onZero: false,
             lineStyle: {
-              color: "#8d8d8d"
+              color: "#3d3d3d"
             }
           },
           axisPointer: {
@@ -123,7 +123,7 @@ const SpendCurve = props => {
           axisLine: {
             onZero: false,
             lineStyle: {
-              color: "#8d8d8d"
+              color: "#3d3d3d"
             }
           },
           axisPointer: {
@@ -148,22 +148,27 @@ const SpendCurve = props => {
         {
           type: "value",
           axisLabel: {
-            show: false
+            show: false,
+            textStyle: { fontFamily: "Montserrat" }
           },
           axisTick: {
-            show: false
+            show: true
           },
           axisLine: {
             lineStyle: {
-              color: "#8d8d8d"
+              color: "#3d3d3d"
             }
           }
         },
         {
           type: "value",
+          axisLabel: {
+            show: false,
+            textStyle: { fontFamily: "Montserrat" }
+          },
           axisLine: {
             lineStyle: {
-              color: "#8d8d8d"
+              color: "#3d3d3d"
             }
           }
         }
@@ -195,6 +200,21 @@ const SpendCurve = props => {
           lineStyle: {
             width: 3
           },
+          markLine: {
+            data: [
+              {
+                type: "max",
+                name: "Total collected",
+                label: {
+                  textStyle: { fontFamily: "Montserrat" },
+                  position: "middle",
+                  formatter(params) {
+                    return `${params.name}: ${params.value} ETH`;
+                  }
+                }
+              }
+            ]
+          },
           data: contributedAmounts
         },
         {
@@ -215,6 +235,7 @@ const SpendCurve = props => {
       {contriArrayReceived}
       <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
         <div className="txt-xxxl text--primary">Spend Curve</div>
+        <br />
         <ReactEcharts option={getOption()} notMerge lazyUpdate style={{ height: "25em", width: "30em", padding: "0px" }} opts={{ renderer: "svg" }} />
       </CUICard>
     </div>

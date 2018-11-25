@@ -50,7 +50,7 @@ class VerticalStepper extends React.Component {
   };
 
   render() {
-    const { classes, getSteps, activeStep, getStepContent, onClick } = this.props;
+    const { classes, getSteps, activeStep, getStepContent, onClick, header, startOver } = this.props;
     const steps = getSteps();
     const connector = (
       <StepConnector
@@ -64,13 +64,13 @@ class VerticalStepper extends React.Component {
     );
 
     return (
-      <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
+      <CUICard className="card-brdr" style={{ padding: "40px 80px 40px 40px" }}>
         <div className="text--right">
           <a rel="noopener" onClick={onClick}>
-            Start Over
+            {startOver}
           </a>
         </div>
-        <div className="txt-xl">Deployer</div>
+        <div className="txt-xl">{header}</div>
         <div className={classes.root}>
           <Stepper activeStep={activeStep} orientation="vertical">
             {steps.map((label, index) => (

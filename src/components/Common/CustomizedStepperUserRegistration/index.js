@@ -63,32 +63,31 @@ class CustomizedStepper extends React.Component {
     );
 
     return (
-      //<CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
+      // <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <div className="text--left">
-      
-      <div className="txt-xl">User Registration</div>
-      <div className={classes.root} style={{paddingTop: "5px"}}>
-        <Stepper alternativeLabel activeStep={activeStep} connector={connector}>
-          {steps.map(label => (
-            <Step key={label}>
-              <StepLabel>
-                <div className="txt labelAlignment">{label}</div>
-              </StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <div>
-          {activeStep === steps.length ? (
-            <div>{this.redirectToIssuerPage()}</div>
-          ) : (
+        <div className="txt-xl">User Registration</div>
+        <div className={classes.root} style={{ paddingTop: "5px" }}>
+          <Stepper alternativeLabel activeStep={activeStep} connector={connector}>
+            {steps.map(label => (
+              <Step key={label}>
+                <StepLabel>
+                  <div className="txt labelAlignment">{label}</div>
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          <div>
+            {activeStep === steps.length ? (
+              <div>{this.redirectToIssuerPage()}</div>
+            ) : (
               <div>
                 <div className={classes.instructions}>{getStepContent(activeStep)}</div>
               </div>
             )}
+          </div>
         </div>
       </div>
-      </div>
-      //</CUICard>
+      // </CUICard>
     );
   }
 }

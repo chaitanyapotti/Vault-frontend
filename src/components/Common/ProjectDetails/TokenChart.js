@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
-import { formatFromWei, Colors, formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
+import { formatFromWei, Colors, formatCurrencyNumber, significantDigits } from "../../../helpers/common/projectDetailhelperFunctions";
 
 class TokenChart extends Component {
   getOption = () => {
@@ -12,7 +12,6 @@ class TokenChart extends Component {
     const tokenData = [];
     const legendData = ["Round 1 Cap", "Round 2 Cap", "Round 3 Cap", "Round 1 Tokens", "Round 2 Tokens", "Round 3 Tokens"];
     const roundDollarData = [];
-    const roundEtherData = [];
     let tokenSold = 0;
     let totalTokens = 0;
     let totalCollectableEther = 0;
@@ -55,7 +54,8 @@ class TokenChart extends Component {
             params.seriesIndex === 2 || params.seriesIndex === 0
               ? `$${formatCurrencyNumber(params.value, 0)}`
               : `${formatCurrencyNumber(params.value, 0)}`;
-          return `${params.seriesName} <br/>${params.name}: ${seriesI} (${params.percent}%)`;
+          const seriesEther = params.seriesIndex === 2 ? `<br/>${significantDigits(params.value / etherPrice)} ETH` : ``;
+          return `${params.seriesName} <br/>${params.name}: ${seriesI} (${params.percent}%)${seriesEther}`;
         },
         textStyle: { fontFamily: "Montserrat", fontSize: "14" }
       },

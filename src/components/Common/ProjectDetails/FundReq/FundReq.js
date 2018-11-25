@@ -3,6 +3,7 @@ import { Divider } from "@material-ui/core";
 import { CUICard } from "../../../../helpers/material-ui";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 import ReqType from "./ReqType";
+import LoadingButton from "../../LoadingButton";
 
 class FundReq extends Component {
   getObject1 = () => {
@@ -99,9 +100,9 @@ class FundReq extends Component {
               Exceptional Fund Requests
             </Col>
             <Col className="push-half--top text-right txt-no-wrp" lg={4}>
-              <a id="lnktag" className="text--black" rel="noopener" onClick={onXfrPollHistoryClick}>
+              <LoadingButton className="text--black lnktags" type="text" onClick={onXfrPollHistoryClick}>
                 View XFR History
-              </a>
+              </LoadingButton>
             </Col>
           </Row>
           <Divider />

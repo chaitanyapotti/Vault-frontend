@@ -9,7 +9,6 @@ import { CUIInputType } from "../../../static/js/variables";
 import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
-import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
 
 const BuyModal = props => {
   const {

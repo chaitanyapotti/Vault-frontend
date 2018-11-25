@@ -28,10 +28,11 @@ const ProjectPreStartName = props => {
     whitelistButtonTransactionHash,
     thumbnailUrl,
     isCurrentMember,
-    isVaultMembershipChecked
+    daicoTokenAddress
   } = props || {};
   const disabledMsg = getSignInStatusText(signinStatusFlag);
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
+  const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
   const { website } = urls;
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
@@ -52,7 +53,10 @@ const ProjectPreStartName = props => {
             </div>
           </div>
         </Col>
-        <Col lg={4} className="txt-g-secondary txt">
+        <Col lg={4} className="push-half--top text-right">
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
           <span>{lastRoundInfo}</span>
         </Col>
       </Row>
@@ -85,7 +89,7 @@ const ProjectPreStartName = props => {
           </div>
         </Col>
         <Col lg={6} className="text-right">
-          {isVaultMembershipChecked && signinStatusFlag < 4 && typeof isCurrentMember === "undefined" ? (
+          {signinStatusFlag < 4 && typeof isCurrentMember === "undefined" ? (
             <div className="hli">
               <CustomToolTip title={disabledMsg} id="btn-disabled" disabled>
                 <span>

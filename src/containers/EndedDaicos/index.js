@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import ContentLoader from "react-content-loader";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getEndedDaicos, showEndedDaicosLoaderAction } from "../../actions/endedDaicosActions";
 import GridData from "../../components/GridData";
@@ -41,7 +40,7 @@ class EndedDaicos extends Component {
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = endedDaicosTable.map(item => {
-      const { projectName, startDateTime, endedAt, raisedAmount, tokenPrice, killConsensus, _id, thumbnailUrl } = item || {};
+      const { projectName, startDateTime, projectEndedAt, raisedAmount, tokenPrice, killConsensus, _id, thumbnailUrl } = item || {};
       const dataArray = [
         thumbnailUrl,
         projectName,
@@ -49,7 +48,7 @@ class EndedDaicos extends Component {
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * parseFloat(ETH), 3))),
         `${killConsensus}%`,
         formatDate(startDateTime),
-        formatDate(endedAt),
+        formatDate(projectEndedAt),
         _id
       ];
       return dataArray;

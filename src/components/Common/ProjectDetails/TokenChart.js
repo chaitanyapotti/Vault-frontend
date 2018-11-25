@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactEcharts from "echarts-for-react";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
-import { formatFromWei, Colors } from "../../../helpers/common/projectDetailhelperFunctions";
+import { formatFromWei, Colors, formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
 
 class TokenChart extends Component {
   getOption = () => {
@@ -12,6 +12,7 @@ class TokenChart extends Component {
     const tokenData = [];
     const legendData = ["Round 1 Cap", "Round 2 Cap", "Round 3 Cap", "Round 1 Tokens", "Round 2 Tokens", "Round 3 Tokens"];
     const roundDollarData = [];
+    const roundEtherData = [];
     let tokenSold = 0;
     let totalTokens = 0;
     let totalCollectableEther = 0;
@@ -28,9 +29,11 @@ class TokenChart extends Component {
     for (let index = 0; index < rounds.length; index += 1) {
       const element = rounds[index];
       totalTokens += formatFromWei(element.tokenCount);
-      const price = formatFromWei(parseFloat(element.tokenCount) / parseFloat(element.tokenRate), 10) * etherPrice;
+      const etherAmount = formatFromWei(parseFloat(element.tokenCount) / parseFloat(element.tokenRate), 10);
+      const price = etherAmount * etherPrice;
       totalCollectableEther += price;
       roundDollarData.push({ value: Math.round(price), name: `Round ${index + 1} Cap`, selected: false });
+      // roundEtherData.push({value: etherAmount, name:  })
       tokenData.push({ value: formatFromWei(element.tokenCount), name: `Round ${index + 1} Tokens`, selected: false });
     }
     for (let index = 0; index < foundationDetails.length; index += 1) {
@@ -42,11 +45,19 @@ class TokenChart extends Component {
     const tokenUnsold = totalTokens - tokenSold;
     etherCollected = Math.round(etherCollected);
     const etherUnCollected = Math.round(totalCollectableEther) - etherCollected;
+    // formatter: "{a} <br/>{b}: {c} ({d}%)",
     return {
       color: Colors(tokenData.length - 3),
       tooltip: {
         trigger: "item",
-        formatter: "{a} <br/>{b}: {c} ({d}%)"
+        formatter(params) {
+          const seriesI =
+            params.seriesIndex === 2 || params.seriesIndex === 0
+              ? `$${formatCurrencyNumber(params.value, 0)}`
+              : `${formatCurrencyNumber(params.value, 0)}`;
+          return `${params.seriesName} <br/>${params.name}: ${seriesI} (${params.percent}%)`;
+        },
+        textStyle: { fontFamily: "Montserrat", fontSize: "14" }
       },
       legend: {
         show: false,

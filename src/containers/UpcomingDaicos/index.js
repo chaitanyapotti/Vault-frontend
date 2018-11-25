@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import ContentLoader from "react-content-loader";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getUpcomingDaicos, showUpcomingDaicosLoaderAction } from "../../actions/upcomingDaicosActions";
 import GridData from "../../components/GridData";
@@ -72,7 +71,7 @@ class UpcomingDaicos extends Component {
                     const { projectName, thumbnailUrl } = value || {};
                     return (
                       <div style={{ width: "130px" }} className="hl">
-                        <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                        <img alt="" className="hli" src={thumbnailUrl} width="35" height="35" />
                         <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
                           {projectName}
                         </div>

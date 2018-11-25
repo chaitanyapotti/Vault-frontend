@@ -27,7 +27,7 @@ class TC extends Component {
     render() { 
         return ( 
             <div>
-                <div className="txt-m txt-dbld text--center">STEP: 3 Terms And Conditions</div>
+                <div className="txt-m txt-dbld text--left">Step 3: Terms And Conditions</div>
                 <div className="txt-m txt-dbld push--top">
                     Please confirm the following:
                 </div>

@@ -2,8 +2,8 @@
 /* eslint camelcase: 0 */
 
 import React from "react";
-import { Grid, Row, Col } from "../../../helpers/react-flexbox-grid";
-import { CUILinearProgress } from "../../../helpers/material-ui";
+import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import { CUILinearProgress, CUICard } from "../../../helpers/material-ui";
 
 const TimeLine = props => {
   const { fundsCollected, roundGoal, startDate, endDate } = props || {};
@@ -12,10 +12,10 @@ const TimeLine = props => {
   const totalDays = Math.round((endDate > startDate ? endDate - startDate : 0) / 86400 / 1000);
   const leftDays = Math.round((endDate > new Date() ? endDate - new Date() : 0) / 86400 / 1000);
   const timeProgress = Math.round((parseFloat(totalDays - leftDays) / parseFloat(totalDays)) * 100);
-  const text = progressValue > 100 ? `Round 1 overflow by ${(progressValue - 100)}%` : `${progressValue} % Goal reached`;
-  const className = progressValue <= 100 ? "txt-m text-right text--secondary":"txt-m text-right text--danger";
+  const text = progressValue > 100 ? `Round 1 overflow by ${progressValue - 100}%` : `${progressValue} % Goal reached`;
+  const className = progressValue <= 100 ? "txt-m text-right text--secondary" : "txt-m text-right text--danger";
   return (
-    <Grid>
+    <CUICard className="card-brdr" style={{ padding: "40px 50px" }} columns={1}>
       <Row>
         <Col lg={6}>
           <div className="txt-xxxl text--primary">DAICO Timeline</div>
@@ -46,7 +46,7 @@ const TimeLine = props => {
           Started on: {startDate.toDateString()}
         </Col>
         <Col lg={4} className="txt-m push-half-h--bottom text-center">
-          Days Left: {Math.round((endDate > new Date() ? endDate - new Date() : 0) / 86400 / 1000)} days
+          Days Left: {leftDays} days
         </Col>
         <Col lg={4} className="txt-m push-half-h--bottom text-right">
           Ends on: {endDate.toDateString()}
@@ -56,9 +56,8 @@ const TimeLine = props => {
       <div>
         <CUILinearProgress style={{ height: 7, borderRadius: 7 }} value={timeProgress} />
       </div>
-    </Grid>
+    </CUICard>
   );
 };
 
 export default TimeLine;
-

@@ -262,8 +262,9 @@ class ProjectDetailGovernance extends Component {
   getNextKillPollStartDate = () => {
     const { killPollIndex, r1EndTime } = this.props || {};
     const endDate = new Date(r1EndTime);
+    if (new Date() - endDate < 0) return endDate;
     endDate.setDate(endDate.getDate() + (killPollIndex + 1) * 90);
-    return endDate.toDateString();
+    return endDate;
   };
 
   getKillPollStartDate = killPollEndDate => {

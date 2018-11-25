@@ -2,6 +2,10 @@ import React from "react";
 import ReactEcharts from "echarts-for-react";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 
+Array.prototype.max = function() {
+  return Math.max.apply(null, this);
+};
+
 const getOption = voteHistogramData => {
   const binRanges = [];
   const binValues = [];
@@ -27,8 +31,9 @@ const getOption = voteHistogramData => {
           label: {
             width: "100%",
             padding: [5, 60, 5, 60],
+            textStyle: { fontFamily: "Montserrat", fontSize: "14" },
             formatter(params) {
-              return `Number of voters with vote share in ${params.value}${params.seriesData.length ? `：${params.seriesData[0].data}` : ""}`;
+              return `No. of voters with vote share in ${params.value}${params.seriesData.length ? `：${params.seriesData[0].data}` : ""}`;
             }
           }
         },
@@ -38,7 +43,7 @@ const getOption = voteHistogramData => {
         axisLine: {
           onZero: false,
           lineStyle: {
-            color: "#8d8d8d"
+            color: "#3d3d3d"
           }
         },
         axisLabel: {
@@ -55,7 +60,7 @@ const getOption = voteHistogramData => {
         axisLine: {
           onZero: false,
           lineStyle: {
-            color: "#8d8d8d"
+            color: "#3d3d3d"
           }
         },
         axisTick: {
@@ -69,6 +74,7 @@ const getOption = voteHistogramData => {
     ],
     yAxis: [
       {
+        max: Math.max(...binValues) * 1.2,
         type: "value",
         axisLabel: {
           show: false
@@ -78,15 +84,16 @@ const getOption = voteHistogramData => {
         },
         axisLine: {
           lineStyle: {
-            color: "#8d8d8d"
+            color: "#3d3d3d"
           }
         }
       },
       {
+        max: Math.max(...binValues) * 1.2,
         type: "value",
         axisLine: {
           lineStyle: {
-            color: "#8d8d8d"
+            color: "#3d3d3d"
           }
         }
       }
@@ -104,6 +111,21 @@ const getOption = voteHistogramData => {
         type: "line",
         lineStyle: {
           width: 3
+        },
+        markLine: {
+          data: [
+            {
+              type: "max",
+              name: "Frequency",
+              label: {
+                textStyle: { fontFamily: "Montserrat" },
+                position: "middle",
+                formatter(params) {
+                  return `${params.name}: ${params.value} Voter`;
+                }
+              }
+            }
+          ]
         },
         areaStyle: {
           shadowBlur: 0,

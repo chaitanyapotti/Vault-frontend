@@ -158,7 +158,7 @@
 #git:hover,
 #telegram:hover,
 #medium:hover,
-#fb:hover,
+#reddit:hover,
 #twitter:hover {
   filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);
 }
@@ -235,13 +235,13 @@
 .prjct-logo {
   width: 80px;
   height: 80px;
-  background-color: #2185d6;
+  /* background-color: #2185d6; */
   display: block;
 }
 
 /* Whitelits */
 .wht-lst-info-cnt {
-  width: 70%;
+  width: 95%;
   margin: 0 auto;
 }
 

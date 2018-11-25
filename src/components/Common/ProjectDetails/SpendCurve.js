@@ -1,23 +1,9 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
-import { object } from "prop-types";
 import { CUICard } from "../../../helpers/material-ui";
-import { formatFromWei } from "../../../helpers/common/projectDetailhelperFunctions";
 
 const SpendCurve = props => {
-  const {
-    initialFundRelease,
-    startDateTime,
-    spendableArrays,
-    spentArray,
-    xfrDots,
-    tapDots,
-    spendableDots,
-    spentDots,
-    contributionArray,
-    dateArray,
-    contriArrayReceived
-  } = props || {};
+  const { spendableArrays, spentArray, contributionArray, dateArray, contriArrayReceived } = props || {};
 
   const getOption = () => {
     const colors = ["#4ca9fc", "#ff89a0", "#f7c34f", "#8d8d8d"];
@@ -77,7 +63,7 @@ const SpendCurve = props => {
           },
           {
             name: "Collected",
-            textStyle: { fontFamily: "Montserrat", fontSize: 14 },
+            textStyle: { fontFamily: "Montserrat", fontSize: "14" },
             icon:
               "path://M11.5,22.4c-6,0-10.9-4.9-10.9-10.9S5.5,0.6,11.5,0.6s10.9,4.9,10.9,10.9S17.5,22.4,11.5,22.4z M11.5,5.4c-3.3,0-6.1,2.7-6.1,6.1s2.7,6.1,6.1,6.1s6.1-2.7,6.1-6.1S14.8,5.4,11.5,5.4z"
           }
@@ -108,7 +94,7 @@ const SpendCurve = props => {
           axisLine: {
             onZero: false,
             lineStyle: {
-              color: "#8d8d8d"
+              color: "#3d3d3d"
             }
           },
           axisPointer: {
@@ -116,6 +102,7 @@ const SpendCurve = props => {
             label: {
               width: "100%",
               padding: [5, 60, 5, 60],
+              textStyle: { fontFamily: "Montserrat", fontSize: "14" },
               formatter(params) {
                 return `Spent as of ${params.value}${params.seriesData.length ? `：${params.seriesData[0].data}` : ""} ETH`;
               }
@@ -136,7 +123,7 @@ const SpendCurve = props => {
           axisLine: {
             onZero: false,
             lineStyle: {
-              color: "#8d8d8d"
+              color: "#3d3d3d"
             }
           },
           axisPointer: {
@@ -144,6 +131,7 @@ const SpendCurve = props => {
             label: {
               width: "100%",
               padding: [5, 60, 5, 60],
+              textStyle: { fontFamily: "Montserrat", fontSize: "14" },
               formatter(params) {
                 return `Spendable as of ${params.value}${params.seriesData.length ? `：${params.seriesData[0].data}` : ""} ETH`;
               }
@@ -160,22 +148,27 @@ const SpendCurve = props => {
         {
           type: "value",
           axisLabel: {
-            show: false
+            show: false,
+            textStyle: { fontFamily: "Montserrat" }
           },
           axisTick: {
-            show: false
+            show: true
           },
           axisLine: {
             lineStyle: {
-              color: "#8d8d8d"
+              color: "#3d3d3d"
             }
           }
         },
         {
           type: "value",
+          axisLabel: {
+            show: false,
+            textStyle: { fontFamily: "Montserrat" }
+          },
           axisLine: {
             lineStyle: {
-              color: "#8d8d8d"
+              color: "#3d3d3d"
             }
           }
         }
@@ -207,6 +200,21 @@ const SpendCurve = props => {
           lineStyle: {
             width: 3
           },
+          markLine: {
+            data: [
+              {
+                type: "max",
+                name: "Total collected",
+                label: {
+                  textStyle: { fontFamily: "Montserrat" },
+                  position: "middle",
+                  formatter(params) {
+                    return `${params.name}: ${params.value} ETH`;
+                  }
+                }
+              }
+            ]
+          },
           data: contributedAmounts
         },
         {
@@ -227,6 +235,7 @@ const SpendCurve = props => {
       {contriArrayReceived}
       <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
         <div className="txt-xxxl text--primary">Spend Curve</div>
+        <br />
         <ReactEcharts option={getOption()} notMerge lazyUpdate style={{ height: "25em", width: "30em", padding: "0px" }} opts={{ renderer: "svg" }} />
       </CUICard>
     </div>

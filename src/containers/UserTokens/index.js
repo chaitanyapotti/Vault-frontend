@@ -9,9 +9,9 @@ import {
   formatFromWei,
   formatMoney,
   formatTokenPrice,
-  r1EndsIn,
   significantDigits,
-  formatCurrencyNumber
+  formatCurrencyNumber,
+  secondsToDhms
 } from "../../helpers/common/projectDetailhelperFunctions";
 import TableLoader from "../../components/Loaders/TableLoader";
 
@@ -32,7 +32,12 @@ class UserTokens extends Component {
     }
   }
 
-  calculateKillDuration = killPollStartDate => new Date(killPollStartDate) - new Date();
+  calculateKillDuration = killPollStartDate => {
+    const daysLeft = new Date() - new Date(killPollStartDate);
+    if (daysLeft < 0) return secondsToDhms(-daysLeft);
+    const secondsLeft = (daysLeft / 1000) % (90 * 3600 * 24);
+    return secondsToDhms(90 * 3600 * 24 * 1000 - secondsLeft * 1000);
+  };
 
   render() {
     const {
@@ -50,17 +55,37 @@ class UserTokens extends Component {
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = userTokensTable.map(item => {
-      const { projectName, tokenPrice, balance, projectHealth, tapIncrement, killConsensus, killPollStartDate, xfrCount, _id, thumbnailUrl } =
-        item || {};
+      const {
+        projectName,
+        tokenPrice,
+        balance,
+        projectHealth,
+        tapIncrement,
+        killConsensus,
+        killPollStartDate,
+        xfrCount,
+        _id,
+        thumbnailUrl,
+        tapAcceptancePercent,
+        killAcceptancePercent
+      } = item || {};
+      const tapText =
+        parseFloat(tapIncrement) > parseFloat(tapAcceptancePercent)
+          ? `${significantDigits(tapIncrement)} (Yes)`
+          : `${significantDigits(tapIncrement)} (No)`;
+      const killText =
+        parseFloat(killConsensus) > parseFloat(killAcceptancePercent)
+          ? `${significantDigits(killConsensus)} (Yes)`
+          : `${significantDigits(killConsensus)} (No)`;
       const dataArray = [
         thumbnailUrl,
         projectName,
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
-        `${formatCurrencyNumber(balance, 0)}(${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
+        `${formatCurrencyNumber(balance, 0)} (${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
         projectHealth,
-        `${significantDigits(tapIncrement)}(Yes)`,
-        `${significantDigits(killConsensus)}(No)`,
-        r1EndsIn(this.calculateKillDuration(killPollStartDate)),
+        tapText,
+        killText,
+        this.calculateKillDuration(killPollStartDate),
         xfrCount,
         _id
       ];
@@ -107,8 +132,18 @@ class UserTokens extends Component {
                         }
                       },
                       { name: "Health", options: { filter: false } },
-                      { name: "Tap Increment*", options: { filter: false } },
-                      { name: "Kill Consensus", options: { filter: false } },
+                      {
+                        name: "Tap Increment*",
+                        options: {
+                          filter: false
+                        }
+                      },
+                      {
+                        name: "Kill Consensus",
+                        options: {
+                          filter: false
+                        }
+                      },
                       { name: "Next Kill In", options: { filter: false } },
                       { name: "XFRs", options: { filter: false } },
                       { name: "Id", options: { display: false, filter: false } }

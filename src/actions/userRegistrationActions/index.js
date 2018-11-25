@@ -214,7 +214,7 @@ export const hasVaultMembershipRequested = userLocalPublicAddress => async dispa
           });
         } else {
           dispatch({
-            type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_SUCCESS,
+            type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_FAILED,
             payload: false
           });
         }

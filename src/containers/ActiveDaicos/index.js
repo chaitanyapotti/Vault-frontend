@@ -24,7 +24,7 @@ class ActiveDaicos extends Component {
 
   calculateEndDuration = r1EndTime => new Date(r1EndTime) - new Date();
 
-  convertRoundGoal = (round, ETH) => formatFromWei((parseFloat(round.tokenCount) * ETH) / parseFloat(round.tokenRate));
+  convertRoundGoal = (round, ETH) => formatFromWei((parseFloat(round.tokenCount) * ETH) / parseFloat(round.tokenRate), 10);
 
   calculateRoundGoal = (round, ETH) => formatMoney(this.convertRoundGoal(round, ETH), 0);
 

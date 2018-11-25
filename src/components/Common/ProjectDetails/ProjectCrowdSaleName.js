@@ -33,11 +33,13 @@ const ProjectCrowdSaleName = props => {
     r1FinalizeButtonTransactionHash,
     buyButtonDisabled,
     thumbnailUrl,
-    remainingAllocation
+    remainingAllocation,
+    daicoTokenAddress
   } = props || {};
   const { website } = urls;
   const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
   const r1FinalizeLink = `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`;
+  const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
   const warningText = signinStatusFlag <= 2 ? "This feature is for vault members only" : "";
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
@@ -58,7 +60,10 @@ const ProjectCrowdSaleName = props => {
             </div>
           </div>
         </Col>
-        <Col lg={4} className="txt-g-secondary txt">
+        <Col lg={4} className="push-half--top text-right">
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
           <span>{lastRoundInfo}</span>
         </Col>
       </Row>

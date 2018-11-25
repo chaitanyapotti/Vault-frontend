@@ -22,7 +22,6 @@ import {
   thumbnailChangedAction,
   uploadThumbnailAction
 } from "../../actions/projectRegistrationActions";
-import { ButtonComponent } from "../Common/FormComponents";
 import actionTypes from "../../action_types";
 
 class IdentityDetails extends React.Component {
@@ -80,7 +79,7 @@ class IdentityDetails extends React.Component {
 
   whitepaperChanged = e => {
     this.props.whitepaperChangedAction(e.target.files[0]);
-    this.props.uploadWhitepaperAction(e.target.files[0],  this.props.userLocalPublicAddress, "whitepaper");
+    this.props.uploadWhitepaperAction(e.target.files[0], this.props.userLocalPublicAddress, "whitepaper");
   };
 
   uploadWhitepaper = () => {
@@ -137,7 +136,9 @@ class IdentityDetails extends React.Component {
     } = this.props || {};
     return (
       <CUICard className="card-brdr">
-        <div className="txt-xl" style={{ padding: "40px 50px" }}>Identity Details</div>
+        <div className="txt-xl" style={{ padding: "40px 50px" }}>
+          Identity Details
+        </div>
         <hr />
         <div style={{ padding: "20px 50px" }}>
           <Row>
@@ -212,7 +213,7 @@ class IdentityDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
-                multiline={true}
+                multiline
                 inputName="Project Description"
                 inputLabel="Project Description"
                 inputPlaceholder="Eg. Protocol for Decentralized Organizations"
@@ -331,26 +332,37 @@ class IdentityDetails extends React.Component {
 
           <Row className="push--top">
             <Col lg={6}>
-              <label for="whitepaper-upload" class="btn bg--primary txt txt-dddbld text--white">
-                  <div className="btn-padding">Upload Whitepaper</div>
+              <label htmlFor="whitepaper-upload" className="btn bg--primary txt txt-dddbld text--white">
+                <div className="btn-padding">Upload Whitepaper</div>
               </label>
               <input name="whitepaper" id="whitepaper-upload" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
               <span className="push--left">{this.props.whitepaperPDF.name}</span>
-              <span className="push--left"><a href={this.props.whitepaperUrl} target="_blank" rel="noreferrer noopener">Whitepaper</a></span>
+              <span className="push--left">
+                <a href={this.props.whitepaperUrl} target="_blank" rel="noreferrer noopener">
+                  Whitepaper
+                </a>
+              </span>
             </Col>
             <Col lg={6}>
-              <label for="thumbnail-upload" class="btn bg--primary txt txt-dddbld text--white">
-                  <div className="btn-padding">Upload Thumbnail</div>
+              <label htmlFor="thumbnail-upload" className="btn bg--primary txt txt-dddbld text--white">
+                <div className="btn-padding">Upload Thumbnail</div>
               </label>
               <input id="thumbnail-upload" name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
               <span className="push--left">{this.props.thumbnailImage.name}</span>
-              <span className="push--left"> <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">Thumbnail</a> </span>
+              <span className="push--left">
+                {" "}
+                <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">
+                  Thumbnail
+                </a>{" "}
+              </span>
             </Col>
           </Row>
           <Row className="push--top">
             <Col lg={12}>
               <div className="text--center">
-                {this.state.thumbnailFile && <img alt="thumbnail" src={this.state.thumbnailFile} width="200" height="200" style={{ backgroundSize: "contain" }} />}
+                {this.state.thumbnailFile && (
+                  <img alt="thumbnail" src={this.state.thumbnailFile} width="200" height="200" style={{ backgroundSize: "contain" }} />
+                )}
               </div>
             </Col>
           </Row>

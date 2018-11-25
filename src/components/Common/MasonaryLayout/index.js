@@ -6,18 +6,18 @@ const MasonryLayout = props => {
   const result = [];
 
   // create columns
-  for (let i = 0; i < props.columns; i++) {
+  for (let i = 0; i < props.columns; i += 1) {
     columnWrapper[`column${i}`] = [];
   }
 
   // divide children into columns
-  for (let i = 0; i < props.children.length; i++) {
+  for (let i = 0; i < props.children.length; i += 1) {
     const columnIndex = i % props.columns;
     columnWrapper[`column${columnIndex}`].push(<div style={{ marginBottom: `${props.gap}px` }}>{props.children[i]}</div>);
   }
 
   // wrap children in each column with a div
-  for (let i = 0; i < props.columns; i++) {
+  for (let i = 0; i < props.columns; i += 1) {
     result.push(
       <div
         style={{

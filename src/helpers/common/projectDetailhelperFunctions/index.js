@@ -12,7 +12,7 @@ const formatDate = dbDate =>
   // });
   `${moment(dbDate).format("Do MMM YYYY | h:mm A z")}`;
 
-const formatRateToPrice = rate => parseFloat(1 / parseFloat(rate)).toPrecision(2);
+const formatRateToPrice = rate => significantDigits(1 / parseFloat(rate));
 
 // const formatNumber = (rate, precision = 2) => parseFloat(rate).toPrecision(precision);
 
@@ -248,7 +248,7 @@ const formatCurrencyNumber = (amount, decimalCount = 2, decimal = ".", thousands
     decimals = Math.abs(decimals);
     decimals = isNaN(decimals) ? 2 : decimals;
 
-    const negativeSign = amount < 0 ? "-" : "";
+    const negativeSign = amt < 0 ? "-" : "";
 
     const i = parseInt((amt = Math.abs(Number(amount) || 0).toFixed(decimals)), 10).toString();
     const j = i.length > 3 ? i.length % 3 : 0;
@@ -268,43 +268,34 @@ const formatCurrencyNumber = (amount, decimalCount = 2, decimal = ".", thousands
   return null;
 };
 
-const getR1Price = props => {
-  const { rounds } = props || {};
-  const [round1] = rounds || {};
-  const { tokenRate } = round1 || {}; // tokens/wei
-  return formatRateToPrice(tokenRate);
-};
+const getR1Price = rounds => formatRateToPrice(getR1Rate(rounds));
 
-const getR1Rate = props => {
-  const { rounds } = props || {};
+const getR1Rate = rounds => {
   const [round1] = rounds || {};
   const { tokenRate } = round1 || {}; // tokens/wei
   return tokenRate;
 };
 
-const getRoundPrice = props => {
-  const { rounds, currentRoundNumber } = props || {};
-  const roundInfo = rounds[parseInt(currentRoundNumber, 10) - 1] || {};
-  const { tokenRate } = roundInfo || {};
-  return formatRateToPrice(tokenRate);
-};
+// const getRoundPrice = props => {
+//   const { rounds, currentRoundNumber } = props || {};
+//   const roundInfo = rounds[parseInt(currentRoundNumber, 10) - 1] || {};
+//   const { tokenRate } = roundInfo || {};
+//   return formatRateToPrice(tokenRate);
+// };
 
-const getR1Goal = props => {
-  const { rounds } = props || {};
+const getR1Goal = rounds => {
   const [round1] = rounds || {};
   const { tokenRate, tokenCount } = round1 || {}; // tokens/wei
   return formatTokenPrice(parseFloat(tokenCount) / parseFloat(tokenRate), 2);
 };
 
-const getR3Price = props => {
-  const { rounds } = props || {};
+const getR3Price = rounds => {
   const round3 = [...rounds].pop() || {};
   const { tokenRate } = round3 || {}; // tokens/wei
   return formatRateToPrice(tokenRate);
 };
 
-const getSoftCap = props => {
-  const { rounds, prices } = props || {};
+const getSoftCap = (rounds, prices) => {
   const { ETH } = prices || {};
   const { price: etherPrice } = ETH || {};
   let softCap = 0;
@@ -312,27 +303,24 @@ const getSoftCap = props => {
     const { tokenCount } = rounds[index];
     softCap += parseFloat(tokenCount);
   }
-  return formatMoney(formatFromWei(softCap * getR3Price(props) * parseFloat(etherPrice), 2), 0);
+  return formatMoney(formatFromWei(softCap * getR3Price(rounds) * parseFloat(etherPrice), 2), 0);
 };
 
-const r1TokenCount = props => {
-  const { rounds } = props || {};
+const r1TokenCount = rounds => {
   const [round1] = rounds || {};
   const { tokenCount } = round1 || {};
   return tokenCount;
 };
 
-const r1TokensSold = props => {
-  const { roundInfo } = props || {};
+const roundTokensSold = roundInfo => {
   const { totalTokensSold } = roundInfo || "";
   return totalTokensSold;
 };
 
-const getHardCap = props => {
-  const { totalMintableSupply, prices } = props || {};
+const getHardCap = (totalMintableSupply, prices, rounds) => {
   const { ETH } = prices || {};
   const { price: etherPrice } = ETH || {};
-  return formatMoney(formatFromWei(parseFloat(totalMintableSupply) * getR3Price(props) * etherPrice), 0);
+  return formatMoney(formatFromWei(parseFloat(totalMintableSupply) * getR3Price(rounds) * etherPrice), 0);
 };
 
 const getSignInStatusText = signInStatusFlag => {
@@ -367,7 +355,7 @@ export {
   getHardCap,
   getR1Goal,
   getR3Price,
-  getRoundPrice,
+  // getRoundPrice,
   formatCurrencyNumber,
   significantDigits,
   formatNumberToINRFormat,
@@ -381,7 +369,7 @@ export {
   xfrWithdrawStatus,
   getR1Rate,
   r1TokenCount,
-  r1TokensSold,
+  roundTokensSold,
   contributionDataConverted,
   Colors,
   getSignInStatusText

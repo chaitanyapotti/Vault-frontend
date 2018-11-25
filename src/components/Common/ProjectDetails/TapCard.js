@@ -29,9 +29,9 @@ const TapCard = props => {
             Tap Increment
           </Col>
           <Col className="push-half--top text-right" lg={4}>
-            <a id="lnktag" className="text--black" rel="noreferrer noopener" onClick={onTapPollsHistoryClick}>
+            <LoadingButton className="text--black lnktags btn-link" type="text" onClick={onTapPollsHistoryClick}>
               View Tap History
-            </a>
+            </LoadingButton>
           </Col>
         </Row>
         <Row className="push-top--35">
@@ -54,7 +54,9 @@ const TapCard = props => {
         <Row className="push--top">
           <Col lg={12} className="text-right hl">
             <div className="text-right">
-              {signinStatusFlag <= 3 ? (
+              {tapPollConsensus === "No Poll" ? (
+                <div className="text--secondary txt"> Tap Poll Not Deployed </div>
+              ) : signinStatusFlag <= 3 ? (
                 <div className="hli">
                   <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
                     <div>
@@ -64,8 +66,6 @@ const TapCard = props => {
                     </div>
                   </Tooltip>
                 </div>
-              ) : tapPollConsensus === "No Poll" ? (
-                <div className="text--secondary txt"> Tap Poll Not Deployed </div>
               ) : tapButtonTransactionHash !== "" ? (
                 <div className="hli">
                   <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">

@@ -215,11 +215,11 @@ button:focus {
 }
 
 .text--danger {
-  color: #f23333;
+  color: #f23333 !important;
 }
 
 .text--secondary {
-  color: #4ca9fc;
+  color: #4ca9fc !important;
 }
 
 .txt-g-primary {
@@ -722,4 +722,17 @@ input[type="file"] {
 .btn:hover {
   color: #ffffff !important;
   text-decoration: none;
+}
+
+.lnktags {
+  background: none !important;
+  color: inherit !important;
+  border: none !important;
+  padding: 0 !important;
+  font: inherit !important;
+  cursor: pointer !important;
+}
+
+.lnktags:hover {
+  color: #4ca9fc !important;
 }

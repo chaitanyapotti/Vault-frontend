@@ -8,7 +8,7 @@ import { fetchProjectDetails, deployContractAction, performContractAction, reset
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUIModal, CUIModalActions, CUIModalContent } from "../../helpers/material-ui";
 import web3 from "../../helpers/web3";
-import CustomizedStepper from "../../components/Common/CustomizedStepper";
+import VerticalStepper from "../../components/Common/VerticalStepper";
 import DeployerCard from "../../components/DeployerCard";
 import config from "../../config";
 import TableLoader from "../../components/Loaders/TableLoader";
@@ -441,13 +441,15 @@ class Deployer extends Component {
                 </Row>
                 <Row>
                   <Col>
-                    <CustomizedStepper
+                    <VerticalStepper
                       history={this.props.history}
                       getStepContent={this.getStepContent}
                       getSteps={this.getSteps}
                       activeStep={currentDeploymentIndicator}
                       projectid={_id}
                       onClick={this.onResetModalOpenClick}
+                      header="Deployer"
+                      startOver="Start Over"
                     />
                   </Col>
                 </Row>

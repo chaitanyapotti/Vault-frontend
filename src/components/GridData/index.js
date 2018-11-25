@@ -61,7 +61,7 @@ class GridData extends React.Component {
         },
         MuiTableCell: {
           root: {
-            padding: "10px 20px 10px 20px",
+            padding: "10px",
             fontFamily: "Montserrat",
             "text-overflow": "ellipsis",
             overflow: "hidden"
@@ -71,6 +71,16 @@ class GridData extends React.Component {
           select: {
             fontSize: "14px",
             fontFamily: "Montserrat"
+          }
+        },
+        MuiTooltip: {
+          tooltip: {
+            fontSize: "14px"
+          }
+        },
+        MuiInputBase: {
+          root: {
+            fontSize: "16px"
           }
         },
         MuiTableRow: {

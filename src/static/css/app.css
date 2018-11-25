@@ -81,54 +81,38 @@ button {
   transition: 250ms ease-in-out;
 }
 
-/* button:hover {
-  box-shadow: 0px 10px 20px 0px hsla(208, 97%, 64%, 0.5) !important;
+button:hover {
   transform: translate(0px, -5px) !important;
   transition: 250ms ease-in-out;
-} */
+}
 
-.labelAlignment {
-  /* text-align: left; */
+button:active {
+  transition-timing-function: ease-in;
+  transition: 250ms;
+  transform: translate(0px, 5px) !important;
+  box-shadow: none !important;
 }
 
 .bg--primary:active {
   background: #198bd1 !important;
-  transition-timing-function: ease-in;
-  transition: 250ms;
-  transform: translate(0px, 5px) !important;
-  box-shadow: none !important;
 }
 .bg--pending:active {
   background: #d8931a !important;
-  transition-timing-function: ease-in;
-  transition: 250ms;
-  transform: translate(0px, 5px) !important;
-  box-shadow: none !important;
 }
 
 .bg--danger:active {
   background: #c10a0a !important;
-  transition-timing-function: ease-in;
-  transition: 250ms;
-  transform: translate(0px, 5px) !important;
-  box-shadow: none !important;
 }
 
 .bg--primary:hover {
   box-shadow: 0px 10px 20px 0px hsla(208, 97%, 64%, 0.5) !important;
-  transform: translate(0px, -5px) !important;
-  transition: 250ms ease-in-out;
 }
 .bg--pending:hover {
   box-shadow: 0px 10px 20px 0px hsla(38, 79%, 47%, 0.5) !important;
-  transform: translate(0px, -5px) !important;
-  transition: 250ms ease-in-out;
 }
 
 .bg--danger:hover {
   box-shadow: 0px 10px 20px 0px rgba(242, 51, 51, 0.5);
-  transform: translate(0px, -5px) !important;
-  transition: 250ms ease-in-out;
 }
 
 .btn:disabled {

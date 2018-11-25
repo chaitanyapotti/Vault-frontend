@@ -119,7 +119,7 @@ const ProjectPreStartName = props => {
             </span>
           ) : (
             <span width="20">
-              <BtnLoader width={45} height={19} />
+              <BtnLoader width={45} height={9} />
             </span>
           )}
         </Col>

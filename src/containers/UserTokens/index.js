@@ -103,13 +103,12 @@ class UserTokens extends Component {
                   <GridData
                     history={history}
                     tableData={data}
-                    filterList={[[], [], [], [], [], [], [], [], []]}
                     filter={false}
                     columns={[
                       {
                         name: "",
                         options: {
-                          customBodyRender: value => <img src={value} width="35" height="35" />
+                          customBodyRender: value => <img alt="" src={value} width="35" height="35" />
                         },
                         filter: true
                       },

@@ -43,7 +43,8 @@ class EndedDaicos extends Component {
     const data = endedDaicosTable.map(item => {
       const { projectName, startDateTime, endedAt, raisedAmount, tokenPrice, killConsensus, _id, thumbnailUrl } = item || {};
       const dataArray = [
-        { projectName, thumbnailUrl },
+        thumbnailUrl,
+        projectName,
         formatMoney(formatFromWei(parseFloat(raisedAmount)), 0),
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * parseFloat(ETH), 3))),
         `${killConsensus}%`,
@@ -64,20 +65,16 @@ class EndedDaicos extends Component {
             filter={false}
             columns={[
               {
+                name: "",
+                options: {
+                  customBodyRender: value => <img src={value} width="35" height="35" />
+                },
+                filter: true
+              },
+              {
                 name: "Name",
                 options: {
-                  customBodyRender: value => {
-                    const { projectName, thumbnailUrl } = value || {};
-                    return (
-                      <div style={{ width: "130px" }} className="hl">
-                        <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                        <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
-                          {projectName}
-                        </div>
-                      </div>
-                    );
-                  },
-                  filter: false
+                  filter: true
                 }
               },
               { name: "Raised", options: { filter: false } },

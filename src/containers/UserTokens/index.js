@@ -69,13 +69,21 @@ class UserTokens extends Component {
         tapAcceptancePercent,
         killAcceptancePercent
       } = item || {};
+      const tapText =
+        parseFloat(tapIncrement) > parseFloat(tapAcceptancePercent)
+          ? `${significantDigits(tapIncrement)} (Yes)`
+          : `${significantDigits(tapIncrement)} (No)`;
+      const killText =
+        parseFloat(killConsensus) > parseFloat(killAcceptancePercent)
+          ? `${significantDigits(killConsensus)} (Yes)`
+          : `${significantDigits(killConsensus)} (No)`;
       const dataArray = [
         { projectName, thumbnailUrl },
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
         `${formatCurrencyNumber(balance, 0)} (${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
         projectHealth,
-        { tapIncrement, tapAcceptancePercent },
-        { killConsensus, killAcceptancePercent },
+        tapText,
+        killText,
         this.calculateKillDuration(killPollStartDate),
         xfrCount,
         _id
@@ -130,25 +138,13 @@ class UserTokens extends Component {
                       {
                         name: "Tap Increment*",
                         options: {
-                          filter: false,
-                          customBodyRender: value => {
-                            const { tapIncrement, tapAcceptancePercent } = value || {};
-                            let classes = "hli pos-rel txt push--left";
-                            classes += parseFloat(tapIncrement) > parseFloat(tapAcceptancePercent) ? " text--secondary" : "";
-                            return <span className={classes}>{significantDigits(tapIncrement)}</span>;
-                          }
+                          filter: false
                         }
                       },
                       {
                         name: "Kill Consensus",
                         options: {
-                          filter: false,
-                          customBodyRender: value => {
-                            const { killConsensus, killAcceptancePercent } = value || {};
-                            let classes = "hli pos-rel txt push--left";
-                            classes += parseFloat(killConsensus) > parseFloat(killAcceptancePercent) ? " text--danger" : "";
-                            return <div className={classes}>{significantDigits(killConsensus)}</div>;
-                          }
+                          filter: false
                         }
                       },
                       { name: "Next Kill In", options: { filter: false } },

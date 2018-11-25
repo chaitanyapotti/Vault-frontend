@@ -116,11 +116,11 @@ class GridData extends React.Component {
           rowClickFn
             ? onRowClick(_id)
             : rowClickPollHistory
-              ? window.open(`/pollscan?contract=${address}`).focus()
-              : history.push({
-                  pathname: `/governance/details`,
-                  search: `?projectid=${_id}`
-                });
+            ? window.open(`/pollscan?contract=${address}`).focus()
+            : history.push({
+                pathname: `/governance/details`,
+                search: `?projectid=${_id}`
+              });
         }
       },
       ...rest

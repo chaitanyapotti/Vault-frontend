@@ -134,6 +134,8 @@ class ProjectGovernance extends Component {
             userLocalPublicAddress={userLocalPublicAddress}
             signinStatusFlag={signinStatusFlag}
             isVaultMembershipChecked={isVaultMembershipChecked}
+            pollFactoryAddress={pollFactoryAddress}
+            daicoTokenAddress={daicoTokenAddress}
           />
         </div>
       );

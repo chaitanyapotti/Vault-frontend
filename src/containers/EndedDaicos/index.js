@@ -40,14 +40,14 @@ class EndedDaicos extends Component {
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = endedDaicosTable.map(item => {
-      const { projectName, startDateTime, endedAt, raisedAmount, tokenPrice, killConsensus, _id, thumbnailUrl } = item || {};
+      const { projectName, startDateTime, projectEndedAt, raisedAmount, tokenPrice, killConsensus, _id, thumbnailUrl } = item || {};
       const dataArray = [
         { projectName, thumbnailUrl },
         formatMoney(formatFromWei(parseFloat(raisedAmount)), 0),
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * parseFloat(ETH), 3))),
         `${killConsensus}%`,
         formatDate(startDateTime),
-        formatDate(endedAt),
+        formatDate(projectEndedAt),
         _id
       ];
       return dataArray;
@@ -69,7 +69,7 @@ class EndedDaicos extends Component {
                     const { projectName, thumbnailUrl } = value || {};
                     return (
                       <div style={{ width: "130px" }} className="hl">
-                        <img className="hli" src={thumbnailUrl} width="35" height="35" />
+                        <img alt="" className="hli" src={thumbnailUrl} width="35" height="35" />
                         <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
                           {projectName}
                         </div>

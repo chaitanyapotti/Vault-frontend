@@ -1,6 +1,7 @@
 import React from "react";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const PDetailPreStart = props => {
   const {
@@ -12,11 +13,22 @@ const PDetailPreStart = props => {
     tapIncrementUnit,
     hardCapCapitalisation,
     dilutedCapitalisation,
-    initialFundRelease
+    initialFundRelease,
+    pollFactoryAddress
   } = props || {};
+  const etherscanLink = `https://rinkeby.etherscan.io/address/${pollFactoryAddress}`;
   return (
     <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
-      <div className="txt-xxxl text--primary">Project Details</div>
+      <Row>
+        <Col className="txt-xxxl text--primary" lg={6}>
+          Project Details
+        </Col>
+        <Col className="push-half--top text-right" lg={6}>
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
+        </Col>
+      </Row>
       <Row className="push-top--35">
         <Col lg={6} className="txt">
           <div className="txt-bold">ICO Start Date:</div>

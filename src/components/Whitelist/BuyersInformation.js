@@ -176,8 +176,7 @@ class BuyersInformation extends Component {
         <div className="txt push--top">
           Due to Anti Money Laundering (AML) regulations, we are obliged to require the following information of every token sale participant.
         </div>
-        
-        
+
         <div className="push--top">
           <CUIDivider />
         </div>
@@ -268,8 +267,8 @@ class BuyersInformation extends Component {
           </Col>
         </Row>
 
-        <br/>
-        <br/>
+        <br />
+        <br />
         <div className="txt-m txt-dbld push--top">Passport/ID information</div>
 
         <Row className="push--top">
@@ -334,8 +333,8 @@ class BuyersInformation extends Component {
           </Col>
         </Row>
 
-        <br/>
-        <br/>
+        <br />
+        <br />
 
         <div className="txt-m txt-dbld push--top">User Details</div>
 

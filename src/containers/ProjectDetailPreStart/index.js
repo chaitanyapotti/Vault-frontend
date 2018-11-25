@@ -63,7 +63,9 @@ class ProjectDetailPreStart extends Component {
       thumbnailUrl,
       prices,
       currentRoundNumber,
-      totalMintableSupply
+      totalMintableSupply,
+      pollFactoryAddress,
+      daicoTokenAddress
     } = this.props || {};
     return (
       <Grid>
@@ -85,6 +87,7 @@ class ProjectDetailPreStart extends Component {
             whitelistButtonTransactionHash={whitelistButtonTransactionHash}
             thumbnailUrl={thumbnailUrl}
             isCurrentMember={isCurrentMember}
+            daicoTokenAddress={daicoTokenAddress}
           />
           <PDetailPreStart
             icoStartDate={formatDate(startDateTime)}
@@ -96,6 +99,7 @@ class ProjectDetailPreStart extends Component {
             hardCapCapitalisation={getSoftCap(rounds, prices)}
             dilutedCapitalisation={getHardCap(totalMintableSupply, prices, rounds)}
             initialFundRelease={formatFromWei(initialFundRelease)}
+            pollFactoryAddress={pollFactoryAddress}
           />
           <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
             <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />

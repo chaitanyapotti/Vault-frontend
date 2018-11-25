@@ -168,21 +168,23 @@ class ProjectDetailCrowdSale extends Component {
       userContribution,
       prices,
       currentRoundNumber,
-      totalMintableSupply
+      totalMintableSupply,
+      daicoTokenAddress,
+      pollFactoryAddress
     } = this.props || {};
     const { buyModalOpen } = this.state;
     const r1Rate = getR1Rate(rounds);
     return (
       <Grid>
+        <div style={{ "margin-bottom": "20px" }}>
+          <TimeLine
+            fundsCollected={formatFromWei(etherCollected, 3)}
+            roundGoal={getR1Goal(rounds)}
+            startDate={new Date(startDateTime)}
+            endDate={new Date(r1EndTime)}
+          />
+        </div>
         <MasonryLayout>
-          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
-            <TimeLine
-              fundsCollected={formatFromWei(etherCollected, 3)}
-              roundGoal={getR1Goal(rounds)}
-              startDate={new Date(startDateTime)}
-              endDate={new Date(r1EndTime)}
-            />
-          </CUICard>
           <ProjectCrowdSaleName
             projectName={projectName}
             tokenTag={tokenTag}
@@ -207,6 +209,7 @@ class ProjectDetailCrowdSale extends Component {
             r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
             thumbnailUrl={thumbnailUrl}
             remainingAllocation={r1Rate * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution, 18))}
+            daicoTokenAddress={daicoTokenAddress}
           />
           <PDetailCrowdSale
             individualCap={formatFromWei(maximumEtherContribution, 3)}
@@ -221,6 +224,7 @@ class ProjectDetailCrowdSale extends Component {
             tokenBalance={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
             remainingAllocation={r1Rate * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution, 18))}
             buyableTokens={formatCurrencyNumber(r1Rate * formatFromWei(maximumEtherContribution), 0)}
+            pollFactoryAddress={pollFactoryAddress}
           />
 
           <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>

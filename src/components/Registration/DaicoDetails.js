@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment-timezone";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { CUICard, CUIFormInput } from "../../helpers/material-ui";
@@ -44,11 +45,13 @@ class DaicoDetails extends React.Component {
   // };
 
   onChangeDaicoStart = date => {
-    this.props.daicoStartDateChangedAction(date);
+    const startDate = moment.utc(date.format("YYYY-MM-DD HH:mm:ss"));
+    this.props.daicoStartDateChangedAction(startDate);
   };
 
   onChangeDaicoEnd = date => {
-    this.props.daicoEndDateChangedAction(date);
+    const endDate = moment.utc(date.format("YYYY-MM-DD HH:mm:ss"));
+    this.props.daicoEndDateChangedAction(endDate);
   };
 
   uploadDaico = () => {

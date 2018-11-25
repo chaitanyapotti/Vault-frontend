@@ -70,14 +70,23 @@ class ActiveDaicos extends Component {
                 {
                   name: "",
                   options: {
+                    download: false,
+                    filter: true,
                     customBodyRender: value => <img src={value} width="35" height="35" />
-                  },
-                  filter: true
+                  }
                 },
                 {
                   name: "Name",
                   options: {
                     filter: true
+                    // customHeadRender(value, tableMeta, updateValue) {
+                    //   console.log(value);
+                    //   return (
+                    //     <span style={{ padding: "20px", verticalAlign: "middle", display: "flex", borderBottom: "3px", margin: "0" }}>
+                    //       {value.name}
+                    //     </span>
+                    //   );
+                    // }
                   }
                 },
                 { name: "Current Round", options: { filter: true } },

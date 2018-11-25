@@ -108,6 +108,7 @@ class UserTokens extends Component {
                       {
                         name: "",
                         options: {
+                          download: false,
                           customBodyRender: value => <img alt="" src={value} width="35" height="35" />
                         },
                         filter: true

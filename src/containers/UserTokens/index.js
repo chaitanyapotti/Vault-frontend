@@ -78,7 +78,8 @@ class UserTokens extends Component {
           ? `${significantDigits(killConsensus)} (Yes)`
           : `${significantDigits(killConsensus)} (No)`;
       const dataArray = [
-        { projectName, thumbnailUrl },
+        thumbnailUrl,
+        projectName,
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
         `${formatCurrencyNumber(balance, 0)} (${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
         projectHealth,
@@ -106,20 +107,16 @@ class UserTokens extends Component {
                     filter={false}
                     columns={[
                       {
+                        name: "",
+                        options: {
+                          customBodyRender: value => <img src={value} width="35" height="35" />
+                        },
+                        filter: true
+                      },
+                      {
                         name: "Name",
                         options: {
-                          customBodyRender: value => {
-                            const { projectName, thumbnailUrl } = value || {};
-                            return (
-                              <div style={{ width: "130px" }} className="hl">
-                                <img alt="" className="hli" src={thumbnailUrl} width="35" height="35" />
-                                <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
-                                  {projectName}
-                                </div>
-                              </div>
-                            );
-                          },
-                          filter: false
+                          filter: true
                         }
                       },
                       {

@@ -549,7 +549,7 @@ class ProjectDetailGovernance extends Component {
       const { address, endTime, consensus } = item || {};
       const dataArray = [
         address,
-        pollState(this.getKillPollStartDate(endTime), new Date(endTime * 1000)),
+        pollState(this.getKillPollStartDate(endTime * 1000), new Date(endTime * 1000)),
         formatDate(new Date(endTime * 1000)),
         significantDigits(consensus)
       ];

@@ -120,7 +120,7 @@ const pollState = (startTime, endTime) => {
   if (presentDate < startTime) {
     return "Tentative";
   }
-  if (startTime < presentDate < endTime) {
+  if (startTime < presentDate && presentDate < endTime) {
     return "Active";
   }
   if (presentDate > endTime) {

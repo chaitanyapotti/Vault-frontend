@@ -92,6 +92,8 @@ class FundReq extends Component {
 
   render() {
     const { onXfrPollHistoryClick } = this.props || {};
+    const obj1 = this.getObject1();
+    const obj2 = this.getObject2();
     return (
       <div>
         <CUICard className="card-brdr">
@@ -105,20 +107,33 @@ class FundReq extends Component {
               </LoadingButton>
             </Col>
           </Row>
-          <Divider />
-          <div>
-            <Row className="push-top--35">
-              <Col lg={12} className="txt">
-                {this.getObject1()}
+          {obj1 !== null ? (
+            <div>
+              <Divider />
+              <Row className="push-top--35">
+                <Col lg={12} className="txt">
+                  {obj1}
+                </Col>
+              </Row>
+            </div>
+          ) : null}
+          {obj2 !== null ? (
+            <div>
+              <Divider />
+              <Row className="push-top--35">
+                <Col lg={12} className="txt">
+                  {obj2}
+                </Col>
+              </Row>
+            </div>
+          ) : null}
+          {obj1 === null && obj2 === null ? (
+            <Row>
+              <Col lg={12} className="txt text-center">
+                <div style={{ padding: "40px 20px" }}>Xfr Poll not deployed</div>
               </Col>
             </Row>
-            {this.getObject2() !== null ? <Divider /> : null}
-            <Row className="push-top--35">
-              <Col lg={12} className="txt">
-                {this.getObject2()}
-              </Col>
-            </Row>
-          </div>
+          ) : null}
         </CUICard>
       </div>
     );

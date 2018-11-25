@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Grid } from "../../helpers/react-flexbox-grid";
-import CustomizedStepper from "../../components/Common/CustomizedStepper";
+import VerticalStepper from "../../components/Common/VerticalStepper";
 import { ButtonComponent } from "../../components/Common/FormComponents";
 import { CUICard, CUIDivider } from "../../helpers/material-ui";
 import { Introduction, EthWallet, TC, BuyersInformation, UploadDocuments, Submit, OtpVerification, Done } from "../../components/Whitelist";
@@ -233,7 +233,7 @@ class WhiteList extends Component {
                 {this.props.userLocalPublicAddress ? (
                   <Grid>
                     <CUICard className="card-brdr" style={{ padding: "40px 40px", marginBottom: "40px" }}>
-                      <CustomizedStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={this.props.activeStep} />
+                      <VerticalStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={this.props.activeStep} />
                       <div className="push-top--50">
                         <CUIDivider />
                       </div>

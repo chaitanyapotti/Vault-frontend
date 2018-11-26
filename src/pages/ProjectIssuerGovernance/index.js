@@ -8,10 +8,12 @@ import IssuerDetailPreGovernance from "../../containers/IssuerDetailPreGovernanc
 import IssuerDetailGovernance from "../../containers/IssuerDetailGovernance";
 import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
 import { Grid } from "../../helpers/react-flexbox-grid";
+import { fetchPrice } from "../../actions/priceFetchActions/index";
 
 class ProjectIssuerGovernance extends Component {
   componentWillUnmount() {
-    this.props.clearGovernanceStates();
+    const { clearGovernanceStates: clearingStates } = this.props || {};
+    clearingStates();
   }
 
   componentDidMount() {
@@ -19,8 +21,9 @@ class ProjectIssuerGovernance extends Component {
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
     if ("projectid" in params) {
-      const { currentRound: currentRoundDetailsFetch } = this.props || {};
+      const { currentRound: currentRoundDetailsFetch, fetchPrice: etherPriceFetch } = this.props || {};
       currentRoundDetailsFetch(params.projectid);
+      etherPriceFetch("ETH");
     } else {
       const { history } = this.props || {};
       history.push({
@@ -30,7 +33,17 @@ class ProjectIssuerGovernance extends Component {
   }
 
   render() {
-    const { currentRoundNumber, projectDetails, treasuryStateNumber, history } = this.props || {};
+    const {
+      currentRoundNumber,
+      projectDetails,
+      treasuryStateNumber,
+      history,
+      prices,
+      isVaultMember,
+      userLocalPublicAddress,
+      signinStatusFlag,
+      isVaultMembershipChecked
+    } = this.props || {};
     const {
       currentDeploymentIndicator,
       projectName,
@@ -62,10 +75,8 @@ class ProjectIssuerGovernance extends Component {
       thumbnailUrl,
       killAcceptancePercent
     } = projectDetails || {};
-    // currentRoundNumber = "2";
-    // Redirect to form if cdi !== 12
 
-    if (treasuryStateNumber === "0") {
+    if (treasuryStateNumber === "" || !isVaultMembershipChecked) {
       return (
         <Grid style={{ marginBottom: "50px" }}>
           <GvrncCardLoader />
@@ -120,6 +131,11 @@ class ProjectIssuerGovernance extends Component {
             history={history}
             thumbnailUrl={thumbnailUrl}
             killAcceptancePercent={killAcceptancePercent}
+            prices={prices}
+            isVaultMember={isVaultMember}
+            userLocalPublicAddress={userLocalPublicAddress}
+            signinStatusFlag={signinStatusFlag}
+            isVaultMembershipChecked={isVaultMembershipChecked}
           />
         </div>
       );
@@ -155,6 +171,11 @@ class ProjectIssuerGovernance extends Component {
             crowdSaleAddress={crowdSaleAddress}
             pollFactoryAddress={pollFactoryAddress}
             thumbnailUrl={thumbnailUrl}
+            prices={prices}
+            isVaultMember={isVaultMember}
+            userLocalPublicAddress={userLocalPublicAddress}
+            signinStatusFlag={signinStatusFlag}
+            isVaultMembershipChecked={isVaultMembershipChecked}
           />
         </div>
       );
@@ -164,15 +185,21 @@ class ProjectIssuerGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { deployerReducer, projectGovernanceReducer } = state || {};
+  const { deployerReducer, projectGovernanceReducer, fetchPriceReducer, signinManagerData } = state || {};
+  const { prices } = fetchPriceReducer || {};
   const { projectDetails, ts } = deployerReducer || {};
   const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
-
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag, isVaultMembershipChecked } = signinManagerData || {};
   return {
     projectDetails,
     currentRoundNumber,
     treasuryStateNumber,
-    ts
+    ts,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isVaultMembershipChecked
   };
 };
 
@@ -180,7 +207,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       currentRound,
-      clearGovernanceStates
+      clearGovernanceStates,
+      fetchPrice
     },
     dispatch
   );

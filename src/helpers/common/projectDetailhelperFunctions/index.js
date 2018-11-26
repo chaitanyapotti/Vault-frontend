@@ -335,6 +335,11 @@ const getRoundText = (roundInfo, currentRoundNumber) => {
   )} (Round ${currentRoundNumber} of 3)`;
 };
 
+const r1Finish = (r1EndTime, roundInfo) => {
+  const { tokenCount, totalTokensSold } = roundInfo || "";
+  return new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).lt(web3.utils.toBN(tokenCount));
+};
+
 const getSignInStatusText = signInStatusFlag => {
   switch (signInStatusFlag) {
     case 0:
@@ -385,5 +390,6 @@ export {
   contributionDataConverted,
   Colors,
   getSignInStatusText,
-  getRoundText
+  getRoundText,
+  r1Finish
 };

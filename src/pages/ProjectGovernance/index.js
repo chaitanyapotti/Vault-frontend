@@ -111,7 +111,6 @@ class ProjectGovernance extends Component {
       );
     }
     if (treasuryStateNumber === "1" && currentRoundNumber === "0") {
-      console.log("here");
       return (
         <div style={{ marginBottom: "50px" }}>
           <ProjectDetailPreStart

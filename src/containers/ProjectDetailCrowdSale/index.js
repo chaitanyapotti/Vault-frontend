@@ -23,7 +23,8 @@ import {
   roundTokensSold,
   r1TokenCount,
   getRoundText,
-  significantDigits
+  significantDigits,
+  r1Finish
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
@@ -107,12 +108,6 @@ class ProjectDetailCrowdSale extends Component {
   onBuyAmountChange = e => {
     const { buyAmountChangedAction: buyAmountChanged, buyAmount } = this.props || {};
     if (buyAmount !== e.target.value) buyAmountChanged(e.target.value);
-  };
-
-  r1Finish = () => {
-    const { r1EndTime, roundInfo } = this.props || {};
-    const { tokenCount, totalTokensSold } = roundInfo || "";
-    return new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).lt(web3.utils.toBN(tokenCount));
   };
 
   canBuy = () => {
@@ -199,7 +194,7 @@ class ProjectDetailCrowdSale extends Component {
             buyButtonDisabled={this.canBuy()}
             onBuyClick={this.buyTokens}
             buyButtonText="Buy"
-            r1Finish={this.r1Finish()}
+            r1Finish={r1Finish(r1EndTime, roundInfo)}
             onR1FinalizeClick={this.onR1FinalizeClick}
             r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
             whitelistButtonTransactionHash={whitelistButtonTransactionHash}

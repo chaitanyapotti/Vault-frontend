@@ -78,7 +78,7 @@ class ProjectGovernance extends Component {
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
-    if (treasuryStateNumber === "0" || !isVaultMembershipChecked) {
+    if (treasuryStateNumber === "" || !isVaultMembershipChecked) {
       return (
         <Grid>
           <GvrncCardLoader />
@@ -102,11 +102,15 @@ class ProjectGovernance extends Component {
             daicoTokenAddress={daicoTokenAddress}
             treasuryStateNumber={treasuryStateNumber}
             prices={prices}
+            isVaultMember={isVaultMember}
+            userLocalPublicAddress={userLocalPublicAddress}
+            signinStatusFlag={signinStatusFlag}
           />
         </div>
       );
     }
     if (treasuryStateNumber === "1" && currentRoundNumber === "0") {
+      console.log("here");
       return (
         <div style={{ marginBottom: "50px" }}>
           <ProjectDetailPreStart
@@ -213,6 +217,9 @@ class ProjectGovernance extends Component {
             killAcceptancePercent={killAcceptancePercent}
             thumbnailUrl={thumbnailUrl}
             prices={prices}
+            isVaultMember={isVaultMember}
+            userLocalPublicAddress={userLocalPublicAddress}
+            signinStatusFlag={signinStatusFlag}
           />
         </div>
       );

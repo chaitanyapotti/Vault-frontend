@@ -62,20 +62,17 @@ export const getUserTokens = (crowdsaleAddress, version, roundNumber, address) =
   const network = "rinkeby";
   axios
     .get(`${config.api_base_url}/web3/crowdsale/round/userdetails`, {
-      params: { address: crowdsaleAddress, network, version: version.toString(), round: roundNumber - 1, useraddress: address }
+      params: { address: crowdsaleAddress, network, version: version.toString(), round: roundNumber, useraddress: address }
     })
     .then(async response => {
-      console.log("200", response.data);
       if (response.status === 200) {
         const { data } = response.data;
         dispatch(userTokens(data));
       } else {
-        console.log("400");
         dispatch(userTokens("0"));
       }
     })
     .catch(err => {
-      console.log("500");
       console.error(err.message);
       dispatch(userTokens("0"));
     });
@@ -161,6 +158,7 @@ export const buyTokens = (
             dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
             dispatch(getRoundTokensSold(version, contractAddress, round));
             dispatch(getEtherCollected(version, pollFactoryAddress));
+            dispatch(getUserTokens(contractAddress, version, round, userLocalPublicAddress));
             dispatch({
               payload: { transactionHash: "" },
               type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED

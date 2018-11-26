@@ -3,7 +3,7 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  etherCollected: 0,
+  etherCollected: "",
   roundInfo: {},
   buyButtonSpinning: false,
   r1FinalizeButtonSpinning: false,
@@ -12,11 +12,20 @@ export const initialState = {
   buyButtonTransactionHash: "",
   r1FinalizeButtonTransactionHash: "",
   buyAmount: "",
-  userContribution: 0
+  userContribution: ""
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.CLEAR_GOVERNANCE_STATES: {
+      return {
+        ...state,
+        tokenBalance: "",
+        userContribution: "",
+        roundInfo: {},
+        etherCollected: ""
+      };
+    }
     case actionTypes.ETHER_COLLECTED: {
       const { receipt } = action.payload;
       return {

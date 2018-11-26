@@ -8,6 +8,12 @@ export const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.CLEAR_GOVERNANCE_STATES: {
+      return {
+        ...state,
+        isCurrentMember: undefined
+      };
+    }
     case actionTypes.BUTTON_SPINNING: {
       const { receipt } = action.payload;
       return {

@@ -76,9 +76,11 @@ class ProjectDetailRefund extends Component {
         <div>
           <div>The DAICO that you are looking for has been killed by investor consensus.</div>
           <div>
-            You are eligible for a refund of {this.getMyRefundValue()} ETH against your balance of
-            {formatCurrencyNumber(formatFromWei(tokenBalance, 0), 0)} {tokenTag} . Click the refund button and sign the transaction to start the
-            refund process
+            You are eligible for a refund of <span className="text--secondary">{this.getMyRefundValue()} ETH</span> against your balance of
+            <span className="text--secondary">
+              {formatCurrencyNumber(formatFromWei(tokenBalance, 0), 0)} {tokenTag}
+            </span>{" "}
+            . Click the refund button and sign the transaction to start the refund process
           </div>
         </div>
       );
@@ -98,9 +100,9 @@ class ProjectDetailRefund extends Component {
     } = this.props || {};
     return (
       <div>
-        <Row lg={8}>
+        <Row lg={8} xs={12}>
           <Col lg={2} />
-          <Col lg={8}>
+          <Col lg={8} xs={12}>
             <RefundCard
               refundByKillButtonSpinning={refundByKillButtonSpinning}
               refundBySoftCapFailSpinning={refundBySoftCapFailSpinning}

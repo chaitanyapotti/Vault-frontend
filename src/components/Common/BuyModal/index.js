@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { CUIFormInput } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
-import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
+import { formatCurrencyNumber, formatFromWei } from "../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 import { CustomToolTip } from "../FormComponents";
@@ -25,14 +25,16 @@ const BuyModal = props => {
     remainingAllocation,
     tokensSold,
     r1TokenGoal,
-    r1Rate
+    r1Rate,
+    minimumEtherContribution
   } = props || {};
   const { tokenRate } = roundInfo || {};
   const parsedInput = parseFloat(inputText);
   const labelValue = formatCurrencyNumber(parsedInput * parseFloat(tokenRate), 0);
   const link = `https://rinkeby.etherscan.io/tx/${buyButtonTransactionHash}`;
   const round1Residue = parseFloat(r1TokenGoal) - parseFloat(tokensSold);
-  const isDisabled = parsedInput * parseFloat(tokenRate) > remainingAllocation || isNaN(parseFloat(inputText)) || parseFloat(inputText) <= 0;
+  const isDisabled =
+    parsedInput * parseFloat(tokenRate) > remainingAllocation || isNaN(parsedInput) || parsedInput < formatFromWei(minimumEtherContribution, 4);
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">

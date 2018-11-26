@@ -163,7 +163,8 @@ class ProjectDetailCrowdSale extends Component {
       currentRoundNumber,
       totalMintableSupply,
       daicoTokenAddress,
-      pollFactoryAddress
+      pollFactoryAddress,
+      minimumEtherContribution
     } = this.props || {};
     const { buyModalOpen } = this.state;
     const r1Rate = getR1Rate(rounds);
@@ -247,6 +248,7 @@ class ProjectDetailCrowdSale extends Component {
           tokensSold={roundTokensSold(roundInfo)}
           r1TokenGoal={r1TokenCount(rounds)}
           r1Rate={r1Rate}
+          minimumEtherContribution={minimumEtherContribution}
         />
       </Grid>
     );

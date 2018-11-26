@@ -74,7 +74,8 @@ class ProjectGovernance extends Component {
       xfrRejectionPercent,
       projectHealth,
       killAcceptancePercent,
-      thumbnailUrl
+      thumbnailUrl,
+      minimumEtherContribution
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
@@ -178,6 +179,7 @@ class ProjectGovernance extends Component {
             userLocalPublicAddress={userLocalPublicAddress}
             signinStatusFlag={signinStatusFlag}
             isVaultMembershipChecked={isVaultMembershipChecked}
+            minimumEtherContribution={minimumEtherContribution}
           />
         </div>
       );
@@ -220,6 +222,7 @@ class ProjectGovernance extends Component {
             isVaultMember={isVaultMember}
             userLocalPublicAddress={userLocalPublicAddress}
             signinStatusFlag={signinStatusFlag}
+            minimumEtherContribution={minimumEtherContribution}
           />
         </div>
       );

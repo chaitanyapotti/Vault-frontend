@@ -6,6 +6,7 @@ import { getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
 import { formatFromWei, formatCurrencyNumber } from "../../helpers/common/projectDetailhelperFunctions";
 import RefundCard from "../../components/RefundCard";
 import { getRemainingEtherBalance, getTotalSupply } from "../../actions/projectDetailGovernanceActions/index";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 
 class ProjectDetailRefund extends Component {
   componentDidMount() {
@@ -61,9 +62,11 @@ class ProjectDetailRefund extends Component {
         <div>
           <div>The DAICO that you are looking for could not successfully reach its Round 1 goal.</div>
           <div>
-            You are eligible for a refund of {this.getMyRefundValue()} ETH against your balance of{" "}
-            {formatCurrencyNumber(formatFromWei(tokenBalance, 0), 0)} {tokenTag} . Click the refund button and sign the transaction to start the
-            refund process
+            You are eligible for a refund of <span className="text--secondary">{this.getMyRefundValue()} ETH</span> against your balance of{" "}
+            <span className="text--secondary">
+              {formatCurrencyNumber(formatFromWei(tokenBalance, 0), 0)} {tokenTag}
+            </span>{" "}
+            . Click the refund button and sign the transaction to start the refund process
           </div>
         </div>
       );
@@ -95,18 +98,24 @@ class ProjectDetailRefund extends Component {
     } = this.props || {};
     return (
       <div>
-        <RefundCard
-          refundByKillButtonSpinning={refundByKillButtonSpinning}
-          refundBySoftCapFailSpinning={refundBySoftCapFailSpinning}
-          onRefundClick={this.onRefundClick}
-          signinStatusFlag={signinStatusFlag}
-          treasuryStateNumber={treasuryStateNumber}
-          tokenBalance={tokenBalance}
-          btnLabel="Refund"
-          label={this.getLabel()}
-          refundByKillButtonTransactionHash={refundByKillButtonTransactionHash}
-          refundBySoftcapfailButtonTransactionHash={refundBySoftcapfailButtonTransactionHash}
-        />
+        <Row lg={8}>
+          <Col lg={2} />
+          <Col lg={8}>
+            <RefundCard
+              refundByKillButtonSpinning={refundByKillButtonSpinning}
+              refundBySoftCapFailSpinning={refundBySoftCapFailSpinning}
+              onRefundClick={this.onRefundClick}
+              signinStatusFlag={signinStatusFlag}
+              treasuryStateNumber={treasuryStateNumber}
+              tokenBalance={tokenBalance}
+              btnLabel="Refund"
+              label={this.getLabel()}
+              refundByKillButtonTransactionHash={refundByKillButtonTransactionHash}
+              refundBySoftcapfailButtonTransactionHash={refundBySoftcapfailButtonTransactionHash}
+            />
+          </Col>
+          <Col lg={2} />
+        </Row>
       </div>
     );
   }

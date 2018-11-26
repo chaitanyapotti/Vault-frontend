@@ -90,11 +90,13 @@ class NonSale extends React.Component {
     const nonSaleEntitiesTable = nonSaleEntities;
     const data =
       nonSaleEntitiesTable.length > 0 &&
-      nonSaleEntitiesTable.filter(entity => entity.entityName !== "Unallocated").map((item, index) => {
-        const { entityName, entityPercentage, entityAddress } = item || {};
-        const dataArray = [entityName, entityPercentage, entityAddress, index];
-        return dataArray;
-      });
+      nonSaleEntitiesTable
+        .filter(entity => entity.entityName !== "Unallocated")
+        .map((item, index) => {
+          const { entityName, entityPercentage, entityAddress } = item || {};
+          const dataArray = [entityName, entityPercentage, entityAddress, index];
+          return dataArray;
+        });
     const prices = { ETH: { price: ethPrice } };
     return (
       <div className="push-top--50">
@@ -188,10 +190,10 @@ class NonSale extends React.Component {
           </Col>
         </Row>
         <hr />
-        <div className="txt-xl" style={{ padding: "40px 50px" }}>
+        {/* <div className="txt-xl" style={{ padding: "40px 50px" }}>
           Token Distribution Chart
         </div>
-        <hr />
+        <hr /> */}
         {this.props.totalSaleTokens > 0 ? (
           <Row style={{ padding: "20px 50px" }}>
             <TokenChart currentRoundNumber="0" prices={prices} rounds={this.getRoundData()} foundationDetails={this.getFoundationData()} />

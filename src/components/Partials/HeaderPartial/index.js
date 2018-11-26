@@ -18,7 +18,7 @@ import { CUIAppBar, CUIButtonIcon, CUIButton } from "../../../helpers/material-u
 import { getSearchResults, searchTextChangeAction } from "../../../actions/searchActions/index";
 import { openRegistrationFormAction, closeRegistrationFormAction } from "../../../actions/signinManagerActions";
 import { fetchProjectDetails } from "../../../actions/deployerActions";
-import { clearProjectDetails } from "../../../actions/projectRegistrationActions"
+import { clearProjectDetails } from "../../../actions/projectRegistrationActions";
 import { ButtonComponent } from "../../Common/FormComponents";
 import "../../../static/css/app.css";
 import AlertModal from "../../Common/AlertModal";
@@ -119,7 +119,7 @@ class HeaderPartial extends React.Component {
     anchorEl: null,
     mobileMoreAnchorEl: null,
     signInModalOpen: false,
-    drawerIsOpen:false
+    drawerIsOpen: false
   };
 
   handleSignInModalOpen = () => this.setState({ signInModalOpen: true });
@@ -187,14 +187,14 @@ class HeaderPartial extends React.Component {
 
   onHandleManageDaicoClicked = () => {
     this.props.searchTextChangeAction("");
-    this.props.clearProjectDetails()
-      this.props.fetchProjectDetails(this.props.userLocalPublicAddress)
-    setTimeout(()=>{
+    this.props.clearProjectDetails();
+    this.props.fetchProjectDetails(this.props.userLocalPublicAddress);
+    setTimeout(() => {
       this.props.history.push({
         pathname: "/deploy",
         search: `?projectid=${this.props.project_id}`
       });
-    }, 1000)
+    }, 1000);
   };
 
   onHandlePublishDaicoClicked = () => {
@@ -247,8 +247,8 @@ class HeaderPartial extends React.Component {
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const { isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked } =
       this.props || {};
-    const { userDetails } = this.props || {}
-    const { firstName, lastName } = userDetails || ""
+    const { userDetails } = this.props || {};
+    const { firstName, lastName } = userDetails || "";
     const { signInModalOpen } = this.state || {};
 
     const renderMenu = (
@@ -273,22 +273,22 @@ class HeaderPartial extends React.Component {
         onClose={this.handleMobileMenuClose}
       >
         <MenuItem onClick={this.onHandleProjectsClicked}>
-          <div>Projects</div>
+          <span className="hdr-menu-cnt">Projects</span>
         </MenuItem>
         {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
           <MenuItem onClick={this.onHandleGovernanceClicked}>
-            <div>My Tokens</div>
+            <span className="hdr-menu-cnt">My Tokens</span>
           </MenuItem>
         ) : null}
         {this.props.signinStatusFlag === 5 ? (
           <div>
             {this.props.manageDaico ? (
               <MenuItem onClick={this.onHandleManageDaicoClicked}>
-                <div>Manage DAICO</div>
+                <span className="hdr-menu-cnt">Manage DAICO</span>
               </MenuItem>
             ) : (
               <MenuItem onClick={this.onHandlePublishDaicoClicked}>
-                <div>Publish DAICO</div>
+                <span className="hdr-menu-cnt">Publish DAICO</span>
               </MenuItem>
             )}
           </div>
@@ -301,201 +301,197 @@ class HeaderPartial extends React.Component {
         {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
           <div>
             <div className={classes.root}>
-            <CUIAppBar
-              position="static"
-              style={
-                scrnWdh < 768
-                  ? { height: "60px", boxShadow: "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
-                  : { height: "85px", boxShadow: "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
-              }
-            >
-              <Grid>
-                <Row>
-                  <Col xs={12}>
-                    <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "85px", padding: 0 }}>
-                      {scrnWdh < 768 ? (
-                        <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
-                          <MenuIcon />
-                        </CUIButtonIcon>
-                      ) : (
-                        <div />
-                      )}
+              <CUIAppBar
+                position="static"
+                style={
+                  scrnWdh < 768
+                    ? { height: "60px", boxShadow: "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
+                    : { height: "85px", boxShadow: "0px 5px 25px 0px rgba(76, 169, 252, 0.25)" }
+                }
+              >
+                <Grid>
+                  <Row>
+                    <Col xs={12}>
+                      <Toolbar style={scrnWdh < 768 ? { height: "60px" } : { height: "85px", padding: 0 }}>
+                        {scrnWdh < 768 ? (
+                          <CUIButtonIcon onClick={this.handleDrawerOpen} className={classes.menuButton} color="inherit" aria-label="Open drawer">
+                            <MenuIcon />
+                          </CUIButtonIcon>
+                        ) : (
+                          <div />
+                        )}
 
-                      <div className={classes.title}>
-                        <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
-                      </div>
-                      <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                          <SearchIcon className={classes.srchlogo} />
+                        <div className={classes.title}>
+                          <span onClick={this.onHandleLogoClicked} className="hdr-logo" />
                         </div>
-                        <InputBase
-                          placeholder="Search"
-                          classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput
-                          }}
-                          value={this.props.searchText}
-                          onChange={this.searchProject}
-                          onKeyDown={this.handleSearch}
-                        />
-                      </div>
-                      <div className={classes.grow} />
-                      <div className={classes.sectionDesktop}>
-                        <div className="hdr-itm-pad text--primary txt-m">
-                          <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked}>
-                            Projects
+                        <div className={classes.search}>
+                          <div className={classes.searchIcon}>
+                            <SearchIcon className={classes.srchlogo} />
                           </div>
+                          <InputBase
+                            placeholder="Search"
+                            classes={{
+                              root: classes.inputRoot,
+                              input: classes.inputInput
+                            }}
+                            value={this.props.searchText}
+                            onChange={this.searchProject}
+                            onKeyDown={this.handleSearch}
+                          />
                         </div>
-                        {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
+                        <div className={classes.grow} />
+                        <div className={classes.sectionDesktop}>
                           <div className="hdr-itm-pad text--primary txt-m">
-                            <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
-                              My Tokens
+                            <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked}>
+                              <span className="hdr-menu-cnt">Projects</span>
                             </div>
                           </div>
-                        ) : null}
-                        {this.props.signinStatusFlag === 5 ? (
-                          <div className="hdr-itm-pad text--primary txt-m">
-                            {this.props.manageDaico ? (
-                              <div onClick={this.onHandleManageDaicoClicked} className="hvr-underline-from-left">
-                                Manage DAICO
+                          {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
+                            <div className="hdr-itm-pad text--primary txt-m">
+                              <div className="hvr-underline-from-left" onClick={this.onHandleGovernanceClicked}>
+                                <span className="hdr-menu-cnt">My Tokens</span>
                               </div>
-                            ) : (
-                              <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">
-                                Publish DAICO
-                              </div>
-                            )}
-                          </div>
-                        ) : null}
+                            </div>
+                          ) : null}
+                          {this.props.signinStatusFlag === 5 ? (
+                            <div className="hdr-itm-pad text--primary txt-m">
+                              {this.props.manageDaico ? (
+                                <div onClick={this.onHandleManageDaicoClicked} className="hvr-underline-from-left">
+                                  <span className="hdr-menu-cnt">Manage DAICO</span>
+                                </div>
+                              ) : (
+                                <div onClick={this.onHandlePublishDaicoClicked} className="hvr-underline-from-left">
+                                  <span className="hdr-menu-cnt">Publish DAICO</span>
+                                </div>
+                              )}
+                            </div>
+                          ) : null}
 
-                        <div className="text--primary txt-m push-half--top">
-                          <div className="text--center">
-                            {
+                          <div className="text--primary txt-m push-half--top">
+                            <div className="text--center">
                               {
-                                0: (
-                                  <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                    <ButtonComponent style={{ boxShadow: "none" }} onClick={() => {}}>
+                                {
+                                  0: (
+                                    <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
+                                      <ButtonComponent style={{ boxShadow: "none" }} onClick={() => {}}>
+                                        <div className="soft-half--sides">
+                                          <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
+                                          <span style={{ top: "3px" }} className="push-half--left pos-rel">
+                                            Install
+                                          </span>
+                                        </div>
+                                      </ButtonComponent>
+                                    </a>
+                                  ),
+                                  1: (
+                                    <ButtonComponent style={{ boxShadow: "none" }} onClick={this.handleSignInModalOpen}>
                                       <div className="soft-half--sides">
                                         <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
                                         <span style={{ top: "3px" }} className="push-half--left pos-rel">
-                                          Install
+                                          Sign in
                                         </span>
                                       </div>
                                     </ButtonComponent>
-                                  </a>
-                                ),
-                                1: (
-                                  <ButtonComponent style={{ boxShadow: "none" }} onClick={this.handleSignInModalOpen}>
-                                    <div className="soft-half--sides">
-                                      <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
-                                      <span style={{ top: "3px" }} className="push-half--left pos-rel">
-                                        Sign in
-                                      </span>
+                                  ),
+                                  2: (
+                                    <div>
+                                      <ButtonComponent onClick={() => {}}>Wrong network</ButtonComponent>
+                                      <div style={{ width: "150px" }} className="txt-ellipsis">
+                                        {this.props.userLocalPublicAddress}
+                                      </div>
+                                      <CUIButton className="btn bg-yellow txt-p-vault txt-dddbld text--white">Wrong network</CUIButton>
+                                      {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                     </div>
-                                  </ButtonComponent>
-                                ),
-                                2: (
-                                  <div>
-                                    <ButtonComponent onClick={() => {}}>Wrong network</ButtonComponent>
-                                    <div style={{ width: "150px" }} className="txt-ellipsis">
-                                      {this.props.userLocalPublicAddress}
-                                    </div>
-                                    <CUIButton className="btn bg-yellow txt-p-vault txt-dddbld text--white">Wrong network</CUIButton>
-                                    {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
-                                  </div>
-                                ),
-                                3: (
-                                  <div>
-                                    {/* <div style={{ width: "150px" }} className="txt-ellipsis">
+                                  ),
+                                  3: (
+                                    <div>
+                                      {/* <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div> */}
-                                    <div style={{ width: "150px" }}>
-                                      {formatAddress(this.props.userLocalPublicAddress)}
+                                      <div style={{ width: "150px" }}>{formatAddress(this.props.userLocalPublicAddress)}</div>
+                                      <ButtonComponent
+                                        style={{ boxShadow: "none" }}
+                                        className="register"
+                                        onClick={this.handleRegistrationButtonClicked}
+                                      >
+                                        Become a Vault Member
+                                      </ButtonComponent>
                                     </div>
-                                    <ButtonComponent
-                                      style={{ boxShadow: "none" }}
-                                      className="register"
-                                      onClick={this.handleRegistrationButtonClicked}
-                                    >
-                                      Become a Vault Member
-                                    </ButtonComponent>
-                                  </div>
-                                ),
-                                4: (
-                                  <div>
-                                    
-                                    <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
-                                    <span>{firstName}</span>
-                                      {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
-                                    </ButtonComponent>
-                                    {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
-                                  </div>
-                                ),
-                                5: (
-                                  <div>
-                                  
-                                    <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
-                                    <span>{firstName}</span>
-                                      {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
-                                    </ButtonComponent>
-                                  </div>
-                                )
-                              }[this.props.signinStatusFlag]
-                            }
+                                  ),
+                                  4: (
+                                    <div>
+                                      <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
+                                        <span>{firstName}</span>
+                                        {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
+                                      </ButtonComponent>
+                                      {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
+                                    </div>
+                                  ),
+                                  5: (
+                                    <div>
+                                      <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
+                                        <span>{firstName}</span>
+                                        {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
+                                      </ButtonComponent>
+                                    </div>
+                                  )
+                                }[this.props.signinStatusFlag]
+                              }
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className={classes.sectionMobile}>
-                        <CUIButtonIcon aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                          <MoreIcon />
-                        </CUIButtonIcon>
-                      </div>
-                    </Toolbar>
-                  </Col>
-                </Row>
-              </Grid>
-            </CUIAppBar>
-            {renderMenu}
-            {renderMobileMenu}
-            <Drawer
-              variant="persistent"
-              classes={{
-                paper: classes.drawerPaper
-              }}
-              open={this.state.drawerIsOpen}
-            >
-              <div className={classes.drawerHeader}>
-                <CUIButtonIcon onClick={this.handleDrawerClose}>
-                  <div>
-                    <ChevronLeft /> Back
-                  </div>
-                </CUIButtonIcon>
-              </div>
-              <div className={classes.drawerInner}>
-                <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked}>
-                  Projects
+                        <div className={classes.sectionMobile}>
+                          <CUIButtonIcon aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+                            <MoreIcon />
+                          </CUIButtonIcon>
+                        </div>
+                      </Toolbar>
+                    </Col>
+                  </Row>
+                </Grid>
+              </CUIAppBar>
+              {renderMenu}
+              {renderMobileMenu}
+              <Drawer
+                variant="persistent"
+                classes={{
+                  paper: classes.drawerPaper
+                }}
+                open={this.state.drawerIsOpen}
+              >
+                <div className={classes.drawerHeader}>
+                  <CUIButtonIcon onClick={this.handleDrawerClose}>
+                    <div>
+                      <ChevronLeft /> Back
+                    </div>
+                  </CUIButtonIcon>
                 </div>
-                {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
-                  <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
-                    My Tokens
+                <div className={classes.drawerInner}>
+                  <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked}>
+                    <span className="hdr-menu-cnt">Projects</span>
                   </div>
-                ) : null}
-                {this.props.signinStatusFlag === 5 ? (
-                  <div className="hdr-itm-pad text--primary txt-m">
-                    {this.props.manageDaico ? (
-                      <div onClick={this.onHandleManageDaicoClicked} className="hdr-itm-pad text--primary txt-m">
-                        Manage DAICO
-                      </div>
-                    ) : (
-                      <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m">
-                        Publish DAICO
-                      </div>
-                    )}
-                  </div>
-                ) : null}
-              </div>
-            </Drawer>
-          </div>
-          <SubHeader/>
+                  {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
+                    <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>
+                      <span className="hdr-menu-cnt">My Tokens</span>
+                    </div>
+                  ) : null}
+                  {this.props.signinStatusFlag === 5 ? (
+                    <div className="hdr-itm-pad text--primary txt-m">
+                      {this.props.manageDaico ? (
+                        <div onClick={this.onHandleManageDaicoClicked} className="hdr-itm-pad text--primary txt-m">
+                          <span className="hdr-menu-cnt">Manage DAICO</span>
+                        </div>
+                      ) : (
+                        <div onClick={this.onHandlePublishDaicoClicked} className="hdr-itm-pad text--primary txt-m lnk--i">
+                          <span className="hdr-menu-cnt">Publish DAICO</span>
+                        </div>
+                      )}
+                    </div>
+                  ) : null}
+                </div>
+              </Drawer>
+            </div>
+            <SubHeader />
           </div>
         ) : (
           <Grid>

@@ -6,9 +6,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { CUIFormInput } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
-import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
+import { formatCurrencyNumber, formatFromWei } from "../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { CustomToolTip } from "../FormComponents";
 
 const BuyModal = props => {
   const {
@@ -24,12 +25,16 @@ const BuyModal = props => {
     remainingAllocation,
     tokensSold,
     r1TokenGoal,
-    r1Rate
+    r1Rate,
+    minimumEtherContribution
   } = props || {};
   const { tokenRate } = roundInfo || {};
-  const labelValue = formatCurrencyNumber(parseFloat(inputText) * parseFloat(tokenRate), 0);
+  const parsedInput = parseFloat(inputText);
+  const labelValue = formatCurrencyNumber(parsedInput * parseFloat(tokenRate), 0);
   const link = `https://rinkeby.etherscan.io/tx/${buyButtonTransactionHash}`;
-  const round1Residue = r1TokenGoal - tokensSold;
+  const round1Residue = parseFloat(r1TokenGoal) - parseFloat(tokensSold);
+  const isDisabled =
+    parsedInput * parseFloat(tokenRate) > remainingAllocation || isNaN(parsedInput) || parsedInput < formatFromWei(minimumEtherContribution, 4);
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
@@ -51,7 +56,7 @@ const BuyModal = props => {
           <p>
             {labelValue} {tokenTag}
           </p>
-          {inputText * r1Rate > round1Residue ? (
+          {parsedInput * parseFloat(r1Rate) > round1Residue ? (
             <div className="txt-m text-right text--danger">
               Your order is overflowing out of Round 1, and part of your order will go to round 2. You may recieve lesser tokens than expected.
             </div>
@@ -68,13 +73,13 @@ const BuyModal = props => {
             </div>
           ) : (
             <div className="hli">
-              <LoadingButton
-                onClick={buyTokensOnClick}
-                loading={buyButtonSpinning}
-                disabled={parseFloat(inputText) * parseFloat(tokenRate) > remainingAllocation || inputText === ""}
-              >
-                Buy
-              </LoadingButton>
+              <CustomToolTip title="Invalid Input" disabled={isDisabled}>
+                <span>
+                  <LoadingButton onClick={buyTokensOnClick} loading={buyButtonSpinning} disabled={isDisabled}>
+                    Buy
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
             </div>
           )}
         </DialogActions>

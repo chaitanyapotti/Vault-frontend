@@ -535,7 +535,8 @@ class ProjectDetailGovernance extends Component {
       contriArrayReceived,
       unlockTokensLoading,
       killVoterCount,
-      etherCollected
+      etherCollected,
+      minimumEtherContribution
     } = this.props || {};
     const {
       modalOpen,
@@ -841,6 +842,7 @@ class ProjectDetailGovernance extends Component {
           inputText={buyAmount}
           onChange={this.onBuyAmountChange}
           buyButtonTransactionHash={buyButtonTransactionHash}
+          minimumEtherContribution={minimumEtherContribution}
         />
       </Grid>
     );

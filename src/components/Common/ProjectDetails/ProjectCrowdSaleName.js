@@ -4,7 +4,9 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
 import { CustomToolTip } from "../FormComponents";
+import BtnLoader from "../../Loaders/BtnLoader";
 
 const ProjectCrowdSaleName = props => {
   const {
@@ -14,16 +16,13 @@ const ProjectCrowdSaleName = props => {
     price,
     roundText,
     description,
-    priceIncrement,
     whitepaper,
-    lastRoundInfo,
     buttonText,
     onClick,
-    buttonVisibility,
-    priceIncrementFlag,
     buttonSpinning,
-    buyButtonVisibility,
+    isCurrentMember,
     onBuyClick,
+    buttonVisibility,
     buyButtonText,
     signinStatusFlag,
     r1Finish,
@@ -37,10 +36,14 @@ const ProjectCrowdSaleName = props => {
     daicoTokenAddress
   } = props || {};
   const { website } = urls;
-  const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
-  const r1FinalizeLink = `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`;
+  const link =
+    whitelistButtonTransactionHash !== ""
+      ? `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`
+      : r1FinalizeButtonTransactionHash !== ""
+      ? `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`
+      : "";
   const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
-  const warningText = signinStatusFlag <= 2 ? "This feature is for vault members only" : "";
+  const warningText = getSignInStatusText(signinStatusFlag);
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
@@ -53,10 +56,7 @@ const ProjectCrowdSaleName = props => {
               <div className="txt-xl">
                 {projectName} ({tokenTag})
               </div>
-              <div className="txt opacity-75">
-                {price} ETH
-                {priceIncrementFlag ? <span className="txt-inc">{` ${priceIncrement}`}</span> : <div />}
-              </div>
+              <div className="txt opacity-75">{price} ETH</div>
             </div>
           </div>
         </Col>
@@ -64,7 +64,6 @@ const ProjectCrowdSaleName = props => {
           <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
             View On Etherscan
           </a>
-          <span>{lastRoundInfo}</span>
         </Col>
       </Row>
       <Row className="push--top">
@@ -72,9 +71,7 @@ const ProjectCrowdSaleName = props => {
           <div>{roundText}</div>
         </Col>
         <Col lg={6}>
-          <div>
-            <SocialLinks urls={urls} />
-          </div>
+          <SocialLinks urls={urls} />
         </Col>
       </Row>
       <Row className="push-half--top txt">
@@ -95,18 +92,18 @@ const ProjectCrowdSaleName = props => {
             </a>
           </div>
         </Col>
-        <Col lg={6} className="text-right hl  ">
-          {signinStatusFlag <= 2 ? (
+        <Col lg={6} className="text-right hl">
+          {signinStatusFlag < 4 && typeof isCurrentMember === "undefined" ? (
             <div className="hli">
-              <CustomToolTip title={warningText} id="btn-disabled">
-                <div>
+              <CustomToolTip title={warningText} id="btn-disabled" disabled>
+                <span>
                   <LoadingButton style={{ padding: "0 40px" }} disabled>
                     {buttonText}
                   </LoadingButton>
-                </div>
+                </span>
               </CustomToolTip>
             </div>
-          ) : whitelistButtonTransactionHash !== "" ? (
+          ) : whitelistButtonTransactionHash !== "" || r1FinalizeButtonTransactionHash !== "" ? (
             <div className="hli">
               <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
                 <LoadingButton type="pending" style={{ padding: "0 40px" }} onClick={() => console.log("Sent to etherscan")}>
@@ -114,13 +111,13 @@ const ProjectCrowdSaleName = props => {
                 </LoadingButton>
               </a>
             </div>
-          ) : buttonVisibility ? (
+          ) : r1Finish && isCurrentMember ? (
             <span className="hli">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={buttonSpinning}>
-                {buttonText}
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
+                Initialise Refund
               </LoadingButton>
             </span>
-          ) : buyButtonVisibility ? (
+          ) : isCurrentMember ? (
             <CustomToolTip disabled={!buyButtonDisabled || remainingAllocation === 0} title="Can't Buy Now">
               <span className="hli push-left--13">
                 <LoadingButton style={{ padding: "0 40px" }} onClick={onBuyClick} disabled={!buyButtonDisabled || remainingAllocation === 0}>
@@ -128,21 +125,17 @@ const ProjectCrowdSaleName = props => {
                 </LoadingButton>
               </span>
             </CustomToolTip>
-          ) : r1FinalizeButtonTransactionHash !== "" ? (
-            <div className="hli">
-              <a href={ensureHttpUrl(r1FinalizeLink)} target="_blank" rel="noreferrer noopener">
-                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                  Status
-                </LoadingButton>
-              </a>
-            </div>
-          ) : r1Finish ? (
+          ) : buttonVisibility ? (
             <span className="hli">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
-                Initialise Refund
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={buttonSpinning}>
+                {buttonText}
               </LoadingButton>
             </span>
-          ) : null}
+          ) : (
+            <span width="20">
+              <BtnLoader width={45} height={9} />
+            </span>
+          )}
         </Col>
       </Row>
     </CUICard>

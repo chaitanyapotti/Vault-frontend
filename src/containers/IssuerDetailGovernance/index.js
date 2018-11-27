@@ -73,7 +73,6 @@ class IssuerDetailGovernance extends Component {
       getCurrentWithdrawableAmount: fetchCurrentWithdrawableAmount,
       getKillVoterCount: fetchKillVoterCount
     } = this.props || {};
-    priceFetch("ETH");
     priceFetch(tokenTag);
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10) - 1;
     fetchRoundTokensSold(version, crowdSaleAddress, roundNumber);
@@ -504,9 +503,9 @@ class IssuerDetailGovernance extends Component {
               onDeployXfrClick={this.onDeployXfrClick}
               deployXfrPollTransactionHash={deployXfrPollTransactionHash}
             />
-          ) : 
-            <div /> 
-          }
+          ) : (
+            <div />
+          )}
           <IssuerFundReq
             data={xfrData}
             details={xfrDetails}
@@ -545,14 +544,8 @@ class IssuerDetailGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const {
-    projectCrowdSaleReducer,
-    projectDetailGovernanceReducer,
-    projectPreStartReducer,
-    signinManagerData,
-    fetchPriceReducer,
-    issuerDetailGovernanceReducer
-  } = state || {};
+  const { projectCrowdSaleReducer, projectDetailGovernanceReducer, projectPreStartReducer, issuerDetailGovernanceReducer, fetchPriceReducer } =
+    state || {};
   const { etherCollected, roundInfo, tokenBalance, buyButtonSpinning } = projectCrowdSaleReducer || {};
   const {
     startNewRoundButtonSpinning,
@@ -597,7 +590,6 @@ const mapStateToProps = state => {
     killVoterCount
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
-  const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { prices } = fetchPriceReducer || {};
 
   return {
@@ -614,12 +606,9 @@ const mapStateToProps = state => {
     xfrData,
     isCurrentMember,
     buttonSpinning,
-    isVaultMember,
-    userLocalPublicAddress,
-    signinStatusFlag,
     buyButtonSpinning,
-    prices,
     killVoteData,
+    prices,
     tapVoteData,
     killButtonSpinning,
     tapButtonSpinning,

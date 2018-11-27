@@ -1,4 +1,5 @@
 import moment from "moment";
+import web3 from "../../web3";
 import constants from "../../../constants";
 
 const formatDate = dbDate =>
@@ -323,6 +324,22 @@ const getHardCap = (totalMintableSupply, prices, rounds) => {
   return formatMoney(formatFromWei(parseFloat(totalMintableSupply) * getR3Price(rounds) * etherPrice), 0);
 };
 
+const getRoundText = (roundInfo, currentRoundNumber) => {
+  const { tokenCount, totalTokensSold } = roundInfo || "";
+  if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
+  if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).eq(web3.utils.toBN(tokenCount))) return `Round ${currentRoundNumber} Ended`;
+  // based on tokens sold
+  return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
+    formatFromWei(tokenCount),
+    0
+  )} (Round ${currentRoundNumber} of 3)`;
+};
+
+const r1Finish = (r1EndTime, roundInfo) => {
+  const { tokenCount, totalTokensSold } = roundInfo || "";
+  return new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).lt(web3.utils.toBN(tokenCount));
+};
+
 const getSignInStatusText = signInStatusFlag => {
   switch (signInStatusFlag) {
     case 0:
@@ -372,5 +389,7 @@ export {
   roundTokensSold,
   contributionDataConverted,
   Colors,
-  getSignInStatusText
+  getSignInStatusText,
+  getRoundText,
+  r1Finish
 };

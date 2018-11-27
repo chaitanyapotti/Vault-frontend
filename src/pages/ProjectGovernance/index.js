@@ -74,11 +74,12 @@ class ProjectGovernance extends Component {
       xfrRejectionPercent,
       projectHealth,
       killAcceptancePercent,
-      thumbnailUrl
+      thumbnailUrl,
+      minimumEtherContribution
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
-    if (treasuryStateNumber === "0" || !isVaultMembershipChecked) {
+    if (treasuryStateNumber === "" || !isVaultMembershipChecked) {
       return (
         <Grid>
           <GvrncCardLoader />
@@ -102,6 +103,9 @@ class ProjectGovernance extends Component {
             daicoTokenAddress={daicoTokenAddress}
             treasuryStateNumber={treasuryStateNumber}
             prices={prices}
+            isVaultMember={isVaultMember}
+            userLocalPublicAddress={userLocalPublicAddress}
+            signinStatusFlag={signinStatusFlag}
           />
         </div>
       );
@@ -174,6 +178,7 @@ class ProjectGovernance extends Component {
             userLocalPublicAddress={userLocalPublicAddress}
             signinStatusFlag={signinStatusFlag}
             isVaultMembershipChecked={isVaultMembershipChecked}
+            minimumEtherContribution={minimumEtherContribution}
           />
         </div>
       );
@@ -213,6 +218,10 @@ class ProjectGovernance extends Component {
             killAcceptancePercent={killAcceptancePercent}
             thumbnailUrl={thumbnailUrl}
             prices={prices}
+            isVaultMember={isVaultMember}
+            userLocalPublicAddress={userLocalPublicAddress}
+            signinStatusFlag={signinStatusFlag}
+            minimumEtherContribution={minimumEtherContribution}
           />
         </div>
       );

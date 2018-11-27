@@ -90,7 +90,6 @@ button:active {
   transition-timing-function: ease-in;
   transition: 250ms;
   transform: translate(0px, 0px) !important;
-  
 }
 
 .bg--primary:hover {
@@ -109,8 +108,17 @@ button:active {
   background: #198bd1 !important;
   box-shadow: 0px 0px 0px #ffffff !important;
 }
+
+.bg--primary {
+  box-shadow: 0px 0px 0px #ffffff !important;
+}
+
 .bg--pending:active {
   background: #d8931a !important;
+  box-shadow: 0px 0px 0px #ffffff !important;
+}
+
+.bg--pending {
   box-shadow: 0px 0px 0px #ffffff !important;
 }
 
@@ -119,7 +127,9 @@ button:active {
   box-shadow: 0px 0px 0px #ffffff !important;
 }
 
-
+.bg--danger {
+  box-shadow: 0px 0px 0px #ffffff !important;
+}
 .btn:disabled {
   background: #d3d3d3 !important;
 }

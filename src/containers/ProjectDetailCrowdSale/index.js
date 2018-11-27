@@ -21,9 +21,12 @@ import {
   formatCurrencyNumber,
   getR1Rate,
   roundTokensSold,
-  r1TokenCount
+  r1TokenCount,
+  getRoundText,
+  significantDigits,
+  r1Finish
 } from "../../helpers/common/projectDetailhelperFunctions";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
 import BuyModal from "../../components/Common/BuyModal";
 import web3 from "../../helpers/web3";
@@ -35,8 +38,8 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   handleBuyClose = () => {
-    const { buyAmountChangedAction: buyAmountChanged } = this.props || {};
-    buyAmountChanged("");
+    const { buyAmountChangedAction: buyAmountChanged, buyAmount } = this.props || {};
+    if (buyAmount !== "") buyAmountChanged("");
     this.setState({ buyModalOpen: false });
   };
 
@@ -53,13 +56,12 @@ class ProjectDetailCrowdSale extends Component {
       checkWhiteList: checkWhiteListStatus,
       getTokenBalance: tokenBalance,
       daicoTokenAddress,
-      getUserTokens: fetchUserTokens,
-      currentRoundNumber
+      getUserTokens: fetchUserTokens
     } = this.props || {};
     fetchEtherCollected(version, pollFactoryAddress);
     fetchRoundTokensSold(version, crowdSaleAddress, 0);
-    fetchUserTokens(crowdSaleAddress, version, currentRoundNumber, userLocalPublicAddress);
     if (signinStatusFlag > 2) {
+      fetchUserTokens(crowdSaleAddress, version, 0, userLocalPublicAddress);
       checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
       tokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
     }
@@ -74,24 +76,16 @@ class ProjectDetailCrowdSale extends Component {
       version,
       membershipAddress,
       signinStatusFlag,
-      daicoTokenAddress
+      daicoTokenAddress,
+      crowdSaleAddress,
+      getUserTokens: fetchUserTokens
     } = this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
       tokenBalance(version, daicoTokenAddress, localAddress);
       checkWhiteListStatus(version, membershipAddress, localAddress);
+      fetchUserTokens(crowdSaleAddress, version, 0, localAddress);
     }
   }
-
-  getRoundText = () => {
-    const { roundInfo, currentRoundNumber } = this.props || {};
-    const { tokenCount, totalTokensSold } = roundInfo || "";
-    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).eq(web3.utils.toBN(tokenCount))) return `Round ${currentRoundNumber} Ended`;
-    // based on tokens sold
-    return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
-      formatFromWei(tokenCount),
-      0
-    )} (Round 1 of 3)`;
-  };
 
   onWhiteListClickInternal = () => {
     const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
@@ -112,14 +106,8 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   onBuyAmountChange = e => {
-    const { buyAmountChangedAction: buyAmountChanged } = this.props || {};
-    buyAmountChanged(e.target.value);
-  };
-
-  r1Finish = () => {
-    const { r1EndTime, roundInfo } = this.props || {};
-    const { tokenCount, totalTokensSold } = roundInfo || "";
-    return new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).lt(web3.utils.toBN(tokenCount));
+    const { buyAmountChangedAction: buyAmountChanged, buyAmount } = this.props || {};
+    if (buyAmount !== e.target.value) buyAmountChanged(e.target.value);
   };
 
   canBuy = () => {
@@ -170,13 +158,17 @@ class ProjectDetailCrowdSale extends Component {
       currentRoundNumber,
       totalMintableSupply,
       daicoTokenAddress,
-      pollFactoryAddress
+      pollFactoryAddress,
+      minimumEtherContribution
     } = this.props || {};
     const { buyModalOpen } = this.state;
     const r1Rate = getR1Rate(rounds);
+    const formattedUserContribution = formatFromWei(userContribution, 18);
+    const formattedMaxEtherContribution = formatFromWei(maximumEtherContribution, 3);
+    const remainingAllocation = r1Rate * (formattedMaxEtherContribution - formattedUserContribution);
     return (
       <Grid>
-        <div style={{ "margin-bottom": "20px" }}>
+        <div style={{ marginBottom: "20px" }}>
           <TimeLine
             fundsCollected={formatFromWei(etherCollected, 3)}
             roundGoal={getR1Goal(rounds)}
@@ -189,30 +181,30 @@ class ProjectDetailCrowdSale extends Component {
             projectName={projectName}
             tokenTag={tokenTag}
             price={getR1Price(rounds)}
-            roundText={this.getRoundText()}
+            roundText={getRoundText(roundInfo, currentRoundNumber)}
             description={description}
             urls={urls}
             whitepaper={whitepaper}
             buttonText="Get Whitelisted"
-            buttonVisibility={!isCurrentMember}
+            buttonVisibility={typeof isCurrentMember !== "undefined" && !isCurrentMember}
             buttonSpinning={buttonSpinning}
             onClick={this.onWhiteListClickInternal}
             signinStatusFlag={signinStatusFlag}
-            buyButtonVisibility={isCurrentMember}
+            isCurrentMember={isCurrentMember}
             buyButtonDisabled={this.canBuy()}
             onBuyClick={this.buyTokens}
             buyButtonText="Buy"
-            r1Finish={this.r1Finish()}
+            r1Finish={r1Finish(r1EndTime, roundInfo)}
             onR1FinalizeClick={this.onR1FinalizeClick}
             r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
             whitelistButtonTransactionHash={whitelistButtonTransactionHash}
             r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
             thumbnailUrl={thumbnailUrl}
-            remainingAllocation={r1Rate * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution, 18))}
+            remainingAllocation={remainingAllocation}
             daicoTokenAddress={daicoTokenAddress}
           />
           <PDetailCrowdSale
-            individualCap={formatFromWei(maximumEtherContribution, 3)}
+            individualCap={significantDigits(formattedMaxEtherContribution)}
             voteSaturationLimit={capPercent / 100}
             killFrequency="Quarterly"
             initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
@@ -222,8 +214,8 @@ class ProjectDetailCrowdSale extends Component {
             dilutedCapitalisation={getHardCap(totalMintableSupply, prices, rounds)}
             tokenDataVisibitlity={isCurrentMember}
             tokenBalance={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
-            remainingAllocation={r1Rate * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution, 18))}
-            buyableTokens={formatCurrencyNumber(r1Rate * formatFromWei(maximumEtherContribution), 0)}
+            remainingAllocation={remainingAllocation}
+            buyableTokens={formatCurrencyNumber(r1Rate * formattedMaxEtherContribution, 0)}
             pollFactoryAddress={pollFactoryAddress}
           />
 
@@ -247,10 +239,11 @@ class ProjectDetailCrowdSale extends Component {
           inputText={buyAmount}
           onChange={this.onBuyAmountChange}
           buyButtonTransactionHash={buyButtonTransactionHash}
-          remainingAllocation={r1Rate * (formatFromWei(maximumEtherContribution) - formatFromWei(userContribution, 18))}
+          remainingAllocation={remainingAllocation}
           tokensSold={roundTokensSold(roundInfo)}
           r1TokenGoal={r1TokenCount(rounds)}
           r1Rate={r1Rate}
+          minimumEtherContribution={minimumEtherContribution}
         />
       </Grid>
     );

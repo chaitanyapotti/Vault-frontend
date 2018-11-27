@@ -44,6 +44,7 @@ const ProjectCrowdSaleName = props => {
       : "";
   const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
   const warningText = getSignInStatusText(signinStatusFlag);
+  const disabledText = parseFloat(remainingAllocation) === 0 ? "Reached buyable limit" : "Cannot buy now";
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
@@ -118,13 +119,15 @@ const ProjectCrowdSaleName = props => {
               </LoadingButton>
             </span>
           ) : isCurrentMember ? (
-            <CustomToolTip disabled={!buyButtonDisabled || remainingAllocation === 0} title="Can't Buy Now">
-              <span className="hli push-left--13">
-                <LoadingButton style={{ padding: "0 40px" }} onClick={onBuyClick} disabled={!buyButtonDisabled || remainingAllocation === 0}>
-                  {buyButtonText}
-                </LoadingButton>
-              </span>
-            </CustomToolTip>
+            <div className="hli">
+              <CustomToolTip title={disabledText} disabled={!buyButtonDisabled || parseFloat(remainingAllocation) === 0}>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} onClick={onBuyClick} disabled={!buyButtonDisabled || remainingAllocation === 0}>
+                    {buyButtonText}
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
+            </div>
           ) : buttonVisibility ? (
             <span className="hli">
               <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={buttonSpinning}>

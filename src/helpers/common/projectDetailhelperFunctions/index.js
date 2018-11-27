@@ -340,7 +340,7 @@ const r1Finish = (r1EndTime, roundInfo) => {
   return new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).lt(web3.utils.toBN(tokenCount));
 };
 
-const getSignInStatusText = signInStatusFlag => {
+const getSignInStatusText = (signInStatusFlag, isIssuerOfProject) => {
   switch (signInStatusFlag) {
     case 0:
       return constants.METAMASK_NOT_INSTALLED;
@@ -352,6 +352,9 @@ const getSignInStatusText = signInStatusFlag => {
       return constants.NOT_VAULT_MEMBER;
     case 4:
       return constants.NOT_VAULT_ISSUER;
+    case 5:
+      if (!isIssuerOfProject) return constants.NOT_VAULT_ISSUER;
+      break;
     default:
       break;
   }

@@ -16,13 +16,11 @@ const ProjectPreStartName = props => {
     price,
     roundText,
     description,
-    priceIncrement,
     whitepaper,
     lastRoundInfo,
     buttonText,
     onClick,
     buttonVisibility,
-    priceIncrementFlag,
     buttonSpinning,
     signinStatusFlag,
     whitelistButtonTransactionHash,
@@ -46,10 +44,7 @@ const ProjectPreStartName = props => {
               <div className="txt-xl">
                 {projectName} ({tokenTag})
               </div>
-              <div className="txt opacity-75">
-                {price} ETH
-                {priceIncrementFlag ? <span className="txt-inc">{` ${priceIncrement}`}</span> : <div />}
-              </div>
+              <div className="txt opacity-75">{price} ETH</div>
             </div>
           </div>
         </Col>

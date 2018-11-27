@@ -7,6 +7,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 import StepConnector from "@material-ui/core/StepConnector";
 import StepContent from "@material-ui/core/StepContent";
 import { CUICard } from "../../../helpers/material-ui";
+import LoadingButton from "../LoadingButton";
 
 const styles = theme => ({
   root: {
@@ -39,55 +40,43 @@ const styles = theme => ({
   }
 });
 
-class VerticalStepper extends React.Component {
-  redirectToIssuerPage = () => {
-    console.log("redirecting to redirectToIssuerPage");
-    const { projectid } = this.props || "";
-    this.props.history.push({
-      pathname: `/issuergovernance/details`,
-      search: `?projectid=${projectid}`
-    });
-  };
+const VerticalStepper = props => {
+  const { classes, getSteps, activeStep, getStepContent, onClick, header, startOver } = props || {};
+  const steps = getSteps();
+  // const connector = (
+  //   <StepConnector
+  //     classes={{
+  //       active: classes.connectorActive,
+  //       completed: classes.connectorCompleted,
+  //       disabled: classes.connectorDisabled,
+  //       line: classes.connectorLine
+  //     }}
+  //   />
+  // );
 
-  render() {
-    const { classes, getSteps, activeStep, getStepContent, onClick, header, startOver } = this.props;
-    const steps = getSteps();
-    const connector = (
-      <StepConnector
-        classes={{
-          active: classes.connectorActive,
-          completed: classes.connectorCompleted,
-          disabled: classes.connectorDisabled,
-          line: classes.connectorLine
-        }}
-      />
-    );
-
-    return (
-      <CUICard className="card-brdr" style={{ padding: "40px 80px 40px 40px" }}>
-        <div className="text--right">
-          <a rel="noopener" onClick={onClick}>
-            {startOver}
-          </a>
-        </div>
-        <div className="txt-xl">{header}</div>
-        <div className={classes.root}>
-          <Stepper activeStep={activeStep} orientation="vertical">
-            {steps.map((label, index) => (
-              <Step key={label}>
-                <StepLabel>
-                  <div className="txt labelAlignment">{label}</div>
-                </StepLabel>
-                <StepContent>{getStepContent(index)}</StepContent>
-              </Step>
-            ))}
-          </Stepper>
-          <div>{activeStep === steps.length ? <div>{this.redirectToIssuerPage()}</div> : <div />}</div>
-        </div>
-      </CUICard>
-    );
-  }
-}
+  return (
+    <CUICard className="card-brdr" style={{ padding: "40px 80px 40px 40px" }}>
+      <div className="text--right">
+        <LoadingButton className="text--black lnktags btn-link" type="text" onClick={onClick}>
+          {startOver}
+        </LoadingButton>
+      </div>
+      <div className="txt-xl">{header}</div>
+      <div className={classes.root}>
+        <Stepper activeStep={activeStep} orientation="vertical">
+          {steps.map((label, index) => (
+            <Step key={label}>
+              <StepLabel>
+                <div className="txt labelAlignment">{label}</div>
+              </StepLabel>
+              <StepContent>{getStepContent(index)}</StepContent>
+            </Step>
+          ))}
+        </Stepper>
+      </div>
+    </CUICard>
+  );
+};
 
 VerticalStepper.propTypes = {
   classes: PropTypes.object

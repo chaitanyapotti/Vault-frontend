@@ -37,15 +37,28 @@ class Deployer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { pageReloading } = this.props || {};
-    const { pageReloading: oldReload } = prevProps || {};
+    const { pageReloading, projectDetails } = this.props || {};
+    const { currentDeploymentIndicator, _id } = projectDetails || {};
+    const { pageReloading: oldReload, currentDeploymentIndicator: oldStep } = prevProps || {};
     if (oldReload !== pageReloading) {
       console.log("reloading in props");
       if (pageReloading) {
         window.location.reload();
       }
     }
+    if (oldStep !== currentDeploymentIndicator) {
+      if (currentDeploymentIndicator === 12) this.redirectToIssuerPage(_id);
+    }
   }
+
+  redirectToIssuerPage = projectid => {
+    const { history } = this.props || {};
+    console.log("redirecting to redirectToIssuerPage", projectid);
+    history.push({
+      pathname: `/issuergovernance/details`,
+      search: `?projectid=${projectid}`
+    });
+  };
 
   deployMembership = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};

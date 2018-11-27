@@ -1,6 +1,7 @@
 import React from "react";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const IPreGovernanceDetails = props => {
   const {
@@ -12,65 +13,70 @@ const IPreGovernanceDetails = props => {
     tapIncrementUnit,
     hardCapCapitalisation,
     dilutedCapitalisation,
-    tokenDataVisibitlity,
     startDateTime,
-    tokenBalance,
-    buyableTokens
+    pollFactoryAddress
   } = props || {};
+  const etherscanLink = `https://rinkeby.etherscan.io/address/${pollFactoryAddress}`;
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
-      <div className="txt-xxxl text--primary">Project Details</div>
+      <Row>
+        <Col className="txt-xxxl text--primary" lg={6}>
+          Project Details
+        </Col>
+        <Col className="push-half--top text-right" lg={6}>
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
+        </Col>
+      </Row>
       <Row className="push-top--35">
-        <Col lg={12} className="txt">
-          ICO Start Date: <span className="text--secondary">{startDateTime} </span>
+        <Col lg={6} className="txt">
+          <div className="txt-bold">ICO Start Date:</div>
+          <div className="text--secondary">{startDateTime}</div>
+        </Col>
+        <Col lg={6} className="txt">
+          <div className="txt-bold">Individual Cap:</div>
+          <div className="text--secondary">{individualCap} ETH/person</div>
         </Col>
       </Row>
       <Row className="push-half--top">
         <Col lg={6} className="txt">
-          Kill Frequency: <span className="text--secondary">{killFrequency}</span>
+          <div className="txt-bold">Vote Saturation Limit: </div>
+          <div className="text--secondary">{voteSaturationLimit}%</div>
         </Col>
         <Col lg={6} className="txt">
-          Individual Cap: <span className="text--secondary">{individualCap} ETH/person</span>
-        </Col>
-      </Row>
-      <Row className="push-half--top">
-        <Col lg={6} className="txt">
-          Vote Saturation Limit: <span className="text--secondary">{voteSaturationLimit}%</span>
-        </Col>
-        <Col lg={6} className="txt">
-          Initial Fund Release: <span className="text--secondary">{initialFundRelease} ETH</span>
+          <div className="txt-bold">Kill Frequency: </div>
+          <div className="text--secondary">{killFrequency}</div>
         </Col>
       </Row>
 
       <Row className="push-half--top">
         <Col lg={6} className="txt">
-          Initial Tap Amount: <span className="text--secondary">{initialTapAmount} ETH/month</span>
+          <div className="txt-bold">Initial Tap Amount:</div>
+          <div className="text--secondary">{initialTapAmount} ETH/month</div>
         </Col>
         <Col lg={6} className="txt">
-          Tap Increment Factor: <span className="text--secondary">{tapIncrementUnit}</span>
+          <div className="txt-bold">Tap Increment Factor:</div>
+          <div className="text--secondary">{tapIncrementUnit}</div>
         </Col>
       </Row>
 
       <Row className="push-half--top">
         <Col lg={6} className="txt">
-          Hard Capitalisation: <span className="text--secondary">{hardCapCapitalisation}</span>
+          <div className="txt-bold">Hard Cap Capitalisation: </div>
+          <div className="text--secondary">{hardCapCapitalisation}</div>
         </Col>
         <Col lg={6} className="txt">
-          Diluted Capitalisation: <span className="text--secondary">{dilutedCapitalisation}</span>
+          <div className="txt-bold">Diluted Capitalisation:</div>
+          <div className="text--secondary">{dilutedCapitalisation}</div>
         </Col>
       </Row>
-      {tokenDataVisibitlity ? (
-        <Row className="push-half--top">
-          <Col lg={6} className="txt">
-            User Token Balance: <span className="text--secondary">{tokenBalance}</span>
-          </Col>
-          <Col lg={6} className="txt">
-            Total Buyable Tokens: <span className="text--secondary">{buyableTokens}</span>
-          </Col>
-        </Row>
-      ) : (
-        <span />
-      )}
+      <Row className="push-half--top">
+        <Col lg={6} className="txt">
+          <div className="txt-bold">Initial Fund Release: </div>
+          <div className="text--secondary">{initialFundRelease} ETH</div>
+        </Col>
+      </Row>
     </CUICard>
   );
 };

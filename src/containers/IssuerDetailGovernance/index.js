@@ -43,6 +43,7 @@ import {
   formatDate,
   significantDigits,
   formatRateToPrice,
+  getR1Goal,
   secondsToDhms
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
@@ -404,7 +405,9 @@ class IssuerDetailGovernance extends Component {
       roundInfo,
       killAcceptancePercent,
       killVoterCount,
-      etherCollected
+      etherCollected,
+      startDateTime,
+      r1EndTime
     } = this.props || {};
     return (
       <Grid>

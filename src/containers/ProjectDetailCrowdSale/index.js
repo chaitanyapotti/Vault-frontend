@@ -170,7 +170,7 @@ class ProjectDetailCrowdSale extends Component {
       <Grid>
         <div style={{ marginBottom: "20px" }}>
           <TimeLine
-            fundsCollected={formatFromWei(etherCollected, 3)}
+            fundsCollected={formatFromWei(etherCollected, 3) || 0}
             roundGoal={getR1Goal(rounds)}
             startDate={new Date(startDateTime)}
             endDate={new Date(r1EndTime)}

@@ -61,7 +61,7 @@ class GridData extends React.Component {
         },
         MuiTableCell: {
           root: {
-            padding: "10px",
+            padding: "0px",
             fontFamily: "Montserrat",
             "text-overflow": "ellipsis",
             overflow: "hidden"
@@ -116,11 +116,11 @@ class GridData extends React.Component {
           rowClickFn
             ? onRowClick(_id)
             : rowClickPollHistory
-            ? window.open(`/pollscan?contract=${address}`).focus()
-            : history.push({
-                pathname: `/governance/details`,
-                search: `?projectid=${_id}`
-              });
+              ? window.open(`/pollscan?contract=${address}`).focus()
+              : history.push({
+                  pathname: `/governance/details`,
+                  search: `?projectid=${_id}`
+                });
         }
       },
       ...rest

@@ -69,7 +69,7 @@ class UpcomingDaicos extends Component {
                 name: "",
                 options: {
                   download: false,
-                  customBodyRender: value => <img src={value} width="35" height="35" />,
+                  customBodyRender: value => <img style={{ margin: "0 10px" }} src={value} width="35" height="35" />,
                   filter: true
                 }
               },

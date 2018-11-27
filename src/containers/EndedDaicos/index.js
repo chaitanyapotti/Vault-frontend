@@ -68,7 +68,7 @@ class EndedDaicos extends Component {
                 options: {
                   download: false,
                   filter: true,
-                  customBodyRender: value => <img src={value} width="35" height="35" />
+                  customBodyRender: value => <img style={{ margin: "0 10px" }} src={value} width="35" height="35" />
                 }
               },
               {

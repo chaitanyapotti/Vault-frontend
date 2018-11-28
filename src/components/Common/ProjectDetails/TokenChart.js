@@ -8,7 +8,8 @@ class TokenChart extends Component {
     const { rounds, foundationDetails, prices, currentRoundNumber, roundInfo } = this.props || {};
     const { ETH } = prices || {};
     const { price: etherPrice } = ETH || {};
-    const roundNumber = currentRoundNumber === "4" ? 3 : currentRoundNumber === "0" ? 1 : parseInt(currentRoundNumber, 10);
+    const roundNumber =
+      currentRoundNumber === "4" ? 3 : currentRoundNumber === "0" || currentRoundNumber === "" ? 1 : parseInt(currentRoundNumber, 10);
     const tokenData = [];
     const legendData = ["Round 1 Cap", "Round 2 Cap", "Round 3 Cap", "Round 1 Tokens", "Round 2 Tokens", "Round 3 Tokens"];
     const roundDollarData = [];
@@ -22,9 +23,11 @@ class TokenChart extends Component {
       etherCollected += (formatFromWei(parseFloat(element.tokenCount), 10) / parseFloat(element.tokenRate)) * etherPrice;
     }
     tokenSold += roundInfo ? formatFromWei(roundInfo.totalTokensSold) : 0;
-    etherCollected += roundInfo
-      ? (formatFromWei(parseFloat(roundInfo.totalTokensSold), 10) / parseFloat(rounds[roundNumber - 1].tokenRate)) * etherPrice
-      : 0;
+    console.log(roundInfo);
+    etherCollected +=
+      typeof roundInfo !== "undefined"
+        ? (formatFromWei(parseFloat(roundInfo.totalTokensSold), 10) / parseFloat(rounds[roundNumber - 1].tokenRate)) * etherPrice
+        : 0;
     for (let index = 0; index < rounds.length; index += 1) {
       const element = rounds[index];
       totalTokens += formatFromWei(element.tokenCount);

@@ -176,6 +176,7 @@ class ProjectIssuerGovernance extends Component {
             userLocalPublicAddress={userLocalPublicAddress}
             signinStatusFlag={signinStatusFlag}
             isVaultMembershipChecked={isVaultMembershipChecked}
+            daicoTokenAddress={daicoTokenAddress}
           />
         </div>
       );

@@ -33,6 +33,14 @@ const BuyModal = props => {
   const labelValue = formatCurrencyNumber(parsedInput * parseFloat(tokenRate), 0);
   const link = `https://rinkeby.etherscan.io/tx/${buyButtonTransactionHash}`;
   const round1Residue = parseFloat(r1TokenGoal) - parseFloat(tokensSold);
+  const disabledTitle =
+    parsedInput < formatFromWei(minimumEtherContribution, 4)
+      ? "Min Contribution not satisfied"
+      : isNaN(parsedInput)
+      ? "Invalid Input"
+      : parsedInput * parseFloat(tokenRate) > remainingAllocation
+      ? "Can't buy that amount"
+      : "";
   const isDisabled =
     parsedInput * parseFloat(tokenRate) > remainingAllocation || isNaN(parsedInput) || parsedInput < formatFromWei(minimumEtherContribution, 4);
   return (
@@ -73,7 +81,7 @@ const BuyModal = props => {
             </div>
           ) : (
             <div className="hli">
-              <CustomToolTip title="Invalid Input" disabled={isDisabled}>
+              <CustomToolTip title={disabledTitle} disabled={isDisabled}>
                 <span>
                   <LoadingButton onClick={buyTokensOnClick} loading={buyButtonSpinning} disabled={isDisabled}>
                     Buy

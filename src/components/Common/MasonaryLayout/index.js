@@ -13,7 +13,11 @@ const MasonryLayout = props => {
   // divide children into columns
   for (let i = 0; i < props.children.length; i += 1) {
     const columnIndex = i % props.columns;
-    columnWrapper[`column${columnIndex}`].push(<div style={{ marginBottom: `${props.gap}px` }}>{props.children[i]}</div>);
+    columnWrapper[`column${columnIndex}`].push(
+      <div style={{ marginBottom: `${props.gap}px` }} key={i}>
+        {props.children[i]}
+      </div>
+    );
   }
 
   // wrap children in each column with a div
@@ -24,6 +28,7 @@ const MasonryLayout = props => {
           marginLeft: `${i > 0 ? props.gap : 0}px`,
           flex: 1
         }}
+        key={i}
       >
         {columnWrapper[`column${i}`]}
       </div>

@@ -41,7 +41,7 @@ export const receivedTransactionHash = body => ({
 });
 
 export const fetchProjectDetails = (projectid, useraddress) => dispatch => {
-  console.log("fetching details: ", projectid);
+  console.log("fetching details: ", projectid, useraddress);
   let paramObject = {};
   if (projectid !== "") {
     paramObject = { params: { projectid } };

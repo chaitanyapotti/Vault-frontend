@@ -188,7 +188,7 @@ class HeaderPartial extends React.Component {
   onHandleManageDaicoClicked = () => {
     this.props.searchTextChangeAction("");
     this.props.clearProjectDetails();
-    this.props.fetchProjectDetails(this.props.userLocalPublicAddress);
+    this.props.fetchProjectDetails("",this.props.userLocalPublicAddress);
     setTimeout(() => {
       this.props.history.push({
         pathname: "/deploy",

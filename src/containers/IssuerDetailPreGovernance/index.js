@@ -7,14 +7,15 @@ import { startR1 } from "../../actions/issuerDetailGovernanceActions/index";
 import {
   formatFromWei,
   getR1Price,
-  getR1Goal,
   getHardCap,
   getSoftCap,
   formatDate,
-  r1Finish
+  r1Finish,
+  getR1Goal
 } from "../../helpers/common/projectDetailhelperFunctions";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
+import MasonryLayout from "../../components/Common/MasonaryLayout";
 
 class IssuerDetailPreGovernance extends Component {
   componentDidMount() {
@@ -61,7 +62,6 @@ class IssuerDetailPreGovernance extends Component {
       foundationDetails,
       startDateTime,
       r1EndTime,
-      etherCollected,
       signinStatusFlag,
       startR1ButtonSpinning,
       r1FinalizeButtonSpinning,
@@ -71,70 +71,72 @@ class IssuerDetailPreGovernance extends Component {
       thumbnailUrl,
       prices,
       roundInfo,
-      totalMintableSupply
+      totalMintableSupply,
+      etherCollected,
+      daicoTokenAddress,
+      ownerAddress,
+      userLocalPublicAddress,
+      pollFactoryAddress
     } = this.props || {};
     return (
       <Grid>
         {currentRoundNumber === "1" ? (
-          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
+          <div style={{ marginBottom: "20px" }}>
             <TimeLine
-              fundsCollected={formatFromWei(etherCollected, 3)}
+              fundsCollected={formatFromWei(etherCollected, 3) || 0}
               roundGoal={getR1Goal(rounds)}
               startDate={new Date(startDateTime)}
               endDate={new Date(r1EndTime)}
             />
-          </CUICard>
+          </div>
         ) : null}
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <IssuerPreGovernanceName
-              projectName={projectName}
-              tokenTag={tokenTag}
-              price={getR1Price(rounds)}
-              roundText="3 Round DAICO"
-              description={description}
-              urls={urls}
-              whitepaper={whitepaper}
-              StartRound1Enabled={currentRoundNumber === "0" && new Date() > new Date(startDateTime) && new Date() < new Date(r1EndTime)}
-              StartRound1Visibility={
-                (currentRoundNumber === "0" && new Date() < new Date(startDateTime)) ||
-                (currentRoundNumber === "0" && new Date() > new Date(startDateTime) && new Date() < new Date(r1EndTime))
-              }
-              startR1ButtonSpinning={startR1ButtonSpinning}
-              signinStatusFlag={signinStatusFlag}
-              r1Finish={r1Finish(r1EndTime, roundInfo)}
-              onR1FinalizeClick={this.onR1FinalizeClick}
-              r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
-              onStartR1Click={this.onStartR1Click}
-              isPermissioned={this.isPermissioned()}
-              onEditClick={this.onEditClick}
-              startR1ButtonTransactionHash={startR1ButtonTransactionHash}
-              r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
-              thumbnailUrl={thumbnailUrl}
+        <MasonryLayout>
+          <IssuerPreGovernanceName
+            projectName={projectName}
+            tokenTag={tokenTag}
+            price={getR1Price(rounds)}
+            roundText="3 Round DAICO"
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            StartRound1Visibility={currentRoundNumber === "0" && new Date() > new Date(startDateTime) && new Date() < new Date(r1EndTime)}
+            startR1ButtonSpinning={startR1ButtonSpinning}
+            signinStatusFlag={signinStatusFlag}
+            r1Finish={r1Finish(r1EndTime, roundInfo)}
+            onR1FinalizeClick={this.onR1FinalizeClick}
+            r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
+            onStartR1Click={this.onStartR1Click}
+            isPermissioned={this.isPermissioned()}
+            onEditClick={this.onEditClick}
+            startR1ButtonTransactionHash={startR1ButtonTransactionHash}
+            r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
+            thumbnailUrl={thumbnailUrl}
+            daicoTokenAddress={daicoTokenAddress}
+            ownerAddress={ownerAddress}
+            userLocalPublicAddress={userLocalPublicAddress}
+          />
+          <IPreGovernanceDetails
+            startDateTime={formatDate(startDateTime)}
+            individualCap={formatFromWei(maximumEtherContribution, 3)}
+            voteSaturationLimit={capPercent / 100}
+            killFrequency="Quarterly"
+            initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
+            initialFundRelease={formatFromWei(initialFundRelease, 3)}
+            tapIncrementUnit={tapIncrementFactor / 100}
+            hardCapCapitalisation={getSoftCap(rounds, prices)}
+            dilutedCapitalisation={getHardCap(totalMintableSupply, prices, rounds)}
+            pollFactoryAddress={pollFactoryAddress}
+          />
+          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
+            <TokenChart
+              rounds={rounds}
+              foundationDetails={foundationDetails}
+              prices={prices}
+              currentRoundNumber={currentRoundNumber}
+              roundInfo={roundInfo}
             />
-          </Col>
-          <Col xs={12} lg={6}>
-            <IPreGovernanceDetails
-              startDateTime={formatDate(startDateTime)}
-              individualCap={formatFromWei(maximumEtherContribution, 3)}
-              voteSaturationLimit={capPercent / 100}
-              killFrequency="Quarterly"
-              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
-              initialFundRelease={formatFromWei(initialFundRelease, 3)}
-              tapIncrementUnit={tapIncrementFactor / 100}
-              hardCapCapitalisation={getSoftCap(rounds, prices)}
-              dilutedCapitalisation={getHardCap(totalMintableSupply, prices, rounds)}
-            />
-          </Col>
-        </Row>
-
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
-              <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
-            </CUICard>
-          </Col>
-        </Row>
+          </CUICard>
+        </MasonryLayout>
       </Grid>
     );
   }

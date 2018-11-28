@@ -44,12 +44,12 @@ export const currentRound = projectid => async dispatch => {
               const { data: currentRoundInfo } = currentRoundData;
               dispatch(currentRoundFetchSuccess(currentRoundInfo));
             } else {
-              dispatch(currentRoundFetchSuccess({}));
+              dispatch(currentRoundFetchSuccess(""));
             }
           })
           .catch(err => {
             console.log(err.message);
-            dispatch(currentRoundFetchSuccess({}));
+            dispatch(currentRoundFetchSuccess(""));
           });
         axios
           .get(`${config.api_base_url}/web3/pollfactory/state`, {
@@ -61,11 +61,11 @@ export const currentRound = projectid => async dispatch => {
               const { data: treasuryRound } = currentRoundData;
               dispatch(treasuryStateFetchSuccess(treasuryRound));
             } else {
-              dispatch(treasuryStateFetchSuccess({}));
+              dispatch(treasuryStateFetchSuccess(""));
             }
           })
           .catch(err => {
-            dispatch(treasuryStateFetchSuccess({}));
+            dispatch(treasuryStateFetchSuccess(""));
             console.log(err.message);
           });
       } else {

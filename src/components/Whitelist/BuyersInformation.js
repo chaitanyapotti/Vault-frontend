@@ -5,6 +5,8 @@ import { CUIFormInput, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import DPicker from "../Common/DPicker";
+import DatePickers from "../Common/DatePickers";
+import ReactSelect from "../Common/ReactSelect";
 
 import {
   addressLine1ChangedAction,
@@ -72,12 +74,12 @@ class BuyersInformation extends Component {
     this.props.documentNumberChangedAction(e.target.value);
   };
 
-  onChangeDateOfIssuance = date => {
-    this.props.dateOfIssuanceChangedAction(date);
+  onChangeDateOfIssuance = e => {
+    this.props.dateOfIssuanceChangedAction(e.target.value);
   };
 
-  onChangeDateOfExpiration = date => {
-    this.props.dateOfExpirationChangedAction(date);
+  onChangeDateOfExpiration = e => {
+    this.props.dateOfExpirationChangedAction(e.target.value);
   };
 
   onChangeFirstName = e => {
@@ -96,8 +98,8 @@ class BuyersInformation extends Component {
     this.props.genderChangedAction(e.target.value);
   };
 
-  onChangeDateOfBirth = date => {
-    this.props.dateOfBirthChangedAction(date);
+  onChangeDateOfBirth = e => {
+    this.props.dateOfBirthChangedAction(e.target.value);
   };
 
   onChangeCitizenship = e => {
@@ -141,7 +143,6 @@ class BuyersInformation extends Component {
     const month = today.getMonth();
     const date = today.getDate();
     const newDate = new Date(year - 18, month, date);
-    console.log(newDate);
     return newDate;
   };
 
@@ -150,7 +151,7 @@ class BuyersInformation extends Component {
     const countryChoices = [];
     const allCountries = countryList.getNames();
     for (let i = 0; i < allCountries.length; i++) {
-      countryChoices.push({ value: allCountries[i], primaryText: allCountries[i] });
+      countryChoices.push({ value: allCountries[i], label: allCountries[i] });
     }
     const {
       addressLine1,
@@ -252,7 +253,8 @@ class BuyersInformation extends Component {
           </Col>
 
           <Col lg={6}>
-            <CUIFormInput
+            <ReactSelect full data={countryChoices} inputLabel="Country" inputValue={country} onChange={this.onChangeCountry} />
+            {/* <CUIFormInput
               required
               inputType={CUIInputType.SELECT}
               full
@@ -263,7 +265,7 @@ class BuyersInformation extends Component {
               inputValue={country}
               items={countryChoices}
               // items={[{ value: "USA", primaryText: "USA" }, { value: "INDIA", primaryText: "INDIA" }, { value: "CHINA", primaryText: "CHINA" }]}
-            />
+            /> */}
           </Col>
         </Row>
 
@@ -303,7 +305,7 @@ class BuyersInformation extends Component {
         <Row className="push--top">
           {dateOfExpiration ? (
             <Col lg={6}>
-              <DPicker
+              <DatePickers
                 maxDate={this.getStartDate()}
                 selectedDate={selectedDate}
                 label="Date Of Issuance"
@@ -313,7 +315,7 @@ class BuyersInformation extends Component {
             </Col>
           ) : (
             <Col lg={6}>
-              <DPicker
+              <DatePickers
                 selectedDate={selectedDate}
                 label="Date Of Issuance"
                 handleDateChange={this.onChangeDateOfIssuance}
@@ -323,7 +325,7 @@ class BuyersInformation extends Component {
           )}
 
           <Col lg={6}>
-            <DPicker
+            <DatePickers
               selectedDate={selectedDate}
               label="Expiration Date"
               minDate={this.getEndMinDate()}
@@ -378,16 +380,14 @@ class BuyersInformation extends Component {
               inputLabel="Gender"
               inputPlaceholder=""
               onChange={this.onChangeGender}
-              items={[{ value: "MALE", primaryText: "M" }, { value: "FEMALE", primaryText: "F" }, { value: "OTHER", primaryText: "O" }]}
+              items={[{ value: "MALE", primaryText: "Male" }, { value: "FEMALE", primaryText: "Female" }, { value: "OTHER", primaryText: "Other" }]}
               inputValue={gender}
             />
           </Col>
 
           <Col lg={6}>
-            <DPicker
-              SelectField
+            <DatePickers
               selectedDate={selectedDate}
-              disableFuture
               label="Date of Birth"
               handleDateChange={this.onChangeDateOfBirth}
               selectedDate={dateOfBirth}
@@ -410,19 +410,6 @@ class BuyersInformation extends Component {
               inputValue={email}
             />
           </Col>
-          {/* <Col lg={6}>
-            <CUIFormInput
-              required
-              inputType={CUIInputType.SELECT}
-              full
-              inputName="Country of Citizenship"
-              inputLabel="Country of Citizenship"
-              inputPlaceholder="USA"
-              onChange={this.onChangeCitizenship}
-              inputValue={citizenship}
-              items={countryChoices}
-            />
-          </Col> */}
         </Row>
       </div>
     );

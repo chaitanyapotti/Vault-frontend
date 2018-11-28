@@ -23,7 +23,6 @@ class TokenChart extends Component {
       etherCollected += (formatFromWei(parseFloat(element.tokenCount), 10) / parseFloat(element.tokenRate)) * etherPrice;
     }
     tokenSold += roundInfo ? formatFromWei(roundInfo.totalTokensSold) : 0;
-    console.log(roundInfo);
     etherCollected +=
       typeof roundInfo !== "undefined"
         ? (formatFromWei(parseFloat(roundInfo.totalTokensSold), 10) / parseFloat(rounds[roundNumber - 1].tokenRate)) * etherPrice

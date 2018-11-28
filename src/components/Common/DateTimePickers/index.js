@@ -5,28 +5,25 @@ import TextField from "@material-ui/core/TextField";
 import moment from "moment";
 
 const styles = theme => ({
-  //   container: {
-  //     display: "flex",
-  //     flexWrap: "wrap"
-  //   },
-  //   textField: {
-  //     marginLeft: theme.spacing.unit,
-  //     marginRight: theme.spacing.unit,
-  //     width: 200
-  //   }
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  textField: {
+    width: 200
+  }
 });
 
 function DateTimePickers(props) {
   const { classes, label, handleDateChange, selectedDate } = props;
   const time = moment(selectedDate).format("YYYY-MM-DDTHH:mm");
-  console.log("datetime", moment(selectedDate).format("YYYY-MM-DDTHH:mm"));
   return (
     <form className={classes.container} noValidate>
       <TextField
         id="datetime-local"
         label={label}
         type="datetime-local"
-        defaultValue={selectedDate !== "Invalid date" && moment(selectedDate).format("YYYY-MM-DDTHH:mm")}
+        defaultValue=""
         className={classes.textField}
         InputLabelProps={{
           shrink: true

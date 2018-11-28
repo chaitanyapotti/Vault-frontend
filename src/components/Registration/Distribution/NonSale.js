@@ -14,7 +14,7 @@ import {
   entityAddressChangedAction,
   nonSaleEntityEditAction
 } from "../../../actions/projectRegistrationActions";
-
+import { CUICard } from "../../../helpers/material-ui";
 import { validateLength, validateDecimal } from "../../../helpers/common/validationHelperFunctions";
 import TokenChart from "../../Common/ProjectDetails/TokenChart";
 
@@ -99,13 +99,11 @@ class NonSale extends React.Component {
         });
     const prices = { ETH: { price: ethPrice } };
     return (
-      <div className="push-top--50">
-        <hr />
+      <CUICard className="card-brdr">
         <div className="txt-xl" style={{ padding: "40px 50px" }}>
           Non Sale Distribution <span>(50% of Supply)</span>
         </div>
-        <hr />
-        <div style={{ padding: "20px 50px" }}>
+        <div style={{ padding: "20px 50px", width: '572px' }}>
           {this.props.unallocatedTokensPer < 50 ? (
             <GridData
               history={history}
@@ -199,7 +197,7 @@ class NonSale extends React.Component {
             <TokenChart currentRoundNumber="0" prices={prices} rounds={this.getRoundData()} foundationDetails={this.getFoundationData()} />
           </Row>
         ) : null}
-      </div>
+      </CUICard>
     );
   }
 }

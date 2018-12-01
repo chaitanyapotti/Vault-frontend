@@ -77,6 +77,22 @@ a:hover {
 }
 
 /* Button Override CSS */
+
+.uploadBtn {
+  transition: 250ms ease-in-out;
+}
+
+.uploadBtn:hover {
+  transform: translate(0px, -5px) !important;
+  transition: 250ms ease-in-out;
+}
+
+.uploadBtn:active {
+  transition-timing-function: ease-in;
+  transition: 250ms;
+  transform: translate(0px, 0px) !important;
+}
+
 button {
   transition: 250ms ease-in-out;
 }

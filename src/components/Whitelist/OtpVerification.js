@@ -66,13 +66,13 @@ class OtpVerification extends Component {
   };
 
   render() {
-    const { countryCode, phoneNumber, otpFromServer, otpFromUser, citizenship } = this.props || {};
+    const { countryCode, phoneNumber, otpFromServer, otpFromUser, citizenship, onClickOtp, disabledBackStatus, onClickBack } = this.props || {};
     return (
       <div>
         <Grid>
           {/* <CUICard className="card-brdr" style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}> */}
           <div>
-          <div className="txt-m txt-dbld text--left">Step 4: Phone Number Verification</div>
+            <div className="txt-m txt-dbld text--left">Step 4: Phone Number Verification</div>
             <Row>
               <Col xs={12} lg={4}>
                 <CUIFormInput
@@ -84,7 +84,7 @@ class OtpVerification extends Component {
                   inputValue={countryCode}
                   onChange={this.handleCountryCodeChanged}
                   disabled={otpFromServer !== ""}
-                // items={[{ value: "+91", primaryText: "+91" }]}
+                  // items={[{ value: "+91", primaryText: "+91" }]}
                 />
               </Col>
               <Col xs={12} lg={8}>
@@ -103,11 +103,7 @@ class OtpVerification extends Component {
                 />
               </Col>
             </Row>
-            <Row>
-              {citizenship.length>0?(
-                <div> Country detected: {citizenship}
-                </div>):(null)}
-            </Row>
+            <Row>{citizenship.length > 0 ? <div> Country detected: {citizenship}</div> : null}</Row>
             <Row className="push--top">
               <Col>
                 <ButtonComponent label="Send OTP" onClick={this.handleSendOtp} disabled={phoneNumber === "" || otpFromServer !== ""} />
@@ -134,22 +130,27 @@ class OtpVerification extends Component {
 
             <Row>
               <Col xs={12}>
-
-                <span style={{color:"red"}} className="txt">
-                  Please provide a phone number belonging to your country of citizenship. Vault’s smart contract will assign your country based on your phone numbers country. Your passport will only be used for manual verification.
+                <span style={{ color: "red" }} className="txt">
+                  Please provide a phone number belonging to your country of citizenship. Vault’s smart contract will assign your country based on
+                  your phone numbers country. Your passport will only be used for manual verification.
                 </span>
-
               </Col>
             </Row>
 
             {this.props.otpVerificationSuccessful ? (
               <div className="push--top">OTP Verification Successful. Go to next step.</div>
             ) : (
-                <div>
-                  {this.props.phoneOrAddressExists ? <div>Your public address or Phone number already exists with another account.</div> : null}
-                </div>
-              )}
+              <div>
+                {this.props.phoneOrAddressExists ? <div>Your public address or Phone number already exists with another account.</div> : null}
+              </div>
+            )}
           </div>
+          <span className="float--right">
+            <ButtonComponent label="Back" onClick={() => onClickBack()} disabled={disabledBackStatus} />
+            <span className="push--left">
+              <ButtonComponent label="Verify OTP" onClick={() => onClickOtp()} disabled={otpFromServer === "" || otpFromUser === ""} />
+            </span>
+          </span>
           {/* </CUICard> */}
         </Grid>
       </div>

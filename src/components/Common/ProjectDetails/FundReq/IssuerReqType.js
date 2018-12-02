@@ -1,10 +1,16 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
-import { formatFromWei, formatDate, significantDigits, secondsToDhms } from "../../../../helpers/common/projectDetailhelperFunctions";
+import {
+  formatFromWei,
+  formatDate,
+  significantDigits,
+  secondsToDhms,
+  getSignInStatusText
+} from "../../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../../LoadingButton";
 import { CUIFormInput } from "../../../../helpers/material-ui";
 import { CUIInputType } from "../../../../static/js/variables";
+import { CustomToolTip } from "../../FormComponents";
 
 const IssuerReqType = props => {
   const {
@@ -20,8 +26,12 @@ const IssuerReqType = props => {
     onDescriptionChange,
     onEditDescriptionClick,
     onSaveClick,
-    address
+    address,
+    signinStatusFlag,
+    ownerAddress,
+    userLocalPublicAddress
   } = props || {};
+  const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
   return (
     <div style={{ padding: "20px 50px" }}>
       <div>Exceptional Fund Requests</div>
@@ -60,13 +70,13 @@ const IssuerReqType = props => {
         <Col lg={6}>
           {!isPermissioned ? (
             <div className="hli">
-              <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
+              <CustomToolTip title={disabledMsg} placement="bottom" id="btn-disabled" disabled>
                 <div>
                   <LoadingButton style={{ padding: "0 40px" }} disabled>
                     Edit
                   </LoadingButton>
                 </div>
-              </Tooltip>
+              </CustomToolTip>
             </div>
           ) : (
             <span className="hli">

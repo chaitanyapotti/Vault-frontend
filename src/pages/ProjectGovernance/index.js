@@ -79,7 +79,7 @@ class ProjectGovernance extends Component {
     } = projectDetails || {};
     // currentRoundNumber = "2";
 
-    if (treasuryStateNumber === "" || !isVaultMembershipChecked) {
+    if (treasuryStateNumber === "" || currentRoundNumber === "" || !isVaultMembershipChecked) {
       return (
         <Grid>
           <GvrncCardLoader />
@@ -137,7 +137,6 @@ class ProjectGovernance extends Component {
             isVaultMember={isVaultMember}
             userLocalPublicAddress={userLocalPublicAddress}
             signinStatusFlag={signinStatusFlag}
-            isVaultMembershipChecked={isVaultMembershipChecked}
             pollFactoryAddress={pollFactoryAddress}
             daicoTokenAddress={daicoTokenAddress}
           />
@@ -177,7 +176,6 @@ class ProjectGovernance extends Component {
             isVaultMember={isVaultMember}
             userLocalPublicAddress={userLocalPublicAddress}
             signinStatusFlag={signinStatusFlag}
-            isVaultMembershipChecked={isVaultMembershipChecked}
             minimumEtherContribution={minimumEtherContribution}
           />
         </div>

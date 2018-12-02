@@ -5,6 +5,8 @@ import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 import { CustomToolTip } from "../FormComponents";
+import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import BtnLoader from "../../Loaders/BtnLoader";
 
 const ProjectGovernanceName = props => {
   const {
@@ -21,20 +23,22 @@ const ProjectGovernanceName = props => {
     onClick,
     buttonVisibility,
     buttonSpinning,
-    buyButtonVisibility,
+    isCurrentMember,
     onBuyClick,
     buyButtonText,
     signinStatusFlag,
-    tradeButtonVisibility,
     tradeUrl,
     whitelistButtonTransactionHash,
     buyButtonDisabled,
     thumbnailUrl,
-    daicoTokenAddress
+    daicoTokenAddress,
+    remainingAllocation
   } = props || {};
   const { website } = urls;
-  const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
+  const link = whitelistButtonTransactionHash !== "" ? `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}` : "";
   const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
+  const warningText = getSignInStatusText(signinStatusFlag);
+  const disabledText = parseFloat(remainingAllocation) === 0 ? "Reached buyable limit" : "Cannot buy now";
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
@@ -90,42 +94,48 @@ const ProjectGovernanceName = props => {
           </div>
         </Col>
         <Col lg={7} className="text-right hl">
-          {signinStatusFlag <= 2 ? (
+          {signinStatusFlag < 4 && typeof isCurrentMember === "undefined" ? (
             <div className="hli">
-              <CustomToolTip title="This feature is only for Vault Members" id="btn-disabled" disabled>
-                <div>
-                  <LoadingButton tooltip="This feature is only for Vault Members" disabled>
+              <CustomToolTip title={warningText} id="btn-disabled" disabled>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} disabled>
                     {buttonText}
                   </LoadingButton>
-                </div>
+                </span>
               </CustomToolTip>
             </div>
           ) : whitelistButtonTransactionHash !== "" ? (
-            <span className="hli">
+            <div className="hli">
               <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                <LoadingButton type="pending" style={{ padding: "0 40px" }} onClick={() => console.log("Sent to etherscan")}>
                   Status
                 </LoadingButton>
               </a>
-            </span>
+            </div>
+          ) : isCurrentMember ? (
+            <div className="hli">
+              <CustomToolTip title={disabledText} disabled={!buyButtonDisabled || parseFloat(remainingAllocation) === 0}>
+                <span>
+                  <LoadingButton onClick={onBuyClick} disabled={!buyButtonDisabled || remainingAllocation === 0}>
+                    {buyButtonText}
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
+            </div>
           ) : buttonVisibility ? (
             <span className="hli">
-              <LoadingButton onClick={onClick} loading={buttonSpinning}>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={buttonSpinning}>
                 {buttonText}
               </LoadingButton>
             </span>
-          ) : buyButtonVisibility ? (
-            <span className="hli">
-              <LoadingButton onClick={onBuyClick} disabled={!buyButtonDisabled}>
-                {buyButtonText}
-              </LoadingButton>
+          ) : (
+            <span width="20">
+              <BtnLoader width={45} height={9} />
             </span>
-          ) : null}
-          {tradeButtonVisibility ? (
-            <a className="hli push-left--13" href={tradeUrl} target="_blank" rel="noopener noreferrer">
-              <LoadingButton onClick={null}>Trade</LoadingButton>
-            </a>
-          ) : null}
+          )}
+          <a className="hli push-left--13" href={tradeUrl} target="_blank" rel="noopener noreferrer">
+            <LoadingButton onClick={null}>Trade</LoadingButton>
+          </a>
         </Col>
       </Row>
     </CUICard>

@@ -1,7 +1,8 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
-const callingCountries = require('country-data').callingCountries;
+
+const callingCountries = require("country-data").callingCountries;
 
 export const initialState = {
   passportUrl: "",
@@ -128,7 +129,6 @@ export default function(state = initialState, action) {
         conditionOneAccepted: action.payload
       };
     }
-    
 
     case actionTypes.CONDITION_TWO_CHANGED: {
       return {
@@ -193,14 +193,14 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.COUNTRY_CODE_CHANGED: {
-      let citizenship  = ""
-      for (let country in callingCountries){
+      let citizenship = "";
+      for (const country in callingCountries) {
         // console.log(callingCountries[country])
-        if (callingCountries[country]["countryCallingCodes"]){
-          for (let i of callingCountries[country]["countryCallingCodes"]){
+        if (callingCountries[country].countryCallingCodes) {
+          for (const i of callingCountries[country].countryCallingCodes) {
             // console.log(i.trim())
-            if (action.payload === i.trim()){
-              citizenship = callingCountries[country]["name"]
+            if (action.payload === i.trim()) {
+              citizenship = callingCountries[country].name;
             }
           }
         }
@@ -208,7 +208,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         countryCode: action.payload,
-        citizenship: citizenship
+        citizenship
       };
     }
 

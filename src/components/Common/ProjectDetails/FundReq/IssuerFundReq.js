@@ -6,6 +6,7 @@ import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 import LoadingButton from "../../LoadingButton";
 import { ensureHttpUrl } from "../../../../helpers/common/urlFixerInHref";
 import { CustomToolTip } from "../../FormComponents";
+import { getSignInStatusText } from "../../../../helpers/common/projectDetailhelperFunctions";
 
 class IssuerFundReq extends Component {
   getObject1 = () => {
@@ -18,7 +19,10 @@ class IssuerFundReq extends Component {
       xfr1Description,
       isPermissioned,
       onEditXfr1DescriptionClick,
-      onSaveXfr1DescriptionClick
+      onSaveXfr1DescriptionClick,
+      signinStatusFlag,
+      userLocalPublicAddress,
+      ownerAddress
     } = this.props || {};
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
@@ -39,6 +43,9 @@ class IssuerFundReq extends Component {
         isPermissioned={isPermissioned}
         onSaveClick={onSaveXfr1DescriptionClick}
         address={address}
+        ownerAddress={ownerAddress}
+        userLocalPublicAddress={userLocalPublicAddress}
+        signinStatusFlag={signinStatusFlag}
       />
     ) : null;
   };
@@ -53,7 +60,10 @@ class IssuerFundReq extends Component {
       xfr2Description,
       isPermissioned,
       onEditXfr2DescriptionClick,
-      onSaveXfr2DescriptionClick
+      onSaveXfr2DescriptionClick,
+      signinStatusFlag,
+      userLocalPublicAddress,
+      ownerAddress
     } = this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime, address } = poll2 || {};
@@ -74,6 +84,9 @@ class IssuerFundReq extends Component {
         isPermissioned={isPermissioned}
         onSaveClick={onSaveXfr2DescriptionClick}
         address={address}
+        ownerAddress={ownerAddress}
+        userLocalPublicAddress={userLocalPublicAddress}
+        signinStatusFlag={signinStatusFlag}
       />
     ) : null;
   };
@@ -87,21 +100,29 @@ class IssuerFundReq extends Component {
       withdrawXfrButtonSpinning,
       getWithdrawableXfrAmount,
       withdrawXfrButtonTransactionHash,
-      isPermissioned
+      isPermissioned,
+      onXfrPollHistoryClick,
+      ownerAddress,
+      userLocalPublicAddress,
+      signinStatusFlag
     } = this.props || {};
     const { totalAmount, text } = getWithdrawableXfrAmount;
+    const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
+    const xfrWarningText = "No Current wihdrawable amount";
     const withdrawXfrLink = `https://rinkeby.etherscan.io/tx/${withdrawXfrButtonTransactionHash}`;
     return (
       <div>
-        {totalAmount > 0 ? (
+        {parseFloat(totalAmount) > 0 ? (
           <div>
             <Row className="push--top">
               <Col lg={4}>
-                {!isPermissioned || !canWithdrawXfrAmount ? (
+                {!isPermissioned ? (
                   <div className="hli">
-                    <CustomToolTip title="This feature is only for Vault Issuer Members" id="btn-disabled" disabled>
+                    <CustomToolTip title={disabledMsg} id="btn-disabled" placement="bottom" disabled>
                       <div>
-                        <LoadingButton disabled>Withdraw Xfr Amount</LoadingButton>
+                        <LoadingButton style={{ padding: "0 40px" }} disabled>
+                          Withdraw Xfr Amount
+                        </LoadingButton>
                       </div>
                     </CustomToolTip>
                   </div>
@@ -114,11 +135,15 @@ class IssuerFundReq extends Component {
                     </a>
                   </div>
                 ) : (
-                  <span className="hli">
-                    <LoadingButton onClick={onWithdrawXfrAmountClick} loading={withdrawXfrButtonSpinning} disabled={!canWithdrawXfrAmount}>
-                      Withdraw Xfr Amount
-                    </LoadingButton>
-                  </span>
+                  <div className="hli">
+                    <CustomToolTip title={xfrWarningText} id="btn-disabled" placement="bottom" disabled={!canWithdrawXfrAmount}>
+                      <span className="hli">
+                        <LoadingButton onClick={onWithdrawXfrAmountClick} loading={withdrawXfrButtonSpinning} disabled={!canWithdrawXfrAmount}>
+                          Withdraw Xfr Amount
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </div>
                 )}
               </Col>
               <Col lg={8}>
@@ -128,27 +153,48 @@ class IssuerFundReq extends Component {
             <Divider />
           </div>
         ) : null}
-        {xfr1 !== null || xfr2 !== null ? (
-          <div>
-            <CUICard className="card-brdr">
-              <div style={{ padding: "40px 50px" }} className="txt-xxxl text--primary">
+
+        <div>
+          <CUICard className="card-brdr">
+            <Row style={{ padding: "40px 50px" }}>
+              <Col className="txt-xxxl text--primary" lg={8}>
                 Exceptional Fund Requests
+              </Col>
+              <Col className="push-half--top text-right txt-no-wrp" lg={4}>
+                <LoadingButton className="text--black lnktags" type="text" onClick={onXfrPollHistoryClick}>
+                  View XFR History
+                </LoadingButton>
+              </Col>
+            </Row>
+            {xfr1 !== null ? (
+              <div>
+                <Divider />
+                <Row className="push-top--35">
+                  <Col lg={12} className="txt">
+                    {xfr1}
+                  </Col>
+                </Row>
               </div>
-              <Divider />
-              <Row className="push-top--35">
-                <Col lg={12} className="txt">
-                  {xfr1}
+            ) : null}
+            {xfr2 !== null ? (
+              <div>
+                <Divider />
+                <Row className="push-top--35">
+                  <Col lg={12} className="txt">
+                    {xfr2}
+                  </Col>
+                </Row>
+              </div>
+            ) : null}
+            {xfr1 === null && xfr2 === null ? (
+              <Row>
+                <Col lg={12} className="txt text-center">
+                  <div style={{ padding: "40px 20px" }}>Xfr Poll not deployed</div>
                 </Col>
               </Row>
-              {xfr2 ? <Divider /> : null}
-              <Row className="push-top--35">
-                <Col lg={12} className="txt">
-                  {xfr2}
-                </Col>
-              </Row>
-            </CUICard>
-          </div>
-        ) : null}
+            ) : null}
+          </CUICard>
+        </div>
       </div>
     );
   }

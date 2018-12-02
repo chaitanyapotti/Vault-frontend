@@ -1,4 +1,5 @@
 import moment from "moment";
+import React from "react";
 import web3 from "../../web3";
 import constants from "../../../constants";
 
@@ -335,6 +336,55 @@ const getRoundText = (roundInfo, currentRoundNumber) => {
   )} (Round ${currentRoundNumber} of 3)`;
 };
 
+const getPriceIncrement = (tokenTag, prices) => {
+  const { [tokenTag]: tokenPrice } = prices || {};
+  const { change } = tokenPrice || {};
+  return change || 0;
+};
+
+const getLastRoundInfo = (roundInfo, currentRoundNumber) => {
+  // TODO: get current round and price
+  const { tokenRate } = roundInfo;
+  const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
+  return (
+    <div style={{ marginTop: "24px" }}>
+      <div className="text-right">Round {roundNumber} price</div>
+      <div className="text-right opacity-75">{formatRateToPrice(tokenRate) || 0} ETH</div>
+    </div>
+  );
+};
+
+const getPrice = (tokenTag, prices, roundInfo) => {
+  // TODO: to use external API
+  const { [tokenTag]: tokenPrice } = prices || {};
+  const { price } = tokenPrice || {};
+  if (!price) {
+    const { tokenRate } = roundInfo || {};
+    return formatRateToPrice(tokenRate);
+  }
+  return price;
+  // return 0.009861;
+};
+
+const getNextKillPollStartDate = (killPollIndex, r1EndTime) => {
+  const endDate = new Date(r1EndTime);
+  // if (new Date() - endDate < 0) return endDate;
+  endDate.setDate(endDate.getDate() + (killPollIndex + 1) * 89);
+  return endDate;
+};
+
+const getKillPollStartDate = killPollEndDate => {
+  const endDate = new Date(killPollEndDate);
+  const startDate = endDate.setDate(endDate.getDate() - 89);
+  return new Date(startDate);
+};
+
+const getXfrEndDate = xfrStartDate => {
+  const startDate = new Date(xfrStartDate);
+  const endDate = startDate.setDate(startDate.getDate() + 29);
+  return new Date(endDate);
+};
+
 const r1Finish = (r1EndTime, roundInfo) => {
   const { tokenCount, totalTokensSold } = roundInfo || "";
   return new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).lt(web3.utils.toBN(tokenCount));
@@ -394,5 +444,11 @@ export {
   Colors,
   getSignInStatusText,
   getRoundText,
-  r1Finish
+  r1Finish,
+  getPriceIncrement,
+  getLastRoundInfo,
+  getPrice,
+  getNextKillPollStartDate,
+  getKillPollStartDate,
+  getXfrEndDate
 };

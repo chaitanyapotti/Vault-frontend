@@ -21,7 +21,7 @@ const CustomToolTip = props => {
   const { classes, title, children, id, placement, disabled } = props || {};
   return (
     <div>
-      {disabled ? (
+      {disabled === true ? (
         <div>
           <Tooltip title={title} classes={{ tooltip: classes.fonts }} id={id} placement={placement}>
             {children}

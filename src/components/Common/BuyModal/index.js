@@ -33,16 +33,21 @@ const BuyModal = props => {
   const labelValue = formatCurrencyNumber(parsedInput * parseFloat(tokenRate), 0);
   const link = `https://rinkeby.etherscan.io/tx/${buyButtonTransactionHash}`;
   const round1Residue = parseFloat(r1TokenGoal) - parseFloat(tokensSold);
+  const otherRoundResidue =
+    formatFromWei((parseFloat(roundInfo.tokenCount) - parseFloat(roundInfo.totalTokensSold)) / parseFloat(roundInfo.tokenRate), 18) - parsedInput;
   const disabledTitle =
     parsedInput < formatFromWei(minimumEtherContribution, 4)
       ? "Min Contribution not satisfied"
       : isNaN(parsedInput)
       ? "Invalid Input"
-      : parsedInput * parseFloat(tokenRate) > remainingAllocation
+      : parsedInput * parseFloat(tokenRate) > remainingAllocation || otherRoundResidue < 0
       ? "Can't buy that amount"
       : "";
   const isDisabled =
-    parsedInput * parseFloat(tokenRate) > remainingAllocation || isNaN(parsedInput) || parsedInput < formatFromWei(minimumEtherContribution, 4);
+    parsedInput * parseFloat(tokenRate) > remainingAllocation ||
+    isNaN(parsedInput) ||
+    parsedInput < formatFromWei(minimumEtherContribution, 4) ||
+    otherRoundResidue < 0;
   return (
     <div>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">

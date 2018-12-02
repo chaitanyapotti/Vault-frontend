@@ -4,11 +4,12 @@ import LoadingButton from "../Common/LoadingButton";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import { ensureHttpUrl } from "../../helpers/common/urlFixerInHref";
 import { CustomToolTip } from "../Common/FormComponents";
+import { getSignInStatusText } from "../../helpers/common/projectDetailhelperFunctions";
+import BtnLoader from "../Loaders/BtnLoader";
 
 const RefundCard = props => {
   const {
     signinStatusFlag,
-    treasuryStateNumber,
     tokenBalance,
     label,
     refundByKillButtonTransactionHash,
@@ -17,8 +18,15 @@ const RefundCard = props => {
     onRefundClick,
     refundBySoftcapfailButtonTransactionHash
   } = props || {};
-  const link = `https://rinkeby.etherscan.io/tx/${refundByKillButtonTransactionHash}`;
-  const refundSoftLink = `https://rinkeby.etherscan.io/tx/${refundBySoftcapfailButtonTransactionHash}`;
+  const link =
+    refundByKillButtonTransactionHash !== ""
+      ? `https://rinkeby.etherscan.io/tx/${refundByKillButtonTransactionHash}`
+      : refundBySoftcapfailButtonTransactionHash !== ""
+      ? `https://rinkeby.etherscan.io/tx/${refundBySoftcapfailButtonTransactionHash}`
+      : "";
+  const warningText = getSignInStatusText(signinStatusFlag);
+  const isDisabled = parseFloat(tokenBalance) === 0;
+  const disabledText = parseFloat(tokenBalance) === 0 ? "You don't hold any tokens" : "";
   return (
     <CUICard className="card-brdr push-top--50" style={{ padding: "40px 50px" }}>
       <Row lg={8}>
@@ -32,7 +40,17 @@ const RefundCard = props => {
         </Col>
         <Col lg={4}>
           <div className="text--center">
-            {refundByKillButtonTransactionHash !== "" ? (
+            {signinStatusFlag < 3 ? (
+              <div className="hli">
+                <CustomToolTip title={warningText} id="btn-disabled" disabled>
+                  <span>
+                    <LoadingButton style={{ padding: "0 40px" }} disabled>
+                      Refund
+                    </LoadingButton>
+                  </span>
+                </CustomToolTip>
+              </div>
+            ) : refundByKillButtonTransactionHash !== "" || refundBySoftcapfailButtonTransactionHash !== "" ? (
               <div className="hli">
                 <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
                   <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
@@ -40,29 +58,25 @@ const RefundCard = props => {
                   </LoadingButton>
                 </a>
               </div>
-            ) : refundBySoftcapfailButtonTransactionHash !== "" ? (
+            ) : tokenBalance ? (
               <div className="hli">
-                <a href={ensureHttpUrl(refundSoftLink)} target="_blank" rel="noreferrer noopener">
-                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                    Status
-                  </LoadingButton>
-                </a>
+                <CustomToolTip title={disabledText} disabled={isDisabled}>
+                  <span>
+                    <LoadingButton
+                      disabled={isDisabled}
+                      onClick={onRefundClick}
+                      loading={refundByKillButtonSpinning || refundBySoftCapFailSpinning}
+                      style={{ padding: "0 40px", "min-width": "200px" }}
+                    >
+                      Refund
+                    </LoadingButton>
+                  </span>
+                </CustomToolTip>
               </div>
-            ) : signinStatusFlag <= 3 ? (
-              <CustomToolTip title="This feature is only for Vault Members" id="btn-disabled" disabled>
-                <span>
-                  <LoadingButton disabled>Refund</LoadingButton>
-                </span>
-              </CustomToolTip>
             ) : (
-              <LoadingButton
-                disabled={(treasuryStateNumber !== "2" && treasuryStateNumber !== "4") || tokenBalance === "0"}
-                onClick={onRefundClick}
-                loading={refundByKillButtonSpinning || refundBySoftCapFailSpinning}
-                style={{ "min-width": "200px" }}
-              >
-                Refund
-              </LoadingButton>
+              <span width="20">
+                <BtnLoader width={45} height={9} />
+              </span>
             )}
           </div>
         </Col>

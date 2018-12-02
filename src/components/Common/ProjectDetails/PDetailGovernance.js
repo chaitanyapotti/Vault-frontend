@@ -3,7 +3,9 @@ import { CustomToolTip } from "../FormComponents";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
+import BtnLoader from "../../Loaders/BtnLoader";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
 
 const PDetailGovernance = props => {
   const {
@@ -22,7 +24,7 @@ const PDetailGovernance = props => {
     killButtonSpinning,
     onRevokeKillClick,
     signinStatusFlag,
-    canUnlockTokens,
+    unlockTokensData,
     onUnlockTokensClick,
     onKillPollsHistoryClick,
     killButtonTransactionHash,
@@ -30,8 +32,13 @@ const PDetailGovernance = props => {
     pollFactoryAddress,
     unlockTokensLoading
   } = props || {};
+  const canUnlockTokens = unlockTokensData && unlockTokensData.length > 0;
   const link = `https://rinkeby.etherscan.io/tx/${killButtonTransactionHash}`;
   const etherscanLink = `https://rinkeby.etherscan.io/address/${pollFactoryAddress}`;
+  const signinText = getSignInStatusText(signinStatusFlag);
+  const warningText = signinStatusFlag < 4 ? signinText : "No unlockable tokens";
+  const isDisabled = parseFloat(yourTokens) <= 0;
+  const killWarningText = signinStatusFlag < 4 ? signinText : isDisabled ? "Not enough token balance" : "";
   return (
     <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
       <Row>
@@ -107,10 +114,20 @@ const PDetailGovernance = props => {
 
       <Row>
         <Col lg={6} className="push--top">
-          {!unlockTokensLoading ? (
-            <LoadingButton style={{ padding: "0 40px" }} onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
-              Unlock All Tokens
-            </LoadingButton>
+          {!unlockTokensLoading || signinStatusFlag < 4 ? (
+            <div className="hli">
+              <CustomToolTip title={warningText} id="btn-disabled" placement="bottom" disabled={!canUnlockTokens}>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} onClick={onUnlockTokensClick} disabled={!canUnlockTokens}>
+                    Unlock All Tokens
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
+            </div>
+          ) : typeof unlockTokensData === "undefined" ? (
+            <span width="20">
+              <BtnLoader width={45} height={9} />
+            </span>
           ) : (
             <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("pending")}>
               Pending
@@ -118,9 +135,9 @@ const PDetailGovernance = props => {
           )}
         </Col>
         <Col lg={6} className="push--top text-right">
-          {signinStatusFlag <= 3 ? (
+          {signinStatusFlag < 4 ? (
             <div className="hli">
-              <CustomToolTip title="This feature is only for Vault Members" id="btn-disabled" placement="bottom" disabled>
+              <CustomToolTip title={killWarningText} id="btn-disabled" placement="bottom" disabled>
                 <span>
                   <LoadingButton style={{ padding: "0 40px" }} type="danger" disabled>
                     Kill Project
@@ -128,6 +145,10 @@ const PDetailGovernance = props => {
                 </span>
               </CustomToolTip>
             </div>
+          ) : typeof killVoteStatus === "undefined" ? (
+            <span width="20">
+              <BtnLoader width={45} height={9} />
+            </span>
           ) : killButtonTransactionHash !== "" ? (
             <div className="hli">
               <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
@@ -138,26 +159,23 @@ const PDetailGovernance = props => {
             </div>
           ) : killVoteStatus === "false" && new Date() >= new Date(r1EndTime) ? (
             <div className="hli">
-              <LoadingButton
-                style={{ padding: "0 40px" }}
-                onClick={onKillClick}
-                type="danger"
-                loading={killButtonSpinning}
-                disabled={parseFloat(yourTokens) <= 0}
-              >
-                Vote in Kill Poll
-              </LoadingButton>
+              <CustomToolTip title={killWarningText} id="btn-disabled" placement="bottom" disabled={isDisabled}>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} onClick={onKillClick} type="danger" loading={killButtonSpinning} disabled={isDisabled}>
+                    Vote in Kill Poll
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
             </div>
           ) : new Date() >= new Date(r1EndTime) ? (
             <div className="hli">
-              <LoadingButton
-                style={{ padding: "0 40px" }}
-                onClick={onRevokeKillClick}
-                loading={killButtonSpinning}
-                disabled={parseFloat(yourTokens) <= 0}
-              >
-                UnVote in Kill Poll
-              </LoadingButton>
+              <CustomToolTip title={killWarningText} id="btn-disabled" placement="bottom" disabled={isDisabled}>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} onClick={onRevokeKillClick} loading={killButtonSpinning} disabled={isDisabled}>
+                    UnVote in Kill Poll
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
             </div>
           ) : null}
         </Col>

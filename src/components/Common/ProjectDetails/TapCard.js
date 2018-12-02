@@ -1,9 +1,11 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
+import { CustomToolTip } from "../FormComponents";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import BtnLoader from "../../Loaders/BtnLoader";
 
 const TapCard = props => {
   const {
@@ -21,6 +23,9 @@ const TapCard = props => {
     tapButtonTransactionHash
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${tapButtonTransactionHash}`;
+  const signinText = getSignInStatusText(signinStatusFlag);
+  const isDisabled = !canTapClick;
+  const tapWarningText = signinStatusFlag < 4 ? signinText : isDisabled ? "Not enough token balance" : "";
   return (
     <div>
       <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
@@ -54,18 +59,22 @@ const TapCard = props => {
         <Row className="push--top">
           <Col lg={12} className="text-right hl">
             <div className="text-right">
-              {tapPollConsensus === "No Poll" ? (
-                <div className="text--secondary txt"> Tap Poll Not Deployed </div>
-              ) : signinStatusFlag <= 3 ? (
+              {signinStatusFlag < 4 ? (
                 <div className="hli">
-                  <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-                    <div>
-                      <LoadingButton style={{ padding: "0 40px" }} disabled>
+                  <CustomToolTip title={tapWarningText} id="btn-disabled" placement="bottom" disabled>
+                    <span>
+                      <LoadingButton style={{ padding: "0 40px" }} type="danger" disabled>
                         Approve
                       </LoadingButton>
-                    </div>
-                  </Tooltip>
+                    </span>
+                  </CustomToolTip>
                 </div>
+              ) : tapPollConsensus === "No Poll" ? (
+                <div className="text--secondary txt"> Tap Poll Not Deployed </div>
+              ) : typeof tapVoteStatus === "undefined" || !tapPollConsensus ? (
+                <span width="20">
+                  <BtnLoader width={45} height={9} />
+                </span>
               ) : tapButtonTransactionHash !== "" ? (
                 <div className="hli">
                   <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
@@ -75,19 +84,31 @@ const TapCard = props => {
                   </a>
                 </div>
               ) : tapVoteStatus === "true" ? (
-                <LoadingButton
-                  style={{ padding: "0 40px" }}
-                  onClick={onRevokeTapClick}
-                  type="danger"
-                  loading={tapButtonSpinning}
-                  disabled={!canTapClick}
-                >
-                  Reject
-                </LoadingButton>
+                <div className="hli">
+                  <CustomToolTip title={tapWarningText} id="btn-disabled" placement="bottom" disabled={isDisabled}>
+                    <span>
+                      <LoadingButton
+                        style={{ padding: "0 40px" }}
+                        onClick={onRevokeTapClick}
+                        type="danger"
+                        loading={tapButtonSpinning}
+                        disabled={isDisabled}
+                      >
+                        Reject
+                      </LoadingButton>
+                    </span>
+                  </CustomToolTip>
+                </div>
               ) : (
-                <LoadingButton style={{ padding: "0 40px" }} onClick={onTapClick} loading={tapButtonSpinning} disabled={!canTapClick}>
-                  Approve
-                </LoadingButton>
+                <div className="hli">
+                  <CustomToolTip title={tapWarningText} id="btn-disabled" placement="bottom" disabled={isDisabled}>
+                    <span>
+                      <LoadingButton style={{ padding: "0 40px" }} onClick={onTapClick} loading={tapButtonSpinning} disabled={isDisabled}>
+                        Approve
+                      </LoadingButton>
+                    </span>
+                  </CustomToolTip>
+                </div>
               )}
             </div>
           </Col>

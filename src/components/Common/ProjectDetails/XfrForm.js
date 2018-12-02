@@ -1,10 +1,11 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { CUIFormInput, CUICard } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { CustomToolTip } from "../FormComponents";
 
 const XfrForm = props => {
   const {
@@ -18,9 +19,14 @@ const XfrForm = props => {
     canDeployXfrPoll,
     deployXfrButtonSpinning,
     onDeployXfrClick,
-    deployXfrPollTransactionHash
+    deployXfrPollTransactionHash,
+    signinStatusFlag,
+    ownerAddress,
+    userLocalPublicAddress
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${deployXfrPollTransactionHash}`;
+  const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
+  const xfrDeployText = "Can't deploy now";
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
       <Row>
@@ -77,13 +83,13 @@ const XfrForm = props => {
 
       <Row className="push--top">
         <Col lg={4}>
-          {!isPermissioned || !canDeployXfrPoll ? (
+          {!isPermissioned ? (
             <div className="hli">
-              <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
-                <div>
+              <CustomToolTip title={disabledMsg} id="btn-disabled" placement="bottom" disabled>
+                <span>
                   <LoadingButton disabled>Deploy Xfr</LoadingButton>
-                </div>
-              </Tooltip>
+                </span>
+              </CustomToolTip>
             </div>
           ) : deployXfrPollTransactionHash !== "" ? (
             <div className="hli">
@@ -94,11 +100,15 @@ const XfrForm = props => {
               </a>
             </div>
           ) : (
-            <span className="hli">
-              <LoadingButton onClick={onDeployXfrClick} loading={deployXfrButtonSpinning} disabled={!canDeployXfrPoll}>
-                Deploy Xfr
-              </LoadingButton>
-            </span>
+            <div className="hli">
+              <CustomToolTip title={xfrDeployText} id="btn-disabled" placement="bottom" disabled={!canDeployXfrPoll}>
+                <span className="hli">
+                  <LoadingButton onClick={onDeployXfrClick} loading={deployXfrButtonSpinning} disabled={!canDeployXfrPoll}>
+                    Deploy Xfr
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
+            </div>
           )}
         </Col>
         <Col lg={8}>

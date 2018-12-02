@@ -1,10 +1,12 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { CUICard, CUIFormInput } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import BtnLoader from "../../Loaders/BtnLoader";
+import { CustomToolTip } from "../FormComponents";
 
 const IssuerWithdrawCard = props => {
   const {
@@ -14,9 +16,14 @@ const IssuerWithdrawCard = props => {
     onWithdrawAmountClick,
     inputText,
     onChange,
-    withdrawButtonTransactionHash
+    withdrawButtonTransactionHash,
+    signinStatusFlag,
+    ownerAddress,
+    userLocalPublicAddress
   } = props || {};
-  const canWithdraw = parseFloat(currentWithdrawableAmount) >= parseFloat(inputText);
+  const canWithdraw = parseFloat(currentWithdrawableAmount) >= parseFloat(inputText) && parseFloat(inputText) > 0;
+  const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
+  const canWithdrawText = "Can't withdraw that amount";
   const link = `https://rinkeby.etherscan.io/tx/${withdrawButtonTransactionHash}`;
   return (
     <div>
@@ -42,15 +49,15 @@ const IssuerWithdrawCard = props => {
           </Col>
         </Row>
         <div className="text-right push--top">
-          {!isPermissioned || !canWithdraw ? (
+          {!isPermissioned ? (
             <div className="hli">
-              <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
+              <CustomToolTip title={disabledMsg} id="btn-disabled" placement="bottom" disabled>
                 <div>
                   <LoadingButton style={{ padding: "0 40px" }} disabled>
                     Withdraw
                   </LoadingButton>
                 </div>
-              </Tooltip>
+              </CustomToolTip>
             </div>
           ) : withdrawButtonTransactionHash !== "" ? (
             <div className="hli">
@@ -60,12 +67,25 @@ const IssuerWithdrawCard = props => {
                 </LoadingButton>
               </a>
             </div>
-          ) : (
-            <span className="hli">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onWithdrawAmountClick} loading={withdrawButtonSpinning} disabled={!canWithdraw}>
-                Withdraw
-              </LoadingButton>
+          ) : !currentWithdrawableAmount ? (
+            <span width="20">
+              <BtnLoader width={45} height={9} />
             </span>
+          ) : (
+            <div className="hli">
+              <CustomToolTip title={canWithdrawText} id="btn-disabled" placement="bottom" disabled={!canWithdraw}>
+                <span className="hli">
+                  <LoadingButton
+                    style={{ padding: "0 40px" }}
+                    onClick={onWithdrawAmountClick}
+                    loading={withdrawButtonSpinning}
+                    disabled={!canWithdraw}
+                  >
+                    Withdraw
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
+            </div>
           )}
         </div>
       </CUICard>

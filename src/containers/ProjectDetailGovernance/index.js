@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import Warning from "@material-ui/icons/Warning";
 import {
   ProjectGovernanceName,
   PDetailGovernance,
@@ -62,7 +61,13 @@ import {
   daysTookForTapPoll,
   xfrResult,
   xfrWithdrawStatus,
-  formatRateToPrice
+  getNextKillPollStartDate,
+  getRoundText,
+  getPriceIncrement,
+  getPrice,
+  getLastRoundInfo,
+  getKillPollStartDate,
+  getXfrEndDate
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
@@ -74,7 +79,6 @@ import web3 from "../../helpers/web3";
 
 class ProjectDetailGovernance extends Component {
   state = {
-    modalOpen: false,
     buyModalOpen: false,
     unlockTokensModalOpen: false,
     killPollsHistoryModalOpen: false,
@@ -102,10 +106,6 @@ class ProjectDetailGovernance extends Component {
     const { buyAmountChangedAction: buyAmountChanged } = this.props || {};
     buyAmountChanged("");
     this.setState({ buyModalOpen: false });
-  };
-
-  handleClose = () => {
-    this.setState({ modalOpen: false });
   };
 
   componentDidMount() {
@@ -144,10 +144,8 @@ class ProjectDetailGovernance extends Component {
       getEtherCollected: fetchEtherCollected,
       getKillVoterCount: fetchKillVoterCount
     } = this.props || {};
-    priceFetch("ETH");
     priceFetch(tokenTag);
     fetchSpendCurveData(version, pollFactoryAddress, crowdSaleAddress);
-    // fetchSpendCurveData(version, pollFactoryAddress);
     fetchVoteHistogramData(projectid);
     fetchKillPollsHistory(pollFactoryAddress);
     fetchTapPollsHistory(pollFactoryAddress);
@@ -200,53 +198,6 @@ class ProjectDetailGovernance extends Component {
     }
   }
 
-  getPriceIncrement = () => {
-    const { tokenTag, prices } = this.props || {};
-    const { [tokenTag]: tokenPrice } = prices || {};
-    const { change } = tokenPrice || {};
-    return change || 0;
-  };
-
-  getLastRoundInfo = () => {
-    // TODO: get current round and price
-    const { roundInfo } = this.props || {};
-    const { tokenRate } = roundInfo;
-    const { currentRoundNumber } = this.props || {};
-    const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
-    return (
-      <div style={{ marginTop: "24px" }}>
-        <div className="text-right">Round {roundNumber} price</div>
-        <div className="text-right opacity-75">{formatRateToPrice(tokenRate)} ETH</div>
-      </div>
-    );
-  };
-
-  getPrice = () => {
-    // TODO: to use external API
-    const { tokenTag, prices } = this.props || {};
-    const { [tokenTag]: tokenPrice } = prices || {};
-    const { price } = tokenPrice || {};
-    if (!price) {
-      const { roundInfo } = this.props || {};
-      const { tokenRate } = roundInfo || {};
-      return formatRateToPrice(tokenRate);
-    }
-    return price;
-    // return 0.009861;
-  };
-
-  getRoundText = () => {
-    const { currentRoundNumber, roundInfo } = this.props || {};
-    const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
-    if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
-    if (totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).eq(web3.utils.toBN(tokenCount))) return `Round ${currentRoundNumber} Ended`;
-
-    return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
-      formatFromWei(tokenCount),
-      0
-    )} (Round ${currentRoundNumber} of 3)`;
-  };
-
   getVoteWeight = () => {
     const { totalMintableSupply, tokenBalance, capPercent } = this.props || {};
     const userShare = significantDigits((parseFloat(tokenBalance) / parseFloat(totalMintableSupply)) * 100, false, 3) || 0;
@@ -259,31 +210,11 @@ class ProjectDetailGovernance extends Component {
     return significantDigits((parseFloat(voteWeight) * 100) / parseFloat(collectiveVoteWeight)) || 0;
   };
 
-  getNextKillPollStartDate = () => {
-    const { killPollIndex, r1EndTime } = this.props || {};
-    const endDate = new Date(r1EndTime);
-    if (new Date() - endDate < 0) return endDate;
-    endDate.setDate(endDate.getDate() + (killPollIndex + 1) * 90);
-    return endDate;
-  };
-
-  getKillPollStartDate = killPollEndDate => {
-    const endDate = new Date(killPollEndDate);
-    const startDate = endDate.setDate(endDate.getDate() - 89);
-    return new Date(startDate);
-  };
-
-  getXfrEndDate = xfrStartDate => {
-    const startDate = new Date(xfrStartDate);
-    const endDate = startDate.setDate(startDate.getDate() + 29);
-    return new Date(endDate);
-  };
-
   getMyTokenValue = () => {
-    const { prices, tokenBalance } = this.props || {};
+    const { prices, tokenBalance, tokenTag, roundInfo } = this.props || {};
     const { ETH } = prices || {};
     const { price: etherPrice } = ETH || {};
-    const tokenPrice = this.getPrice() * parseFloat(etherPrice);
+    const tokenPrice = getPrice(tokenTag, prices, roundInfo) * parseFloat(etherPrice);
     return formatMoney(tokenPrice * parseFloat(formatFromWei(tokenBalance)) || 0);
   };
 
@@ -320,10 +251,6 @@ class ProjectDetailGovernance extends Component {
     const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
     if (isVaultMember) {
       whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
-    } else {
-      this.setState({
-        modalOpen: true
-      });
     }
   };
 
@@ -452,11 +379,6 @@ class ProjectDetailGovernance extends Component {
     return parseFloat(tokenBalance) > 0;
   };
 
-  canUnlockTokens = () => {
-    const { unlockTokensData } = this.props || {};
-    return unlockTokensData && unlockTokensData.length > 0;
-  };
-
   unlockTokensClick = () => {
     const { unlockTokensData, unlockTokens: unlockTokensAction, version, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
     unlockTokensAction(unlockTokensData, version, userLocalPublicAddress, pollFactoryAddress);
@@ -536,21 +458,17 @@ class ProjectDetailGovernance extends Component {
       unlockTokensLoading,
       killVoterCount,
       etherCollected,
-      minimumEtherContribution
+      minimumEtherContribution,
+      unlockTokensData
     } = this.props || {};
-    const {
-      modalOpen,
-      buyModalOpen,
-      unlockTokensModalOpen,
-      killPollsHistoryModalOpen,
-      tapPollsHistoryModalOpen,
-      xfrPollsHistoryModalOpen
-    } = this.state;
+    // const r1Rate = getR1Rate(rounds);
+    const price = getPrice(tokenTag, prices, roundInfo) || 0;
+    const { buyModalOpen, unlockTokensModalOpen, killPollsHistoryModalOpen, tapPollsHistoryModalOpen, xfrPollsHistoryModalOpen } = this.state;
     const killHistoryData = killPollsHistoryData.map(item => {
       const { address, endTime, consensus } = item || {};
       const dataArray = [
         address,
-        pollState(this.getKillPollStartDate(endTime * 1000), new Date(endTime * 1000)),
+        pollState(getKillPollStartDate(endTime * 1000), new Date(endTime * 1000)),
         formatDate(new Date(endTime * 1000)),
         significantDigits(consensus)
       ];
@@ -567,7 +485,7 @@ class ProjectDetailGovernance extends Component {
       const dataArray = [
         address,
         formatDate(xfrStartTime),
-        xfrResult(xfrStartTime, this.getXfrEndDate(startTime), consensus, xfrRejectionPercent),
+        xfrResult(xfrStartTime, getXfrEndDate(startTime), consensus, xfrRejectionPercent),
         100 - significantDigits(consensus),
         xfrWithdrawStatus(amount, startTime, endTime)
       ];
@@ -578,7 +496,7 @@ class ProjectDetailGovernance extends Component {
     return (
       <Grid>
         {this.canKill() ? (
-          <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px", "margin-bottom": "20px", width:'101.5%' }}>
+          <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px", marginBottom: "20px", width: "101.5%" }}>
             <Row>
               <Col lg={6}>
                 <div className="txt-xxxl text--primary">Notice</div>
@@ -599,9 +517,9 @@ class ProjectDetailGovernance extends Component {
                   </span>{" "}
                   and the number of voters voting for kill <span className="text--secondary">({killVoterCount})</span> is greater than the minimum
                   required voters <span className="text--secondary">({Math.ceil((5 * formatFromWei(etherCollected, 6)) / 100)})</span>. Hence
-                  withdrawals and tap increment on this DAICO are temporarily frozen until consensus drops below threshold. If the consensus
-                  stays above this value on <span className="text--secondary">{formatDate(this.getNextKillPollStartDate())}</span>, this DAICO will
-                  get killed.
+                  withdrawals and tap increment on this DAICO are temporarily frozen until consensus drops below threshold. If the consensus stays
+                  above this value on <span className="text--secondary">{formatDate(getNextKillPollStartDate(killPollIndex, r1EndTime))}</span>, this
+                  DAICO will get killed.
                 </div>
               </Col>
             </Row>
@@ -645,21 +563,19 @@ class ProjectDetailGovernance extends Component {
           </CUICard>
         ) : null}
         <MasonaryLayout columns={2}>
-          {/* <Row className="push--top">
-            <Col xs={12} lg={6}> */}
           <ProjectGovernanceName
             projectName={projectName}
             tokenTag={tokenTag}
-            price={this.getPrice()}
-            roundText={this.getRoundText()}
+            price={price}
+            roundText={getRoundText(roundInfo, currentRoundNumber)}
             daicoTokenAddress={daicoTokenAddress}
-            priceIncrement={this.getPriceIncrement()}
+            priceIncrement={getPriceIncrement(tokenTag, prices)}
             description={description}
             urls={urls}
             whitepaper={whitepaper}
-            lastRoundInfo={this.getLastRoundInfo()}
+            lastRoundInfo={getLastRoundInfo(roundInfo, currentRoundNumber)}
             buttonText="Get Whitelisted"
-            buttonVisibility={!isCurrentMember && currentRoundNumber !== "4"}
+            buttonVisibility={typeof isCurrentMember !== "undefined" && !isCurrentMember && currentRoundNumber !== "4"}
             buttonSpinning={buttonSpinning}
             onClick={this.onWhiteListClickInternal}
             signinStatusFlag={signinStatusFlag}
@@ -668,24 +584,23 @@ class ProjectDetailGovernance extends Component {
             buyButtonText="Buy"
             buyButtonDisabled={this.canBuy()}
             whitelistButtonTransactionHash={whitelistButtonTransactionHash}
-            tradeButtonVisibility
             tradeUrl={this.getTradeUrl()}
             thumbnailUrl={thumbnailUrl}
+            currentRoundNumber={currentRoundNumber}
+            isCurrentMember={isCurrentMember}
           />
-          {/* </Col>
-            <Col xs={12} lg={6}> */}
           <PDetailGovernance
             voteSaturationLimit={capPercent / 100}
             yourTokens={formatCurrencyNumber(formatFromWei(tokenBalance), 0)}
             yourVoteWeight={this.getVoteWeight()}
             yourVoteShare={this.getVoteShare()}
             killAttemptsLeft={8 - killPollIndex}
-            nextKillAttempt={formatDate(this.getNextKillPollStartDate())}
+            nextKillAttempt={formatDate(getNextKillPollStartDate(killPollIndex, r1EndTime))}
             yourTokenValue={this.getMyTokenValue()}
             yourRefundValue={this.getMyRefundValue()}
             totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
             killConsensus={this.getKillConsensus()}
-            canUnlockTokens={this.canUnlockTokens()}
+            unlockTokensData={unlockTokensData}
             killVoteStatus={this.getKillVoteStatus()}
             onKillClick={this.onKillClick}
             onRevokeKillClick={this.onRevokeKillClick}
@@ -701,11 +616,6 @@ class ProjectDetailGovernance extends Component {
             pollFactoryAddress={pollFactoryAddress}
             unlockTokensLoading={unlockTokensLoading}
           />
-          {/* </Col>
-          </Row> */}
-
-          {/* <Row className="push--top">
-            <Col xs={12} lg={6}> */}
           <TapCard
             currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30, 10))}
             tapIncrementUnit={tapIncrementFactor / 100}
@@ -721,8 +631,6 @@ class ProjectDetailGovernance extends Component {
             tapPollConsensus={tapPollConsensus}
             tapButtonTransactionHash={tapButtonTransactionHash}
           />
-          {/* </Col>
-            <Col xs={12} lg={6}> */}
           <SpendCurve
             spendableArrays={spendableArrays}
             spentArray={spentArray}
@@ -736,11 +644,6 @@ class ProjectDetailGovernance extends Component {
             contributionArray={contributionArray}
             contriArrayReceived={contriArrayReceived}
           />
-          {/* </Col>
-          </Row> */}
-
-          {/* <Row className="push--top">
-            <Col xs={12} lg={6}> */}
           <FundReq
             data={xfrData}
             details={xfrDetails}
@@ -758,8 +661,6 @@ class ProjectDetailGovernance extends Component {
             xfr1ButtonTransactionHash={xfr1ButtonTransactionHash}
             xfr2ButtonTransactionHash={xfr2ButtonTransactionHash}
           />
-          {/* </Col>
-            <Col xs={12} lg={6}> */}
           <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
             <VoteHistogram
               voteHistogramData={voteHistogramData}
@@ -777,16 +678,7 @@ class ProjectDetailGovernance extends Component {
               roundInfo={roundInfo}
             />
           </CUICard>
-
-          {/* </Col>
-          </Row> */}
         </MasonaryLayout>
-        <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
-          <div className="text--center text--danger">
-            <Warning style={{ width: "2em", height: "2em" }} />
-          </div>
-          <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
-        </AlertModal>
         <AlertModal
           killButtonSpinning={killButtonSpinning}
           tapButtonSpinning={tapButtonSpinning}
@@ -850,7 +742,7 @@ class ProjectDetailGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { projectDetailGovernanceReducer, projectPreStartReducer, signinManagerData, fetchPriceReducer, projectCrowdSaleReducer } = state || {};
+  const { projectDetailGovernanceReducer, projectPreStartReducer, fetchPriceReducer, projectCrowdSaleReducer } = state || {};
   const { etherCollected, roundInfo, tokenBalance, buyButtonSpinning } = projectCrowdSaleReducer || {};
   const {
     tokensUnderGovernance,
@@ -885,7 +777,6 @@ const mapStateToProps = state => {
     killVoterCount
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
-  const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { prices } = fetchPriceReducer || {};
   const { spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray, contributionArray, contriArrayReceived } =
     state.deployerReducer || {};
@@ -904,9 +795,6 @@ const mapStateToProps = state => {
     xfrData,
     isCurrentMember,
     buttonSpinning,
-    isVaultMember,
-    userLocalPublicAddress,
-    signinStatusFlag,
     buyButtonSpinning,
     prices,
     killVoteData,

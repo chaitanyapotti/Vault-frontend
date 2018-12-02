@@ -26,7 +26,7 @@ import {
   emailChangedAction
 } from "../../actions/userRegistrationActions";
 
-const countryList = require("country-list");
+const countryList = require("country-data");
 
 class BuyersInformation extends Component {
   constructor(props) {
@@ -147,11 +147,13 @@ class BuyersInformation extends Component {
 
   render() {
     const { selectedDate } = this.state || {};
-    const countryChoices = [];
-    const allCountries = countryList.getNames();
-    for (let i = 0; i < allCountries.length; i++) {
-      countryChoices.push({ value: allCountries[i], primaryText: allCountries[i] });
+    let countryChoices = [];
+    const allCountries = countryList.countries.all;
+    console.log(allCountries);
+    for (let index = 0; index < allCountries.length; index += 1) {
+      countryChoices.push({ value: allCountries[index].name, primaryText: allCountries[index].name });
     }
+    countryChoices = [...new Set(countryChoices)].sort();
     const {
       addressLine1,
       addressLine2,

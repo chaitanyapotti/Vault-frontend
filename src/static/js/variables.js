@@ -39,7 +39,8 @@ export const CUIButtonType = {
   DEFAULT: "default",
   CONTAINED: "contained",
   PENDING: "pending",
-  DANGER: "danger"
+  DANGER: "danger",
+  TEXT: "text"
 };
 
 export const CUIButtonSize = {

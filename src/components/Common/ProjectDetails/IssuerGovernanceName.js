@@ -1,10 +1,12 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { CustomToolTip } from "../FormComponents";
+import BtnLoader from "../../Loaders/BtnLoader";
 
 const IssuerGovernanceName = props => {
   const {
@@ -24,9 +26,16 @@ const IssuerGovernanceName = props => {
     onEditClick,
     canStartNewRound,
     startNewRoundButtonTransactionHash,
-    thumbnailUrl
+    thumbnailUrl,
+    signinStatusFlag,
+    ownerAddress,
+    userLocalPublicAddress,
+    daicoTokenAddress
   } = props || {};
   const link = `https://rinkeby.etherscan.io/tx/${startNewRoundButtonTransactionHash}`;
+  const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
+  const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
+  const isDisabled = !isPermissioned;
   const { website } = urls;
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
@@ -48,6 +57,9 @@ const IssuerGovernanceName = props => {
           </div>
         </Col>
         <Col lg={4} className="txt-g-secondary txt txt-no-wrp">
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
           <span>{lastRoundInfo}</span>
         </Col>
       </Row>
@@ -80,46 +92,36 @@ const IssuerGovernanceName = props => {
           </div>
         </Col>
         <Col lg={6} className="text-right hl">
-          {!canStartNewRound ? null : !isPermissioned ? (
-            <div className="hli">
-              <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
-                <div>
-                  <LoadingButton style={{ padding: "0 40px" }} disabled>
-                    {buttonText}
+          {isPermissioned ? (
+            startNewRoundButtonTransactionHash !== "" ? (
+              <div className="hli">
+                <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
                   </LoadingButton>
-                </div>
-              </Tooltip>
-            </div>
-          ) : startNewRoundButtonTransactionHash !== "" ? (
-            <div className="hli">
-              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                  Status
+                </a>
+              </div>
+            ) : canStartNewRound ? (
+              <span className="hli">
+                <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={startNewRoundButtonSpinning}>
+                  {buttonText}
                 </LoadingButton>
-              </a>
-            </div>
-          ) : (
-            <span className="hli">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={startNewRoundButtonSpinning} disabled={!canStartNewRound}>
-                {buttonText}
-              </LoadingButton>
-            </span>
-          )}
-          {!isPermissioned ? (
-            <div className="hli">
-              <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
-                <LoadingButton style={{ padding: "0 40px" }} disabled>
+              </span>
+            ) : !canStartNewRound ? null : (
+              <span width="20">
+                <BtnLoader width={45} height={9} />
+              </span>
+            )
+          ) : null}
+          <div className="hli">
+            <CustomToolTip disabled={isDisabled} title={disabledMsg} id="btn-disabled">
+              <span>
+                <LoadingButton style={{ padding: "0 40px" }} onClick={onEditClick} disabled={isDisabled}>
                   Edit
                 </LoadingButton>
-              </Tooltip>
-            </div>
-          ) : (
-            <span className="hli">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onEditClick}>
-                Edit
-              </LoadingButton>
-            </span>
-          )}
+              </span>
+            </CustomToolTip>
+          </div>
         </Col>
       </Row>
     </CUICard>

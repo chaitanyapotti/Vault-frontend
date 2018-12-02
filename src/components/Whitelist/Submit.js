@@ -13,6 +13,7 @@ import { CUIFormInput, CUIFormInputLabel } from "../../helpers/material-ui";
 import { CUIInputType, CUIInputColor } from "../../static/js/variables";
 import Loader from "../Loaders/loader";
 import LoadingButton from "../Common/LoadingButton";
+import { ButtonComponent } from "../Common/FormComponents";
 
 class Submit extends Component {
   componentDidMount() {
@@ -42,7 +43,14 @@ class Submit extends Component {
   };
 
   render() {
-    const { isVaultMembershipButtonSpinning, vaultMembershipRequestTransactionHash, vaultPaymentPendingStatus } = this.props || {};
+    const {
+      isVaultMembershipButtonSpinning,
+      vaultMembershipRequestTransactionHash,
+      vaultPaymentPendingStatus,
+      disabledBackStatus,
+      onClickBack,
+      onClickSave
+    } = this.props || {};
     const link = `https://rinkeby.etherscan.io/tx/${vaultMembershipRequestTransactionHash}`;
     return (
       <div>
@@ -56,8 +64,8 @@ class Submit extends Component {
                   {this.props.isVaultMember ? (
                     <div>{this.props.history.push("/registration")}</div>
                   ) : (
-                      <div>We will approve your membership request automatically in some time.</div>
-                    )}
+                    <div>We will approve your membership request automatically in some time.</div>
+                  )}
                 </div>
               ) : vaultMembershipRequestTransactionHash !== "" ? (
                 <div className="hli push--top">
@@ -68,65 +76,70 @@ class Submit extends Component {
                   </a>
                 </div>
               ) : (
-                    <div>
-                      <Grid>
-                        <Row className="push--top">
-                        <Col>
-                            <CUIFormInputLabel
-                              control={
-                                <CUIFormInput
-                                  inputType={CUIInputType.RADIO}
-                                  inputColor={CUIInputColor.PRIMARY}
-                                  inputChecked={this.props.isIssuerFlag}
-                                  onChange={this.handleIssuerFlagToggled}
-                                />
-                              }
-                              label= {<div className="txt-m txt-dbld">Issuer</div>} 
+                <div>
+                  <Grid>
+                    <Row className="push--top">
+                      <Col>
+                        <CUIFormInputLabel
+                          control={
+                            <CUIFormInput
+                              inputType={CUIInputType.RADIO}
+                              inputColor={CUIInputColor.PRIMARY}
+                              inputChecked={this.props.isIssuerFlag}
+                              onChange={this.handleIssuerFlagToggled}
                             />
-                            <span>
-                              <CUIFormInputLabel
-                                control={
-                                  <CUIFormInput
-                                    inputType={CUIInputType.RADIO}
-                                    inputColor={CUIInputColor.PRIMARY}
-                                    inputChecked={!this.props.isIssuerFlag}
-                                    onChange={this.handleIssuerFlagToggled}
-                                  />
-                                }
-                                label={<div className="txt-m txt-dbld">Investor</div>} 
+                          }
+                          label={<div className="txt-m txt-dbld">Issuer</div>}
+                        />
+                        <span>
+                          <CUIFormInputLabel
+                            control={
+                              <CUIFormInput
+                                inputType={CUIInputType.RADIO}
+                                inputColor={CUIInputColor.PRIMARY}
+                                inputChecked={!this.props.isIssuerFlag}
+                                onChange={this.handleIssuerFlagToggled}
                               />
-                            </span>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <LoadingButton
-                              style={{ padding: "0 40px" }}
-                              onClick={this.handleRequestVaultMembership}
-                              loading={isVaultMembershipButtonSpinning}
-                            >
-                              Become a Vault Member
+                            }
+                            label={<div className="txt-m txt-dbld">Investor</div>}
+                          />
+                        </span>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <LoadingButton
+                          style={{ padding: "0 40px" }}
+                          onClick={this.handleRequestVaultMembership}
+                          loading={isVaultMembershipButtonSpinning}
+                        >
+                          Become a Vault Member
                         </LoadingButton>
-                          </Col>
-                          
-                        </Row>
-                        <Row className="push--top">
-                          {this.props.isIssuerFlag ? (
-                            <div>You will be able to publish a DAICO and you will be charged 0.5016 Ethers.</div>
-                          ) : (
-                              <div>You will be able to participate in DAICOs and you will be charged 0.0016 Ethers.</div>
-                            )}
-                        </Row>
-                      </Grid>
-                    </div>
-                  )}
+                      </Col>
+                    </Row>
+                    <Row className="push--top">
+                      {this.props.isIssuerFlag ? (
+                        <div>You will be able to publish a DAICO and participate in DAICOs. You will be charged 0.5016 ETH.</div>
+                      ) : (
+                        <div>You will be able to participate in DAICOs and you will be charged 0.0016 ETH.</div>
+                      )}
+                    </Row>
+                  </Grid>
+                </div>
+              )}
             </div>
           </div>
         ) : (
-            <Grid>
-              <Loader rows={6} />
-            </Grid>
-          )}
+          <Grid>
+            <Loader rows={6} />
+          </Grid>
+        )}
+        <span className="float--right">
+          <ButtonComponent label="Back" onClick={() => onClickBack()} disabled={disabledBackStatus} />
+          <span className="push--left">
+            <ButtonComponent label="Save" onClick={() => onClickSave()} />
+          </span>
+        </span>
       </div>
     );
   }

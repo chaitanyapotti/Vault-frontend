@@ -10,7 +10,6 @@ class FundReq extends Component {
     const {
       data,
       details,
-      onXfrPollHistoryClick,
       xfrVoteData,
       signinStatusFlag,
       onRevokeXfr1Click,
@@ -41,7 +40,6 @@ class FundReq extends Component {
         onXfrClick={onXfr1Click}
         xfrButtonSpinning={xfr1ButtonSpinning}
         tokensUnderGovernance={tokensUnderGovernance}
-        onXfrPollHistoryClick={onXfrPollHistoryClick}
         canXfrClick={canXfrClick}
         link={link}
         xfr1ButtonTransactionHash={xfr1ButtonTransactionHash}

@@ -4,13 +4,13 @@ import actionTypes from "../../action_types";
 // import { significantDigits } from "../../helpers/common/projectDetailhelperFunctions"
 
 export const initialState = {
-  tokenBalance: "0",
+  tokenBalance: "",
   tokensUnderGovernance: "0",
   remainingEtherBalance: "0",
   killPollIndex: "0",
   totalSupply: "0",
-  killConsensus: "0",
-  tapPollConsensus: "0",
+  killConsensus: "",
+  tapPollConsensus: "",
   currentTap: "0",
   xfrData: {},
   xfrVoteData: [],
@@ -54,13 +54,19 @@ export const initialState = {
   killFinalizeTransactionHash: "",
   xfr2ButtonTransactionHash: "",
   tapButtonTransactionHash: "",
-  unlockTokensData: {},
+  unlockTokensData: undefined,
   unlockTokensLoading: false,
   killVoterCount: "0"
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.CLEAR_GOVERNANCE_STATES: {
+      return {
+        ...state,
+        unlockTokensData: undefined
+      };
+    }
     case actionTypes.VOTE_HISTOGRAM_DATA_SUCCESS: {
       // console.log("vote histogram data: " ,action.payload)
       const { binDict, collectiveVoteWeight } = action.payload || {};

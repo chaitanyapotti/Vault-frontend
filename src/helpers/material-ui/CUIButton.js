@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import { CS_FONT_SIZE, CUIButtonColor } from "../../static/js/variables";
+import { CS_FONT_SIZE, CUIButtonColor, CUIButtonType } from "../../static/js/variables";
 import PropTypes from "../../PropTypes";
 
 /**
@@ -78,7 +78,7 @@ CUIButton.defaultProps = {
   style: {},
   isLink: false,
   label: "",
-  type: "text",
+  type: CUIButtonType.CONTAINED,
   href: undefined,
   id: "",
   isLinkExternal: false,
@@ -93,7 +93,7 @@ CUIButton.defaultProps = {
 };
 
 CUIButton.propTypes = {
-  // type: PropTypes.cuiButtonType,
+  type: PropTypes.cuiButtonType,
   children: PropTypes.node,
   component: PropTypes.func,
   className: PropTypes.string,

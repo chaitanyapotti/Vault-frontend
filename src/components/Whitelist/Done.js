@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { ButtonComponent } from "../Common/FormComponents";
 
 class Done extends Component {
   handleSelect = event => {
@@ -21,6 +22,9 @@ class Done extends Component {
             <div>We will approve your membership request automatically in some time.</div>
           )}
         </div>
+        <span className="float--right">
+          <ButtonComponent label="Home" onClick={() => this.props.history.push("/")} />
+        </span>
       </div>
     );
   }

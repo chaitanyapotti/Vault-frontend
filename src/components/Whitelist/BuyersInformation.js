@@ -7,6 +7,7 @@ import { Row, Col } from "../../helpers/react-flexbox-grid";
 import DPicker from "../Common/DPicker";
 import DatePickers from "../Common/DatePickers";
 import ReactSelect from "../Common/ReactSelect";
+import { ButtonComponent } from "../Common/FormComponents";
 
 import {
   addressLine1ChangedAction,
@@ -28,7 +29,7 @@ import {
   emailChangedAction
 } from "../../actions/userRegistrationActions";
 
-const countryList = require("country-list");
+const countryList = require("country-data");
 
 class BuyersInformation extends Component {
   constructor(props) {
@@ -148,11 +149,13 @@ class BuyersInformation extends Component {
 
   render() {
     const { selectedDate } = this.state || {};
-    const countryChoices = [];
-    const allCountries = countryList.getNames();
-    for (let i = 0; i < allCountries.length; i++) {
-      countryChoices.push({ value: allCountries[i], label: allCountries[i] });
+    let countryChoices = [];
+    const allCountries = countryList.countries.all;
+    console.log(allCountries);
+    for (let index = 0; index < allCountries.length; index += 1) {
+      countryChoices.push({ value: allCountries[index].name, primaryText: allCountries[index].name });
     }
+    countryChoices = [...new Set(countryChoices)].sort();
     const {
       addressLine1,
       addressLine2,
@@ -169,7 +172,10 @@ class BuyersInformation extends Component {
       firstName,
       lastName,
       email,
-      gender
+      gender,
+      onClickNext,
+      disabledFlag,
+      onClickSave
     } = this.props || {};
     return (
       <div>
@@ -411,6 +417,12 @@ class BuyersInformation extends Component {
             />
           </Col>
         </Row>
+        <span className="float--right">
+          <ButtonComponent label="Save" onClick={() => onClickSave()} />
+          <span className="push--left">
+            <ButtonComponent label="Next" onClick={() => onClickNext()} disabled={disabledFlag} />
+          </span>
+        </span>
       </div>
     );
   }

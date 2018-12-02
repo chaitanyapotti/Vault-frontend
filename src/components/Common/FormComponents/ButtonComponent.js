@@ -13,7 +13,7 @@ const ButtonComponent = props => (
     label={props.label}
     id={props.label}
     disabled={props.disabled}
-    type="contained"
+    type={props.type ? props.type : "contained"}
     // labelStyle={{ padding: "6px 16px" }}
     onClick={() => {
       props.onClick();

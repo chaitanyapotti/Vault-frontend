@@ -91,7 +91,6 @@ class ProjectDetailRefund extends Component {
   render() {
     const {
       tokenBalance,
-      treasuryStateNumber,
       refundByKillButtonTransactionHash,
       refundByKillButtonSpinning,
       refundBySoftCapFailSpinning,
@@ -99,16 +98,14 @@ class ProjectDetailRefund extends Component {
       refundBySoftcapfailButtonTransactionHash
     } = this.props || {};
     return (
-      <div>
-        <Row lg={8} xs={12}>
-          <Col lg={2} />
-          <Col lg={8} xs={12}>
+      <Grid>
+        <Row>
+          <Col>
             <RefundCard
               refundByKillButtonSpinning={refundByKillButtonSpinning}
               refundBySoftCapFailSpinning={refundBySoftCapFailSpinning}
               onRefundClick={this.onRefundClick}
               signinStatusFlag={signinStatusFlag}
-              treasuryStateNumber={treasuryStateNumber}
               tokenBalance={tokenBalance}
               btnLabel="Refund"
               label={this.getLabel()}
@@ -116,9 +113,8 @@ class ProjectDetailRefund extends Component {
               refundBySoftcapfailButtonTransactionHash={refundBySoftcapfailButtonTransactionHash}
             />
           </Col>
-          <Col lg={2} />
         </Row>
-      </div>
+      </Grid>
     );
   }
 }
@@ -136,16 +132,13 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, signinManagerData, projectDetailGovernanceReducer, projectRefundReducer } = state || {};
+  const { projectCrowdSaleReducer, projectDetailGovernanceReducer, projectRefundReducer } = state || {};
   const { tokenBalance } = projectCrowdSaleReducer || {};
-  const { userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   const { remainingEtherBalance, totalSupply } = projectDetailGovernanceReducer || {};
   const { refundByKillButtonSpinning, refundBySoftCapFailSpinning, refundByKillButtonTransactionHash, refundBySoftcapfailButtonTransactionHash } =
     projectRefundReducer || {};
   return {
     tokenBalance,
-    userLocalPublicAddress,
-    signinStatusFlag,
     remainingEtherBalance,
     totalSupply,
     refundByKillButtonSpinning,

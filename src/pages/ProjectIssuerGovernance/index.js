@@ -76,7 +76,7 @@ class ProjectIssuerGovernance extends Component {
       killAcceptancePercent
     } = projectDetails || {};
 
-    if (treasuryStateNumber === "" || !isVaultMembershipChecked) {
+    if (treasuryStateNumber === "" || currentRoundNumber === "" || !isVaultMembershipChecked) {
       return (
         <Grid style={{ marginBottom: "50px" }}>
           <GvrncCardLoader />
@@ -97,7 +97,10 @@ class ProjectIssuerGovernance extends Component {
         </Grid>
       );
     }
-    if (treasuryStateNumber === "3" && currentRoundNumber !== "0") {
+    if (
+      treasuryStateNumber === "3" &&
+      (currentRoundNumber !== "1" || currentRoundNumber !== "2" || currentRoundNumber !== "3" || currentRoundNumber !== "4")
+    ) {
       return (
         <div style={{ marginBottom: "50px" }}>
           <IssuerDetailGovernance

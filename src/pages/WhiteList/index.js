@@ -140,44 +140,64 @@ class WhiteList extends Component {
       case 0:
         return (
           <div className="wht-lst-info-cnt">
-            <Introduction />
+            <Introduction onClickNext={this.handleNext} disabledFlag={this.getDisabledStatus()} />
           </div>
         );
       case 1:
         return (
           <div className="wht-lst-info-cnt">
-            <EthWallet />
+            <EthWallet
+              onClickNext={this.handleNext}
+              onClickBack={this.handleBack}
+              disabledFlag={this.getDisabledStatus()}
+              disabledBackStatus={this.getBackDisabledStatus()}
+            />
           </div>
         );
       case 2:
         return (
           <div className="wht-lst-info-cnt">
-            <TC />
+            <TC
+              onClickNext={this.handleNext}
+              onClickBack={this.handleBack}
+              disabledFlag={this.getDisabledStatus()}
+              disabledBackStatus={this.getBackDisabledStatus()}
+            />
           </div>
         );
       case 3:
         return (
           <div className="wht-lst-info-cnt">
-            <OtpVerification />
+            <OtpVerification
+              onClickOtp={this.handleOtpVerification}
+              onClickBack={this.handleBack}
+              disabledBackStatus={this.getBackDisabledStatus()}
+            />
           </div>
         );
       case 4:
         return (
           <div className="wht-lst-info-cnt">
-            <BuyersInformation />
+            <BuyersInformation onClickSave={this.handleSave} onClickNext={this.handleNext} disabledFlag={this.getDisabledStatus()} />
           </div>
         );
       case 5:
         return (
           <div className="wht-lst-info-cnt">
-            <UploadDocuments />
+            <UploadDocuments
+              onClickNext={this.handleNext}
+              onClickBack={this.handleBack}
+              onClickSave={this.handleSave}
+              disabledFlag={this.getDisabledStatus()}
+              disabledBackStatus={this.getBackDisabledStatus()}
+            />
           </div>
         );
       case 6:
         return (
           <div className="wht-lst-info-cnt">
             {" "}
-            <Submit />{" "}
+            <Submit onClickBack={this.handleBack} onClickSave={this.handleSave} disabledBackStatus={this.getBackDisabledStatus()} />{" "}
           </div>
         );
       case 7:
@@ -209,7 +229,7 @@ class WhiteList extends Component {
   };
 
   handleSave = () => {
-    console.log("user registration data: ", this.props.userRegistrationData);
+    // console.log("user registration data: ", this.props.userRegistrationData);
     this.props.saveUserFormStates(this.props.userRegistrationData, this.props.userLocalPublicAddress);
   };
 
@@ -234,10 +254,8 @@ class WhiteList extends Component {
                   <Grid>
                     <CUICard className="card-brdr" style={{ padding: "40px 40px", marginBottom: "40px" }}>
                       <VerticalStepper getStepContent={this.getStepContent} getSteps={this.getSteps} activeStep={this.props.activeStep} />
-                      <div className="push-top--50">
-                        {/* <CUIDivider /> */}
-                      </div>
-                      <div className="push--top text--right">
+                      {/* <div className="push-top--50">{ <CUIDivider /> }</div> */}
+                      {/* <div className="push--top text--right">
                         <ButtonComponent label="Back" onClick={this.handleBack} disabled={this.getBackDisabledStatus()} />
                         <span className="push--left">
                           <ButtonComponent label="Save" onClick={this.handleSave} />
@@ -255,7 +273,7 @@ class WhiteList extends Component {
                             <ButtonComponent label="Next" onClick={this.handleNext} disabled={this.getDisabledStatus()} />
                           </span>
                         )}
-                      </div>
+                      </div> */}
                     </CUICard>
                   </Grid>
                 ) : (

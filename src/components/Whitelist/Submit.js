@@ -112,9 +112,9 @@ class Submit extends Component {
                         </Row>
                         <Row className="push--top">
                           {this.props.isIssuerFlag ? (
-                            <div>You will be able to publish a DAICO and you will be charged 0.5016 Ethers.</div>
+                            <div>You will be able to publish a DAICO and participate in DAICOs. You will be charged 0.5016 ETH.</div>
                           ) : (
-                              <div>You will be able to participate in DAICOs and you will be charged 0.0016 Ethers.</div>
+                              <div>You will be able to participate in DAICOs and you will be charged 0.0016 ETH.</div>
                             )}
                         </Row>
                       </Grid>

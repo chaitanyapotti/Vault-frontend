@@ -373,7 +373,7 @@ class HeaderPartial extends React.Component {
                                 {
                                   0: (
                                     <a target="_blank" href={urls.metamask} rel="noopener noreferrer">
-                                      <ButtonComponent style={{ boxShadow: "none" }} onClick={() => {}}>
+                                      <ButtonComponent onClick={() => {}}>
                                         <div className="soft-half--sides">
                                           <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
                                           <span style={{ top: "3px" }} className="push-half--left pos-rel">
@@ -384,7 +384,7 @@ class HeaderPartial extends React.Component {
                                     </a>
                                   ),
                                   1: (
-                                    <ButtonComponent style={{ boxShadow: "none" }} onClick={this.handleSignInModalOpen}>
+                                    <ButtonComponent onClick={this.handleSignInModalOpen}>
                                       <div className="soft-half--sides">
                                         <img className="push-left--10" src="/assets/Header/metamask.png" width="20" height="20" alt="metamask" />
                                         <span style={{ top: "3px" }} className="push-half--left pos-rel">
@@ -410,8 +410,6 @@ class HeaderPartial extends React.Component {
                                     </div> */}
                                       <div style={{ width: "150px" }}>{formatAddress(this.props.userLocalPublicAddress)}</div>
                                       <ButtonComponent
-                                        style={{ boxShadow: "none" }}
-                                        className="register"
                                         onClick={this.handleRegistrationButtonClicked}
                                       >
                                         Become a Vault Member
@@ -420,7 +418,7 @@ class HeaderPartial extends React.Component {
                                   ),
                                   4: (
                                     <div>
-                                      <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
+                                      <ButtonComponent onClick={this.onCopyClickAddress}>
                                         <span>{firstName}</span>
                                         {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
                                       </ButtonComponent>
@@ -429,7 +427,7 @@ class HeaderPartial extends React.Component {
                                   ),
                                   5: (
                                     <div>
-                                      <ButtonComponent style={{ boxShadow: "none" }} onClick={this.onCopyClickAddress}>
+                                      <ButtonComponent onClick={this.onCopyClickAddress}>
                                         <span>{firstName}</span>
                                         {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
                                       </ButtonComponent>

@@ -5,6 +5,7 @@ import { CUIFormInput, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import DPicker from "../Common/DPicker";
+import { ButtonComponent } from "../Common/FormComponents";
 
 import {
   addressLine1ChangedAction,
@@ -170,7 +171,10 @@ class BuyersInformation extends Component {
       firstName,
       lastName,
       email,
-      gender
+      gender,
+      onClickNext,
+      disabledFlag,
+      onClickSave
     } = this.props || {};
     return (
       <div>
@@ -426,6 +430,12 @@ class BuyersInformation extends Component {
             />
           </Col> */}
         </Row>
+        <span className="float--right">
+          <ButtonComponent label="Save" onClick={() => onClickSave()} />
+          <span className="push--left">
+            <ButtonComponent label="Next" onClick={() => onClickNext()} disabled={disabledFlag} />
+          </span>
+        </span>
       </div>
     );
   }

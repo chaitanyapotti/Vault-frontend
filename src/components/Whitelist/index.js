@@ -7,13 +7,4 @@ import Submit from "./Submit";
 import OtpVerification from "./OtpVerification";
 import Done from "./Done";
 
-export {
-    Introduction,
-    EthWallet,
-    TC,
-    BuyersInformation,
-    UploadDocuments,
-    Submit,
-    OtpVerification,
-    Done
-}
+export { Introduction, EthWallet, TC, BuyersInformation, UploadDocuments, Submit, OtpVerification, Done };

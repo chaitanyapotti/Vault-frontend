@@ -75,7 +75,8 @@ class WhiteList extends Component {
       addressUrl,
       passportFileName,
       selfieFileName,
-      addressFileName
+      addressFileName,
+      email
     } = this.props || {};
     switch (getActiveStep) {
       case 2:
@@ -98,6 +99,7 @@ class WhiteList extends Component {
           firstName === "" ||
           lastName === "" ||
           gender === "" ||
+          email === "" ||
           !dateOfBirth
         );
       case 5:
@@ -204,7 +206,7 @@ class WhiteList extends Component {
         return (
           <div className="wht-lst-info-cnt">
             {" "}
-            <Done />{" "}
+            <Done history={this.props.history} />{" "}
           </div>
         );
       default:

@@ -168,7 +168,7 @@ export default function(state = initialState, action) {
 
     case actionTypes.OTP_SENT_TO_USER_FAILED: {
       if (action.payload !== "") {
-        localErrors[actionTypes.PHONE_NUMBER_CHANGED] = "Enter a Valid Phone Number";
+        localErrors[actionTypes.PHONE_NUMBER_CHANGED] = "Either entered phone number is invalid or already registered with another public address.";
       }
       if (action.payload !== "") {
         localErrors[actionTypes.USER_OTP_INPUT_CHANGED] = "";

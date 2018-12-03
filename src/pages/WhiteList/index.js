@@ -225,6 +225,7 @@ class WhiteList extends Component {
   handleNext = () => {
     const { activeStep: getActiveStep, nextButtonAction: nextAction } = this.props || {};
     nextAction(getActiveStep);
+    this.props.saveUserFormStates(this.props.userRegistrationData, this.props.userLocalPublicAddress);
     // this.setState(state => ({
     //     activeStep: state.activeStep + 1,
     //   }));

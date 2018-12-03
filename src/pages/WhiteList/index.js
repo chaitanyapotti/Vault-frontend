@@ -14,6 +14,7 @@ import {
   verifyPhoneNumber
 } from "../../actions/userRegistrationActions";
 import Loader from "../../components/Loaders/loader";
+import actionTypes from "../../action_types";
 
 class WhiteList extends Component {
   componentDidMount() {
@@ -76,7 +77,8 @@ class WhiteList extends Component {
       passportFileName,
       selfieFileName,
       addressFileName,
-      email
+      email,
+      errors
     } = this.props || {};
     switch (getActiveStep) {
       case 2:
@@ -100,7 +102,8 @@ class WhiteList extends Component {
           lastName === "" ||
           gender === "" ||
           email === "" ||
-          !dateOfBirth
+          !dateOfBirth ||
+          errors[actionTypes.USER_EMAIL_CHANGED] !== ""
         );
       case 5:
         return (
@@ -238,8 +241,6 @@ class WhiteList extends Component {
 
   render() {
     const {
-      otpFromServer,
-      otpFromUser,
       isIssuerChecked,
       isMetamaskNetworkChecked,
       isMetamaskInstallationChecked,
@@ -341,7 +342,8 @@ const mapStateToProps = state => {
     addressUrl,
     passportFileName,
     selfieFileName,
-    addressFileName
+    addressFileName,
+    errors
   } = state.userRegistrationData || {};
   return {
     userLocalPublicAddress,
@@ -382,7 +384,8 @@ const mapStateToProps = state => {
     isMetamaskInstallationChecked,
     isUserDefaultAccountChecked,
     isVaultMembershipChecked,
-    signinStatusFlag
+    signinStatusFlag,
+    errors
   };
 };
 

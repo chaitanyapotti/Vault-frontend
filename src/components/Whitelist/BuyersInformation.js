@@ -320,6 +320,7 @@ class BuyersInformation extends Component {
           ) : (
             <Col lg={6}>
               <DPicker
+                maxDate={new Date()}
                 selectedDate={selectedDate}
                 label="Date Of Issuance"
                 handleDateChange={this.onChangeDateOfIssuance}

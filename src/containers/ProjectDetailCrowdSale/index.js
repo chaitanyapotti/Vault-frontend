@@ -95,10 +95,10 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   buyTokensOnClick = () => {
-    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, daicoTokenAddress, pollFactoryAddress, buyAmount } =
+    const { version, crowdSaleAddress, buyTokens: buyToken, userLocalPublicAddress, daicoTokenAddress, pollFactoryAddress, buyAmount, network } =
       this.props || {};
     // // TODO: need to add how many tokens to buy
-    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, 0, daicoTokenAddress, pollFactoryAddress);
+    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, 0, daicoTokenAddress, pollFactoryAddress, network);
   };
 
   buyTokens = () => {
@@ -120,8 +120,8 @@ class ProjectDetailCrowdSale extends Component {
   };
 
   onR1FinalizeClick = () => {
-    const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress, projectid } = this.props || {};
-    r1Finalize(version, crowdSaleAddress, userLocalPublicAddress, projectid);
+    const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress, projectid, network } = this.props || {};
+    r1Finalize(version, crowdSaleAddress, userLocalPublicAddress, projectid, network);
   };
 
   render() {

@@ -44,11 +44,12 @@ class ProjectDetailRefund extends Component {
       treasuryStateNumber,
       userLocalPublicAddress,
       daicoTokenAddress,
+      network,
       refundByKill: killRefund,
       refundBySoftCapFail: softCapRefund
     } = this.props || {};
-    if (treasuryStateNumber === "2") softCapRefund(version, pollFactoryAddress, userLocalPublicAddress, daicoTokenAddress);
-    if (treasuryStateNumber === "4") killRefund(version, pollFactoryAddress, userLocalPublicAddress, daicoTokenAddress);
+    if (treasuryStateNumber === "2") softCapRefund(version, pollFactoryAddress, userLocalPublicAddress, daicoTokenAddress, network);
+    if (treasuryStateNumber === "4") killRefund(version, pollFactoryAddress, userLocalPublicAddress, daicoTokenAddress, network);
   };
 
   getMyRefundValue = () => {

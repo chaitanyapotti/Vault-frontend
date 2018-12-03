@@ -208,7 +208,7 @@ export const isUnlockTokensButtonSpinning = receipt => ({
   type: actionTypes.UNLOCK_TOKENS_BUTTON_SPINNING
 });
 
-export const unlockTokens = (data, version, userLocalPublicAddress, pollFactoryAddress) => async dispatch => {
+export const unlockTokens = (data, version, userLocalPublicAddress, pollFactoryAddress, network) => async dispatch => {
   dispatch(isUnlockTokensButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
@@ -227,13 +227,13 @@ export const unlockTokens = (data, version, userLocalPublicAddress, pollFactoryA
       Promise.all(promiseArray)
         .then(response => {
           console.log(response);
-          dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
-          dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-          dispatch(getKillConsensus(version, pollFactoryAddress));
-          dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-          dispatch(getTapPollConsensus(version, pollFactoryAddress));
-          dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-          dispatch(getXfrData(version, pollFactoryAddress));
+          dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+          dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+          dispatch(getKillConsensus(version, pollFactoryAddress, network));
+          dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+          dispatch(getTapPollConsensus(version, pollFactoryAddress, network));
+          dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+          dispatch(getXfrData(version, pollFactoryAddress, network));
           dispatch(isUnlockTokensButtonSpinning(false));
         })
         .catch(err => {
@@ -559,7 +559,7 @@ export const getKillPollVote = (version, contractAddress, userLocalPublicAddress
 };
 
 // name: PollFactory, address: pollFactoryAddress
-export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isKillButtonSpinning(true));
   axios
@@ -582,9 +582,9 @@ export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress,
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getKillConsensus(version, pollFactoryAddress));
+                dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getKillConsensus(version, pollFactoryAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -624,7 +624,7 @@ export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress,
 //   dispatch(isKillButtonSpinning(false));
 // })
 // name: PollFactory, address: pollFactoryAddress
-export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isKillButtonSpinning(true));
   axios
@@ -647,9 +647,9 @@ export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAd
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getKillConsensus(version, pollFactoryAddress));
+                dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getKillConsensus(version, pollFactoryAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -707,7 +707,7 @@ export const getTapPollVote = (version, contractAddress, userLocalPublicAddress,
 };
 
 // name: PollFactory, address: pollFactoryAddress returns boolean
-export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isTapButtonSpinning(true));
   axios
@@ -730,9 +730,9 @@ export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress, 
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getTapPollConsensus(version, pollFactoryAddress));
+                dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getTapPollConsensus(version, pollFactoryAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -768,7 +768,7 @@ export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress, 
 };
 
 // name: PollFactory, address: pollFactoryAddress
-export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isTapButtonSpinning(true));
   axios
@@ -791,9 +791,9 @@ export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAdd
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getTapPollConsensus(version, pollFactoryAddress));
+                dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getTapPollConsensus(version, pollFactoryAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -851,7 +851,7 @@ export const getXfrPollVote = (version, contractAddress, userLocalPublicAddress,
 };
 
 // name: PollFactory, address: pollFactoryAddress returns boolean
-export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isXfr1ButtonSpinning(true));
   axios
@@ -874,9 +874,9 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getXfrData(version, pollFactoryAddress));
+                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getXfrData(version, pollFactoryAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -917,7 +917,7 @@ export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress,
 //   dispatch(isXfr1ButtonSpinning(false));
 // })
 
-export const voteInXfr2Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+export const voteInXfr2Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isXfr2ButtonSpinning(true));
   axios
@@ -940,9 +940,9 @@ export const voteInXfr2Poll = (version, contractAddress, userLocalPublicAddress,
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getXfrData(version, pollFactoryAddress));
+                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getXfrData(version, pollFactoryAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -978,7 +978,7 @@ export const voteInXfr2Poll = (version, contractAddress, userLocalPublicAddress,
 };
 
 // name: PollFactory, address: pollFactoryAddress returns boolean
-export const revokeVoteInXfr1Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+export const revokeVoteInXfr1Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isXfr1ButtonSpinning(true));
   axios
@@ -1001,9 +1001,9 @@ export const revokeVoteInXfr1Poll = (version, contractAddress, userLocalPublicAd
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getXfrData(version, pollFactoryAddress));
+                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getXfrData(version, pollFactoryAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -1038,7 +1038,7 @@ export const revokeVoteInXfr1Poll = (version, contractAddress, userLocalPublicAd
     });
 };
 
-export const revokeVoteInXfr2Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress) => dispatch => {
+export const revokeVoteInXfr2Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isXfr2ButtonSpinning(true));
   axios
@@ -1061,9 +1061,9 @@ export const revokeVoteInXfr2Poll = (version, contractAddress, userLocalPublicAd
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress));
-                dispatch(getXfrData(version, pollFactoryAddress));
+                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getXfrData(version, pollFactoryAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -1098,7 +1098,7 @@ export const revokeVoteInXfr2Poll = (version, contractAddress, userLocalPublicAd
     });
 };
 
-export const finalizeKill = (version, pollFactoryAddress, userLocalPublicAddress) => dispatch => {
+export const finalizeKill = (version, pollFactoryAddress, userLocalPublicAddress, network) => dispatch => {
   dispatch(isKillFinalizeButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
@@ -1120,7 +1120,7 @@ export const finalizeKill = (version, pollFactoryAddress, userLocalPublicAddress
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getCurrentKillPollIndex(version, pollFactoryAddress));
+                dispatch(getCurrentKillPollIndex(version, pollFactoryAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.KILL_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED

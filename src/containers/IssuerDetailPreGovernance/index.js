@@ -37,9 +37,9 @@ class IssuerDetailPreGovernance extends Component {
   };
 
   onStartR1Click = () => {
-    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress, projectid, currentRoundNumber } = this.props || {};
+    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress, projectid, currentRoundNumber, network } = this.props || {};
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10);
-    r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber);
+    r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber, network);
   };
 
   isPermissioned = () => {

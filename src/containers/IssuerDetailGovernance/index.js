@@ -154,9 +154,9 @@ class IssuerDetailGovernance extends Component {
   };
 
   onStartNewRoundClick = () => {
-    const { startNewRound: startRound, version, crowdSaleAddress, userLocalPublicAddress, projectid, currentRoundNumber } = this.props || {};
+    const { startNewRound: startRound, version, crowdSaleAddress, userLocalPublicAddress, projectid, currentRoundNumber, network } = this.props || {};
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10);
-    startRound(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber);
+    startRound(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber, network);
   };
 
   canKill = () => {
@@ -176,13 +176,13 @@ class IssuerDetailGovernance extends Component {
   };
 
   onDeployTapPollClick = () => {
-    const { version, deployTapPoll: deployTap, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
-    deployTap(version, pollFactoryAddress, userLocalPublicAddress);
+    const { version, deployTapPoll: deployTap, userLocalPublicAddress, pollFactoryAddress, network } = this.props || {};
+    deployTap(version, pollFactoryAddress, userLocalPublicAddress, network);
   };
 
   onIncrementTapClick = () => {
-    const { version, incrementTap: incrementTapAmount, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
-    incrementTapAmount(version, pollFactoryAddress, userLocalPublicAddress);
+    const { version, incrementTap: incrementTapAmount, userLocalPublicAddress, pollFactoryAddress, network } = this.props || {};
+    incrementTapAmount(version, pollFactoryAddress, userLocalPublicAddress, network);
   };
 
   onEditClick = () => {
@@ -196,8 +196,9 @@ class IssuerDetailGovernance extends Component {
   };
 
   onWithdrawAmountClick = () => {
-    const { version, withdrawAmount: withdrawAmountClick, userLocalPublicAddress, pollFactoryAddress, withdrawableAmount } = this.props || {};
-    withdrawAmountClick(version, pollFactoryAddress, userLocalPublicAddress, withdrawableAmount);
+    const { version, withdrawAmount: withdrawAmountClick, userLocalPublicAddress, pollFactoryAddress, withdrawableAmount, network } =
+      this.props || {};
+    withdrawAmountClick(version, pollFactoryAddress, userLocalPublicAddress, withdrawableAmount, network);
   };
 
   onChangeXfrTitle = e => {
@@ -307,14 +308,15 @@ class IssuerDetailGovernance extends Component {
       projectid,
       xfrTitleText,
       xfrAmountText,
-      xfrDescriptionText
+      xfrDescriptionText,
+      network
     } = this.props || {};
-    deployXfrPollClick(version, pollFactoryAddress, userLocalPublicAddress, xfrAmountText, xfrTitleText, xfrDescriptionText, projectid);
+    deployXfrPollClick(version, pollFactoryAddress, userLocalPublicAddress, xfrAmountText, xfrTitleText, xfrDescriptionText, projectid, network);
   };
 
   onWithdrawXfrAmountClick = () => {
-    const { version, withdrawXfrAmount: withdrawXfrAmountClick, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
-    withdrawXfrAmountClick(version, pollFactoryAddress, userLocalPublicAddress);
+    const { version, withdrawXfrAmount: withdrawXfrAmountClick, userLocalPublicAddress, pollFactoryAddress, network } = this.props || {};
+    withdrawXfrAmountClick(version, pollFactoryAddress, userLocalPublicAddress, network);
   };
 
   onEditXfr1DescriptionClick = () => {

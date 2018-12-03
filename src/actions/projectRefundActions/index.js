@@ -16,7 +16,7 @@ export const refundBySoftCapFailButtonSpinning = receipt => ({
   type: actionTypes.REFUND_BY_SOFT_CAP_FAIL_BUTTON_SPINNING
 });
 
-export const refundByKill = (version, contractAddress, userLocalPublicAddress, daicoTokenAddress) => dispatch => {
+export const refundByKill = (version, contractAddress, userLocalPublicAddress, daicoTokenAddress, network) => dispatch => {
   dispatch(refundByKillButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
@@ -38,9 +38,9 @@ export const refundByKill = (version, contractAddress, userLocalPublicAddress, d
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
-                dispatch(getRemainingEtherBalance(version, contractAddress));
-                dispatch(getTotalSupply(version, daicoTokenAddress));
+                dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress, network));
+                dispatch(getRemainingEtherBalance(version, contractAddress, network));
+                dispatch(getTotalSupply(version, daicoTokenAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.REFUND_BY_KILL_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -75,7 +75,7 @@ export const refundByKill = (version, contractAddress, userLocalPublicAddress, d
     });
 };
 
-export const refundBySoftCapFail = (version, contractAddress, userLocalPublicAddress, daicoTokenAddress) => dispatch => {
+export const refundBySoftCapFail = (version, contractAddress, userLocalPublicAddress, daicoTokenAddress, network) => dispatch => {
   dispatch(refundBySoftCapFailButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
@@ -97,9 +97,9 @@ export const refundBySoftCapFail = (version, contractAddress, userLocalPublicAdd
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
-                dispatch(getRemainingEtherBalance(version, contractAddress));
-                dispatch(getTotalSupply(version, daicoTokenAddress));
+                dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress, network));
+                dispatch(getRemainingEtherBalance(version, contractAddress, network));
+                dispatch(getTotalSupply(version, daicoTokenAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.REFUND_BY_SOFTCAPFAIL_BUTTON_TRANSACTION_HASH_RECEIVED

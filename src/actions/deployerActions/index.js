@@ -159,7 +159,6 @@ export const deployContractAction = (version, projectid, cdi, args, contractName
         const { abi, bytecode } = data || {};
         const gasPrice = await web3.eth.getGasPrice();
         const fetchedNonce = await web3.eth.getTransactionCount(userLocalPublicAddress, "pending");
-        console.log(fetchedNonce, userNonce, "herer");
         const nonceAdj = userNonce !== "" ? userNonce : fetchedNonce;
         const gasPriceAdj = userNonce !== "" ? (parseFloat(gasPrice) + 5000000000).toString() : (parseFloat(gasPrice) + 2000000000).toString();
         new web3.eth.Contract(abi)

@@ -85,7 +85,7 @@ export const editXfr2Description = (projectid, xfrAddress, description) => dispa
     });
 };
 
-export const startR1 = (version, contractAddress, userLocalPublicAddress, projectid, round) => dispatch => {
+export const startR1 = (version, contractAddress, userLocalPublicAddress, projectid, round, network) => dispatch => {
   dispatch(isStartR1ButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })
@@ -108,7 +108,7 @@ export const startR1 = (version, contractAddress, userLocalPublicAddress, projec
               transactionHash,
               () => {
                 dispatch(currentRound(projectid));
-                dispatch(getRoundTokensSold(version, contractAddress, round));
+                dispatch(getRoundTokensSold(version, contractAddress, round, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.START_R1_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -143,7 +143,7 @@ export const startR1 = (version, contractAddress, userLocalPublicAddress, projec
     });
 };
 
-export const startNewRound = (version, contractAddress, userLocalPublicAddress, projectid, round) => dispatch => {
+export const startNewRound = (version, contractAddress, userLocalPublicAddress, projectid, round, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isStartNewRoundButtonSpinning(true));
   axios
@@ -167,7 +167,7 @@ export const startNewRound = (version, contractAddress, userLocalPublicAddress, 
               transactionHash,
               () => {
                 dispatch(currentRound(projectid));
-                dispatch(getRoundTokensSold(version, contractAddress, round));
+                dispatch(getRoundTokensSold(version, contractAddress, round, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.START_NEW_ROUND_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -202,7 +202,7 @@ export const startNewRound = (version, contractAddress, userLocalPublicAddress, 
     });
 };
 
-export const deployTapPoll = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const deployTapPoll = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isDeployTapPollButtonSpinning(true));
   axios
@@ -225,8 +225,8 @@ export const deployTapPoll = (version, contractAddress, userLocalPublicAddress) 
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getCurrentTap(version, contractAddress));
-                dispatch(getTapPollConsensus(version, contractAddress));
+                dispatch(getCurrentTap(version, contractAddress, network));
+                dispatch(getTapPollConsensus(version, contractAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.DEPLOY_TAP_POLL_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -261,7 +261,7 @@ export const deployTapPoll = (version, contractAddress, userLocalPublicAddress) 
     });
 };
 
-export const incrementTap = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const incrementTap = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isIncrementTapButtonSpinning(true));
   axios
@@ -284,8 +284,8 @@ export const incrementTap = (version, contractAddress, userLocalPublicAddress) =
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getCurrentTap(version, contractAddress));
-                dispatch(getTapPollConsensus(version, contractAddress));
+                dispatch(getCurrentTap(version, contractAddress, network));
+                dispatch(getTapPollConsensus(version, contractAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.INCREMENT_TAP_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -320,7 +320,16 @@ export const incrementTap = (version, contractAddress, userLocalPublicAddress) =
     });
 };
 
-export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, amount, titleText, descriptionText, projectid) => dispatch => {
+export const deployXfrPoll = (
+  version,
+  contractAddress,
+  userLocalPublicAddress,
+  amount,
+  titleText,
+  descriptionText,
+  projectid,
+  network
+) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isDeployXfrPollButtonSpinning(true));
   axios
@@ -369,7 +378,7 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
                     startDate: new Date()
                   })
                   .then(resp => {
-                    dispatch(getXfrData(version, contractAddress));
+                    dispatch(getXfrData(version, contractAddress, network));
                     dispatch(currentRound(projectid));
                   });
               },
@@ -406,7 +415,7 @@ export const deployXfrPoll = (version, contractAddress, userLocalPublicAddress, 
     });
 };
 
-export const withdrawXfrAmount = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const withdrawXfrAmount = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isWithdrawXfrButtonSpinning(true));
   axios
@@ -429,7 +438,7 @@ export const withdrawXfrAmount = (version, contractAddress, userLocalPublicAddre
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getXfrData(version, contractAddress));
+                dispatch(getXfrData(version, contractAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.WITHDRAW_XFR_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -464,7 +473,7 @@ export const withdrawXfrAmount = (version, contractAddress, userLocalPublicAddre
     });
 };
 
-export const withdrawAmount = (version, contractAddress, userLocalPublicAddress, amount) => dispatch => {
+export const withdrawAmount = (version, contractAddress, userLocalPublicAddress, amount, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
   dispatch(isWithdrawButtonSpinning(true));
   axios
@@ -488,7 +497,7 @@ export const withdrawAmount = (version, contractAddress, userLocalPublicAddress,
             pollTxHash(
               transactionHash,
               () => {
-                dispatch(getCurrentWithdrawableAmount(version, contractAddress));
+                dispatch(getCurrentWithdrawableAmount(version, contractAddress, network));
                 dispatch({
                   type: actionTypes.WITHDRAW_AMOUNT_CHANGED,
                   payload: ""

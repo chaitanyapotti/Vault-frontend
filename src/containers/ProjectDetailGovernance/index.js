@@ -266,11 +266,12 @@ class ProjectDetailGovernance extends Component {
       currentRoundNumber,
       daicoTokenAddress,
       pollFactoryAddress,
-      buyAmount
+      buyAmount,
+      network
     } = this.props || {};
     // // TODO: need to add how many tokens to buy
     const roundNumber = currentRoundNumber === "4" ? 2 : parseInt(currentRoundNumber, 10) - 1;
-    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, roundNumber, daicoTokenAddress, pollFactoryAddress);
+    buyToken(version, crowdSaleAddress, userLocalPublicAddress, buyAmount, roundNumber, daicoTokenAddress, pollFactoryAddress, network);
   };
 
   buyTokens = () => {
@@ -283,57 +284,57 @@ class ProjectDetailGovernance extends Component {
   };
 
   onKillClick = () => {
-    const { version, voteInKillPoll: killVote, userLocalPublicAddress, killVoteData, pollFactoryAddress } = this.props || {};
+    const { version, voteInKillPoll: killVote, userLocalPublicAddress, killVoteData, pollFactoryAddress, network } = this.props || {};
     const { killPollAddress } = killVoteData || {};
-    killVote(version, killPollAddress, userLocalPublicAddress, pollFactoryAddress);
+    killVote(version, killPollAddress, userLocalPublicAddress, pollFactoryAddress, network);
     // or revokeVoteInKillPoll();
   };
 
   onRevokeKillClick = () => {
-    const { version, revokeVoteInKillPoll: killUnVote, userLocalPublicAddress, killVoteData, pollFactoryAddress } = this.props || {};
+    const { version, revokeVoteInKillPoll: killUnVote, userLocalPublicAddress, killVoteData, pollFactoryAddress, network } = this.props || {};
     const { killPollAddress } = killVoteData || {};
-    killUnVote(version, killPollAddress, userLocalPublicAddress, pollFactoryAddress);
+    killUnVote(version, killPollAddress, userLocalPublicAddress, pollFactoryAddress, network);
   };
 
   onTapClick = () => {
-    const { version, voteInTapPoll: tapVote, userLocalPublicAddress, tapVoteData, pollFactoryAddress } = this.props || {};
+    const { version, voteInTapPoll: tapVote, userLocalPublicAddress, tapVoteData, pollFactoryAddress, network } = this.props || {};
     const { tapPollAddress } = tapVoteData || {};
-    tapVote(version, tapPollAddress, userLocalPublicAddress, pollFactoryAddress);
+    tapVote(version, tapPollAddress, userLocalPublicAddress, pollFactoryAddress, network);
     // or revokeVoteInKillPoll();
   };
 
   onRevokeTapClick = () => {
-    const { version, revokeVoteInTapPoll: tapUnVote, userLocalPublicAddress, tapVoteData, pollFactoryAddress } = this.props || {};
+    const { version, revokeVoteInTapPoll: tapUnVote, userLocalPublicAddress, tapVoteData, pollFactoryAddress, network } = this.props || {};
     const { tapPollAddress } = tapVoteData || {};
-    tapUnVote(version, tapPollAddress, userLocalPublicAddress, pollFactoryAddress);
+    tapUnVote(version, tapPollAddress, userLocalPublicAddress, pollFactoryAddress, network);
   };
 
   onXfr1Click = () => {
-    const { version, voteInXfr1Poll: xfr1Vote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { version, voteInXfr1Poll: xfr1Vote, userLocalPublicAddress, xfrData, pollFactoryAddress, network } = this.props || {};
     const { poll1 } = xfrData || {};
     const { address } = poll1 || {};
-    xfr1Vote(version, address, userLocalPublicAddress, pollFactoryAddress);
+    xfr1Vote(version, address, userLocalPublicAddress, pollFactoryAddress, network);
   };
 
   onXfr2Click = () => {
-    const { version, voteInXfr2Poll: xfr2Vote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { version, voteInXfr2Poll: xfr2Vote, userLocalPublicAddress, xfrData, pollFactoryAddress, network } = this.props || {};
     const { poll2 } = xfrData || {};
     const { address } = poll2 || {};
-    xfr2Vote(version, address, userLocalPublicAddress, pollFactoryAddress);
+    xfr2Vote(version, address, userLocalPublicAddress, pollFactoryAddress, network);
   };
 
   onRevokeXfr1Click = () => {
-    const { version, revokeVoteInXfr1Poll: xfr1RevokeVote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { version, revokeVoteInXfr1Poll: xfr1RevokeVote, userLocalPublicAddress, xfrData, pollFactoryAddress, network } = this.props || {};
     const { poll1 } = xfrData || {};
     const { address } = poll1 || {};
-    xfr1RevokeVote(version, address, userLocalPublicAddress, pollFactoryAddress);
+    xfr1RevokeVote(version, address, userLocalPublicAddress, pollFactoryAddress, network);
   };
 
   onRevokeXfr2Click = () => {
-    const { version, revokeVoteInXfr2Poll: xfr2RevokeVote, userLocalPublicAddress, xfrData, pollFactoryAddress } = this.props || {};
+    const { version, revokeVoteInXfr2Poll: xfr2RevokeVote, userLocalPublicAddress, xfrData, pollFactoryAddress, network } = this.props || {};
     const { poll2 } = xfrData || {};
     const { address } = poll2 || {};
-    xfr2RevokeVote(version, address, userLocalPublicAddress, pollFactoryAddress);
+    xfr2RevokeVote(version, address, userLocalPublicAddress, pollFactoryAddress, network);
   };
 
   getKillVoteStatus = () => {
@@ -368,8 +369,8 @@ class ProjectDetailGovernance extends Component {
   };
 
   onKillFinalizeClick = () => {
-    const { version, pollFactoryAddress, finalizeKill: killFinalize, userLocalPublicAddress } = this.props || {};
-    killFinalize(version, pollFactoryAddress, userLocalPublicAddress);
+    const { version, pollFactoryAddress, finalizeKill: killFinalize, userLocalPublicAddress, network } = this.props || {};
+    killFinalize(version, pollFactoryAddress, userLocalPublicAddress, network);
   };
 
   canTapClick = () => {
@@ -383,8 +384,8 @@ class ProjectDetailGovernance extends Component {
   };
 
   unlockTokensClick = () => {
-    const { unlockTokensData, unlockTokens: unlockTokensAction, version, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
-    unlockTokensAction(unlockTokensData, version, userLocalPublicAddress, pollFactoryAddress);
+    const { unlockTokensData, unlockTokens: unlockTokensAction, version, userLocalPublicAddress, pollFactoryAddress, network } = this.props || {};
+    unlockTokensAction(unlockTokensData, version, userLocalPublicAddress, pollFactoryAddress, network);
     this.handleUnlockTokensClose();
   };
 

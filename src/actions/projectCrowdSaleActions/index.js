@@ -138,7 +138,8 @@ export const buyTokens = (
   amount,
   round,
   daicoTokenAddress,
-  pollFactoryAddress
+  pollFactoryAddress,
+  network
 ) => async dispatch => {
   dispatch(isBuyButtonSpinning(true));
   const gasPrice = await web3.eth.getGasPrice();
@@ -159,10 +160,10 @@ export const buyTokens = (
         pollTxHash(
           transactionHash,
           () => {
-            dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
-            dispatch(getRoundTokensSold(version, contractAddress, round));
-            dispatch(getEtherCollected(version, pollFactoryAddress));
-            dispatch(getUserTokens(contractAddress, version, round, userLocalPublicAddress));
+            dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress, network));
+            dispatch(getRoundTokensSold(version, contractAddress, round, network));
+            dispatch(getEtherCollected(version, pollFactoryAddress, network));
+            dispatch(getUserTokens(contractAddress, version, round, userLocalPublicAddress, network));
             dispatch({
               payload: { transactionHash: "" },
               type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -196,7 +197,7 @@ export const buyTokens = (
     });
 };
 
-export const finalizeR1 = (version, contractAddress, userLocalPublicAddress, projectid) => dispatch => {
+export const finalizeR1 = (version, contractAddress, userLocalPublicAddress, projectid, network) => dispatch => {
   dispatch(isR1FinalizeButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })

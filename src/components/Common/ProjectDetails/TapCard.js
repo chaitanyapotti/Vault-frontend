@@ -4,7 +4,7 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
-import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanHashLink } from "../../../helpers/common/projectDetailhelperFunctions";
 import BtnLoader from "../../Loaders/BtnLoader";
 
 const TapCard = props => {
@@ -20,10 +20,11 @@ const TapCard = props => {
     signinStatusFlag,
     canTapClick,
     tapPollConsensus,
-    tapButtonTransactionHash
+    tapButtonTransactionHash,
+    network
   } = props || {};
-  const link = `https://rinkeby.etherscan.io/tx/${tapButtonTransactionHash}`;
-  const signinText = getSignInStatusText(signinStatusFlag);
+  const link = getEtherScanHashLink(tapButtonTransactionHash, network);
+  const signinText = getSignInStatusText(signinStatusFlag, network);
   const isDisabled = !canTapClick;
   const tapWarningText = signinStatusFlag < 4 ? signinText : isDisabled ? "Not enough token balance" : "";
   return (

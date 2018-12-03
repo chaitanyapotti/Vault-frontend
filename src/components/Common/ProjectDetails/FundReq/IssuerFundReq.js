@@ -6,7 +6,7 @@ import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 import LoadingButton from "../../LoadingButton";
 import { ensureHttpUrl } from "../../../../helpers/common/urlFixerInHref";
 import { CustomToolTip } from "../../FormComponents";
-import { getSignInStatusText } from "../../../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanHashLink } from "../../../../helpers/common/projectDetailhelperFunctions";
 
 class IssuerFundReq extends Component {
   getObject1 = () => {
@@ -104,12 +104,13 @@ class IssuerFundReq extends Component {
       onXfrPollHistoryClick,
       ownerAddress,
       userLocalPublicAddress,
-      signinStatusFlag
+      signinStatusFlag,
+      network
     } = this.props || {};
     const { totalAmount, text } = getWithdrawableXfrAmount;
     const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
     const xfrWarningText = "No Current wihdrawable amount";
-    const withdrawXfrLink = `https://rinkeby.etherscan.io/tx/${withdrawXfrButtonTransactionHash}`;
+    const withdrawXfrLink = getEtherScanHashLink(withdrawXfrButtonTransactionHash, network);
     return (
       <div>
         {parseFloat(totalAmount) > 0 ? (

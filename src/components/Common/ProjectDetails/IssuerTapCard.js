@@ -3,7 +3,7 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
-import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanHashLink } from "../../../helpers/common/projectDetailhelperFunctions";
 import BtnLoader from "../../Loaders/BtnLoader";
 import { CustomToolTip } from "../FormComponents";
 
@@ -25,14 +25,15 @@ const IssuerTapCard = props => {
     ownerAddress,
     userLocalPublicAddress,
     tapPollConsensus,
-    onTapPollsHistoryClick
+    onTapPollsHistoryClick,
+    network
   } = props || {};
-  const link = `https://rinkeby.etherscan.io/tx/${deployTapPollButtonTransactionHash}`;
+  const link = getEtherScanHashLink(deployTapPollButtonTransactionHash, network);
   const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
   const isDisabled = !canIncreaseTap;
   const tapWarningText = "Can't increase tap now";
   const tapDeployText = "Can't deploy now";
-  const tapIncrementLink = `https://rinkeby.etherscan.io/tx/${incrementTapButtonTransactionHash}`;
+  const tapIncrementLink = getEtherScanHashLink(incrementTapButtonTransactionHash, network);
   return (
     <div>
       <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>

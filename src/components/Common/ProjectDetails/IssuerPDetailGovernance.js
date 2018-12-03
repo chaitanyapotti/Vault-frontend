@@ -3,6 +3,7 @@ import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 import LoadingButton from "../LoadingButton";
+import { getEtherScanAddressLink } from "../../../helpers/common/projectDetailhelperFunctions";
 
 const IssuerPDetailGovernance = props => {
   const {
@@ -13,9 +14,10 @@ const IssuerPDetailGovernance = props => {
     totalRefundableBalance,
     killConsensus,
     pollFactoryAddress,
-    onKillPollsHistoryClick
+    onKillPollsHistoryClick,
+    network
   } = props || {};
-  const etherscanLink = `https://rinkeby.etherscan.io/address/${pollFactoryAddress}`;
+  const etherscanLink = getEtherScanAddressLink(pollFactoryAddress, network);
 
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>

@@ -159,7 +159,8 @@ class ProjectDetailCrowdSale extends Component {
       totalMintableSupply,
       daicoTokenAddress,
       pollFactoryAddress,
-      minimumEtherContribution
+      minimumEtherContribution,
+      network
     } = this.props || {};
     const { buyModalOpen } = this.state;
     const r1Rate = getR1Rate(rounds);
@@ -202,6 +203,7 @@ class ProjectDetailCrowdSale extends Component {
             thumbnailUrl={thumbnailUrl}
             remainingAllocation={remainingAllocation}
             daicoTokenAddress={daicoTokenAddress}
+            network={network}
           />
           <PDetailCrowdSale
             individualCap={significantDigits(formattedMaxEtherContribution)}
@@ -217,6 +219,7 @@ class ProjectDetailCrowdSale extends Component {
             remainingAllocation={remainingAllocation}
             buyableTokens={formatCurrencyNumber(r1Rate * formattedMaxEtherContribution, 0)}
             pollFactoryAddress={pollFactoryAddress}
+            network={network}
           />
 
           <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
@@ -244,6 +247,7 @@ class ProjectDetailCrowdSale extends Component {
           r1TokenGoal={r1TokenCount(rounds)}
           r1Rate={r1Rate}
           minimumEtherContribution={minimumEtherContribution}
+          network={network}
         />
       </Grid>
     );

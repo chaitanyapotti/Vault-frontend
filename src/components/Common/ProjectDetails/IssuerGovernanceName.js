@@ -4,7 +4,7 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
-import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanAddressLink, getEtherScanHashLink } from "../../../helpers/common/projectDetailhelperFunctions";
 import { CustomToolTip } from "../FormComponents";
 import BtnLoader from "../../Loaders/BtnLoader";
 
@@ -30,10 +30,11 @@ const IssuerGovernanceName = props => {
     signinStatusFlag,
     ownerAddress,
     userLocalPublicAddress,
-    daicoTokenAddress
+    daicoTokenAddress,
+    network
   } = props || {};
-  const link = `https://rinkeby.etherscan.io/tx/${startNewRoundButtonTransactionHash}`;
-  const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
+  const link = getEtherScanHashLink(startNewRoundButtonTransactionHash, network);
+  const etherscanLink = getEtherScanAddressLink(daicoTokenAddress, network);
   const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
   const isDisabled = !isPermissioned;
   const { website } = urls;

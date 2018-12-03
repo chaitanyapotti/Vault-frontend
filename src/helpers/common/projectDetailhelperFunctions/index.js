@@ -411,6 +411,18 @@ const getSignInStatusText = (signInStatusFlag, isIssuerOfProject) => {
   return constants.FAILED;
 };
 
+const getEtherScanHashLink = (txHash, network = null) => {
+  console.log(network, txHash);
+  const localNetwork = network === null ? "main" : network;
+  return network === "main" ? `https://etherscan.io/tx/${txHash}` : `https://${localNetwork}.etherscan.io/tx/${txHash}`;
+};
+
+const getEtherScanAddressLink = (address, network = null) => {
+  console.log(address, network);
+  const localNetwork = network === null ? "main" : network;
+  return network === "main" ? `https://etherscan.io/address/${address}` : `https://${localNetwork}.etherscan.io/address/${address}`;
+};
+
 export {
   formatDate,
   formatRateToPrice,
@@ -450,5 +462,7 @@ export {
   getPrice,
   getNextKillPollStartDate,
   getKillPollStartDate,
-  getXfrEndDate
+  getXfrEndDate,
+  getEtherScanHashLink,
+  getEtherScanAddressLink
 };

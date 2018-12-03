@@ -5,7 +5,7 @@ import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 import { CustomToolTip } from "../FormComponents";
-import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanHashLink, getEtherScanAddressLink } from "../../../helpers/common/projectDetailhelperFunctions";
 import BtnLoader from "../../Loaders/BtnLoader";
 
 const ProjectPreStartName = props => {
@@ -26,11 +26,12 @@ const ProjectPreStartName = props => {
     whitelistButtonTransactionHash,
     thumbnailUrl,
     isCurrentMember,
-    daicoTokenAddress
+    daicoTokenAddress,
+    network
   } = props || {};
   const disabledMsg = getSignInStatusText(signinStatusFlag);
-  const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
-  const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
+  const link = getEtherScanHashLink(whitelistButtonTransactionHash, network);
+  const etherscanLink = getEtherScanAddressLink(daicoTokenAddress, network);
   const { website } = urls;
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>

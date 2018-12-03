@@ -5,7 +5,7 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
 import BtnLoader from "../../Loaders/BtnLoader";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
-import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanHashLink, getEtherScanAddressLink } from "../../../helpers/common/projectDetailhelperFunctions";
 
 const PDetailGovernance = props => {
   const {
@@ -30,11 +30,12 @@ const PDetailGovernance = props => {
     killButtonTransactionHash,
     r1EndTime,
     pollFactoryAddress,
-    unlockTokensLoading
+    unlockTokensLoading,
+    network
   } = props || {};
   const canUnlockTokens = unlockTokensData && unlockTokensData.length > 0;
-  const link = `https://rinkeby.etherscan.io/tx/${killButtonTransactionHash}`;
-  const etherscanLink = `https://rinkeby.etherscan.io/address/${pollFactoryAddress}`;
+  const link = getEtherScanHashLink(killButtonTransactionHash, network);
+  const etherscanLink = getEtherScanAddressLink(pollFactoryAddress, network);
   const signinText = getSignInStatusText(signinStatusFlag);
   const warningText = signinStatusFlag < 4 ? signinText : "No unlockable tokens";
   const isDisabled = parseFloat(yourTokens) <= 0;

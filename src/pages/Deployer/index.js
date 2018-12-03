@@ -263,7 +263,7 @@ class Deployer extends Component {
 
   getStepContent = () => {
     const { projectDetails, deployContractButtonSpinning, deployContractStartButtonSpinning } = this.props || {};
-    const { currentDeploymentIndicator, latestTxHash } = projectDetails || {};
+    const { currentDeploymentIndicator, latestTxHash, network } = projectDetails || {};
     switch (currentDeploymentIndicator) {
       case 0:
         return (
@@ -275,6 +275,7 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 1:
@@ -287,6 +288,7 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 2:
@@ -299,6 +301,7 @@ class Deployer extends Component {
             btnLabel="Deploy Token Locker"
             onClick={() => this.deployLockedTokens("")}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 3:
@@ -311,6 +314,7 @@ class Deployer extends Component {
             btnLabel="Deploy Poll Factory"
             onClick={() => this.deployPollFactory("")}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 4:
@@ -323,6 +327,7 @@ class Deployer extends Component {
             btnLabel="Deploy Crowdsale Contract"
             onClick={() => this.deployCrowdSale("")}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 5:
@@ -335,6 +340,7 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 6:
@@ -347,6 +353,7 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 7:
@@ -359,6 +366,7 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 8:
@@ -371,6 +379,7 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 9:
@@ -383,6 +392,7 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 10:
@@ -395,6 +405,7 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 11:
@@ -407,11 +418,17 @@ class Deployer extends Component {
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       default:
         return (
-          <DeployerCard label="Deployment is done. Click here to be redirected to home page" btnLabel="Redirect Home" onClick={this.redirectHome} />
+          <DeployerCard
+            label="Deployment is done. Click here to be redirected to home page"
+            btnLabel="Redirect Home"
+            onClick={this.redirectHome}
+            network={network}
+          />
         );
     }
   };

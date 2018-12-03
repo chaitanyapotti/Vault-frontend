@@ -73,7 +73,8 @@ class ProjectIssuerGovernance extends Component {
       xfrRejectionPercent,
       _id,
       thumbnailUrl,
-      killAcceptancePercent
+      killAcceptancePercent,
+      network
     } = projectDetails || {};
 
     if (treasuryStateNumber === "" || currentRoundNumber === "" || !isVaultMembershipChecked) {
@@ -139,6 +140,7 @@ class ProjectIssuerGovernance extends Component {
             userLocalPublicAddress={userLocalPublicAddress}
             signinStatusFlag={signinStatusFlag}
             isVaultMembershipChecked={isVaultMembershipChecked}
+            network={network}
           />
         </div>
       );
@@ -180,6 +182,7 @@ class ProjectIssuerGovernance extends Component {
             signinStatusFlag={signinStatusFlag}
             isVaultMembershipChecked={isVaultMembershipChecked}
             daicoTokenAddress={daicoTokenAddress}
+            network={network}
           />
         </div>
       );

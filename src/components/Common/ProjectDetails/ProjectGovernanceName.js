@@ -5,7 +5,7 @@ import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 import { CustomToolTip } from "../FormComponents";
-import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanHashLink, getEtherScanAddressLink } from "../../../helpers/common/projectDetailhelperFunctions";
 import BtnLoader from "../../Loaders/BtnLoader";
 
 const ProjectGovernanceName = props => {
@@ -32,11 +32,12 @@ const ProjectGovernanceName = props => {
     buyButtonDisabled,
     thumbnailUrl,
     daicoTokenAddress,
-    remainingAllocation
+    remainingAllocation,
+    network
   } = props || {};
   const { website } = urls;
-  const link = whitelistButtonTransactionHash !== "" ? `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}` : "";
-  const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
+  const link = whitelistButtonTransactionHash !== "" ? getEtherScanHashLink(whitelistButtonTransactionHash, network) : "";
+  const etherscanLink = getEtherScanAddressLink(daicoTokenAddress, network);
   const warningText = getSignInStatusText(signinStatusFlag);
   const disabledText = parseFloat(remainingAllocation) === 0 ? "Reached buyable limit" : "Cannot buy now";
   return (

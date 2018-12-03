@@ -2,6 +2,7 @@ import React from "react";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { getEtherScanAddressLink } from "../../../helpers/common/projectDetailhelperFunctions";
 
 const IPreGovernanceDetails = props => {
   const {
@@ -14,9 +15,10 @@ const IPreGovernanceDetails = props => {
     hardCapCapitalisation,
     dilutedCapitalisation,
     startDateTime,
-    pollFactoryAddress
+    pollFactoryAddress,
+    network
   } = props || {};
-  const etherscanLink = `https://rinkeby.etherscan.io/address/${pollFactoryAddress}`;
+  const etherscanLink = getEtherScanAddressLink(pollFactoryAddress, network);
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
       <Row>

@@ -19,10 +19,16 @@ import MasonryLayout from "../../components/Common/MasonaryLayout";
 
 class IssuerDetailPreGovernance extends Component {
   componentDidMount() {
-    const { version, pollFactoryAddress, crowdSaleAddress, getEtherCollected: fetchEtherCollected, getRoundTokensSold: fetchRoundTokensSold } =
-      this.props || {};
-    fetchEtherCollected(version, pollFactoryAddress);
-    fetchRoundTokensSold(version, crowdSaleAddress, 0);
+    const {
+      version,
+      pollFactoryAddress,
+      crowdSaleAddress,
+      network,
+      getEtherCollected: fetchEtherCollected,
+      getRoundTokensSold: fetchRoundTokensSold
+    } = this.props || {};
+    fetchEtherCollected(version, pollFactoryAddress, network);
+    fetchRoundTokensSold(version, crowdSaleAddress, 0, network);
   }
 
   onR1FinalizeClick = () => {
@@ -76,7 +82,8 @@ class IssuerDetailPreGovernance extends Component {
       daicoTokenAddress,
       ownerAddress,
       userLocalPublicAddress,
-      pollFactoryAddress
+      pollFactoryAddress,
+      network
     } = this.props || {};
     return (
       <Grid>
@@ -114,6 +121,7 @@ class IssuerDetailPreGovernance extends Component {
             daicoTokenAddress={daicoTokenAddress}
             ownerAddress={ownerAddress}
             userLocalPublicAddress={userLocalPublicAddress}
+            network={network}
           />
           <IPreGovernanceDetails
             startDateTime={formatDate(startDateTime)}
@@ -126,6 +134,7 @@ class IssuerDetailPreGovernance extends Component {
             hardCapCapitalisation={getSoftCap(rounds, prices)}
             dilutedCapitalisation={getHardCap(totalMintableSupply, prices, rounds)}
             pollFactoryAddress={pollFactoryAddress}
+            network={network}
           />
           <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
             <TokenChart

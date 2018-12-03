@@ -67,7 +67,8 @@ import {
   getPrice,
   getLastRoundInfo,
   getKillPollStartDate,
-  getXfrEndDate
+  getXfrEndDate,
+  getEtherScanHashLink
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
@@ -121,6 +122,7 @@ class ProjectDetailGovernance extends Component {
       membershipAddress,
       userLocalPublicAddress,
       tokenTag,
+      network,
       fetchPrice: priceFetch,
       checkWhiteList: checkWhiteListStatus,
       getTokenBalance: fetchTokenBalance,
@@ -145,30 +147,30 @@ class ProjectDetailGovernance extends Component {
       getKillVoterCount: fetchKillVoterCount
     } = this.props || {};
     priceFetch(tokenTag);
-    fetchSpendCurveData(version, pollFactoryAddress, crowdSaleAddress);
-    fetchVoteHistogramData(projectid);
+    fetchSpendCurveData(version, pollFactoryAddress, crowdSaleAddress, network);
+    fetchVoteHistogramData(projectid, network);
     fetchKillPollsHistory(pollFactoryAddress);
     fetchTapPollsHistory(pollFactoryAddress);
     fetchXfrPollsHistory(pollFactoryAddress);
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10) - 1;
-    fetchRoundTokensSold(version, crowdSaleAddress, roundNumber);
-    fetchTokensUnderGovernance(version, daicoTokenAddress);
-    fetchCurrentKillPollIndex(version, pollFactoryAddress);
-    fetchRemainingEtherBalance(version, pollFactoryAddress);
-    fetchTotalSupply(version, daicoTokenAddress);
-    fetchKillConsensus(version, pollFactoryAddress);
-    fetchTapPollConsensus(version, pollFactoryAddress);
-    fetchCurrentTap(version, pollFactoryAddress);
-    fetchXfrData(version, pollFactoryAddress);
-    fetchEtherCollected(version, pollFactoryAddress);
-    fetchKillVoterCount(version, pollFactoryAddress);
+    fetchRoundTokensSold(version, crowdSaleAddress, roundNumber, network);
+    fetchTokensUnderGovernance(version, daicoTokenAddress, network);
+    fetchCurrentKillPollIndex(version, pollFactoryAddress, network);
+    fetchRemainingEtherBalance(version, pollFactoryAddress, network);
+    fetchTotalSupply(version, daicoTokenAddress, network);
+    fetchKillConsensus(version, pollFactoryAddress, network);
+    fetchTapPollConsensus(version, pollFactoryAddress, network);
+    fetchCurrentTap(version, pollFactoryAddress, network);
+    fetchXfrData(version, pollFactoryAddress, network);
+    fetchEtherCollected(version, pollFactoryAddress, network);
+    fetchKillVoterCount(version, pollFactoryAddress, network);
     if (signinStatusFlag > 2) {
-      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
-      fetchTokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
-      fetchKillPollVote(version, pollFactoryAddress, userLocalPublicAddress);
-      fetchTapPollVote(version, pollFactoryAddress, userLocalPublicAddress);
-      fetchXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress);
-      fetchUnlockTokensData(pollFactoryAddress, userLocalPublicAddress);
+      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress, network);
+      fetchTokenBalance(version, daicoTokenAddress, userLocalPublicAddress, network);
+      fetchKillPollVote(version, pollFactoryAddress, userLocalPublicAddress, network);
+      fetchTapPollVote(version, pollFactoryAddress, userLocalPublicAddress, network);
+      fetchXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network);
+      fetchUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network);
     }
   }
 
@@ -182,6 +184,7 @@ class ProjectDetailGovernance extends Component {
       signinStatusFlag,
       daicoTokenAddress,
       pollFactoryAddress,
+      network,
       getTokenBalance: fetchTokenBalance,
       getKillPollVote: fetchKillPollVote,
       getTapPollVote: fetchTapPollVote,
@@ -189,12 +192,12 @@ class ProjectDetailGovernance extends Component {
       getUnlockTokensData: fetchUnlockTokensData
     } = this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
-      checkWhiteListStatus(version, membershipAddress, localAddress);
-      fetchTokenBalance(version, daicoTokenAddress, localAddress);
-      fetchKillPollVote(version, pollFactoryAddress, localAddress);
-      fetchTapPollVote(version, pollFactoryAddress, localAddress);
-      fetchXfrPollVote(version, pollFactoryAddress, localAddress);
-      fetchUnlockTokensData(pollFactoryAddress, localAddress);
+      checkWhiteListStatus(version, membershipAddress, localAddress, network);
+      fetchTokenBalance(version, daicoTokenAddress, localAddress, network);
+      fetchKillPollVote(version, pollFactoryAddress, localAddress, network);
+      fetchTapPollVote(version, pollFactoryAddress, localAddress, network);
+      fetchXfrPollVote(version, pollFactoryAddress, localAddress, network);
+      fetchUnlockTokensData(pollFactoryAddress, localAddress, network);
     }
   }
 
@@ -459,7 +462,8 @@ class ProjectDetailGovernance extends Component {
       killVoterCount,
       etherCollected,
       minimumEtherContribution,
-      unlockTokensData
+      unlockTokensData,
+      network
     } = this.props || {};
     // const r1Rate = getR1Rate(rounds);
     const price = getPrice(tokenTag, prices, roundInfo) || 0;
@@ -492,7 +496,7 @@ class ProjectDetailGovernance extends Component {
       return dataArray;
     });
     const killOnsensus = parseFloat(this.getKillConsensus()) > parseFloat(killAcceptancePercent);
-    const link = `https://rinkeby.etherscan.io/tx/${killFinalizeTransactionHash}`;
+    const link = getEtherScanHashLink(killFinalizeTransactionHash);
     return (
       <Grid>
         {this.canKill() ? (
@@ -588,6 +592,7 @@ class ProjectDetailGovernance extends Component {
             thumbnailUrl={thumbnailUrl}
             currentRoundNumber={currentRoundNumber}
             isCurrentMember={isCurrentMember}
+            network={network}
           />
           <PDetailGovernance
             voteSaturationLimit={capPercent / 100}
@@ -615,6 +620,7 @@ class ProjectDetailGovernance extends Component {
             r1EndTime={r1EndTime}
             pollFactoryAddress={pollFactoryAddress}
             unlockTokensLoading={unlockTokensLoading}
+            network={network}
           />
           <TapCard
             currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30, 10))}
@@ -630,6 +636,7 @@ class ProjectDetailGovernance extends Component {
             onTapPollsHistoryClick={this.handleTapPollsHistoryOpen}
             tapPollConsensus={tapPollConsensus}
             tapButtonTransactionHash={tapButtonTransactionHash}
+            network={network}
           />
           <SpendCurve
             spendableArrays={spendableArrays}
@@ -660,6 +667,7 @@ class ProjectDetailGovernance extends Component {
             canXfrClick={this.canXfrClick()}
             xfr1ButtonTransactionHash={xfr1ButtonTransactionHash}
             xfr2ButtonTransactionHash={xfr2ButtonTransactionHash}
+            network={network}
           />
           <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
             <VoteHistogram
@@ -735,6 +743,7 @@ class ProjectDetailGovernance extends Component {
           onChange={this.onBuyAmountChange}
           buyButtonTransactionHash={buyButtonTransactionHash}
           minimumEtherContribution={minimumEtherContribution}
+          network={network}
         />
       </Grid>
     );

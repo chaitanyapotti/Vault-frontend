@@ -16,22 +16,24 @@ class ProjectDetailRefund extends Component {
       signinStatusFlag,
       userLocalPublicAddress,
       pollFactoryAddress,
+      network,
       getTokenBalance: fetchTokenBalance,
       getRemainingEtherBalance: fetchRemainingEtherBalance,
       getTotalSupply: fetchTotalSupply
     } = this.props || {};
-    fetchRemainingEtherBalance(version, pollFactoryAddress);
-    fetchTotalSupply(version, daicoTokenAddress);
+    fetchRemainingEtherBalance(version, pollFactoryAddress, network);
+    fetchTotalSupply(version, daicoTokenAddress, network);
     if (signinStatusFlag > 2) {
-      fetchTokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
+      fetchTokenBalance(version, daicoTokenAddress, userLocalPublicAddress, network);
     }
   }
 
   componentDidUpdate(prevProps) {
     const { userLocalPublicAddress: prevAddress, signinStatusFlag: prevFlag } = prevProps || "";
-    const { userLocalPublicAddress: localAddress, getTokenBalance: tokenBalance, version, signinStatusFlag, daicoTokenAddress } = this.props || {};
+    const { userLocalPublicAddress: localAddress, getTokenBalance: tokenBalance, version, signinStatusFlag, daicoTokenAddress, network } =
+      this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
-      tokenBalance(version, daicoTokenAddress, localAddress);
+      tokenBalance(version, daicoTokenAddress, localAddress, network);
     }
   }
 
@@ -95,7 +97,8 @@ class ProjectDetailRefund extends Component {
       refundByKillButtonSpinning,
       refundBySoftCapFailSpinning,
       signinStatusFlag,
-      refundBySoftcapfailButtonTransactionHash
+      refundBySoftcapfailButtonTransactionHash,
+      network
     } = this.props || {};
     return (
       <Grid>
@@ -111,6 +114,7 @@ class ProjectDetailRefund extends Component {
               label={this.getLabel()}
               refundByKillButtonTransactionHash={refundByKillButtonTransactionHash}
               refundBySoftcapfailButtonTransactionHash={refundBySoftcapfailButtonTransactionHash}
+              network={network}
             />
           </Col>
         </Row>

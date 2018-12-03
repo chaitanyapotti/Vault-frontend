@@ -76,6 +76,7 @@ class IssuerDetailGovernance extends Component {
       pollFactoryAddress,
       daicoTokenAddress,
       tokenTag,
+      network,
       getRoundTokensSold: fetchRoundTokensSold,
       fetchPrice: priceFetch,
       getTokensUnderGovernance: fetchTokensUnderGovernance,
@@ -95,21 +96,21 @@ class IssuerDetailGovernance extends Component {
     } = this.props || {};
     priceFetch(tokenTag);
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10) - 1;
-    fetchRoundTokensSold(version, crowdSaleAddress, roundNumber);
-    fetchTokensUnderGovernance(version, daicoTokenAddress);
-    fetchCurrentKillPollIndex(version, pollFactoryAddress);
-    fetchRemainingEtherBalance(version, pollFactoryAddress);
-    fetchTotalSupply(version, daicoTokenAddress);
-    fetchKillConsensus(version, pollFactoryAddress);
-    fetchTapPollConsensus(version, pollFactoryAddress);
-    fetchCurrentTap(version, pollFactoryAddress);
-    fetchXfrData(version, pollFactoryAddress);
-    fetchCurrentWithdrawableAmount(version, pollFactoryAddress);
-    fetchKillVoterCount(version, pollFactoryAddress);
+    fetchRoundTokensSold(version, crowdSaleAddress, roundNumber, network);
+    fetchTokensUnderGovernance(version, daicoTokenAddress, network);
+    fetchCurrentKillPollIndex(version, pollFactoryAddress, network);
+    fetchRemainingEtherBalance(version, pollFactoryAddress, network);
+    fetchTotalSupply(version, daicoTokenAddress, network);
+    fetchKillConsensus(version, pollFactoryAddress, network);
+    fetchTapPollConsensus(version, pollFactoryAddress, network);
+    fetchCurrentTap(version, pollFactoryAddress, network);
+    fetchXfrData(version, pollFactoryAddress, network);
+    fetchCurrentWithdrawableAmount(version, pollFactoryAddress, network);
+    fetchKillVoterCount(version, pollFactoryAddress, network);
     fetchKillPollsHistory(pollFactoryAddress);
     fetchTapPollsHistory(pollFactoryAddress);
     fetchXfrPollsHistory(pollFactoryAddress);
-    fetchEtherCollected(version, pollFactoryAddress);
+    fetchEtherCollected(version, pollFactoryAddress, network);
   }
 
   state = {
@@ -402,7 +403,8 @@ class IssuerDetailGovernance extends Component {
       userLocalPublicAddress,
       tapPollConsensus,
       daicoTokenAddress,
-      pollFactoryAddress
+      pollFactoryAddress,
+      network
     } = this.props || {};
     const { killPollsHistoryModalOpen, tapPollsHistoryModalOpen, xfrPollsHistoryModalOpen } = this.state;
     const price = getPrice(tokenTag, prices, roundInfo) || 0;
@@ -488,6 +490,7 @@ class IssuerDetailGovernance extends Component {
             ownerAddress={ownerAddress}
             userLocalPublicAddress={userLocalPublicAddress}
             daicoTokenAddress={daicoTokenAddress}
+            network={network}
           />
           <IssuerPDetailGovernance
             voteSaturationLimit={capPercent / 100}
@@ -498,6 +501,7 @@ class IssuerDetailGovernance extends Component {
             killConsensus={this.getKillConsensus()}
             pollFactoryAddress={pollFactoryAddress}
             onKillPollsHistoryClick={this.handleKillPollsHistoryOpen}
+            network={network}
           />
           <IssuerTapCard
             currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30, 10))}
@@ -517,6 +521,7 @@ class IssuerDetailGovernance extends Component {
             userLocalPublicAddress={userLocalPublicAddress}
             tapPollConsensus={tapPollConsensus}
             onTapPollsHistoryClick={this.handleTapPollsHistoryOpen}
+            network={network}
           />
           <IssuerWithdrawCard
             currentWithdrawableAmount={formatFromWei(currentWithdrawableAmount, 3)}
@@ -530,6 +535,7 @@ class IssuerDetailGovernance extends Component {
             ownerAddress={ownerAddress}
             userLocalPublicAddress={userLocalPublicAddress}
             tapPollConsensus={tapPollConsensus}
+            network={network}
           />
           {this.canShowXfrPoll() ? (
             <XfrForm
@@ -547,6 +553,7 @@ class IssuerDetailGovernance extends Component {
               signinStatusFlag={signinStatusFlag}
               ownerAddress={ownerAddress}
               userLocalPublicAddress={userLocalPublicAddress}
+              network={network}
             />
           ) : (
             <div />
@@ -576,6 +583,7 @@ class IssuerDetailGovernance extends Component {
             userLocalPublicAddress={userLocalPublicAddress}
             tapPollConsensus={tapPollConsensus}
             onXfrPollHistoryClick={this.handleXfrPollsHistoryOpen}
+            network={network}
           />
 
           <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>

@@ -1,7 +1,7 @@
 import React from "react";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
-import { formatCurrencyNumber } from "../../../helpers/common/projectDetailhelperFunctions";
+import { formatCurrencyNumber, getEtherScanAddressLink } from "../../../helpers/common/projectDetailhelperFunctions";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 
 const PDetailCrowdSale = props => {
@@ -17,9 +17,10 @@ const PDetailCrowdSale = props => {
     tokenBalance,
     buyableTokens,
     remainingAllocation,
-    pollFactoryAddress
+    pollFactoryAddress,
+    network
   } = props || {};
-  const etherscanLink = `https://rinkeby.etherscan.io/address/${pollFactoryAddress}`;
+  const etherscanLink = getEtherScanAddressLink(pollFactoryAddress, network);
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
       <Row>

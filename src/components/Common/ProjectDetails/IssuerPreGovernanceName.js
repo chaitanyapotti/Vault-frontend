@@ -4,7 +4,7 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
-import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanAddressLink, getEtherScanHashLink } from "../../../helpers/common/projectDetailhelperFunctions";
 import { CustomToolTip } from "../FormComponents";
 import BtnLoader from "../../Loaders/BtnLoader";
 
@@ -32,15 +32,16 @@ const IssuerPreGovernanceName = props => {
     daicoTokenAddress,
     signinStatusFlag,
     ownerAddress,
-    userLocalPublicAddress
+    userLocalPublicAddress,
+    network
   } = props || {};
-  const etherscanLink = `https://rinkeby.etherscan.io/address/${daicoTokenAddress}`;
+  const etherscanLink = getEtherScanAddressLink(daicoTokenAddress, network);
   const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
   const link =
     startR1ButtonTransactionHash !== ""
-      ? `https://rinkeby.etherscan.io/tx/${startR1ButtonTransactionHash}`
+      ? getEtherScanHashLink(startR1ButtonTransactionHash, network)
       : r1FinalizeButtonTransactionHash !== ""
-      ? `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`
+      ? getEtherScanHashLink(r1FinalizeButtonTransactionHash, network)
       : "";
   const { website } = urls;
   return (

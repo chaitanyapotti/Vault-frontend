@@ -4,6 +4,7 @@ import { CUICard } from "../../../../helpers/material-ui";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 import ReqType from "./ReqType";
 import LoadingButton from "../../LoadingButton";
+import { getEtherScanHashLink } from "../../../../helpers/common/projectDetailhelperFunctions";
 
 class FundReq extends Component {
   getObject1 = () => {
@@ -17,9 +18,10 @@ class FundReq extends Component {
       xfr1ButtonSpinning,
       tokensUnderGovernance,
       canXfrClick,
-      xfr1ButtonTransactionHash
+      xfr1ButtonTransactionHash,
+      network
     } = this.props || {};
-    const link = `https://rinkeby.etherscan.io/tx/${xfr1ButtonTransactionHash}`;
+    const link = getEtherScanHashLink(xfr1ButtonTransactionHash, network);
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
     const requiredData = details && details.length > 0 && address ? details.filter(x => x.address.toUpperCase() === address.toUpperCase()) : [];
@@ -58,7 +60,8 @@ class FundReq extends Component {
       xfr2ButtonSpinning,
       tokensUnderGovernance,
       canXfrClick,
-      xfr2ButtonTransactionHash
+      xfr2ButtonTransactionHash,
+      network
     } = this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime, address } = poll2 || {};
@@ -66,7 +69,7 @@ class FundReq extends Component {
     const { name, description, startDate } = requiredData[0] || {}; //
     const requiredVote = Array.isArray(xfrVoteData) ? xfrVoteData.filter(x => x.address === address) : [];
     const { voted } = requiredVote[0] || false;
-    const xfr2Link = `https://rinkeby.etherscan.io/tx/${xfr2ButtonTransactionHash}`;
+    const xfr2Link = getEtherScanHashLink(xfr2ButtonTransactionHash, network);
     return endTime ? (
       <ReqType
         amount={amount}

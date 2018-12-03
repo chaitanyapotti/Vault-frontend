@@ -5,8 +5,9 @@ import actionTypes from "../../action_types";
 import constants from "../../constants";
 import { pollTxHash } from "../helperActions";
 
-export const getVoteHistogramData = projectid => async dispatch => {
-  const network = "rinkeby";
+export const getVoteHistogramData = (projectid, network) => async dispatch => {
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   // await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/projectweb3/votehistogram`, {
@@ -43,8 +44,9 @@ export const getVoteHistogramData = projectid => async dispatch => {
     });
 };
 
-export const getSpendCurveData = (version, address, crowdsaleaddress) => async dispatch => {
-  const network = "rinkeby";
+export const getSpendCurveData = (version, address, crowdsaleaddress, network) => dispatch => {
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   // await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/spendcurve`, {
@@ -245,10 +247,10 @@ export const unlockTokens = (data, version, userLocalPublicAddress, pollFactoryA
     });
 };
 
-export const getUnlockTokensData = (pollFactoryAddress, userLocalPublicAddress) => dispatch => {
+export const getUnlockTokensData = (pollFactoryAddress, userLocalPublicAddress, network) => dispatch => {
   axios
     .get(`${config.api_base_url}/projectweb3/lockedtokens`, {
-      params: { pollfactoryaddress: pollFactoryAddress, useraddress: userLocalPublicAddress }
+      params: { pollfactoryaddress: pollFactoryAddress, useraddress: userLocalPublicAddress, network }
     })
     .then(response => {
       const { status, data: pollHistory } = response || {};
@@ -335,9 +337,10 @@ export const getXfrPollsHistory = pollFactoryAddress => async dispatch => {
     });
 };
 
-export const getTokensUnderGovernance = (version, contractAddress) => dispatch => {
+export const getTokensUnderGovernance = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/erc20token/tokensundergovernance`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -356,9 +359,10 @@ export const getTokensUnderGovernance = (version, contractAddress) => dispatch =
     });
 };
 
-export const getCurrentKillPollIndex = (version, contractAddress) => dispatch => {
+export const getCurrentKillPollIndex = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/currentkillpollindex`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -377,9 +381,10 @@ export const getCurrentKillPollIndex = (version, contractAddress) => dispatch =>
     });
 };
 
-export const getRemainingEtherBalance = (version, contractAddress) => dispatch => {
+export const getRemainingEtherBalance = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/remainingbalance`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -398,9 +403,10 @@ export const getRemainingEtherBalance = (version, contractAddress) => dispatch =
     });
 };
 
-export const getTotalSupply = (version, contractAddress) => dispatch => {
+export const getTotalSupply = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/erc20token/totalsupply`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -419,9 +425,10 @@ export const getTotalSupply = (version, contractAddress) => dispatch => {
     });
 };
 
-export const getKillConsensus = (version, contractAddress) => dispatch => {
+export const getKillConsensus = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/killconsensus`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -440,9 +447,10 @@ export const getKillConsensus = (version, contractAddress) => dispatch => {
     });
 };
 
-export const getKillVoterCount = (version, contractAddress) => dispatch => {
+export const getKillVoterCount = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/killvotecount`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -461,9 +469,10 @@ export const getKillVoterCount = (version, contractAddress) => dispatch => {
     });
 };
 
-export const getTapPollConsensus = (version, contractAddress) => dispatch => {
+export const getTapPollConsensus = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/tappollconsensus`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -482,9 +491,10 @@ export const getTapPollConsensus = (version, contractAddress) => dispatch => {
     });
 };
 
-export const getCurrentTap = (version, contractAddress) => dispatch => {
+export const getCurrentTap = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/currenttap`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -503,9 +513,10 @@ export const getCurrentTap = (version, contractAddress) => dispatch => {
     });
 };
 
-export const getXfrData = (version, contractAddress) => dispatch => {
+export const getXfrData = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/xfrpolldata`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -525,9 +536,10 @@ export const getXfrData = (version, contractAddress) => dispatch => {
 };
 
 // returns a boolean.
-export const getKillPollVote = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const getKillPollVote = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/killpollvote`, {
       params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }
@@ -672,9 +684,10 @@ export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAd
     });
 };
 
-export const getTapPollVote = (version, contractAddress, userLocalPublicAddress) => dispatch => {
+export const getTapPollVote = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/tappollvote`, {
       params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }
@@ -815,9 +828,10 @@ export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAdd
     });
 };
 
-export const getXfrPollVote = (version, contractAddress, userLocalPublicAddress) => async dispatch => {
+export const getXfrPollVote = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/xfrpollvote`, {
       params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }

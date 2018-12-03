@@ -4,7 +4,7 @@ import { CUIFormInput, CUICard } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
-import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanHashLink } from "../../../helpers/common/projectDetailhelperFunctions";
 import { CustomToolTip } from "../FormComponents";
 
 const XfrForm = props => {
@@ -22,9 +22,10 @@ const XfrForm = props => {
     deployXfrPollTransactionHash,
     signinStatusFlag,
     ownerAddress,
-    userLocalPublicAddress
+    userLocalPublicAddress,
+    network
   } = props || {};
-  const link = `https://rinkeby.etherscan.io/tx/${deployXfrPollTransactionHash}`;
+  const link = getEtherScanHashLink(deployXfrPollTransactionHash, network);
   const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
   const xfrDeployText = "Can't deploy now";
   return (

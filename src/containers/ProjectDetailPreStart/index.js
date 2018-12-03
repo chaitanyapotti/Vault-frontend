@@ -10,18 +10,18 @@ import MasonaryLayout from "../../components/Common/MasonaryLayout";
 
 class ProjectDetailPreStart extends Component {
   componentDidMount() {
-    const { checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag, userLocalPublicAddress } = this.props || {};
+    const { checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag, userLocalPublicAddress, network } = this.props || {};
     if (signinStatusFlag > 2) {
-      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
+      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress, network);
     }
   }
 
   componentDidUpdate(prevProps) {
     const { userLocalPublicAddress: prevAddress, signinStatusFlag: prevFlag } = prevProps || {};
-    const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag } =
+    const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag, network } =
       this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
-      checkWhiteListStatus(version, membershipAddress, localAddress);
+      checkWhiteListStatus(version, membershipAddress, localAddress, network);
     }
   }
 
@@ -65,7 +65,8 @@ class ProjectDetailPreStart extends Component {
       currentRoundNumber,
       totalMintableSupply,
       pollFactoryAddress,
-      daicoTokenAddress
+      daicoTokenAddress,
+      network
     } = this.props || {};
     return (
       <Grid>
@@ -88,6 +89,7 @@ class ProjectDetailPreStart extends Component {
             thumbnailUrl={thumbnailUrl}
             isCurrentMember={isCurrentMember}
             daicoTokenAddress={daicoTokenAddress}
+            network={network}
           />
           <PDetailPreStart
             icoStartDate={formatDate(startDateTime)}
@@ -100,6 +102,7 @@ class ProjectDetailPreStart extends Component {
             dilutedCapitalisation={getHardCap(totalMintableSupply, prices, rounds)}
             initialFundRelease={formatFromWei(initialFundRelease)}
             pollFactoryAddress={pollFactoryAddress}
+            network={network}
           />
           <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
             <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />

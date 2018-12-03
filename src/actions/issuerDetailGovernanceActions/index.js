@@ -62,7 +62,6 @@ export const onEditXfr2DescriptionClick = value => dispatch => {
 };
 
 export const editXfr1Description = (projectid, xfrAddress, description) => dispatch => {
-  console.log("edit save: ", projectid, xfrAddress, description)
   axios
     .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}`, {
       description
@@ -528,8 +527,8 @@ export const withdrawAmount = (version, contractAddress, userLocalPublicAddress,
     });
 };
 
-export const getCurrentWithdrawableAmount = (version, contractAddress) => dispatch => {
-  const network = "rinkeby";
+export const getCurrentWithdrawableAmount = (version, contractAddress, network) => dispatch => {
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/withdrawableamount`, {
       params: { version: version.toString(), network, address: contractAddress }

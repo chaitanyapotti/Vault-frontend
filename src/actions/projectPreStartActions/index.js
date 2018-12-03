@@ -76,9 +76,10 @@ export const onWhiteListClick = (version, contractName, contractAddress, userLoc
     });
 };
 
-export const checkWhiteList = (version, contractAddress, userLocalPublicAddress) => async dispatch => {
+export const checkWhiteList = (version, contractAddress, userLocalPublicAddress, network) => async dispatch => {
   // doesn't call the blockchain => non-blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   const address = await web3.utils.toChecksumAddress(contractAddress);
   axios
     .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {

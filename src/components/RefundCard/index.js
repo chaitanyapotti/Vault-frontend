@@ -4,7 +4,7 @@ import LoadingButton from "../Common/LoadingButton";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import { ensureHttpUrl } from "../../helpers/common/urlFixerInHref";
 import { CustomToolTip } from "../Common/FormComponents";
-import { getSignInStatusText } from "../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanHashLink } from "../../helpers/common/projectDetailhelperFunctions";
 import BtnLoader from "../Loaders/BtnLoader";
 
 const RefundCard = props => {
@@ -16,13 +16,14 @@ const RefundCard = props => {
     refundBySoftCapFailSpinning,
     refundByKillButtonSpinning,
     onRefundClick,
-    refundBySoftcapfailButtonTransactionHash
+    refundBySoftcapfailButtonTransactionHash,
+    network
   } = props || {};
   const link =
     refundByKillButtonTransactionHash !== ""
-      ? `https://rinkeby.etherscan.io/tx/${refundByKillButtonTransactionHash}`
+      ? getEtherScanHashLink(refundByKillButtonTransactionHash, network)
       : refundBySoftcapfailButtonTransactionHash !== ""
-      ? `https://rinkeby.etherscan.io/tx/${refundBySoftcapfailButtonTransactionHash}`
+      ? getEtherScanHashLink(refundBySoftcapfailButtonTransactionHash, network)
       : "";
   const warningText = getSignInStatusText(signinStatusFlag);
   const isDisabled = parseFloat(tokenBalance) === 0;

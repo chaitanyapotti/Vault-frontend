@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { CUIFormInput } from "../../../helpers/material-ui";
 import { CUIInputType } from "../../../static/js/variables";
-import { formatCurrencyNumber, formatFromWei } from "../../../helpers/common/projectDetailhelperFunctions";
+import { formatCurrencyNumber, formatFromWei, getEtherScanHashLink } from "../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
 import { CustomToolTip } from "../FormComponents";
@@ -26,12 +26,13 @@ const BuyModal = props => {
     tokensSold,
     r1TokenGoal,
     r1Rate,
-    minimumEtherContribution
+    minimumEtherContribution,
+    network
   } = props || {};
   const { tokenRate } = roundInfo || {};
   const parsedInput = parseFloat(inputText);
   const labelValue = formatCurrencyNumber(parsedInput * parseFloat(tokenRate), 0);
-  const link = `https://rinkeby.etherscan.io/tx/${buyButtonTransactionHash}`;
+  const link = getEtherScanHashLink(buyButtonTransactionHash, network);
   const round1Residue = parseFloat(r1TokenGoal) - parseFloat(tokensSold);
   const otherRoundResidue =
     formatFromWei((parseFloat(roundInfo.tokenCount) - parseFloat(roundInfo.totalTokensSold)) / parseFloat(roundInfo.tokenRate), 18) - parsedInput;

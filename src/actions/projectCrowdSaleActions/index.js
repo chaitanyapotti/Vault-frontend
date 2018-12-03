@@ -36,9 +36,10 @@ export const isR1FinalizeButtonSpinning = receipt => ({
   type: actionTypes.R1_FINALIZE_BUTTON_SPINNING
 });
 
-export const getEtherCollected = (version, contractAddress) => async dispatch => {
+export const getEtherCollected = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/totaletherraised`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -57,9 +58,10 @@ export const getEtherCollected = (version, contractAddress) => async dispatch =>
     });
 };
 
-export const getUserTokens = (crowdsaleAddress, version, roundNumber, address) => async dispatch => {
+export const getUserTokens = (crowdsaleAddress, version, roundNumber, address, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/crowdsale/round/userdetails`, {
       params: { address: crowdsaleAddress, network, version: version.toString(), round: roundNumber, useraddress: address }
@@ -85,9 +87,10 @@ export const buyAmountChangedAction = value => dispatch => {
   });
 };
 
-export const getRoundTokensSold = (version, contractAddress, round) => async dispatch => {
+export const getRoundTokensSold = (version, contractAddress, round, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/crowdsale/round/details`, {
       params: { version: version.toString(), network, address: contractAddress, round }
@@ -106,9 +109,10 @@ export const getRoundTokensSold = (version, contractAddress, round) => async dis
     });
 };
 
-export const getTokenBalance = (version, contractAddress, userLocalPublicAddress) => async dispatch => {
+export const getTokenBalance = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/erc20token/tokenbalance`, {
       params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }

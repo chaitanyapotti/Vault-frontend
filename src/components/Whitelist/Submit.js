@@ -14,6 +14,7 @@ import { CUIInputType, CUIInputColor } from "../../static/js/variables";
 import Loader from "../Loaders/loader";
 import LoadingButton from "../Common/LoadingButton";
 import { ButtonComponent } from "../Common/FormComponents";
+import { getEtherScanHashLink } from "../../helpers/common/projectDetailhelperFunctions";
 
 class Submit extends Component {
   componentDidMount() {
@@ -51,7 +52,7 @@ class Submit extends Component {
       onClickBack,
       onClickSave
     } = this.props || {};
-    const link = `https://rinkeby.etherscan.io/tx/${vaultMembershipRequestTransactionHash}`;
+    const link = getEtherScanHashLink(vaultMembershipRequestTransactionHash);
     return (
       <div>
         {this.props.vaultMembershipRequestChecked ? (

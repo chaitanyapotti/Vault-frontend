@@ -4,7 +4,7 @@ import { CUIInputType } from "../../../static/js/variables";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
-import { getSignInStatusText } from "../../../helpers/common/projectDetailhelperFunctions";
+import { getSignInStatusText, getEtherScanHashLink } from "../../../helpers/common/projectDetailhelperFunctions";
 import BtnLoader from "../../Loaders/BtnLoader";
 import { CustomToolTip } from "../FormComponents";
 
@@ -19,12 +19,13 @@ const IssuerWithdrawCard = props => {
     withdrawButtonTransactionHash,
     signinStatusFlag,
     ownerAddress,
-    userLocalPublicAddress
+    userLocalPublicAddress,
+    network
   } = props || {};
   const canWithdraw = parseFloat(currentWithdrawableAmount) >= parseFloat(inputText) && parseFloat(inputText) > 0;
   const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
   const canWithdrawText = "Can't withdraw that amount";
-  const link = `https://rinkeby.etherscan.io/tx/${withdrawButtonTransactionHash}`;
+  const link = getEtherScanHashLink(withdrawButtonTransactionHash, network);
   return (
     <div>
       <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>

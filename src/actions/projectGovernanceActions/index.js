@@ -24,16 +24,17 @@ export const treasuryStateFetchSuccess = receipt => ({
   type: actionTypes.TREASURY_STATE_FETCHED
 });
 
-export const currentRound = projectid => async dispatch => {
+export const currentRound = projectid => dispatch => {
   axios
     .get(`${config.api_base_url}/db/projects`, { params: { projectid } })
     .then(async response => {
       const { status, data: projectData } = response || {};
       if (status === 200) {
         const { data } = projectData || {};
-        const { version, crowdSaleAddress, pollFactoryAddress } = data || {};
+        const { version, crowdSaleAddress, pollFactoryAddress, network } = data || {};
         dispatch(projectDetailsFetched(data));
-        const network = "rinkeby";
+        // const network = "rinkeby";
+        // const network = await web3.eth.net.getNetworkType();
         axios
           .get(`${config.api_base_url}/web3/crowdsale/currentround`, {
             params: { version: version.toString(), network, address: crowdSaleAddress }

@@ -19,7 +19,7 @@ class Done extends Component {
           {this.props.isVaultMember ? (
             <div>{this.props.history.push("/registration")}</div>
           ) : (
-            <div>We will approve your membership request automatically in some time.</div>
+            <div>We will approve your membership request automatically in some time. Please revisit and reload in approximately 5 minutes.</div>
           )}
         </div>
         <span className="float--right">

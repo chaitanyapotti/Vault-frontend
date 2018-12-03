@@ -406,9 +406,9 @@ class BuyersInformation extends Component {
           <Col lg={6}>
             <CUIFormInput
               required
-              inputType={CUIInputType.TEXT}
+              inputType={CUIInputType.EMAIL}
               full
-              forceAlpha
+              // forceAlpha
               inputName="Email"
               inputLabel="Email"
               inputPlaceholder="mohan@peace.org"

@@ -188,7 +188,7 @@ class HeaderPartial extends React.Component {
   onHandleManageDaicoClicked = () => {
     this.props.searchTextChangeAction("");
     this.props.clearProjectDetails();
-    this.props.fetchProjectDetails("",this.props.userLocalPublicAddress);
+    this.props.fetchProjectDetails("", this.props.userLocalPublicAddress);
     setTimeout(() => {
       this.props.history.push({
         pathname: "/deploy",
@@ -409,11 +409,7 @@ class HeaderPartial extends React.Component {
                                       {this.props.userLocalPublicAddress}
                                     </div> */}
                                       <div style={{ width: "150px" }}>{formatAddress(this.props.userLocalPublicAddress)}</div>
-                                      <ButtonComponent
-                                        onClick={this.handleRegistrationButtonClicked}
-                                      >
-                                        Become a Vault Member
-                                      </ButtonComponent>
+                                      <ButtonComponent onClick={this.handleRegistrationButtonClicked}>Become a Vault Member</ButtonComponent>
                                     </div>
                                   ),
                                   4: (

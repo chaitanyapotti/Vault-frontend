@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { CUICard, CUIFormInput } from "../../helpers/material-ui";
+import Avatar from "@material-ui/core/Avatar";
+import { CUICard, CUIFormInput, CUIChip } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import {
@@ -343,25 +344,24 @@ class IdentityDetails extends React.Component {
                 <div className="btn-padding">Upload Whitepaper</div>
               </label>
               <input name="whitepaper" id="whitepaper-upload" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
-              <span className="push--left">{this.props.whitepaperPDF.name}</span>
-              <span className="push--left">
+              {/* <span className="push--left">{this.props.whitepaperPDF.name}</span> */}
+              {this.props.whitepaperUrl && <div className="push--top">
                 <a href={this.props.whitepaperUrl} target="_blank" rel="noreferrer noopener">
-                  Whitepaper
+                <CUIChip avatar={<Avatar>file</Avatar>} label={this.props.whitepaperPDF.name} />
                 </a>
-              </span>
+              </div>}
             </Col>
             <Col lg={6}>
               <label htmlFor="thumbnail-upload" className="btn bg--primary txt txt-dddbld text--white">
                 <div className="btn-padding">Upload Thumbnail</div>
               </label>
               <input id="thumbnail-upload" name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
-              <span className="push--left">{this.props.thumbnailImage.name}</span>
-              <span className="push--left">
-                {" "}
+              {/* <span className="push--left">{this.props.thumbnailImage.name}</span> */}
+              {this.props.thumbnailUrl &&<div className="push--top">
                 <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">
-                  Thumbnail
-                </a>{" "}
-              </span>
+                <CUIChip avatar={<Avatar>file</Avatar>} label={this.props.thumbnailImage.name} />
+                </a>
+              </div>}
             </Col>
           </Row>
           <Row className="push--top">

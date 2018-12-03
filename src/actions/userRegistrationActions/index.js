@@ -30,6 +30,7 @@ export function postUserFormData(userRegistrationData, userLocalPublicAddress) {
   userFormObject.citizenship = userRegistrationData.citizenship;
   userFormObject.isVaultMember = false;
   userFormObject.network = "rinkeby";
+  userFormObject.email = userRegistrationData.email;
   return dispatch =>
     axios
       .post(`${config.api_base_url}/db/users?useraddress=${userLocalPublicAddress}`, userFormObject)

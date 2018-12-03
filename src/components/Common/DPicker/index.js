@@ -15,7 +15,7 @@ class DPicker extends PureComponent {
           onChange={handleDateChange}
           label={label}
           style={{ margin: "16px 0 8px" }}
-          format="Do MMM YYYY | h:mm A z"
+          format="Do MMM YYYY"
           mask={[/\d/, /\d/, /\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, " ", /\d/, /\d/, ":", /\d/, /\d/, " ", /a|p/i, "M"]}
           disablePast={disablePast}
           disableFuture={disableFuture}

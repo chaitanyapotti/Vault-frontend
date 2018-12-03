@@ -16,14 +16,13 @@ const styles = theme => ({
 
 function DateTimePickers(props) {
   const { classes, label, handleDateChange, selectedDate } = props;
-  const time = moment(selectedDate).format("YYYY-MM-DDTHH:mm");
   return (
     <form className={classes.container} noValidate>
       <TextField
         id="datetime-local"
         label={label}
         type="datetime-local"
-        defaultValue=""
+        defaultValue={selectedDate}
         className={classes.textField}
         InputLabelProps={{
           shrink: true

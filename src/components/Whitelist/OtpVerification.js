@@ -14,7 +14,10 @@ import { CUICard, CUIFormInput, CUIFormInputLabel } from "../../helpers/material
 import { CUIInputType, CUIInputColor } from "../../static/js/variables";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../Common/FormComponents";
+import ReactSelect from "../Common/ReactSelect";
 import actionTypes from "../../action_types";
+
+const countryList = require("country-data");
 
 class OtpVerification extends Component {
   //   componentDidMount() {
@@ -35,8 +38,9 @@ class OtpVerification extends Component {
     this.props.phoneNumberChanged(e.target.value);
   };
 
-  handleCountryCodeChanged = e => {
-    this.props.countryCodeChanged(e.target.value);
+  handleCountryCodeChanged = val => {
+    const { value } = val || {};
+    this.props.countryCodeChanged(value);
   };
 
   handleOtpVerification = () => {
@@ -67,6 +71,11 @@ class OtpVerification extends Component {
 
   render() {
     const { countryCode, phoneNumber, otpFromServer, otpFromUser, citizenship, onClickOtp, disabledBackStatus, onClickBack } = this.props || {};
+    const countryChoices = [];
+    const allCountries = countryList.countries.all;
+    for (let index = 0; index < allCountries.length; index += 1) {
+      countryChoices.push({ value: allCountries[index].countryCallingCodes[0], label: allCountries[index].countryCallingCodes[0] });
+    }
     return (
       <div>
         <Grid>
@@ -75,7 +84,14 @@ class OtpVerification extends Component {
             <div className="txt-m txt-dbld text--left">Step 4: Phone Number Verification</div>
             <Row>
               <Col xs={12} lg={4}>
-                <CUIFormInput
+                <ReactSelect
+                  full
+                  placeholder="+91"
+                  data={countryChoices}
+                  inputValue={countryCode}
+                  onChange={this.handleCountryCodeChanged}
+                />
+                {/* <CUIFormInput
                   inputType={CUIInputType.TEXT}
                   full
                   inputName="Country Code"
@@ -85,7 +101,7 @@ class OtpVerification extends Component {
                   onChange={this.handleCountryCodeChanged}
                   disabled={otpFromServer !== ""}
                   // items={[{ value: "+91", primaryText: "+91" }]}
-                />
+                /> */}
               </Col>
               <Col xs={12} lg={8}>
                 <CUIFormInput

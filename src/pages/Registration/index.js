@@ -186,8 +186,8 @@ class Registration extends Component {
                 <Grid>
                   <MasonaryLayout>
                     <IdentityDetails />
-                    <DaicoDetails />
                     <Distribution />
+                    <DaicoDetails />
                     <NonSale />
                   </MasonaryLayout>
                 </Grid>

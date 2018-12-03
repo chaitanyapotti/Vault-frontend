@@ -5,6 +5,7 @@ import { CUIFormInput, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import DPicker from "../Common/DPicker";
+import moment from 'moment';
 import DatePickers from "../Common/DatePickers";
 import ReactSelect from "../Common/ReactSelect";
 import { ButtonComponent } from "../Common/FormComponents";
@@ -64,7 +65,8 @@ class BuyersInformation extends Component {
   };
 
   onChangeCountry = e => {
-    this.props.countryChangedAction(e.target.value);
+    const { value } = e || {};
+    this.props.countryChangedAction(value);
   };
 
   onChangeTypeOfDocument = e => {
@@ -151,9 +153,8 @@ class BuyersInformation extends Component {
     const { selectedDate } = this.state || {};
     let countryChoices = [];
     const allCountries = countryList.countries.all;
-    console.log(allCountries);
     for (let index = 0; index < allCountries.length; index += 1) {
-      countryChoices.push({ value: allCountries[index].name, primaryText: allCountries[index].name });
+      countryChoices.push({ value: allCountries[index].name, label: allCountries[index].name });
     }
     countryChoices = [...new Set(countryChoices)].sort();
     const {
@@ -259,7 +260,7 @@ class BuyersInformation extends Component {
           </Col>
 
           <Col lg={6}>
-            <ReactSelect full data={countryChoices} inputLabel="Country" inputValue={country} onChange={this.onChangeCountry} />
+            <ReactSelect full data={countryChoices} placeholder="Eg: USA" inputLabel="Country" inputValue={country} onChange={this.onChangeCountry} />
             {/* <CUIFormInput
               required
               inputType={CUIInputType.SELECT}
@@ -313,30 +314,29 @@ class BuyersInformation extends Component {
             <Col lg={6}>
               <DatePickers
                 maxDate={this.getStartDate()}
-                selectedDate={selectedDate}
+                selectedDate={moment(dateOfIssuance).format('YYYY-MM-DD')}
                 label="Date Of Issuance"
                 handleDateChange={this.onChangeDateOfIssuance}
-                selectedDate={dateOfIssuance}
+                // selectedDate={dateOfIssuance}
               />
             </Col>
           ) : (
             <Col lg={6}>
               <DatePickers
-                selectedDate={selectedDate}
+                selectedDate={moment(dateOfIssuance).format('YYYY-MM-DD')}
                 label="Date Of Issuance"
                 handleDateChange={this.onChangeDateOfIssuance}
-                selectedDate={dateOfIssuance}
+                // selectedDate={dateOfIssuance}
               />
             </Col>
           )}
 
           <Col lg={6}>
             <DatePickers
-              selectedDate={selectedDate}
+              selectedDate={moment(dateOfExpiration).format('YYYY-MM-DD')}
               label="Expiration Date"
               minDate={this.getEndMinDate()}
               handleDateChange={this.onChangeDateOfExpiration}
-              selectedDate={dateOfExpiration}
             />
           </Col>
         </Row>
@@ -393,10 +393,9 @@ class BuyersInformation extends Component {
 
           <Col lg={6}>
             <DatePickers
-              selectedDate={selectedDate}
+              selectedDate={moment(dateOfBirth).format('YYYY-MM-DD')}
               label="Date of Birth"
               handleDateChange={this.onChangeDateOfBirth}
-              selectedDate={dateOfBirth}
               maxDate={this.getEndMaxDate()}
             />
           </Col>

@@ -101,7 +101,6 @@ class DaicoDetails extends React.Component {
     const { daicoEndDate, initialFundRelease, maxEtherContribution, initialTapValue, tapIncrementFactor, voteSaturationLimit, allowEditAll } =
       this.props || {};
     const { daicoStartDate } = this.props || {};
-    // console.log("daico start date: ", daicoStartDate)
     return (
       <div>
         <CUICard className="card-brdr">
@@ -112,15 +111,23 @@ class DaicoDetails extends React.Component {
           <div style={{ padding: "20px 50px" }}>
             <Row>
               <Col xs={12} lg={6}>
-                {allowEditAll ? (
-                  <DateTimePickers selectedDate={daicoStartDate} label="Round 1 Start Date" handleDateChange={this.onChangeDaicoStart} />
+                {allowEditAll && daicoStartDate ? (
+                  <DateTimePickers
+                    selectedDate={moment(daicoStartDate).format("YYYY-MM-DDTHH:mm")}
+                    label="Round 1 Start Date"
+                    handleDateChange={this.onChangeDaicoStart}
+                  />
                 ) : (
                   <div>{daicoStartDate}</div>
                 )}
               </Col>
               <Col xs={12} lg={6}>
-                {allowEditAll ? (
-                  <DateTimePickers selectedDate={daicoEndDate} label="Round 1 End Date" handleDateChange={this.onChangeDaicoEnd} />
+                {allowEditAll && daicoEndDate ? (
+                  <DateTimePickers
+                    selectedDate={moment(daicoEndDate).format("YYYY-MM-DDTHH:mm")}
+                    label="Round 1 End Date"
+                    handleDateChange={this.onChangeDaicoEnd}
+                  />
                 ) : (
                   <div>{daicoEndDate}</div>
                 )}

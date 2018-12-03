@@ -145,7 +145,7 @@ const components = {
 
 class ReactSelect extends React.Component {
   render() {
-    const { classes, theme, data, inputValue, onChange } = this.props;
+    const { classes, theme, data, inputValue, onChange, placeholder } = this.props;
     const selectStyles = {
       input: base => ({
         ...base,
@@ -164,9 +164,9 @@ class ReactSelect extends React.Component {
             styles={selectStyles}
             options={data}
             components={components}
-            value={inputValue}
+            value={{ value: inputValue, label: inputValue }}
             onChange={onChange}
-            placeholder="Eg: USA"
+            placeholder={placeholder}
           />
         </NoSsr>
       </div>

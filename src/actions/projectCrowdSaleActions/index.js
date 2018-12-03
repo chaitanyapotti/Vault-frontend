@@ -38,7 +38,6 @@ export const isR1FinalizeButtonSpinning = receipt => ({
 
 export const getEtherCollected = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  // const network = "rinkeby";
   // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/totaletherraised`, {
@@ -60,7 +59,6 @@ export const getEtherCollected = (version, contractAddress, network) => dispatch
 
 export const getUserTokens = (crowdsaleAddress, version, roundNumber, address, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  // const network = "rinkeby";
   // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/crowdsale/round/userdetails`, {
@@ -89,7 +87,6 @@ export const buyAmountChangedAction = value => dispatch => {
 
 export const getRoundTokensSold = (version, contractAddress, round, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  // const network = "rinkeby";
   // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/crowdsale/round/details`, {
@@ -111,7 +108,6 @@ export const getRoundTokensSold = (version, contractAddress, round, network) => 
 
 export const getTokenBalance = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  // const network = "rinkeby";
   // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/erc20token/tokenbalance`, {

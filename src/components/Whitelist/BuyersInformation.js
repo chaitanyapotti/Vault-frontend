@@ -6,6 +6,7 @@ import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import DPicker from "../Common/DPicker";
 import { ButtonComponent } from "../Common/FormComponents";
+import actionTypes from "../../action_types";
 
 import {
   addressLine1ChangedAction,
@@ -414,6 +415,8 @@ class BuyersInformation extends Component {
               inputPlaceholder="mohan@peace.org"
               onChange={this.onChangeEmail}
               inputValue={email}
+              error={!!this.getErrorMsg(actionTypes.USER_EMAIL_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.USER_EMAIL_CHANGED)}
             />
           </Col>
           {/* <Col lg={6}>

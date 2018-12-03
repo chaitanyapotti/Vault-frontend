@@ -1,6 +1,7 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
+import { validateEmail } from "../../helpers/common/validationHelperFunctions";
 
 const callingCountries = require("country-data").callingCountries;
 
@@ -110,9 +111,15 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.USER_EMAIL_CHANGED: {
+      if (validateEmail(action.payload)) {
+        localErrors[actionTypes.USER_EMAIL_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.USER_EMAIL_CHANGED] = "Not a valid email";
+      }
       return {
         ...state,
-        email: action.payload
+        email: action.payload,
+        errors: localErrors
       };
     }
 

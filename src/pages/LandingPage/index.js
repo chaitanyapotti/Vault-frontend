@@ -15,7 +15,7 @@ class LandingPage extends Component {
     return (
       <Grid>
         <div style={{ marginBottom: "20px" }}>
-          <CUICard style={{ height: "239px" }} className="card-brdr-no-shadow crd-img-radius card-home">
+          <CUICard style={{ height: "239px" }} onClick={this.onWhiteListClick} className="card-brdr-no-shadow crd-img-radius card-home">
             <div className="pos-rel">
               <img style={{ width: "100%", marginBottom: "-20px" }} src="/assets/LoginScreen/landing.png" alt="landing" />
               <span className="pos-abs text--white txt-font" style={{ top: "50px", left: "50px" }}>
@@ -25,7 +25,9 @@ class LandingPage extends Component {
                 Watch this space for news about Electus Daico
               </span>
               <span className="pos-abs text--white" style={{ top: "115px", left: "50px" }}>
-                <LoadingButton onClick={this.onWhiteListClick}>Get WhiteListed</LoadingButton>
+                <LoadingButton style={{ padding: "10px 40px", "pointer-events": "none" }} id="blackBtn">
+                  <span style={{ fontSize: "18px", fontWeight: "normal" }}>Get Whitelisted</span>
+                </LoadingButton>
               </span>
             </div>
           </CUICard>

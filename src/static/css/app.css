@@ -113,7 +113,7 @@ button:active {
 }
 
 .card-home:hover {
-  box-shadow: 0px 10px 20px 0px hsla(208, 97%, 64%, 0.5) !important;
+  box-shadow: 0px 10px 30px 0px hsla(208, 97%, 64%, 0.25) !important;
   transform: translate(0px, -5px) !important;
   transition: 250ms ease-in-out;
   cursor: pointer;
@@ -149,6 +149,10 @@ button:active {
   box-shadow: 0px 0px 0px #ffffff !important;
 }
 
+#blackBtn {
+  background-color: #3d3d3d !important;
+}
+
 .bg--danger:active {
   background: #c10a0a !important;
   box-shadow: 0px 0px 0px #ffffff !important;
@@ -157,6 +161,7 @@ button:active {
 .bg--danger {
   box-shadow: 0px 0px 0px #ffffff !important;
 }
+
 .btn:disabled {
   background: #d3d3d3 !important;
 }

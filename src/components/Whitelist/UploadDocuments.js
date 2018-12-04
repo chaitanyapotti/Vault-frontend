@@ -34,7 +34,6 @@ class UploadDocuments extends Component {
   };
 
   render() {
-    console.log("seld", this.state);
     const { passportFileName, selfieFileName, addressFileName, onClickNext, disabledFlag, disabledBackStatus, onClickBack, onClickSave } =
       this.props || {};
     const idType = passportFileName && passportFileName.split(".");
@@ -97,14 +96,16 @@ class UploadDocuments extends Component {
               </label>
               <input id="selfie-upload" type="file" name="selfieDoc" accept="image/*" onChange={this.selfieChanged} />
               <span className="push--left">
-              {selfieFileName && this.state.selfie? (
-                null
-              ):(
-                <CUIChip avatar={<Avatar>{addressType[1].toUpperCase()}</Avatar>} label={addressType[0]} />
-              )}
+                {selfieFileName && this.state.selfie ? null : (
+                  <CUIChip avatar={<Avatar>{addressType[1].toUpperCase()}</Avatar>} label={addressType[0]} />
+                )}
               </span>
             </div>
-            <div>{selfieFileName && this.state.selfie && <CUIAvatar imgSrc={this.state.selfie} style={{ width: "100px", height: "100px", margin: "20px auto" }} />}</div>
+            <div>
+              {selfieFileName && this.state.selfie && (
+                <CUIAvatar imgSrc={this.state.selfie} style={{ width: "100px", height: "100px", margin: "20px auto" }} />
+              )}
+            </div>
             <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>
             <div className="txt">2 MB maximum file size</div>
           </Col>

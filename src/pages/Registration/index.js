@@ -22,6 +22,8 @@ import { ButtonComponent } from "../../components/Common/FormComponents";
 import AlertModal from "../../components/Common/AlertModal";
 import actionTypes from "../../action_types";
 import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
+import MasonaryLayout from "../../components/Common/MasonaryLayout";
+import NonSale from "../../components/Registration/Distribution/NonSale";
 
 class Registration extends Component {
   state = {
@@ -182,23 +184,13 @@ class Registration extends Component {
             {signinStatusFlag === 5 ? (
               <div>
                 <Grid>
-                  <Row className="push--top">
-                    <Col xs={12} lg={7}>
-                      <IdentityDetails />
-                    </Col>
-                    <Col xs={12} lg={5}>
-                      <div>
-                        <DaicoDetails />
-                      </div>
-                    </Col>
-                  </Row>
-
-                  <Row className="push--top push--bottom">
-                    <Col xs={12} lg={7}>
-                      <Distribution />
-                    </Col>
-                  </Row>
-
+                  <MasonaryLayout>
+                    <IdentityDetails />
+                    <Distribution />
+                    <DaicoDetails />
+                    <NonSale />
+                  </MasonaryLayout>
+                </Grid>
                   <AlertModal open={deployModal} handleClose={this.handleDeployModalClose} onProceedClick={this.handlePublishDaico} metamask>
                     <div className="text--center text--danger">
                       <Warning style={{ width: "2em", height: "2em" }} /> WARNING
@@ -215,7 +207,6 @@ class Registration extends Component {
                     </div>
                     <div className="text--center push--top">{modalMessage}</div>
                   </AlertModal>
-                </Grid>
                 <div id="dckd-btn" className="soft dckd-btn-cnt">
                   <Grid>
                     <div className="float--right">

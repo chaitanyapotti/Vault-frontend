@@ -17,6 +17,7 @@ import {
 } from "../../actions/projectRegistrationActions";
 import actionTypes from "../../action_types";
 import DTPicker from "../Common/DTPicker";
+import DateTimePickers from "../Common/DateTimePickers";
 
 class DaicoDetails extends React.Component {
   onChangeIniFundVal = e => {
@@ -44,12 +45,14 @@ class DaicoDetails extends React.Component {
   //   this.props.daicoRoundsChangedAction(e.target.value);
   // };
 
-  onChangeDaicoStart = date => {
+  onChangeDaicoStart = e => {
+    const date = e.target.value;
     const startDate = moment.utc(date.format("YYYY-MM-DD HH:mm:ss"));
     this.props.daicoStartDateChangedAction(startDate);
   };
 
-  onChangeDaicoEnd = date => {
+  onChangeDaicoEnd = e => {
+    const date = e.target.value;
     const endDate = moment.utc(date.format("YYYY-MM-DD HH:mm:ss"));
     this.props.daicoEndDateChangedAction(endDate);
   };
@@ -98,7 +101,6 @@ class DaicoDetails extends React.Component {
     const { daicoEndDate, initialFundRelease, maxEtherContribution, initialTapValue, tapIncrementFactor, voteSaturationLimit, allowEditAll } =
       this.props || {};
     const { daicoStartDate } = this.props || {};
-    // console.log("daico start date: ", daicoStartDate)
     return (
       <div>
         <CUICard className="card-brdr">
@@ -109,18 +111,20 @@ class DaicoDetails extends React.Component {
           <div style={{ padding: "20px 50px" }}>
             <Row>
               <Col xs={12} lg={6}>
-                {allowEditAll ? (
-                  <DTPicker selectedDate={daicoStartDate} disablePast label="Round 1 Start Date" handleDateChange={this.onChangeDaicoStart} />
+                {allowEditAll && daicoStartDate ? (
+                  <DateTimePickers
+                    selectedDate={moment(daicoStartDate).format("YYYY-MM-DDTHH:mm")}
+                    label="Round 1 Start Date"
+                    handleDateChange={this.onChangeDaicoStart}
+                  />
                 ) : (
                   <div>{daicoStartDate}</div>
                 )}
               </Col>
               <Col xs={12} lg={6}>
-                {allowEditAll ? (
-                  <DTPicker
-                    selectedDate={daicoEndDate}
-                    // minDate={this.getEndMinDate()}
-                    // maxDate={this.getEndMaxDate()}
+                {allowEditAll && daicoEndDate ? (
+                  <DateTimePickers
+                    selectedDate={moment(daicoEndDate).format("YYYY-MM-DDTHH:mm")}
                     label="Round 1 End Date"
                     handleDateChange={this.onChangeDaicoEnd}
                   />

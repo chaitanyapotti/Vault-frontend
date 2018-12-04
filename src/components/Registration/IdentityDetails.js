@@ -163,6 +163,9 @@ class IdentityDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
+                labelProps={{
+                  shrink: true
+                }}
                 inputName="Admin Email"
                 inputLabel="Admin Email"
                 inputPlaceholder="Eg. admin@electus.network"
@@ -214,7 +217,11 @@ class IdentityDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
-                multiline
+                InputProps={{
+                  multiline: true,
+                  rows: "4",
+                  margin: "normal"
+                }}
                 inputName="Project Description"
                 inputLabel="Project Description"
                 inputPlaceholder="Eg. Protocol for Decentralized Organizations"

@@ -18,7 +18,6 @@ import ReactSelect from "../Common/ReactSelect";
 import actionTypes from "../../action_types";
 
 const countryList = require("country-data");
-const countryTelData = require('country-telephone-data');
 
 class OtpVerification extends Component {
   //   componentDidMount() {
@@ -75,7 +74,8 @@ class OtpVerification extends Component {
     const countryChoices = [];
     const allCountries = countryList.countries.all;
     for (let index = 0; index < allCountries.length; index += 1) {
-      countryChoices.push({ value: allCountries[index].countryCallingCodes[0], label: allCountries[index].countryCallingCodes[0] });
+      if (allCountries[index].countryCallingCodes.length > 0)
+        countryChoices.push({ value: allCountries[index].countryCallingCodes[0], label: allCountries[index].countryCallingCodes[0] });
     }
     return (
       <div>
@@ -85,13 +85,7 @@ class OtpVerification extends Component {
             <div className="txt-m txt-dbld text--left">Step 4: Phone Number Verification</div>
             <Row>
               <Col xs={12} lg={4}>
-                <ReactSelect
-                  full
-                  placeholder="+91"
-                  data={countryChoices}
-                  inputValue={countryCode}
-                  onChange={this.handleCountryCodeChanged}
-                />
+                <ReactSelect full placeholder="+91" data={countryChoices} inputValue={countryCode} onChange={this.handleCountryCodeChanged} />
                 {/* <CUIFormInput
                   inputType={CUIInputType.TEXT}
                   full

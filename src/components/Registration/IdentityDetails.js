@@ -133,7 +133,7 @@ class IdentityDetails extends React.Component {
       whitepaperUrl,
       // uploadingThumbnail,
       thumbnailUrl,
-      allowEditAll, 
+      allowEditAll,
       whitepaperPDFName,
       thumbnailImageName
     } = this.props || {};
@@ -347,11 +347,13 @@ class IdentityDetails extends React.Component {
               </label>
               <input name="whitepaper" id="whitepaper-upload" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
               {/* <span className="push--left">{this.props.whitepaperPDF.name}</span> */}
-              {this.props.whitepaperUrl && <div className="push--top">
-                <a href={this.props.whitepaperUrl} target="_blank" rel="noreferrer noopener">
-                <CUIChip avatar={<Avatar>file</Avatar>} label={whitepaperPDFName} />
-                </a>
-              </div>}
+              {this.props.whitepaperUrl && (
+                <div className="push--top">
+                  <a href={this.props.whitepaperUrl} target="_blank" rel="noreferrer noopener">
+                    <CUIChip avatar={<Avatar>file</Avatar>} label={whitepaperPDFName} />
+                  </a>
+                </div>
+              )}
             </Col>
             <Col lg={6}>
               <label htmlFor="thumbnail-upload" className="btn bg--primary txt txt-dddbld text--white">
@@ -359,19 +361,27 @@ class IdentityDetails extends React.Component {
               </label>
               <input id="thumbnail-upload" name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
               {/* <span className="push--left">{this.props.thumbnailImage.name}</span> */}
-              {this.props.thumbnailUrl &&<div className="push--top">
-                <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">
-                <CUIChip avatar={<Avatar>file</Avatar>} label={thumbnailImageName} />
-                </a>
-              </div>}
+              {this.props.thumbnailUrl && (
+                <div className="push--top">
+                  <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">
+                    <CUIChip avatar={<Avatar>file</Avatar>} label={thumbnailImageName} />
+                  </a>
+                </div>
+              )}
             </Col>
           </Row>
           <Row className="push--top">
             <Col lg={12}>
               <div className="text--center">
-                {this.state.thumbnailFile && (
-                  <img alt="thumbnail" src={this.state.thumbnailFile} width="200" height="200" style={{ backgroundSize: "contain" }} />
-                )}
+                {this.state.thumbnailFile || this.props.thumbnailUrl !== "" ? (
+                  <img
+                    alt="thumbnail"
+                    src={this.state.thumbnailFile || this.props.thumbnailUrl}
+                    width="200"
+                    height="200"
+                    style={{ backgroundSize: "contain" }}
+                  />
+                ) : null}
               </div>
             </Col>
           </Row>
@@ -402,7 +412,7 @@ const mapStateToProps = state => {
     uploadingThumbnail,
     thumbnailUrl,
     errors,
-    allowEditAll, 
+    allowEditAll,
     whitepaperPDFName,
     thumbnailImageName
   } = state.projectRegistrationData || {};

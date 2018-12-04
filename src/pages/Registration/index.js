@@ -191,23 +191,23 @@ class Registration extends Component {
                     <NonSale />
                   </MasonaryLayout>
                 </Grid>
-                  <AlertModal open={deployModal} handleClose={this.handleDeployModalClose} onProceedClick={this.handlePublishDaico} metamask>
-                    <div className="text--center text--danger">
-                      <Warning style={{ width: "2em", height: "2em" }} /> WARNING
-                    </div>
-                    <div className="text--center push--top">
-                      Once this DAICO is published, you will not be able to edit the on-chain details of the project. However the off-chain details
-                      will remain editable.
-                    </div>
-                  </AlertModal>
+                <AlertModal open={deployModal} handleClose={this.handleDeployModalClose} onProceedClick={this.handlePublishDaico} metamask>
+                  <div className="text--center text--danger">
+                    <Warning style={{ width: "2em", height: "2em" }} /> WARNING
+                  </div>
+                  <div className="text--center push--top">
+                    Once this DAICO is published, you will not be able to edit the on-chain details of the project. However the off-chain details will
+                    remain editable.
+                  </div>
+                </AlertModal>
 
-                  <AlertModal open={modalOpen} handleClose={this.handleClose}>
-                    <div className="text--center text--danger">
-                      <Warning style={{ width: "2em", height: "2em" }} />
-                    </div>
-                    <div className="text--center push--top">{modalMessage}</div>
-                  </AlertModal>
-                <div id="dckd-btn" className="soft dckd-btn-cnt">
+                <AlertModal open={modalOpen} handleClose={this.handleClose}>
+                  <div className="text--center text--danger">
+                    <Warning style={{ width: "2em", height: "2em" }} />
+                  </div>
+                  <div className="text--center push--top">{modalMessage}</div>
+                </AlertModal>
+                <div id="dckd-btn" className="soft dckd-btn-cnt" style={{ boxShadow: "0px -5px 25px 0px rgba(76, 169, 252, 0.25)" }}>
                   <Grid>
                     <div className="float--right">
                       <ButtonComponent onClick={this.handleSaveButtonClicked} label="Save" />

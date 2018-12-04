@@ -50,9 +50,10 @@ class Submit extends Component {
       vaultPaymentPendingStatus,
       disabledBackStatus,
       onClickBack,
-      onClickSave
+      onClickSave,
+      networkName
     } = this.props || {};
-    const link = getEtherScanHashLink(vaultMembershipRequestTransactionHash);
+    const link = getEtherScanHashLink(vaultMembershipRequestTransactionHash, networkName);
     return (
       <div>
         {this.props.vaultMembershipRequestChecked ? (
@@ -147,7 +148,7 @@ class Submit extends Component {
 }
 
 const mapStateToProps = state => {
-  const { userLocalPublicAddress, isVaultMember } = state.signinManagerData || {};
+  const { userLocalPublicAddress, isVaultMember, networkName } = state.signinManagerData || {};
   const { userRegistrationData } = state || {};
   const {
     vaultMembershipRequested,
@@ -168,7 +169,8 @@ const mapStateToProps = state => {
     vaultMembershipRequestChecked,
     isVaultMembershipButtonSpinning,
     vaultMembershipRequestTransactionHash,
-    vaultPaymentPendingStatus
+    vaultPaymentPendingStatus,
+    networkName
   };
 };
 

@@ -148,16 +148,14 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
   return dispatch => {
     // console.log("printing current provider: ", web3.currentProvider)
     if (web3.currentProvider === null) {
-      if (metamaskPreviousInstallationState === false) {
-        return;
-      }
-      return dispatch({
-        type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
-        payload: false
-      });
+      if (!metamaskPreviousInstallationState) {
+        return dispatch({
+          type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
+          payload: false
+        });
+      } else return;
     }
-    if (metamaskPreviousInstallationState === true) {
-    } else {
+    if (!metamaskPreviousInstallationState) {
       dispatch({
         type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
         payload: true

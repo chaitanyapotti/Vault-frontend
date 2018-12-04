@@ -18,6 +18,7 @@ import SigninManager from "./containers/SigninManager";
 import store from "./store";
 import Search from "./pages/Search";
 import WhiteList from "./pages/WhiteList";
+import LandingPage from "./pages/LandingPage";
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
@@ -28,7 +29,7 @@ const App = props => {
       <Router>
         <VaultApp dispatch={store.dispatch} getState={store.getState} history={history}>
           <Switch>
-            <Route exact path="/" component={FeaturedProjects} history={history} />
+            <Route exact path="/" component={LandingPage} history={history} />
             <Route exact path="/mytokens" component={Governance} />
             <Route strict path="/governance/details" component={ProjectGovernance} history={history} />
             <Route strict path="/issuergovernance/details" component={ProjectIssuerGovernance} history={history} />

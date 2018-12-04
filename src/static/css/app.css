@@ -497,6 +497,10 @@ button:focus {
   text-overflow: ellipsis;
 }
 
+.txt-font {
+  font-size: 25px;
+}
+
 .pttl {
   position: relative;
   white-space: nowrap;
@@ -664,6 +668,14 @@ button:focus {
 .card-brdr {
   border: 1.75px solid #eaeaea !important;
   box-shadow: none !important;
+}
+
+.card-brdr-no-shadow {
+  box-shadow: none !important;
+}
+
+.crd-img-radius {
+  border-radius: 12px !important;
 }
 
 .txt-no-wrp {

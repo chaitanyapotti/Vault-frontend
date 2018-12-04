@@ -70,9 +70,11 @@ export const initialState = {
   tokenTags: [],
   tokenTagsRetrieveFailureMessage: "",
   whitepaperPDF: "",
+  whitepaperPDFName: "",
   whitepaperUrl: "",
   uploadingWhitepaper: false,
   thumbnailImage: "",
+  thumbnailImageName: "", 
   uploadingThumbnail: false,
   thumbnailUrl: "",
   allowEditAll: false,
@@ -171,7 +173,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.THUMBNAIL_CHANGED: {
-      return { ...state, thumbnailImage: action.payload };
+      return { ...state, thumbnailImage: action.payload, thumbnailImageName: action.payload.name };
     }
 
     case actionTypes.UPLOADING_THUMBNAIL: {
@@ -187,7 +189,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.WHITEPAPER_CHANGED: {
-      return { ...state, whitepaperPDF: action.payload}
+      return { ...state, whitepaperPDF: action.payload, whitepaperPDFName:action.payload.name }
     }
 
     case actionTypes.UPLOADING_WHITEPAPER: {

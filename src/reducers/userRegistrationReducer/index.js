@@ -1,6 +1,7 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
+import {countryList} from "../../constants";
 import { validateEmail } from "../../helpers/common/validationHelperFunctions";
 
 const callingCountries = require("country-data").callingCountries;
@@ -28,6 +29,7 @@ export const initialState = {
   gender: "",
   dateOfBirth: null,
   citizenship: "",
+  countryIndex: 0,
   activeStep: 0,
   phoneNumber: "",
   countryCode: "",
@@ -175,7 +177,7 @@ export default function(state = initialState, action) {
 
     case actionTypes.OTP_SENT_TO_USER_FAILED: {
       if (action.payload !== "") {
-        localErrors[actionTypes.PHONE_NUMBER_CHANGED] = "Either entered phone number is invalid or already registered with another public address.";
+        localErrors[actionTypes.PHONE_NUMBER_CHANGED] = "The given phone number is invalid or already registered with another public address.";
       }
       if (action.payload !== "") {
         localErrors[actionTypes.USER_OTP_INPUT_CHANGED] = "";
@@ -201,6 +203,7 @@ export default function(state = initialState, action) {
 
     case actionTypes.COUNTRY_CODE_CHANGED: {
       let citizenship = "";
+      let countryIndex = 0
       for (const country in callingCountries) {
         // console.log(callingCountries[country])
         if (callingCountries[country].countryCallingCodes) {
@@ -212,10 +215,14 @@ export default function(state = initialState, action) {
           }
         }
       }
+      let countryArrayList = countryList.map(x => x.name);
+      countryIndex = countryArrayList.indexOf(citizenship);
+
       return {
         ...state,
         countryCode: action.payload,
-        citizenship
+        citizenship,
+        countryIndex
       };
     }
 

@@ -98,9 +98,11 @@ class DaicoDetails extends React.Component {
   };
 
   render() {
-    const { daicoEndDate, initialFundRelease, maxEtherContribution, initialTapValue, tapIncrementFactor, voteSaturationLimit, allowEditAll } =
+    const { initialFundRelease, maxEtherContribution, initialTapValue, tapIncrementFactor, voteSaturationLimit, allowEditAll } =
       this.props || {};
-    const { daicoStartDate } = this.props || {};
+    let { daicoEndDate, daicoStartDate } = this.props || {};
+    // daicoStartDate = new Date(daicoStartDate) || new Date();
+    // daicoEndDate = new Date(daicoEndDate) || new Date();
     return (
       <div>
         <CUICard className="card-brdr">
@@ -111,7 +113,7 @@ class DaicoDetails extends React.Component {
           <div style={{ padding: "20px 50px" }}>
             <Row>
               <Col xs={12} lg={6}>
-                {allowEditAll && daicoStartDate ? (
+                {allowEditAll ? (
                   <DateTimePickers
                     selectedDate={moment(daicoStartDate).format("YYYY-MM-DDTHH:mm")}
                     label="Round 1 Start Date"
@@ -122,7 +124,7 @@ class DaicoDetails extends React.Component {
                 )}
               </Col>
               <Col xs={12} lg={6}>
-                {allowEditAll && daicoEndDate ? (
+                {allowEditAll ? (
                   <DateTimePickers
                     selectedDate={moment(daicoEndDate).format("YYYY-MM-DDTHH:mm")}
                     label="Round 1 End Date"

@@ -133,7 +133,9 @@ class IdentityDetails extends React.Component {
       whitepaperUrl,
       // uploadingThumbnail,
       thumbnailUrl,
-      allowEditAll
+      allowEditAll, 
+      whitepaperPDFName,
+      thumbnailImageName
     } = this.props || {};
     return (
       <CUICard className="card-brdr">
@@ -347,7 +349,7 @@ class IdentityDetails extends React.Component {
               {/* <span className="push--left">{this.props.whitepaperPDF.name}</span> */}
               {this.props.whitepaperUrl && <div className="push--top">
                 <a href={this.props.whitepaperUrl} target="_blank" rel="noreferrer noopener">
-                <CUIChip avatar={<Avatar>file</Avatar>} label={this.props.whitepaperPDF.name} />
+                <CUIChip avatar={<Avatar>file</Avatar>} label={whitepaperPDFName} />
                 </a>
               </div>}
             </Col>
@@ -359,7 +361,7 @@ class IdentityDetails extends React.Component {
               {/* <span className="push--left">{this.props.thumbnailImage.name}</span> */}
               {this.props.thumbnailUrl &&<div className="push--top">
                 <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">
-                <CUIChip avatar={<Avatar>file</Avatar>} label={this.props.thumbnailImage.name} />
+                <CUIChip avatar={<Avatar>file</Avatar>} label={thumbnailImageName} />
                 </a>
               </div>}
             </Col>
@@ -400,7 +402,9 @@ const mapStateToProps = state => {
     uploadingThumbnail,
     thumbnailUrl,
     errors,
-    allowEditAll
+    allowEditAll, 
+    whitepaperPDFName,
+    thumbnailImageName
   } = state.projectRegistrationData || {};
   const { userLocalPublicAddress } = state.signinManagerData || {};
   return {
@@ -424,7 +428,9 @@ const mapStateToProps = state => {
     thumbnailUrl,
     errors,
     userLocalPublicAddress,
-    allowEditAll
+    allowEditAll,
+    whitepaperPDFName,
+    thumbnailImageName
   };
 };
 

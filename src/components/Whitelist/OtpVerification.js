@@ -18,6 +18,7 @@ import ReactSelect from "../Common/ReactSelect";
 import actionTypes from "../../action_types";
 
 const countryList = require("country-data");
+const countryTelData = require('country-telephone-data');
 
 class OtpVerification extends Component {
   //   componentDidMount() {

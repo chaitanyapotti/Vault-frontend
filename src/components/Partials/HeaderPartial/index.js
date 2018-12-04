@@ -395,11 +395,11 @@ class HeaderPartial extends React.Component {
                                   ),
                                   2: (
                                     <div>
-                                      <ButtonComponent onClick={() => {}}>Wrong network</ButtonComponent>
-                                      <div style={{ width: "150px" }} className="txt-ellipsis">
-                                        {this.props.userLocalPublicAddress}
-                                      </div>
-                                      <CUIButton className="btn bg-yellow txt-p-vault txt-dddbld text--white">Wrong network</CUIButton>
+                                    <CUIButton className="btn bg-yellow txt-p-vault txt-dddbld text--white">Wrong network</CUIButton>
+                                      {/* <div style={{ width: "150px" }} className="txt-ellipsis">
+                                        {formatAddress(this.props.userLocalPublicAddress)}
+                                      </div> */}
+                                      
                                       {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                     </div>
                                   ),
@@ -408,14 +408,14 @@ class HeaderPartial extends React.Component {
                                       {/* <div style={{ width: "150px" }} className="txt-ellipsis">
                                       {this.props.userLocalPublicAddress}
                                     </div> */}
-                                      <div style={{ width: "150px" }}>{formatAddress(this.props.userLocalPublicAddress)}</div>
+                                      {/* <div style={{ width: "150px" }}>{formatAddress(this.props.userLocalPublicAddress)}</div> */}
                                       <ButtonComponent onClick={this.handleRegistrationButtonClicked}>Become a Vault Member</ButtonComponent>
                                     </div>
                                   ),
                                   4: (
                                     <div>
                                       <ButtonComponent onClick={this.onCopyClickAddress}>
-                                        <span>{firstName}</span>
+                                        <span>Hi, {firstName}</span>
                                         {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
                                       </ButtonComponent>
                                       {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
@@ -424,7 +424,7 @@ class HeaderPartial extends React.Component {
                                   5: (
                                     <div>
                                       <ButtonComponent onClick={this.onCopyClickAddress}>
-                                        <span>{firstName}</span>
+                                        <span>Hi, {firstName}</span>
                                         {/* {this.props.userLocalPublicAddress.slice(0, 6)} */}
                                       </ButtonComponent>
                                     </div>

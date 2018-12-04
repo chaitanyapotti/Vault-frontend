@@ -15,7 +15,7 @@ class LandingPage extends Component {
     return (
       <Grid>
         <div style={{ marginBottom: "20px" }}>
-          <CUICard style={{ height: "239px" }} className="card-brdr-no-shadow crd-img-radius">
+          <CUICard style={{ height: "239px" }} className="card-brdr-no-shadow crd-img-radius card-home">
             <div className="pos-rel">
               <img style={{ width: "100%", marginBottom: "-20px" }} src="/assets/LoginScreen/landing.png" alt="landing" />
               <span className="pos-abs text--white txt-font" style={{ top: "50px", left: "50px" }}>
@@ -31,7 +31,7 @@ class LandingPage extends Component {
           </CUICard>
         </div>
         <MasonryLayout>
-          <CUICard style={{ height: "301px" }} className="card-brdr-no-shadow crd-img-radius">
+          <CUICard style={{ height: "301px" }} className="card-brdr-no-shadow crd-img-radius card-home">
             <div className="pos-rel">
               <a href="https://storage.googleapis.com/electus/VaultProductDocument.pdf" rel="noreferrer noopener" target="_blank">
                 <img style={{ width: "100%", marginBottom: "-25px" }} src="/assets/LoginScreen/landing-1.png" alt="landing-1" />
@@ -45,7 +45,7 @@ class LandingPage extends Component {
             </div>
           </CUICard>
 
-          <CUICard style={{ height: "414px" }} className="card-brdr-no-shadow crd-img-radius">
+          <CUICard style={{ height: "414px" }} className="card-brdr-no-shadow crd-img-radius card-home">
             <div className="pos-rel">
               <a
                 href="https://medium.com/@ParthaB/multi-layered-raises-and-why-they-are-relevant-c3e9369cda4f"
@@ -62,7 +62,7 @@ class LandingPage extends Component {
               </span>
             </div>
           </CUICard>
-          <CUICard style={{ height: "370px" }} className="card-brdr-no-shadow crd-img-radius">
+          <CUICard style={{ height: "370px" }} className="card-brdr-no-shadow crd-img-radius card-home">
             <div className="pos-rel">
               <a href="https://storage.googleapis.com/electus/whitepaper.pdf" rel="noreferrer noopener" target="_blank">
                 <img style={{ width: "100%" }} src="/assets/LoginScreen/landing-3.png" alt="landing-3" />

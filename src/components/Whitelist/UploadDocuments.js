@@ -38,6 +38,7 @@ class UploadDocuments extends Component {
       this.props || {};
     const idType = passportFileName && passportFileName.split(".");
     const addressType = addressFileName && addressFileName.split(".");
+    const selfieType = selfieFileName && selfieFileName.split(".");
     return (
       <div>
         <div className="txt-m txt-dbld text--left">Step 6: Upload Documents</div>
@@ -97,7 +98,7 @@ class UploadDocuments extends Component {
               <input id="selfie-upload" type="file" name="selfieDoc" accept="image/*" onChange={this.selfieChanged} />
               <span className="push--left">
                 {selfieFileName && this.state.selfie ? null : (
-                  <CUIChip avatar={<Avatar>{(addressType[1]|| "").toUpperCase()}</Avatar>} label={addressType[0]} />
+                  <CUIChip avatar={<Avatar>{(selfieType[1]|| "").toUpperCase()}</Avatar>} label={selfieType[0]} />
                 )}
               </span>
             </div>

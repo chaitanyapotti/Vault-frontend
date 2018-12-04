@@ -63,13 +63,13 @@ export function postUserFormData(userRegistrationData, userLocalPublicAddress) {
       });
 }
 
-export const requestVaultMembership = (userLocalPublicAddress, isIssuer) => async dispatch => {
+export const requestVaultMembership = (userLocalPublicAddress, isIssuer, countryIndex) => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
-  let param2 = 1;
-  let ethers = "0.0016";
+  let param2 = 2;
+  let ethers = "0.0015";
   if (isIssuer) {
-    param2 = 0;
-    ethers = "0.5016";
+    param2 = 1;
+    ethers = "0.5015";
   }
 
   axios
@@ -92,7 +92,7 @@ export const requestVaultMembership = (userLocalPublicAddress, isIssuer) => asyn
             const gasPrice = await web3.eth.getGasPrice();
             const instance = new web3.eth.Contract(abi, config.vault_contract_address, { from: userLocalPublicAddress });
             instance.methods
-              .requestMembership([0, param2])
+              .requestMembership([(countryIndex+1).toString(), param2])
               .send({
                 from: userLocalPublicAddress,
                 value: web3.utils.toWei(ethers, "ether"),

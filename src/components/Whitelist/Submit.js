@@ -35,7 +35,7 @@ class Submit extends Component {
   handleRequestVaultMembership = () => {
     this.props.saveUserFormStates(this.props.userRegistrationData, this.props.userLocalPublicAddress);
     this.props.postUserFormData(this.props.userRegistrationData, this.props.userLocalPublicAddress);
-    this.props.requestVaultMembership(this.props.userLocalPublicAddress, this.props.isIssuerFlag);
+    this.props.requestVaultMembership(this.props.userLocalPublicAddress, this.props.isIssuerFlag, this.props.countryIndex);
   };
 
   handleIssuerFlagToggled = e => {
@@ -120,9 +120,9 @@ class Submit extends Component {
                     </Row>
                     <Row className="push--top">
                       {this.props.isIssuerFlag ? (
-                        <div>You will be able to publish a DAICO and participate in DAICOs. You will be charged 0.5016 ETH.</div>
+                        <div>You will be able to publish a DAICO and participate in DAICOs. You will be charged 0.5015 ETH.</div>
                       ) : (
-                        <div>You will be able to participate in DAICOs and you will be charged 0.0016 ETH.</div>
+                        <div>You will be able to participate in DAICOs and you will be charged 0.0015 ETH.</div>
                       )}
                     </Row>
                   </Grid>
@@ -152,6 +152,7 @@ const mapStateToProps = state => {
   const {
     vaultMembershipRequested,
     isIssuerFlag,
+    countryIndex,
     vaultMembershipRequestChecked,
     isVaultMembershipButtonSpinning,
     vaultMembershipRequestTransactionHash,
@@ -163,6 +164,7 @@ const mapStateToProps = state => {
     vaultMembershipRequested,
     isVaultMember,
     isIssuerFlag,
+    countryIndex,
     vaultMembershipRequestChecked,
     isVaultMembershipButtonSpinning,
     vaultMembershipRequestTransactionHash,

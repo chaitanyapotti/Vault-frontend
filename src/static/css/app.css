@@ -115,6 +115,17 @@ button:active {
   box-shadow: 0px 10px 20px 0px hsla(208, 97%, 64%, 0.5) !important;
 }
 
+.card-home:hover {
+  box-shadow: 0px 10px 30px 0px hsla(208, 97%, 64%, 0.25) !important;
+  transform: translate(0px, -5px) !important;
+  transition: 250ms ease-in-out;
+  cursor: pointer;
+}
+
+.card-home:active {
+  background: #198bd1 !important;
+  box-shadow: 0px 0px 0px #ffffff !important;
+}
 .bg--pending:hover {
   box-shadow: 0px 10px 20px 0px hsla(38, 79%, 47%, 0.5) !important;
 }
@@ -141,6 +152,10 @@ button:active {
   box-shadow: 0px 0px 0px #ffffff !important;
 }
 
+#blackBtn {
+  background-color: #3d3d3d !important;
+}
+
 .bg--danger:active {
   background: #c10a0a !important;
   box-shadow: 0px 0px 0px #ffffff !important;
@@ -149,6 +164,7 @@ button:active {
 .bg--danger {
   box-shadow: 0px 0px 0px #ffffff !important;
 }
+
 .btn:disabled {
   background: #d3d3d3 !important;
 }
@@ -500,6 +516,10 @@ button:focus {
   text-overflow: ellipsis;
 }
 
+.txt-font {
+  font-size: 25px;
+}
+
 .pttl {
   position: relative;
   white-space: nowrap;
@@ -667,6 +687,14 @@ button:focus {
 .card-brdr {
   border: 1.75px solid #eaeaea !important;
   box-shadow: none !important;
+}
+
+.card-brdr-no-shadow {
+  box-shadow: none !important;
+}
+
+.crd-img-radius {
+  border-radius: 12px !important;
 }
 
 .txt-no-wrp {

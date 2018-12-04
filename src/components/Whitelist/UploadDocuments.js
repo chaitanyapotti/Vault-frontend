@@ -66,7 +66,7 @@ class UploadDocuments extends Component {
               </label>
               <input id="passport-upload" name="passportDoc" type="file" accept="image/*, application/pdf" onChange={this.passportDocChanged} />
               <span className="push--left">
-                {passportFileName && <CUIChip avatar={<Avatar>{idType[1].toUpperCase()}</Avatar>} label={idType[0]} />}
+                {passportFileName && <CUIChip avatar={<Avatar>{(idType[1]|| "").toUpperCase()}</Avatar>} label={idType[0]} />}
               </span>
             </div>
 
@@ -97,7 +97,7 @@ class UploadDocuments extends Component {
               <input id="selfie-upload" type="file" name="selfieDoc" accept="image/*" onChange={this.selfieChanged} />
               <span className="push--left">
                 {selfieFileName && this.state.selfie ? null : (
-                  <CUIChip avatar={<Avatar>{addressType[1].toUpperCase()}</Avatar>} label={addressType[0]} />
+                  <CUIChip avatar={<Avatar>{(addressType[1]|| "").toUpperCase()}</Avatar>} label={addressType[0]} />
                 )}
               </span>
             </div>
@@ -130,7 +130,7 @@ class UploadDocuments extends Component {
               </label>
               <input id="address-upload" type="file" accept="image/*, application/pdf" onChange={this.addressDocChanged} />
               <span className="push--left">
-                {addressFileName && <CUIChip avatar={<Avatar>{addressType[1].toUpperCase()}</Avatar>} label={addressType[0]} />}
+                {addressFileName && <CUIChip avatar={<Avatar>{(addressType[1]|| "").toUpperCase()}</Avatar>} label={addressType[0]} />}
               </span>
             </div>
             <div className="txt">Accepted file types: jpg, png, jpeg, pdf</div>

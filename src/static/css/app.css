@@ -125,6 +125,7 @@ button:active {
 .card-home:active {
   background: #198bd1 !important;
   box-shadow: 0px 0px 0px #ffffff !important;
+  transform: translate(0px, 0px) !important;
 }
 .bg--pending:hover {
   box-shadow: 0px 10px 20px 0px hsla(38, 79%, 47%, 0.5) !important;

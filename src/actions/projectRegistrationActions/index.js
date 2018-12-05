@@ -65,7 +65,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     killAcceptancePercent: "80",
     xfrRejectionPercent: "50",
     tapAcceptancePercent: "50",
-    network: "rinkeby",
+    network: "main",
     version: "1",
     totalMintableSupply: web3.utils.toWei(parseInt(projectData.totalSaleTokens + totalNonSaleTokens, 10).toString()),
     currentDeploymentIndicator: 0,

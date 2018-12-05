@@ -29,7 +29,7 @@ export function postUserFormData(userRegistrationData, userLocalPublicAddress) {
   userFormObject.dateOfBirth = userRegistrationData.dateOfBirth;
   userFormObject.citizenship = userRegistrationData.citizenship;
   userFormObject.isVaultMember = false;
-  userFormObject.network = "rinkeby";
+  userFormObject.network = "main";
   userFormObject.email = userRegistrationData.email;
   return dispatch =>
     axios
@@ -92,7 +92,7 @@ export const requestVaultMembership = (userLocalPublicAddress, isIssuer, country
             const gasPrice = await web3.eth.getGasPrice();
             const instance = new web3.eth.Contract(abi, config.vault_contract_address, { from: userLocalPublicAddress });
             instance.methods
-              .requestMembership([(countryIndex+1).toString(), param2])
+              .requestMembership([(countryIndex + 1).toString(), param2])
               .send({
                 from: userLocalPublicAddress,
                 value: web3.utils.toWei(ethers, "ether"),

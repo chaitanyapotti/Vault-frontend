@@ -9,7 +9,7 @@ class LandingPage extends Component {
   onWhiteListClick = () => {
     const { history } = this.props || {};
     // TODO: after deployment
-    history.push({ pathname: `/governance/details`, search: `?projectid=${123}` });
+    history.push({ pathname: `/governance/details`, search: `?projectid=5c07c4cafff9a5eca2e9c057` });
   };
 
   render() {

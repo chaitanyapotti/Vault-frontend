@@ -24,7 +24,8 @@ import {
   r1TokenCount,
   getRoundText,
   significantDigits,
-  r1Finish
+  r1Finish,
+  getButtonVisibility
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
@@ -88,9 +89,9 @@ class ProjectDetailCrowdSale extends Component {
   }
 
   onWhiteListClickInternal = () => {
-    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
+    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember, network } = this.props || {};
     if (isVaultMember) {
-      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
+      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress, network);
     }
   };
 
@@ -160,7 +161,8 @@ class ProjectDetailCrowdSale extends Component {
       daicoTokenAddress,
       pollFactoryAddress,
       minimumEtherContribution,
-      network
+      network,
+      isMembershipRequestPending
     } = this.props || {};
     const { buyModalOpen } = this.state;
     const r1Rate = getR1Rate(rounds);
@@ -187,7 +189,7 @@ class ProjectDetailCrowdSale extends Component {
             urls={urls}
             whitepaper={whitepaper}
             buttonText="Get Whitelisted"
-            buttonVisibility={typeof isCurrentMember !== "undefined" && !isCurrentMember}
+            buttonVisibility={getButtonVisibility(isCurrentMember, isMembershipRequestPending, signinStatusFlag)}
             buttonSpinning={buttonSpinning}
             onClick={this.onWhiteListClickInternal}
             signinStatusFlag={signinStatusFlag}
@@ -204,6 +206,7 @@ class ProjectDetailCrowdSale extends Component {
             remainingAllocation={remainingAllocation}
             daicoTokenAddress={daicoTokenAddress}
             network={network}
+            isMembershipRequestPending={isMembershipRequestPending}
           />
           <PDetailCrowdSale
             individualCap={significantDigits(formattedMaxEtherContribution)}
@@ -283,7 +286,7 @@ const mapStateToProps = state => {
     buyAmount,
     userContribution
   } = projectCrowdSaleReducer || {};
-  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
+  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash, isMembershipRequestPending } = projectPreStartReducer || {};
   return {
     isCurrentMember,
     buttonSpinning,
@@ -296,7 +299,8 @@ const mapStateToProps = state => {
     buyButtonTransactionHash,
     r1FinalizeButtonTransactionHash,
     buyAmount,
-    userContribution
+    userContribution,
+    isMembershipRequestPending
   };
 };
 

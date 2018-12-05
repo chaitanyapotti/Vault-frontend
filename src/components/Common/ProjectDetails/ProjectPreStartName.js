@@ -27,7 +27,8 @@ const ProjectPreStartName = props => {
     thumbnailUrl,
     isCurrentMember,
     daicoTokenAddress,
-    network
+    network,
+    isMembershipRequestPending
   } = props || {};
   const disabledMsg = getSignInStatusText(signinStatusFlag);
   const link = getEtherScanHashLink(whitelistButtonTransactionHash, network);
@@ -85,7 +86,7 @@ const ProjectPreStartName = props => {
           </div>
         </Col>
         <Col lg={6} className="text-right">
-          {signinStatusFlag < 4 && typeof isCurrentMember === "undefined" ? (
+          {signinStatusFlag < 4 && (typeof isCurrentMember === "undefined" || !isCurrentMember) ? (
             <div className="hli">
               <CustomToolTip title={disabledMsg} id="btn-disabled" disabled>
                 <span>
@@ -103,16 +104,18 @@ const ProjectPreStartName = props => {
                 </LoadingButton>
               </a>
             </div>
+          ) : isMembershipRequestPending ? (
+            <span className="hli">Your request is pending</span>
+          ) : isCurrentMember ? (
+            <span>
+              You are whitelisted <img src="/assets/Vault/whitelist.svg" alt="whitelist checked" width="20" height="20" />
+            </span>
           ) : buttonVisibility ? (
             <div className="hli">
               <LoadingButton onClick={onClick} loading={buttonSpinning}>
                 {buttonText}
               </LoadingButton>
             </div>
-          ) : isCurrentMember ? (
-            <span>
-              You are whitelisted <img src="/assets/Vault/whitelist.svg" alt="whitelist checked" width="20" height="20" />
-            </span>
           ) : (
             <span width="20">
               <BtnLoader width={45} height={9} />

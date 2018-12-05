@@ -683,7 +683,7 @@ const mapStateToProps = state => {
     tapPollsHistoryData,
     xfrPollsHistoryData
   } = projectDetailGovernanceReducer || {};
-  const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
+  const { isCurrentMember, buttonSpinning, isMembershipRequestPending } = projectPreStartReducer || {};
   const { prices } = fetchPriceReducer || {};
 
   return {
@@ -734,7 +734,8 @@ const mapStateToProps = state => {
     killVoterCount,
     killPollsHistoryData,
     tapPollsHistoryData,
-    xfrPollsHistoryData
+    xfrPollsHistoryData,
+    isMembershipRequestPending
   };
 };
 

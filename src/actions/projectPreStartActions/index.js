@@ -2,11 +2,16 @@ import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
 import actionTypes from "../../action_types";
-import { pollTxHash } from "../helperActions";
+import { pollTxHashResult } from "../helperActions";
 
 export const isAlreadyWhiteListed = receipt => ({
   payload: { receipt },
   type: actionTypes.WHITELIST_CHECK
+});
+
+export const isWhiteListPending = receipt => ({
+  payload: { receipt },
+  type: actionTypes.WHITELIST_CHECK_PENDING
 });
 
 export const isButtonSpinning = receipt => ({
@@ -14,7 +19,7 @@ export const isButtonSpinning = receipt => ({
   type: actionTypes.BUTTON_SPINNING
 });
 
-export const onWhiteListClick = (version, contractName, contractAddress, userLocalPublicAddress) => async dispatch => {
+export const onWhiteListClick = (version, contractName, contractAddress, userLocalPublicAddress, network) => async dispatch => {
   dispatch(isButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: contractName } })
@@ -34,10 +39,16 @@ export const onWhiteListClick = (version, contractName, contractAddress, userLoc
             type: actionTypes.WHITELIST_BUTTON_TRANSACTION_HASH_RECEIVED
           });
           dispatch(
-            pollTxHash(
+            pollTxHashResult(
               transactionHash,
-              () => {
-                dispatch(isAlreadyWhiteListed(true));
+              response => {
+                if (response.logs && response.logs.length === 2) dispatch(isAlreadyWhiteListed(true));
+                if (response.logs && response.logs.length === 1)
+                  dispatch({
+                    type: actionTypes.WHITELIST_CHECK_PENDING,
+                    payload: true
+                  });
+                // dispatch(checkWhiteList(version, contractAddress, userLocalPublicAddress, network));
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.WHITELIST_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -46,6 +57,10 @@ export const onWhiteListClick = (version, contractName, contractAddress, userLoc
               () => {
                 dispatch(isButtonSpinning(false));
                 dispatch(isAlreadyWhiteListed(false));
+                dispatch({
+                  type: actionTypes.WHITELIST_CHECK_PENDING,
+                  payload: false
+                });
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.WHITELIST_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -55,6 +70,10 @@ export const onWhiteListClick = (version, contractName, contractAddress, userLoc
               () => {
                 dispatch(isButtonSpinning(false));
                 dispatch(isAlreadyWhiteListed(false));
+                dispatch({
+                  type: actionTypes.WHITELIST_CHECK_PENDING,
+                  payload: false
+                });
                 dispatch({
                   payload: { transactionHash: "" },
                   type: actionTypes.WHITELIST_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -67,6 +86,10 @@ export const onWhiteListClick = (version, contractName, contractAddress, userLoc
           console.error(err.message);
           dispatch(isButtonSpinning(false));
           dispatch(isAlreadyWhiteListed(false));
+          dispatch({
+            type: actionTypes.WHITELIST_CHECK_PENDING,
+            payload: false
+          });
         });
     })
     .catch(err => {
@@ -88,7 +111,44 @@ export const checkWhiteList = (version, contractAddress, userLocalPublicAddress,
     .then(response => {
       if (response.status === 200) {
         const { data } = response.data;
-        dispatch(isAlreadyWhiteListed(data === "true"));
+        if (data === "true") dispatch(isAlreadyWhiteListed(true));
+        else {
+          axios
+            .get(`${config.api_base_url}/web3/vaulttoken/ismembershipapprovalpending`, {
+              params: { version, network, address, useraddress: userLocalPublicAddress }
+            })
+            .then(otherResponse => {
+              if (otherResponse.status === 200) {
+                if (otherResponse.data.data === "true") {
+                  dispatch(isAlreadyWhiteListed(false));
+                  dispatch({
+                    type: actionTypes.WHITELIST_CHECK_PENDING,
+                    payload: true
+                  });
+                } else {
+                  dispatch(isAlreadyWhiteListed(false));
+                  dispatch({
+                    type: actionTypes.WHITELIST_CHECK_PENDING,
+                    payload: false
+                  });
+                }
+              } else {
+                dispatch(isAlreadyWhiteListed(false));
+                dispatch({
+                  type: actionTypes.WHITELIST_CHECK_PENDING,
+                  payload: false
+                });
+              }
+            })
+            .catch(err => {
+              console.error(err.message);
+              dispatch(isAlreadyWhiteListed(false));
+              dispatch({
+                type: actionTypes.WHITELIST_CHECK_PENDING,
+                payload: false
+              });
+            });
+        }
       } else {
         console.error("api response error");
         dispatch(isAlreadyWhiteListed(false));

@@ -112,7 +112,8 @@ class Deployer extends Component {
       xfrRejectionPercent,
       tapAcceptancePercent,
       lockedTokensAddress,
-      tapIncrementFactor
+      tapIncrementFactor,
+      config.poll_deployer_contract_address
     ];
     deployAction(version, _id, currentDeploymentIndicator, args, "PollFactory", userLocalPublicAddress, nonce);
   };
@@ -467,10 +468,10 @@ class Deployer extends Component {
             {signinStatusFlag === 5 ? (
               <Grid>
                 <Row>
-                  <Col lg={10} />
+                  <Col lg={12} />
                 </Row>
                 <Row>
-                  <Col>
+                  <Col lg={12}>
                     <VerticalStepper
                       history={this.props.history}
                       getStepContent={this.getStepContent}

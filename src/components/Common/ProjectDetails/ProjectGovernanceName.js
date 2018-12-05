@@ -33,7 +33,8 @@ const ProjectGovernanceName = props => {
     thumbnailUrl,
     daicoTokenAddress,
     remainingAllocation,
-    network
+    network,
+    isMembershipRequestPending
   } = props || {};
   const { website } = urls;
   const link = whitelistButtonTransactionHash !== "" ? getEtherScanHashLink(whitelistButtonTransactionHash, network) : "";
@@ -95,7 +96,7 @@ const ProjectGovernanceName = props => {
           </div>
         </Col>
         <Col lg={7} className="text-right hl">
-          {signinStatusFlag < 4 && typeof isCurrentMember === "undefined" ? (
+          {signinStatusFlag < 4 && (typeof isCurrentMember === "undefined" || !isCurrentMember) ? (
             <div className="hli">
               <CustomToolTip title={warningText} id="btn-disabled" disabled>
                 <span>
@@ -123,6 +124,8 @@ const ProjectGovernanceName = props => {
                 </span>
               </CustomToolTip>
             </div>
+          ) : isMembershipRequestPending ? (
+            <span className="hli">Your Request is pending</span>
           ) : buttonVisibility ? (
             <span className="hli">
               <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={buttonSpinning}>

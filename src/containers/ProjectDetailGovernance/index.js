@@ -68,7 +68,8 @@ import {
   getLastRoundInfo,
   getKillPollStartDate,
   getXfrEndDate,
-  getEtherScanHashLink
+  getEtherScanHashLink,
+  getButtonVisibility
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import AlertModal from "../../components/Common/AlertModal";
@@ -251,9 +252,9 @@ class ProjectDetailGovernance extends Component {
   };
 
   onWhiteListClickInternal = () => {
-    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
+    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember, network } = this.props || {};
     if (isVaultMember) {
-      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
+      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress, network);
     }
   };
 
@@ -464,7 +465,8 @@ class ProjectDetailGovernance extends Component {
       etherCollected,
       minimumEtherContribution,
       unlockTokensData,
-      network
+      network,
+      isMembershipRequestPending
     } = this.props || {};
     // const r1Rate = getR1Rate(rounds);
     const price = getPrice(tokenTag, prices, roundInfo) || 0;
@@ -580,7 +582,7 @@ class ProjectDetailGovernance extends Component {
             whitepaper={whitepaper}
             lastRoundInfo={getLastRoundInfo(roundInfo, currentRoundNumber)}
             buttonText="Get Whitelisted"
-            buttonVisibility={typeof isCurrentMember !== "undefined" && !isCurrentMember && currentRoundNumber !== "4"}
+            buttonVisibility={getButtonVisibility(isCurrentMember, isMembershipRequestPending, signinStatusFlag) && currentRoundNumber !== "4"}
             buttonSpinning={buttonSpinning}
             onClick={this.onWhiteListClickInternal}
             signinStatusFlag={signinStatusFlag}
@@ -594,6 +596,7 @@ class ProjectDetailGovernance extends Component {
             currentRoundNumber={currentRoundNumber}
             isCurrentMember={isCurrentMember}
             network={network}
+            isMembershipRequestPending={isMembershipRequestPending}
           />
           <PDetailGovernance
             voteSaturationLimit={capPercent / 100}
@@ -786,7 +789,7 @@ const mapStateToProps = state => {
     unlockTokensLoading,
     killVoterCount
   } = projectDetailGovernanceReducer || {};
-  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
+  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash, isMembershipRequestPending } = projectPreStartReducer || {};
   const { prices } = fetchPriceReducer || {};
   const { spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray, contributionArray, contriArrayReceived } =
     state.deployerReducer || {};
@@ -840,7 +843,8 @@ const mapStateToProps = state => {
     contriArrayReceived,
     unlockTokensData,
     unlockTokensLoading,
-    killVoterCount
+    killVoterCount,
+    isMembershipRequestPending
   };
 };
 

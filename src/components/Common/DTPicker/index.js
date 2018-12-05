@@ -25,7 +25,7 @@ class DTPicker extends PureComponent {
           onChange={handleDateChange}
           label={label}
           style={{ margin: "16px 0 8px" }}
-          format="Do MMM YYYY | mm:h A z"
+          format="Do MMM YYYY | hh:mm A z"
           mask={[/\d/, /\d/, /\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, " ", /\d/, /\d/, ":", /\d/, /\d/, " ", /a|p/i, "M"]}
           disablePast={disablePast}
           disableFuture={disableFuture}

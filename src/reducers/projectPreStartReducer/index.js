@@ -2,6 +2,7 @@ import actionTypes from "../../action_types";
 
 export const initialState = {
   isCurrentMember: undefined,
+  isMembershipRequestPending: undefined,
   buttonSpinning: false,
   whitelistButtonTransactionHash: ""
 };
@@ -11,7 +12,8 @@ export default (state = initialState, action) => {
     case actionTypes.CLEAR_GOVERNANCE_STATES: {
       return {
         ...state,
-        isCurrentMember: undefined
+        isCurrentMember: undefined,
+        isMembershipRequestPending: undefined
       };
     }
     case actionTypes.BUTTON_SPINNING: {
@@ -34,6 +36,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isCurrentMember: receipt
+      };
+    }
+    case actionTypes.WHITELIST_CHECK_PENDING: {
+      const receipt = action.payload;
+      return {
+        ...state,
+        isMembershipRequestPending: receipt
       };
     }
     default:

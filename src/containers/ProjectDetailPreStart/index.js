@@ -5,7 +5,14 @@ import { ProjectPreStartName, PDetailPreStart, TokenChart } from "../../componen
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
-import { formatDate, formatFromWei, getR1Price, getSoftCap, getHardCap } from "../../helpers/common/projectDetailhelperFunctions";
+import {
+  formatDate,
+  formatFromWei,
+  getR1Price,
+  getSoftCap,
+  getHardCap,
+  getButtonVisibility
+} from "../../helpers/common/projectDetailhelperFunctions";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
 
 class ProjectDetailPreStart extends Component {
@@ -30,9 +37,9 @@ class ProjectDetailPreStart extends Component {
     "3 Round DAICO";
 
   onWhiteListClickInternal = () => {
-    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
+    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember, network } = this.props || {};
     if (isVaultMember) {
-      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
+      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress, network);
     }
   };
 
@@ -66,7 +73,8 @@ class ProjectDetailPreStart extends Component {
       totalMintableSupply,
       pollFactoryAddress,
       daicoTokenAddress,
-      network
+      network,
+      isMembershipRequestPending
     } = this.props || {};
     return (
       <Grid>
@@ -81,7 +89,7 @@ class ProjectDetailPreStart extends Component {
             urls={urls}
             whitepaper={whitepaper}
             buttonText="Get Whitelisted"
-            buttonVisibility={typeof isCurrentMember !== "undefined" && !isCurrentMember}
+            buttonVisibility={getButtonVisibility(isCurrentMember, isMembershipRequestPending, signinStatusFlag)}
             buttonSpinning={buttonSpinning}
             onClick={this.onWhiteListClickInternal}
             signinStatusFlag={signinStatusFlag}
@@ -90,6 +98,7 @@ class ProjectDetailPreStart extends Component {
             isCurrentMember={isCurrentMember}
             daicoTokenAddress={daicoTokenAddress}
             network={network}
+            isMembershipRequestPending={isMembershipRequestPending}
           />
           <PDetailPreStart
             icoStartDate={formatDate(startDateTime)}
@@ -124,11 +133,12 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => {
   const { projectPreStartReducer } = state || {};
-  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
+  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash, isMembershipRequestPending } = projectPreStartReducer || {};
   return {
     isCurrentMember,
     buttonSpinning,
-    whitelistButtonTransactionHash
+    whitelistButtonTransactionHash,
+    isMembershipRequestPending
   };
 };
 

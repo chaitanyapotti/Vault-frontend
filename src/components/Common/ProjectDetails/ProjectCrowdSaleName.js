@@ -34,7 +34,8 @@ const ProjectCrowdSaleName = props => {
     thumbnailUrl,
     remainingAllocation,
     daicoTokenAddress,
-    network
+    network,
+    isMembershipRequestPending
   } = props || {};
   const { website } = urls;
   const link =
@@ -95,7 +96,7 @@ const ProjectCrowdSaleName = props => {
           </div>
         </Col>
         <Col lg={6} className="text-right hl">
-          {signinStatusFlag < 4 && typeof isCurrentMember === "undefined" ? (
+          {signinStatusFlag < 4 && (typeof isCurrentMember === "undefined" || !isCurrentMember) ? (
             <div className="hli">
               <CustomToolTip title={warningText} id="btn-disabled" disabled>
                 <span>
@@ -119,6 +120,8 @@ const ProjectCrowdSaleName = props => {
                 Initialise Refund
               </LoadingButton>
             </span>
+          ) : isMembershipRequestPending ? (
+            <span className="hli">Your request is pending</span>
           ) : isCurrentMember ? (
             <div className="hli">
               <CustomToolTip title={disabledText} disabled={!buyButtonDisabled || parseFloat(remainingAllocation) === 0}>

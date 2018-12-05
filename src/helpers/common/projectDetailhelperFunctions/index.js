@@ -390,6 +390,18 @@ const r1Finish = (r1EndTime, roundInfo) => {
   return new Date(r1EndTime) < new Date() && totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).lt(web3.utils.toBN(tokenCount));
 };
 
+const getButtonVisibility = (isCurrentMember, isMembershipRequestPending, signInStatusFlag) => {
+  if (
+    typeof isCurrentMember !== "undefined" &&
+    typeof isMembershipRequestPending !== "undefined" &&
+    !isCurrentMember &&
+    !isMembershipRequestPending &&
+    signInStatusFlag > 3
+  )
+    return true;
+  return false;
+};
+
 const getSignInStatusText = (signInStatusFlag, isIssuerOfProject) => {
   switch (signInStatusFlag) {
     case 0:
@@ -462,5 +474,6 @@ export {
   getKillPollStartDate,
   getXfrEndDate,
   getEtherScanHashLink,
-  getEtherScanAddressLink
+  getEtherScanAddressLink,
+  getButtonVisibility
 };

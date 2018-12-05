@@ -23,9 +23,9 @@ import {
   roundTokensSold,
   r1TokenCount,
   getRoundText,
-  significantDigits,
   r1Finish,
-  getButtonVisibility
+  getButtonVisibility,
+  getIndividualCap
 } from "../../helpers/common/projectDetailhelperFunctions";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
@@ -209,7 +209,7 @@ class ProjectDetailCrowdSale extends Component {
             isMembershipRequestPending={isMembershipRequestPending}
           />
           <PDetailCrowdSale
-            individualCap={significantDigits(formattedMaxEtherContribution)}
+            individualCap={getIndividualCap(maximumEtherContribution, rounds)}
             voteSaturationLimit={capPercent / 100}
             killFrequency="Quarterly"
             initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}

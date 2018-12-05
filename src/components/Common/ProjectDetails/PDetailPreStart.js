@@ -38,7 +38,7 @@ const PDetailPreStart = props => {
         </Col>
         <Col lg={6} className="txt">
           <div className="txt-bold">Individual Cap:</div>
-          <div className="text--secondary">{individualCap} ETH/person</div>
+          <div className="text--secondary">{individualCap}</div>
         </Col>
       </Row>
 

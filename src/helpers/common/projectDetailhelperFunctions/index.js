@@ -402,6 +402,12 @@ const getButtonVisibility = (isCurrentMember, isMembershipRequestPending, signIn
   return false;
 };
 
+const getIndividualCap = (maximumEtherContribution, rounds) => {
+  const r1Goal = parseFloat(getR1Goal(rounds));
+  const maxEther = significantDigits(formatFromWei(maximumEtherContribution, 3));
+  return maxEther > r1Goal ? "Uncapped" : `${maxEther} ETH/person`;
+};
+
 const getSignInStatusText = (signInStatusFlag, isIssuerOfProject) => {
   switch (signInStatusFlag) {
     case 0:
@@ -475,5 +481,6 @@ export {
   getXfrEndDate,
   getEtherScanHashLink,
   getEtherScanAddressLink,
-  getButtonVisibility
+  getButtonVisibility,
+  getIndividualCap
 };

@@ -11,7 +11,8 @@ import {
   getR1Price,
   getSoftCap,
   getHardCap,
-  getButtonVisibility
+  getButtonVisibility,
+  getIndividualCap
 } from "../../helpers/common/projectDetailhelperFunctions";
 import MasonaryLayout from "../../components/Common/MasonaryLayout";
 
@@ -102,7 +103,7 @@ class ProjectDetailPreStart extends Component {
           />
           <PDetailPreStart
             icoStartDate={formatDate(startDateTime)}
-            individualCap={formatFromWei(maximumEtherContribution, 3)}
+            individualCap={getIndividualCap(maximumEtherContribution, rounds)}
             voteSaturationLimit={capPercent / 100}
             killFrequency="Quarterly"
             initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}

@@ -36,7 +36,7 @@ const PDetailCrowdSale = props => {
       <Row className="push-top--35">
         <Col lg={6} className="txt">
           <div className="txt-bold">Individual Cap: </div>
-          <div className="text--secondary">{individualCap} ETH/person</div>
+          <div className="text--secondary">{individualCap}</div>
         </Col>
         <Col lg={6} className="txt">
           <div className="txt-bold">User Token Balance: </div>

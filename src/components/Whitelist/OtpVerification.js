@@ -114,7 +114,7 @@ class OtpVerification extends Component {
                 />
               </Col>
             </Row>
-            <Row>{citizenship.length > 0 ? <div> Country detected: {citizenship}</div> : null}</Row>
+            {/* <Row>{citizenship.length > 0 ? <div> Country detected: {citizenship}</div> : null}</Row> */}
             <Row className="push--top">
               <Col>
                 <ButtonComponent label="Send OTP" onClick={this.handleSendOtp} disabled={phoneNumber === "" || otpFromServer !== ""} />
@@ -139,14 +139,14 @@ class OtpVerification extends Component {
               </Col>
             </Row>
 
-            <Row>
+            {/* <Row>
               <Col xs={12}>
                 <span style={{ color: "red" }} className="txt">
                   Please provide a phone number belonging to your country of citizenship. Vault’s smart contract will assign your country based on
                   your phone numbers country. Your passport will only be used for manual verification.
                 </span>
               </Col>
-            </Row>
+            </Row> */}
 
             {this.props.otpVerificationSuccessful ? (
               <div className="push--top">OTP Verification Successful. Go to next step.</div>

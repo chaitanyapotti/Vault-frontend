@@ -144,7 +144,8 @@ class UploadDocuments extends Component {
             <ButtonComponent label="Save" onClick={() => onClickSave()} />
           </span>
           <span className="push--left">
-            <ButtonComponent label="Next" onClick={() => onClickNext()} disabled={disabledFlag} />
+            {/* <ButtonComponent label="Next" onClick={() => onClickNext()} disabled={disabledFlag} /> */}
+            <ButtonComponent label="Next" onClick={() => onClickNext()} />
           </span>
         </span>
       </div>

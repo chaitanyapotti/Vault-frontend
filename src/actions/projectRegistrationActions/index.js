@@ -56,7 +56,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     urls: {
       website: projectData.websiteLink,
       github: projectData.githubLink,
-      facebook: projectData.facebookLink,
+      reddit: projectData.redditLink,
       telegram: projectData.telegramLink,
       twitter: projectData.twitterLink,
       medium: projectData.mediumLink
@@ -65,7 +65,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     killAcceptancePercent: "80",
     xfrRejectionPercent: "50",
     tapAcceptancePercent: "50",
-    network: "rinkeby",
+    network: "main",
     version: "1",
     totalMintableSupply: web3.utils.toWei(parseInt(projectData.totalSaleTokens + totalNonSaleTokens, 10).toString()),
     currentDeploymentIndicator: 0,
@@ -114,7 +114,7 @@ export function projectMetadata(projectData, userLocalPublicAddress) {
     urls: {
       website: projectData.websiteLink,
       github: projectData.githubLink,
-      facebook: projectData.facebookLink,
+      reddit: projectData.redditLink,
       telegram: projectData.telegramLink,
       twitter: projectData.twitterLink,
       medium: projectData.mediumLink
@@ -521,10 +521,10 @@ export function mediumLinkChangedAction(value) {
   };
 }
 
-export function facebookLinkChangedAction(value) {
+export function redditLinkChangedAction(value) {
   return dispatch => {
     dispatch({
-      type: actionTypes.FACEBOOK_LINK_CHANGED,
+      type: actionTypes.REDDIT_LINK_CHANGED,
       payload: value
     });
   };

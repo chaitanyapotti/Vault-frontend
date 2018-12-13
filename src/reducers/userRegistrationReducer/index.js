@@ -1,6 +1,10 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
+import {countryList} from "../../constants";
+import { validateEmail } from "../../helpers/common/validationHelperFunctions";
+
+const callingCountries = require("country-data").callingCountries;
 
 export const initialState = {
   passportUrl: "",
@@ -25,6 +29,7 @@ export const initialState = {
   gender: "",
   dateOfBirth: null,
   citizenship: "",
+  countryIndex: 0,
   activeStep: 0,
   phoneNumber: "",
   countryCode: "",
@@ -37,6 +42,8 @@ export const initialState = {
   otpFailedMessage: "",
   conditionOneAccepted: false,
   conditionTwoAccepted: false,
+  conditionThreeAccepted: false,
+  conditionFourAccepted: false,
   vaultMembershipRequested: false,
   vaultMembershipRequestChecked: false,
   isVaultMembershipButtonSpinning: false,
@@ -72,7 +79,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         vaultMembershipRequested: action.payload,
-        vaultMembershipRequestChecked: true, 
+        vaultMembershipRequestChecked: true,
         activeStep: 7
       };
     }
@@ -106,10 +113,16 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.USER_EMAIL_CHANGED: {
+      if (validateEmail(action.payload)) {
+        localErrors[actionTypes.USER_EMAIL_CHANGED] = "";
+      } else {
+        localErrors[actionTypes.USER_EMAIL_CHANGED] = "Not a valid email";
+      }
       return {
         ...state,
-        email: action.payload
-      }
+        email: action.payload,
+        errors: localErrors
+      };
     }
 
     case actionTypes.VAULT_MEMBERSHIP_CHECK: {
@@ -133,6 +146,20 @@ export default function(state = initialState, action) {
       };
     }
 
+    case actionTypes.CONDITION_THREE_CHANGED: {
+      return {
+        ...state,
+        conditionThreeAccepted: action.payload
+      };
+    }
+
+    case actionTypes.CONDITION_FOUR_CHANGED: {
+      return {
+        ...state,
+        conditionFourAccepted: action.payload
+      };
+    }
+
     case actionTypes.OTP_SENT_TO_USER_SUCCESS: {
       if (action.payload !== "") {
         localErrors[actionTypes.PHONE_NUMBER_CHANGED] = "";
@@ -150,7 +177,7 @@ export default function(state = initialState, action) {
 
     case actionTypes.OTP_SENT_TO_USER_FAILED: {
       if (action.payload !== "") {
-        localErrors[actionTypes.PHONE_NUMBER_CHANGED] = "Enter a Valid Phone Number";
+        localErrors[actionTypes.PHONE_NUMBER_CHANGED] = "The given phone number is invalid or already registered with another public address.";
       }
       if (action.payload !== "") {
         localErrors[actionTypes.USER_OTP_INPUT_CHANGED] = "";
@@ -175,9 +202,27 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.COUNTRY_CODE_CHANGED: {
+      let citizenship = "";
+      let countryIndex = 0
+      for (const country in callingCountries) {
+        // console.log(callingCountries[country])
+        if (callingCountries[country].countryCallingCodes) {
+          for (const i of callingCountries[country].countryCallingCodes) {
+            // console.log(i.trim())
+            if (action.payload === i.trim()) {
+              citizenship = callingCountries[country].name;
+            }
+          }
+        }
+      }
+      let countryArrayList = countryList.map(x => x.name);
+      countryIndex = countryArrayList.indexOf(citizenship);
+
       return {
         ...state,
-        countryCode: action.payload
+        countryCode: action.payload,
+        citizenship,
+        countryIndex
       };
     }
 
@@ -365,6 +410,22 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.DATE_OF_BIRTH_CHANGED: {
+      // today = new Date();
+      // currentYear = today.getFullYear();
+      // currentMonth = today.getMonth();
+      // currentDay = today.getDate();
+      // birth = new Date(action.payload);
+      // birthYear = birth.getFullYear();
+      // birthMonth = birth.getMonth();
+      // birthday = birth.getDate();
+      // age = currentYear - birthYear;
+      // ageMonth = currentMonth - birthMonth;
+      // ageDay = currentDay - birthday;
+      // if ((age === 18 && ageMonth <= 0 && ageDay <= 0) || age < 18) {
+      //   localErrors[actionTypes.DATE_OF_BIRTH_CHANGED] = "Age should be greater than 18";
+      // } else {
+      //   localErrors[actionTypes.DATE_OF_BIRTH_CHANGED] = "";
+      // }
       return {
         ...state,
         dateOfBirth: action.payload

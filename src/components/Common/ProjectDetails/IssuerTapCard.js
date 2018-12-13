@@ -1,9 +1,11 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { getSignInStatusText, getEtherScanHashLink } from "../../../helpers/common/projectDetailhelperFunctions";
+import BtnLoader from "../../Loaders/BtnLoader";
+import { CustomToolTip } from "../FormComponents";
 
 const IssuerTapCard = props => {
   const {
@@ -18,14 +20,33 @@ const IssuerTapCard = props => {
     onIncrementTapClick,
     onDeployTapPollClick,
     deployTapPollButtonTransactionHash,
-    incrementTapButtonTransactionHash
+    incrementTapButtonTransactionHash,
+    signinStatusFlag,
+    ownerAddress,
+    userLocalPublicAddress,
+    tapPollConsensus,
+    onTapPollsHistoryClick,
+    network
   } = props || {};
-  const link = `https://rinkeby.etherscan.io/tx/${deployTapPollButtonTransactionHash}`;
-  const tapIncrementLink = `https://rinkeby.etherscan.io/tx/${incrementTapButtonTransactionHash}`;
+  const link = getEtherScanHashLink(deployTapPollButtonTransactionHash, network);
+  const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
+  const isDisabled = !canIncreaseTap;
+  const tapWarningText = "Can't increase tap now";
+  const tapDeployText = "Can't deploy now";
+  const tapIncrementLink = getEtherScanHashLink(incrementTapButtonTransactionHash, network);
   return (
     <div>
       <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
-        <div className="txt-xxxl text--primary">Tap Increment</div>
+        <Row>
+          <Col className="txt-xxxl text--primary" lg={8}>
+            Tap Increment
+          </Col>
+          <Col className="push-half--top text-right" lg={4}>
+            <LoadingButton className="text--black lnktags btn-link" type="text" onClick={onTapPollsHistoryClick}>
+              View Tap History
+            </LoadingButton>
+          </Col>
+        </Row>
         <Row className="push-top--35">
           <Col lg={6} className="txt">
             <div className="txt-bold">Current Tap Amount: </div>
@@ -46,15 +67,15 @@ const IssuerTapCard = props => {
 
         <Row className="push--top">
           <Col lg={6}>
-            {!isPermissioned || !canIncreaseTap ? (
+            {!isPermissioned ? (
               <div className="hli">
-                <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
+                <CustomToolTip title={disabledMsg} id="btn-disabled" placement="bottom" disabled>
                   <div>
                     <LoadingButton style={{ padding: "0 40px" }} disabled>
                       Increase Tap
                     </LoadingButton>
                   </div>
-                </Tooltip>
+                </CustomToolTip>
               </div>
             ) : incrementTapButtonTransactionHash !== "" ? (
               <a href={ensureHttpUrl(tapIncrementLink)} target="_blank" rel="noreferrer noopener">
@@ -64,27 +85,37 @@ const IssuerTapCard = props => {
                   </LoadingButton>
                 </span>
               </a>
-            ) : (
-              <span className="hli">
-                <LoadingButton
-                  style={{ padding: "0 40px" }}
-                  onClick={onIncrementTapClick}
-                  loading={incrementTapButtonSpinning}
-                  disabled={!canIncreaseTap}
-                >
-                  Increase Tap
-                </LoadingButton>
+            ) : !tapPollConsensus ? (
+              <span width="20">
+                <BtnLoader width={45} height={9} />
               </span>
+            ) : (
+              <div className="hli">
+                <CustomToolTip title={tapWarningText} id="btn-disabled" placement="bottom" disabled={isDisabled}>
+                  <span className="hli">
+                    <LoadingButton
+                      style={{ padding: "0 40px" }}
+                      onClick={onIncrementTapClick}
+                      loading={incrementTapButtonSpinning}
+                      disabled={isDisabled}
+                    >
+                      Increase Tap
+                    </LoadingButton>
+                  </span>
+                </CustomToolTip>
+              </div>
             )}
           </Col>
           <Col lg={6} className="text-right">
-            {!isPermissioned || !canDeployTapPoll ? (
+            {!isPermissioned ? (
               <div className="hli">
-                <Tooltip title="This feature is only for Vault Issuer Members" id="btn-disabled">
-                  <LoadingButton style={{ padding: "0 40px" }} disabled>
-                    Deploy Tap Poll
-                  </LoadingButton>
-                </Tooltip>
+                <CustomToolTip title={disabledMsg} id="btn-disabled" placement="bottom" disabled>
+                  <span>
+                    <LoadingButton style={{ padding: "0 40px" }} disabled>
+                      Deploy Tap Poll
+                    </LoadingButton>
+                  </span>
+                </CustomToolTip>
               </div>
             ) : deployTapPollButtonTransactionHash !== "" ? (
               <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
@@ -94,17 +125,25 @@ const IssuerTapCard = props => {
                   </LoadingButton>
                 </span>
               </a>
-            ) : (
-              <span className="hli">
-                <LoadingButton
-                  style={{ padding: "0 40px" }}
-                  onClick={onDeployTapPollClick}
-                  loading={deployTapPollButtonSpinning}
-                  disabled={!canDeployTapPoll}
-                >
-                  Deploy Tap Poll
-                </LoadingButton>
+            ) : !tapPollConsensus ? (
+              <span width="20">
+                <BtnLoader width={45} height={9} />
               </span>
+            ) : (
+              <div className="hli">
+                <CustomToolTip title={tapDeployText} id="btn-disabled" placement="bottom" disabled={!canDeployTapPoll}>
+                  <span className="hli">
+                    <LoadingButton
+                      style={{ padding: "0 40px" }}
+                      onClick={onDeployTapPollClick}
+                      loading={deployTapPollButtonSpinning}
+                      disabled={!canDeployTapPoll}
+                    >
+                      Deploy Tap Poll
+                    </LoadingButton>
+                  </span>
+                </CustomToolTip>
+              </div>
             )}
           </Col>
         </Row>

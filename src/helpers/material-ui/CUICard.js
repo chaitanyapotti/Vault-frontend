@@ -43,13 +43,13 @@ const CUICard = props => <Card {...props}>{props.children}</Card>;
 
 CUICard.defaultProps = {
   style: { overflow: "unset" },
-  raised: true,
+  raised: true
 };
 
 CUICard.propTypes = {
   children: PropTypes.node.isRequired,
   style: PropTypes.shape({}),
-  raised: PropTypes.bool,
+  raised: PropTypes.bool
 };
 
 /** *********************** CUICardMedia ************************ */
@@ -58,20 +58,20 @@ const CUICardMedia = props => <CardMedia {...props}>{props.children}</CardMedia>
 CUICardMedia.defaultProps = {
   children: null,
   srclink: null,
-  mediaimg: null,
+  mediaimg: null
 };
 
 CUICardMedia.propTypes = {
   children: PropTypes.node,
   srclink: PropTypes.string,
-  mediaimg: PropTypes.string,
+  mediaimg: PropTypes.string
 };
 
 /** *********************** CUICardActions ************************ */
 const CUICardActions = props => <CardActions {...props}>{props.children}</CardActions>;
 
 CUICardActions.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 /** *********************** CUICardHeader ************************ */
@@ -81,21 +81,21 @@ CUICardHeader.defaultProps = {
   children: null,
   cardtitle: "",
   subtitle: "",
-  headerimg: "",
+  headerimg: ""
 };
 
 CUICardHeader.propTypes = {
   children: PropTypes.node,
   cardtitle: PropTypes.string,
   subtitle: PropTypes.string,
-  headerimg: PropTypes.string,
+  headerimg: PropTypes.string
 };
 
 /** *********************** CUICardText ************************ */
 const CUICardText = props => <CardContent {...props}>{props.children}</CardContent>;
 
 CUICardText.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 export { CUICard, CUICardMedia, CUICardText, CUICardActions, CUICardHeader };

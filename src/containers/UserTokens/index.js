@@ -9,9 +9,9 @@ import {
   formatFromWei,
   formatMoney,
   formatTokenPrice,
-  r1EndsIn,
   significantDigits,
-  formatCurrencyNumber
+  formatCurrencyNumber,
+  secondsToDhms
 } from "../../helpers/common/projectDetailhelperFunctions";
 import TableLoader from "../../components/Loaders/TableLoader";
 
@@ -32,7 +32,12 @@ class UserTokens extends Component {
     }
   }
 
-  calculateKillDuration = killPollStartDate => new Date(killPollStartDate) - new Date();
+  calculateKillDuration = killPollStartDate => {
+    const daysLeft = new Date() - new Date(killPollStartDate);
+    if (daysLeft < 0) return secondsToDhms(-daysLeft);
+    const secondsLeft = (daysLeft / 1000) % (90 * 3600 * 24);
+    return secondsToDhms(90 * 3600 * 24 * 1000 - secondsLeft * 1000);
+  };
 
   render() {
     const {
@@ -50,16 +55,37 @@ class UserTokens extends Component {
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = userTokensTable.map(item => {
-      const { projectName, tokenPrice, balance, projectHealth, tapIncrement, killConsensus, killPollStartDate, xfrCount, _id, thumbnailUrl } =
-        item || {};
-      const dataArray = [
-        { projectName, thumbnailUrl },
-        formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
-        `${formatCurrencyNumber(balance, 0)}(${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
+      const {
+        projectName,
+        tokenPrice,
+        balance,
         projectHealth,
-        `${significantDigits(tapIncrement)}(Yes)`,
-        `${significantDigits(killConsensus)}(No)`,
-        r1EndsIn(this.calculateKillDuration(killPollStartDate)),
+        tapIncrement,
+        killConsensus,
+        killPollStartDate,
+        xfrCount,
+        _id,
+        thumbnailUrl,
+        tapAcceptancePercent,
+        killAcceptancePercent
+      } = item || {};
+      const tapText =
+        parseFloat(tapIncrement) > parseFloat(tapAcceptancePercent)
+          ? `${significantDigits(tapIncrement)} (Yes)`
+          : `${significantDigits(tapIncrement)} (No)`;
+      const killText =
+        parseFloat(killConsensus) > parseFloat(killAcceptancePercent)
+          ? `${significantDigits(killConsensus)} (Yes)`
+          : `${significantDigits(killConsensus)} (No)`;
+      const dataArray = [
+        thumbnailUrl,
+        projectName,
+        formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
+        `${formatCurrencyNumber(balance, 0)} (${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
+        projectHealth,
+        tapText,
+        killText,
+        this.calculateKillDuration(killPollStartDate),
         xfrCount,
         _id
       ];
@@ -77,24 +103,20 @@ class UserTokens extends Component {
                   <GridData
                     history={history}
                     tableData={data}
-                    filterList={[[], [], [], [], [], [], [], [], []]}
                     filter={false}
                     columns={[
                       {
+                        name: "",
+                        options: {
+                          download: false,
+                          customBodyRender: value => <img style={{ margin: "0 10px" }} alt="" src={value} width="35" height="35" />
+                        },
+                        filter: true
+                      },
+                      {
                         name: "Name",
                         options: {
-                          customBodyRender: value => {
-                            const { projectName, thumbnailUrl } = value || {};
-                            return (
-                              <div style={{ width: "130px" }} className="hl">
-                                <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                                <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
-                                  {projectName}
-                                </div>
-                              </div>
-                            );
-                          },
-                          filter: false
+                          filter: true
                         }
                       },
                       {
@@ -110,8 +132,18 @@ class UserTokens extends Component {
                         }
                       },
                       { name: "Health", options: { filter: false } },
-                      { name: "Tap Increment*", options: { filter: false } },
-                      { name: "Kill Consensus", options: { filter: false } },
+                      {
+                        name: "Tap Increment*",
+                        options: {
+                          filter: false
+                        }
+                      },
+                      {
+                        name: "Kill Consensus",
+                        options: {
+                          filter: false
+                        }
+                      },
                       { name: "Next Kill In", options: { filter: false } },
                       { name: "XFRs", options: { filter: false } },
                       { name: "Id", options: { display: false, filter: false } }

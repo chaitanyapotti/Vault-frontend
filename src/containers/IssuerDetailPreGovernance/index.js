@@ -4,12 +4,18 @@ import { bindActionCreators } from "redux";
 import { IPreGovernanceDetails, IssuerPreGovernanceName, TokenChart, TimeLine } from "../../components/Common/ProjectDetails";
 import { getEtherCollected, getRoundTokensSold, finalizeR1 } from "../../actions/projectCrowdSaleActions/index";
 import { startR1 } from "../../actions/issuerDetailGovernanceActions/index";
-import { formatFromWei, getR1Price, getR1Goal, getHardCap, getSoftCap, formatDate } from "../../helpers/common/projectDetailhelperFunctions";
-import { fetchPrice } from "../../actions/priceFetchActions/index";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import {
+  formatFromWei,
+  getR1Price,
+  getHardCap,
+  getSoftCap,
+  formatDate,
+  r1Finish,
+  getR1Goal
+} from "../../helpers/common/projectDetailhelperFunctions";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
-
-const bigInt = require("big-integer");
+import MasonryLayout from "../../components/Common/MasonaryLayout";
 
 class IssuerDetailPreGovernance extends Component {
   componentDidMount() {
@@ -17,26 +23,13 @@ class IssuerDetailPreGovernance extends Component {
       version,
       pollFactoryAddress,
       crowdSaleAddress,
+      network,
       getEtherCollected: fetchEtherCollected,
-      getRoundTokensSold: fetchRoundTokensSold,
-      fetchPrice: etherPriceFetch
+      getRoundTokensSold: fetchRoundTokensSold
     } = this.props || {};
-    etherPriceFetch("ETH");
-    fetchEtherCollected(version, pollFactoryAddress);
-    fetchRoundTokensSold(version, crowdSaleAddress, 0);
+    fetchEtherCollected(version, pollFactoryAddress, network);
+    fetchRoundTokensSold(version, crowdSaleAddress, 0, network);
   }
-
-  componentDidUpdate(prevProps) {}
-
-  r1Finish = () => {
-    const { r1EndTime, rounds, roundInfo } = this.props || {};
-    const [round1] = rounds || {};
-    const { tokenCount } = round1 || {}; // tokens/wei
-    const { totalTokensSold } = roundInfo || "";
-    if (new Date(r1EndTime) < new Date() && bigInt(totalTokensSold).lesser(bigInt(tokenCount))) return true;
-
-    return false;
-  };
 
   onR1FinalizeClick = () => {
     const { version, crowdSaleAddress, finalizeR1: r1Finalize, userLocalPublicAddress, projectid } = this.props || {};
@@ -44,9 +37,9 @@ class IssuerDetailPreGovernance extends Component {
   };
 
   onStartR1Click = () => {
-    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress, projectid, currentRoundNumber } = this.props || {};
+    const { version, crowdSaleAddress, startR1: r1Start, userLocalPublicAddress, projectid, currentRoundNumber, network } = this.props || {};
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10);
-    r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber);
+    r1Start(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber, network);
   };
 
   isPermissioned = () => {
@@ -75,77 +68,84 @@ class IssuerDetailPreGovernance extends Component {
       foundationDetails,
       startDateTime,
       r1EndTime,
-      etherCollected,
       signinStatusFlag,
       startR1ButtonSpinning,
       r1FinalizeButtonSpinning,
       currentRoundNumber,
       startR1ButtonTransactionHash,
       r1FinalizeButtonTransactionHash,
-      thumbnailUrl
+      thumbnailUrl,
+      prices,
+      roundInfo,
+      totalMintableSupply,
+      etherCollected,
+      daicoTokenAddress,
+      ownerAddress,
+      userLocalPublicAddress,
+      pollFactoryAddress,
+      network
     } = this.props || {};
     return (
       <Grid>
         {currentRoundNumber === "1" ? (
-          <CUICard style={{ padding: "40px 50px" }}>
+          <div style={{ marginBottom: "20px" }}>
             <TimeLine
-              fundsCollected={formatFromWei(etherCollected, 3)}
-              roundGoal={getR1Goal(this.props)}
+              fundsCollected={formatFromWei(etherCollected, 3) || 0}
+              roundGoal={getR1Goal(rounds)}
               startDate={new Date(startDateTime)}
               endDate={new Date(r1EndTime)}
             />
-          </CUICard>
+          </div>
         ) : null}
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <IssuerPreGovernanceName
-              projectName={projectName}
-              tokenTag={tokenTag}
-              price={getR1Price(this.props)}
-              roundText="3 Round DAICO"
-              description={description}
-              urls={urls}
-              whitepaper={whitepaper}
-              StartRound1Enabled={currentRoundNumber === "0" && new Date() > new Date(startDateTime) && new Date() < new Date(r1EndTime)}
-              StartRound1Visibility={
-                (currentRoundNumber === "0" && new Date() < new Date(startDateTime)) ||
-                (currentRoundNumber === "0" && new Date() > new Date(startDateTime) && new Date() < new Date(r1EndTime))
-              }
-              startR1ButtonSpinning={startR1ButtonSpinning}
-              signinStatusFlag={signinStatusFlag}
-              r1Finish={this.r1Finish()}
-              onR1FinalizeClick={this.onR1FinalizeClick}
-              r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
-              onStartR1Click={this.onStartR1Click}
-              isPermissioned={this.isPermissioned()}
-              onEditClick={this.onEditClick}
-              startR1ButtonTransactionHash={startR1ButtonTransactionHash}
-              r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
-              thumbnailUrl={thumbnailUrl}
+        <MasonryLayout>
+          <IssuerPreGovernanceName
+            projectName={projectName}
+            tokenTag={tokenTag}
+            price={getR1Price(rounds)}
+            roundText="3 Round DAICO"
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            StartRound1Visibility={currentRoundNumber === "0" && new Date() > new Date(startDateTime) && new Date() < new Date(r1EndTime)}
+            startR1ButtonSpinning={startR1ButtonSpinning}
+            signinStatusFlag={signinStatusFlag}
+            r1Finish={r1Finish(r1EndTime, roundInfo)}
+            onR1FinalizeClick={this.onR1FinalizeClick}
+            r1FinalizeButtonSpinning={r1FinalizeButtonSpinning}
+            onStartR1Click={this.onStartR1Click}
+            isPermissioned={this.isPermissioned()}
+            onEditClick={this.onEditClick}
+            startR1ButtonTransactionHash={startR1ButtonTransactionHash}
+            r1FinalizeButtonTransactionHash={r1FinalizeButtonTransactionHash}
+            thumbnailUrl={thumbnailUrl}
+            daicoTokenAddress={daicoTokenAddress}
+            ownerAddress={ownerAddress}
+            userLocalPublicAddress={userLocalPublicAddress}
+            network={network}
+          />
+          <IPreGovernanceDetails
+            startDateTime={formatDate(startDateTime)}
+            individualCap={formatFromWei(maximumEtherContribution, 3)}
+            voteSaturationLimit={capPercent / 100}
+            killFrequency="Quarterly"
+            initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
+            initialFundRelease={formatFromWei(initialFundRelease, 3)}
+            tapIncrementUnit={tapIncrementFactor / 100}
+            hardCapCapitalisation={getSoftCap(rounds, prices)}
+            dilutedCapitalisation={getHardCap(totalMintableSupply, prices, rounds)}
+            pollFactoryAddress={pollFactoryAddress}
+            network={network}
+          />
+          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
+            <TokenChart
+              rounds={rounds}
+              foundationDetails={foundationDetails}
+              prices={prices}
+              currentRoundNumber={currentRoundNumber}
+              roundInfo={roundInfo}
             />
-          </Col>
-          <Col xs={12} lg={6}>
-            <IPreGovernanceDetails
-              startDateTime={formatDate(startDateTime)}
-              individualCap={formatFromWei(maximumEtherContribution, 3)}
-              voteSaturationLimit={capPercent / 100}
-              killFrequency="Quarterly"
-              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
-              initialFundRelease={formatFromWei(initialFundRelease, 3)}
-              tapIncrementUnit={tapIncrementFactor / 100}
-              hardCapCapitalisation={getSoftCap(this.props)}
-              dilutedCapitalisation={getHardCap(this.props)}
-            />
-          </Col>
-        </Row>
-
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <CUICard style={{ padding: "40px 50px" }}>
-              <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
-            </CUICard>
-          </Col>
-        </Row>
+          </CUICard>
+        </MasonryLayout>
       </Grid>
     );
   }
@@ -156,7 +156,6 @@ const mapDispatchToProps = dispatch =>
     {
       getEtherCollected,
       getRoundTokensSold,
-      fetchPrice,
       finalizeR1,
       startR1
     },
@@ -164,18 +163,13 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, signinManagerData, fetchPriceReducer, issuerDetailGovernanceReducer } = state || {};
+  const { projectCrowdSaleReducer, issuerDetailGovernanceReducer } = state || {};
   const { startR1ButtonTransactionHash } = issuerDetailGovernanceReducer;
   const { etherCollected, roundInfo, r1FinalizeButtonSpinning, startR1ButtonSpinning, r1FinalizeButtonTransactionHash } =
     projectCrowdSaleReducer || {};
-  const { prices } = fetchPriceReducer || {};
-  const { userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
   return {
     etherCollected,
     roundInfo,
-    userLocalPublicAddress,
-    signinStatusFlag,
-    prices,
     r1FinalizeButtonSpinning,
     startR1ButtonSpinning,
     startR1ButtonTransactionHash,

@@ -2,10 +2,11 @@ import React from "react";
 import LoadingButton from "../Common/LoadingButton";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import { ensureHttpUrl } from "../../helpers/common/urlFixerInHref";
+import { getEtherScanHashLink } from "../../helpers/common/projectDetailhelperFunctions";
 
 const DeployerCard = props => {
-  const { btnLabel, onClick, label, latestTxHash, deployContractStartButtonSpinning, speedup } = props || {};
-  const link = `https://rinkeby.etherscan.io/tx/${latestTxHash}`;
+  const { btnLabel, onClick, label, latestTxHash, deployContractStartButtonSpinning, network } = props || {};
+  const link = getEtherScanHashLink(latestTxHash, network);
   return (
     <div className="push-top--50">
       {latestTxHash !== "0x" ? (
@@ -49,7 +50,7 @@ const DeployerCard = props => {
 
           <Col lg={4} xs={12}>
             <div className="text--right">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={deployContractStartButtonSpinning}>
+              <LoadingButton style={{ padding: "0 40px", "margin-top": "-15px" }} onClick={onClick} loading={deployContractStartButtonSpinning}>
                 {btnLabel}
               </LoadingButton>
             </div>

@@ -4,6 +4,9 @@ import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { getSignInStatusText, getEtherScanAddressLink, getEtherScanHashLink } from "../../../helpers/common/projectDetailhelperFunctions";
+import { CustomToolTip } from "../FormComponents";
+import BtnLoader from "../../Loaders/BtnLoader";
 
 const IssuerPreGovernanceName = props => {
   const {
@@ -13,12 +16,9 @@ const IssuerPreGovernanceName = props => {
     price,
     roundText,
     description,
-    priceIncrement,
     whitepaper,
     lastRoundInfo,
     StartRound1Visibility,
-    StartRound1Enabled,
-    priceIncrementFlag,
     r1Finish,
     onR1FinalizeClick,
     startR1ButtonSpinning,
@@ -28,13 +28,24 @@ const IssuerPreGovernanceName = props => {
     onEditClick,
     startR1ButtonTransactionHash,
     r1FinalizeButtonTransactionHash,
-    thumbnailUrl
+    thumbnailUrl,
+    daicoTokenAddress,
+    signinStatusFlag,
+    ownerAddress,
+    userLocalPublicAddress,
+    network
   } = props || {};
-  const link = `https://rinkeby.etherscan.io/tx/${startR1ButtonTransactionHash}`;
-  const refundLink = `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`;
+  const etherscanLink = getEtherScanAddressLink(daicoTokenAddress, network);
+  const disabledMsg = getSignInStatusText(signinStatusFlag, ownerAddress === userLocalPublicAddress);
+  const link =
+    startR1ButtonTransactionHash !== ""
+      ? getEtherScanHashLink(startR1ButtonTransactionHash, network)
+      : r1FinalizeButtonTransactionHash !== ""
+      ? getEtherScanHashLink(r1FinalizeButtonTransactionHash, network)
+      : "";
   const { website } = urls;
   return (
-    <CUICard style={{ padding: "40px 40px" }}>
+    <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
@@ -42,17 +53,17 @@ const IssuerPreGovernanceName = props => {
               <img alt="logo" className="prjct-logo hli" src={thumbnailUrl} />
             </span>
             <div className="hli push--left text--primary push-half--top">
-              <div className="txt-xxxl">
+              <div className="txt-xl">
                 {projectName} ({tokenTag})
               </div>
-              <div className="txt">
-                {price} ETH
-                {priceIncrementFlag ? <span className="txt-inc">{` ${priceIncrement}`}</span> : <div />}
-              </div>
+              <div className="txt opacity-75">{price} ETH</div>
             </div>
           </div>
         </Col>
-        <Col lg={4} className="txt-g-secondary txt">
+        <Col lg={4} className="push-half--top text-right">
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
           <span>{lastRoundInfo}</span>
         </Col>
       </Row>
@@ -67,56 +78,58 @@ const IssuerPreGovernanceName = props => {
         </Col>
       </Row>
       <Row className="push-half--top txt">
-        <Col>{description}</Col>
+        <Col lg={12} xs={12} className="fnt-ps">
+          {description}
+        </Col>
       </Row>
       <Row className="push--top">
         <Col lg={6} className="text--secondary txt">
           <div>
-            <a href={ensureHttpUrl(whitepaper)} target="_blank" rel="noopener noreferrer">
+            <a className="text--secondary" href={whitepaper} target="_blank" rel="noopener noreferrer">
               Read our whitepaper
             </a>
           </div>
           <div>
-            <a href={ensureHttpUrl(website)} target="_blank" rel="noopener noreferrer">
+            <a className="text--secondary" href={website} target="_blank" rel="noopener noreferrer">
               Learn more on our website
             </a>
           </div>
         </Col>
-        <Col lg={6} className="text-right hl  ">
+        <Col lg={6} className="text-right">
           {isPermissioned ? (
-            startR1ButtonTransactionHash !== "" ? (
-              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                  Status
-                </LoadingButton>
-              </a>
-            ) : r1FinalizeButtonTransactionHash !== "" ? (
-              <a href={ensureHttpUrl(refundLink)} target="_blank" rel="noreferrer noopener">
-                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                  Status
-                </LoadingButton>
-              </a>
+            startR1ButtonTransactionHash !== "" || r1FinalizeButtonTransactionHash !== "" ? (
+              <div>
+                <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                </a>
+              </div>
             ) : StartRound1Visibility ? (
-              <div className="hli">
-                <LoadingButton onClick={onStartR1Click} disabled={!StartRound1Enabled} loading={startR1ButtonSpinning}>
+              <span>
+                <LoadingButton style={{ padding: "0 40px" }} onClick={onStartR1Click} loading={startR1ButtonSpinning}>
                   Start Round 1
                 </LoadingButton>
-              </div>
-            ) : isPermissioned && r1Finish ? (
-              <div className="hli">
-                <LoadingButton onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
+              </span>
+            ) : r1Finish ? (
+              <span>
+                <LoadingButton style={{ padding: "0 40px" }} onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
                   Initialise Refund
                 </LoadingButton>
-              </div>
-            ) : null
+              </span>
+            ) : !StartRound1Visibility ? null : (
+              <span width="20">
+                <BtnLoader width={45} height={9} />
+              </span>
+            )
           ) : null}
-          {
-            <span className="hli">
-              <LoadingButton onClick={onEditClick} disabled={!isPermissioned}>
+          <CustomToolTip disabled={!isPermissioned} title={disabledMsg} id="btn-disabled">
+            <span>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onEditClick} disabled={!isPermissioned}>
                 Edit
               </LoadingButton>
             </span>
-          }
+          </CustomToolTip>
         </Col>
       </Row>
     </CUICard>

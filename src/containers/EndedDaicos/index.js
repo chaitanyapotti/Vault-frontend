@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import ContentLoader from "react-content-loader";
 import { fetchPrice } from "../../actions/priceFetchActions";
 import { getEndedDaicos, showEndedDaicosLoaderAction } from "../../actions/endedDaicosActions";
 import GridData from "../../components/GridData";
@@ -41,14 +40,15 @@ class EndedDaicos extends Component {
     let { ETH } = prices || {};
     ETH = ETH.price || {};
     const data = endedDaicosTable.map(item => {
-      const { projectName, startDateTime, endedAt, raisedAmount, tokenPrice, killConsensus, _id, thumbnailUrl } = item || {};
+      const { projectName, startDateTime, projectEndedAt, raisedAmount, tokenPrice, killConsensus, _id, thumbnailUrl } = item || {};
       const dataArray = [
-        { projectName, thumbnailUrl },
+        thumbnailUrl,
+        projectName,
         formatMoney(formatFromWei(parseFloat(raisedAmount)), 0),
         formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * parseFloat(ETH), 3))),
         `${killConsensus}%`,
         formatDate(startDateTime),
-        formatDate(endedAt),
+        formatDate(projectEndedAt),
         _id
       ];
       return dataArray;
@@ -64,20 +64,17 @@ class EndedDaicos extends Component {
             filter={false}
             columns={[
               {
+                name: "",
+                options: {
+                  download: false,
+                  filter: true,
+                  customBodyRender: value => <img style={{ margin: "0 10px" }} src={value} width="35" height="35" />
+                }
+              },
+              {
                 name: "Name",
                 options: {
-                  customBodyRender: value => {
-                    const { projectName, thumbnailUrl } = value || {};
-                    return (
-                      <div style={{ width: "130px" }} className="hl">
-                        <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                        <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
-                          {projectName}
-                        </div>
-                      </div>
-                    );
-                  },
-                  filter: false
+                  filter: true
                 }
               },
               { name: "Raised", options: { filter: false } },

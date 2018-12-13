@@ -5,6 +5,11 @@ import { CUIFormInput, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import DPicker from "../Common/DPicker";
+import moment from 'moment';
+import DatePickers from "../Common/DatePickers";
+import ReactSelect from "../Common/ReactSelect";
+import { ButtonComponent } from "../Common/FormComponents";
+import actionTypes from "../../action_types";
 
 import {
   addressLine1ChangedAction,
@@ -25,7 +30,8 @@ import {
   saveUserFormStates,
   emailChangedAction
 } from "../../actions/userRegistrationActions";
-const countryList = require('country-list');
+
+const countryList = require("country-data");
 
 class BuyersInformation extends Component {
   constructor(props) {
@@ -35,7 +41,7 @@ class BuyersInformation extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.saveUserFormStates(this.props.userRegistrationData, this.props.userLocalPublicAddress);
   }
 
@@ -60,7 +66,8 @@ class BuyersInformation extends Component {
   };
 
   onChangeCountry = e => {
-    this.props.countryChangedAction(e.target.value);
+    const { value } = e || {};
+    this.props.countryChangedAction(value);
   };
 
   onChangeTypeOfDocument = e => {
@@ -71,12 +78,12 @@ class BuyersInformation extends Component {
     this.props.documentNumberChangedAction(e.target.value);
   };
 
-  onChangeDateOfIssuance = date => {
-    this.props.dateOfIssuanceChangedAction(date);
+  onChangeDateOfIssuance = e => {
+    this.props.dateOfIssuanceChangedAction(e.target.value);
   };
 
-  onChangeDateOfExpiration = date => {
-    this.props.dateOfExpirationChangedAction(date);
+  onChangeDateOfExpiration = e => {
+    this.props.dateOfExpirationChangedAction(e.target.value);
   };
 
   onChangeFirstName = e => {
@@ -88,15 +95,15 @@ class BuyersInformation extends Component {
   };
 
   onChangeEmail = e => {
-    this.props.emailChangedAction(e.target.value); 
-  }
+    this.props.emailChangedAction(e.target.value);
+  };
 
   onChangeGender = e => {
     this.props.genderChangedAction(e.target.value);
   };
 
-  onChangeDateOfBirth = date => {
-    this.props.dateOfBirthChangedAction(date);
+  onChangeDateOfBirth = e => {
+    this.props.dateOfBirthChangedAction(e.target.value);
   };
 
   onChangeCitizenship = e => {
@@ -123,14 +130,34 @@ class BuyersInformation extends Component {
     return new Date(newDate.setDate(newDate.getDate() - 1));
   };
 
+  getErrorMsg = propName => {
+    const { errors } = this.props || {};
+    if (errors) {
+      if (errors.hasOwnProperty(propName)) {
+        return errors[propName];
+      }
+      return "";
+    }
+    return "";
+  };
+
+  getEndMaxDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const date = today.getDate();
+    const newDate = new Date(year - 18, month, date);
+    return newDate;
+  };
+
   render() {
     const { selectedDate } = this.state || {};
-    console.log("country list: ",countryList.getNames())
-    let countryChoices = []
-    const allCountries = countryList.getNames()
-    for (let i=0; i< allCountries.length; i++){
-      countryChoices.push({value: allCountries[i], primaryText: allCountries[i]})
+    let countryChoices = [];
+    const allCountries = countryList.countries.all;
+    for (let index = 0; index < allCountries.length; index += 1) {
+      countryChoices.push({ value: allCountries[index].name, label: allCountries[index].name });
     }
+    countryChoices = [...new Set(countryChoices)].sort();
     const {
       addressLine1,
       addressLine2,
@@ -147,22 +174,25 @@ class BuyersInformation extends Component {
       firstName,
       lastName,
       email,
-      gender
+      gender,
+      onClickNext,
+      disabledFlag,
+      onClickSave
     } = this.props || {};
     return (
       <div>
-        <div className="txt-m txt-dbld text--center">STEP: 4 Buyers Information</div>
+        <div className="txt-m txt-dbld text--left">Step 5: Buyers Information</div>
         <div className="txt push--top">
-          Due to Anti Money Laundering (AML) regulations. We are obliged to require the following information of every token sale participant.
+          Due to Anti Money Laundering (AML) regulations, we are obliged to require the following information of every token sale participant.
         </div>
-        <div className="txt-m txt-dbld push--top">Your Residential Address</div>
-        <div className="txt-m push-top--half">
-          Please share your residential address. In the next step you will be asked to provide the scan of a document proving the residency.
-        </div>
+
         <div className="push--top">
           <CUIDivider />
         </div>
-        <div className="txt-m txt-dbld push--top">Address</div>
+        <div className="txt-m txt-dbld push--top">Residential Address</div>
+        <div className="txt push-top--half">
+          Please share your residential address. In the next step you will be asked to provide the scan of a document proving your residency.
+        </div>
         <CUIFormInput
           required
           inputType={CUIInputType.TEXT}
@@ -231,7 +261,8 @@ class BuyersInformation extends Component {
           </Col>
 
           <Col lg={6}>
-            <CUIFormInput
+            <ReactSelect full data={countryChoices} placeholder="Eg: USA" inputLabel="Country" inputValue={country} onChange={this.onChangeCountry} />
+            {/* <CUIFormInput
               required
               inputType={CUIInputType.SELECT}
               full
@@ -241,11 +272,14 @@ class BuyersInformation extends Component {
               onChange={this.onChangeCountry}
               inputValue={country}
               items={countryChoices}
-              //items={[{ value: "USA", primaryText: "USA" }, { value: "INDIA", primaryText: "INDIA" }, { value: "CHINA", primaryText: "CHINA" }]}
-            />
+              // items={[{ value: "USA", primaryText: "USA" }, { value: "INDIA", primaryText: "INDIA" }, { value: "CHINA", primaryText: "CHINA" }]}
+            /> */}
           </Col>
         </Row>
-        <div className="txt-m txt-dbld push--top">YOUR PASSPORT / ID INFORMATION</div>
+
+        <br />
+        <br />
+        <div className="txt-m txt-dbld push--top">Passport/ID information</div>
 
         <Row className="push--top">
           <Col lg={6}>
@@ -279,37 +313,39 @@ class BuyersInformation extends Component {
         <Row className="push--top">
           {dateOfExpiration ? (
             <Col lg={6}>
-              <DPicker
+              <DatePickers
                 maxDate={this.getStartDate()}
-                selectedDate={selectedDate}
+                selectedDate={moment(dateOfIssuance).format('YYYY-MM-DD')}
                 label="Date Of Issuance"
                 handleDateChange={this.onChangeDateOfIssuance}
-                selectedDate={dateOfIssuance}
+                // selectedDate={dateOfIssuance}
               />
             </Col>
           ) : (
             <Col lg={6}>
-              <DPicker
-                selectedDate={selectedDate}
+              <DatePickers
+                selectedDate={moment(dateOfIssuance).format('YYYY-MM-DD')}
                 label="Date Of Issuance"
                 handleDateChange={this.onChangeDateOfIssuance}
-                selectedDate={dateOfIssuance}
+                // selectedDate={dateOfIssuance}
               />
             </Col>
           )}
 
           <Col lg={6}>
-            <DPicker
-              selectedDate={selectedDate}
+            <DatePickers
+              selectedDate={moment(dateOfExpiration).format('YYYY-MM-DD')}
               label="Expiration Date"
               minDate={this.getEndMinDate()}
               handleDateChange={this.onChangeDateOfExpiration}
-              selectedDate={dateOfExpiration}
             />
           </Col>
         </Row>
 
-        <div className="txt-m txt-dbld push--top">Full Name</div>
+        <br />
+        <br />
+
+        <div className="txt-m txt-dbld push--top">User Details</div>
 
         <Row className="push--top">
           <Col lg={6}>
@@ -351,51 +387,45 @@ class BuyersInformation extends Component {
               inputLabel="Gender"
               inputPlaceholder=""
               onChange={this.onChangeGender}
-              items={[{ value: "MALE", primaryText: "M" }, { value: "FEMALE", primaryText: "F" }, { value: "OTHER", primaryText: "O" }]}
+              items={[{ value: "MALE", primaryText: "Male" }, { value: "FEMALE", primaryText: "Female" }, { value: "OTHER", primaryText: "Other" }]}
               inputValue={gender}
             />
           </Col>
 
           <Col lg={6}>
-          <DPicker
-          SelectField = {true}
-          selectedDate={selectedDate}
-              disableFuture
+            <DatePickers
+              selectedDate={moment(dateOfBirth).format('YYYY-MM-DD')}
               label="Date of Birth"
               handleDateChange={this.onChangeDateOfBirth}
-              selectedDate={dateOfBirth}
-          />
+              maxDate={this.getEndMaxDate()}
+            />
           </Col>
         </Row>
 
         <Row className="push--top">
-        <Col lg={6}>
+          <Col lg={6}>
             <CUIFormInput
               required
-              inputType={CUIInputType.TEXT}
+              inputType={CUIInputType.EMAIL}
               full
-              forceAlpha
+              // forceAlpha
               inputName="Email"
               inputLabel="Email"
               inputPlaceholder="mohan@peace.org"
               onChange={this.onChangeEmail}
               inputValue={email}
-            />
-          </Col>
-          <Col lg={6}>
-            <CUIFormInput
-              required
-              inputType={CUIInputType.SELECT}
-              full
-              inputName="Country of Citizenship"
-              inputLabel="Country of Citizenship"
-              inputPlaceholder="USA"
-              onChange={this.onChangeCitizenship}
-              inputValue={citizenship}
-              items={countryChoices}
+              error={!!this.getErrorMsg(actionTypes.USER_EMAIL_CHANGED)}
+              helperText={this.getErrorMsg(actionTypes.USER_EMAIL_CHANGED)}
             />
           </Col>
         </Row>
+        <span className="float--right">
+          <ButtonComponent label="Save" onClick={() => onClickSave()} />
+          <span className="push--left">
+          <ButtonComponent label="Next" onClick={() => onClickNext()} />
+            {/* <ButtonComponent label="Next" onClick={() => onClickNext()} disabled={disabledFlag} /> */}
+          </span>
+        </span>
       </div>
     );
   }
@@ -420,7 +450,8 @@ const mapStateToProps = state => {
     email,
     gender,
     dateOfBirth,
-    citizenship
+    citizenship,
+    errors
   } = state.userRegistrationData || {};
   return {
     userLocalPublicAddress,
@@ -440,7 +471,8 @@ const mapStateToProps = state => {
     gender,
     dateOfBirth,
     citizenship,
-    userRegistrationData
+    userRegistrationData,
+    errors
   };
 };
 

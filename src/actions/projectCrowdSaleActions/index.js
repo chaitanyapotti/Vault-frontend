@@ -36,9 +36,9 @@ export const isR1FinalizeButtonSpinning = receipt => ({
   type: actionTypes.R1_FINALIZE_BUTTON_SPINNING
 });
 
-export const getEtherCollected = (version, contractAddress) => async dispatch => {
+export const getEtherCollected = (version, contractAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/pollfactory/totaletherraised`, {
       params: { version: version.toString(), network, address: contractAddress }
@@ -57,25 +57,22 @@ export const getEtherCollected = (version, contractAddress) => async dispatch =>
     });
 };
 
-export const getUserTokens = (crowdsaleAddress, version, roundNumber, address) => async dispatch => {
+export const getUserTokens = (crowdsaleAddress, version, roundNumber, address, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/crowdsale/round/userdetails`, {
-      params: { address: crowdsaleAddress, network, version: version.toString(), round: roundNumber - 1, useraddress: address }
+      params: { address: crowdsaleAddress, network, version: version.toString(), round: roundNumber, useraddress: address }
     })
     .then(async response => {
-      console.log("200", response.data);
       if (response.status === 200) {
         const { data } = response.data;
         dispatch(userTokens(data));
       } else {
-        console.log("400");
         dispatch(userTokens("0"));
       }
     })
     .catch(err => {
-      console.log("500");
       console.error(err.message);
       dispatch(userTokens("0"));
     });
@@ -88,9 +85,9 @@ export const buyAmountChangedAction = value => dispatch => {
   });
 };
 
-export const getRoundTokensSold = (version, contractAddress, round) => async dispatch => {
+export const getRoundTokensSold = (version, contractAddress, round, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/crowdsale/round/details`, {
       params: { version: version.toString(), network, address: contractAddress, round }
@@ -109,9 +106,9 @@ export const getRoundTokensSold = (version, contractAddress, round) => async dis
     });
 };
 
-export const getTokenBalance = (version, contractAddress, userLocalPublicAddress) => async dispatch => {
+export const getTokenBalance = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
   // doesn't call blockchain. await is non blocking
-  const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/web3/erc20token/tokenbalance`, {
       params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }
@@ -137,7 +134,8 @@ export const buyTokens = (
   amount,
   round,
   daicoTokenAddress,
-  pollFactoryAddress
+  pollFactoryAddress,
+  network
 ) => async dispatch => {
   dispatch(isBuyButtonSpinning(true));
   const gasPrice = await web3.eth.getGasPrice();
@@ -158,9 +156,10 @@ export const buyTokens = (
         pollTxHash(
           transactionHash,
           () => {
-            dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress));
-            dispatch(getRoundTokensSold(version, contractAddress, round));
-            dispatch(getEtherCollected(version, pollFactoryAddress));
+            dispatch(getTokenBalance(version, daicoTokenAddress, userLocalPublicAddress, network));
+            dispatch(getRoundTokensSold(version, contractAddress, round, network));
+            dispatch(getEtherCollected(version, pollFactoryAddress, network));
+            dispatch(getUserTokens(contractAddress, version, round, userLocalPublicAddress, network));
             dispatch({
               payload: { transactionHash: "" },
               type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -194,7 +193,7 @@ export const buyTokens = (
     });
 };
 
-export const finalizeR1 = (version, contractAddress, userLocalPublicAddress, projectid) => dispatch => {
+export const finalizeR1 = (version, contractAddress, userLocalPublicAddress, projectid, network) => dispatch => {
   dispatch(isR1FinalizeButtonSpinning(true));
   axios
     .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "CrowdSale" } })

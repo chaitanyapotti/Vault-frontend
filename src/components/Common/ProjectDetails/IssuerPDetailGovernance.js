@@ -1,12 +1,43 @@
 import React from "react";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
+import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import LoadingButton from "../LoadingButton";
+import { getEtherScanAddressLink } from "../../../helpers/common/projectDetailhelperFunctions";
 
 const IssuerPDetailGovernance = props => {
-  const { voteSaturationLimit, killAttemptsLeft, killFrequency, nextKillAttempt, totalRefundableBalance, killConsensus } = props || {};
+  const {
+    voteSaturationLimit,
+    killAttemptsLeft,
+    killFrequency,
+    nextKillAttempt,
+    totalRefundableBalance,
+    killConsensus,
+    pollFactoryAddress,
+    onKillPollsHistoryClick,
+    network
+  } = props || {};
+  const etherscanLink = getEtherScanAddressLink(pollFactoryAddress, network);
+
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
-      <div className="txt-xxxl text--primary">Project Details</div>
+      <Row>
+        <Col className="txt-xxxl text--primary" lg={6}>
+          Project Details
+        </Col>
+        <Col className="push-half--top text-right" lg={6}>
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="push-half--top text-right" lg={12}>
+          <LoadingButton className="text--black lnktags" type="text" onClick={onKillPollsHistoryClick}>
+            Kill Polls History
+          </LoadingButton>
+        </Col>
+      </Row>
       <Row className="push-half--top">
         <Col lg={6} className="txt">
           <div className="txt-bold">Vote Saturation Limit: </div>

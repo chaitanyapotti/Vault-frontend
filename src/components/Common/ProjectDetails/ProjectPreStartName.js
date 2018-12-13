@@ -1,10 +1,12 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { CustomToolTip } from "../FormComponents";
+import { getSignInStatusText, getEtherScanHashLink, getEtherScanAddressLink } from "../../../helpers/common/projectDetailhelperFunctions";
+import BtnLoader from "../../Loaders/BtnLoader";
 
 const ProjectPreStartName = props => {
   const {
@@ -14,19 +16,23 @@ const ProjectPreStartName = props => {
     price,
     roundText,
     description,
-    priceIncrement,
     whitepaper,
     lastRoundInfo,
     buttonText,
     onClick,
     buttonVisibility,
-    priceIncrementFlag,
     buttonSpinning,
     signinStatusFlag,
     whitelistButtonTransactionHash,
-    thumbnailUrl
+    thumbnailUrl,
+    isCurrentMember,
+    daicoTokenAddress,
+    network,
+    isMembershipRequestPending
   } = props || {};
-  const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
+  const disabledMsg = getSignInStatusText(signinStatusFlag);
+  const link = getEtherScanHashLink(whitelistButtonTransactionHash, network);
+  const etherscanLink = getEtherScanAddressLink(daicoTokenAddress, network);
   const { website } = urls;
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
@@ -40,14 +46,14 @@ const ProjectPreStartName = props => {
               <div className="txt-xl">
                 {projectName} ({tokenTag})
               </div>
-              <div className="txt opacity-75">
-                {price} ETH
-                {priceIncrementFlag ? <span className="txt-inc">{` ${priceIncrement}`}</span> : <div />}
-              </div>
+              <div className="txt opacity-75">{price} ETH</div>
             </div>
           </div>
         </Col>
-        <Col lg={4} className="txt-g-secondary txt">
+        <Col lg={4} className="push-half--top text-right">
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
           <span>{lastRoundInfo}</span>
         </Col>
       </Row>
@@ -79,28 +85,40 @@ const ProjectPreStartName = props => {
             </a>
           </div>
         </Col>
-        <Col lg={6} className="text-right   ">
-          {signinStatusFlag < 3 ? (
-            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-              <div>
-                <LoadingButton style={{ padding: "0 40px" }} disabled>
-                  {buttonText}
-                </LoadingButton>
-              </div>
-            </Tooltip>
+        <Col lg={6} className="text-right">
+          {signinStatusFlag < 4 && (typeof isCurrentMember === "undefined" || !isCurrentMember) ? (
+            <div className="hli">
+              <CustomToolTip title={disabledMsg} id="btn-disabled" disabled>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} disabled>
+                    {buttonText}
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
+            </div>
           ) : whitelistButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
-          ) : buttonVisibility ? (
-            <LoadingButton onClick={onClick} loading={buttonSpinning}>
-              {buttonText}
-            </LoadingButton>
-          ) : (
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
+          ) : isMembershipRequestPending ? (
+            <span className="hli">Your request is pending</span>
+          ) : isCurrentMember ? (
             <span>
               You are whitelisted <img src="/assets/Vault/whitelist.svg" alt="whitelist checked" width="20" height="20" />
+            </span>
+          ) : buttonVisibility ? (
+            <div className="hli">
+              <LoadingButton onClick={onClick} loading={buttonSpinning}>
+                {buttonText}
+              </LoadingButton>
+            </div>
+          ) : (
+            <span width="20">
+              <BtnLoader width={45} height={9} />
             </span>
           )}
         </Col>

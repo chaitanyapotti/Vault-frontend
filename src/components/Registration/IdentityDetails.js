@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { CUICard, CUIFormInput } from "../../helpers/material-ui";
+import Avatar from "@material-ui/core/Avatar";
+import { CUICard, CUIFormInput, CUIChip } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
 import {
@@ -14,7 +15,7 @@ import {
   telegramLinkChangedAction,
   githubLinkChangedAction,
   mediumLinkChangedAction,
-  facebookLinkChangedAction,
+  redditLinkChangedAction,
   twitterLinkChangedAction,
   teamAddressChangedAction,
   whitepaperChangedAction,
@@ -22,7 +23,6 @@ import {
   thumbnailChangedAction,
   uploadThumbnailAction
 } from "../../actions/projectRegistrationActions";
-import { ButtonComponent } from "../Common/FormComponents";
 import actionTypes from "../../action_types";
 
 class IdentityDetails extends React.Component {
@@ -67,7 +67,7 @@ class IdentityDetails extends React.Component {
   };
 
   onChangeFbLink = e => {
-    this.props.facebookLinkChangedAction(e.target.value);
+    this.props.redditLinkChangedAction(e.target.value);
   };
 
   onChangeTwtLink = e => {
@@ -80,7 +80,7 @@ class IdentityDetails extends React.Component {
 
   whitepaperChanged = e => {
     this.props.whitepaperChangedAction(e.target.files[0]);
-    this.props.uploadWhitepaperAction(e.target.files[0],  this.props.userLocalPublicAddress, "whitepaper");
+    this.props.uploadWhitepaperAction(e.target.files[0], this.props.userLocalPublicAddress, "whitepaper");
   };
 
   uploadWhitepaper = () => {
@@ -124,7 +124,7 @@ class IdentityDetails extends React.Component {
       projectDescription,
       twitterLink,
       githubLink,
-      facebookLink,
+      redditLink,
       telegramLink,
       mediumLink,
       teamAddress,
@@ -133,11 +133,15 @@ class IdentityDetails extends React.Component {
       whitepaperUrl,
       // uploadingThumbnail,
       thumbnailUrl,
-      allowEditAll
+      allowEditAll,
+      whitepaperPDFName,
+      thumbnailImageName
     } = this.props || {};
     return (
       <CUICard className="card-brdr">
-        <div className="txt-xl" style={{ padding: "40px 50px" }}>Identity Details</div>
+        <div className="txt-xl" style={{ padding: "40px 50px" }}>
+          Identity Details
+        </div>
         <hr />
         <div style={{ padding: "20px 50px" }}>
           <Row>
@@ -161,6 +165,9 @@ class IdentityDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
+                labelProps={{
+                  shrink: true
+                }}
                 inputName="Admin Email"
                 inputLabel="Admin Email"
                 inputPlaceholder="Eg. admin@electus.network"
@@ -212,7 +219,11 @@ class IdentityDetails extends React.Component {
                 inputType={CUIInputType.TEXT}
                 required
                 full
-                multiline={true}
+                InputProps={{
+                  multiline: true,
+                  rows: "4",
+                  margin: "normal"
+                }}
                 inputName="Project Description"
                 inputLabel="Project Description"
                 inputPlaceholder="Eg. Protocol for Decentralized Organizations"
@@ -288,13 +299,13 @@ class IdentityDetails extends React.Component {
               <CUIFormInput
                 inputType={CUIInputType.TEXT}
                 full
-                inputName="Facebook Link"
-                inputLabel="Facebook Link"
-                inputPlaceholder="Eg. https://www.facebook.com/electusnetwork/"
-                inputValue={facebookLink}
+                inputName="Reddit Link"
+                inputLabel="Reddit Link"
+                inputPlaceholder="Eg. https://www.reddit.com/r/ElectusNetwork/"
+                inputValue={redditLink}
                 onChange={this.onChangeFbLink}
-                error={!!this.getErrorMsg(actionTypes.FACEBOOK_LINK_CHANGED)}
-                helperText={this.getErrorMsg(actionTypes.FACEBOOK_LINK_CHANGED)}
+                error={!!this.getErrorMsg(actionTypes.REDDIT_LINK_CHANGED)}
+                helperText={this.getErrorMsg(actionTypes.REDDIT_LINK_CHANGED)}
               />
             </Col>
             <Col xs={12} lg={6}>
@@ -331,26 +342,46 @@ class IdentityDetails extends React.Component {
 
           <Row className="push--top">
             <Col lg={6}>
-              <div className="upload-btn-wrapper">
-                <ButtonComponent onClick={() => console.log("clicked")}>Upload Whitepaper</ButtonComponent>
-                <input name="whitepaper" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
-              </div>
-              <span className="push--left">{this.props.whitepaperPDF.name}</span>
-              <span className="push--left"><a href={this.props.whitepaperUrl} target="_blank" rel="noreferrer noopener">Whitepaper</a></span>
+              <label htmlFor="whitepaper-upload" className="btn bg--primary txt txt-dddbld text--white">
+                <div className="btn-padding">Upload Whitepaper</div>
+              </label>
+              <input name="whitepaper" id="whitepaper-upload" type="file" accept="application/pdf" onChange={this.whitepaperChanged} />
+              {/* <span className="push--left">{this.props.whitepaperPDF.name}</span> */}
+              {this.props.whitepaperUrl && (
+                <div className="push--top">
+                  <a href={this.props.whitepaperUrl} target="_blank" rel="noreferrer noopener">
+                    <CUIChip avatar={<Avatar>file</Avatar>} label={whitepaperPDFName} />
+                  </a>
+                </div>
+              )}
             </Col>
             <Col lg={6}>
-              <div className="upload-btn-wrapper">
-                <ButtonComponent onClick={() => console.log("clicked")}>Upload Thumbnail</ButtonComponent>
-                <input name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
-              </div>
-              <span>{this.props.thumbnailImage.name}</span>
-              <span> <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">Thumbnail</a> </span>
+              <label htmlFor="thumbnail-upload" className="btn bg--primary txt txt-dddbld text--white">
+                <div className="btn-padding">Upload Thumbnail</div>
+              </label>
+              <input id="thumbnail-upload" name="thumbnail" type="file" accept="image/*" onChange={this.thumbnailChanged} />
+              {/* <span className="push--left">{this.props.thumbnailImage.name}</span> */}
+              {this.props.thumbnailUrl && (
+                <div className="push--top">
+                  <a href={this.props.thumbnailUrl} target="_blank" rel="noreferrer noopener">
+                    <CUIChip avatar={<Avatar>file</Avatar>} label={thumbnailImageName} />
+                  </a>
+                </div>
+              )}
             </Col>
           </Row>
           <Row className="push--top">
             <Col lg={12}>
               <div className="text--center">
-                {this.state.thumbnailFile && <img alt="thumbnail" src={this.state.thumbnailFile} width="200" height="200" style={{ backgroundSize: "contain" }} />}
+                {this.state.thumbnailFile || this.props.thumbnailUrl !== "" ? (
+                  <img
+                    alt="thumbnail"
+                    src={this.state.thumbnailFile || this.props.thumbnailUrl}
+                    width="200"
+                    height="200"
+                    style={{ backgroundSize: "contain" }}
+                  />
+                ) : null}
               </div>
             </Col>
           </Row>
@@ -371,7 +402,7 @@ const mapStateToProps = state => {
     telegramLink,
     githubLink,
     mediumLink,
-    facebookLink,
+    redditLink,
     twitterLink,
     teamAddress,
     whitepaperPDF,
@@ -381,7 +412,9 @@ const mapStateToProps = state => {
     uploadingThumbnail,
     thumbnailUrl,
     errors,
-    allowEditAll
+    allowEditAll,
+    whitepaperPDFName,
+    thumbnailImageName
   } = state.projectRegistrationData || {};
   const { userLocalPublicAddress } = state.signinManagerData || {};
   return {
@@ -394,7 +427,7 @@ const mapStateToProps = state => {
     telegramLink,
     githubLink,
     mediumLink,
-    facebookLink,
+    redditLink,
     twitterLink,
     teamAddress,
     whitepaperPDF,
@@ -405,7 +438,9 @@ const mapStateToProps = state => {
     thumbnailUrl,
     errors,
     userLocalPublicAddress,
-    allowEditAll
+    allowEditAll,
+    whitepaperPDFName,
+    thumbnailImageName
   };
 };
 
@@ -421,7 +456,7 @@ const mapDispatchToProps = dispatch =>
       telegramLinkChangedAction,
       githubLinkChangedAction,
       mediumLinkChangedAction,
-      facebookLinkChangedAction,
+      redditLinkChangedAction,
       twitterLinkChangedAction,
       teamAddressChangedAction,
       whitepaperChangedAction,

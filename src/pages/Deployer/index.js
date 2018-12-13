@@ -8,7 +8,7 @@ import { fetchProjectDetails, deployContractAction, performContractAction, reset
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUIModal, CUIModalActions, CUIModalContent } from "../../helpers/material-ui";
 import web3 from "../../helpers/web3";
-import CustomizedStepper from "../../components/Common/CustomizedStepper";
+import VerticalStepper from "../../components/Common/VerticalStepper";
 import DeployerCard from "../../components/DeployerCard";
 import config from "../../config";
 import TableLoader from "../../components/Loaders/TableLoader";
@@ -37,15 +37,28 @@ class Deployer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { pageReloading } = this.props || {};
-    const { pageReloading: oldReload } = prevProps || {};
+    const { pageReloading, projectDetails } = this.props || {};
+    const { currentDeploymentIndicator, _id } = projectDetails || {};
+    const { pageReloading: oldReload, currentDeploymentIndicator: oldStep } = prevProps || {};
     if (oldReload !== pageReloading) {
       console.log("reloading in props");
       if (pageReloading) {
         window.location.reload();
       }
     }
+    if (oldStep !== currentDeploymentIndicator) {
+      if (currentDeploymentIndicator === 12) this.redirectToIssuerPage(_id);
+    }
   }
+
+  redirectToIssuerPage = projectid => {
+    const { history } = this.props || {};
+    console.log("redirecting to redirectToIssuerPage", projectid);
+    history.push({
+      pathname: `/issuergovernance/details`,
+      search: `?projectid=${projectid}`
+    });
+  };
 
   deployMembership = (nonce = "") => {
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
@@ -99,7 +112,8 @@ class Deployer extends Component {
       xfrRejectionPercent,
       tapAcceptancePercent,
       lockedTokensAddress,
-      tapIncrementFactor
+      tapIncrementFactor,
+      config.poll_deployer_contract_address
     ];
     deployAction(version, _id, currentDeploymentIndicator, args, "PollFactory", userLocalPublicAddress, nonce);
   };
@@ -250,172 +264,189 @@ class Deployer extends Component {
 
   getStepContent = () => {
     const { projectDetails, deployContractButtonSpinning, deployContractStartButtonSpinning } = this.props || {};
-    const { currentDeploymentIndicator, latestTxHash } = projectDetails || {};
+    const { currentDeploymentIndicator, latestTxHash, network } = projectDetails || {};
     switch (currentDeploymentIndicator) {
       case 0:
         return (
           <DeployerCard
-            label="Let's start deployment and deploy Membership Contract"
+            label="Deploy this contract to enable whitelisting in DAICO"
             btnLabel="Deploy Membership Contract"
             onClick={() => this.deployMembership("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 1:
         return (
           <DeployerCard
-            label="Let's deploy Daico Token Contract"
-            btnLabel="Deploy Daico Token"
+            label="Deploy this contract to enable creation of ERC-20 tokens"
+            btnLabel="Deploy ERC-20 Contract"
             onClick={() => this.deployDaicoToken("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 2:
         return (
           <DeployerCard
-            label="Let's deploy Locked Tokens Contract"
+            label="Deploy this contract to enable the locking of vested tokens for 1 year"
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
-            btnLabel="Deploy Locked Tokens"
+            btnLabel="Deploy Token Locker"
             onClick={() => this.deployLockedTokens("")}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 3:
         return (
           <DeployerCard
-            label="Let's deploy Poll Factory Contract"
+            label="Deploy this contract to enable Polls and Treasury on your DAICO"
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             btnLabel="Deploy Poll Factory"
             onClick={() => this.deployPollFactory("")}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 4:
         return (
           <DeployerCard
-            label="Let's deploy Crowd Sale Contract"
+            label="Deploy this contract to accept ether in exchange of minted ERC-20 tokens"
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
-            btnLabel="Deploy Crowd Sale"
+            btnLabel="Deploy Crowdsale Contract"
             onClick={() => this.deployCrowdSale("")}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 5:
         return (
           <DeployerCard
-            label="Let's set treasury address in Daico Token Contract"
+            label="Sign this transaction to define the treasury address of your DAICO in ERC-20 Contract"
             btnLabel="Set Treasury Address"
             onClick={() => this.setTreasuryInDaicoToken("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 6:
         return (
           <DeployerCard
-            label="Let's set crowdsale address in Daico Token Contract"
-            btnLabel="Set crowdsale address"
+            label="Sign this transaction to define the crowdsale address of your DAICO in ERC-20 Contract"
+            btnLabel="Set Crowdsale Address"
             onClick={() => this.setCrowdsaleInDaicoToken("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 7:
         return (
           <DeployerCard
-            label="Let's set crowdsale address in Locked Tokens Contract"
-            btnLabel="Set crowdsale Address"
+            label="Sign this transaction to define the crowdsale address of your DAICO in Token Locker"
+            btnLabel="Set Crowdsale Address"
             onClick={() => this.setCrowdsaleInLockedTokens("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 8:
         return (
           <DeployerCard
-            label="Let's set crowdsale address in Poll factory Contract"
-            btnLabel="Set crowdsale Address"
+            label="Sign this transaction to define the crowdsale address of your DAICO in Poll Factory Contract"
+            btnLabel="Set Crowdsale Address"
             onClick={() => this.setCrowdSaleInPollFactory("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 9:
         return (
           <DeployerCard
-            label="Let's Create Kill Polls"
-            btnLabel="Create Kill Polls"
+            label="Sign this transaction to deploy the first 4 Kill Polls"
+            btnLabel="Create Kill Polls I"
             onClick={() => this.createKillPolls("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 10:
         return (
           <DeployerCard
-            label="Let's Create Kill Polls part 2"
-            btnLabel="Create Kill Polls part 2"
+            label="Sign this transaction to deploy the remaining 4 Kill Polls"
+            btnLabel="Create Kill Polls II"
             onClick={() => this.createKillPolls("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       case 11:
         return (
           <DeployerCard
-            label="Let's Mint foundation tokens"
-            btnLabel="Mint foundation tokens"
+            label="Sign this transaction to mint the vested tokens"
+            btnLabel="Mint vested tokens"
             onClick={() => this.mintFoundationTokens("")}
             deployContractButtonSpinning={deployContractButtonSpinning}
             deployContractStartButtonSpinning={deployContractStartButtonSpinning}
             latestTxHash={latestTxHash}
             speedup={this.onSpeedUpClick}
+            network={network}
           />
         );
       default:
         return (
-          <DeployerCard label="Deployment is done. Click here to be redirected to home page" btnLabel="Redirect Home" onClick={this.redirectHome} />
+          <DeployerCard
+            label="Deployment is done. Click here to be redirected to home page"
+            btnLabel="Redirect Home"
+            onClick={this.redirectHome}
+            network={network}
+          />
         );
     }
   };
 
   getSteps = () => [
-    "Deploy Membership",
-    "Deploy Daico Token",
-    "Deploy Locked Tokens",
-    "Deploy Poll Factory",
-    "Deploy Crowd Sale",
-    "Set Treasury in Daico, Token",
-    "Set Crowdsale in Daico Token",
-    "Set Crowdsale in Locked Tokens",
-    "Set Crowdsale in Poll Factory",
-    "Create Kill Polls",
-    "Create Kill Polls 2",
-    "Mint Foundation Tokens"
+    "Membership Contract",
+    "ERC-20 Contract",
+    "Token Locker",
+    "Poll Factory",
+    "Crowdsale Contract",
+    "Treasury Address",
+    "Crowdsale Address I",
+    "Crowdsale Address II",
+    "Crowdsale Address III",
+    "Kill Polls I",
+    "Kill Polls II",
+    "Mint Tokens"
   ];
 
   render() {
@@ -437,21 +468,19 @@ class Deployer extends Component {
             {signinStatusFlag === 5 ? (
               <Grid>
                 <Row>
-                  <Col lg={10} />
-                  <Col lg={2}>
-                    <LoadingButton style={{ padding: "0 40px" }} onClick={this.onResetModalOpenClick}>
-                      Start Over
-                    </LoadingButton>
-                  </Col>
+                  <Col lg={12} />
                 </Row>
                 <Row>
-                  <Col>
-                    <CustomizedStepper
+                  <Col lg={12}>
+                    <VerticalStepper
                       history={this.props.history}
                       getStepContent={this.getStepContent}
                       getSteps={this.getSteps}
                       activeStep={currentDeploymentIndicator}
                       projectid={_id}
+                      onClick={this.onResetModalOpenClick}
+                      header="Deployer"
+                      startOver="Start Over"
                     />
                   </Col>
                 </Row>
@@ -478,12 +507,16 @@ class Deployer extends Component {
               </div>
             </CUIModalContent>
             <CUIModalActions>
-              <LoadingButton style={{ padding: "0 40px" }} onClick={this.onResetClick}>
-                Proceed
-              </LoadingButton>
-              <LoadingButton style={{ padding: "0 40px" }} onClick={this.handleClose}>
-                Close
-              </LoadingButton>
+              <div className="hli">
+                <LoadingButton style={{ padding: "0 40px" }} onClick={this.onResetClick} type="danger">
+                  Proceed
+                </LoadingButton>
+              </div>
+              <div className="hli">
+                <LoadingButton style={{ padding: "0 40px" }} onClick={this.handleClose}>
+                  Close
+                </LoadingButton>
+              </div>
             </CUIModalActions>
           </CUIModal>
         }

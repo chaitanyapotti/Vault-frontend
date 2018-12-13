@@ -4,12 +4,7 @@ import actionTypes from "../../action_types";
 import {
   validateAdminName,
   validateEmail,
-  validateTwitterLink,
-  validateFacebookLink,
   validateWebsiteUrl,
-  validateGitLink,
-  validateMediumLink,
-  validateTelegramLink,
   validateProjectNameLength,
   validateTokenTagLength,
   validateMaxEtherContribution,
@@ -23,7 +18,7 @@ import {
   validateProjectDescription
 } from "../../helpers/common/validationHelperFunctions";
 
-import {significantDigits} from "../../helpers/common/projectDetailhelperFunctions"
+import { significantDigits } from "../../helpers/common/projectDetailhelperFunctions";
 
 export const initialState = {
   adminName: "",
@@ -35,7 +30,7 @@ export const initialState = {
   telegramLink: "",
   githubLink: "",
   mediumLink: "",
-  facebookLink: "",
+  redditLink: "",
   twitterLink: "",
   initialFundRelease: "",
   daicoRounds: "",
@@ -75,9 +70,11 @@ export const initialState = {
   tokenTags: [],
   tokenTagsRetrieveFailureMessage: "",
   whitepaperPDF: "",
+  whitepaperPDFName: "",
   whitepaperUrl: "",
   uploadingWhitepaper: false,
   thumbnailImage: "",
+  thumbnailImageName: "", 
   uploadingThumbnail: false,
   thumbnailUrl: "",
   allowEditAll: false,
@@ -176,7 +173,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.THUMBNAIL_CHANGED: {
-      return { ...state, thumbnailImage: action.payload };
+      return { ...state, thumbnailImage: action.payload, thumbnailImageName: action.payload.name };
     }
 
     case actionTypes.UPLOADING_THUMBNAIL: {
@@ -192,7 +189,7 @@ export default function(state = initialState, action) {
     }
 
     case actionTypes.WHITEPAPER_CHANGED: {
-      return { ...state, whitepaperPDF: action.payload}
+      return { ...state, whitepaperPDF: action.payload, whitepaperPDFName:action.payload.name }
     }
 
     case actionTypes.UPLOADING_WHITEPAPER: {
@@ -211,12 +208,12 @@ export default function(state = initialState, action) {
       let nonSaleEntities = state.nonSaleEntities;
       let editEntity = nonSaleEntities.splice(action.payload[3], 1);
       var unallocIndex = 100
-      for (let obj in nonSaleEntities){
-        if (nonSaleEntities[obj].entityName==="Unallocated"){
-          unallocIndex = obj
+      for (const obj in nonSaleEntities) {
+        if (nonSaleEntities[obj].entityName === "Unallocated") {
+          unallocIndex = obj;
         }
       }
-      if (unallocIndex!==100){
+      if (unallocIndex !== 100) {
         nonSaleEntities.splice(unallocIndex, 1);
       }
       // if (nonSaleEntities.indexOf({ entityName: "Unallocated" }) != -1){
@@ -253,7 +250,7 @@ export default function(state = initialState, action) {
         if (unallocatedTokensPer - action.payload.entityPercentage < 0) {
           nonSaleEntities.push(slicedUnallocated[0])
           return { ...state, nonSaleEntities: nonSaleEntities}
-        } else {
+        } 
           nonSaleEntities.push(action.payload);
           if (unallocatedTokensPer - action.payload.entityPercentage> 0) {
             nonSaleEntities.push({
@@ -269,7 +266,7 @@ export default function(state = initialState, action) {
               entityAddress: "",
               unallocatedTokensPer: unallocatedTokensPer - action.payload.entityPercentage
             }
-          } else {
+          } 
             return {
               ...state,
               nonSaleEntities: nonSaleEntities,
@@ -278,8 +275,8 @@ export default function(state = initialState, action) {
               entityAddress: "",
               unallocatedTokensPer: unallocatedTokensPer- action.payload.entityPercentage
             }
-          }
-        }
+          
+        
       } else {
         return {
           ...state
@@ -497,10 +494,10 @@ export default function(state = initialState, action) {
       };
     }
 
-    case actionTypes.FACEBOOK_LINK_CHANGED: {
+    case actionTypes.REDDIT_LINK_CHANGED: {
       return {
         ...state,
-        facebookLink: action.payload
+        redditLink: action.payload
       };
     }
 
@@ -549,7 +546,6 @@ export default function(state = initialState, action) {
         daicoStartDate: action.payload
       };
     }
-
 
     case actionTypes.DAICO_END_DATE_CHANGED: {
       return {

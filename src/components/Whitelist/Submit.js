@@ -8,12 +8,13 @@ import {
   isIssuerFlagToggled,
   hasVaultMembershipRequested
 } from "../../actions/userRegistrationActions";
-import { ButtonComponent } from "../Common/FormComponents";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import { CUICard, CUIFormInput, CUIFormInputLabel, CUIDivider } from "../../helpers/material-ui";
+import { CUIFormInput, CUIFormInputLabel } from "../../helpers/material-ui";
 import { CUIInputType, CUIInputColor } from "../../static/js/variables";
 import Loader from "../Loaders/loader";
 import LoadingButton from "../Common/LoadingButton";
+import { ButtonComponent } from "../Common/FormComponents";
+import { getEtherScanHashLink } from "../../helpers/common/projectDetailhelperFunctions";
 
 class Submit extends Component {
   componentDidMount() {
@@ -34,7 +35,7 @@ class Submit extends Component {
   handleRequestVaultMembership = () => {
     this.props.saveUserFormStates(this.props.userRegistrationData, this.props.userLocalPublicAddress);
     this.props.postUserFormData(this.props.userRegistrationData, this.props.userLocalPublicAddress);
-    this.props.requestVaultMembership(this.props.userLocalPublicAddress, this.props.isIssuerFlag);
+    this.props.requestVaultMembership(this.props.userLocalPublicAddress, this.props.isIssuerFlag, this.props.countryIndex);
   };
 
   handleIssuerFlagToggled = e => {
@@ -43,13 +44,21 @@ class Submit extends Component {
   };
 
   render() {
-    const { isVaultMembershipButtonSpinning, vaultMembershipRequestTransactionHash, vaultPaymentPendingStatus } = this.props || {};
-    const link = `https://rinkeby.etherscan.io/tx/${vaultMembershipRequestTransactionHash}`;
+    const {
+      isVaultMembershipButtonSpinning,
+      vaultMembershipRequestTransactionHash,
+      vaultPaymentPendingStatus,
+      disabledBackStatus,
+      onClickBack,
+      onClickSave,
+      networkName
+    } = this.props || {};
+    const link = getEtherScanHashLink(vaultMembershipRequestTransactionHash, networkName);
     return (
       <div>
         {this.props.vaultMembershipRequestChecked ? (
           <div>
-            <div className="txt-m txt-dbld text--center">STEP: 7 Request Vault Membership</div>
+            <div className="txt-m txt-dbld text--left">Step 7: Request Vault Membership</div>
             <div className="txt push--top">I hereby declare that all the data submitted is factually correct to the best of my knowledge.</div>
             <div>
               {this.props.vaultMembershipRequested ? (
@@ -61,24 +70,17 @@ class Submit extends Component {
                   )}
                 </div>
               ) : vaultMembershipRequestTransactionHash !== "" ? (
-                <a href={link} target="_blank" rel="noreferrer noopener">
-                  <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
-                    Status
-                  </LoadingButton>
-                </a>
+                <div className="hli push--top">
+                  <a href={link} target="_blank" rel="noreferrer noopener">
+                    <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
+                      Status
+                    </LoadingButton>
+                  </a>
+                </div>
               ) : (
                 <div>
                   <Grid>
                     <Row className="push--top">
-                      <Col>
-                        <LoadingButton
-                          style={{ padding: "0 40px" }}
-                          onClick={this.handleRequestVaultMembership}
-                          loading={isVaultMembershipButtonSpinning}
-                        >
-                          Become a Vault Member
-                        </LoadingButton>
-                      </Col>
                       <Col>
                         <CUIFormInputLabel
                           control={
@@ -89,7 +91,7 @@ class Submit extends Component {
                               onChange={this.handleIssuerFlagToggled}
                             />
                           }
-                          label="Issuer"
+                          label={<div className="txt-m txt-dbld">Issuer</div>}
                         />
                         <span>
                           <CUIFormInputLabel
@@ -101,16 +103,27 @@ class Submit extends Component {
                                 onChange={this.handleIssuerFlagToggled}
                               />
                             }
-                            label="Investor"
+                            label={<div className="txt-m txt-dbld">Investor</div>}
                           />
                         </span>
                       </Col>
                     </Row>
                     <Row>
+                      <Col>
+                        <LoadingButton
+                          style={{ padding: "0 40px" }}
+                          onClick={this.handleRequestVaultMembership}
+                          loading={isVaultMembershipButtonSpinning}
+                        >
+                          Become a Vault Member
+                        </LoadingButton>
+                      </Col>
+                    </Row>
+                    <Row className="push--top">
                       {this.props.isIssuerFlag ? (
-                        <div>You will be able to publish a DAICO and you will be charged 0.5016 Ethers.</div>
+                        <div>You will be able to publish a DAICO and participate in DAICOs. You will be charged 0.5015 ETH.</div>
                       ) : (
-                        <div>You will be able to participate in DAICOs and you will be charged 0.0016 Ethers.</div>
+                        <div>You will be able to participate in DAICOs and you will be charged 0.0015 ETH.</div>
                       )}
                     </Row>
                   </Grid>
@@ -123,17 +136,24 @@ class Submit extends Component {
             <Loader rows={6} />
           </Grid>
         )}
+        <span className="float--right">
+          <ButtonComponent label="Back" onClick={() => onClickBack()} disabled={disabledBackStatus} />
+          <span className="push--left">
+            <ButtonComponent label="Save" onClick={() => onClickSave()} />
+          </span>
+        </span>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { userLocalPublicAddress, isVaultMember } = state.signinManagerData || {};
+  const { userLocalPublicAddress, isVaultMember, networkName } = state.signinManagerData || {};
   const { userRegistrationData } = state || {};
   const {
     vaultMembershipRequested,
     isIssuerFlag,
+    countryIndex,
     vaultMembershipRequestChecked,
     isVaultMembershipButtonSpinning,
     vaultMembershipRequestTransactionHash,
@@ -145,10 +165,12 @@ const mapStateToProps = state => {
     vaultMembershipRequested,
     isVaultMember,
     isIssuerFlag,
+    countryIndex,
     vaultMembershipRequestChecked,
     isVaultMembershipButtonSpinning,
     vaultMembershipRequestTransactionHash,
-    vaultPaymentPendingStatus
+    vaultPaymentPendingStatus,
+    networkName
   };
 };
 

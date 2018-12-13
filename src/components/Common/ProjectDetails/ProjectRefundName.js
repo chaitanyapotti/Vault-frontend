@@ -26,7 +26,7 @@ const ProjectRefundName = props => {
   } = props || {};
   const { website } = urls;
   return (
-    <CUICard style={{ padding: "40px 40px" }}>
+    <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
         <Col xs={12} lg={8}>
           <div className="hl">
@@ -74,9 +74,11 @@ const ProjectRefundName = props => {
         </Col>
         <Col lg={6} className="text-right   ">
           {buttonVisibility ? (
-            <LoadingButton onClick={onClick} loading={buttonSpinning}>
-              {buttonText}
-            </LoadingButton>
+            <div className="hli">
+              <LoadingButton onClick={onClick} loading={buttonSpinning}>
+                {buttonText}
+              </LoadingButton>
+            </div>
           ) : (
             <span>
               You are whitelisted <img src="/assets/Vault/whitelist.svg" alt="whitelist checked" width="20" height="20" />

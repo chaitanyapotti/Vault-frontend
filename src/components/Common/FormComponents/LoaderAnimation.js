@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-const LoaderAnimation = (props) => 
-    <div class={props.comp ? "circle-loader load-complete" : "circle-loader"}>
-        <div class="checkmark draw" style={props.comp ? {display: 'block'}: {}}></div>
-    </div>;
-
+const LoaderAnimation = props => (
+  <div className={props.comp ? "circle-loader load-complete" : "circle-loader"}>
+    <div className="checkmark draw" style={props.comp ? { display: "block" } : {}} />
+  </div>
+);
 
 export default LoaderAnimation;
 

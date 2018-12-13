@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { IssuerGovernanceName, IssuerPDetailGovernance, IssuerTapCard, IssuerFundReq } from "../../components/Common/ProjectDetails";
-import { getRoundTokensSold, buyTokens, getTokenBalance } from "../../actions/projectCrowdSaleActions/index";
+import { CUICard } from "../../helpers/material-ui";
+import { IssuerGovernanceName, IssuerPDetailGovernance, IssuerTapCard, IssuerFundReq, TokenChart } from "../../components/Common/ProjectDetails";
+import { getRoundTokensSold, buyTokens, getTokenBalance, getEtherCollected } from "../../actions/projectCrowdSaleActions/index";
 import {
   startNewRound,
   deployTapPoll,
@@ -33,21 +34,38 @@ import {
   getTapPollConsensus,
   getCurrentTap,
   getXfrData,
-  finalizeKill
+  finalizeKill,
+  getKillVoterCount,
+  getKillPollsHistory,
+  getTapPollsHistory,
+  getXfrPollsHistory
 } from "../../actions/projectDetailGovernanceActions/index";
 import {
   formatFromWei,
   formatCurrencyNumber,
   formatDate,
   significantDigits,
-  formatRateToPrice
+  formatRateToPrice,
+  secondsToDhms,
+  getNextKillPollStartDate,
+  getRoundText,
+  getPriceIncrement,
+  getPrice,
+  getLastRoundInfo,
+  pollState,
+  daysTookForTapPoll,
+  xfrResult,
+  xfrWithdrawStatus,
+  getKillPollStartDate,
+  getXfrEndDate
 } from "../../helpers/common/projectDetailhelperFunctions";
+import GridData from "../../components/GridData";
 import { fetchPrice } from "../../actions/priceFetchActions/index";
 import XfrForm from "../../components/Common/ProjectDetails/XfrForm";
 import IssuerWithdrawCard from "../../components/Common/ProjectDetails/IssuerWithdrawCard";
-import MasonaryLayout from "../../components/Common/MasonaryLayout";
-
-const bigInt = require("big-integer");
+import MasonryLayout from "../../components/Common/MasonaryLayout";
+import web3 from "../../helpers/web3";
+import AlertModal from "../../components/Common/AlertModal";
 
 class IssuerDetailGovernance extends Component {
   componentDidMount() {
@@ -58,6 +76,7 @@ class IssuerDetailGovernance extends Component {
       pollFactoryAddress,
       daicoTokenAddress,
       tokenTag,
+      network,
       getRoundTokensSold: fetchRoundTokensSold,
       fetchPrice: priceFetch,
       getTokensUnderGovernance: fetchTokensUnderGovernance,
@@ -68,77 +87,49 @@ class IssuerDetailGovernance extends Component {
       getTapPollConsensus: fetchTapPollConsensus,
       getCurrentTap: fetchCurrentTap,
       getXfrData: fetchXfrData,
-      getCurrentWithdrawableAmount: fetchCurrentWithdrawableAmount
+      getCurrentWithdrawableAmount: fetchCurrentWithdrawableAmount,
+      getKillVoterCount: fetchKillVoterCount,
+      getKillPollsHistory: fetchKillPollsHistory,
+      getTapPollsHistory: fetchTapPollsHistory,
+      getXfrPollsHistory: fetchXfrPollsHistory,
+      getEtherCollected: fetchEtherCollected
     } = this.props || {};
-    priceFetch("ETH");
     priceFetch(tokenTag);
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10) - 1;
-    fetchRoundTokensSold(version, crowdSaleAddress, roundNumber);
-    fetchTokensUnderGovernance(version, daicoTokenAddress);
-    fetchCurrentKillPollIndex(version, pollFactoryAddress);
-    fetchRemainingEtherBalance(version, pollFactoryAddress);
-    fetchTotalSupply(version, daicoTokenAddress);
-    fetchKillConsensus(version, pollFactoryAddress);
-    fetchTapPollConsensus(version, pollFactoryAddress);
-    fetchCurrentTap(version, pollFactoryAddress);
-    fetchXfrData(version, pollFactoryAddress);
-    fetchCurrentWithdrawableAmount(version, pollFactoryAddress);
+    fetchRoundTokensSold(version, crowdSaleAddress, roundNumber, network);
+    fetchTokensUnderGovernance(version, daicoTokenAddress, network);
+    fetchCurrentKillPollIndex(version, pollFactoryAddress, network);
+    fetchRemainingEtherBalance(version, pollFactoryAddress, network);
+    fetchTotalSupply(version, daicoTokenAddress, network);
+    fetchKillConsensus(version, pollFactoryAddress, network);
+    fetchTapPollConsensus(version, pollFactoryAddress, network);
+    fetchCurrentTap(version, pollFactoryAddress, network);
+    fetchXfrData(version, pollFactoryAddress, network);
+    fetchCurrentWithdrawableAmount(version, pollFactoryAddress, network);
+    fetchKillVoterCount(version, pollFactoryAddress, network);
+    fetchKillPollsHistory(pollFactoryAddress);
+    fetchTapPollsHistory(pollFactoryAddress);
+    fetchXfrPollsHistory(pollFactoryAddress);
+    fetchEtherCollected(version, pollFactoryAddress, network);
   }
 
-  getPriceIncrement = () => {
-    const { tokenTag, prices } = this.props || {};
-    const { [tokenTag]: tokenPrice } = prices || {};
-    const { change } = tokenPrice || {};
-    return change || 0;
+  state = {
+    killPollsHistoryModalOpen: false,
+    tapPollsHistoryModalOpen: false,
+    xfrPollsHistoryModalOpen: false
   };
 
-  getLastRoundInfo = () => {
-    // TODO: get current round and price
-    const { roundInfo } = this.props || {};
-    const { tokenRate } = roundInfo;
-    const { currentRoundNumber } = this.props || {};
-    const roundNumber = currentRoundNumber === "4" ? "3" : currentRoundNumber;
-    return (
-      <div style={{ marginTop: "24px" }}>
-        <div className="text-right">Round {roundNumber} price</div>
-        <div className="text-right opacity-75">{formatRateToPrice(tokenRate)} ETH</div>
-      </div>
-    );
-  };
+  handleKillPollsHistoryOpen = () => this.setState({ killPollsHistoryModalOpen: true });
 
-  getPrice = () => {
-    // TODO: to use external API
-    const { tokenTag, prices } = this.props || {};
-    const { [tokenTag]: tokenPrice } = prices || {};
-    const { price } = tokenPrice || {};
-    if (!price) {
-      const { roundInfo } = this.props || {};
-      const { tokenRate } = roundInfo || {};
-      return formatRateToPrice(tokenRate);
-    }
-    return price;
-    // return 0.009861;
-  };
+  handleKillPollsHistoryClose = () => this.setState({ killPollsHistoryModalOpen: false });
 
-  getRoundText = () => {
-    const { currentRoundNumber } = this.props || {};
-    const { roundInfo } = this.props || {};
-    const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
-    if (currentRoundNumber === "4") return "Sold Out (3rd Round Ended)";
-    if (bigInt(totalTokensSold).equals(bigInt(tokenCount))) return `Round ${currentRoundNumber} Completed`;
+  handleTapPollsHistoryOpen = () => this.setState({ tapPollsHistoryModalOpen: true });
 
-    return `${formatCurrencyNumber(formatFromWei(totalTokensSold), 0)} Tokens Sold of ${formatCurrencyNumber(
-      formatFromWei(tokenCount),
-      0
-    )} (Round ${currentRoundNumber} of 3)`;
-  };
+  handleTapPollsHistoryClose = () => this.setState({ tapPollsHistoryModalOpen: false });
 
-  getNextKillPollStartDate = () => {
-    const { killPollIndex, r1EndTime } = this.props || {};
-    const endDate = new Date(r1EndTime);
-    endDate.setDate(endDate.getDate() + (killPollIndex + 1) * 90);
-    return endDate.toDateString();
-  };
+  handleXfrPollsHistoryOpen = () => this.setState({ xfrPollsHistoryModalOpen: true });
+
+  handleXfrPollsHistoryClose = () => this.setState({ xfrPollsHistoryModalOpen: false });
 
   getKillConsensus = () => {
     const { killConsensus, tokensUnderGovernance } = this.props || {};
@@ -159,19 +150,24 @@ class IssuerDetailGovernance extends Component {
   canStartNewRound = () => {
     const { roundInfo, currentRoundNumber } = this.props || {};
     const { tokenCount, totalTokensSold } = roundInfo || {}; // tokens/wei
-    return bigInt(totalTokensSold).equals(bigInt(tokenCount)) && currentRoundNumber <= "3";
+    return totalTokensSold && tokenCount && web3.utils.toBN(totalTokensSold).eq(web3.utils.toBN(tokenCount)) && currentRoundNumber <= "3";
   };
 
   onStartNewRoundClick = () => {
-    const { startNewRound: startRound, version, crowdSaleAddress, userLocalPublicAddress, projectid, currentRoundNumber } = this.props || {};
+    const { startNewRound: startRound, version, crowdSaleAddress, userLocalPublicAddress, projectid, currentRoundNumber, network } = this.props || {};
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10);
-    startRound(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber);
+    startRound(version, crowdSaleAddress, userLocalPublicAddress, projectid, roundNumber, network);
+  };
+
+  canKill = () => {
+    const { killAcceptancePercent, killVoterCount, etherCollected } = this.props || {};
+    return parseFloat(this.getKillConsensus()) > parseFloat(killAcceptancePercent) && killVoterCount > (5 * formatFromWei(etherCollected, 6)) / 100;
   };
 
   canIncreaseTap = () => {
     const { tapAcceptancePercent, tapPollConsensus, tokensUnderGovernance } = this.props || {};
     const consensus = parseFloat(tapPollConsensus) / parseFloat(tokensUnderGovernance);
-    return consensus > parseFloat(tapAcceptancePercent);
+    return consensus > parseFloat(tapAcceptancePercent) && !this.canKill();
   };
 
   canDeployTapPoll = () => {
@@ -180,13 +176,13 @@ class IssuerDetailGovernance extends Component {
   };
 
   onDeployTapPollClick = () => {
-    const { version, deployTapPoll: deployTap, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
-    deployTap(version, pollFactoryAddress, userLocalPublicAddress);
+    const { version, deployTapPoll: deployTap, userLocalPublicAddress, pollFactoryAddress, network } = this.props || {};
+    deployTap(version, pollFactoryAddress, userLocalPublicAddress, network);
   };
 
   onIncrementTapClick = () => {
-    const { version, incrementTap: incrementTapAmount, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
-    incrementTapAmount(version, pollFactoryAddress, userLocalPublicAddress);
+    const { version, incrementTap: incrementTapAmount, userLocalPublicAddress, pollFactoryAddress, network } = this.props || {};
+    incrementTapAmount(version, pollFactoryAddress, userLocalPublicAddress, network);
   };
 
   onEditClick = () => {
@@ -199,25 +195,10 @@ class IssuerDetailGovernance extends Component {
     return signinStatusFlag === 5 && ownerAddress === userLocalPublicAddress;
   };
 
-  // onWithdrawAmountChange = e => {
-  //   this.setState({ withdrawableAmount: e.target.value });
-  // };
-
-  // onTitleTextChange = e => {
-  //   this.setState({ titleText: e.target.value });
-  // };
-
-  // onAmountTextChange = e => {
-  //   this.setState({ amountText: e.target.value });
-  // };
-
-  // onDescriptionTextChange = e => {
-  //   this.setState({ descriptionText: e.target.value });
-  // };
-
   onWithdrawAmountClick = () => {
-    const { version, withdrawAmount: withdrawAmountClick, userLocalPublicAddress, pollFactoryAddress, withdrawableAmount } = this.props || {};
-    withdrawAmountClick(version, pollFactoryAddress, userLocalPublicAddress, withdrawableAmount);
+    const { version, withdrawAmount: withdrawAmountClick, userLocalPublicAddress, pollFactoryAddress, withdrawableAmount, network } =
+      this.props || {};
+    withdrawAmountClick(version, pollFactoryAddress, userLocalPublicAddress, withdrawableAmount, network);
   };
 
   onChangeXfrTitle = e => {
@@ -241,23 +222,8 @@ class IssuerDetailGovernance extends Component {
   };
 
   canDeployXfrPoll = () => {
-    const { xfrData, xfrTitleText, xfrAmountText, xfrDescriptionText } = this.props || {};
-    const { poll1, poll2 } = xfrData || {};
-    const { address: poll1Address, endTime: poll1EndTime } = poll1 || {};
-    const { address: poll2Address, endTime: poll2EndTime } = poll2 || {};
-    const newDate1 = new Date();
-    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
-    const newDate2 = new Date();
-    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
-    return (
-      (poll1Address === "0x0000000000000000000000000000000000000000" ||
-        poll2Address === "0x0000000000000000000000000000000000000000" ||
-        new Date() > newDate1 ||
-        new Date() > newDate2) &&
-      xfrTitleText !== "" &&
-      xfrAmountText !== "" &&
-      xfrDescriptionText !== ""
-    );
+    const { xfrTitleText, xfrAmountText, xfrDescriptionText } = this.props || {};
+    return this.canShowXfrPoll() && xfrTitleText !== "" && xfrAmountText !== "" && xfrDescriptionText !== "";
   };
 
   canShowXfrPoll = () => {
@@ -265,14 +231,13 @@ class IssuerDetailGovernance extends Component {
     const { poll1, poll2 } = xfrData || {};
     const { address: poll1Address, endTime: poll1EndTime } = poll1 || {};
     const { address: poll2Address, endTime: poll2EndTime } = poll2 || {};
-    const newDate1 = new Date();
-    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
-    const newDate2 = new Date();
-    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
+    const newDate1 = new Date(poll1EndTime * 1000);
+    newDate1.setDate(newDate1.getDate() + 3);
+    const newDate2 = new Date(poll2EndTime * 1000);
+    newDate2.setDate(newDate2.getDate() + 3);
     return (
       poll1Address === "0x0000000000000000000000000000000000000000" ||
       poll2Address === "0x0000000000000000000000000000000000000000" ||
-      this.canWithdrawXfrAmount() ||
       new Date() > newDate1 ||
       new Date() > newDate2
     );
@@ -283,17 +248,18 @@ class IssuerDetailGovernance extends Component {
     const { poll1, poll2 } = xfrData || {};
     const { consensus: poll1Consensus, endTime: poll1EndTime } = poll1 || {};
     const { consensus: poll2Consensus, endTime: poll2EndTime } = poll2 || {};
-    const newDate1 = new Date();
-    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
-    const newDate2 = new Date();
-    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
+    const newDate1 = new Date(poll1EndTime * 1000);
+    newDate1.setDate(newDate1.getDate() + 3);
+    const newDate2 = new Date(poll2EndTime * 1000);
+    newDate2.setDate(newDate2.getDate() + 3);
     return (
-      (parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
+      ((parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
         new Date() > new Date(poll1EndTime * 1000) &&
         new Date() < newDate1) ||
-      (parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) &&
-        new Date() > new Date(poll2EndTime * 1000) &&
-        new Date() < newDate2)
+        (parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) &&
+          new Date() > new Date(poll2EndTime * 1000) &&
+          new Date() < newDate2)) &&
+      !this.canKill()
     );
   };
 
@@ -302,24 +268,35 @@ class IssuerDetailGovernance extends Component {
     const { poll1, poll2 } = xfrData || {};
     const { consensus: poll1Consensus, endTime: poll1EndTime, amount: poll1RequestedAmount } = poll1 || {};
     const { consensus: poll2Consensus, endTime: poll2EndTime, amount: poll2RequestedAmount } = poll2 || {};
-    const newDate1 = new Date();
-    newDate1.setDate(new Date(poll1EndTime * 1000).getDate() + 3);
-    const newDate2 = new Date();
-    newDate2.setDate(new Date(poll2EndTime * 1000).getDate() + 3);
+    const newDate1 = new Date(poll1EndTime * 1000);
+    newDate1.setDate(newDate1.getDate() + 3);
+    const newDate2 = new Date(poll2EndTime * 1000);
+    newDate2.setDate(newDate2.getDate() + 3);
     let totalAmount = 0;
+    let amount1 = 0;
+    let amount2 = 0;
+    let xfrCount = 0;
     if (
       parseFloat(xfrRejectionPercent) > parseFloat(poll1Consensus) / parseFloat(tokensUnderGovernance) &&
-      new Date() > new Date(poll1EndTime * 1000 && new Date() < newDate1)
+      new Date() > new Date(poll1EndTime * 1000) &&
+      new Date() < newDate1
     ) {
-      totalAmount += formatFromWei(poll1RequestedAmount, 3);
+      amount1 += formatFromWei(poll1RequestedAmount, 3);
+      xfrCount += 1;
     }
     if (
       parseFloat(xfrRejectionPercent) > parseFloat(poll2Consensus) / parseFloat(tokensUnderGovernance) &&
-      new Date() > new Date(poll2EndTime * 1000 && new Date() < newDate1)
+      new Date() > new Date(poll2EndTime * 1000) &&
+      new Date() < newDate1
     ) {
-      totalAmount += formatFromWei(poll2RequestedAmount, 3);
+      amount2 += formatFromWei(poll2RequestedAmount, 3);
+      xfrCount += 1;
     }
-    return totalAmount;
+    totalAmount = amount1 + amount2;
+    const partItem = new Date() <= newDate2 ? `and ${secondsToDhms(new Date() - newDate2)} respectively` : "";
+    const text = `You are currently entitled to withdraw ${totalAmount} ETH from 
+    ${xfrCount} XFRs. Your entitlement will expire in ${secondsToDhms(new Date() - newDate1)} ${partItem}`;
+    return { totalAmount, amount1, amount2, text };
   };
 
   onDeployXfrClick = () => {
@@ -331,14 +308,15 @@ class IssuerDetailGovernance extends Component {
       projectid,
       xfrTitleText,
       xfrAmountText,
-      xfrDescriptionText
+      xfrDescriptionText,
+      network
     } = this.props || {};
-    deployXfrPollClick(version, pollFactoryAddress, userLocalPublicAddress, xfrAmountText, xfrTitleText, xfrDescriptionText, projectid);
+    deployXfrPollClick(version, pollFactoryAddress, userLocalPublicAddress, xfrAmountText, xfrTitleText, xfrDescriptionText, projectid, network);
   };
 
   onWithdrawXfrAmountClick = () => {
-    const { version, withdrawXfrAmount: withdrawXfrAmountClick, userLocalPublicAddress, pollFactoryAddress } = this.props || {};
-    withdrawXfrAmountClick(version, pollFactoryAddress, userLocalPublicAddress);
+    const { version, withdrawXfrAmount: withdrawXfrAmountClick, userLocalPublicAddress, pollFactoryAddress, network } = this.props || {};
+    withdrawXfrAmountClick(version, pollFactoryAddress, userLocalPublicAddress, network);
   };
 
   onEditXfr1DescriptionClick = () => {
@@ -407,23 +385,101 @@ class IssuerDetailGovernance extends Component {
       isXfr2DescriptionEditable,
       xfr1Description,
       xfr2Description,
-      thumbnailUrl
+      thumbnailUrl,
+      rounds,
+      foundationDetails,
+      currentRoundNumber,
+      prices,
+      roundInfo,
+      killAcceptancePercent,
+      killVoterCount,
+      etherCollected,
+      killPollsHistoryData,
+      tapPollsHistoryData,
+      xfrPollsHistoryData,
+      xfrRejectionPercent,
+      history,
+      r1EndTime,
+      signinStatusFlag,
+      ownerAddress,
+      userLocalPublicAddress,
+      tapPollConsensus,
+      daicoTokenAddress,
+      pollFactoryAddress,
+      network
     } = this.props || {};
+    const { killPollsHistoryModalOpen, tapPollsHistoryModalOpen, xfrPollsHistoryModalOpen } = this.state;
+    const price = getPrice(tokenTag, prices, roundInfo) || 0;
+    const killHistoryData = killPollsHistoryData.map(item => {
+      const { address, endTime, consensus } = item || {};
+      const dataArray = [
+        address,
+        pollState(getKillPollStartDate(endTime * 1000), new Date(endTime * 1000)),
+        formatDate(new Date(endTime * 1000)),
+        significantDigits(consensus)
+      ];
+      return dataArray;
+    });
+    const tapHistoryData = tapPollsHistoryData.map(item => {
+      const { address, startTime, endTime, consensus } = item || {};
+      const dataArray = [address, formatDate(new Date(startTime * 1000)), daysTookForTapPoll(startTime, endTime), significantDigits(consensus)];
+      return dataArray;
+    });
+    const xfrHistoryData = xfrPollsHistoryData.map(item => {
+      const { address, startTime, consensus, amount, endTime } = item || {};
+      const xfrStartTime = new Date(startTime * 1000);
+      const dataArray = [
+        address,
+        formatDate(xfrStartTime),
+        xfrResult(xfrStartTime, getXfrEndDate(startTime), consensus, xfrRejectionPercent),
+        100 - significantDigits(consensus),
+        xfrWithdrawStatus(amount, startTime, endTime)
+      ];
+      return dataArray;
+    });
     return (
       <Grid>
-        <MasonaryLayout columns={2}>
-          {/* <Row>
-          <Col xs={12} lg={6}> */}
+        {this.canKill() ? (
+          <CUICard className="card-brdr" style={{ padding: "40px 50px", "margin-bottom": "20px" }}>
+            <Row>
+              <Col lg={6}>
+                <div className="txt-xxxl text--primary">Notice</div>
+              </Col>
+            </Row>
+            <Row className="push-half--top">
+              <Col lg={12}>
+                <div>
+                  Current Kill Consensus{" "}
+                  <span className="text--secondary">
+                    ({this.getKillConsensus()}
+                    %)
+                  </span>{" "}
+                  is greater than kill threshold{" "}
+                  <span className="text--secondary">
+                    ({killAcceptancePercent}
+                    %)
+                  </span>{" "}
+                  and the number of voters voting for kill <span className="text--secondary">({killVoterCount})</span> is greater than the minimum
+                  required voters <span className="text--secondary">({Math.ceil((5 * formatFromWei(etherCollected, 6)) / 100)})</span>. Hence
+                  withdrawals and tap increment on this DAICO are temporarily frozen until until consensus drops below threshold. If the consensus
+                  stays above this value on <span className="text--secondary">{formatDate(getNextKillPollStartDate(killPollIndex, r1EndTime))}</span>,
+                  this DAICO will get killed.
+                </div>
+              </Col>
+            </Row>
+          </CUICard>
+        ) : null}
+        <MasonryLayout columns={2}>
           <IssuerGovernanceName
             projectName={projectName}
             tokenTag={tokenTag}
-            price={this.getPrice()}
-            roundText={this.getRoundText()}
-            priceIncrement={this.getPriceIncrement()}
+            price={price}
+            roundText={getRoundText(roundInfo, currentRoundNumber)}
+            priceIncrement={getPriceIncrement(tokenTag, prices)}
             description={description}
             urls={urls}
             whitepaper={whitepaper}
-            lastRoundInfo={this.getLastRoundInfo()}
+            lastRoundInfo={getLastRoundInfo(roundInfo, currentRoundNumber)}
             buttonText={this.getstartNewRoundText()}
             startNewRoundButtonSpinning={startNewRoundButtonSpinning}
             canStartNewRound={this.canStartNewRound()}
@@ -432,24 +488,25 @@ class IssuerDetailGovernance extends Component {
             onEditClick={this.onEditClick}
             startNewRoundButtonTransactionHash={startNewRoundButtonTransactionHash}
             thumbnailUrl={thumbnailUrl}
+            signinStatusFlag={signinStatusFlag}
+            ownerAddress={ownerAddress}
+            userLocalPublicAddress={userLocalPublicAddress}
+            daicoTokenAddress={daicoTokenAddress}
+            network={network}
           />
-          {/* </Col>
-          <Col xs={12} lg={6}> */}
           <IssuerPDetailGovernance
             voteSaturationLimit={capPercent / 100}
             killFrequency="Quarterly"
-            killAttemptsLeft={7 - killPollIndex}
-            nextKillAttempt={formatDate(this.getNextKillPollStartDate())}
+            killAttemptsLeft={8 - killPollIndex}
+            nextKillAttempt={formatDate(getNextKillPollStartDate(killPollIndex, r1EndTime))}
             totalRefundableBalance={formatFromWei(remainingEtherBalance, 2)}
             killConsensus={this.getKillConsensus()}
+            pollFactoryAddress={pollFactoryAddress}
+            onKillPollsHistoryClick={this.handleKillPollsHistoryOpen}
+            network={network}
           />
-          {/* </Col>
-        </Row> */}
-
-          {/* <Row className="push--top">
-          <Col xs={12} lg={6}> */}
           <IssuerTapCard
-            currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30))}
+            currentTapAmount={formatCurrencyNumber(formatFromWei(parseFloat(currentTap) * 86400 * 30, 10))}
             tapIncrementUnit={tapIncrementFactor / 100}
             incrementApproval={this.getTapPollConsensus()}
             isPermissioned={this.isPermissioned()}
@@ -461,9 +518,13 @@ class IssuerDetailGovernance extends Component {
             onDeployTapPollClick={this.onDeployTapPollClick}
             deployTapPollButtonTransactionHash={deployTapPollButtonTransactionHash}
             incrementTapButtonTransactionHash={incrementTapButtonTransactionHash}
+            signinStatusFlag={signinStatusFlag}
+            ownerAddress={ownerAddress}
+            userLocalPublicAddress={userLocalPublicAddress}
+            tapPollConsensus={tapPollConsensus}
+            onTapPollsHistoryClick={this.handleTapPollsHistoryOpen}
+            network={network}
           />
-          {/* </Col>
-          <Col xs={12} lg={6}> */}
           <IssuerWithdrawCard
             currentWithdrawableAmount={formatFromWei(currentWithdrawableAmount, 3)}
             isPermissioned={this.isPermissioned()}
@@ -472,12 +533,13 @@ class IssuerDetailGovernance extends Component {
             inputText={withdrawableAmount}
             onChange={this.onChangeWithdrawAmount}
             withdrawButtonTransactionHash={withdrawButtonTransactionHash}
+            signinStatusFlag={signinStatusFlag}
+            ownerAddress={ownerAddress}
+            userLocalPublicAddress={userLocalPublicAddress}
+            tapPollConsensus={tapPollConsensus}
+            network={network}
           />
-          {/* </Col>
-        </Row> */}
           {this.canShowXfrPoll() ? (
-            // <Row className="push--top">
-            //   <Col xs={12} lg={6}>
             <XfrForm
               titleText={xfrTitleText}
               onTitleTextChange={this.onChangeXfrTitle}
@@ -489,18 +551,15 @@ class IssuerDetailGovernance extends Component {
               canDeployXfrPoll={this.canDeployXfrPoll()}
               deployXfrButtonSpinning={deployXfrButtonSpinning}
               onDeployXfrClick={this.onDeployXfrClick}
-              canWithdrawXfrAmount={this.canWithdrawXfrAmount()}
-              withdrawXfrButtonSpinning={withdrawXfrButtonSpinning}
-              onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
-              getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
               deployXfrPollTransactionHash={deployXfrPollTransactionHash}
-              withdrawXfrButtonTransactionHash={withdrawXfrButtonTransactionHash}
+              signinStatusFlag={signinStatusFlag}
+              ownerAddress={ownerAddress}
+              userLocalPublicAddress={userLocalPublicAddress}
+              network={network}
             />
-          ) : //   </Col>
-          // </Row>
-          null}
-          {/* <Row className="push--top">
-          <Col xs={12} lg={6}> */}
+          ) : (
+            <div />
+          )}
           <IssuerFundReq
             data={xfrData}
             details={xfrDetails}
@@ -516,24 +575,68 @@ class IssuerDetailGovernance extends Component {
             isPermissioned={this.isPermissioned()}
             onSaveXfr1DescriptionClick={this.onSaveXfr1DescriptionClick}
             onSaveXfr2DescriptionClick={this.onSaveXfr2DescriptionClick}
+            canWithdrawXfrAmount={this.canWithdrawXfrAmount()}
+            withdrawXfrButtonSpinning={withdrawXfrButtonSpinning}
+            onWithdrawXfrAmountClick={this.onWithdrawXfrAmountClick}
+            getWithdrawableXfrAmount={this.getWithdrawableXfrAmount()}
+            withdrawXfrButtonTransactionHash={withdrawXfrButtonTransactionHash}
+            signinStatusFlag={signinStatusFlag}
+            ownerAddress={ownerAddress}
+            userLocalPublicAddress={userLocalPublicAddress}
+            tapPollConsensus={tapPollConsensus}
+            onXfrPollHistoryClick={this.handleXfrPollsHistoryOpen}
+            network={network}
           />
-          {/* </Col>
-        </Row> */}
-        </MasonaryLayout>
+
+          <CUICard className="card-brdr" style={{ padding: "40px 50px" }}>
+            <TokenChart
+              rounds={rounds}
+              foundationDetails={foundationDetails}
+              prices={prices}
+              currentRoundNumber={currentRoundNumber}
+              roundInfo={roundInfo}
+            />
+          </CUICard>
+        </MasonryLayout>
+        <AlertModal open={killPollsHistoryModalOpen} handleClose={this.handleKillPollsHistoryClose}>
+          <div>
+            <GridData
+              history={history}
+              rowClickPollHistory
+              tableData={killHistoryData}
+              filter={false}
+              columns={["Address", "State", "End Date", "Consensus", { name: "Id", options: { display: false } }]}
+            />
+          </div>
+        </AlertModal>
+        <AlertModal open={tapPollsHistoryModalOpen} handleClose={this.handleTapPollsHistoryClose}>
+          <div>
+            <GridData
+              rowClickPollHistory
+              tableData={tapHistoryData}
+              filter={false}
+              columns={["Poll Address", "Deployed On", "Took Time To Complete", "Consensus"]}
+            />
+          </div>
+        </AlertModal>
+        <AlertModal open={xfrPollsHistoryModalOpen} handleClose={this.handleXfrPollsHistoryClose}>
+          <div>
+            <GridData
+              rowClickPollHistory
+              tableData={xfrHistoryData}
+              filter={false}
+              columns={["Poll Address", "Deployed On", "Result", "Consensus", "Withdraw Status"]}
+            />
+          </div>
+        </AlertModal>
       </Grid>
     );
   }
 }
 
 const mapStateToProps = state => {
-  const {
-    projectCrowdSaleReducer,
-    projectDetailGovernanceReducer,
-    projectPreStartReducer,
-    signinManagerData,
-    fetchPriceReducer,
-    issuerDetailGovernanceReducer
-  } = state || {};
+  const { projectCrowdSaleReducer, projectDetailGovernanceReducer, projectPreStartReducer, issuerDetailGovernanceReducer, fetchPriceReducer } =
+    state || {};
   const { etherCollected, roundInfo, tokenBalance, buyButtonSpinning } = projectCrowdSaleReducer || {};
   const {
     startNewRoundButtonSpinning,
@@ -574,10 +677,13 @@ const mapStateToProps = state => {
     xfr1ButtonSpinning,
     xfr2ButtonSpinning,
     xfrVoteData,
-    killFinalizeButtonSpinning
+    killFinalizeButtonSpinning,
+    killVoterCount,
+    killPollsHistoryData,
+    tapPollsHistoryData,
+    xfrPollsHistoryData
   } = projectDetailGovernanceReducer || {};
-  const { isCurrentMember, buttonSpinning } = projectPreStartReducer || {};
-  const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
+  const { isCurrentMember, buttonSpinning, isMembershipRequestPending } = projectPreStartReducer || {};
   const { prices } = fetchPriceReducer || {};
 
   return {
@@ -594,12 +700,9 @@ const mapStateToProps = state => {
     xfrData,
     isCurrentMember,
     buttonSpinning,
-    isVaultMember,
-    userLocalPublicAddress,
-    signinStatusFlag,
     buyButtonSpinning,
-    prices,
     killVoteData,
+    prices,
     tapVoteData,
     killButtonSpinning,
     tapButtonSpinning,
@@ -627,7 +730,12 @@ const mapStateToProps = state => {
     isXfr1DescriptionEditable,
     isXfr2DescriptionEditable,
     xfr1Description,
-    xfr2Description
+    xfr2Description,
+    killVoterCount,
+    killPollsHistoryData,
+    tapPollsHistoryData,
+    xfrPollsHistoryData,
+    isMembershipRequestPending
   };
 };
 
@@ -665,7 +773,12 @@ const mapDispatchToProps = dispatch =>
       onEditXfr2DescriptionClick,
       onEditXfr1DescriptionClick,
       editXfr2Description,
-      editXfr1Description
+      editXfr1Description,
+      getKillVoterCount,
+      getKillPollsHistory,
+      getTapPollsHistory,
+      getXfrPollsHistory,
+      getEtherCollected
     },
     dispatch
   );

@@ -4,13 +4,13 @@ import actionTypes from "../../action_types";
 // import { significantDigits } from "../../helpers/common/projectDetailhelperFunctions"
 
 export const initialState = {
-  tokenBalance: "0",
+  tokenBalance: "",
   tokensUnderGovernance: "0",
   remainingEtherBalance: "0",
   killPollIndex: "0",
   totalSupply: "0",
-  killConsensus: "0",
-  tapPollConsensus: "0",
+  killConsensus: "",
+  tapPollConsensus: "",
   currentTap: "0",
   xfrData: {},
   xfrVoteData: [],
@@ -53,11 +53,20 @@ export const initialState = {
   killButtonTransactionHash: "",
   killFinalizeTransactionHash: "",
   xfr2ButtonTransactionHash: "",
-  tapButtonTransactionHash: ""
+  tapButtonTransactionHash: "",
+  unlockTokensData: undefined,
+  unlockTokensLoading: false,
+  killVoterCount: "0"
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.CLEAR_GOVERNANCE_STATES: {
+      return {
+        ...state,
+        unlockTokensData: undefined
+      };
+    }
     case actionTypes.VOTE_HISTOGRAM_DATA_SUCCESS: {
       // console.log("vote histogram data: " ,action.payload)
       const { binDict, collectiveVoteWeight } = action.payload || {};
@@ -73,11 +82,27 @@ export default (state = initialState, action) => {
       return { ...state, voteHistogramData: histArray, totalVotes, collectiveVoteWeight };
     }
 
+    case actionTypes.KILL_VOTER_COUNT_RECEIVED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        killVoterCount: receipt
+      };
+    }
+
     case actionTypes.KILL_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED: {
       const { transactionHash } = action.payload;
       return {
         ...state,
         killFinalizeTransactionHash: transactionHash
+      };
+    }
+
+    case actionTypes.UNLOCK_TOKENS_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        unlockTokensLoading: receipt
       };
     }
 
@@ -264,6 +289,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         killFinalizeButtonSpinning: receipt
+      };
+    }
+    case actionTypes.UNLOCK_TOKENS_DATA_FETCHED: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        unlockTokensData: receipt
       };
     }
     default:

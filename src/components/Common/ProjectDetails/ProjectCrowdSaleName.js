@@ -1,10 +1,12 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../../helpers/material-ui";
 import { Row, Col } from "../../../helpers/react-flexbox-grid";
 import SocialLinks from "../SocialLinks";
 import LoadingButton from "../LoadingButton";
 import { ensureHttpUrl } from "../../../helpers/common/urlFixerInHref";
+import { getSignInStatusText, getEtherScanHashLink, getEtherScanAddressLink } from "../../../helpers/common/projectDetailhelperFunctions";
+import { CustomToolTip } from "../FormComponents";
+import BtnLoader from "../../Loaders/BtnLoader";
 
 const ProjectCrowdSaleName = props => {
   const {
@@ -14,16 +16,13 @@ const ProjectCrowdSaleName = props => {
     price,
     roundText,
     description,
-    priceIncrement,
     whitepaper,
-    lastRoundInfo,
     buttonText,
     onClick,
-    buttonVisibility,
-    priceIncrementFlag,
     buttonSpinning,
-    buyButtonVisibility,
+    isCurrentMember,
     onBuyClick,
+    buttonVisibility,
     buyButtonText,
     signinStatusFlag,
     r1Finish,
@@ -33,11 +32,21 @@ const ProjectCrowdSaleName = props => {
     r1FinalizeButtonTransactionHash,
     buyButtonDisabled,
     thumbnailUrl,
-    remainingAllocation
+    remainingAllocation,
+    daicoTokenAddress,
+    network,
+    isMembershipRequestPending
   } = props || {};
   const { website } = urls;
-  const link = `https://rinkeby.etherscan.io/tx/${whitelistButtonTransactionHash}`;
-  const r1FinalizeLink = `https://rinkeby.etherscan.io/tx/${r1FinalizeButtonTransactionHash}`;
+  const link =
+    whitelistButtonTransactionHash !== ""
+      ? getEtherScanHashLink(whitelistButtonTransactionHash, network)
+      : r1FinalizeButtonTransactionHash !== ""
+      ? getEtherScanHashLink(r1FinalizeButtonTransactionHash, network)
+      : "";
+  const etherscanLink = getEtherScanAddressLink(daicoTokenAddress, network);
+  const warningText = getSignInStatusText(signinStatusFlag);
+  const disabledText = parseFloat(remainingAllocation) === 0 ? "Reached buyable limit" : "Cannot buy now";
   return (
     <CUICard className="card-brdr" style={{ padding: "40px 40px" }}>
       <Row>
@@ -50,15 +59,14 @@ const ProjectCrowdSaleName = props => {
               <div className="txt-xl">
                 {projectName} ({tokenTag})
               </div>
-              <div className="txt opacity-75">
-                {price} ETH
-                {priceIncrementFlag ? <span className="txt-inc">{` ${priceIncrement}`}</span> : <div />}
-              </div>
+              <div className="txt opacity-75">{price} ETH</div>
             </div>
           </div>
         </Col>
-        <Col lg={4} className="txt-g-secondary txt">
-          <span>{lastRoundInfo}</span>
+        <Col lg={4} className="push-half--top text-right">
+          <a id="lnktag" className="text--black" href={ensureHttpUrl(etherscanLink)} target="_blank" rel="noreferrer noopener">
+            View On Etherscan
+          </a>
         </Col>
       </Row>
       <Row className="push--top">
@@ -66,9 +74,7 @@ const ProjectCrowdSaleName = props => {
           <div>{roundText}</div>
         </Col>
         <Col lg={6}>
-          <div>
-            <SocialLinks urls={urls} />
-          </div>
+          <SocialLinks urls={urls} />
         </Col>
       </Row>
       <Row className="push-half--top txt">
@@ -89,48 +95,54 @@ const ProjectCrowdSaleName = props => {
             </a>
           </div>
         </Col>
-        <Col lg={6} className="text-right hl  ">
-          {signinStatusFlag <= 2 ? (
+        <Col lg={6} className="text-right hl">
+          {signinStatusFlag < 4 && (typeof isCurrentMember === "undefined" || !isCurrentMember) ? (
             <div className="hli">
-              <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-                <div>
-                  <LoadingButton style={{ padding: "0 40px" }} tooltip="This feature is only for Vault Members" disabled>
+              <CustomToolTip title={warningText} id="btn-disabled" disabled>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} disabled>
                     {buttonText}
                   </LoadingButton>
-                </div>
-              </Tooltip>
+                </span>
+              </CustomToolTip>
             </div>
-          ) : whitelistButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
+          ) : whitelistButtonTransactionHash !== "" || r1FinalizeButtonTransactionHash !== "" ? (
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" style={{ padding: "0 40px" }} onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
+          ) : r1Finish && isCurrentMember ? (
+            <span className="hli">
+              <LoadingButton style={{ padding: "0 40px" }} onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
+                Initialise Refund
               </LoadingButton>
-            </a>
+            </span>
+          ) : isMembershipRequestPending ? (
+            <span className="hli">Your request is pending</span>
+          ) : isCurrentMember ? (
+            <div className="hli">
+              <CustomToolTip title={disabledText} disabled={!buyButtonDisabled || parseFloat(remainingAllocation) === 0}>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} onClick={onBuyClick} disabled={!buyButtonDisabled || remainingAllocation === 0}>
+                    {buyButtonText}
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
+            </div>
           ) : buttonVisibility ? (
             <span className="hli">
               <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={buttonSpinning}>
                 {buttonText}
               </LoadingButton>
             </span>
-          ) : buyButtonVisibility ? (
-            <span className="hli push-left--13">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onBuyClick} disabled={!buyButtonDisabled || remainingAllocation === 0}>
-                {buyButtonText}
-              </LoadingButton>
+          ) : (
+            <span width="20">
+              <BtnLoader width={45} height={9} />
             </span>
-          ) : r1FinalizeButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(r1FinalizeLink)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
-          ) : r1Finish ? (
-            <span className="hli">
-              <LoadingButton style={{ padding: "0 40px" }} onClick={onR1FinalizeClick} loading={r1FinalizeButtonSpinning}>
-                Initialise Refund
-              </LoadingButton>
-            </span>
-          ) : null}
+          )}
         </Col>
       </Row>
     </CUICard>

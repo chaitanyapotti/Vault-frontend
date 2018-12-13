@@ -1,7 +1,13 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
+import { CustomToolTip } from "../../FormComponents";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
-import { formatFromWei, formatDate, significantDigits } from "../../../../helpers/common/projectDetailhelperFunctions";
+import {
+  formatFromWei,
+  formatDate,
+  significantDigits,
+  secondsToDhms,
+  getSignInStatusText
+} from "../../../../helpers/common/projectDetailhelperFunctions";
 import LoadingButton from "../../LoadingButton";
 import { ensureHttpUrl } from "../../../../helpers/common/urlFixerInHref";
 
@@ -19,13 +25,14 @@ const ReqType = props => {
     onRevokeXfrClick,
     xfrButtonSpinning,
     tokensUnderGovernance,
-    onXfrPollHistoryClick,
     canXfrClick,
     xfr1ButtonTransactionHash,
     xfr2ButtonTransactionHash,
-    xfr2Link,
     link
   } = props || {};
+  const signinText = getSignInStatusText(signinStatusFlag);
+  const xfrWarningText = signinStatusFlag < 4 ? signinText : !canXfrClick ? "Not enough token balance" : "";
+  const isDisabled = !canXfrClick;
   return (
     <div style={{ padding: "40px 50px" }}>
       <Row className="txt-g-secondary txt-m">
@@ -49,39 +56,49 @@ const ReqType = props => {
           <span className="text--secondary"> {100 - significantDigits(parseFloat(consensus) / parseFloat(tokensUnderGovernance) || 0)}%</span>
         </Col>
         <Col lg={7} className="txt txt-no-wrp">
-          Ends in: <span className="text--secondary">{formatDate(endTime * 1000)}</span>
+          Ends in: <span className="text--secondary">{secondsToDhms(new Date(endTime * 1000) - new Date())}</span>
         </Col>
       </Row>
       <Row>
         <Col lg={12} className="push--top text-right">
-          {signinStatusFlag <= 3 ? (
-            <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-              <div>
-                <LoadingButton style={{ padding: "0 40px" }} disabled type="danger">
-                  Deny
+          {signinStatusFlag < 4 ? (
+            <div className="hli">
+              <CustomToolTip title={xfrWarningText} id="btn-disabled" placement="bottom" disabled>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} type="danger" disabled>
+                    Deny
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
+            </div>
+          ) : (xfr1ButtonTransactionHash && xfr1ButtonTransactionHash !== "") || (xfr2ButtonTransactionHash && xfr2ButtonTransactionHash !== "") ? (
+            <div className="hli">
+              <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
                 </LoadingButton>
-              </div>
-            </Tooltip>
-          ) : xfr1ButtonTransactionHash && xfr1ButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
-          ) : xfr2ButtonTransactionHash && xfr2ButtonTransactionHash !== "" ? (
-            <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                Status
-              </LoadingButton>
-            </a>
+              </a>
+            </div>
           ) : voted ? (
-            <LoadingButton style={{ padding: "0 40px" }} onClick={onRevokeXfrClick} loading={xfrButtonSpinning} disabled={!canXfrClick}>
-              Allow
-            </LoadingButton>
+            <div className="hli">
+              <CustomToolTip title={xfrWarningText} id="btn-disabled" placement="bottom" disabled={isDisabled}>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} onClick={onRevokeXfrClick} loading={xfrButtonSpinning} disabled={isDisabled}>
+                    Allow
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
+            </div>
           ) : (
-            <LoadingButton style={{ padding: "0 40px" }} onClick={onXfrClick} type="danger" loading={xfrButtonSpinning} disabled={!canXfrClick}>
-              Deny
-            </LoadingButton>
+            <div className="hli">
+              <CustomToolTip title={xfrWarningText} id="btn-disabled" placement="bottom" disabled={isDisabled}>
+                <span>
+                  <LoadingButton style={{ padding: "0 40px" }} onClick={onXfrClick} type="danger" loading={xfrButtonSpinning} disabled={isDisabled}>
+                    Deny
+                  </LoadingButton>
+                </span>
+              </CustomToolTip>
+            </div>
           )}
         </Col>
       </Row>

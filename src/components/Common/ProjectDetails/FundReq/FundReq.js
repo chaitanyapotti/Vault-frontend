@@ -3,13 +3,14 @@ import { Divider } from "@material-ui/core";
 import { CUICard } from "../../../../helpers/material-ui";
 import { Row, Col } from "../../../../helpers/react-flexbox-grid";
 import ReqType from "./ReqType";
+import LoadingButton from "../../LoadingButton";
+import { getEtherScanHashLink } from "../../../../helpers/common/projectDetailhelperFunctions";
 
 class FundReq extends Component {
   getObject1 = () => {
     const {
       data,
       details,
-      onXfrPollHistoryClick,
       xfrVoteData,
       signinStatusFlag,
       onRevokeXfr1Click,
@@ -17,12 +18,13 @@ class FundReq extends Component {
       xfr1ButtonSpinning,
       tokensUnderGovernance,
       canXfrClick,
-      xfr1ButtonTransactionHash
+      xfr1ButtonTransactionHash,
+      network
     } = this.props || {};
-    const link = `https://rinkeby.etherscan.io/tx/${xfr1ButtonTransactionHash}`;
+    const link = getEtherScanHashLink(xfr1ButtonTransactionHash, network);
     const { poll1 } = data || {};
     const { amount, consensus, endTime, address } = poll1 || {};
-    const requiredData = details ? details.filter(x => x.address === address) : [];
+    const requiredData = details && details.length > 0 && address ? details.filter(x => x.address.toUpperCase() === address.toUpperCase()) : [];
     const { name, description, startDate } = requiredData[0] || {};
     const requiredVote = Array.isArray(xfrVoteData) ? xfrVoteData.filter(x => x.address === address) : [];
     const { voted } = requiredVote[0] || false;
@@ -40,7 +42,6 @@ class FundReq extends Component {
         onXfrClick={onXfr1Click}
         xfrButtonSpinning={xfr1ButtonSpinning}
         tokensUnderGovernance={tokensUnderGovernance}
-        onXfrPollHistoryClick={onXfrPollHistoryClick}
         canXfrClick={canXfrClick}
         link={link}
         xfr1ButtonTransactionHash={xfr1ButtonTransactionHash}
@@ -59,7 +60,8 @@ class FundReq extends Component {
       xfr2ButtonSpinning,
       tokensUnderGovernance,
       canXfrClick,
-      xfr2ButtonTransactionHash
+      xfr2ButtonTransactionHash,
+      network
     } = this.props || {};
     const { poll2 } = data || {};
     const { amount, consensus, endTime, address } = poll2 || {};
@@ -67,7 +69,7 @@ class FundReq extends Component {
     const { name, description, startDate } = requiredData[0] || {}; //
     const requiredVote = Array.isArray(xfrVoteData) ? xfrVoteData.filter(x => x.address === address) : [];
     const { voted } = requiredVote[0] || false;
-    const xfr2Link = `https://rinkeby.etherscan.io/tx/${xfr2ButtonTransactionHash}`;
+    const xfr2Link = getEtherScanHashLink(xfr2ButtonTransactionHash, network);
     return endTime ? (
       <ReqType
         amount={amount}
@@ -91,6 +93,8 @@ class FundReq extends Component {
 
   render() {
     const { onXfrPollHistoryClick } = this.props || {};
+    const obj1 = this.getObject1();
+    const obj2 = this.getObject2();
     return (
       <div>
         <CUICard className="card-brdr">
@@ -99,25 +103,38 @@ class FundReq extends Component {
               Exceptional Fund Requests
             </Col>
             <Col className="push-half--top text-right txt-no-wrp" lg={4}>
-              <a rel="noopener" onClick={onXfrPollHistoryClick}>
+              <LoadingButton className="text--black lnktags" type="text" onClick={onXfrPollHistoryClick}>
                 View XFR History
-              </a>
+              </LoadingButton>
             </Col>
           </Row>
-          <Divider />
-          <div>
-            <Row className="push-top--35">
-              <Col lg={12} className="txt">
-                {this.getObject1()}
+          {obj1 !== null ? (
+            <div>
+              <Divider />
+              <Row className="push-top--35">
+                <Col lg={12} className="txt">
+                  {obj1}
+                </Col>
+              </Row>
+            </div>
+          ) : null}
+          {obj2 !== null ? (
+            <div>
+              <Divider />
+              <Row className="push-top--35">
+                <Col lg={12} className="txt">
+                  {obj2}
+                </Col>
+              </Row>
+            </div>
+          ) : null}
+          {obj1 === null && obj2 === null ? (
+            <Row>
+              <Col lg={12} className="txt text-center">
+                <div style={{ padding: "40px 20px" }}>Xfr Poll not deployed</div>
               </Col>
             </Row>
-            {this.getObject2() !== null ? <Divider /> : null}
-            <Row className="push-top--35">
-              <Col lg={12} className="txt">
-                {this.getObject2()}
-              </Col>
-            </Row>
-          </div>
+          ) : null}
         </CUICard>
       </div>
     );

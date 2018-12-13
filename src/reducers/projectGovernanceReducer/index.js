@@ -1,19 +1,18 @@
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  currentRoundNumber: "0",
-  treasuryStateNumber: "0"
+  currentRoundNumber: "",
+  treasuryStateNumber: ""
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-
     case actionTypes.CLEAR_GOVERNANCE_STATES: {
       return {
         ...state,
-        currentRoundNumber: "0",
-      treasuryStateNumber: "0"
-      }
+        currentRoundNumber: "",
+        treasuryStateNumber: ""
+      };
     }
 
     case actionTypes.CURRENT_ROUND_FETCHED: {

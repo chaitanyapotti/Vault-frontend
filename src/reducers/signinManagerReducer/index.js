@@ -63,9 +63,9 @@ export default function(state = initialState, action) {
 
     case types.USER_DETAILS: {
       return {
-        ...state, 
+        ...state,
         userDetails: action.payload
-      }
+      };
     }
 
     case types.ISISSUER_CHECK: {
@@ -81,10 +81,10 @@ export default function(state = initialState, action) {
     }
 
     case types.METAMASK_NETWORK: {
-      if (action.payload === "rinkeby") {
+      if (action.payload === "main") {
         return {
           ...state,
-          networkName: "rinkeby",
+          networkName: "main",
           metamaskPreviousNetworkName: action.payload,
           isMetamaskNetworkChecked: true
         };
@@ -147,7 +147,7 @@ export default function(state = initialState, action) {
       if (userPreviousLocalPublicAddress && userPreviousLocalPublicAddress !== action.payload && action.payload !== "") {
         reloadPage = true;
       }
-      if (networkName === "rinkeby") {
+      if (networkName === "main") {
         if (action.payload) {
           return {
             ...state,

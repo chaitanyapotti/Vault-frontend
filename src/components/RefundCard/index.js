@@ -1,73 +1,88 @@
 import React from "react";
-import { Tooltip } from "@material-ui/core";
 import { CUICard } from "../../helpers/material-ui";
 import LoadingButton from "../Common/LoadingButton";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { Row, Col } from "../../helpers/react-flexbox-grid";
 import { ensureHttpUrl } from "../../helpers/common/urlFixerInHref";
+import { CustomToolTip } from "../Common/FormComponents";
+import { getSignInStatusText, getEtherScanHashLink } from "../../helpers/common/projectDetailhelperFunctions";
+import BtnLoader from "../Loaders/BtnLoader";
 
 const RefundCard = props => {
   const {
     signinStatusFlag,
-    treasuryStateNumber,
     tokenBalance,
     label,
     refundByKillButtonTransactionHash,
     refundBySoftCapFailSpinning,
     refundByKillButtonSpinning,
     onRefundClick,
-    refundBySoftcapfailButtonTransactionHash
+    refundBySoftcapfailButtonTransactionHash,
+    network
   } = props || {};
-  const link = `https://rinkeby.etherscan.io/tx/${refundByKillButtonTransactionHash}`;
-  const refundSoftLink = `https://rinkeby.etherscan.io/tx/${refundBySoftcapfailButtonTransactionHash}`;
+  const link =
+    refundByKillButtonTransactionHash !== ""
+      ? getEtherScanHashLink(refundByKillButtonTransactionHash, network)
+      : refundBySoftcapfailButtonTransactionHash !== ""
+      ? getEtherScanHashLink(refundBySoftcapfailButtonTransactionHash, network)
+      : "";
+  const warningText = getSignInStatusText(signinStatusFlag);
+  const isDisabled = parseFloat(tokenBalance) === 0;
+  const disabledText = parseFloat(tokenBalance) === 0 ? "You don't hold any tokens" : "";
   return (
-    <div className="push-top--50">
-      <Grid>
-        <Row>
-          <Col lg={12}>
-            <CUICard style={{ padding: "40px 50px" }}>
-              <Grid>
-                <Row>
-                  <Col lg={8}>
-                    <div className="text-left text--primary sbhdr-txt push--bottom txt-xl">{label}</div>
-                  </Col>
-                  <Col lg={4}>
-                    <div className="text--center">
-                      {refundByKillButtonTransactionHash !== "" ? (
-                        <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
-                          <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                            Status
-                          </LoadingButton>
-                        </a>
-                      ) : refundBySoftcapfailButtonTransactionHash !== "" ? (
-                        <a href={ensureHttpUrl(refundSoftLink)} target="_blank" rel="noreferrer noopener">
-                          <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
-                            Status
-                          </LoadingButton>
-                        </a>
-                      ) : signinStatusFlag <= 3 ? (
-                        <Tooltip title="This feature is only for Vault Members" id="btn-disabled">
-                          <div>
-                            <LoadingButton disabled>Refund</LoadingButton>
-                          </div>
-                        </Tooltip>
-                      ) : (
-                        <LoadingButton
-                          disabled={(treasuryStateNumber !== "2" && treasuryStateNumber !== "4") || tokenBalance === "0"}
-                          onClick={onRefundClick}
-                          loading={refundByKillButtonSpinning || refundBySoftCapFailSpinning}
-                        >
-                          Refund
-                        </LoadingButton>
-                      )}
-                    </div>
-                  </Col>
-                </Row>
-              </Grid>
-            </CUICard>
-          </Col>
-        </Row>
-      </Grid>
-    </div>
+    <CUICard className="card-brdr push-top--50" style={{ padding: "40px 50px" }}>
+      <Row lg={8}>
+        <Col>
+          <div className="txt-xxxl text--primary">Refund Mode</div>
+        </Col>
+      </Row>
+      <Row className="push-top--50">
+        <Col lg={8}>
+          <div className="text-left fnt-ps push--bottom txt">{label}</div>
+        </Col>
+        <Col lg={4}>
+          <div className="text--center">
+            {signinStatusFlag < 3 ? (
+              <div className="hli">
+                <CustomToolTip title={warningText} id="btn-disabled" disabled>
+                  <span>
+                    <LoadingButton style={{ padding: "0 40px" }} disabled>
+                      Refund
+                    </LoadingButton>
+                  </span>
+                </CustomToolTip>
+              </div>
+            ) : refundByKillButtonTransactionHash !== "" || refundBySoftcapfailButtonTransactionHash !== "" ? (
+              <div className="hli">
+                <a href={ensureHttpUrl(link)} target="_blank" rel="noreferrer noopener">
+                  <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
+                    Status
+                  </LoadingButton>
+                </a>
+              </div>
+            ) : tokenBalance ? (
+              <div className="hli">
+                <CustomToolTip title={disabledText} disabled={isDisabled}>
+                  <span>
+                    <LoadingButton
+                      disabled={isDisabled}
+                      onClick={onRefundClick}
+                      loading={refundByKillButtonSpinning || refundBySoftCapFailSpinning}
+                      style={{ padding: "0 40px", "min-width": "200px" }}
+                    >
+                      Refund
+                    </LoadingButton>
+                  </span>
+                </CustomToolTip>
+              </div>
+            ) : (
+              <span width="20">
+                <BtnLoader width={45} height={9} />
+              </span>
+            )}
+          </div>
+        </Col>
+      </Row>
+    </CUICard>
   );
 };
 

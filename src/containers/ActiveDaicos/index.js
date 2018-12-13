@@ -24,7 +24,7 @@ class ActiveDaicos extends Component {
 
   calculateEndDuration = r1EndTime => new Date(r1EndTime) - new Date();
 
-  convertRoundGoal = (round, ETH) => formatFromWei((parseFloat(round.tokenCount) * ETH) / parseFloat(round.tokenRate));
+  convertRoundGoal = (round, ETH) => formatFromWei((parseFloat(round.tokenCount) * ETH) / parseFloat(round.tokenRate), 10);
 
   calculateRoundGoal = (round, ETH) => formatMoney(this.convertRoundGoal(round, ETH), 0);
 
@@ -43,7 +43,8 @@ class ActiveDaicos extends Component {
     const data = activeDaicosTable.map(item => {
       const { projectName, rounds, currentRound, startDateTime, r1EndTime, raisedAmount, tokenPrice, _id, thumbnailUrl } = item || {};
       const dataArray = [
-        { projectName, thumbnailUrl },
+        thumbnailUrl,
+        projectName,
         `${currentRound} of 3`,
         this.calculateRoundGoal(rounds[0], ETH),
         this.calculateFinalGoal(rounds, ETH),
@@ -67,20 +68,25 @@ class ActiveDaicos extends Component {
               filter
               columns={[
                 {
+                  name: "",
+                  options: {
+                    download: false,
+                    filter: true,
+                    customBodyRender: value => <img style={{ margin: "0 10px" }} src={value} width="35" height="35" />
+                  }
+                },
+                {
                   name: "Name",
                   options: {
-                    customBodyRender: value => {
-                      const { projectName, thumbnailUrl } = value || {};
-                      return (
-                        <div style={{ width: "130px" }} className="hl">
-                          <img className="hli" src={thumbnailUrl} width="35" height="35" />
-                          <div className="hli pos-rel txt push--left" style={{ top: "10px" }}>
-                            {projectName}
-                          </div>
-                        </div>
-                      );
-                    },
-                    filter: false
+                    filter: true
+                    // customHeadRender(value, tableMeta, updateValue) {
+                    //   console.log(value);
+                    //   return (
+                    //     <span style={{ padding: "20px", verticalAlign: "middle", display: "flex", borderBottom: "3px", margin: "0" }}>
+                    //       {value.name}
+                    //     </span>
+                    //   );
+                    // }
                   }
                 },
                 { name: "Current Round", options: { filter: true } },

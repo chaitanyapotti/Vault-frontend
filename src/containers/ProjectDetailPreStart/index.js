@@ -1,43 +1,35 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import Warning from "@material-ui/icons/Warning";
 import { ProjectPreStartName, PDetailPreStart, TokenChart } from "../../components/Common/ProjectDetails";
 import { onWhiteListClick, checkWhiteList } from "../../actions/projectPreStartActions/index";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
-import { formatDate, formatFromWei, getR1Price, getSoftCap, getHardCap } from "../../helpers/common/projectDetailhelperFunctions";
-import { fetchPrice } from "../../actions/priceFetchActions/index";
-import AlertModal from "../../components/Common/AlertModal";
+import {
+  formatDate,
+  formatFromWei,
+  getR1Price,
+  getSoftCap,
+  getHardCap,
+  getButtonVisibility,
+  getIndividualCap
+} from "../../helpers/common/projectDetailhelperFunctions";
+import MasonaryLayout from "../../components/Common/MasonaryLayout";
 
 class ProjectDetailPreStart extends Component {
-  state = {
-    modalOpen: false
-  };
-
-  handleClose = () => this.setState({ modalOpen: false });
-
   componentDidMount() {
-    const {
-      fetchPrice: etherPriceFetch,
-      checkWhiteList: checkWhiteListStatus,
-      version,
-      membershipAddress,
-      signinStatusFlag,
-      userLocalPublicAddress
-    } = this.props || {};
-    etherPriceFetch("ETH");
+    const { checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag, userLocalPublicAddress, network } = this.props || {};
     if (signinStatusFlag > 2) {
-      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
+      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress, network);
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { userLocalPublicAddress: prevAddress, signinStatusFlag: prevFlag } = prevProps || "";
-    const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag } =
+    const { userLocalPublicAddress: prevAddress, signinStatusFlag: prevFlag } = prevProps || {};
+    const { userLocalPublicAddress: localAddress, checkWhiteList: checkWhiteListStatus, version, membershipAddress, signinStatusFlag, network } =
       this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
-      checkWhiteListStatus(version, membershipAddress, localAddress);
+      checkWhiteListStatus(version, membershipAddress, localAddress, network);
     }
   }
 
@@ -46,13 +38,9 @@ class ProjectDetailPreStart extends Component {
     "3 Round DAICO";
 
   onWhiteListClickInternal = () => {
-    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember } = this.props || {};
+    const { version, membershipAddress, onWhiteListClick: whiteListClick, userLocalPublicAddress, isVaultMember, network } = this.props || {};
     if (isVaultMember) {
-      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress);
-    } else {
-      this.setState({
-        modalOpen: true
-      });
+      whiteListClick(version, "Protocol", membershipAddress, userLocalPublicAddress, network);
     }
   };
 
@@ -80,60 +68,56 @@ class ProjectDetailPreStart extends Component {
       buttonSpinning,
       signinStatusFlag,
       whitelistButtonTransactionHash,
-      thumbnailUrl
+      thumbnailUrl,
+      prices,
+      currentRoundNumber,
+      totalMintableSupply,
+      pollFactoryAddress,
+      daicoTokenAddress,
+      network,
+      isMembershipRequestPending
     } = this.props || {};
-    const { modalOpen } = this.state;
     return (
       <Grid>
-        <Row>
-          <Col xs={12} lg={6}>
-            <ProjectPreStartName
-              projectName={projectName}
-              priceIncrementFlag={false}
-              tokenTag={tokenTag}
-              price={getR1Price(this.props)}
-              roundText={this.getRoundText()}
-              description={description}
-              urls={urls}
-              whitepaper={whitepaper}
-              buttonText="Get Whitelisted"
-              buttonVisibility={!isCurrentMember}
-              buttonSpinning={buttonSpinning}
-              onClick={this.onWhiteListClickInternal}
-              signinStatusFlag={signinStatusFlag}
-              whitelistButtonTransactionHash={whitelistButtonTransactionHash}
-              thumbnailUrl={thumbnailUrl}
-            />
-          </Col>
-          <Col xs={12} lg={6}>
-            <PDetailPreStart
-              icoStartDate={formatDate(startDateTime)}
-              individualCap={formatFromWei(maximumEtherContribution, 3)}
-              voteSaturationLimit={capPercent / 100}
-              killFrequency="Quarterly"
-              initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
-              tapIncrementUnit={parseFloat(tapIncrementFactor) / 100}
-              hardCapCapitalisation={getSoftCap(this.props)}
-              dilutedCapitalisation={getHardCap(this.props)}
-              initialFundRelease={formatFromWei(initialFundRelease)}
-            />
-          </Col>
-        </Row>
-
-        <Row className="push--top">
-          <Col xs={12} lg={6}>
-            <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
-              <TokenChart rounds={rounds} foundationDetails={foundationDetails} />
-            </CUICard>
-          </Col>
-        </Row>
-
-        <AlertModal open={modalOpen} handleClose={this.handleClose} link="/register">
-          <div className="text--center text--danger">
-            <Warning style={{ width: "2em", height: "2em" }} />
-          </div>
-          <div className="text--center push--top">You are not registered with us. Please Login to use our App.</div>
-        </AlertModal>
+        <MasonaryLayout>
+          <ProjectPreStartName
+            projectName={projectName}
+            priceIncrementFlag={false}
+            tokenTag={tokenTag}
+            price={getR1Price(rounds)}
+            roundText={this.getRoundText()}
+            description={description}
+            urls={urls}
+            whitepaper={whitepaper}
+            buttonText="Get Whitelisted"
+            buttonVisibility={getButtonVisibility(isCurrentMember, isMembershipRequestPending, signinStatusFlag)}
+            buttonSpinning={buttonSpinning}
+            onClick={this.onWhiteListClickInternal}
+            signinStatusFlag={signinStatusFlag}
+            whitelistButtonTransactionHash={whitelistButtonTransactionHash}
+            thumbnailUrl={thumbnailUrl}
+            isCurrentMember={isCurrentMember}
+            daicoTokenAddress={daicoTokenAddress}
+            network={network}
+            isMembershipRequestPending={isMembershipRequestPending}
+          />
+          <PDetailPreStart
+            icoStartDate={formatDate(startDateTime)}
+            individualCap={getIndividualCap(maximumEtherContribution, rounds)}
+            voteSaturationLimit={capPercent / 100}
+            killFrequency="Quarterly"
+            initialTapAmount={formatFromWei(initialTapAmount * 86400 * 30, 3)}
+            tapIncrementUnit={parseFloat(tapIncrementFactor) / 100}
+            hardCapCapitalisation={getSoftCap(rounds, prices)}
+            dilutedCapitalisation={getHardCap(totalMintableSupply, prices, rounds)}
+            initialFundRelease={formatFromWei(initialFundRelease)}
+            pollFactoryAddress={pollFactoryAddress}
+            network={network}
+          />
+          <CUICard className="fnt-ps card-brdr" style={{ padding: "40px 50px" }}>
+            <TokenChart rounds={rounds} foundationDetails={foundationDetails} prices={prices} currentRoundNumber={currentRoundNumber} />
+          </CUICard>
+        </MasonaryLayout>
       </Grid>
     );
   }
@@ -143,26 +127,19 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       onWhiteListClick,
-      fetchPrice,
       checkWhiteList
     },
     dispatch
   );
 
 const mapStateToProps = state => {
-  const { projectPreStartReducer, fetchPriceReducer, signinManagerData } = state || {};
-  const { prices } = fetchPriceReducer || {};
-  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash } = projectPreStartReducer || {};
-  const { isVaultMember, userLocalPublicAddress, signinStatusFlag } = signinManagerData || {};
-
+  const { projectPreStartReducer } = state || {};
+  const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash, isMembershipRequestPending } = projectPreStartReducer || {};
   return {
     isCurrentMember,
     buttonSpinning,
-    prices,
-    isVaultMember,
-    userLocalPublicAddress,
-    signinStatusFlag,
-    whitelistButtonTransactionHash
+    whitelistButtonTransactionHash,
+    isMembershipRequestPending
   };
 };
 

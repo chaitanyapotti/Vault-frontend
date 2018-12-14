@@ -8,7 +8,8 @@ import { pollTxHash } from "../helperActions";
 
 const httpClient = axios.create();
 
-export function postUserFormData(userRegistrationData, userLocalPublicAddress) {
+export const postUserFormData = async (userRegistrationData, userLocalPublicAddress) => {
+  const network = await web3.eth.net.getNetworkType();
   const userFormObject = {};
   userFormObject.address = {
     addressLine1: userRegistrationData.addressLine1,
@@ -29,7 +30,7 @@ export function postUserFormData(userRegistrationData, userLocalPublicAddress) {
   userFormObject.dateOfBirth = userRegistrationData.dateOfBirth;
   userFormObject.citizenship = userRegistrationData.citizenship;
   userFormObject.isVaultMember = false;
-  userFormObject.network = "main";
+  userFormObject.network = network;
   userFormObject.email = userRegistrationData.email;
   return dispatch =>
     axios
@@ -65,6 +66,8 @@ export function postUserFormData(userRegistrationData, userLocalPublicAddress) {
 
 export const requestVaultMembership = (userLocalPublicAddress, isIssuer, countryIndex) => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
+  let vault_contract_address = config.vault_contract_address[network]
+  let vault_version = config.vault_version[network]
   let param2 = 2;
   let ethers = "0.0015";
   if (isIssuer) {
@@ -74,7 +77,7 @@ export const requestVaultMembership = (userLocalPublicAddress, isIssuer, country
 
   axios
     .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
-      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
+      params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
     })
     .then(response => {
       if (response.status === 200) {
@@ -86,11 +89,11 @@ export const requestVaultMembership = (userLocalPublicAddress, isIssuer, country
             type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING,
             payload: { receipt: true }
           });
-          axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: config.vault_Version, name: "Vault" } }).then(async res => {
+          axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: config.vault_version, name: "Vault" } }).then(async res => {
             const { data: byteData } = res.data || {};
             const { abi } = byteData || {};
             const gasPrice = await web3.eth.getGasPrice();
-            const instance = new web3.eth.Contract(abi, config.vault_contract_address, { from: userLocalPublicAddress });
+            const instance = new web3.eth.Contract(abi, vault_contract_address, { from: userLocalPublicAddress });
             instance.methods
               .requestMembership([(countryIndex + 1).toString(), param2])
               .send({
@@ -179,9 +182,11 @@ export function isAlreadyVaultMember(receipt) {
 
 export const checkVaultMembership = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
+  let vault_contract_address = config.vault_contract_address[network]
+  let vault_version = config.vault_version[network]
   axios
     .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
-      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
+      params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
     })
     .then(response => {
       if (response.status === 200) {
@@ -201,9 +206,11 @@ export const checkVaultMembership = userLocalPublicAddress => async dispatch => 
 
 export const hasVaultMembershipRequested = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
+  let vault_contract_address = config.vault_contract_address[network]
+  let vault_version = config.vault_version[network]
   axios
     .get(`${config.api_base_url}/web3/vaulttoken/ismembershipapprovalpending`, {
-      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
+      params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
     })
     .then(response => {
       if (response.status === 200) {
@@ -235,11 +242,13 @@ export const hasVaultMembershipRequested = userLocalPublicAddress => async dispa
     });
 };
 
-export function sendOtp(phoneNumber, countryCode) {
+export const sendOtp = (phoneNumber, countryCode) => {
   console.log("sending otp");
-  return dispatch => {
+  return async dispatch => {
+    const network = await web3.eth.net.getNetworkType();
     axios
-      .get(`${config.api_base_url}/db/users/otp`, { params: { phoneNumber: phoneNumber.toString(), countryCode: countryCode.toString() } })
+      .get(`${config.api_base_url}/db/users/otp`,
+       { params: { phoneNumber: phoneNumber.toString(), countryCode: countryCode.toString(), network } })
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -290,10 +299,11 @@ export function sendOtp(phoneNumber, countryCode) {
 }
 
 export function verifyPhoneNumber(serverOtp, userOtp, publicAddress, phoneNumber, countryCode) {
-  return dispatch => {
+  return async dispatch => {
     if (serverOtp.toString() === userOtp.toString()) {
+      const network = await web3.eth.net.getNetworkType();
       axios
-        .post(`${config.api_base_url}/db/users/register/phone`, {
+        .post(`${config.api_base_url}/db/users/register/phone?network=${network}`, {
           publicaddress: publicAddress,
           phonenumber: phoneNumber,
           countrycode: countryCode
@@ -380,9 +390,11 @@ export function countryCodeChanged(code) {
 }
 
 export function saveUserFormStates(userFormData, userLocalPublicAddress) {
-  return dispatch =>
+  return async dispatch =>{
+    const network = await web3.eth.net.getNetworkType();
     axios
-      .post(`${config.api_base_url}/db/users/formstates?useraddress=${userLocalPublicAddress}`, userFormData)
+      .post(`${config.api_base_url}/db/users/formstates?useraddress=${userLocalPublicAddress}&network=${network}`,
+       userFormData)
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -410,12 +422,14 @@ export function saveUserFormStates(userFormData, userLocalPublicAddress) {
           payload: constants.USER_FORM_STATES_SAVED_FAILED_MESSAGE
         });
       });
+    }
 }
 
 export function fetchUserFormStates(userLocalPublicAddress) {
-  return dispatch =>
+  return async dispatch =>{
+    const network = await web3.eth.net.getNetworkType();
     axios
-      .get(`${config.api_base_url}/db/users/formstates`, { params: { useraddress: userLocalPublicAddress } })
+      .get(`${config.api_base_url}/db/users/formstates`, { params: { useraddress: userLocalPublicAddress, network } })
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -443,20 +457,22 @@ export function fetchUserFormStates(userLocalPublicAddress) {
           payload: constants.USER_FORM_STATES_FAILED_MESSAGE
         });
       });
+    }
 }
 
 export function uploadPassportDocAction(passportDoc, userLocalPublicAddress, doctype) {
   const form = new FormData();
   form.append("file", passportDoc);
   const name = passportDoc.name || "";
-  return dispatch => {
+  return async dispatch => {
+    const network = await web3.eth.net.getNetworkType();
     dispatch({
       type: actionTypes.UPLOADING_PASSPORT_DOC,
       payload: name
     });
     httpClient({
       method: "post",
-      url: `${config.api_base_url}/db/users/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}`,
+      url: `${config.api_base_url}/db/users/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}&network=${network}`,
       data: form,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
@@ -487,14 +503,15 @@ export function uploadSelfieAction(selfie, userLocalPublicAddress, doctype) {
   const form = new FormData();
   form.append("file", selfie);
   const name = selfie.name || "";
-  return dispatch => {
+  return async dispatch => {
+    const network = await web3.eth.net.getNetworkType();
     dispatch({
       type: actionTypes.UPLOADING_SELFIE,
       payload: name
     });
     httpClient({
       method: "post",
-      url: `${config.api_base_url}/db/users/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}`,
+      url: `${config.api_base_url}/db/users/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}&network=${network}`,
       data: form,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
@@ -525,14 +542,15 @@ export function uploadAddressDocAction(addressDoc, userLocalPublicAddress, docty
   const form = new FormData();
   form.append("file", addressDoc);
   const name = addressDoc.name || "";
-  return dispatch => {
+  return async dispatch => {
+    const network = await web3.eth.net.getNetworkType();
     dispatch({
       type: actionTypes.UPLOADING_ADDRESS_DOC,
       payload: name
     });
     httpClient({
       method: "post",
-      url: `${config.api_base_url}/db/users/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}`,
+      url: `${config.api_base_url}/db/users/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}&network=${network}`,
       data: form,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })

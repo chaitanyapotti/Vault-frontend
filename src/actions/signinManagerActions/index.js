@@ -36,7 +36,8 @@ export function openRegistrationFormAction(userRegistered) {
 }
 
 export function checkUserRegistration() {
-  return dispatch => {
+  return async dispatch => {
+    const network = await web3.eth.net.getNetworkType();
     web3.eth
       .getAccounts()
       .then(accounts => {
@@ -46,7 +47,7 @@ export function checkUserRegistration() {
             payload: accounts[0]
           });
           axios
-            .get(`${config.api_base_url}/db/users`, { params: { useraddress: accounts[0] } })
+            .get(`${config.api_base_url}/db/users`, { params: { useraddress: accounts[0], network } })
             .then(response => {
               if (response.status === 200) {
                 if (response.data.message === constants.SUCCESS) {
@@ -90,9 +91,11 @@ export function checkUserRegistration() {
 }
 
 export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
-  return dispatch =>
+  return async dispatch => {
+    const network = await web3.eth.net.getNetworkType();
     axios
-      .get(`${config.api_base_url}/db/projects/deployment/indicator`, { params: { useraddress: userLocalPublicAddress } })
+      .get(`${config.api_base_url}/db/projects/deployment/indicator`,
+       { params: { useraddress: userLocalPublicAddress, network } })
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -120,13 +123,16 @@ export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
           payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
         });
       });
+    }
 }
 
 export const checkVaultMembership = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
+  let vault_contract_address = config.vault_contract_address[network]
+  let vault_version = config.vault_version[network]
   axios
     .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
-      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
+      params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
     })
     .then(response => {
       if (response.status === 200) {
@@ -176,7 +182,7 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
                   payload: networkName
                 });
               }
-              if (networkName === "main") {
+              // if (networkName === "main") {
                 if (accounts[0] !== userPreviousLocalPublicAddress) {
                   dispatch({
                     type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
@@ -186,12 +192,13 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
                   dispatch(checkIssuer(accounts[0]));
                   dispatch(fetchProjectDeploymentIndicator(accounts[0]));
                 }
-              } else if (accounts[0] !== userPreviousLocalPublicAddress) {
-                dispatch({
-                  type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
-                  payload: accounts[0]
-                });
-              }
+              // } 
+              // else if (accounts[0] !== userPreviousLocalPublicAddress) {
+              //   dispatch({
+              //     type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
+              //     payload: accounts[0]
+              //   });
+              // }
             })
             .catch(err => {
               console.log("err: ", err);
@@ -341,9 +348,11 @@ export function userOtpChanged(otp) {
 
 export const requestVaultMembership = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
+  let vault_contract_address = config.vault_contract_address[network]
+  let vault_version = config.vault_version[network]
   axios
     .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
-      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
+      params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
     })
     .then(response => {
       if (response.status === 200) {
@@ -355,11 +364,11 @@ export const requestVaultMembership = userLocalPublicAddress => async dispatch =
             type: actionTypes.VAULT_MEMBERSHIP_BUTTON_SPINNING,
             payload: true
           });
-          axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: config.vault_Version, name: "Vault" } }).then(async res => {
+          axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: vault_version, name: "Vault" } }).then(async res => {
             const { data: byteData } = res.data || {};
             const { abi } = byteData || {};
             const gasPrice = await web3.eth.getGasPrice();
-            const instance = new web3.eth.Contract(abi, config.vault_contract_address, { from: userLocalPublicAddress });
+            const instance = new web3.eth.Contract(abi, vault_contract_address, { from: userLocalPublicAddress });
             instance.methods
               .requestMembership([0, 0])
               .send({
@@ -427,10 +436,11 @@ export const requestVaultMembership = userLocalPublicAddress => async dispatch =
     .catch(err => console.error(err.message));
 };
 
-export const checkIssuer = userLocalPublicAddress => dispatch => {
+export const checkIssuer = userLocalPublicAddress => async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/db/users/isissuer`, {
-      params: { useraddress: userLocalPublicAddress }
+      params: { useraddress: userLocalPublicAddress, network }
     })
     .then(response => {
       if (response.status === 200) {
@@ -469,9 +479,12 @@ export const checkIssuer = userLocalPublicAddress => dispatch => {
 
 export const checkVaultMembershipPaymentStatus = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
+  let vault_contract_address = config.vault_contract_address[network]
+  let vault_version = config.vault_version[network]
+   
   axios
     .get(`${config.api_base_url}/web3/vaulttoken/ismembershipapprovalpending`, {
-      params: { version: config.vault_Version, network, address: config.vault_contract_address, useraddress: userLocalPublicAddress }
+      params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
     })
     .then(response => {
       if (response.status === 200) {
@@ -502,9 +515,11 @@ export const checkVaultMembershipPaymentStatus = userLocalPublicAddress => async
     });
 };
 
-export const checkPhoneVerification = userLocalPublicAddress => dispatch => {
+export const checkPhoneVerification = userLocalPublicAddress => async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
   axios
-    .get(`${config.api_base_url}/db/users/isphoneverified`, { params: { useraddress: userLocalPublicAddress } })
+    .get(`${config.api_base_url}/db/users/isphoneverified`,
+       { params: { useraddress: userLocalPublicAddress, network } })
     .then(response => {
       if (response.status === 200) {
         if (response.data.message === constants.SUCCESS) {

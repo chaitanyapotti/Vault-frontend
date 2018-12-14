@@ -268,10 +268,10 @@ export const getUnlockTokensData = (pollFactoryAddress, userLocalPublicAddress, 
 };
 
 export const getKillPollsHistory = pollFactoryAddress => async dispatch => {
-  // await web3.eth.net.getNetworkType();
+  const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/db/projects/history/killpoll`, {
-      params: { pollfactoryaddress: pollFactoryAddress }
+      params: { pollfactoryaddress: pollFactoryAddress, network }
     })
     .then(response => {
       const { status, data: killPollsHistorytData } = response || {};
@@ -292,9 +292,10 @@ export const getKillPollsHistory = pollFactoryAddress => async dispatch => {
 };
 
 export const getTapPollsHistory = pollFactoryAddress => async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/db/projects/history/tappoll`, {
-      params: { pollfactoryaddress: pollFactoryAddress }
+      params: { pollfactoryaddress: pollFactoryAddress, network }
     })
     .then(response => {
       const { status, data: tapPollsHistorytData } = response || {};
@@ -315,9 +316,10 @@ export const getTapPollsHistory = pollFactoryAddress => async dispatch => {
 };
 
 export const getXfrPollsHistory = pollFactoryAddress => async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
   axios
     .get(`${config.api_base_url}/db/projects/history/xfrpoll`, {
-      params: { pollfactoryaddress: pollFactoryAddress }
+      params: { pollfactoryaddress: pollFactoryAddress, network }
     })
     .then(response => {
       const { status, data: xfrPollsHistorytData } = response || {};

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { checkUserRegistration, fetchCurrentAccount, checkVaultMembership, pageReloadingSignal } from "../../actions/signinManagerActions";
+import { fetchCurrentAccount,  pageReloadingSignal } from "../../actions/signinManagerActions";
 
 class SigninManager extends Component {
   constructor(props) {
@@ -37,9 +37,6 @@ class SigninManager extends Component {
     }
     return (
       <div>
-        {/* <p>User is registered: {this.props.userRegistered.toString()}</p>
-                <p>User Address: {this.props.userServerPublicAddress}</p>
-                <p>User is issuer: {this.props.userIsIssuer.toString()}</p> */}
       </div>
     );
   }
@@ -71,9 +68,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      checkUserRegistration,
       fetchCurrentAccount,
-      checkVaultMembership,
       pageReloadingSignal
     },
     dispatch

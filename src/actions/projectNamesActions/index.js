@@ -2,11 +2,15 @@ import axios from "axios";
 import actionTypes from "../../action_types";
 import config from "../../config";
 import constants from "../../constants";
+import web3 from "../../helpers/web3";
 
 export function getProjectNames() {
-  return dispatch =>
+  return async dispatch => {
+    const network = await web3.eth.net.getNetworkType();
     axios
-      .get(`${config.api_base_url}/db/projects/uniqueprojecttags`)
+      .get(`${config.api_base_url}/db/projects/uniqueprojecttags`, {
+        params: { network }
+      })
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -34,4 +38,5 @@ export function getProjectNames() {
           payload: constants.PROJECT_NAMES_FAILED_MESSAGE
         });
       });
+    }
 }

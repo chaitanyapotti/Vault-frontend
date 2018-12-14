@@ -7,7 +7,10 @@ import web3 from "../../helpers/web3";
 
 const httpClient = axios.create();
 
-export function newProjectRegistration(projectData, userLocalPublicAddress) {
+export const newProjectRegistration = async (projectData, userLocalPublicAddress) => {
+  const network = await web3.eth.net.getNetworkType();
+  let vault_contract_address = config.vault_contract_address[network]
+  
   const foundationDetails = [];
   const { nonSaleEntities, totalSaleTokens } = projectData || [];
   let totalNonSaleTokens = 0;
@@ -43,7 +46,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     ],
     minimumEtherContribution: "100000000000000000",
     maximumEtherContribution: web3.utils.toWei(projectData.maxEtherContribution),
-    vaultAddress: config.vault_contract_address,
+    vaultAddress: vault_contract_address,
     foundationDetails,
     initialFundRelease: web3.utils.toWei(projectData.initialFundRelease, "ether"),
     teamAddress: projectData.teamAddress,
@@ -65,7 +68,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     killAcceptancePercent: "80",
     xfrRejectionPercent: "50",
     tapAcceptancePercent: "50",
-    network: "main",
+    network: network,
     version: "1",
     totalMintableSupply: web3.utils.toWei(parseInt(projectData.totalSaleTokens + totalNonSaleTokens, 10).toString()),
     currentDeploymentIndicator: 0,
@@ -75,9 +78,10 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
     raisedAmount: 0
   };
 
-  return dispatch =>
+  return async dispatch =>{
+  const network = await web3.eth.net.getNetworkType();
     axios
-      .post(`${config.api_base_url}/db/projects/`, projectObject)
+      .post(`${config.api_base_url}/db/projects?network=${network}`, projectObject)
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -105,6 +109,7 @@ export function newProjectRegistration(projectData, userLocalPublicAddress) {
           payload: constants.PROJECT_REGISTRATION_FAILED_MESSAGE
         });
       });
+    }
 }
 
 export function projectMetadata(projectData, userLocalPublicAddress) {
@@ -121,9 +126,10 @@ export function projectMetadata(projectData, userLocalPublicAddress) {
     }
   };
 
-  return dispatch =>
+  return async dispatch =>{
+    const network = await web3.eth.net.getNetworkType();
     axios
-      .post(`${config.api_base_url}/db/projects/`, projectObject)
+      .post(`${config.api_base_url}/db/projects?network=${network}`, projectObject)
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -151,12 +157,14 @@ export function projectMetadata(projectData, userLocalPublicAddress) {
           payload: constants.PROJECT_METADATA_FAILED_MESSAGE
         });
       });
+    }
 }
 
 export function saveProjectStates(projectData, userLocalPublicAddress) {
-  return dispatch =>
+  return async dispatch =>{
+    const network = await web3.eth.net.getNetworkType();
     axios
-      .post(`${config.api_base_url}/db/projects/formstates?useraddress=${userLocalPublicAddress}`, projectData)
+      .post(`${config.api_base_url}/db/projects/formstates?useraddress=${userLocalPublicAddress}&network=${network}`, projectData)
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -184,6 +192,7 @@ export function saveProjectStates(projectData, userLocalPublicAddress) {
           payload: constants.PROJECT_STATES_SAVED_FAILED_MESSAGE
         });
       });
+    }
 }
 
 export function clearProjectDetails() {
@@ -196,9 +205,10 @@ export function clearProjectDetails() {
 }
 
 export function fetchProjectStates(userLocalPublicAddress) {
-  return dispatch =>
+  return async dispatch =>{
+    const network = await web3.eth.net.getNetworkType();
     axios
-      .get(`${config.api_base_url}/db/projects/formstates`, { params: { useraddress: userLocalPublicAddress } })
+      .get(`${config.api_base_url}/db/projects/formstates`, { params: { useraddress: userLocalPublicAddress, network } })
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -226,12 +236,14 @@ export function fetchProjectStates(userLocalPublicAddress) {
           payload: constants.PROJECT_STATES_FAILED_MESSAGE
         });
       });
+    }
 }
 
 export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
-  return dispatch =>
+  return async dispatch => {
+    const network = await web3.eth.net.getNetworkType();
     axios
-      .get(`${config.api_base_url}/db/projects/deployment/indicator`, { params: { useraddress: userLocalPublicAddress } })
+      .get(`${config.api_base_url}/db/projects/deployment/indicator`, { params: { useraddress: userLocalPublicAddress, network } })
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -259,9 +271,11 @@ export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
           payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
         });
       });
+    }
 }
 
-export function uploadThumbnailAction(thumbnailImage, userLocalPublicAddress, doctype) {
+export const uploadThumbnailAction = async (thumbnailImage, userLocalPublicAddress, doctype) =>{
+  const network = await web3.eth.net.getNetworkType();
   const form = new FormData();
   form.append("file", thumbnailImage);
   return dispatch => {
@@ -271,7 +285,7 @@ export function uploadThumbnailAction(thumbnailImage, userLocalPublicAddress, do
     });
     httpClient({
       method: "post",
-      url: `${config.api_base_url}/db/projects/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}`,
+      url: `${config.api_base_url}/db/projects/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}&network=${network}`,
       data: form,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })
@@ -307,7 +321,8 @@ export function thumbnailChangedAction(thumbnailImage) {
   };
 }
 
-export function uploadWhitepaperAction(whitepaperPDF, userLocalPublicAddress, doctype) {
+export const uploadWhitepaperAction = async (whitepaperPDF, userLocalPublicAddress, doctype) => {
+  const network = await web3.eth.net.getNetworkType();
   const form = new FormData();
   form.append("file", whitepaperPDF);
   return dispatch => {
@@ -317,7 +332,7 @@ export function uploadWhitepaperAction(whitepaperPDF, userLocalPublicAddress, do
     });
     httpClient({
       method: "post",
-      url: `${config.api_base_url}/db/projects/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}`,
+      url: `${config.api_base_url}/db/projects/document/upload?useraddress=${userLocalPublicAddress}&doctype=${doctype}&network=${network}`,
       data: form,
       config: { headers: { "Content-Type": "multipart/form-data" } }
     })

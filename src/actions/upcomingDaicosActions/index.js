@@ -2,11 +2,15 @@ import axios from "axios";
 import config from "../../config";
 import actionTypes from "../../action_types";
 import constants from "../../constants";
+import web3 from "../../helpers/web3";
 
 export function getUpcomingDaicos() {
-  return dispatch => {
+  return async dispatch => {
+    const network = await web3.eth.net.getNetworkType(); 
     axios
-      .get(`${config.api_base_url}/db/projects/upcoming`)
+      .get(`${config.api_base_url}/db/projects/upcoming` , {
+        params: { network }
+      })
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -22,7 +26,7 @@ export function getUpcomingDaicos() {
           }
         } else {
           dispatch({
-            type: actionTypes.UPCOMING_DAICOS_FAILED,
+            type: actionTypes.UPCOMING_DAICOS_FAILED, 
             payload: constants.UPCOMING_DAICOS_FAILED_MESSAGE,
           });
         }

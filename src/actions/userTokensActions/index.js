@@ -4,7 +4,7 @@ import actionTypes from "../../action_types";
 import web3 from "../../helpers/web3";
 import constants from "../../constants";
 
-const version = config.vault_Version;
+const version = config.vault_version;
 
 export const getUserTokens = userAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();

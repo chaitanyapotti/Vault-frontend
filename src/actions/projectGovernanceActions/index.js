@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from "../../config";
 import actionTypes from "../../action_types";
+import web3 from "../../helpers/web3";
 
 export const clearGovernanceStates = () => dispatch => {
   dispatch({
@@ -24,14 +25,15 @@ export const treasuryStateFetchSuccess = receipt => ({
   type: actionTypes.TREASURY_STATE_FETCHED
 });
 
-export const currentRound = projectid => dispatch => {
+export const currentRound = projectid => async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
   axios
-    .get(`${config.api_base_url}/db/projects`, { params: { projectid } })
+    .get(`${config.api_base_url}/db/projects`, { params: { projectid, network } })
     .then(async response => {
       const { status, data: projectData } = response || {};
       if (status === 200) {
         const { data } = projectData || {};
-        const { version, crowdSaleAddress, pollFactoryAddress, network } = data || {};
+        const { version, crowdSaleAddress, pollFactoryAddress } = data || {};
         dispatch(projectDetailsFetched(data));
         // const network = "rinkeby";
         // const network = await web3.eth.net.getNetworkType();

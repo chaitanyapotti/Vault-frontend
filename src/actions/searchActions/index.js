@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from "../../config";
 import actionTypes from "../../action_types";
+import web3 from "../../helpers/web3";
 
 export function searchResultFetched(data) {
   return {
@@ -19,14 +20,15 @@ export function searchTextChangeAction(data){
 }
 
 export function getSearchResults(q) {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: actionTypes.SEARCH_TEXT_CHANGED,
       payload: q
     })
+    const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/db/projects/search`, {
-        params: { q }
+        params: { q, network }
       })
       .then(response => {
         if (response.status === 200) {

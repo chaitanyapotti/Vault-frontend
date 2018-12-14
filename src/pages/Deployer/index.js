@@ -60,10 +60,12 @@ class Deployer extends Component {
     });
   };
 
-  deployMembership = (nonce = "") => {
+  deployMembership = async (nonce = "") => {
+    const network = await web3.eth.net.getNetworkType();
+    let vault_contract_address = config.vault_contract_address[network]
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
     const { version, _id, currentDeploymentIndicator, projectName, tokenTag } = projectDetails || {};
-    const args = [web3.utils.fromAscii(projectName), web3.utils.fromAscii(tokenTag), config.vault_contract_address];
+    const args = [web3.utils.fromAscii(projectName), web3.utils.fromAscii(tokenTag), vault_contract_address];
     deployAction(version, _id, currentDeploymentIndicator, args, "Protocol", userLocalPublicAddress, nonce);
   };
 
@@ -82,7 +84,9 @@ class Deployer extends Component {
     deployAction(version, _id, currentDeploymentIndicator, args, "LockedTokens", userLocalPublicAddress, nonce);
   };
 
-  deployPollFactory = (nonce = "") => {
+  deployPollFactory = async (nonce = "") => {
+    const network = await web3.eth.net.getNetworkType();
+    let vault_contract_address = config.vault_contract_address[network]
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
     const {
       version,
@@ -106,7 +110,7 @@ class Deployer extends Component {
       initialFundRelease,
       initialTapAmount,
       (new Date(killPollStartDate).getTime() / 1000).toString(), // In Unix Time
-      config.vault_contract_address,
+      vault_contract_address,
       capPercent,
       killAcceptancePercent,
       xfrRejectionPercent,
@@ -118,7 +122,9 @@ class Deployer extends Component {
     deployAction(version, _id, currentDeploymentIndicator, args, "PollFactory", userLocalPublicAddress, nonce);
   };
 
-  deployCrowdSale = (nonce = "") => {
+  deployCrowdSale = async (nonce = "") => {
+    const network = await web3.eth.net.getNetworkType();
+    let vault_contract_address = config.vault_contract_address[network]
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
     const {
       version,
@@ -146,7 +152,7 @@ class Deployer extends Component {
       pollFactoryAddress,
       membershipAddress,
       daicoTokenAddress,
-      config.vault_contract_address,
+      vault_contract_address,
       foundationDetails.map(a => a.address),
       foundationDetails.map(a => a.amount.toString())
     ];

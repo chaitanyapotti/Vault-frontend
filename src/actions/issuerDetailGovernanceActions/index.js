@@ -61,9 +61,10 @@ export const onEditXfr2DescriptionClick = value => dispatch => {
   });
 };
 
-export const editXfr1Description = (projectid, xfrAddress, description) => dispatch => {
+export const editXfr1Description = (projectid, xfrAddress, description) => async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
   axios
-    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}`, {
+    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}&network=${network}`, {
       description
     })
     .then(response => dispatch(onEditXfr1DescriptionClick(false)))
@@ -73,9 +74,10 @@ export const editXfr1Description = (projectid, xfrAddress, description) => dispa
     });
 };
 
-export const editXfr2Description = (projectid, xfrAddress, description) => dispatch => {
+export const editXfr2Description = (projectid, xfrAddress, description) =>async dispatch => {
+  const network = await web3.eth.net.getNetworkType();
   axios
-    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}`, {
+    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}&network=${network}`, {
       description
     })
     .then(response => dispatch(onEditXfr2DescriptionClick(false)))
@@ -371,7 +373,7 @@ export const deployXfrPoll = (
                   type: actionTypes.DEPLOY_XFR_POLL_TRANSACTION_HASH_RECEIVED
                 });
                 axios
-                  .patch(`${config.api_base_url}/db/projects/xfrs?projectid=${projectid}`, {
+                  .patch(`${config.api_base_url}/db/projects/xfrs?projectid=${projectid}&network=${network}`, {
                     name: titleText,
                     description: descriptionText,
                     address,

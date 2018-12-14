@@ -81,24 +81,24 @@ export default function(state = initialState, action) {
     }
 
     case types.METAMASK_NETWORK: {
-      if (action.payload === "main") {
+      // if (action.payload === "main") {
         return {
           ...state,
-          networkName: "main",
+          networkName: action.payload,
           metamaskPreviousNetworkName: action.payload,
           isMetamaskNetworkChecked: true
         };
-      }
-      return {
-        ...state,
-        signinStatusFlag: 2,
-        networkName: action.payload,
-        metamaskPreviousNetworkName: action.payload,
-        isMetamaskNetworkChecked: true,
-        isIssuerChecked: true,
-        isUserDefaultAccountChecked: true,
-        isVaultMembershipChecked: true
-      };
+      // }
+      // return {
+      //   ...state,
+      //   signinStatusFlag: 2,
+      //   networkName: action.payload,
+      //   metamaskPreviousNetworkName: action.payload,
+      //   isMetamaskNetworkChecked: true,
+      //   isIssuerChecked: true,
+      //   isUserDefaultAccountChecked: true,
+      //   isVaultMembershipChecked: true
+      // };
     }
 
     case types.METAMASK_INSTALLATION_STATUS_CHECK: {
@@ -147,8 +147,7 @@ export default function(state = initialState, action) {
       if (userPreviousLocalPublicAddress && userPreviousLocalPublicAddress !== action.payload && action.payload !== "") {
         reloadPage = true;
       }
-      if (networkName === "main") {
-        if (action.payload) {
+        if (action.payload!== "") {
           return {
             ...state,
             userRegistered: false,
@@ -176,36 +175,36 @@ export default function(state = initialState, action) {
           isVaultMembershipChecked: true,
           reloadPage
         };
-      }
-      if (action.payload !== "") {
-        return {
-          ...state,
-          userRegistered: false,
-          userIsIssuer: false,
-          isVaultMember: false,
-          userServerPublicAddress: "",
-          userLocalPublicAddress: action.payload,
-          userPreviousLocalPublicAddress: action.payload,
-          isUserDefaultAccountChecked: true,
-          signinStatusFlag: 2,
-          reloadPage
-        };
-      }
-      return {
-        ...state,
-        userRegistered: false,
-        userIsIssuer: false,
-        isVaultMember: false,
-        userServerPublicAddress: "",
-        userLocalPublicAddress: "",
-        userPreviousLocalPublicAddress: "",
-        signinStatusFlag: 1,
-        isUserDefaultAccountChecked: true,
-        isIssuerChecked: true,
-        isMetamaskNetworkChecked: true,
-        isVaultMembershipChecked: true,
-        reloadPage
-      };
+      
+      // if (action.payload !== "") {
+      //   return {
+      //     ...state,
+      //     userRegistered: false,
+      //     userIsIssuer: false,
+      //     isVaultMember: false,
+      //     userServerPublicAddress: "",
+      //     userLocalPublicAddress: action.payload,
+      //     userPreviousLocalPublicAddress: action.payload,
+      //     isUserDefaultAccountChecked: true,
+      //     signinStatusFlag: 2,
+      //     reloadPage
+      //   };
+      // }
+      // return {
+      //   ...state,
+      //   userRegistered: false,
+      //   userIsIssuer: false,
+      //   isVaultMember: false,
+      //   userServerPublicAddress: "",
+      //   userLocalPublicAddress: "",
+      //   userPreviousLocalPublicAddress: "",
+      //   signinStatusFlag: 1,
+      //   isUserDefaultAccountChecked: true,
+      //   isIssuerChecked: true,
+      //   isMetamaskNetworkChecked: true,
+      //   isVaultMembershipChecked: true,
+      //   reloadPage
+      // };
     }
 
     case types.SHOW_REGISTRATION_FORM: {

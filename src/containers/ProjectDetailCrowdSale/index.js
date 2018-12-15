@@ -48,6 +48,7 @@ class ProjectDetailCrowdSale extends Component {
     const {
       version,
       pollFactoryAddress,
+      network,
       crowdSaleAddress,
       getEtherCollected: fetchEtherCollected,
       getRoundTokensSold: fetchRoundTokensSold,
@@ -59,12 +60,12 @@ class ProjectDetailCrowdSale extends Component {
       daicoTokenAddress,
       getUserTokens: fetchUserTokens
     } = this.props || {};
-    fetchEtherCollected(version, pollFactoryAddress);
-    fetchRoundTokensSold(version, crowdSaleAddress, 0);
+    fetchEtherCollected(version, pollFactoryAddress, network);
+    fetchRoundTokensSold(version, crowdSaleAddress, 0, network);
     if (signinStatusFlag > 2) {
-      fetchUserTokens(crowdSaleAddress, version, 0, userLocalPublicAddress);
-      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
-      tokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
+      fetchUserTokens(crowdSaleAddress, version, 0, userLocalPublicAddress, network);
+      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress, network);
+      tokenBalance(version, daicoTokenAddress, userLocalPublicAddress, network);
     }
   }
 
@@ -75,6 +76,7 @@ class ProjectDetailCrowdSale extends Component {
       getTokenBalance: tokenBalance,
       checkWhiteList: checkWhiteListStatus,
       version,
+      network,
       membershipAddress,
       signinStatusFlag,
       daicoTokenAddress,
@@ -82,9 +84,9 @@ class ProjectDetailCrowdSale extends Component {
       getUserTokens: fetchUserTokens
     } = this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
-      tokenBalance(version, daicoTokenAddress, localAddress);
-      checkWhiteListStatus(version, membershipAddress, localAddress);
-      fetchUserTokens(crowdSaleAddress, version, 0, localAddress);
+      tokenBalance(version, daicoTokenAddress, localAddress, network);
+      checkWhiteListStatus(version, membershipAddress, localAddress, network);
+      fetchUserTokens(crowdSaleAddress, version, 0, localAddress, network);
     }
   }
 

@@ -288,7 +288,7 @@ const getR1Rate = rounds => {
 const getR1Goal = rounds => {
   const [round1] = rounds || {};
   const { tokenRate, tokenCount } = round1 || {}; // tokens/wei
-  return formatTokenPrice(parseFloat(tokenCount) / parseFloat(tokenRate), 2);
+  return formatTokenPrice(parseFloat(tokenCount) / parseFloat(tokenRate), 6);
 };
 
 const getR3Price = rounds => {

@@ -24,11 +24,11 @@ class LandingPage extends Component {
                 alt="landing"
               />
               <div className="pos-abs" style={screenWidth >= "760" ? { top: "50px", left: "50px" } : { top: "30px", left: "30px" }}>
-                <div className="text--white txt-font">Electus DAICO</div>
-                <div className="text--white push-half--top">Watch this space for news about Electus Daico</div>
+                <div className="text--white txt-font">Electus DAICO is live now</div>
+                <div className="text--white push-half--top">Contribute now to be a part of the change</div>
                 <div className="text--white push--top">
-                  <LoadingButton style={{ padding: "10px 40px", "pointer-events": "none" }} id="blackBtn">
-                    <span style={{ fontSize: "18px", fontWeight: "normal" }}>Get Whitelisted</span>
+                  <LoadingButton style={{ padding: "10px 40px", "pointer-events": "none" }} id="whiteBtn">
+                    <span style={{ fontSize: "18px", fontWeight: "normal", color: "#4ca9fc" }}>Get Whitelisted</span>
                   </LoadingButton>
                 </div>
               </div>

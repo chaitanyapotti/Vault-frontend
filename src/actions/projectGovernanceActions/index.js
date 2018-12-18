@@ -27,7 +27,6 @@ export const treasuryStateFetchSuccess = receipt => ({
 
 export const currentRound = (projectid, history = null) => async dispatch => {
   const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
-  console.log(localNetwork);
   axios
     .get(`${config.api_base_url}/db/projects`, { params: { projectid, network: localNetwork } })
     .then(async response => {

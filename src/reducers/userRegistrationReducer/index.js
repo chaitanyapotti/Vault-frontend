@@ -1,10 +1,8 @@
 /* global document, window */
 /* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
-import {countryList} from "../../constants";
+import { countryList } from "../../constants";
 import { validateEmail } from "../../helpers/common/validationHelperFunctions";
-
-const callingCountries = require("country-data").callingCountries;
 
 export const initialState = {
   passportUrl: "",
@@ -203,21 +201,16 @@ export default function(state = initialState, action) {
 
     case actionTypes.COUNTRY_CODE_CHANGED: {
       let citizenship = "";
-      let countryIndex = 0
-      for (const country in callingCountries) {
-        // console.log(callingCountries[country])
-        if (callingCountries[country].countryCallingCodes) {
-          for (const i of callingCountries[country].countryCallingCodes) {
-            // console.log(i.trim())
-            if (action.payload === i.trim()) {
-              citizenship = callingCountries[country].name;
-            }
-          }
-        }
+      let countryIndex = 0;
+      const countryCodeAlpha2 = action.payload
+        .slice(-4)
+        .replace("(", "")
+        .replace(")", "");
+      const item = countryList.findIndex(x => x.code === countryCodeAlpha2);
+      if (item > 0) {
+        countryIndex = item;
+        citizenship = countryList[item].name;
       }
-      let countryArrayList = countryList.map(x => x.name);
-      countryIndex = countryArrayList.indexOf(citizenship);
-
       return {
         ...state,
         countryCode: action.payload,

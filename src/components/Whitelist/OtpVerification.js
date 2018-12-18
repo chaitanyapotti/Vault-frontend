@@ -74,8 +74,12 @@ class OtpVerification extends Component {
     const countryChoices = [];
     const allCountries = countryList.countries.all;
     for (let index = 0; index < allCountries.length; index += 1) {
-      if (allCountries[index].countryCallingCodes.length > 0)
-        countryChoices.push({ value: allCountries[index].countryCallingCodes[0], label: allCountries[index].countryCallingCodes[0] });
+      allCountries[index].countryCallingCodes.forEach(element => {
+        countryChoices.push({
+          value: `${element} - (${allCountries[index].alpha2})`,
+          label: `${element} - ${allCountries[index].name} (${allCountries[index].alpha2})`
+        });
+      });
     }
     return (
       <div>

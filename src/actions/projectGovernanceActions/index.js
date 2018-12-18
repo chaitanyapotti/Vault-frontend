@@ -25,14 +25,16 @@ export const treasuryStateFetchSuccess = receipt => ({
   type: actionTypes.TREASURY_STATE_FETCHED
 });
 
-export const currentRound = projectid => async dispatch => {
+export const currentRound = (projectid, history = null) => async dispatch => {
   const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
+  console.log(localNetwork);
   axios
     .get(`${config.api_base_url}/db/projects`, { params: { projectid, network: localNetwork } })
     .then(async response => {
       const { status, data: projectData } = response || {};
       if (status === 200) {
         const { data } = projectData || {};
+        if (data === null && history !== null) history.push("/");
         const { version, crowdSaleAddress, pollFactoryAddress, network } = data || {};
         dispatch(projectDetailsFetched(data));
         // const network = "rinkeby";
@@ -77,6 +79,6 @@ export const currentRound = projectid => async dispatch => {
     })
     .catch(err => {
       dispatch(projectDetailsFetched({}));
-      console.log(err.message);
+      console.log(err);
     });
 };

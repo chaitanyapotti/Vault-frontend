@@ -10,13 +10,13 @@ export function searchResultFetched(data) {
   };
 }
 
-export function searchTextChangeAction(data){
+export function searchTextChangeAction(data) {
   return dispatch => {
     dispatch({
       type: actionTypes.SEARCH_TEXT_CHANGED,
       payload: data
-    })
-  }
+    });
+  };
 }
 
 export function getSearchResults(q) {
@@ -24,11 +24,11 @@ export function getSearchResults(q) {
     dispatch({
       type: actionTypes.SEARCH_TEXT_CHANGED,
       payload: q
-    })
-    const network = await web3.eth.net.getNetworkType();
+    });
+    const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
     axios
       .get(`${config.api_base_url}/db/projects/search`, {
-        params: { q, network }
+        params: { q, network: localNetwork }
       })
       .then(response => {
         if (response.status === 200) {

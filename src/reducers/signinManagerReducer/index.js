@@ -82,12 +82,12 @@ export default function(state = initialState, action) {
 
     case types.METAMASK_NETWORK: {
       // if (action.payload === "main") {
-        return {
-          ...state,
-          networkName: action.payload,
-          metamaskPreviousNetworkName: action.payload,
-          isMetamaskNetworkChecked: true
-        };
+      return {
+        ...state,
+        networkName: action.payload,
+        metamaskPreviousNetworkName: action.payload,
+        isMetamaskNetworkChecked: true
+      };
       // }
       // return {
       //   ...state,
@@ -147,35 +147,35 @@ export default function(state = initialState, action) {
       if (userPreviousLocalPublicAddress && userPreviousLocalPublicAddress !== action.payload && action.payload !== "") {
         reloadPage = true;
       }
-        if (action.payload!== "") {
-          return {
-            ...state,
-            userRegistered: false,
-            userIsIssuer: false,
-            isVaultMember: false,
-            userServerPublicAddress: "",
-            userLocalPublicAddress: action.payload,
-            userPreviousLocalPublicAddress: action.payload,
-            isUserDefaultAccountChecked: true,
-            reloadPage
-          };
-        }
+      if (action.payload !== "") {
         return {
           ...state,
           userRegistered: false,
           userIsIssuer: false,
           isVaultMember: false,
           userServerPublicAddress: "",
-          userLocalPublicAddress: "",
-          userPreviousLocalPublicAddress: "",
-          signinStatusFlag: 1,
+          userLocalPublicAddress: action.payload,
+          userPreviousLocalPublicAddress: action.payload,
           isUserDefaultAccountChecked: true,
-          isIssuerChecked: true,
-          isMetamaskNetworkChecked: true,
-          isVaultMembershipChecked: true,
           reloadPage
         };
-      
+      }
+      return {
+        ...state,
+        userRegistered: false,
+        userIsIssuer: false,
+        isVaultMember: false,
+        userServerPublicAddress: "",
+        userLocalPublicAddress: "",
+        userPreviousLocalPublicAddress: "",
+        signinStatusFlag: 1,
+        isUserDefaultAccountChecked: true,
+        isIssuerChecked: true,
+        isMetamaskNetworkChecked: true,
+        isVaultMembershipChecked: true,
+        reloadPage
+      };
+
       // if (action.payload !== "") {
       //   return {
       //     ...state,

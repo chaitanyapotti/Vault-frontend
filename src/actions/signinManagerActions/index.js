@@ -94,8 +94,7 @@ export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
   return async dispatch => {
     const network = await web3.eth.net.getNetworkType();
     axios
-      .get(`${config.api_base_url}/db/projects/deployment/indicator`,
-       { params: { useraddress: userLocalPublicAddress, network } })
+      .get(`${config.api_base_url}/db/projects/deployment/indicator`, { params: { useraddress: userLocalPublicAddress, network } })
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -123,13 +122,13 @@ export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
           payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
         });
       });
-    }
+  };
 }
 
 export const checkVaultMembership = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
-  let vault_contract_address = config.vault_contract_address[network]
-  let vault_version = config.vault_version[network]
+  const vault_contract_address = config.vault_contract_address[network];
+  const vault_version = config.vault_version[network];
   axios
     .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
       params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
@@ -159,7 +158,8 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
           type: actionTypes.METAMASK_INSTALLATION_STATUS_CHECK,
           payload: false
         });
-      } else return;
+      }
+      return;
     }
     if (!metamaskPreviousInstallationState) {
       dispatch({
@@ -167,49 +167,37 @@ export function fetchCurrentAccount(userPreviousLocalPublicAddress, metamaskPrev
         payload: true
       });
     }
-
+    web3.eth.net
+      .getNetworkType()
+      .then(networkName => {
+        if (networkName !== metamaskPreviousNetworkName) {
+          dispatch({
+            type: actionTypes.METAMASK_NETWORK,
+            payload: networkName
+          });
+        }
+      })
+      .catch(err => {
+        console.log("err: ", err);
+      });
     web3.eth
       .getAccounts()
       .then(accounts => {
         if (accounts.length > 0) {
-          web3.eth.net
-            .getNetworkType()
-            .then(networkName => {
-              // console.log("printing network: ", networkName)
-              if (networkName !== metamaskPreviousNetworkName) {
-                dispatch({
-                  type: actionTypes.METAMASK_NETWORK,
-                  payload: networkName
-                });
-              }
-              // if (networkName === "main") {
-                if (accounts[0] !== userPreviousLocalPublicAddress) {
-                  dispatch({
-                    type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
-                    payload: accounts[0]
-                  });
-                  dispatch(checkVaultMembership(accounts[0]));
-                  dispatch(checkIssuer(accounts[0]));
-                  dispatch(fetchProjectDeploymentIndicator(accounts[0]));
-                }
-              // } 
-              // else if (accounts[0] !== userPreviousLocalPublicAddress) {
-              //   dispatch({
-              //     type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
-              //     payload: accounts[0]
-              //   });
-              // }
-            })
-            .catch(err => {
-              console.log("err: ", err);
-            });
-        } else {
-          if (userPreviousLocalPublicAddress !== "") {
+          if (accounts[0] !== userPreviousLocalPublicAddress) {
             dispatch({
               type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
-              payload: ""
+              payload: accounts[0]
             });
+            dispatch(checkVaultMembership(accounts[0]));
+            dispatch(checkIssuer(accounts[0]));
+            dispatch(fetchProjectDeploymentIndicator(accounts[0]));
           }
+        } else if (userPreviousLocalPublicAddress !== "") {
+          dispatch({
+            type: actionTypes.USER_DEFAULT_ACCOUNT_CHANGED,
+            payload: ""
+          });
 
           // dispatch({
           //   type: actionTypes.USER_LOGGED_OUT,
@@ -348,8 +336,8 @@ export function userOtpChanged(otp) {
 
 export const requestVaultMembership = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
-  let vault_contract_address = config.vault_contract_address[network]
-  let vault_version = config.vault_version[network]
+  const vault_contract_address = config.vault_contract_address[network];
+  const vault_version = config.vault_version[network];
   axios
     .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
       params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
@@ -479,9 +467,9 @@ export const checkIssuer = userLocalPublicAddress => async dispatch => {
 
 export const checkVaultMembershipPaymentStatus = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
-  let vault_contract_address = config.vault_contract_address[network]
-  let vault_version = config.vault_version[network]
-   
+  const vault_contract_address = config.vault_contract_address[network];
+  const vault_version = config.vault_version[network];
+
   axios
     .get(`${config.api_base_url}/web3/vaulttoken/ismembershipapprovalpending`, {
       params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
@@ -518,8 +506,7 @@ export const checkVaultMembershipPaymentStatus = userLocalPublicAddress => async
 export const checkPhoneVerification = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
   axios
-    .get(`${config.api_base_url}/db/users/isphoneverified`,
-       { params: { useraddress: userLocalPublicAddress, network } })
+    .get(`${config.api_base_url}/db/users/isphoneverified`, { params: { useraddress: userLocalPublicAddress, network } })
     .then(response => {
       if (response.status === 200) {
         if (response.data.message === constants.SUCCESS) {

@@ -6,10 +6,10 @@ import web3 from "../../helpers/web3";
 
 export function getFeaturedProjects() {
   return async dispatch => {
-    const network = await web3.eth.net.getNetworkType();
+    const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
     axios
       .get(`${config.api_base_url}/db/projects/featured`, {
-        params: { network }
+        params: { network: localNetwork }
       })
       .then(response => {
         if (response.status === 200) {

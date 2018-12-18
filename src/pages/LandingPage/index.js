@@ -1,4 +1,8 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { withRouter } from "react-router-dom";
+import AlertModal from "../../components/Common/AlertModal";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
 import MasonryLayout from "../../components/Common/MasonaryLayout";
@@ -6,13 +10,23 @@ import LoadingButton from "../../components/Common/LoadingButton";
 
 const screenWidth = window.innerWidth;
 class LandingPage extends Component {
+  state = {
+    wrongNetworkModalOpen: false
+  };
+
+  handleWrongNetworkOpen = () => this.setState({ wrongNetworkModalOpen: true });
+
+  handleWrongNetworkClose = () => this.setState({ wrongNetworkModalOpen: false });
+
   onWhiteListClick = () => {
-    const { history } = this.props || {};
+    const { history, networkName } = this.props || {};
+    if (networkName && networkName !== "main") this.handleWrongNetworkOpen();
     // TODO: after deployment
-    history.push({ pathname: `/governance/details`, search: `?projectid=5c07c4cafff9a5eca2e9c057` });
+    else history.push({ pathname: `/governance/details`, search: `?projectid=5c07c4cafff9a5eca2e9c057` });
   };
 
   render() {
+    const { wrongNetworkModalOpen } = this.state;
     return (
       <Grid>
         <div style={{ marginBottom: "20px" }}>
@@ -27,7 +41,7 @@ class LandingPage extends Component {
                 <div className="text--white txt-font">Electus DAICO is live now</div>
                 <div className="text--white push-half--top">Contribute now to be a part of the change</div>
                 <div className="text--white push--top">
-                  <LoadingButton style={{ padding: "10px 40px", "pointer-events": "none" }} id="whiteBtn">
+                  <LoadingButton style={{ padding: "10px 40px", pointerEvents: "none" }} id="whiteBtn">
                     <span style={{ fontSize: "18px", fontWeight: "normal", color: "#4ca9fc" }}>Get Whitelisted</span>
                   </LoadingButton>
                 </div>
@@ -95,9 +109,27 @@ class LandingPage extends Component {
             </div>
           </CUICard>
         </MasonryLayout>
+        <AlertModal open={wrongNetworkModalOpen} handleClose={this.handleWrongNetworkClose}>
+          <div className="text--center push--top">Please switch to Main network in Metamask</div>
+        </AlertModal>
       </Grid>
     );
   }
 }
 
-export default LandingPage;
+const mapStateToProps = state => {
+  const { signinManagerData } = state || {};
+  const { networkName } = signinManagerData || {};
+  return {
+    networkName
+  };
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
+const connector = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LandingPage);
+
+export default withRouter(connector);

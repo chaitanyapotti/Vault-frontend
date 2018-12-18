@@ -21,8 +21,8 @@ class ProjectIssuerGovernance extends Component {
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
     if ("projectid" in params) {
-      const { currentRound: currentRoundDetailsFetch, fetchPrice: etherPriceFetch } = this.props || {};
-      currentRoundDetailsFetch(params.projectid);
+      const { currentRound: currentRoundDetailsFetch, fetchPrice: etherPriceFetch, history } = this.props || {};
+      currentRoundDetailsFetch(params.projectid, history);
       etherPriceFetch("ETH");
     } else {
       const { history } = this.props || {};

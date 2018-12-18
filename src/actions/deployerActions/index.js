@@ -41,12 +41,12 @@ export const receivedTransactionHash = body => ({
 });
 
 export const fetchProjectDetails = (projectid, useraddress) => async dispatch => {
-  const network = await web3.eth.net.getNetworkType();
+  const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
   let paramObject = {};
   if (projectid !== "") {
-    paramObject = { params: { projectid, network } };
+    paramObject = { params: { projectid, network: localNetwork } };
   } else {
-    paramObject = { params: { useraddress, network } };
+    paramObject = { params: { useraddress, network: localNetwork } };
   }
   axios
     .get(`${config.api_base_url}/db/projects`, paramObject)
@@ -68,7 +68,7 @@ export const fetchProjectDetails = (projectid, useraddress) => async dispatch =>
     });
 };
 
-export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator, userLocalPublicAddress, nonce) =>  dispatch => {
+export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator, userLocalPublicAddress, nonce) => dispatch => {
   let txHash = latestTxHash;
   timers.forEach(x => clearInterval(x));
   const myTimer = setInterval(() => {
@@ -95,9 +95,9 @@ export const pollTxHash = (latestTxHash, projectid, currentDeploymentIndicator, 
                   currentRound: 0,
                   raisedAmount: 0
                 };
-                const network = await web3.eth.net.getNetworkType();
+                const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
                 axios
-                  .post(`${config.api_base_url}/db/projects?network=${network}`, projectObject)
+                  .post(`${config.api_base_url}/db/projects?network=${localNetwork}`, projectObject)
                   .then(response => {
                     if (response.status === 200) {
                       console.log("patch success");
@@ -134,9 +134,9 @@ export const resetDeployment = userLocalPublicAddress => async dispatch => {
     currentDeploymentIndicator: 0,
     latestTxHash: "0x"
   };
-  const network = await web3.eth.net.getNetworkType();
+  const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
   axios
-    .post(`${config.api_base_url}/db/projects?network=${network}`, projectObject)
+    .post(`${config.api_base_url}/db/projects?network=${localNetwork}`, projectObject)
     .then(response => {
       if (response.status === 200) {
         dispatch(fetchProjectDetails("", userLocalPublicAddress));
@@ -327,9 +327,9 @@ const setContractAddress = (projectid, cdi, address, nonce) =>
   });
 
 const patchContractApi = async (projectid, body, resolve, reject) => {
-  const network = await web3.eth.net.getNetworkType();
+  const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
   axios
-    .patch(`${config.api_base_url}/db/projects/contracts?projectid=${projectid}&network=${network}`, body)
+    .patch(`${config.api_base_url}/db/projects/contracts?projectid=${projectid}&network=${localNetwork}`, body)
     .then(response => resolve(body)) // maybe update backend to send response as this
     .catch(err => reject(err.message));
 };

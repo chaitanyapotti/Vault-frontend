@@ -6,10 +6,10 @@ import web3 from "../../helpers/web3";
 
 export function getProjectNames() {
   return async dispatch => {
-    const network = await web3.eth.net.getNetworkType();
+    const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
     axios
       .get(`${config.api_base_url}/db/projects/uniqueprojecttags`, {
-        params: { network }
+        params: { network: localNetwork }
       })
       .then(response => {
         if (response.status === 200) {
@@ -38,5 +38,5 @@ export function getProjectNames() {
           payload: constants.PROJECT_NAMES_FAILED_MESSAGE
         });
       });
-    }
+  };
 }

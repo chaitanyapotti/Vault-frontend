@@ -9,8 +9,8 @@ const httpClient = axios.create();
 
 export const newProjectRegistration = async (projectData, userLocalPublicAddress) => {
   const network = await web3.eth.net.getNetworkType();
-  let vault_contract_address = config.vault_contract_address[network]
-  
+  const vault_contract_address = config.vault_contract_address[network];
+
   const foundationDetails = [];
   const { nonSaleEntities, totalSaleTokens } = projectData || [];
   let totalNonSaleTokens = 0;
@@ -68,7 +68,7 @@ export const newProjectRegistration = async (projectData, userLocalPublicAddress
     killAcceptancePercent: "80",
     xfrRejectionPercent: "50",
     tapAcceptancePercent: "50",
-    network: network,
+    network,
     version: "1",
     totalMintableSupply: web3.utils.toWei(parseInt(projectData.totalSaleTokens + totalNonSaleTokens, 10).toString()),
     currentDeploymentIndicator: 0,
@@ -78,8 +78,7 @@ export const newProjectRegistration = async (projectData, userLocalPublicAddress
     raisedAmount: 0
   };
 
-  return async dispatch =>{
-  const network = await web3.eth.net.getNetworkType();
+  return async dispatch => {
     axios
       .post(`${config.api_base_url}/db/projects?network=${network}`, projectObject)
       .then(response => {
@@ -109,8 +108,8 @@ export const newProjectRegistration = async (projectData, userLocalPublicAddress
           payload: constants.PROJECT_REGISTRATION_FAILED_MESSAGE
         });
       });
-    }
-}
+  };
+};
 
 export function projectMetadata(projectData, userLocalPublicAddress) {
   const projectObject = {
@@ -126,7 +125,7 @@ export function projectMetadata(projectData, userLocalPublicAddress) {
     }
   };
 
-  return async dispatch =>{
+  return async dispatch => {
     const network = await web3.eth.net.getNetworkType();
     axios
       .post(`${config.api_base_url}/db/projects?network=${network}`, projectObject)
@@ -157,11 +156,11 @@ export function projectMetadata(projectData, userLocalPublicAddress) {
           payload: constants.PROJECT_METADATA_FAILED_MESSAGE
         });
       });
-    }
+  };
 }
 
 export function saveProjectStates(projectData, userLocalPublicAddress) {
-  return async dispatch =>{
+  return async dispatch => {
     const network = await web3.eth.net.getNetworkType();
     axios
       .post(`${config.api_base_url}/db/projects/formstates?useraddress=${userLocalPublicAddress}&network=${network}`, projectData)
@@ -192,7 +191,7 @@ export function saveProjectStates(projectData, userLocalPublicAddress) {
           payload: constants.PROJECT_STATES_SAVED_FAILED_MESSAGE
         });
       });
-    }
+  };
 }
 
 export function clearProjectDetails() {
@@ -205,7 +204,7 @@ export function clearProjectDetails() {
 }
 
 export function fetchProjectStates(userLocalPublicAddress) {
-  return async dispatch =>{
+  return async dispatch => {
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/db/projects/formstates`, { params: { useraddress: userLocalPublicAddress, network } })
@@ -236,7 +235,7 @@ export function fetchProjectStates(userLocalPublicAddress) {
           payload: constants.PROJECT_STATES_FAILED_MESSAGE
         });
       });
-    }
+  };
 }
 
 export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
@@ -271,10 +270,10 @@ export function fetchProjectDeploymentIndicator(userLocalPublicAddress) {
           payload: constants.PROJECT_DEPLOYMENT_INDICATOR_FAILED_MESSAGE
         });
       });
-    }
+  };
 }
 
-export const uploadThumbnailAction = async (thumbnailImage, userLocalPublicAddress, doctype) =>{
+export const uploadThumbnailAction = async (thumbnailImage, userLocalPublicAddress, doctype) => {
   const network = await web3.eth.net.getNetworkType();
   const form = new FormData();
   form.append("file", thumbnailImage);
@@ -310,7 +309,7 @@ export const uploadThumbnailAction = async (thumbnailImage, userLocalPublicAddre
         });
       });
   };
-}
+};
 
 export function thumbnailChangedAction(thumbnailImage) {
   return dispatch => {
@@ -357,7 +356,7 @@ export const uploadWhitepaperAction = async (whitepaperPDF, userLocalPublicAddre
         });
       });
   };
-}
+};
 
 export function whitepaperChangedAction(whitepaperPDF) {
   return dispatch => {

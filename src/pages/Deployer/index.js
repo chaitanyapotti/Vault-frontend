@@ -61,10 +61,9 @@ class Deployer extends Component {
   };
 
   deployMembership = async (nonce = "") => {
-    const network = await web3.eth.net.getNetworkType();
-    let vault_contract_address = config.vault_contract_address[network]
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
-    const { version, _id, currentDeploymentIndicator, projectName, tokenTag } = projectDetails || {};
+    const { version, _id, currentDeploymentIndicator, projectName, tokenTag, network } = projectDetails || {};
+    const vault_contract_address = config.vault_contract_address[network];
     const args = [web3.utils.fromAscii(projectName), web3.utils.fromAscii(tokenTag), vault_contract_address];
     deployAction(version, _id, currentDeploymentIndicator, args, "Protocol", userLocalPublicAddress, nonce);
   };
@@ -85,8 +84,6 @@ class Deployer extends Component {
   };
 
   deployPollFactory = async (nonce = "") => {
-    const network = await web3.eth.net.getNetworkType();
-    let vault_contract_address = config.vault_contract_address[network]
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
     const {
       version,
@@ -102,8 +99,10 @@ class Deployer extends Component {
       xfrRejectionPercent,
       tapAcceptancePercent,
       lockedTokensAddress,
-      tapIncrementFactor
+      tapIncrementFactor,
+      network
     } = projectDetails || {};
+    const vault_contract_address = config.vault_contract_address[network];
     const args = [
       daicoTokenAddress,
       teamAddress,
@@ -123,8 +122,6 @@ class Deployer extends Component {
   };
 
   deployCrowdSale = async (nonce = "") => {
-    const network = await web3.eth.net.getNetworkType();
-    let vault_contract_address = config.vault_contract_address[network]
     const { userLocalPublicAddress, projectDetails, deployContractAction: deployAction } = this.props || {};
     const {
       version,
@@ -139,8 +136,10 @@ class Deployer extends Component {
       membershipAddress,
       daicoTokenAddress,
       foundationDetails,
-      startDateTime
+      startDateTime,
+      network
     } = projectDetails || {};
+    const vault_contract_address = config.vault_contract_address[network];
     const args = [
       minimumEtherContribution.toString(),
       maximumEtherContribution.toString(),

@@ -273,7 +273,7 @@ class HeaderPartial extends React.Component {
         onClose={this.handleMobileMenuClose}
       >
         <MenuItem onClick={this.onHandleProjectsClicked}>
-          <span className="hdr-menu-cnt">Projects: {this.props.networkName}</span>
+          <span className="hdr-menu-cnt">{this.props.networkName ? `Projects: ${this.props.networkName}` : `Projects`}</span>
         </MenuItem>
         {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
           <MenuItem onClick={this.onHandleGovernanceClicked}>
@@ -343,7 +343,7 @@ class HeaderPartial extends React.Component {
                         <div className={classes.sectionDesktop}>
                           <div className="hdr-itm-pad text--primary txt-m">
                             <div className="hvr-underline-from-left" onClick={this.onHandleProjectsClicked}>
-                              <span className="hdr-menu-cnt">Projects: {this.props.networkName}</span>
+                              <span className="hdr-menu-cnt">{this.props.networkName ? `Projects: ${this.props.networkName}` : `Projects`}</span>
                             </div>
                           </div>
                           {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
@@ -462,7 +462,7 @@ class HeaderPartial extends React.Component {
                 </div>
                 <div className={classes.drawerInner}>
                   <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleProjectsClicked}>
-                    <span className="hdr-menu-cnt">Projects: {this.props.networkName}</span>
+                    <span className="hdr-menu-cnt">{this.props.networkName ? `Projects: ${this.props.networkName}` : `Projects`}</span>
                   </div>
                   {this.props.signinStatusFlag === 4 || this.props.signinStatusFlag === 5 ? (
                     <div className="hdr-itm-pad text--primary txt-m" onClick={this.onHandleGovernanceClicked}>

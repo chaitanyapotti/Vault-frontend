@@ -62,9 +62,9 @@ export const onEditXfr2DescriptionClick = value => dispatch => {
 };
 
 export const editXfr1Description = (projectid, xfrAddress, description) => async dispatch => {
-  const network = await web3.eth.net.getNetworkType();
+  const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
   axios
-    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}&network=${network}`, {
+    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}&network=${localNetwork}`, {
       description
     })
     .then(response => dispatch(onEditXfr1DescriptionClick(false)))
@@ -74,10 +74,10 @@ export const editXfr1Description = (projectid, xfrAddress, description) => async
     });
 };
 
-export const editXfr2Description = (projectid, xfrAddress, description) =>async dispatch => {
-  const network = await web3.eth.net.getNetworkType();
+export const editXfr2Description = (projectid, xfrAddress, description) => async dispatch => {
+  const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
   axios
-    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}&network=${network}`, {
+    .patch(`${config.api_base_url}/db/projects/xfrdescription?projectid=${projectid}&address=${xfrAddress}&network=${localNetwork}`, {
       description
     })
     .then(response => dispatch(onEditXfr2DescriptionClick(false)))

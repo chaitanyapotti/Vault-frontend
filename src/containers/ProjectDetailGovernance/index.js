@@ -150,9 +150,9 @@ class ProjectDetailGovernance extends Component {
     priceFetch(tokenTag);
     fetchSpendCurveData(version, pollFactoryAddress, crowdSaleAddress, network);
     fetchVoteHistogramData(projectid, network);
-    fetchKillPollsHistory(pollFactoryAddress);
-    fetchTapPollsHistory(pollFactoryAddress);
-    fetchXfrPollsHistory(pollFactoryAddress);
+    fetchKillPollsHistory(pollFactoryAddress, network);
+    fetchTapPollsHistory(pollFactoryAddress, network);
+    fetchXfrPollsHistory(pollFactoryAddress, network);
     const roundNumber = currentRoundNumber === "4" ? 2 : currentRoundNumber === "0" ? 0 : parseInt(currentRoundNumber, 10) - 1;
     fetchRoundTokensSold(version, crowdSaleAddress, roundNumber, network);
     fetchTokensUnderGovernance(version, daicoTokenAddress, network);

@@ -171,7 +171,6 @@ class ProjectDetailCrowdSale extends Component {
     const formattedUserContribution = formatFromWei(userContribution, 18);
     const formattedMaxEtherContribution = formatFromWei(maximumEtherContribution, 3);
     const remainingAllocation = r1Rate * (formattedMaxEtherContribution - formattedUserContribution);
-    console.log("here2");
     return (
       <Grid>
         <div style={{ marginBottom: "20px" }}>

@@ -107,9 +107,9 @@ class IssuerDetailGovernance extends Component {
     fetchXfrData(version, pollFactoryAddress, network);
     fetchCurrentWithdrawableAmount(version, pollFactoryAddress, network);
     fetchKillVoterCount(version, pollFactoryAddress, network);
-    fetchKillPollsHistory(pollFactoryAddress);
-    fetchTapPollsHistory(pollFactoryAddress);
-    fetchXfrPollsHistory(pollFactoryAddress);
+    fetchKillPollsHistory(pollFactoryAddress, network);
+    fetchTapPollsHistory(pollFactoryAddress, network);
+    fetchXfrPollsHistory(pollFactoryAddress, network);
     fetchEtherCollected(version, pollFactoryAddress, network);
   }
 

@@ -62,12 +62,12 @@ export const postUserFormData = async (userRegistrationData, userLocalPublicAddr
           payload: constants.PROJECT_REGISTRATION_FAILED_MESSAGE
         });
       });
-}
+};
 
 export const requestVaultMembership = (userLocalPublicAddress, isIssuer, countryIndex) => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
-  let vault_contract_address = config.vault_contract_address[network]
-  let vault_version = config.vault_version[network]
+  const vault_contract_address = config.vault_contract_address[network];
+  const vault_version = config.vault_version[network];
   let param2 = 2;
   let ethers = "0.0015";
   if (isIssuer) {
@@ -182,8 +182,8 @@ export function isAlreadyVaultMember(receipt) {
 
 export const checkVaultMembership = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
-  let vault_contract_address = config.vault_contract_address[network]
-  let vault_version = config.vault_version[network]
+  const vault_contract_address = config.vault_contract_address[network];
+  const vault_version = config.vault_version[network];
   axios
     .get(`${config.api_base_url}/web3/membershiptoken/iscurrentmember`, {
       params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
@@ -206,8 +206,8 @@ export const checkVaultMembership = userLocalPublicAddress => async dispatch => 
 
 export const hasVaultMembershipRequested = userLocalPublicAddress => async dispatch => {
   const network = await web3.eth.net.getNetworkType();
-  let vault_contract_address = config.vault_contract_address[network]
-  let vault_version = config.vault_version[network]
+  const vault_contract_address = config.vault_contract_address[network];
+  const vault_version = config.vault_version[network];
   axios
     .get(`${config.api_base_url}/web3/vaulttoken/ismembershipapprovalpending`, {
       params: { version: vault_version, network, address: vault_contract_address, useraddress: userLocalPublicAddress }
@@ -247,8 +247,7 @@ export const sendOtp = (phoneNumber, countryCode) => {
   return async dispatch => {
     const network = await web3.eth.net.getNetworkType();
     axios
-      .get(`${config.api_base_url}/db/users/otp`,
-       { params: { phoneNumber: phoneNumber.toString(), countryCode: countryCode.toString(), network } })
+      .get(`${config.api_base_url}/db/users/otp`, { params: { phoneNumber: phoneNumber.toString(), countryCode: countryCode.toString(), network } })
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -296,7 +295,7 @@ export const sendOtp = (phoneNumber, countryCode) => {
         });
       });
   };
-}
+};
 
 export function verifyPhoneNumber(serverOtp, userOtp, publicAddress, phoneNumber, countryCode) {
   return async dispatch => {
@@ -390,11 +389,10 @@ export function countryCodeChanged(code) {
 }
 
 export function saveUserFormStates(userFormData, userLocalPublicAddress) {
-  return async dispatch =>{
+  return async dispatch => {
     const network = await web3.eth.net.getNetworkType();
     axios
-      .post(`${config.api_base_url}/db/users/formstates?useraddress=${userLocalPublicAddress}&network=${network}`,
-       userFormData)
+      .post(`${config.api_base_url}/db/users/formstates?useraddress=${userLocalPublicAddress}&network=${network}`, userFormData)
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === constants.SUCCESS) {
@@ -422,11 +420,11 @@ export function saveUserFormStates(userFormData, userLocalPublicAddress) {
           payload: constants.USER_FORM_STATES_SAVED_FAILED_MESSAGE
         });
       });
-    }
+  };
 }
 
 export function fetchUserFormStates(userLocalPublicAddress) {
-  return async dispatch =>{
+  return async dispatch => {
     const network = await web3.eth.net.getNetworkType();
     axios
       .get(`${config.api_base_url}/db/users/formstates`, { params: { useraddress: userLocalPublicAddress, network } })
@@ -457,7 +455,7 @@ export function fetchUserFormStates(userLocalPublicAddress) {
           payload: constants.USER_FORM_STATES_FAILED_MESSAGE
         });
       });
-    }
+  };
 }
 
 export function uploadPassportDocAction(passportDoc, userLocalPublicAddress, doctype) {

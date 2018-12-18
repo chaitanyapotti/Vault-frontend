@@ -50,7 +50,6 @@ class ProjectDetailCrowdSale extends Component {
       pollFactoryAddress,
       network,
       crowdSaleAddress,
-      network,
       getEtherCollected: fetchEtherCollected,
       getRoundTokensSold: fetchRoundTokensSold,
       signinStatusFlag,

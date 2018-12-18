@@ -6,10 +6,10 @@ import web3 from "../../helpers/web3";
 
 export function getUpcomingDaicos() {
   return async dispatch => {
-    const network = await web3.eth.net.getNetworkType(); 
+    const localNetwork = web3.eth.currentProvider ? await web3.eth.net.getNetworkType() : "";
     axios
-      .get(`${config.api_base_url}/db/projects/upcoming` , {
-        params: { network }
+      .get(`${config.api_base_url}/db/projects/upcoming`, {
+        params: { network: localNetwork }
       })
       .then(response => {
         if (response.status === 200) {
@@ -21,20 +21,20 @@ export function getUpcomingDaicos() {
           } else {
             dispatch({
               type: actionTypes.UPCOMING_DAICOS_FAILED,
-              payload: constants.UPCOMING_DAICOS_FAILED_MESSAGE,
+              payload: constants.UPCOMING_DAICOS_FAILED_MESSAGE
             });
           }
         } else {
           dispatch({
-            type: actionTypes.UPCOMING_DAICOS_FAILED, 
-            payload: constants.UPCOMING_DAICOS_FAILED_MESSAGE,
+            type: actionTypes.UPCOMING_DAICOS_FAILED,
+            payload: constants.UPCOMING_DAICOS_FAILED_MESSAGE
           });
         }
       })
       .catch(err => {
         dispatch({
           type: actionTypes.UPCOMING_DAICOS_FAILED,
-          payload: constants.UPCOMING_DAICOS_FAILED_MESSAGE,
+          payload: constants.UPCOMING_DAICOS_FAILED_MESSAGE
         });
       });
   };

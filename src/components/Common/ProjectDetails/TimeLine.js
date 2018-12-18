@@ -31,10 +31,10 @@ const TimeLine = props => {
           Funds Collected
         </Col>
         <Col lg={4} className="txt-m push-half-h--bottom text-center">
-          {fundsCollected} ETH
+          {significantDigits(fundsCollected)} ETH
         </Col>
         <Col lg={4} className="txt-m push-half-h--bottom text-right">
-          {roundGoal} ETH Goal
+          {significantDigits(roundGoal)} ETH Goal
         </Col>
       </Row>
       <CUILinearProgress style={{ height: 7, borderRadius: 7 }} value={progressValue} />

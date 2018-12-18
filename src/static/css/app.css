@@ -157,6 +157,10 @@ button:active {
   background-color: #3d3d3d !important;
 }
 
+#whiteBtn {
+  background-color: #ffffff !important;
+}
+
 .bg--danger:active {
   background: #c10a0a !important;
   box-shadow: 0px 0px 0px #ffffff !important;

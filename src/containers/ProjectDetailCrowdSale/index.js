@@ -48,6 +48,7 @@ class ProjectDetailCrowdSale extends Component {
     const {
       version,
       pollFactoryAddress,
+      network,
       crowdSaleAddress,
       network,
       getEtherCollected: fetchEtherCollected,

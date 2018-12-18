@@ -137,6 +137,7 @@ class IdentityDetails extends React.Component {
       whitepaperPDFName,
       thumbnailImageName
     } = this.props || {};
+
     return (
       <CUICard className="card-brdr">
         <div className="txt-xl" style={{ padding: "40px 50px" }}>

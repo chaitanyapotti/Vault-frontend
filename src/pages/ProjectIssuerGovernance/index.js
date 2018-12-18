@@ -33,49 +33,8 @@ class ProjectIssuerGovernance extends Component {
   }
 
   render() {
-    const {
-      currentRoundNumber,
-      projectDetails,
-      treasuryStateNumber,
-      history,
-      prices,
-      isVaultMember,
-      userLocalPublicAddress,
-      signinStatusFlag,
-      isVaultMembershipChecked
-    } = this.props || {};
-    const {
-      currentDeploymentIndicator,
-      projectName,
-      tokenTag,
-      description,
-      urls,
-      whitepaper,
-      startDateTime,
-      maximumEtherContribution,
-      capPercent,
-      initialTapAmount,
-      tapIncrementFactor,
-      isCurrentMember,
-      version,
-      membershipAddress,
-      rounds,
-      totalMintableSupply,
-      foundationDetails,
-      r1EndTime,
-      pollFactoryAddress,
-      initialFundRelease,
-      crowdSaleAddress,
-      daicoTokenAddress,
-      xfrDetails,
-      ownerAddress,
-      tapAcceptancePercent,
-      xfrRejectionPercent,
-      _id,
-      thumbnailUrl,
-      killAcceptancePercent,
-      network
-    } = projectDetails || {};
+    const { currentRoundNumber, projectDetails, treasuryStateNumber, history, isVaultMembershipChecked } = this.props || {};
+    const { currentDeploymentIndicator } = projectDetails || {};
 
     if (treasuryStateNumber === "" || currentRoundNumber === "" || !isVaultMembershipChecked) {
       return (
@@ -104,44 +63,7 @@ class ProjectIssuerGovernance extends Component {
     ) {
       return (
         <div style={{ marginBottom: "50px" }}>
-          <IssuerDetailGovernance
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            currentRoundNumber={currentRoundNumber}
-            daicoTokenAddress={daicoTokenAddress}
-            xfrDetails={xfrDetails}
-            ownerAddress={ownerAddress}
-            tapAcceptancePercent={tapAcceptancePercent}
-            xfrRejectionPercent={xfrRejectionPercent}
-            projectid={_id}
-            history={history}
-            thumbnailUrl={thumbnailUrl}
-            killAcceptancePercent={killAcceptancePercent}
-            prices={prices}
-            isVaultMember={isVaultMember}
-            userLocalPublicAddress={userLocalPublicAddress}
-            signinStatusFlag={signinStatusFlag}
-            isVaultMembershipChecked={isVaultMembershipChecked}
-            network={network}
-          />
+          <IssuerDetailGovernance history={history} />
         </div>
       );
     }
@@ -149,41 +71,7 @@ class ProjectIssuerGovernance extends Component {
     if (treasuryStateNumber === "1") {
       return (
         <div style={{ marginBottom: "50px" }}>
-          <IssuerDetailPreGovernance
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            r1EndTime={r1EndTime}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            initialFundRelease={initialFundRelease}
-            currentRoundNumber={currentRoundNumber}
-            treasuryStateNumber={treasuryStateNumber}
-            projectid={_id}
-            ownerAddress={ownerAddress}
-            history={history}
-            crowdSaleAddress={crowdSaleAddress}
-            pollFactoryAddress={pollFactoryAddress}
-            thumbnailUrl={thumbnailUrl}
-            prices={prices}
-            isVaultMember={isVaultMember}
-            userLocalPublicAddress={userLocalPublicAddress}
-            signinStatusFlag={signinStatusFlag}
-            isVaultMembershipChecked={isVaultMembershipChecked}
-            daicoTokenAddress={daicoTokenAddress}
-            network={network}
-          />
+          <IssuerDetailPreGovernance history={history} />
         </div>
       );
     }

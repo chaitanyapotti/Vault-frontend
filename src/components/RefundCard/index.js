@@ -67,7 +67,7 @@ const RefundCard = props => {
                       disabled={isDisabled}
                       onClick={onRefundClick}
                       loading={refundByKillButtonSpinning || refundBySoftCapFailSpinning}
-                      style={{ padding: "0 40px", "min-width": "200px" }}
+                      style={{ padding: "0 40px", minWidth: "200px" }}
                     >
                       Refund
                     </LoadingButton>

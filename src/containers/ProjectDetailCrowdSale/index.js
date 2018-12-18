@@ -49,6 +49,7 @@ class ProjectDetailCrowdSale extends Component {
       version,
       pollFactoryAddress,
       crowdSaleAddress,
+      network,
       getEtherCollected: fetchEtherCollected,
       getRoundTokensSold: fetchRoundTokensSold,
       signinStatusFlag,
@@ -59,12 +60,12 @@ class ProjectDetailCrowdSale extends Component {
       daicoTokenAddress,
       getUserTokens: fetchUserTokens
     } = this.props || {};
-    fetchEtherCollected(version, pollFactoryAddress);
-    fetchRoundTokensSold(version, crowdSaleAddress, 0);
+    fetchEtherCollected(version, pollFactoryAddress, network);
+    fetchRoundTokensSold(version, crowdSaleAddress, 0, network);
     if (signinStatusFlag > 2) {
-      fetchUserTokens(crowdSaleAddress, version, 0, userLocalPublicAddress);
-      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress);
-      tokenBalance(version, daicoTokenAddress, userLocalPublicAddress);
+      fetchUserTokens(crowdSaleAddress, version, 0, userLocalPublicAddress, network);
+      checkWhiteListStatus(version, membershipAddress, userLocalPublicAddress, network);
+      tokenBalance(version, daicoTokenAddress, userLocalPublicAddress, network);
     }
   }
 
@@ -75,6 +76,7 @@ class ProjectDetailCrowdSale extends Component {
       getTokenBalance: tokenBalance,
       checkWhiteList: checkWhiteListStatus,
       version,
+      network,
       membershipAddress,
       signinStatusFlag,
       daicoTokenAddress,
@@ -82,9 +84,9 @@ class ProjectDetailCrowdSale extends Component {
       getUserTokens: fetchUserTokens
     } = this.props || {};
     if (prevAddress !== localAddress || (prevFlag !== signinStatusFlag && signinStatusFlag > 2)) {
-      tokenBalance(version, daicoTokenAddress, localAddress);
-      checkWhiteListStatus(version, membershipAddress, localAddress);
-      fetchUserTokens(crowdSaleAddress, version, 0, localAddress);
+      tokenBalance(version, daicoTokenAddress, localAddress, network);
+      checkWhiteListStatus(version, membershipAddress, localAddress, network);
+      fetchUserTokens(crowdSaleAddress, version, 0, localAddress, network);
     }
   }
 
@@ -169,6 +171,7 @@ class ProjectDetailCrowdSale extends Component {
     const formattedUserContribution = formatFromWei(userContribution, 18);
     const formattedMaxEtherContribution = formatFromWei(maximumEtherContribution, 3);
     const remainingAllocation = r1Rate * (formattedMaxEtherContribution - formattedUserContribution);
+    console.log("here2");
     return (
       <Grid>
         <div style={{ marginBottom: "20px" }}>
@@ -274,7 +277,10 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, projectPreStartReducer } = state || {};
+  const { projectCrowdSaleReducer, projectPreStartReducer, deployerReducer, signinManagerData, fetchPriceReducer, projectGovernanceReducer } =
+    state || {};
+  const { projectDetails, ts } = deployerReducer || {};
+  const { _id: projectid } = projectDetails;
   const {
     etherCollected,
     roundInfo,
@@ -287,7 +293,20 @@ const mapStateToProps = state => {
     userContribution
   } = projectCrowdSaleReducer || {};
   const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash, isMembershipRequestPending } = projectPreStartReducer || {};
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag, isVaultMembershipChecked } = signinManagerData || {};
+  const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
+  const { prices } = fetchPriceReducer || {};
   return {
+    ...projectDetails,
+    projectid,
+    currentRoundNumber,
+    treasuryStateNumber,
+    ts,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isVaultMembershipChecked,
     isCurrentMember,
     buttonSpinning,
     etherCollected,

@@ -137,12 +137,36 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, projectDetailGovernanceReducer, projectRefundReducer } = state || {};
+  const {
+    projectCrowdSaleReducer,
+    projectDetailGovernanceReducer,
+    projectRefundReducer,
+    deployerReducer,
+    signinManagerData,
+    fetchPriceReducer,
+    projectGovernanceReducer
+  } = state || {};
+  const { projectDetails, ts } = deployerReducer || {};
   const { tokenBalance } = projectCrowdSaleReducer || {};
+  const { _id: projectid } = projectDetails;
   const { remainingEtherBalance, totalSupply } = projectDetailGovernanceReducer || {};
   const { refundByKillButtonSpinning, refundBySoftCapFailSpinning, refundByKillButtonTransactionHash, refundBySoftcapfailButtonTransactionHash } =
     projectRefundReducer || {};
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag, isVaultMembershipChecked } = signinManagerData || {};
+  const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
+  const { prices } = fetchPriceReducer || {};
+
   return {
+    ...projectDetails,
+    projectid,
+    currentRoundNumber,
+    treasuryStateNumber,
+    ts,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isVaultMembershipChecked,
     tokenBalance,
     remainingEtherBalance,
     totalSupply,

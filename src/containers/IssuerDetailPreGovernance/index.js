@@ -163,11 +163,27 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, issuerDetailGovernanceReducer } = state || {};
+  const { projectCrowdSaleReducer, issuerDetailGovernanceReducer, deployerReducer, signinManagerData, fetchPriceReducer, projectGovernanceReducer } =
+    state || {};
+  const { projectDetails, ts } = deployerReducer || {};
+  const { _id: projectid } = projectDetails;
   const { startR1ButtonTransactionHash } = issuerDetailGovernanceReducer;
   const { etherCollected, roundInfo, r1FinalizeButtonSpinning, startR1ButtonSpinning, r1FinalizeButtonTransactionHash } =
     projectCrowdSaleReducer || {};
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag, isVaultMembershipChecked } = signinManagerData || {};
+  const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
+  const { prices } = fetchPriceReducer || {};
   return {
+    ...projectDetails,
+    projectid,
+    currentRoundNumber,
+    treasuryStateNumber,
+    ts,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isVaultMembershipChecked,
     etherCollected,
     roundInfo,
     r1FinalizeButtonSpinning,

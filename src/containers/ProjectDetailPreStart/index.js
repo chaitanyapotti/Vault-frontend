@@ -133,9 +133,24 @@ const mapDispatchToProps = dispatch =>
   );
 
 const mapStateToProps = state => {
-  const { projectPreStartReducer } = state || {};
+  const { projectPreStartReducer, deployerReducer, signinManagerData, fetchPriceReducer, projectGovernanceReducer } = state || {};
+  const { projectDetails, ts } = deployerReducer || {};
+  const { _id: projectid } = projectDetails;
   const { isCurrentMember, buttonSpinning, whitelistButtonTransactionHash, isMembershipRequestPending } = projectPreStartReducer || {};
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag, isVaultMembershipChecked } = signinManagerData || {};
+  const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
+  const { prices } = fetchPriceReducer || {};
   return {
+    ...projectDetails,
+    projectid,
+    currentRoundNumber,
+    treasuryStateNumber,
+    ts,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isVaultMembershipChecked,
     isCurrentMember,
     buttonSpinning,
     whitelistButtonTransactionHash,

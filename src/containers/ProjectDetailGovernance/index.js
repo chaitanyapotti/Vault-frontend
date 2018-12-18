@@ -755,7 +755,17 @@ class ProjectDetailGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { projectDetailGovernanceReducer, projectPreStartReducer, fetchPriceReducer, projectCrowdSaleReducer } = state || {};
+  const {
+    projectDetailGovernanceReducer,
+    projectPreStartReducer,
+    fetchPriceReducer,
+    projectCrowdSaleReducer,
+    deployerReducer,
+    signinManagerData,
+    projectGovernanceReducer
+  } = state || {};
+  const { projectDetails, ts } = deployerReducer || {};
+  const { _id: projectid } = projectDetails;
   const { etherCollected, roundInfo, tokenBalance, buyButtonSpinning } = projectCrowdSaleReducer || {};
   const {
     tokensUnderGovernance,
@@ -794,7 +804,19 @@ const mapStateToProps = state => {
   const { spendableArrays, spentArray, xfrDots, tapDots, spendableDots, spentDots, dateArray, contributionArray, contriArrayReceived } =
     state.deployerReducer || {};
   const { buyButtonTransactionHash, buyAmount } = projectCrowdSaleReducer;
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag, isVaultMembershipChecked } = signinManagerData || {};
+  const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
   return {
+    ...projectDetails,
+    projectid,
+    currentRoundNumber,
+    treasuryStateNumber,
+    ts,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isVaultMembershipChecked,
     etherCollected,
     roundInfo,
     tokenBalance,

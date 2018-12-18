@@ -635,8 +635,18 @@ class IssuerDetailGovernance extends Component {
 }
 
 const mapStateToProps = state => {
-  const { projectCrowdSaleReducer, projectDetailGovernanceReducer, projectPreStartReducer, issuerDetailGovernanceReducer, fetchPriceReducer } =
-    state || {};
+  const {
+    projectCrowdSaleReducer,
+    projectDetailGovernanceReducer,
+    projectPreStartReducer,
+    issuerDetailGovernanceReducer,
+    fetchPriceReducer,
+    deployerReducer,
+    signinManagerData,
+    projectGovernanceReducer
+  } = state || {};
+  const { projectDetails, ts } = deployerReducer || {};
+  const { _id: projectid } = projectDetails;
   const { etherCollected, roundInfo, tokenBalance, buyButtonSpinning } = projectCrowdSaleReducer || {};
   const {
     startNewRoundButtonSpinning,
@@ -685,8 +695,20 @@ const mapStateToProps = state => {
   } = projectDetailGovernanceReducer || {};
   const { isCurrentMember, buttonSpinning, isMembershipRequestPending } = projectPreStartReducer || {};
   const { prices } = fetchPriceReducer || {};
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag, isVaultMembershipChecked } = signinManagerData || {};
+  const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
 
   return {
+    ...projectDetails,
+    projectid,
+    currentRoundNumber,
+    treasuryStateNumber,
+    ts,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isVaultMembershipChecked,
     etherCollected,
     roundInfo,
     tokenBalance,

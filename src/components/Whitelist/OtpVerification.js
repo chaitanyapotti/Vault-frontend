@@ -10,8 +10,8 @@ import {
   checkVaultMembership,
   requestVaultMembership
 } from "../../actions/userRegistrationActions";
-import { CUICard, CUIFormInput, CUIFormInputLabel } from "../../helpers/material-ui";
-import { CUIInputType, CUIInputColor } from "../../static/js/variables";
+import { CUIFormInput } from "../../helpers/material-ui";
+import { CUIInputType } from "../../static/js/variables";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { ButtonComponent } from "../Common/FormComponents";
 import ReactSelect from "../Common/ReactSelect";
@@ -70,7 +70,7 @@ class OtpVerification extends Component {
   };
 
   render() {
-    const { countryCode, phoneNumber, otpFromServer, otpFromUser, citizenship, onClickOtp, disabledBackStatus, onClickBack } = this.props || {};
+    const { countryCode, phoneNumber, otpFromServer, otpFromUser, onClickOtp, disabledBackStatus, onClickBack } = this.props || {};
     const countryChoices = [];
     const allCountries = countryList.countries.all;
     for (let index = 0; index < allCountries.length; index += 1) {

@@ -831,7 +831,6 @@ const mapStateToProps = state => {
     isCurrentMember,
     buttonSpinning,
     buyButtonSpinning,
-    prices,
     killVoteData,
     tapVoteData,
     killButtonSpinning,

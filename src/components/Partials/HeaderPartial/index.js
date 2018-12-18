@@ -25,7 +25,7 @@ import AlertModal from "../../Common/AlertModal";
 import Warning from "@material-ui/icons/Warning";
 import Loader from "../../Loaders/loader";
 import SubHeader from "../../Common/Subheader";
-import { formatAddress } from "../../../helpers/common/addressDisplayFormatter";
+// import { formatAddress } from "../../../helpers/common/addressDisplayFormatter";
 
 // const images = {
 //   metamask: "/assets/Footer/metamask.png"
@@ -248,7 +248,7 @@ class HeaderPartial extends React.Component {
     const { isIssuerChecked, isMetamaskNetworkChecked, isMetamaskInstallationChecked, isUserDefaultAccountChecked, isVaultMembershipChecked } =
       this.props || {};
     const { userDetails } = this.props || {};
-    const { firstName, lastName } = userDetails || "";
+    const { firstName } = userDetails || "";
     const { signInModalOpen } = this.state || {};
 
     const renderMenu = (
@@ -295,7 +295,7 @@ class HeaderPartial extends React.Component {
         ) : null}
       </Menu>
     );
-    const random = Math.random() * (1 - 0.7) + 0.7;
+    // const random = Math.random() * (1 - 0.7) + 0.7;
     return (
       <div>
         {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
@@ -395,11 +395,11 @@ class HeaderPartial extends React.Component {
                                   ),
                                   2: (
                                     <div>
-                                    <CUIButton className="btn bg-yellow txt-p-vault txt-dddbld text--white">Wrong network</CUIButton>
+                                      <CUIButton className="btn bg-yellow txt-p-vault txt-dddbld text--white">Wrong network</CUIButton>
                                       {/* <div style={{ width: "150px" }} className="txt-ellipsis">
                                         {formatAddress(this.props.userLocalPublicAddress)}
                                       </div> */}
-                                      
+
                                       {/* <ButtonComponent className="register" onClick={this.handleRegistrationButtonClicked}>Register</ButtonComponent> */}
                                     </div>
                                   ),

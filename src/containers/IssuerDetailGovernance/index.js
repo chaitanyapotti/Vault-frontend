@@ -724,7 +724,6 @@ const mapStateToProps = state => {
     buttonSpinning,
     buyButtonSpinning,
     killVoteData,
-    prices,
     tapVoteData,
     killButtonSpinning,
     tapButtonSpinning,

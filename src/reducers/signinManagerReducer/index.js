@@ -49,7 +49,7 @@ export default function(state = initialState, action) {
 
     case types.PROJECT_DEPLOYMENT_INDICATOR_SUCCESS: {
       let manageDaico = false;
-      const project_id = state.project_id || "";
+      // const project_id = state.project_id || "";
       const { _id } = action.payload || "";
       if ("currentDeploymentIndicator" in action.payload) {
         manageDaico = true;
@@ -142,7 +142,7 @@ export default function(state = initialState, action) {
     }
 
     case types.USER_DEFAULT_ACCOUNT_CHANGED: {
-      const networkName = state.networkName;
+      // const networkName = state.networkName;
       let { reloadPage, userPreviousLocalPublicAddress } = state || {};
       if (userPreviousLocalPublicAddress && userPreviousLocalPublicAddress !== action.payload && action.payload !== "") {
         reloadPage = true;

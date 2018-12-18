@@ -9,7 +9,7 @@ import VaultApp from "./VaultApp";
 import Registration from "./pages/Registration";
 import AllProjects from "./pages/AllProjects";
 import Governance from "./pages/Governance";
-import FeaturedProjects from "./pages/FeaturedProjects";
+// import FeaturedProjects from "./pages/FeaturedProjects";
 import ProjectIssuerGovernance from "./pages/ProjectIssuerGovernance";
 import Deployer from "./pages/Deployer";
 import ProjectGovernance from "./pages/ProjectGovernance";

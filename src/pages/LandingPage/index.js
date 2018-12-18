@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "react-router-dom";
 import AlertModal from "../../components/Common/AlertModal";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import { CUICard } from "../../helpers/material-ui";
 import MasonryLayout from "../../components/Common/MasonaryLayout";
 import LoadingButton from "../../components/Common/LoadingButton";

@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import VerticalStepper from "../../components/Common/VerticalStepper";
-import { ButtonComponent } from "../../components/Common/FormComponents";
-import { CUICard, CUIDivider } from "../../helpers/material-ui";
+import { CUICard } from "../../helpers/material-ui";
 import { Introduction, EthWallet, TC, BuyersInformation, UploadDocuments, Submit, OtpVerification, Done } from "../../components/Whitelist";
 import {
   fetchUserFormStates,

@@ -130,9 +130,9 @@ class IdentityDetails extends React.Component {
       teamAddress,
       websiteLink,
       // uploadingWhitepaper,
-      whitepaperUrl,
+      // whitepaperUrl,
       // uploadingThumbnail,
-      thumbnailUrl,
+      // thumbnailUrl,
       allowEditAll,
       whitepaperPDFName,
       thumbnailImageName

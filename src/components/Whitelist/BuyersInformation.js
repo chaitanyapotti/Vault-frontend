@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import moment from "moment";
 import { CUIFormInput, CUIDivider } from "../../helpers/material-ui";
 import { CUIInputType } from "../../static/js/variables";
 import { Row, Col } from "../../helpers/react-flexbox-grid";
-import DPicker from "../Common/DPicker";
-import moment from 'moment';
 import DatePickers from "../Common/DatePickers";
 import ReactSelect from "../Common/ReactSelect";
 import { ButtonComponent } from "../Common/FormComponents";
@@ -315,7 +314,7 @@ class BuyersInformation extends Component {
             <Col lg={6}>
               <DatePickers
                 maxDate={this.getStartDate()}
-                selectedDate={moment(dateOfIssuance).format('YYYY-MM-DD')}
+                selectedDate={moment(dateOfIssuance).format("YYYY-MM-DD")}
                 label="Date Of Issuance"
                 handleDateChange={this.onChangeDateOfIssuance}
                 // selectedDate={dateOfIssuance}
@@ -324,7 +323,7 @@ class BuyersInformation extends Component {
           ) : (
             <Col lg={6}>
               <DatePickers
-                selectedDate={moment(dateOfIssuance).format('YYYY-MM-DD')}
+                selectedDate={moment(dateOfIssuance).format("YYYY-MM-DD")}
                 label="Date Of Issuance"
                 handleDateChange={this.onChangeDateOfIssuance}
                 // selectedDate={dateOfIssuance}
@@ -334,7 +333,7 @@ class BuyersInformation extends Component {
 
           <Col lg={6}>
             <DatePickers
-              selectedDate={moment(dateOfExpiration).format('YYYY-MM-DD')}
+              selectedDate={moment(dateOfExpiration).format("YYYY-MM-DD")}
               label="Expiration Date"
               minDate={this.getEndMinDate()}
               handleDateChange={this.onChangeDateOfExpiration}
@@ -394,7 +393,7 @@ class BuyersInformation extends Component {
 
           <Col lg={6}>
             <DatePickers
-              selectedDate={moment(dateOfBirth).format('YYYY-MM-DD')}
+              selectedDate={moment(dateOfBirth).format("YYYY-MM-DD")}
               label="Date of Birth"
               handleDateChange={this.onChangeDateOfBirth}
               maxDate={this.getEndMaxDate()}
@@ -422,7 +421,7 @@ class BuyersInformation extends Component {
         <span className="float--right">
           <ButtonComponent label="Save" onClick={() => onClickSave()} />
           <span className="push--left">
-          <ButtonComponent label="Next" onClick={() => onClickNext()} />
+            <ButtonComponent label="Next" onClick={() => onClickNext()} />
             {/* <ButtonComponent label="Next" onClick={() => onClickNext()} disabled={disabledFlag} /> */}
           </span>
         </span>

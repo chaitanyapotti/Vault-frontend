@@ -214,7 +214,6 @@ export const hasVaultMembershipRequested = userLocalPublicAddress => async dispa
     })
     .then(response => {
       if (response.status === 200) {
-        console.log("mem status: ", response.data);
         if (response.data.data === "true") {
           dispatch({
             type: actionTypes.VAULT_MEMBERSHIP_REQUEST_CHECK_SUCCESS,

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { fetchCurrentAccount,  pageReloadingSignal } from "../../actions/signinManagerActions";
+import { fetchCurrentAccount, pageReloadingSignal } from "../../actions/signinManagerActions";
 
 class SigninManager extends Component {
   constructor(props) {
@@ -12,8 +12,8 @@ class SigninManager extends Component {
 
   reloadPage = () => {
     window.location.reload();
-    this.props.pageReloadingSignal()
-  }
+    this.props.pageReloadingSignal();
+  };
 
   initAddressPoll() {
     if (!this.interval) {
@@ -32,13 +32,10 @@ class SigninManager extends Component {
   }
 
   render() {
-    if (this.props.reloadPage){
-      this.reloadPage()
+    if (this.props.reloadPage) {
+      this.reloadPage();
     }
-    return (
-      <div>
-      </div>
-    );
+    return <div />;
   }
 }
 

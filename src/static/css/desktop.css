@@ -3,231 +3,275 @@
 /* -------------------------------------------------- */
 
 .logo {
-    position: relative;
-    display: inline-block;
-    height: 135px;
-    width: 125px;
-    background: url(/assets/LoginScreen/logo.svg) no-repeat 0 0;
-    background-size: 100%;
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  height: 135px;
+  width: 125px;
+  background: url(/assets/LoginScreen/logo.svg) no-repeat 0 0;
+  background-size: 100%;
+  cursor: pointer;
 }
 
 .metamask-card {
-    position: relative;
-    display: inline-block;
-    height: 255px;
-    width: 205px;
-    background: url(/assets/LoginScreen/metamask.svg) no-repeat 0 0;
-    background-size: 100%;
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  height: 255px;
+  width: 205px;
+  background: url(/assets/LoginScreen/metamask.svg) no-repeat 0 0;
+  background-size: 100%;
+  cursor: pointer;
 }
 
 .prvt-key-card {
-    position: relative;
-    display: inline-block;
-    height: 255px;
-    width: 205px;
-    background: url(/assets/LoginScreen/prvt_key.svg) no-repeat 0 0;
-    background-size: 100%;
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  height: 255px;
+  width: 205px;
+  background: url(/assets/LoginScreen/prvt_key.svg) no-repeat 0 0;
+  background-size: 100%;
+  cursor: pointer;
 }
 
 .sign-in-card {
-    position: relative;
-    display: inline-block;
-    height: 255px;
-    width: 205px;
-    background: url(/assets/LoginScreen/sign_in.svg) no-repeat 0 0;
-    background-size: 100%;
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  height: 255px;
+  width: 205px;
+  background: url(/assets/LoginScreen/sign_in.svg) no-repeat 0 0;
+  background-size: 100%;
+  cursor: pointer;
 }
 
 .attach-json-card {
-    position: relative;
-    display: inline-block;
-    height: 255px;
-    width: 205px;
-    background: url(/assets/LoginScreen/attch_json.svg) no-repeat 0 0;
-    background-size: 100%;
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  height: 255px;
+  width: 205px;
+  background: url(/assets/LoginScreen/attch_json.svg) no-repeat 0 0;
+  background-size: 100%;
+  cursor: pointer;
 }
 
 .crd-mrgn {
-    margin: 0 25px;
+  margin: 0 25px;
 }
 
 .crd-animation {
-    position: relative;
-    top: 0;
-    transition: top ease 0.5s;
+  position: relative;
+  top: 0;
+  transition: top ease 0.5s;
 }
 
 .crd-animation:hover {
-    top: -20px;
+  top: -20px;
 }
 
 .daico-name {
-    font-size: 50px;
-    line-height: 80px;
+  font-size: 50px;
+  line-height: 80px;
 }
 
 .daico-type {
-    font-size: 29px;
-    line-height: 25px;
+  font-size: 29px;
+  line-height: 25px;
 }
 
 .d-cnt {
-    margin-left: 40px;
+  margin-left: 40px;
 }
 
 .d-lnr-rstrt-msg {
-    font-size: 25px;
-    line-height: 30px;
-    position: relative;
-    top: 30px;
+  font-size: 25px;
+  line-height: 30px;
+  position: relative;
+  top: 30px;
 }
 
 .d-lnr-dscrptn-mrgn {
-    margin: 30px 0;
+  margin: 30px 0;
 }
 
 .tp-swtch-cnt {
-    height: 110px;
-    width: 270px;
-    border-radius: 8px;
+  height: 110px;
+  width: 270px;
+  border-radius: 8px;
 }
 
-.btn{
-    min-width: 135px;
-    height: 45px;
-    border: none !important;
-    border-radius: 50px !important;
+.btn {
+  min-width: 135px;
+  height: 45px;
+  border: none !important;
+  border-radius: 50px !important;
 }
 
 /*CSS for Masonary Card*/
 
 .crd-cnt-mrgn {
-    margin: 15px;
-    position: relative;
-    color: #2d2d2d;
+  margin: 15px;
+  position: relative;
+  color: #2d2d2d;
 }
 
 .crd-img-cnt {
-    width: 100px;
-    height: 100px;
-    background-color: #51505D;
-    border-radius: 4px;
-    margin: 0 18px 18px 0;
+  width: 100px;
+  height: 100px;
+  background-color: #51505d;
+  border-radius: 4px;
+  margin: 0 18px 18px 0;
 }
 
 .crd-btm-ryt-box {
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: #2185d6;;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #2185d6;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
 
 /* -------------------------------------------------- */
 /* Footer */
 /* -------------------------------------------------- */
 
-.ftr-cnt{
-    height: 215px;
-    background-color: #ffffff;
+.ftr-cnt {
+  height: 215px;
+  background-color: #ffffff;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
-.ftr-logo{
-    position: relative;
-    display: inline-block;
-    height: 40px;
-    width: 120px;
-    background: url(/assets/Footer/ftr-logo.svg) no-repeat 0 0;
-    background-size: 100%;
-    cursor: pointer;
+.ftr-logo {
+  position: relative;
+  display: inline-block;
+  height: 40px;
+  width: 120px;
+  background: url(/assets/Footer/ftr-logo.svg) no-repeat 0 0;
+  background-size: 100%;
+  cursor: pointer;
 }
 
-
+#git:hover,
+#github:hover,
+#telegram:hover,
+#medium:hover,
+#reddit:hover,
+#twitter:hover {
+  filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);
+}
 /* Subheaders */
 
-.sbhdr-cnt{
-    background-color: #ffffff;
-    height: 100px;
+.sbhdr-cnt {
+  background-color: #ffffff;
+  height: 100px;
 }
 
-.sbhdr-txt{
-    color: #4ca9fc;
+.sbhdr-txt {
+  color: #4ca9fc;
 }
 
-.sbhdr-mrgn-tp{
-    margin-top: 25px;
+.sbhdr-mrgn-tp {
+  margin-top: 25px;
 }
-
 
 /* Token Chart */
-.piechart{
-    background-image: url("/assets/Vault/PieChart.png");
-    width: 100%;
-    height: 350px;
-    background-repeat: no-repeat;
-    background-size: 120%;
+.piechart {
+  background-image: url("/assets/Vault/PieChart.png");
+  width: 100%;
+  height: 350px;
+  background-repeat: no-repeat;
+  background-size: 120%;
 }
 
-.sqrclrbx{
-    width: 50px;
-    height: 30px;
-    display: inline-block;
-    background-color: red;
-    border: 2px solid;
+.sqrclrbx {
+  width: 50px;
+  height: 30px;
+  display: inline-block;
+  background-color: red;
+  border: 2px solid;
 }
-  
-.piechrtxt{
-    position: absolute;
-    margin: 5px 0 0 20px;
+
+.piechrtxt {
+  position: absolute;
+  margin: 5px 0 0 20px;
 }
-  
-.piechrtxtcnt{
-    margin-top: 3.5%
+
+.piechrtxtcnt {
+  margin-top: 3.5%;
 }
-  
-.tknsltxt{
-    margin-top: 150px;
+
+.tknsltxt {
+  margin-top: 150px;
 }
-  
-.pieclr1{
-    background-color: #aedcff;
+
+.pieclr1 {
+  background-color: #aedcff;
 }
-  
-.pieclr2{
-    background-color: #61b4ff;
+
+.pieclr2 {
+  background-color: #61b4ff;
 }
-  
-.pieclr3{
-    background-color: #228cff;
+
+.pieclr3 {
+  background-color: #228cff;
 }
-  
-.pieclr4{
-    background-color: #397396;
+
+.pieclr4 {
+  background-color: #397396;
 }
-  
-.pieclr5{
-    background-color: #2c4856;
+
+.pieclr5 {
+  background-color: #2c4856;
 }
-  
-.pieclr6{
-    background-color: #002838;
+
+.pieclr6 {
+  background-color: #002838;
 }
 
 /* Project Details */
-.prjct-logo{
-    width: 80px;
-    height: 80px;
-    background-color: #2185d6;
-    display: block;
+.prjct-logo {
+  width: 80px;
+  height: 80px;
+  /* background-color: #2185d6; */
+  display: block;
+}
+
+/* Whitelits */
+.wht-lst-info-cnt {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.upld-img-plachldr {
+  height: 250px;
+  border: 1px solid;
+}
+
+/* Docked Button on Registration page */
+
+.dckd-btn-cnt {
+  box-shadow: rgba(76, 169, 252, 0.25) 25px 5px 0px 0px;
+  margin-bottom: 1px;
+  background-color: #ffffff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+/* Faetured Card Description number of lines*/
+.dscrptn-lins {
+  height: 80px;
+  line-height: 20px;
+  overflow: hidden;
+}
+
+/* link tag css */
+#lnktag:hover {
+  color: #4ca9fc !important;
 }

@@ -1,80 +1,162 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
-import { Table, Loader, Grid } from "semantic-ui-react";
-import { showUserTokensLoaderAction } from "../../actions/userTokensActions";
-
-class UserTokensTableBody extends Component {
-  handleTableRowClicked = projectid => {
-    this.props.history.push({
-      pathname: `/governance/details`,
-      search: `?projectid=${projectid}`,
-    });
-  };
-
-  addTableRowsDynamically = () => {
-    const table = this.props.userTokensTable;
-    if (table && table.length > 0) {
-      return table.map((project, index) => (
-        <Table.Row key={index} onClick={this.handleTableRowClicked.bind(this, project.name)}>
-          <Table.Cell>{project.name}</Table.Cell>
-          <Table.Cell>{project.price}</Table.Cell>
-          <Table.Cell>{project.tokens}</Table.Cell>
-          <Table.Cell>{project.health}</Table.Cell>
-          <Table.Cell>{project.tapIncrement}</Table.Cell>
-          <Table.Cell>{project.killConsensus}</Table.Cell>
-          <Table.Cell>{project.nextKillPollRemainingTime}</Table.Cell>
-          <Table.Cell>{project.XFRs}</Table.Cell>
-        </Table.Row>
-      ));
-    }
-    return <Table.Row>Activities could not be retrieved, please try reloading the page.</Table.Row>;
-  };
-
-  render() {
-    return <Table.Body>{this.addTableRowsDynamically()}</Table.Body>;
-  }
-}
-
-const UserTokensTableHeader = () => (
-  <Table.Header>
-    <Table.Row>
-      <Table.HeaderCell>Name</Table.HeaderCell>
-      <Table.HeaderCell>Rounds</Table.HeaderCell>
-      <Table.HeaderCell>R1 Goal</Table.HeaderCell>
-      <Table.HeaderCell>Final Goal</Table.HeaderCell>
-      <Table.HeaderCell>Raised*</Table.HeaderCell>
-      <Table.HeaderCell>Price*</Table.HeaderCell>
-      <Table.HeaderCell>Started at</Table.HeaderCell>
-      <Table.HeaderCell>R1 Ends in</Table.HeaderCell>
-    </Table.Row>
-  </Table.Header>
-);
+import { fetchPrice } from "../../actions/priceFetchActions";
+import { getUserTokens, showUserTokensLoaderAction } from "../../actions/userTokensActions";
+import GridData from "../../components/GridData";
+import {
+  formatCent,
+  formatFromWei,
+  formatMoney,
+  formatTokenPrice,
+  significantDigits,
+  formatCurrencyNumber,
+  secondsToDhms
+} from "../../helpers/common/projectDetailhelperFunctions";
+import TableLoader from "../../components/Loaders/TableLoader";
 
 class UserTokens extends Component {
+  componentDidMount() {
+    const { userLocalPublicAddress, getUserTokens: fetchUserTokens, showUserTokensLoaderAction: userTokensLoaderAction, fetchPrice: getPrice } =
+      this.props || {};
+    fetchUserTokens(userLocalPublicAddress);
+    userTokensLoaderAction();
+    getPrice("ETH");
+  }
+
+  componentDidUpdate(prevProps) {
+    const { getUserTokens: fetchUserTokens, userLocalPublicAddress: currentLocalAddress } = this.props || {};
+    const { userLocalPublicAddress: prevLocalAddress } = prevProps || {};
+    if (prevLocalAddress !== currentLocalAddress) {
+      fetchUserTokens(currentLocalAddress);
+    }
+  }
+
+  calculateKillDuration = killPollStartDate => {
+    const daysLeft = new Date() - new Date(killPollStartDate);
+    if (daysLeft < 0) return secondsToDhms(-daysLeft);
+    const secondsLeft = (daysLeft / 1000) % (90 * 3600 * 24);
+    return secondsToDhms(90 * 3600 * 24 * 1000 - secondsLeft * 1000);
+  };
+
   render() {
+    const {
+      userTokensTable,
+      prices,
+      history,
+      showUserTokensLoader,
+      signinStatusFlag,
+      isIssuerChecked,
+      isMetamaskNetworkChecked,
+      isMetamaskInstallationChecked,
+      isUserDefaultAccountChecked,
+      isVaultMembershipChecked
+    } = this.props || {};
+    let { ETH } = prices || {};
+    ETH = ETH.price || {};
+    const data = userTokensTable.map(item => {
+      const {
+        projectName,
+        tokenPrice,
+        balance,
+        projectHealth,
+        tapIncrement,
+        killConsensus,
+        killPollStartDate,
+        xfrCount,
+        _id,
+        thumbnailUrl,
+        tapAcceptancePercent,
+        killAcceptancePercent
+      } = item || {};
+      const tapText =
+        parseFloat(tapIncrement) > parseFloat(tapAcceptancePercent)
+          ? `${significantDigits(tapIncrement)} (Yes)`
+          : `${significantDigits(tapIncrement)} (No)`;
+      const killText =
+        parseFloat(killConsensus) > parseFloat(killAcceptancePercent)
+          ? `${significantDigits(killConsensus)} (Yes)`
+          : `${significantDigits(killConsensus)} (No)`;
+      const dataArray = [
+        thumbnailUrl,
+        projectName,
+        formatCent(significantDigits(formatTokenPrice(parseFloat(tokenPrice) * ETH, 3))),
+        `${formatCurrencyNumber(balance, 0)} (${formatMoney(formatFromWei(balance * tokenPrice * ETH), 0)})`,
+        projectHealth,
+        tapText,
+        killText,
+        this.calculateKillDuration(killPollStartDate),
+        xfrCount,
+        _id
+      ];
+      return dataArray;
+    });
     return (
       <div>
-        <Grid columns={5}>
-          <Grid.Row />
-          <Grid.Row>
-            <Grid.Column />
-            <Grid.Column>My Tokens</Grid.Column>
-            <Grid.Column />
-            <Grid.Column>*Prices based on current ETH/USD ratio</Grid.Column>
-            <Grid.Column />
-          </Grid.Row>
-        </Grid>
-        {this.props.showUserTokensLoader ? (
-          <Loader active={this.props.showUserTokensLoader} />
-        ) : this.props.userTokensRetrievedSuccessFully ? (
-          <Table>
-            <UserTokensTableHeader />
-            <UserTokensTableBody userTokensTable={this.props.userTokensTable} history={this.props.history} />
-          </Table>
+        {isIssuerChecked && isMetamaskNetworkChecked && isMetamaskInstallationChecked && isUserDefaultAccountChecked && isVaultMembershipChecked ? (
+          <div>
+            {signinStatusFlag >= 4 ? (
+              <div>
+                {showUserTokensLoader ? (
+                  <TableLoader />
+                ) : (
+                  <GridData
+                    history={history}
+                    tableData={data}
+                    filter={false}
+                    columns={[
+                      {
+                        name: "",
+                        options: {
+                          download: false,
+                          customBodyRender: value => <img style={{ margin: "0 10px" }} alt="" src={value} width="35" height="35" />
+                        },
+                        filter: true
+                      },
+                      {
+                        name: "Name",
+                        options: {
+                          filter: true
+                        }
+                      },
+                      {
+                        name: "Price(USD)*",
+                        options: {
+                          filter: false
+                        }
+                      },
+                      {
+                        name: "Tokens",
+                        options: {
+                          filter: false
+                        }
+                      },
+                      { name: "Health", options: { filter: false } },
+                      {
+                        name: "Tap Increment*",
+                        options: {
+                          filter: false
+                        }
+                      },
+                      {
+                        name: "Kill Consensus",
+                        options: {
+                          filter: false
+                        }
+                      },
+                      { name: "Next Kill In", options: { filter: false } },
+                      { name: "XFRs", options: { filter: false } },
+                      { name: "Id", options: { display: false, filter: false } }
+                    ]}
+                  />
+                )}
+              </div>
+            ) : (
+              this.props.history.push("/")
+            )}
+          </div>
         ) : (
-          <h3>{this.props.userTokensRetrieveFailureMessage}</h3>
+          <TableLoader />
         )}
       </div>
     );
@@ -83,23 +165,43 @@ class UserTokens extends Component {
 
 const mapStateToProps = state => {
   const { userTokensTable, showUserTokensLoader, userTokensRetrieveFailureMessage, userTokensRetrievedSuccessFully } = state.userTokensData || {};
+  const { prices } = state.fetchPriceReducer || {};
+  const {
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked
+  } = state.signinManagerData || {};
   return {
     userTokensTable,
     showUserTokensLoader,
     userTokensRetrieveFailureMessage,
     userTokensRetrievedSuccessFully,
+    prices,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isIssuerChecked,
+    isMetamaskNetworkChecked,
+    isMetamaskInstallationChecked,
+    isUserDefaultAccountChecked,
+    isVaultMembershipChecked
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      getUserTokens,
       showUserTokensLoaderAction,
+      fetchPrice
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(UserTokens);

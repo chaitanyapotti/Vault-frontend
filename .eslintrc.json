@@ -11,7 +11,7 @@
     "max-len": [
       2,
       {
-        "code": 300
+        "code": 150
       }
     ],
     "react/sort-comp": 0,
@@ -27,16 +27,9 @@
         "props": false
       }
     ],
-    "no-mixed-operators": [
-      "error",
-      {
-        "allowSamePrecedence": true
-      }
-    ],
     "prettier/prettier": [
       "error",
       {
-        "trailingComma": "all",
         "singleQuote": false,
         "printWidth": 150,
         "semi": true

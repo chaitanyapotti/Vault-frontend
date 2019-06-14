@@ -18,6 +18,7 @@ import CUIRegWrapper from "./CUIRegWrapper";
 import CUITabs from "./CUITabs";
 import CUIWrapper from "./CUIWrapper";
 import CUIChip from "./CUIChip";
+import CUISelectInput from "./CUISelectInput";
 
 export {
   CUIAppBar,
@@ -50,4 +51,5 @@ export {
   CUIWrapper,
   CUIRegWrapper,
   CUIChip,
+  CUISelectInput
 };

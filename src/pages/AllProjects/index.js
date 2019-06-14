@@ -1,43 +1,60 @@
 import React, { Component } from "react";
-import { Tab } from "semantic-ui-react";
 import ActiveDaicos from "../../containers/ActiveDaicos";
 import UpcomingDaicos from "../../containers/UpcomingDaicos";
 import EndedDaicos from "../../containers/EndedDaicos";
+import { Grid } from "../../helpers/react-flexbox-grid";
+import { CUITabs } from "../../helpers/material-ui";
 
+function TabContainer(props) {
+  return <div style={{ paddingTop: 8 * 3 }}>{props.children}</div>;
+}
 class AllProjects extends Component {
-  panes = [
-    {
-      menuItem: "Active DAICOs",
-      render: () => (
-        <Tab.Pane attached={false}>
-          {" "}
-          <ActiveDaicos history={this.props.history} />
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "Upcoming DAICOs",
-      render: () => (
-        <Tab.Pane attached={false}>
-          <UpcomingDaicos history={this.props.history} />
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "Ended DAICOs",
-      render: () => (
-        <Tab.Pane attached={false}>
-          <EndedDaicos history={this.props.history} />
-        </Tab.Pane>
-      ),
-    },
-  ];
+  state = {
+    value: "active"
+  };
+
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
 
   render() {
+    const { value } = this.state;
+    const list = [
+      {
+        label: "Active DAICOs",
+        value: "active",
+        key: "active"
+      },
+      {
+        label: "Upcoming DAICOs",
+        value: "upcoming",
+        key: "upcoming"
+      },
+      {
+        label: "Ended DAICOs",
+        value: "ended",
+        key: "ended"
+      }
+    ];
     return (
-      <div>
-        <Tab menu={{ secondary: true, pointing: false }} panes={this.panes} history={this.props.history} />
-      </div>
+      <Grid style={{ marginBottom: "50px" }}>
+        <CUITabs style={{ color: "black !important" }} onChange={this.handleChange} value={this.state.value} iconList={list} />
+        {value === "active" && (
+          <TabContainer>
+            <ActiveDaicos history={this.props.history} />
+          </TabContainer>
+        )}
+        {value === "upcoming" && (
+          <TabContainer>
+            <UpcomingDaicos history={this.props.history} />
+          </TabContainer>
+        )}
+        {value === "ended" && (
+          <TabContainer>
+            <EndedDaicos history={this.props.history} />
+          </TabContainer>
+        )}
+      </Grid>
     );
   }
 }

@@ -1,40 +1,52 @@
 /* eslint react/require-default-props: 0 */
 /* eslint camelcase: 0 */
 
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import "./static/css/app.css";
 import VaultApp from "./VaultApp";
 import Registration from "./pages/Registration";
-import Dashboard from "./pages/Dashboard";
-import LandingPage from "./pages/LandingPage";
 import AllProjects from "./pages/AllProjects";
 import Governance from "./pages/Governance";
-import FeaturedProjects from "./pages/FeaturedProjects";
+// import FeaturedProjects from "./pages/FeaturedProjects";
+import ProjectIssuerGovernance from "./pages/ProjectIssuerGovernance";
 import Deployer from "./pages/Deployer";
 import ProjectGovernance from "./pages/ProjectGovernance";
 import SigninManager from "./containers/SigninManager";
-import Register from "./containers/Register";
+// import Register from "./containers/Register";
 import store from "./store";
-import "semantic-ui-css/semantic.min.css";
+import Search from "./pages/Search";
+import WhiteList from "./pages/WhiteList";
+import LandingPage from "./pages/LandingPage";
 
-class App extends Component {
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
+
+class App extends PureComponent {
   render() {
+    const { history } = this.props || {};
     return (
       <Provider store={store}>
         <Router>
-          <VaultApp dispatch={store.dispatch} getState={store.getState} history={this.props.history}>
+          <VaultApp dispatch={store.dispatch} getState={store.getState} history={history}>
             <Switch>
-              <Route exact path="/" component={FeaturedProjects} />
-              <Route exact path="/governance" component={Governance} />
-              <Route strict path="/governance/details" component={ProjectGovernance} history={this.props.history} />
+              <Route exact path="/" component={LandingPage} history={history} />
+              <Route exact path="/mytokens" component={Governance} />
+              <Route strict path="/governance/details" component={ProjectGovernance} history={history} />
+              <Route strict path="/issuergovernance/details" component={ProjectIssuerGovernance} history={history} />
               <Route exact path="/projects" component={AllProjects} />
-              <Route exact path="/landing" component={LandingPage} />
-              <Route exact path="/registration" component={Registration} />
-              <Route exact path="/dashboard" component={Dashboard} />
-              <Route exact path="/deploy" component={Deployer} />
-              <Route exact path="/register" component={Register} />
+              <Route exact path="/registration" component={Registration} history={history} />
+              <Route strict path="/deploy" component={Deployer} history={history} />
+              <Route exact path="/register" component={WhiteList} />
+              {/* <Route exact path="/register" component={Register} /> */}
+              <Route strict path="/search" component={Search} />
+              <Route
+                path="/pollscan"
+                component={() => {
+                  const searchPath = window.location.search;
+                  window.location = `https://pollscan.io/contract${searchPath}`;
+                }}
+              />
             </Switch>
             <SigninManager />
           </VaultApp>

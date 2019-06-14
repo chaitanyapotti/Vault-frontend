@@ -1,80 +1,93 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
-import { Table, Loader } from "semantic-ui-react";
+import { fetchPrice } from "../../actions/priceFetchActions";
 import { getUpcomingDaicos, showUpcomingDaicosLoaderAction } from "../../actions/upcomingDaicosActions";
-
-const calculateEndDuration = r1EndTime =>
-  // console.log(moment.duration( moment(moment(r1EndTime).format('YYYY-MM-DD hh:mm:ss')), moment(moment().format('YYYY-MM-DD hh:mm:ss'))))
-  r1EndTime;
-
-// const calculateRoundGoal = (round) => {
-//     return (parseFloat(round.tokenCount) / (parseFloat(round.tokenRate) * Math.pow(10, 18)))
-// }
-
-class UpcomingDaicosTableBody extends Component {
-  handleTableRowClicked = projectid => {
-    this.props.history.push({
-      pathname: `/governance/details`,
-      search: `?projectid=${projectid}`,
-    });
-  };
-
-  addTableRowsDynamically = () => {
-    const table = this.props.upcomingDaicosTable;
-    if (table && table.length > 0) {
-      return table.map((project, index) => (
-        <Table.Row key={index} onClick={this.handleTableRowClicked.bind(this, project._id)}>
-          <Table.Cell>{project.projectName}</Table.Cell>
-          <Table.Cell>{100}</Table.Cell>
-          <Table.Cell>{1}</Table.Cell>
-          <Table.Cell>90%</Table.Cell>
-          <Table.Cell>{new Date(project.startDateTime).toISOString()}</Table.Cell>
-          <Table.Cell>{calculateEndDuration(project.r1EndTime)}</Table.Cell>
-        </Table.Row>
-      ));
-    }
-    return <Table.Row>Activities could not be retrieved, please try reloading the page.</Table.Row>;
-  };
-
-  render() {
-    return <Table.Body>{this.addTableRowsDynamically()}</Table.Body>;
-  }
-}
-
-const UpcomingDaicosTableHeader = () => (
-  <Table.Header>
-    <Table.Row>
-      <Table.HeaderCell>Name</Table.HeaderCell>
-      <Table.HeaderCell>Rounds</Table.HeaderCell>
-      <Table.HeaderCell>R1 Goal</Table.HeaderCell>
-      <Table.HeaderCell>Final Goal</Table.HeaderCell>
-      <Table.HeaderCell>Price*</Table.HeaderCell>
-      <Table.HeaderCell>Starts at</Table.HeaderCell>
-      <Table.HeaderCell>R1 Ends on</Table.HeaderCell>
-    </Table.Row>
-  </Table.Header>
-);
+import GridData from "../../components/GridData";
+import {
+  formatDate,
+  formatCent,
+  formatFromWei,
+  formatMoney,
+  formatRateToPrice,
+  significantDigits
+} from "../../helpers/common/projectDetailhelperFunctions";
+import TableLoader from "../../components/Loaders/TableLoader";
 
 class UpcomingDaicos extends Component {
   componentDidMount() {
-    this.props.getUpcomingDaicos();
-    this.props.showUpcomingDaicosLoaderAction();
+    const { getUpcomingDaicos: fetchUpcomingDaicos, fetchPrice: getPrice } = this.props || {};
+    fetchUpcomingDaicos();
+    getPrice("ETH");
   }
 
+  calculateEndDuration = r1EndTime => new Date(r1EndTime) - new Date();
+
+  convertRoundGoal = (round, ETH) => formatFromWei((parseFloat(round.tokenCount) * ETH) / parseFloat(round.tokenRate));
+
+  calculateRoundGoal = (round, ETH) => formatMoney(this.convertRoundGoal(round, ETH), 0);
+
+  calculateFinalGoal = (roundArray, ETH) => {
+    let finalGoal = 0;
+    for (let i = 0; i < roundArray.length; i += 1) {
+      finalGoal += this.convertRoundGoal(roundArray[i], ETH);
+    }
+    return formatMoney(finalGoal, 0);
+  };
+
   render() {
+    const { upcomingDaicosTable, prices, history, showUpcomingDaicosLoader } = this.props || {};
+    let { ETH } = prices || {};
+    ETH = ETH.price || {};
+    const data = upcomingDaicosTable.map(item => {
+      const { projectName, rounds, startDateTime, r1EndTime, _id, thumbnailUrl } = item || {};
+      const dataArray = [
+        thumbnailUrl,
+        projectName,
+        rounds.length,
+        this.calculateRoundGoal(rounds[0], ETH),
+        this.calculateFinalGoal(rounds, ETH),
+        formatCent(significantDigits(formatRateToPrice(rounds[0].tokenRate) * ETH)),
+        // formatCent(formatNumber(formatRateToPrice(rounds[0].tokenRate) * ETH, 5)),
+        formatDate(startDateTime),
+        formatDate(r1EndTime),
+        _id
+      ];
+      return dataArray;
+    });
     return (
       <div>
-        {this.props.showUpcomingDaicosLoader ? (
-          <Loader active={this.props.showUpcomingDaicosLoader} />
-        ) : this.props.upcomingDaicosRetrievedSuccessFully ? (
-          <Table>
-            <UpcomingDaicosTableHeader />
-            <UpcomingDaicosTableBody upcomingDaicosTable={this.props.upcomingDaicosTable} history={this.props.history} />
-          </Table>
+        {showUpcomingDaicosLoader ? (
+          <TableLoader />
         ) : (
-          <h3>{this.props.upcomingDaicosRetrieveFailureMessage}</h3>
+          <GridData
+            history={history}
+            tableData={data}
+            filter={false}
+            columns={[
+              {
+                name: "",
+                options: {
+                  download: false,
+                  customBodyRender: value => <img style={{ margin: "0 10px" }} src={value} width="35" height="35" />,
+                  filter: true
+                }
+              },
+              {
+                name: "Name",
+                options: {
+                  filter: true
+                }
+              },
+              { name: "Rounds", options: { filter: true } },
+              { name: "R1 Goal", options: { filter: false } },
+              { name: "Final Goal", options: { filter: false } },
+              { name: "Price*", options: { filter: false } },
+              { name: "Starts at (UTC)", options: { filter: false } },
+              { name: "R1 Ends on (UTC)", options: { filter: false } },
+              { name: "Id", options: { display: false, filter: false } }
+            ]}
+          />
         )}
       </div>
     );
@@ -84,11 +97,13 @@ class UpcomingDaicos extends Component {
 const mapStateToProps = state => {
   const { upcomingDaicosTable, showUpcomingDaicosLoader, upcomingDaicosRetrieveFailureMessage, upcomingDaicosRetrievedSuccessFully } =
     state.upcomingDaicosData || {};
+  const { prices } = state.fetchPriceReducer || {};
   return {
     upcomingDaicosTable,
     showUpcomingDaicosLoader,
     upcomingDaicosRetrieveFailureMessage,
     upcomingDaicosRetrievedSuccessFully,
+    prices
   };
 };
 
@@ -97,11 +112,12 @@ const mapDispatchToProps = dispatch =>
     {
       getUpcomingDaicos,
       showUpcomingDaicosLoaderAction,
+      fetchPrice
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(UpcomingDaicos);

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Form, Input, Button, Divider, Checkbox } from "semantic-ui-react";
 import {
   sendOtp,
   countryCodeChanged,
@@ -10,8 +9,13 @@ import {
   verifyPhoneNumber,
   isIssuerFlagToggled,
   checkVaultMembership,
-  requestVaultMembership,
+  requestVaultMembership
 } from "../../actions/signinManagerActions";
+import { CUICard, CUIFormInput, CUIFormInputLabel } from "../../helpers/material-ui";
+import { CUIInputType, CUIInputColor } from "../../static/js/variables";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import LoadingButton from "../../components/Common/LoadingButton";
+import { ButtonComponent } from "../../components/Common/FormComponents";
 
 class Register extends Component {
   componentDidMount() {
@@ -43,12 +47,11 @@ class Register extends Component {
       this.props.isIssuerFlag,
       this.props.userLocalPublicAddress,
       this.props.phoneNumber,
-      this.props.countryCode,
+      this.props.countryCode
     );
   };
 
   handleIssuerFlagToggled = (event, data) => {
-    console.log("click", data);
     this.props.isIssuerFlagToggled();
   };
 
@@ -62,50 +65,100 @@ class Register extends Component {
         {this.props.isVaultMember ? (
           <div>You are already a vault member.</div>
         ) : this.props.isPhoneNumberVerified ? (
-          this.props.vaultPaymentPendingStatus ? (
+          vaultPaymentPendingStatus ? (
             <div>Your approval is pending at our end. Our team shall process it at the earliest possible.</div>
+          ) : vaultMembershipRequestTransactionHash !== "" ? (
+            <div className="hli">
+              <a href={link} target="_blank" rel="noreferrer noopener">
+                <LoadingButton style={{ padding: "0 40px" }} type="pending" onClick={() => console.log("Sent to etherscan")}>
+                  Status
+                </LoadingButton>
+              </a>
+            </div>
           ) : (
             <div>
-              <Button onClick={this.handleVaultMembershipTransaction}>Request Vault Membership</Button>
+              <LoadingButton style={{ padding: "0 40px" }} onClick={this.handleVaultMembershipTransaction} loading={isVaultMembershipButtonSpinning}>
+                Request Vault Membership
+              </LoadingButton>
             </div>
           )
         ) : (
-          <div>
-            This is Phone Number Registration form
-            <Form>
-              <Form.Group inline>
-                <Form.Field>
-                  <label>Phone Number</label>
-                  <Input placeholder="+91" onChange={this.handleCountryCodeChanged} />
-                </Form.Field>
-                <Form.Field>
-                  <Input placeholder="9096xxxxxx" onChange={this.handlePhoneNumberChanged} />
-                </Form.Field>
-                <Form.Field>
-                  <label>Please check if you are an Issuer</label>
-                  <Checkbox toggle onClick={this.handleIssuerFlagToggled} checked={this.props.isIssuerFlag} />
-                </Form.Field>
-                <Form.Field>
-                  <Button onClick={this.handleSendOtp}> Send OTP</Button>
-                </Form.Field>
-              </Form.Group>
-            </Form>
-            <Divider />
-            <Form>
-              <Form.Field>
-                <label> OTP: </label>
-                <Input placeholder="1234" onChange={this.handleOtpChanged} />
-              </Form.Field>
-              <Form.Field>
-                <Button onClick={this.handleOtpVerification}>Submit</Button>
-              </Form.Field>
-            </Form>
-            {this.props.otpVerificationSuccessful ? (
-              <div>OTP Verification Successful. Welcome to the Vault</div>
-            ) : (
-              <div>OTP Verification Failed.</div>
-            )}
-          </div>
+          <Grid>
+            <CUICard className="card-brdr" style={{ padding: "40px 40px", width: "450px", margin: "0 auto" }}>
+              <div>
+                <div className="sbhdr-txt push--bottom txt-xl">Phone Number Registration form</div>
+                <Row>
+                  <Col xs={12} lg={4}>
+                    <CUIFormInput
+                      inputType={CUIInputType.TEXT}
+                      full
+                      inputName="Country Code"
+                      inputLabel="Country Code"
+                      inputPlaceholder="+91"
+                      onChange={this.handleCountryCodeChanged}
+                    />
+                  </Col>
+                  <Col xs={12} lg={8}>
+                    <CUIFormInput
+                      inputType={CUIInputType.TEXT}
+                      full
+                      inputName="Phone Number"
+                      inputLabel="Phone Number"
+                      inputPlaceholder="9096xxxxxx"
+                      onChange={this.handlePhoneNumberChanged}
+                    />
+                  </Col>
+                </Row>
+                <Row className="push--top">
+                  <Col>
+                    <ButtonComponent label="Send OTP" onClick={this.handleSendOtp} />
+                  </Col>
+                </Row>
+
+                <Row className="push--top">
+                  <Col>
+                    <CUIFormInputLabel
+                      control={
+                        <CUIFormInput
+                          inputType={CUIInputType.CHECKBOX}
+                          inputColor={CUIInputColor.PRIMARY}
+                          inputChecked={this.props.isIssuerFlag}
+                          onChange={this.handleIssuerFlagToggled}
+                        />
+                      }
+                      label="Please check if you are an Issuer"
+                    />
+                  </Col>
+                </Row>
+
+                {/* <Row className="push--top"><Col><CUIDivider /></Col></Row> */}
+
+                <Row>
+                  <Col xs={12} lg={4}>
+                    <CUIFormInput
+                      inputType={CUIInputType.TEXT}
+                      full
+                      inputName="OTP"
+                      inputLabel="OTP"
+                      inputPlaceholder="1234"
+                      onChange={this.handleOtpChanged}
+                    />
+                  </Col>
+                </Row>
+                <Row className="push--top">
+                  <Col>
+                    <ButtonComponent label="Verify OTP" onClick={this.handleOtpVerification} />
+                  </Col>
+                </Row>
+
+                {this.props.otpVerificationSuccessful ? (
+                  <div className="push--top">OTP Verification Successful. Welcome to the Vault</div>
+                ) : (
+                  <div className="push--top">OTP Verification Failed.</div>
+                )}
+              </div>
+            </CUICard>
+          </Grid>
         )}
 
         <div />
@@ -125,7 +178,7 @@ const mapStateToProps = state => {
     userLocalPublicAddress,
     isVaultMember,
     isPhoneNumberVerified,
-    vaultPaymentPendingStatus,
+    vaultPaymentPendingStatus
   } = state.signinManagerData || {};
   return {
     phoneNumber,
@@ -137,7 +190,7 @@ const mapStateToProps = state => {
     userLocalPublicAddress,
     isVaultMember,
     isPhoneNumberVerified,
-    vaultPaymentPendingStatus,
+    vaultPaymentPendingStatus
   };
 };
 
@@ -151,12 +204,12 @@ const mapDispatchToProps = dispatch =>
       verifyPhoneNumber,
       isIssuerFlagToggled,
       checkVaultMembership,
-      requestVaultMembership,
+      requestVaultMembership
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Register);

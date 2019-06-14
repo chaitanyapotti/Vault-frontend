@@ -1,41 +1,35 @@
-/* global document, window */
-/* eslint no-underscore-dangle: 0 */
 import actionTypes from "../../action_types";
 
 export const initialState = {
-  currentRoundNumber: 0,
-  treasuryStateNumber: "0",
+  currentRoundNumber: "",
+  treasuryStateNumber: ""
 };
 
-export default function(state = initialState, action) {
+export default (state = initialState, action) => {
   switch (action.type) {
-    // case actionTypes.MEMBERSHIP_ASSIGNED:
-    //   return {
-    //     ...state,
-    //     membershipAssigned: true
-    //   };
+    case actionTypes.CLEAR_GOVERNANCE_STATES: {
+      return {
+        ...state,
+        currentRoundNumber: "",
+        treasuryStateNumber: ""
+      };
+    }
 
-    // case actionTypes.MEMBERSHIP_FAILED:
-    //   return {
-    //     ...state,
-    //     membershipAssigned: false
-    //   };
-
-    case actionTypes.CURRENT_ROUND_FETCHED:
+    case actionTypes.CURRENT_ROUND_FETCHED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        currentRoundNumber: receipt,
+        currentRoundNumber: receipt
       };
-
+    }
     case actionTypes.TREASURY_STATE_FETCHED: {
       const { receipt } = action.payload;
       return {
         ...state,
-        treasuryStateNumber: receipt,
+        treasuryStateNumber: receipt
       };
     }
     default:
       return state;
   }
-}
+};

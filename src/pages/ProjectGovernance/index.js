@@ -2,244 +2,108 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import qs from "qs";
-// import queryString from "query-string";
 import { withRouter } from "react-router-dom";
-import { currentRound } from "../../actions/projectGovernanceActions/index";
+import { currentRound, clearGovernanceStates } from "../../actions/projectGovernanceActions/index";
 import ProjectDetailPreStart from "../../containers/ProjectDetailPreStart";
 import ProjectDetailCrowdSale from "../../containers/ProjectDetailCrowdSale";
 import ProjectDetailGovernance from "../../containers/ProjectDetailGovernance";
-import ProjectDetailSaleEnd from "../../containers/ProjectDetailSaleEnd";
 import ProjectDetailRefund from "../../containers/ProjectDetailRefund";
+import { Grid } from "../../helpers/react-flexbox-grid";
+import { fetchPrice } from "../../actions/priceFetchActions/index";
+import GvrncCardLoader from "../../components/Loaders/gvrncCardLoader";
 
 class ProjectGovernance extends Component {
+  componentWillUnmount() {
+    const { clearGovernanceStates: clearingStates } = this.props || {};
+    clearingStates();
+  }
+
   componentDidMount() {
     // Do Routing here - use query string
     const currentUrl = new URL(window.location.href);
     const params = qs.parse(currentUrl.search, { ignoreQueryPrefix: true });
-    console.log("parsed params: ", params);
-    // this.props.currentRound()
     if ("projectid" in params) {
-      this.props.currentRound(params.projectid);
+      const { currentRound: currentRoundDetailsFetch, fetchPrice: etherPriceFetch, history } = this.props || {};
+      currentRoundDetailsFetch(params.projectid, history);
+      etherPriceFetch("ETH");
     } else {
-      this.props.history.push({
-        pathname: `/`,
+      const { history } = this.props || {};
+      history.push({
+        pathname: `/`
       });
     }
-
-    // const { version, crowdSaleAddress } = this.props.projectDetails || {};
-    // console.log(version, crowdSaleAddress);
-    // this.props.currentRound(version, crowdSaleAddress);
   }
 
   render() {
-    const { currentRoundNumber, projectDetails, treasuryStateNumber } = this.props || {};
-    const {
-      currentDeploymentIndicator,
-      projectName,
-      tokenTag,
-      description,
-      urls,
-      whitepaper,
-      startDateTime,
-      maximumEtherContribution,
-      capPercent,
-      initialTapAmount,
-      tapIncrementFactor,
-      isCurrentMember,
-      version,
-      membershipAddress,
-      rounds,
-      totalMintableSupply,
-      foundationDetails,
-      r1EndTime,
-      pollFactoryAddress,
-      initialFundRelease,
-      crowdSaleAddress,
-      daicoTokenAddress,
-    } = projectDetails || {};
+    const { currentRoundNumber, projectDetails, treasuryStateNumber, history, isVaultMembershipChecked } = this.props || {};
+    const { currentDeploymentIndicator } = projectDetails || {};
     // currentRoundNumber = "2";
+
+    if (treasuryStateNumber === "" || currentRoundNumber === "" || !isVaultMembershipChecked) {
+      return (
+        <Grid>
+          <GvrncCardLoader />
+        </Grid>
+      );
+    }
 
     if (currentDeploymentIndicator !== 12)
       return (
-        <div>
-          <p>The project hasn't been deployed yet</p>
+        <Grid style={{ marginBottom: "50px" }}>
+          <div className="text-center txt">The project has not been deployed yet</div>
+        </Grid>
+      );
+    if (treasuryStateNumber === "2" || treasuryStateNumber === "4") {
+      return (
+        <div style={{ marginBottom: "50px" }}>
+          <ProjectDetailRefund history={history} />
         </div>
       );
-
-    if (treasuryStateNumber === "3") {
+    }
+    if (treasuryStateNumber === "1" && currentRoundNumber === "0") {
       return (
-        <ProjectDetailRefund
-          version={version}
-          membershipAddress={membershipAddress}
-          projectName={projectName}
-          tokenTag={tokenTag}
-          description={description}
-          urls={urls}
-          whitepaper={whitepaper}
-          startDateTime={startDateTime}
-          maximumEtherContribution={maximumEtherContribution}
-          capPercent={capPercent}
-          initialTapAmount={initialTapAmount}
-          tapIncrementFactor={tapIncrementFactor}
-          isCurrentMember={isCurrentMember}
-          rounds={rounds}
-          totalMintableSupply={totalMintableSupply}
-          foundationDetails={foundationDetails}
-          r1EndTime={r1EndTime}
-          pollFactoryAddress={pollFactoryAddress}
-          initialFundRelease={initialFundRelease}
-          crowdSaleAddress={crowdSaleAddress}
-          currentRoundNumber={currentRoundNumber}
-          daicoTokenAddress={daicoTokenAddress}
-        />
+        <div style={{ marginBottom: "50px" }}>
+          <ProjectDetailPreStart history={history} />
+        </div>
       );
     }
 
-    switch (currentRoundNumber) {
-      case "0":
-        return (
-          <ProjectDetailPreStart
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-          />
-        );
-      case "1":
-        return (
-          <ProjectDetailCrowdSale
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-          />
-        );
-      case "2":
-      case "3":
-        return (
-          <ProjectDetailGovernance
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            currentRoundNumber={currentRoundNumber}
-            daicoTokenAddress={daicoTokenAddress}
-          />
-        );
-      case "4":
-        return (
-          <ProjectDetailSaleEnd
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            currentRoundNumber={currentRoundNumber}
-            daicoTokenAddress={daicoTokenAddress}
-          />
-        );
-      case "5":
-        return (
-          <ProjectDetailRefund
-            version={version}
-            membershipAddress={membershipAddress}
-            projectName={projectName}
-            tokenTag={tokenTag}
-            description={description}
-            urls={urls}
-            whitepaper={whitepaper}
-            startDateTime={startDateTime}
-            maximumEtherContribution={maximumEtherContribution}
-            capPercent={capPercent}
-            initialTapAmount={initialTapAmount}
-            tapIncrementFactor={tapIncrementFactor}
-            isCurrentMember={isCurrentMember}
-            rounds={rounds}
-            totalMintableSupply={totalMintableSupply}
-            foundationDetails={foundationDetails}
-            r1EndTime={r1EndTime}
-            pollFactoryAddress={pollFactoryAddress}
-            initialFundRelease={initialFundRelease}
-            crowdSaleAddress={crowdSaleAddress}
-            currentRoundNumber={currentRoundNumber}
-            daicoTokenAddress={daicoTokenAddress}
-          />
-        );
-      default:
-        return null;
+    if (treasuryStateNumber === "1" && currentRoundNumber === "1") {
+      return (
+        <div style={{ marginBottom: "50px" }}>
+          <ProjectDetailCrowdSale history={history} />
+        </div>
+      );
     }
+
+    if (treasuryStateNumber === "3" && (currentRoundNumber === "2" || currentRoundNumber === "3" || currentRoundNumber === "4")) {
+      return (
+        <div style={{ marginBottom: "50px" }}>
+          <ProjectDetailGovernance history={history} />
+        </div>
+      );
+    }
+
+    return null;
   }
 }
 
 const mapStateToProps = state => {
-  const { deployerReducer, projectGovernanceReducer } = state || {};
+  const { deployerReducer, projectGovernanceReducer, fetchPriceReducer, signinManagerData } = state || {};
+  const { prices } = fetchPriceReducer || {};
   const { projectDetails, ts } = deployerReducer || {};
   const { currentRoundNumber, treasuryStateNumber } = projectGovernanceReducer || {};
-
+  const { isVaultMember, userLocalPublicAddress, signinStatusFlag, isVaultMembershipChecked } = signinManagerData || {};
   return {
     projectDetails,
     currentRoundNumber,
     treasuryStateNumber,
     ts,
+    prices,
+    isVaultMember,
+    userLocalPublicAddress,
+    signinStatusFlag,
+    isVaultMembershipChecked
   };
 };
 
@@ -247,15 +111,15 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       currentRound,
+      clearGovernanceStates,
+      fetchPrice
     },
-    dispatch,
+    dispatch
   );
 
 const connector = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ProjectGovernance);
 
 export default withRouter(connector);
-
-// TODO: Do the Proptypes validation to all childrens

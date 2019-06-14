@@ -2,77 +2,83 @@
 /* Header */
 /* -------------------------------------------------- */
 
-.hdr-cnt{
-    background-color: #ffffff;
-    height: 129px;
+.hdr-cnt {
+  background-color: #ffffff;
+  height: 129px;
 }
 
-.srch-box{
-    border-radius: 1.25rem;
-    background-color: #000000;
-    opacity: 0.05;
-    color: #3d3d3d;
-    height: 46px;
-    width: 276px;
+.hdr-menu-cnt {
+  cursor: pointer;
+}
+
+.srch-box {
+  border-radius: 1.25rem;
+  background-color: #000000;
+  opacity: 0.05;
+  color: #3d3d3d;
+  height: 46px;
+  width: 276px;
 }
 .hdr-logo {
-    position: relative;
-    display: inline-block;
-    height: 60px;
-    width: 160px;
-    background: url(/assets/Header/vault-logo.svg) no-repeat 0 0;
-    background-size: 100%;
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  height: 60px;
+  width: 160px;
+  background: url(/assets/Header/vault-logo.svg) no-repeat 0 0;
+  background-size: 100%;
+  cursor: pointer;
 }
 
 .hdr-item-cnt {
-    position: relative;
-    top: 22px;
-    margin-left: 70px;
+  position: relative;
+  top: 22px;
+  margin-left: 70px;
 }
 
-.hdr-itm-pad{
-    padding: 40px 20px 20px;
+.hdr-itm-pad {
+  padding: 20px 20px 20px;
 }
 
-.add-ellip{
-    width: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.add-ellip {
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.wdh-100{
-    width: 100px;
+.wdh-100 {
+  width: 100px;
 }
 
 .hvr-underline-from-left:before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    left: 0;
-    right: 100%;
-    bottom: 0;
-    background: #4ca9fc;
-    height: 3px;
-    -webkit-transition-property: right;
-    transition-property: right;
-    -webkit-transition-duration: 0.3s;
-    transition-duration: 0.3s;
-    -webkit-transition-timing-function: ease-out;
-    transition-timing-function: ease-out;
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  background: #4ca9fc;
+  height: 3px;
+  -webkit-transition-property: right;
+  transition-property: right;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
 }
 
 .hvr-underline-from-left {
-    display: inline-block; 
-    vertical-align: middle; 
-    -webkit-transform: perspective(1px) translateZ(0);
-    transform: perspective(1px) translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    position: relative;
-    overflow: hidden;
-    padding: 2px;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  position: relative;
+  overflow: hidden;
+  padding: 2px;
 }
 
-.hvr-underline-from-left:hover:before, .hvr-underline-from-left:focus:before, .hvr-underline-from-left:active:before {
-    right: 0;
+.hvr-underline-from-left:hover:before,
+.hvr-underline-from-left:focus:before,
+.hvr-underline-from-left:active:before {
+  right: 0;
 }

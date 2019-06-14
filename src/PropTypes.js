@@ -1,4 +1,3 @@
-/* eslint-disable guard-for-in */
 import PropTypes from "prop-types";
 import {
   CUIButtonSize,
@@ -11,7 +10,7 @@ import {
   CUIModalTemplateType,
   CUIPosition,
   CUIPrefixSuffixType,
-  CUIProgressType,
+  CUIProgressType
 } from "./static/js/variables";
 // import { MEMBERSHIP_TYPE } from './enitites/Common';
 
@@ -26,7 +25,7 @@ const cuiTypes = {
   CUIInputMargin,
   CUICardType,
   CUIPrefixSuffixType,
-  CUIModalTemplateType,
+  CUIModalTemplateType
 };
 
 function getCUIPropTypes(object) {
@@ -35,7 +34,7 @@ function getCUIPropTypes(object) {
 
 const types = {};
 for (const type in cuiTypes) {
-  types[type.replace("CUI", "cui")] = getCUIPropTypes(cuiTypes[type]);
+  if (Object.prototype.hasOwnProperty.call(cuiTypes, type)) types[type.replace("CUI", "cui")] = getCUIPropTypes(cuiTypes[type]);
 }
 
 // types.membershipType = PropTypes.oneOf(Object.keys(MEMBERSHIP_TYPE).map(item => MEMBERSHIP_TYPE[item]));
@@ -53,7 +52,7 @@ types.basicProfile = {
   location: PropTypes.shape({
     country: PropTypes.string,
     state: PropTypes.string,
-    city: PropTypes.string,
+    city: PropTypes.string
   }),
   membershipType: PropTypes.string,
   income: PropTypes.string,
@@ -61,28 +60,28 @@ types.basicProfile = {
   photos: PropTypes.shape({ count: PropTypes.number, status: PropTypes.bool, images: PropTypes.arrayOf(PropTypes.object) }),
   flag: PropTypes.shape({
     isFree: PropTypes.bool,
-    isLiked: PropTypes.bool,
-  }),
+    isLiked: PropTypes.bool
+  })
 };
 
 types.profileItem = {
   slug: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
-  type: PropTypes.oneOf(["space", "dot", "comma"]), // defaults to comma
+  type: PropTypes.oneOf(["space", "dot", "comma"]) // defaults to comma
 };
 
 types.profileSection = {
   id: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
-  content: PropTypes.arrayOf(PropTypes.shape(PropTypes.profileItem)),
+  content: PropTypes.arrayOf(PropTypes.shape(PropTypes.profileItem))
 };
 
 types.profileImage = {
   domain_name: PropTypes.string.isRequired,
   large: PropTypes.string,
   semilarge: PropTypes.string,
-  small: PropTypes.string,
+  small: PropTypes.string
 };
 
 types.displayProfile = {
@@ -94,11 +93,11 @@ types.displayProfile = {
   photos: PropTypes.shape({
     count: PropTypes.number,
     status: PropTypes.bool,
-    images: PropTypes.arrayOf(PropTypes.shape(PropTypes.profileImage)),
+    images: PropTypes.arrayOf(PropTypes.shape(PropTypes.profileImage))
   }).isRequired,
   flag: PropTypes.shape({
-    isActive: PropTypes.bool.isRequired,
-  }).isRequired,
+    isActive: PropTypes.bool.isRequired
+  }).isRequired
 };
 
 types.children = PropTypes.node;

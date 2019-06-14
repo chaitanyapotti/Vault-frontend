@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import { CS_FONT_SIZE, CUIButtonColor } from "../../static/js/variables";
+import { CS_FONT_SIZE, CUIButtonColor, CUIButtonType } from "../../static/js/variables";
 import PropTypes from "../../PropTypes";
 
 /**
@@ -47,7 +47,7 @@ const CUIButton = props => {
     id,
     size,
     fullWidth: full,
-    tabIndex,
+    tabIndex
   };
 
   if (isLink && href) {
@@ -70,7 +70,7 @@ CUIButton.defaultProps = {
   children: null,
   labelStyle: {
     textTransform: "none",
-    fontSize: CS_FONT_SIZE.S,
+    fontSize: CS_FONT_SIZE.S
   },
   className: "",
   disabled: false,
@@ -78,7 +78,7 @@ CUIButton.defaultProps = {
   style: {},
   isLink: false,
   label: "",
-  type: "flat",
+  type: CUIButtonType.CONTAINED,
   href: undefined,
   id: "",
   isLinkExternal: false,
@@ -89,7 +89,7 @@ CUIButton.defaultProps = {
   actionProps: {},
   to: "",
   component: undefined,
-  onClick: () => {},
+  onClick: () => {}
 };
 
 CUIButton.propTypes = {
@@ -112,7 +112,7 @@ CUIButton.propTypes = {
   icon: PropTypes.element,
   to: PropTypes.string,
   actionProps: PropTypes.shape({}),
-  onClick: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 export default CUIButton;

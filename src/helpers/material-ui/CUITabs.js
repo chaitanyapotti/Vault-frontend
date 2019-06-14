@@ -2,8 +2,6 @@
 import React from "react";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { Link } from "react-router-dom";
-import { CUIBadge } from ".";
 import PropTypes from "../../PropTypes";
 import { CUIColor } from "../../static/js/variables";
 
@@ -33,45 +31,20 @@ import { CUIColor } from "../../static/js/variables";
  */
 
 const CUITabs = props => {
-  const { iconList, full, scroll, style, indicatorColor, textColor, value, disabled } = props || {};
-  const tabsProps = { indicatorColor, textColor, value, scrollable: scroll, fullWidth: full };
+  const { iconList, full, scroll, style, indicatorColor, textColor, value, onChange } = props || {};
+  const tabsProps = { indicatorColor, textColor, value, scrollable: scroll, fullWidth: full, onChange, style };
 
   return (
     <Tabs {...tabsProps}>
       {iconList.map(option => {
-        const isActive = option.value === value;
-        const isDisabled = isActive && disabled;
-
         const tabProps = {
           key: option.key,
-          disabled: isDisabled,
           value: option.value,
           label: option.label,
-          style,
+          style
         };
 
-        if (option.isLinkExternal) {
-          tabProps.href = option.link;
-        } else {
-          tabProps.component = Link;
-          tabProps.to = option.link;
-        }
-
-        return (
-          <Tab
-            {...tabProps}
-            icon={
-              <span className={`${option.class}${isActive ? " active" : " inactive"}`}>
-                {!isActive &&
-                  !!option.count && (
-                    <CUIBadge badgeColor={CUIColor.PRIMARY} style={{ marginLeft: 5 }} content={option.count > 999 ? "999+" : option.count}>
-                      <span />
-                    </CUIBadge>
-                  )}
-              </span>
-            }
-          />
-        );
+        return <Tab {...tabProps} />;
       })}
     </Tabs>
   );
@@ -85,26 +58,17 @@ CUITabs.defaultProps = {
   full: false,
   scroll: false,
   indicatorColor: CUIColor.SECONDARY,
-  textColor: CUIColor.INHERIT,
+  textColor: CUIColor.INHERIT
 };
 
 CUITabs.propTypes = {
   style: PropTypes.shape({}),
   icon: PropTypes.node,
   label: PropTypes.string,
-  iconList: PropTypes.arrayOf(
-    PropTypes.shape({
-      class: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      link: PropTypes.string.isRequired,
-    }),
-  ),
   full: PropTypes.bool,
   scroll: PropTypes.bool,
-  indicatorColor: PropTypes.cuiColor,
   textColor: PropTypes.cuiColor,
-  disabled: PropTypes.bool.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired
 };
 
 export default CUITabs;

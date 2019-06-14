@@ -10,7 +10,21 @@ import { CS_COLORS, CUIInputColor, CUIInputMargin, CUIInputType } from "../../st
 import PropTypes from "../../PropTypes";
 
 const CUIFormInput = props => {
-  const { inputType, inputName, inputLabel, inputPlaceholder, inputID, inputValue: inputVal, inputMargin, disabled, style, onChange } = props || {};
+  const {
+    inputType,
+    inputName,
+    inputLabel,
+    inputPlaceholder,
+    inputID,
+    inputValue: inputVal,
+    inputMargin,
+    disabled,
+    style,
+    onChange,
+    error,
+    helperText,
+    required
+  } = props || {};
 
   const cuiTextProps = {
     type: inputType,
@@ -23,6 +37,9 @@ const CUIFormInput = props => {
     disabled,
     style,
     onChange,
+    error,
+    helperText,
+    required
   };
 
   switch (inputType) {
@@ -41,23 +58,30 @@ const CUIFormInput = props => {
         inputProps,
         inputPrefixSuffix,
         forceNumeric,
+        forceNumDec,
+        forceAlpha,
         error,
         helperText,
         hintText,
         onBlur,
         onFocus,
+        required
       } = props || {};
       cuiTextProps.error = error;
+      cuiTextProps.required = required;
       cuiTextProps.helperText = hintText || helperText;
       cuiTextProps.autoFocus = textFocus;
       cuiTextProps.fullWidth = full;
       cuiTextProps.InputLabelProps = labelProps;
-      cuiTextProps.InputProps = { ...getCUIPrefixSuffix(...inputPrefixSuffix), ...InputProps };
+      cuiTextProps.InputProps = {
+        ...getCUIPrefixSuffix(...inputPrefixSuffix),
+        ...InputProps
+      };
       cuiTextProps.inputProps = inputProps;
       cuiTextProps.onFocus = onFocus;
       cuiTextProps.onBlur = onBlur;
       cuiTextProps.onKeyDown = e => {
-        handleInputKeydown(e, onKeyDownSelector, forceNumeric);
+        handleInputKeydown(e, onKeyDownSelector, forceNumeric, forceNumDec, forceAlpha);
       };
 
       return <TextField {...cuiTextProps} />;
@@ -188,7 +212,7 @@ const CUIFormInput = props => {
       cuiTextProps.InputProps = labelStyle;
       cuiTextProps.SelectProps = {
         MenuProps: { style: { maxHeight: 400 } },
-        IconComponent: selectIcon(iconColor, iconStyle),
+        IconComponent: selectIcon(iconColor, iconStyle)
       };
       return (
         <TextField {...cuiTextProps}>
@@ -259,7 +283,7 @@ CUIFormInput.defaultProps = {
   onChange: () => {},
   onClick: () => {},
   onClose: () => {},
-  onInputChange: () => {},
+  onInputChange: () => {}
 };
 
 CUIFormInput.propTypes = {
@@ -301,7 +325,7 @@ CUIFormInput.propTypes = {
   onChange: PropTypes.func,
   onClick: PropTypes.func,
   onClose: PropTypes.func,
-  onDelete: PropTypes.func,
+  onDelete: PropTypes.func
 };
 
 export default CUIFormInput;

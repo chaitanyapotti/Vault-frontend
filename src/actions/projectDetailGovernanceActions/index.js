@@ -1,576 +1,1156 @@
 import axios from "axios";
 import config from "../../config";
 import web3 from "../../helpers/web3";
+import actionTypes from "../../action_types";
+import constants from "../../constants";
+import { pollTxHash } from "../helperActions";
 
-export function tokenBalanceReceived(receipt) {
-  return {
-    payload: { receipt },
-    type: "TOKEN_BALANCE_RECEIVED",
-  };
-}
+export const getVoteHistogramData = (projectid, network) => async dispatch => {
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  // await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/projectweb3/votehistogram`, {
+      params: { network, projectid }
+    })
+    .then(response => {
+      const { status, data: voteHistogramData } = response || {};
+      const { data, message } = voteHistogramData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch({
+            type: actionTypes.VOTE_HISTOGRAM_DATA_SUCCESS,
+            payload: data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.VOTE_HISTOGRAM_DATA_FAILED,
+            payload: constants.VOTE_HISTOGRAM_DATA_FAILED_MESSAGE
+          });
+        }
+      } else {
+        dispatch({
+          type: actionTypes.VOTE_HISTOGRAM_DATA_FAILED,
+          payload: constants.VOTE_HISTOGRAM_DATA_FAILED_MESSAGE
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: actionTypes.VOTE_HISTOGRAM_DATA_FAILED,
+        payload: err.message
+      });
+    });
+};
 
-export function tokensUnderGovernanceReceived(receipt) {
-  return {
-    payload: { rec: receipt },
-    type: "TOKENS_UNDER_GOVERNANCE_RECEIVED",
-  };
-}
+export const getSpendCurveData = (version, address, crowdsaleaddress, network) => dispatch => {
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  // await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/spendcurve`, {
+      params: { address, network, version, crowdsaleaddress }
+    })
+    .then(response => {
+      const { status, data: spendCurveData } = response || {};
+      const { data, message } = spendCurveData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch({
+            type: actionTypes.SPEND_CURVE_DATA_SUCCESS,
+            payload: data
+          });
+        } else {
+          dispatch({
+            type: actionTypes.SPEND_CURVE_DATA_FAILED,
+            payload: constants.SPEND_CURVE_DATA_FAILED_MESSAGE
+          });
+        }
+      } else {
+        dispatch({
+          type: actionTypes.SPEND_CURVE_DATA_FAILED,
+          payload: constants.SPEND_CURVE_DATA_FAILED_MESSAGE
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: actionTypes.SPEND_CURVE_DATA_FAILED,
+        payload: err.message
+      });
+    });
+};
 
-export function killPollIndexReceived(receipt) {
-  return {
-    payload: { receipt },
-    type: "KILL_POLL_INDEX_RECEIVED",
-  };
-}
+export const tokensUnderGovernanceReceived = receipt => ({
+  payload: { rec: receipt },
+  type: actionTypes.TOKENS_UNDER_GOVERNANCE_RECEIVED
+});
 
-export function remainingEtherBalanceReceived(receipt) {
-  return {
-    payload: { receipt },
-    type: "REMAINING_ETHER_BALANCE_RECEIVED",
-  };
-}
+export const killPollIndexReceived = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_POLL_INDEX_RECEIVED
+});
 
-export function totalSupplyReceived(receipt) {
-  return {
-    payload: { receipt },
-    type: "TOTAL_SUPPLY_RECEIVED",
-  };
-}
+export const remainingEtherBalanceReceived = receipt => ({
+  payload: { receipt },
+  type: actionTypes.REMAINING_ETHER_BALANCE_RECEIVED
+});
 
-export function killConsensusReceived(receipt) {
-  return {
-    payload: { receipt },
-    type: "KILL_CONSENSUS_RECEIVED",
-  };
-}
+export const totalSupplyReceived = receipt => ({
+  payload: { receipt },
+  type: actionTypes.TOTAL_SUPPLY_RECEIVED
+});
 
-export function tapConsensusReceived(receipt) {
-  return {
-    payload: { receipt },
-    type: "TAP_CONSENSUS_RECEIVED",
-  };
-}
+export const killConsensusReceived = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_CONSENSUS_RECEIVED
+});
 
-export function currentTapReceived(receipt) {
-  return {
-    payload: { receipt },
-    type: "CURRENT_TAP_RECEIVED",
-  };
-}
+export const killVoterCountReceived = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_VOTER_COUNT_RECEIVED
+});
 
-export function xfrDataReceived(receipt) {
-  return {
-    payload: { receipt },
-    type: "XFR_DATA_RECEIVED",
-  };
-}
+export const tapConsensusReceived = receipt => ({
+  payload: { receipt },
+  type: actionTypes.TAP_CONSENSUS_RECEIVED
+});
 
-export function killPollVote(receipt) {
-  return {
-    payload: { receipt },
-    type: "KILL_POLL_VOTE_RECEIVED",
-  };
-}
+export const currentTapReceived = receipt => ({
+  payload: { receipt },
+  type: actionTypes.CURRENT_TAP_RECEIVED
+});
 
-export function votedInKillPoll(receipt) {
-  return {
-    payload: { receipt },
-    type: "VOTED_KILL_POLL",
-  };
-}
+export const xfrDataReceived = receipt => ({
+  payload: { receipt },
+  type: actionTypes.XFR_DATA_RECEIVED
+});
 
-export function revokedVoteInKillPoll(receipt) {
-  return {
-    payload: { receipt },
-    type: "REVOKED_VOTE_KILL_POLL",
-  };
-}
+export const killPollVote = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_POLL_VOTE_RECEIVED
+});
 
-export function tapPollVote(receipt) {
-  return {
-    payload: { receipt },
-    type: "TAP_POLL_VOTE_RECEIVED",
-  };
-}
+export const isKillButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_BUTTON_SPINNING
+});
 
-export function votedInTapPoll(receipt) {
-  return {
-    payload: { receipt },
-    type: "VOTED_TAP_POLL",
-  };
-}
+export const tapPollVote = receipt => ({
+  payload: { receipt },
+  type: actionTypes.TAP_POLL_VOTE_RECEIVED
+});
 
-export function revokedVoteInTapPoll(receipt) {
-  return {
-    payload: { receipt },
-    type: "REVOKED_VOTE_TAP_POLL",
-  };
-}
+export const isTapButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.TAP_BUTTON_SPINNING
+});
 
-export function xfrPollVote1(receipt) {
-  return {
-    payload: { receipt },
-    type: "XFR_POLL1_VOTE_RECEIVED",
-  };
-}
+export const xfrPollVote = receipt => ({
+  payload: { receipt },
+  type: actionTypes.XFR_POLL_VOTE_RECEIVED
+});
 
-export function votedInXfrPoll1(receipt) {
-  return {
-    payload: { receipt },
-    type: "VOTED_XFR_POLL1",
-  };
-}
+export const isXfr1ButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.XFR1_BUTTON_SPINNING
+});
 
-export function revokedVoteInXfrPoll1(receipt) {
-  return {
-    payload: { receipt },
-    type: "REVOKED_VOTE_XFR_POLL1",
-  };
-}
+export const isXfr2ButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.XFR2_BUTTON_SPINNING
+});
 
-export function xfrPollVote2(receipt) {
-  return {
-    payload: { receipt },
-    type: "XFR_POLL2_VOTE_RECEIVED",
-  };
-}
+export const isKillFinalizeButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_FINALIZE_BUTTON_SPINNING
+});
 
-export function votedInXfrPoll2(receipt) {
-  return {
-    payload: { receipt },
-    type: "VOTED_XFR_POLL2",
-  };
-}
+export const killPollsHistoryFetchSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.KILL_POLLS_HISTORY_SUCCESS
+});
 
-export function revokedVoteInXfrPoll2(receipt) {
-  return {
-    payload: { receipt },
-    type: "REVOKED_VOTE_XFR_POLL2",
-  };
-}
+export const killPollsHistoryFetchFailed = () => ({
+  payload: constants.KILL_POLLS_HISTORY_FAILED_MESSAGE,
+  type: actionTypes.KILL_POLLS_HISTORY_FAILED
+});
 
-export function getTokenBalance(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const network = await web3.eth.net.getNetworkType();
-    web3.eth.getAccounts().then(accounts =>
-      axios
-        .get(`${config.api_base_url}/web3/erc20token/tokenbalance`, {
-          params: { version: version.toString(), network, address: contractAddress, useraddress: accounts[0] },
+export const tapPollsHistoryFetchSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.TAP_POLLS_HISTORY_SUCCESS
+});
+
+export const tapPollsHistoryFetchFailed = () => ({
+  payload: constants.TAP_POLLS_HISTORY_FAILED_MESSAGE,
+  type: actionTypes.TAP_POLLS_HISTORY_FAILED
+});
+
+export const xfrPollsHistoryFetchSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.XFR_POLLS_HISTORY_SUCCESS
+});
+
+export const xfrPollsHistoryFetchFailed = () => ({
+  payload: constants.XFR_POLLS_HISTORY_FAILED_MESSAGE,
+  type: actionTypes.XFR_POLLS_HISTORY_FAILED
+});
+
+export const unlockTokensDataFetch = data => ({
+  payload: { receipt: data },
+  type: actionTypes.UNLOCK_TOKENS_DATA_FETCHED
+});
+
+export const isUnlockTokensButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.UNLOCK_TOKENS_BUTTON_SPINNING
+});
+
+export const unlockTokens = (data, version, userLocalPublicAddress, pollFactoryAddress, network) => async dispatch => {
+  dispatch(isUnlockTokensButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(async ipollData => {
+      const { data: pollData } = ipollData.data || {};
+      const { abi } = pollData || {};
+      const gasPrice = await web3.eth.getGasPrice();
+      const promiseArray = [];
+      for (let index = 0; index < data.length; index += 1) {
+        const element = data[index];
+        const ipollInstance = new web3.eth.Contract(abi, element.address, { from: userLocalPublicAddress });
+        promiseArray.push(
+          ipollInstance.methods.revokeVote().send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        );
+      }
+      Promise.all(promiseArray)
+        .then(response => {
+          console.log(response);
+          dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+          dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+          dispatch(getKillConsensus(version, pollFactoryAddress, network));
+          dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+          dispatch(getTapPollConsensus(version, pollFactoryAddress, network));
+          dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+          dispatch(getXfrData(version, pollFactoryAddress, network));
+          dispatch(isUnlockTokensButtonSpinning(false));
         })
-        .then(async response => {
-          const { data } = response.data;
-          dispatch(tokenBalanceReceived(web3.utils.fromWei(data, "ether")));
-        })
-        .catch(err => console.error(err.message)),
-    );
-  };
-}
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isUnlockTokensButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isKillButtonSpinning(false));
+    });
+};
 
-export function getTokensUnderGovernance(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/erc20token/tokensundergovernance`, {
-        params: { version: version.toString(), network, address: contractAddress },
-      })
-      .then(async response => {
+export const getUnlockTokensData = (pollFactoryAddress, userLocalPublicAddress, network) => dispatch => {
+  axios
+    .get(`${config.api_base_url}/projectweb3/lockedtokens`, {
+      params: { pollfactoryaddress: pollFactoryAddress, useraddress: userLocalPublicAddress, network }
+    })
+    .then(response => {
+      const { status, data: pollHistory } = response || {};
+      const { data } = pollHistory || {};
+      if (status === 200) {
+        dispatch(unlockTokensDataFetch(data));
+      } else {
+        dispatch(unlockTokensDataFetch({}));
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch(unlockTokensDataFetch({}));
+    });
+};
+
+export const getKillPollsHistory = (pollFactoryAddress, network) => async dispatch => {
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/db/projects/history/killpoll`, {
+      params: { pollfactoryaddress: pollFactoryAddress, network }
+    })
+    .then(response => {
+      const { status, data: killPollsHistorytData } = response || {};
+      const { data, message } = killPollsHistorytData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch(killPollsHistoryFetchSuccess(data));
+        } else {
+          dispatch(killPollsHistoryFetchFailed());
+        }
+      } else {
+        dispatch(killPollsHistoryFetchFailed());
+      }
+    })
+    .catch(err => {
+      dispatch(killPollsHistoryFetchFailed());
+    });
+};
+
+export const getTapPollsHistory = (pollFactoryAddress, network) => async dispatch => {
+  axios
+    .get(`${config.api_base_url}/db/projects/history/tappoll`, {
+      params: { pollfactoryaddress: pollFactoryAddress, network }
+    })
+    .then(response => {
+      const { status, data: tapPollsHistorytData } = response || {};
+      const { data, message } = tapPollsHistorytData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch(tapPollsHistoryFetchSuccess(data));
+        } else {
+          dispatch(tapPollsHistoryFetchFailed());
+        }
+      } else {
+        dispatch(tapPollsHistoryFetchFailed());
+      }
+    })
+    .catch(err => {
+      dispatch(tapPollsHistoryFetchFailed());
+    });
+};
+
+export const getXfrPollsHistory = (pollFactoryAddress, network) => async dispatch => {
+  axios
+    .get(`${config.api_base_url}/db/projects/history/xfrpoll`, {
+      params: { pollfactoryaddress: pollFactoryAddress, network }
+    })
+    .then(response => {
+      const { status, data: xfrPollsHistorytData } = response || {};
+      const { data, message } = xfrPollsHistorytData || {};
+      if (status === 200) {
+        if (message === constants.SUCCESS) {
+          dispatch(xfrPollsHistoryFetchSuccess(data));
+        } else {
+          dispatch(xfrPollsHistoryFetchFailed());
+        }
+      } else {
+        dispatch(xfrPollsHistoryFetchFailed());
+      }
+    })
+    .catch(err => {
+      dispatch(xfrPollsHistoryFetchFailed());
+    });
+};
+
+export const getTokensUnderGovernance = (version, contractAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/erc20token/tokensundergovernance`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
         const { data } = response.data;
-        dispatch(tokenBalanceReceived(web3.utils.fromWei(data, "ether")));
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+        dispatch(tokensUnderGovernanceReceived(data));
+      } else {
+        dispatch(tokensUnderGovernanceReceived("0"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(tokensUnderGovernanceReceived("0"));
+    });
+};
 
-export function getCurrentKillPollIndex(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/pollfactory/currentkillpollindex`, {
-        params: { version: version.toString(), network, address: contractAddress },
-      })
-      .then(async response => {
+export const getCurrentKillPollIndex = (version, contractAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/currentkillpollindex`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
         const { data } = response.data;
         dispatch(killPollIndexReceived(data));
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+      } else {
+        dispatch(killPollIndexReceived(0));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(killPollIndexReceived(0));
+    });
+};
 
-export function getRemainingEtherBalance(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/pollfactory/remainingbalance`, {
-        params: { version: version.toString(), network, address: contractAddress },
-      })
-      .then(async response => {
+export const getRemainingEtherBalance = (version, contractAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/remainingbalance`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
         const { data } = response.data;
         dispatch(remainingEtherBalanceReceived(data));
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+      } else {
+        dispatch(remainingEtherBalanceReceived("0"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(remainingEtherBalanceReceived("0"));
+    });
+};
 
-export function getTotalSupply(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/erc20token/totalsupply`, {
-        params: { version: version.toString(), network, address: contractAddress },
-      })
-      .then(async response => {
+export const getTotalSupply = (version, contractAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/erc20token/totalsupply`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
         const { data } = response.data;
         dispatch(totalSupplyReceived(data));
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+      } else {
+        dispatch(totalSupplyReceived("0"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(totalSupplyReceived("0"));
+    });
+};
 
-export function getKillConsensus(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/pollfactory/killconsensus`, {
-        params: { version: version.toString(), network, address: contractAddress },
-      })
-      .then(async response => {
+export const getKillConsensus = (version, contractAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/killconsensus`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
         const { data } = response.data;
         dispatch(killConsensusReceived(data));
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+      } else {
+        dispatch(killConsensusReceived("0"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(killConsensusReceived("0"));
+    });
+};
 
-export function getTapPollConsensus(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/pollfactory/tappollconsensus`, {
-        params: { version: version.toString(), network, address: contractAddress },
-      })
-      .then(async response => {
+export const getKillVoterCount = (version, contractAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/killvotecount`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        dispatch(killVoterCountReceived(data));
+      } else {
+        dispatch(killVoterCountReceived("0"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(killVoterCountReceived("0"));
+    });
+};
+
+export const getTapPollConsensus = (version, contractAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/tappollconsensus`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
         const { data } = response.data;
         dispatch(tapConsensusReceived(data));
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+      } else {
+        dispatch(tapConsensusReceived("0"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(tapConsensusReceived("0"));
+    });
+};
 
-export function getCurrentTap(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/pollfactory/currenttap`, {
-        params: { version: version.toString(), network, address: contractAddress },
-      })
-      .then(async response => {
+export const getCurrentTap = (version, contractAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/currenttap`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
         const { data } = response.data;
         dispatch(currentTapReceived(data));
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+      } else {
+        dispatch(currentTapReceived("0"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(currentTapReceived("0"));
+    });
+};
 
-export function getXfrData(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const network = await web3.eth.net.getNetworkType();
-    axios
-      .get(`${config.api_base_url}/web3/pollfactory/xfrpolldata`, {
-        params: { version: version.toString(), network, address: contractAddress },
-      })
-      .then(async response => {
+export const getXfrData = (version, contractAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/xfrpolldata`, {
+      params: { version: version.toString(), network, address: contractAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
         const { data } = response.data;
         dispatch(xfrDataReceived(data));
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+      } else {
+        dispatch(xfrDataReceived({}));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(xfrDataReceived({}));
+    });
+};
 
 // returns a boolean.
-export function getKillPollVote(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const accounts = await web3.eth.getAccounts();
-    axios
-      .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-      .then(res => {
-        const { data } = res.data || {};
-        const { abi } = data || {};
-        const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-        instance.methods
-          .currentKillPoll()
-          .call()
-          .then(killPollAddress => {
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-              const { data } = ipollData.data || {};
-              const { abi } = data || {};
-              const ipollInstance = new web3.eth.Contract(abi, killPollAddress, { from: accounts[0] });
-              ipollInstance.methods
-                .voters(accounts[0])
-                .call()
-                .then(response => {
-                  const { voted } = response;
-                  dispatch(killPollVote(voted));
-                });
-            });
-          });
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+export const getKillPollVote = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/killpollvote`, {
+      params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        dispatch(killPollVote(data));
+      } else {
+        dispatch(killPollVote("false"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(killPollVote("false"));
+    });
+};
 
 // name: PollFactory, address: pollFactoryAddress
-export function voteInKillPoll(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const accounts = await web3.eth.getAccounts();
-    axios
-      .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-      .then(res => {
-        const { data } = res.data || {};
-        const { abi } = data || {};
-        const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-        instance.methods
-          .currentKillPoll()
-          .call()
-          .then(killPollAddress => {
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-              const { data } = ipollData.data || {};
-              const { abi } = data || {};
-              const ipollInstance = new web3.eth.Contract(abi, killPollAddress, { from: accounts[0] });
-              ipollInstance.methods
-                .vote(0)
-                .send({ from: accounts[0] })
-                .then(response => dispatch(votedInKillPoll(response)));
-            });
+export const voteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isKillButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(async ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
+      ipollInstance.methods
+        .vote(0)
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
+          dispatch(isKillButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED
           });
-      })
-      .catch(err => console.error(err.message));
-  };
-}
-
-// name: PollFactory, address: pollFactoryAddress
-export function revokeVoteInKillPoll(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const accounts = await web3.eth.getAccounts();
-    axios
-      .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-      .then(res => {
-        const { data } = res.data || {};
-        const { abi } = data || {};
-        const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-        instance.methods
-          .currentKillPoll()
-          .call()
-          .then(killPollAddress => {
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-              const { data } = ipollData.data || {};
-              const { abi } = data || {};
-              const ipollInstance = new web3.eth.Contract(abi, killPollAddress, { from: accounts[0] });
-              ipollInstance.methods
-                .revokeVote()
-                .send({ from: accounts[0] })
-                .then(response => dispatch(revokedVoteInKillPoll(response)));
-            });
-          });
-      })
-      .catch(err => console.error(err.message));
-  };
-}
-
-export function getTapPollVote(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const accounts = await web3.eth.getAccounts();
-    axios
-      .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-      .then(res => {
-        const { data } = res.data || {};
-        const { abi } = data || {};
-        const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-        instance.methods
-          .tapPoll()
-          .call()
-          .then(tapPollAddress => {
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-              const { data } = ipollData.data || {};
-              const { abi } = data || {};
-              const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
-              ipollInstance.methods
-                .voters(accounts[0])
-                .call()
-                .then(response => {
-                  const { voted } = response;
-                  dispatch(tapPollVote(voted));
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getKillConsensus(version, pollFactoryAddress, network));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED
                 });
-            });
+              },
+              () => {
+                dispatch(isKillButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isKillButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isKillButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isKillButtonSpinning(false));
+    });
+};
+// .on("receipt", receipt => {
+//   dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+//   dispatch(getKillConsensus(version, pollFactoryAddress));
+//   dispatch(isKillButtonSpinning(false));
+// })
+// name: PollFactory, address: pollFactoryAddress
+export const revokeVoteInKillPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isKillButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(async ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
+      ipollInstance.methods
+        .revokeVote()
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
+          dispatch(isKillButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED
           });
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getKillPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getKillConsensus(version, pollFactoryAddress, network));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isKillButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isKillButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.KILL_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isKillButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isKillButtonSpinning(false));
+    });
+};
+
+export const getTapPollVote = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/tappollvote`, {
+      params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        dispatch(tapPollVote(data));
+      } else {
+        dispatch(tapPollVote("false"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(tapPollVote("false"));
+    });
+};
 
 // name: PollFactory, address: pollFactoryAddress returns boolean
-export function voteInTapPoll(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const accounts = await web3.eth.getAccounts();
-    axios
-      .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-      .then(res => {
-        const { data } = res.data || {};
-        const { abi } = data || {};
-        const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-        instance.methods
-          .tapPoll()
-          .call()
-          .then(tapPollAddress => {
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-              const { data } = ipollData.data || {};
-              const { abi } = data || {};
-              const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
-              ipollInstance.methods
-                .vote(0)
-                .send({ from: accounts[0] })
-                .then(response => dispatch(votedInTapPoll(response)));
-            });
+export const voteInTapPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isTapButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(async ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
+      ipollInstance.methods
+        .vote(0)
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
+          dispatch(isTapButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED
           });
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getTapPollConsensus(version, pollFactoryAddress, network));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isTapButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isTapButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isTapButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isTapButtonSpinning(false));
+    });
+};
 
 // name: PollFactory, address: pollFactoryAddress
-export function revokeVoteInTapPoll(version, contractAddress) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const accounts = await web3.eth.getAccounts();
-    axios
-      .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-      .then(res => {
-        const { data } = res.data || {};
-        const { abi } = data || {};
-        const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-        instance.methods
-          .tapPoll()
-          .call()
-          .then(tapPollAddress => {
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-              const { data } = ipollData.data || {};
-              const { abi } = data || {};
-              const ipollInstance = new web3.eth.Contract(abi, tapPollAddress, { from: accounts[0] });
-              ipollInstance.methods
-                .revokeVote()
-                .send({ from: accounts[0] })
-                .then(response => dispatch(revokedVoteInTapPoll(response)));
-            });
+export const revokeVoteInTapPoll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isTapButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(async ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
+      ipollInstance.methods
+        .revokeVote()
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
+          dispatch(isTapButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED
           });
-      })
-      .catch(err => console.error(err.message));
-  };
-}
-
-export function getXfrPollVote(version, contractAddress, index) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const accounts = await web3.eth.getAccounts();
-    axios
-      .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-      .then(res => {
-        const { data } = res.data || {};
-        const { abi } = data || {};
-        const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-        instance.methods
-          .xfrPollData(index)
-          .call()
-          .then(xfrPollDetails => {
-            const { xfrPollAddress } = xfrPollDetails;
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-              const { data } = ipollData.data || {};
-              const { abi } = data || {};
-              const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
-              ipollInstance.methods
-                .voters(accounts[0])
-                .call()
-                .then(response => {
-                  const { voted } = response;
-                  dispatch(index === 0 ? xfrPollVote1(voted) : xfrPollVote2(voted));
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getTapPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getTapPollConsensus(version, pollFactoryAddress, network));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED
                 });
-            });
-          });
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+              },
+              () => {
+                dispatch(isTapButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isTapButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.TAP_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isTapButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isTapButtonSpinning(false));
+    });
+};
+
+export const getXfrPollVote = (version, contractAddress, userLocalPublicAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  // const network = "rinkeby";
+  // const network = await web3.eth.net.getNetworkType();
+  axios
+    .get(`${config.api_base_url}/web3/pollfactory/xfrpollvote`, {
+      params: { version: version.toString(), network, address: contractAddress, useraddress: userLocalPublicAddress }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const { data } = response.data;
+        dispatch(xfrPollVote(data));
+      } else {
+        dispatch(xfrPollVote("false"));
+      }
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(xfrPollVote("false"));
+    });
+};
 
 // name: PollFactory, address: pollFactoryAddress returns boolean
-export function voteInXfrPoll(version, contractAddress, index) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const accounts = await web3.eth.getAccounts();
-    axios
-      .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-      .then(res => {
-        const { data } = res.data || {};
-        const { abi } = data || {};
-        const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-        instance.methods
-          .xfrPollData(index)
-          .call()
-          .then(xfrPollDetails => {
-            const { xfrPollAddress } = xfrPollDetails;
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-              const { data } = ipollData.data || {};
-              const { abi } = data || {};
-              const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
-              ipollInstance.methods
-                .vote(0)
-                .send({ from: accounts[0] })
-                .then(response => dispatch(index === 0 ? votedInXfrPoll1(response) : votedInXfrPoll2(response)));
-            });
+export const voteInXfr1Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isXfr1ButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(async ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
+      ipollInstance.methods
+        .vote(0)
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
+          dispatch(isXfr1ButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
           });
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getXfrData(version, pollFactoryAddress, network));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isXfr1ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isXfr1ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isXfr1ButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isXfr1ButtonSpinning(false));
+    });
+};
 
-// name: PollFactory, address: pollFactoryAddress
-export function revokeVoteInXfrPoll(version, contractAddress, index) {
-  return async dispatch => {
-    // doesn't call blockchain. await is non blocking
-    const accounts = await web3.eth.getAccounts();
-    axios
-      .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
-      .then(res => {
-        const { data } = res.data || {};
-        const { abi } = data || {};
-        const instance = new web3.eth.Contract(abi, contractAddress, { from: accounts[0] });
-        instance.methods
-          .xfrPollData(index)
-          .call()
-          .then(xfrPollDetails => {
-            const { xfrPollAddress } = xfrPollDetails;
-            axios.get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } }).then(ipollData => {
-              const { data } = ipollData.data || {};
-              const { abi } = data || {};
-              const ipollInstance = new web3.eth.Contract(abi, xfrPollAddress, { from: accounts[0] });
-              ipollInstance.methods
-                .revokeVote()
-                .send({ from: accounts[0] })
-                .then(response => dispatch(index === 0 ? revokedVoteInXfrPoll1(response) : revokedVoteInXfrPoll2(response)));
-            });
+// .on("receipt", receipt => {
+//   dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress));
+//   dispatch(getXfrData(version, pollFactoryAddress));
+//   dispatch(isXfr1ButtonSpinning(false));
+// })
+
+export const voteInXfr2Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isXfr2ButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(async ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
+      ipollInstance.methods
+        .vote(0)
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
+          dispatch(isXfr2ButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED
           });
-      })
-      .catch(err => console.error(err.message));
-  };
-}
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getXfrData(version, pollFactoryAddress, network));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isXfr2ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isXfr2ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isXfr2ButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isXfr2ButtonSpinning(false));
+    });
+};
+
+// name: PollFactory, address: pollFactoryAddress returns boolean
+export const revokeVoteInXfr1Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isXfr1ButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(async ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
+      ipollInstance.methods
+        .revokeVote()
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
+          dispatch(isXfr1ButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getXfrData(version, pollFactoryAddress, network));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isXfr1ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isXfr1ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR1_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isXfr1ButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isXfr1ButtonSpinning(false));
+    });
+};
+
+export const revokeVoteInXfr2Poll = (version, contractAddress, userLocalPublicAddress, pollFactoryAddress, network) => dispatch => {
+  // doesn't call blockchain. await is non blocking
+  dispatch(isXfr2ButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "IPoll" } })
+    .then(async ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, contractAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
+      ipollInstance.methods
+        .revokeVote()
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
+          dispatch(isXfr2ButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getXfrPollVote(version, pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getUnlockTokensData(pollFactoryAddress, userLocalPublicAddress, network));
+                dispatch(getXfrData(version, pollFactoryAddress, network));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isXfr2ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isXfr2ButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.XFR2_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isXfr2ButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isXfr2ButtonSpinning(false));
+    });
+};
+
+export const finalizeKill = (version, pollFactoryAddress, userLocalPublicAddress, network) => dispatch => {
+  dispatch(isKillFinalizeButtonSpinning(true));
+  axios
+    .get(`${config.api_base_url}/web3/contractdata/`, { params: { version: version.toString(), name: "PollFactory" } })
+    .then(async ipollData => {
+      const { data } = ipollData.data || {};
+      const { abi } = data || {};
+      const ipollInstance = new web3.eth.Contract(abi, pollFactoryAddress, { from: userLocalPublicAddress });
+      const gasPrice = await web3.eth.getGasPrice();
+      ipollInstance.methods
+        .executeKill()
+        .send({ from: userLocalPublicAddress, gasPrice: (parseFloat(gasPrice) + 2000000000).toString() })
+        .on("transactionHash", transactionHash => {
+          dispatch(isKillFinalizeButtonSpinning(false));
+          dispatch({
+            payload: { transactionHash },
+            type: actionTypes.KILL_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED
+          });
+          dispatch(
+            pollTxHash(
+              transactionHash,
+              () => {
+                dispatch(getCurrentKillPollIndex(version, pollFactoryAddress, network));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.KILL_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {
+                dispatch(isKillFinalizeButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.KILL_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              },
+              () => {},
+              () => {
+                dispatch(isKillFinalizeButtonSpinning(false));
+                dispatch({
+                  payload: { transactionHash: "" },
+                  type: actionTypes.KILL_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED
+                });
+              }
+            )
+          );
+        })
+        .catch(err => {
+          console.error(err.message);
+          dispatch(isKillFinalizeButtonSpinning(false));
+        });
+    })
+    .catch(err => {
+      console.error(err.message);
+      dispatch(isKillFinalizeButtonSpinning(false));
+    });
+};

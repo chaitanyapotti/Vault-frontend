@@ -20,7 +20,7 @@ import PropTypes from "../../PropTypes";
 
 const CUIChip = props => {
   const { label, onDelete, style } = props;
-  return <Chip label={label} onDelete={onDelete} style={style} />;
+  return <Chip label={label} onDelete={onDelete} style={style} {...props} />;
 };
 
 CUIChip.defaultProps = {
@@ -28,12 +28,13 @@ CUIChip.defaultProps = {
     margin: "0px 2px 4px",
     color: "#72727d",
     backgroundColor: "#f1f1f2",
-  },
+    fontSize: "14px"
+  }
 };
 CUIChip.propTypes = {
   label: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
-  style: PropTypes.shape(),
+  style: PropTypes.shape()
 };
 
 export default CUIChip;

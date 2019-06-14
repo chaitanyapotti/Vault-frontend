@@ -6,7 +6,7 @@ export const initialState = {
   upcomingDaicosTable: [],
   showUpcomingDaicosLoader: true,
   upcomingDaicosRetrieveFailureMessage: "",
-  upcomingDaicosRetrievedSuccessFully: false,
+  upcomingDaicosRetrievedSuccessFully: false
 };
 
 export default function(state = initialState, action) {
@@ -16,7 +16,7 @@ export default function(state = initialState, action) {
         ...state,
         showUpcomingDaicosLoader: false,
         upcomingDaicosTable: action.payload,
-        upcomingDaicosRetrievedSuccessFully: true,
+        upcomingDaicosRetrievedSuccessFully: true
       };
 
     case actionTypes.UPCOMING_DAICOS_FAILED:
@@ -24,14 +24,14 @@ export default function(state = initialState, action) {
         ...state,
         showUpcomingDaicosLoader: false,
         upcomingDaicosRetrieveFailureMessage: action.payload,
-        upcomingDaicosRetrievedSuccessFully: false,
+        upcomingDaicosRetrievedSuccessFully: false
       };
 
     case actionTypes.SHOW_UPCOMING_DAICOS_LOADER:
       return {
         ...state,
         showUpcomingDaicosLoader: true,
-        upcomingDaicosRetrievedSuccessFully: false,
+        upcomingDaicosRetrievedSuccessFully: false
       };
 
     default:
